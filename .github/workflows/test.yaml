@@ -1,0 +1,97 @@
+name: ci
+
+on: push
+
+env:
+  DATABASE_URL: postgres://postgres:dummy@localhost:5432/test
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: docker/setup-buildx-action@v2
+      - uses: docker/build-push-action@v3
+        with:
+          context: .
+          tags: rails-template:latest
+          outputs: type=docker,dest=/tmp/rails-template.tar
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      -
+        name: Cache image
+        id: rails-template-docker
+        uses: actions/cache@v3
+        with:
+          path: /tmp/rails-template.tar
+          key: ${{ github.sha }}-rails-template
+  lint:
+    name: "Linting: Rubocop"
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: docker/setup-buildx-action@v2
+      - uses: actions/cache@v3
+        with:
+          path: /tmp/rails-template.tar
+          key: ${{ github.sha }}-rails-template
+      - run: docker load --input /tmp/rails-template.tar
+      - run: docker run --rm rails-template:latest bundle exec rubocop
+  unit-tests:
+    name: "Unit tests: RSpec"
+    runs-on: ubuntu-latest
+    needs: build
+    services:
+      postgres:
+        image: postgres
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_DB: test
+          POSTGRES_PASSWORD: dummy
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: docker/setup-buildx-action@v2
+      - uses: actions/cache@v3
+        with:
+          path: /tmp/rails-template.tar
+          key: ${{ github.sha }}-rails-template
+      - run: docker load --input /tmp/rails-template.tar
+      - run: |
+          docker run \
+            --network="host" \
+            -e DATABASE_URL="${{ env.DATABASE_URL }}" \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            --rm rails-template bundle exec rspec
+  integration-tests:
+    name: "Integration tests: Cucumber"
+    runs-on: ubuntu-latest
+    needs: build
+    services:
+      postgres:
+        image: postgres
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_DB: test
+          POSTGRES_PASSWORD: dummy
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: docker/setup-buildx-action@v2
+      - uses: actions/cache@v3
+        with:
+          path: /tmp/rails-template.tar
+          key: ${{ github.sha }}-rails-template
+      - run: docker load --input /tmp/rails-template.tar
+      - run: |
+          docker run \
+            --network="host" \
+            -e DATABASE_URL="${{ env.DATABASE_URL }}" \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            --rm rails-template bundle exec cucumber

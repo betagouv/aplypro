@@ -1,0 +1,11 @@
+<% if flash[:notice].present?  %>
+  <div class="fr-notice fr-notice--info">
+    <div class="fr-container">
+      <div class="fr-notice__body">
+        <p class="fr-notice__title">
+          <%= flash[:notice] %>
+        </p>
+      </div>
+    </div>
+  </div>
+<% end %>
