@@ -1,0 +1,12 @@
+- content_for(:page_title) { "Accueil" }
+
+.fr-grid-row
+  .fr-col-12.fr-col-md-7
+    %h1 Bienvenue
+
+    %p
+      Cette application est réservée aux chefs d'établissements et
+      permet de renseigner les périodes de stage validées par les
+      lycéens professionnels.
+
+    = link_to 'Connexion', root_path, class: 'fr-btn'

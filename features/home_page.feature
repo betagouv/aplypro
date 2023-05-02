@@ -7,4 +7,4 @@ Fonctionnalité: La page d'accueil me salue
   Scénario:
     Quand je me rends sur la page d'accueil
     Alors la page contient "Direction Interministérielle du Numérique"
-    Et la page contient "Nom de votre service"
+    Et la page contient "Allocation pour les lycéens professionnels"
