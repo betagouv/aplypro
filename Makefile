@@ -18,3 +18,6 @@ guard:
 
 debug:
 	$(DOCKER-RUN) web $(BUNDLE-EXEC) rdbg -A web 12345
+
+cl:
+	$(DOCKER-RUN) web bin/rails console

@@ -13,6 +13,7 @@ services:
       DATABASE_URL: 'postgresql://postgres:dummy@db:5433'
       RUBY_DEBUG_PORT: 12345
       RUBY_DEBUG_HOST: 0.0.0.0
+      RUBY_DEBUG_NO_RELINE: true
     depends_on:
       - db
   db:
