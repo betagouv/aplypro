@@ -16,8 +16,8 @@
   %body
     = render 'shared/skiplinks'
     = render 'shared/header'
-    = render 'shared/flash'
     .fr-container
       %main#main.fr-py-3w
+        = render 'shared/flash'
         = yield
     = render 'shared/footer'
