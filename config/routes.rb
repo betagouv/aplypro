@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
+  devise_for :principals, controllers: { omniauth_callbacks: 'principals/omniauth_callbacks' }
 
   root "home#index"
+  get "/login", to: "home#login"
 end

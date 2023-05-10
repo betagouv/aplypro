@@ -1,9 +1,12 @@
+require 'faker'
+
 FactoryBot.define do
   factory :principal do
-    name { "MyString" }
+    uid { Faker::Alphanumeric.alpha }
+    name { Faker::Name.name }
     provider { "MyString" }
     secret { "MyString" }
     token { "MyString" }
-    email { "MyString" }
+    email { Faker::Internet.email }
   end
 end

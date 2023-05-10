@@ -3,3 +3,6 @@ fr:
     sponsor: "Direction\nInterministérielle\ndu Numérique"
     service_name: "Aplypro"
     service_description: "Allocation pour les lycéens professionnels"
+  auth:
+    success: "Connexion effectuée avec succès"
+    failure: "La connexion a échouée"

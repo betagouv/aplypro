@@ -10,7 +10,7 @@ RSpec.describe Principal, type: :model do
   # end
 
   describe "validations" do
-    %w[name email provider token secret email].each do |attr|
+    %w[uid name email provider token secret email].each do |attr|
       it { is_expected.to validate_presence_of(attr) }
     end
   end

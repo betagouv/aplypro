@@ -1,0 +1,10 @@
+- content_for(:page_title) { "Connexion" }
+
+%h1 Connexion
+
+%p
+  Vous devez vous connecter pour accéder aux services de gestion des
+  stages.
+
+- Principal.omniauth_providers.each do |sym|
+  = button_to sym, principal_developer_omniauth_authorize_path, method: :post, remote: false, data: { turbo: false }, class: "fr-btn"
