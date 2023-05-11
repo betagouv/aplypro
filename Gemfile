@@ -78,6 +78,7 @@ group :test do
   gem "rubocop-rails"
   gem "rubocop-rspec"
   gem "shoulda-matchers"
+  gem "webmock"
 end
 
 group :development do
