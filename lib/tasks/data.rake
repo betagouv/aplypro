@@ -1,23 +1,37 @@
 # frozen_string_literal: true
 
-ETAB_URL = "/Users/steph/Downloads/fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre.csv".freeze
+require "csv"
+require "net/http"
 
-# https://data.education.gouv.fr/explore/dataset/fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre/download?format=csv&timezone=Europe/Berlin&use_labels_for_header=false
+def fetch_and_save(uri, path)
+  return File.read(path) if File.exist?(path)
 
-require 'csv'
-require 'net/http'
+  data = Net::HTTP.get(uri)
+
+  File.write(path, data.force_encoding("UTF-8"))
+
+  return data
+end
 
 namespace :data do
   desc "fetches the public list of establishements and filter out the ones we need"
   task fetch_establishments: :environment do
-    # raw = Net::HTTP.get(URI(ETAB_URL))
+    Rails.logger.info "Fetching the CSV file..."
 
-    raw = File.read(ETAB_URL)
+    raw = fetch_and_save(
+      URI(Establishment::BOOTSTRAP_URL),
+      Rails.root.join("tmp/list-etabs.csv")
+    )
 
-    csv = CSV
-            .read(raw, col_sep: ';', headers: true)
-            .then { |data| data.filter { |d| d["nature_uai"].start_with? "3" }}
+    Rails.logger.info "Parsing the CSV file..."
 
-    puts csv.count
+    attributes = CSV
+                 .parse(raw, col_sep: ";", headers: true)
+                 .map { |data| Establishment.from_csv(data) }
+                 .select(&:second_degree?)
+                 .reject(&:invalid?)
+                 .map { |etab| etab.attributes.merge(created_at: DateTime.now, updated_at: DateTime.now) }
+
+    Establishment.upsert_all(attributes)
   end
 end

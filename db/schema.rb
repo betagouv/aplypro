@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_09_214339) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_12_084221) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "establishments", id: false, force: :cascade do |t|
+    t.string "uai", null: false
+    t.string "name", null: false
+    t.string "denomination", null: false
+    t.string "nature", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["uai"], name: "index_establishments_on_uai", unique: true
+  end
 
   create_table "principals", primary_key: ["uid", "provider"], force: :cascade do |t|
     t.string "uid", null: false
