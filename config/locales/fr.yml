@@ -1,4 +1,10 @@
 fr:
+  activerecord:
+    attributes:
+      establishment:
+        uai: "UAI"
+        name: "Nom"
+
   global:
     sponsor: "Direction\nInterministérielle\ndu Numérique"
     service_name: "Aplypro"

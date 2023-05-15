@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePrincipals < ActiveRecord::Migration[7.0]
   def change
     create_table :principals, primary_key: %i[uid provider] do |t|

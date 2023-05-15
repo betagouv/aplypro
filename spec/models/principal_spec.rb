@@ -1,8 +1,10 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
-RSpec.describe Principal, type: :model do
+require "rails_helper"
+
+RSpec.describe Principal do
   it "has a valid factory" do
-    expect(FactoryBot.build(:principal)).to be_valid
+    expect(build(:principal)).to be_valid
   end
 
   # describe 'associations' do
