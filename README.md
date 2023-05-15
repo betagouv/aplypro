@@ -1,26 +1,23 @@
-# Beta x Rails
+# Aplypro
 
-![image](https://user-images.githubusercontent.com/107635/182360512-9fd4be19-bdf9-4a02-8f9c-94abf94e0164.png)
-
+Allocation pour les lycéens professionnels.
 
 ## Introduction
 
-Ce repo est un kit de démarrage basé sur Ruby on Rails 7 avec le
-[DSFR](https://www.systeme-de-design.gouv.fr/), notre [librairie de
-composants DSFR](https://github.com/betagouv/dsfr-view-components)
-ansi que certains outils choisis :
+Cette application servira de support aux personnels de direction pour
+renseigner et faciliter le paiement des périodes de stage en milieu
+professionnel (PFMP).
 
-* RSpec comme framework de tests ;
-* Cucumber et Capybara pour les tests BDD ;
-* Rubocop (RSpec et Rails) pour le linting.
+## Pile technique
 
-La base de données est configurée avec PostgreSQL.
-
-MailCatcher est utilisé en développement pour intercepter les e-mails
-envoyés.
+- Ruby 3 ;
+- Ruby on Rails 7 ;
+- Keycloak ;
+- RSpec ;
+- Cucumber.
 
 ## Démarrage
 
-```shell
+```sh
 docker-compose up
 ```
