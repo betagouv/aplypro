@@ -36,3 +36,6 @@
 
 node_modules
 .DS_STORE
+
+# Keycloak's data folder
+.local
