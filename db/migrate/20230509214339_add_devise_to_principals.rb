@@ -2,7 +2,7 @@
 
 class AddDeviseToPrincipals < ActiveRecord::Migration[7.0]
   def self.up
-    change_table :principals do |t|
+    change_table :principals, bulk: true do |t|
       ## Rememberable
       t.datetime :remember_created_at
 

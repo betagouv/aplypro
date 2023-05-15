@@ -10,7 +10,7 @@ def fetch_and_save(uri, path)
 
   File.write(path, data.force_encoding("UTF-8"))
 
-  return data
+  data
 end
 
 namespace :data do
@@ -29,9 +29,9 @@ namespace :data do
                  .parse(raw, col_sep: ";", headers: true)
                  .map { |data| Establishment.from_csv(data) }
                  .select(&:second_degree?)
-                 .reject(&:invalid?)
+                 .reject { |e| e.name.blank? }
                  .map { |etab| etab.attributes.merge(created_at: DateTime.now, updated_at: DateTime.now) }
 
-    Establishment.upsert_all(attributes)
+    Establishment.upsert_all(attributes) # rubocop:disable Rails/SkipsModelValidations
   end
 end

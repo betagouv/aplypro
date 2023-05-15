@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Principal < ApplicationRecord
   self.primary_key = %i[uid provider]
 

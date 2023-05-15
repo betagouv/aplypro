@@ -2,11 +2,10 @@
 
 class HomeController < ApplicationController
   def index
-    unless principal_signed_in?
-      redirect_to login_url
-    end
+    return if principal_signed_in?
+
+    redirect_to login_url
   end
 
-  def login
-  end
+  def login; end
 end

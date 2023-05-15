@@ -32,9 +32,11 @@ describe "Data tasks", type: :task do
     expect { task.invoke }.to change(Establishment, :count)
   end
 
-  it "rejects schools we don't care about" do
+  it "rejects invalid/irrelevant schools we don't care about" do
+    irrelevant = ["ECOLE MATERNELLE PUBLIQUE", "ECOLE PRIMAIRE", "ECOLE ELEMENTAIRE PUBLIQUE"]
+
     task.invoke
 
-    expect(Establishment.all.map(&:denomination).uniq).not_to include(*["ECOLE MATERNELLE PUBLIQUE", "ECOLE PRIMAIRE", "ECOLE ELEMENTAIRE PUBLIQUE"])
+    expect(Establishment.all.map(&:denomination).uniq).not_to include(*irrelevant)
   end
 end
