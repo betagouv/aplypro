@@ -4,6 +4,8 @@ class Establishment < ApplicationRecord
   validates :name, :uai, presence: true
   validates :uai, uniqueness: true
 
+  has_many :classes, class_name: "Classe"
+
   BOOTSTRAP_URL = ENV.fetch("APLYPRO_ESTABLISHMENTS_BOOTSTRAP_URL")
 
   CSV_MAPPING = {

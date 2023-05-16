@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_16_143624) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_16_161726) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "classes", force: :cascade do |t|
+    t.bigint "establishment_id", null: false
+    t.bigint "mefstat_id", null: false
+    t.string "label"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["establishment_id"], name: "index_classes_on_establishment_id"
+    t.index ["mefstat_id"], name: "index_classes_on_mefstat_id"
+  end
 
   create_table "establishments", force: :cascade do |t|
     t.string "uai", null: false
@@ -52,4 +62,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_16_143624) do
     t.index ["uid", "provider"], name: "index_principals_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "classes", "mefstats"
 end

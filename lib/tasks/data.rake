@@ -32,6 +32,8 @@ def fetch_and_save(uri, path)
 end
 
 namespace :data do
+  AUTO_KEYS = %w[id created_at updated_at]
+
   desc "fetches the public list of establishements and filter out the ones we need"
   task fetch_establishments: :environment do
     log_around "Fetching establishments" do
@@ -41,14 +43,15 @@ namespace :data do
       )
 
       log_around "Parsing the CSV file" do
-        attributes = CSV
+        models = CSV
                      .parse(raw, col_sep: ";", headers: true)
                      .map { |data| Establishment.from_csv(data) }
                      .select(&:second_degree?)
                      .reject { |e| e.name.blank? }
-                     .map { |etab| etab.attributes.merge(created_at: DateTime.now, updated_at: DateTime.now) }
+                     .map(&:attributes)
+                     .map { |h| h.except(*AUTO_KEYS) }
 
-        Establishment.upsert_all(attributes) # rubocop:disable Rails/SkipsModelValidations
+        Establishment.insert_all(models) # rubocop:disable Rails/SkipsModelValidations
       end
     end
   end
@@ -62,13 +65,14 @@ namespace :data do
       )
 
       log_around "Parsing the CSV file" do
-        attributes = CSV
+        models = CSV
                      .parse(raw, col_sep: ";", headers: true)
                      .map { |data| Mefstat.from_csv(data) }
-                     .uniq(&:id)
-                     .map { |mefstat| mefstat.attributes.merge(created_at: DateTime.now, updated_at: DateTime.now) }
+                     .uniq(&:code)
+                     .map(&:attributes)
+                     .map { |h| h.except(*AUTO_KEYS) }
 
-        Mefstat.upsert_all(attributes) # rubocop:disable Rails/SkipsModelValidations
+        Mefstat.insert_all(models) # rubocop:disable Rails/SkipsModelValidations
       end
     end
   end
