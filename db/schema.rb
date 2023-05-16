@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_12_084221) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_16_143624) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -24,6 +24,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_12_084221) do
     t.index ["uai"], name: "index_establishments_on_uai", unique: true
   end
 
+  create_table "mefstats", force: :cascade do |t|
+    t.string "label", null: false
+    t.string "short", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "principals", primary_key: ["uid", "provider"], force: :cascade do |t|
     t.string "uid", null: false
     t.string "provider", null: false
@@ -33,10 +40,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_12_084221) do
     t.string "email", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "remember_created_at"
+    t.datetime "remember_created_at", precision: nil
     t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
+    t.datetime "current_sign_in_at", precision: nil
+    t.datetime "last_sign_in_at", precision: nil
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.index ["email"], name: "index_principals_on_email", unique: true
