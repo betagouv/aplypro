@@ -12,7 +12,7 @@ describe "Data tasks", type: :task do
   end
 
   before do
-    data = Rails.root.join("spec/fixtures", FIXTURE_NAME).read
+    data = Rails.root.join("mock/data", FIXTURE_NAME).read
 
     stub_request(:get, Establishment::BOOTSTRAP_URL)
       .with(

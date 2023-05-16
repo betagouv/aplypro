@@ -16,7 +16,7 @@ RSpec.describe Establishment do
     let(:csv) do
       CSV
         .read(
-          "spec/fixtures/fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre.csv",
+          "mock/data/fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre.csv",
           col_sep: ";",
           headers: true
         )
