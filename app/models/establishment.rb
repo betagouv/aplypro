@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Establishment < ApplicationRecord
-  self.primary_key = :uai
-
   validates :name, :uai, presence: true
   validates :uai, uniqueness: true
 

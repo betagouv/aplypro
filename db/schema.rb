@@ -14,7 +14,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_16_143624) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "establishments", id: false, force: :cascade do |t|
+  create_table "establishments", force: :cascade do |t|
     t.string "uai", null: false
     t.string "name", null: false
     t.string "denomination", null: false
@@ -25,13 +25,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_16_143624) do
   end
 
   create_table "mefstats", force: :cascade do |t|
+    t.integer "code", null: false
     t.string "label", null: false
     t.string "short", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_mefstats_on_code", unique: true
   end
 
-  create_table "principals", primary_key: ["uid", "provider"], force: :cascade do |t|
+  create_table "principals", force: :cascade do |t|
     t.string "uid", null: false
     t.string "provider", null: false
     t.string "name", null: false
@@ -47,6 +49,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_16_143624) do
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.index ["email"], name: "index_principals_on_email", unique: true
+    t.index ["uid", "provider"], name: "index_principals_on_uid_and_provider", unique: true
   end
 
 end

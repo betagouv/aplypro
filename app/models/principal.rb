@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Principal < ApplicationRecord
-  self.primary_key = %i[uid provider]
-
   devise :omniauthable, omniauth_providers: %i[developer]
 
   validates :uid, :provider, :name, :token, :secret, :email, presence: true
