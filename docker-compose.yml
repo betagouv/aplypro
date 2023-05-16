@@ -14,6 +14,7 @@ services:
       RUBY_DEBUG_PORT: 12345
       RUBY_DEBUG_HOST: 0.0.0.0
       RUBY_DEBUG_NO_RELINE: true
+      APLYPRO_ESTABLISHMENTS_BOOTSTRAP_URL: "http://mock:3002/list-etabs"
     depends_on:
       - db
   db:
@@ -38,3 +39,12 @@ services:
     entrypoint: /opt/keycloak/bin/kc.sh start-dev
     ports:
       - "3001:1090"
+  mock:
+    environment:
+      PORT: 3002
+    build:
+      context: './mock'
+    volumes:
+      - "./mock:/app"
+    ports:
+      - "3002:3002"
