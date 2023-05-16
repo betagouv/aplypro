@@ -6,7 +6,7 @@ class Establishment < ApplicationRecord
   validates :name, :uai, presence: true
   validates :uai, uniqueness: true
 
-  BOOTSTRAP_URL = "https://data.education.gouv.fr/explore/dataset/fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre/download?format=csv&timezone=Europe/Berlin&use_labels_for_header=false"
+  BOOTSTRAP_URL = ENV.fetch("APLYPRO_ESTABLISHMENTS_BOOTSTRAP_URL")
 
   CSV_MAPPING = {
     "numero_uai" => :uai,

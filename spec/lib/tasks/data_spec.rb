@@ -19,7 +19,6 @@ describe "Data tasks", type: :task do
         headers: {
           "Accept" => "*/*",
           "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-          "Host" => "data.education.gouv.fr",
           "User-Agent" => "Ruby"
         }
       )
