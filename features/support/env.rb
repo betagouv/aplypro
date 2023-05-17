@@ -34,6 +34,14 @@ ActionController::Base.allow_rescue = false
 
 # You may also want to configure DatabaseCleaner to use different strategies for certain features and scenarios.
 # See the DatabaseCleaner documentation for details. Example:
+
+begin
+  DatabaseCleaner.strategy = :transaction
+  DatabaseCleaner.allow_remote_database_url = true
+rescue NameError
+  raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
+end
+
 #
 #   Before('@no-txn,@selenium,@culerity,@celerity,@javascript') do
 #     # { except: [:widgets] } may not do what you expect here
