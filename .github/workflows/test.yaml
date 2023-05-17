@@ -2,6 +2,10 @@ name: ci
 
 on: push
 
+# FIXME: having to run each step with every single environment
+# variable just doesn't scale. We could stamp them straight into the
+# image but that defeats the whole point of environment variables,
+# lest we can do it just in this file.
 env:
   DATABASE_URL: postgres://postgres:dummy@localhost:5432/test
   APLYPRO_ESTABLISHMENTS_BOOTSTRAP_URL: http://etabs
@@ -67,9 +71,11 @@ jobs:
       - run: |
           docker run \
             --network="host" \
-            -e DATABASE_URL="${{ env.DATABASE_URL }}" \
-            -e APLYPRO_ESTABLISHMENTS_BOOTSTRAP_URL="${{ env.APLYPRO_ESTABLISHMENTS_BOOTSTRAP_URL }}" \
-            -v /var/run/docker.sock:/var/run/docker.sock \
+            -e DATABASE_URL \
+            -e APLYPRO_ESTABLISHMENTS_BOOTSTRAP_URL \
+            -e APLYPRO_SYGNE_API \
+            -e APLYPRO_MEFSTATS_BOOTSTRAP_URL \
+            -e RAILS_ENV \
             --rm rails-template bundle exec rspec
   integration-tests:
     name: "Integration tests: Cucumber"
@@ -97,7 +103,9 @@ jobs:
       - run: |
           docker run \
             --network="host" \
-            -e DATABASE_URL="${{ env.DATABASE_URL }}" \
-            -e APLYPRO_ESTABLISHMENTS_BOOTSTRAP_URL="${{ env.APLYPRO_ESTABLISHMENTS_BOOTSTRAP_URL }}" \
-            -v /var/run/docker.sock:/var/run/docker.sock \
+            -e DATABASE_URL \
+            -e APLYPRO_ESTABLISHMENTS_BOOTSTRAP_URL \
+            -e APLYPRO_SYGNE_API \
+            -e APLYPRO_MEFSTATS_BOOTSTRAP_URL \
+            -e RAILS_ENV \
             --rm rails-template bundle exec cucumber
