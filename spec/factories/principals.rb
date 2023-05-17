@@ -4,6 +4,7 @@ require "faker"
 
 FactoryBot.define do
   factory :principal do
+    establishment
     uid { Faker::Alphanumeric.alpha }
     name { Faker::Name.name }
     provider { "MyString" }
