@@ -270,7 +270,7 @@ Devise.setup do |config|
 
   # ==> OmniAuth
   config.omniauth :developer,
-                  :fields => [:email, :name, :uai]
+                  fields: %i[email name uai]
 
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.

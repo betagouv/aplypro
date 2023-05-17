@@ -1,5 +1,10 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
-RSpec.describe Classe, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+require "rails_helper"
+
+RSpec.describe Classe do
+  describe "associations" do
+    it { is_expected.to belong_to(:establishment).class_name("Establishment") }
+    it { is_expected.to belong_to(:mefstat).class_name("Mefstat") }
+  end
 end

@@ -31,9 +31,11 @@ def fetch_and_save(uri, path)
   check_cached_file(path) || download_to(uri, path)
 end
 
-namespace :data do
-  AUTO_KEYS = %w[id created_at updated_at]
+AUTO_KEYS = %w[id created_at updated_at].freeze
 
+# I'm feeling a CSVFetcher class soon
+# rubocop:disable Metrics/BlockLength
+namespace :data do
   desc "fetches the public list of establishements and filter out the ones we need"
   task fetch_establishments: :environment do
     log_around "Fetching establishments" do
@@ -44,12 +46,12 @@ namespace :data do
 
       log_around "Parsing the CSV file" do
         models = CSV
-                     .parse(raw, col_sep: ";", headers: true)
-                     .map { |data| Establishment.from_csv(data) }
-                     .select(&:second_degree?)
-                     .reject { |e| e.name.blank? }
-                     .map(&:attributes)
-                     .map { |h| h.except(*AUTO_KEYS) }
+                 .parse(raw, col_sep: ";", headers: true)
+                 .map { |data| Establishment.from_csv(data) }
+                 .select(&:second_degree?)
+                 .reject { |e| e.name.blank? }
+                 .map(&:attributes)
+                 .map { |h| h.except(*AUTO_KEYS) }
 
         Establishment.insert_all(models) # rubocop:disable Rails/SkipsModelValidations
       end
@@ -66,14 +68,15 @@ namespace :data do
 
       log_around "Parsing the CSV file" do
         models = CSV
-                     .parse(raw, col_sep: ";", headers: true)
-                     .map { |data| Mefstat.from_csv(data) }
-                     .uniq(&:code)
-                     .map(&:attributes)
-                     .map { |h| h.except(*AUTO_KEYS) }
+                 .parse(raw, col_sep: ";", headers: true)
+                 .map { |data| Mefstat.from_csv(data) }
+                 .uniq(&:code)
+                 .map(&:attributes)
+                 .map { |h| h.except(*AUTO_KEYS) }
 
         Mefstat.insert_all(models) # rubocop:disable Rails/SkipsModelValidations
       end
     end
   end
 end
+# rubocop:enable Metrics/BlockLength

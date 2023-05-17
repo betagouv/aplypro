@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class CreatePrincipals < ActiveRecord::Migration[7.0]
+  # rubocop:disable Metrics/MethodLength
   def change
     create_table :principals do |t|
       t.string :uid, null: false
@@ -14,7 +15,8 @@ class CreatePrincipals < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_index :principals, [:uid, :provider], unique: true
+    add_index :principals, %i[uid provider], unique: true
     add_index :principals, :email, unique: true
   end
+  # rubocop:enable Metrics/MethodLength
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Mefstat < ApplicationRecord
   BOOTSTRAP_URL = ENV.fetch "APLYPRO_MEFSTATS_BOOTSTRAP_URL"
 

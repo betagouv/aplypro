@@ -7,8 +7,6 @@ class DashboardController < ApplicationController
     @etab = current_principal.establishment
     @classes = @etab.classes
 
-    if @classes.none?
-      FetchStudentsJob.perform_later(@etab)
-    end
+    FetchStudentsJob.perform_later(@etab) if @classes.none?
   end
 end

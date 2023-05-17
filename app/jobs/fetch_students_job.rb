@@ -22,7 +22,7 @@ class FetchStudentsJob < ApplicationJob
     end
   end
 
-  def students_url_for(etab)
-    URI.parse(ENV.fetch "APLYPRO_SYGNE_API")
+  def students_url_for(_etab)
+    URI.parse(ENV.fetch("APLYPRO_SYGNE_API"))
   end
 end

@@ -7,8 +7,8 @@ RSpec.describe Principal do
     expect(build(:principal)).to be_valid
   end
 
-  describe 'associations' do
-    it { should belong_to(:establishment).class_name('Establishment') }
+  describe "associations" do
+    it { is_expected.to belong_to(:establishment).class_name("Establishment") }
   end
 
   describe "validations" do

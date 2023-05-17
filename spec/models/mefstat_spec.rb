@@ -1,7 +1,9 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 require "csv"
 
-RSpec.describe Mefstat, type: :model do
+RSpec.describe Mefstat do
   subject(:mefstat) { build(:mefstat) }
 
   it { is_expected.to validate_presence_of(:label) }

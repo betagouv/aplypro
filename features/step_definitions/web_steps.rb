@@ -25,5 +25,5 @@ Quand("je remplis {string} avec {string}") do |label, value|
 end
 
 Alors("debug") do
-  debugger
+  debugger # rubocop:disable Lint/Debugger
 end

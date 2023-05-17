@@ -77,7 +77,7 @@ end
 cucumber_options = {
   # Below are examples overriding defaults
 
-  cmd: 'bin/cucumber',
+  cmd: "bin/cucumber",
   cmd_additional_args: "--profile default",
 
   # all_after_pass: false,
