@@ -12,7 +12,9 @@ class Establishment < ApplicationRecord
     "numero_uai" => :uai,
     "appellation_officielle" => :name,
     "denomination_principale" => :denomination,
-    "nature_uai" => :nature
+    "nature_uai" => :nature,
+    "code_postal_uai" => :postal_code,
+    "localite_acheminement_uai" => :city
   }.freeze
 
   def self.from_csv(csv)
@@ -25,5 +27,9 @@ class Establishment < ApplicationRecord
 
   def second_degree?
     nature.start_with?("3")
+  end
+
+  def to_s
+    name
   end
 end
