@@ -9,8 +9,9 @@ RSpec.describe FetchStudentsJob do
 
   before do
     data = Rails.root.join("mock/data", FIXTURE_NAME).read
+    url = ENV.fetch "APLYPRO_SYGNE_API"
 
-    stub_request(:get, "http://mock:3002/sygne/")
+    stub_request(:get, url)
       .with(
         headers: {
           "Accept" => "*/*",

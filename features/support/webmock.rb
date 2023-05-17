@@ -8,9 +8,10 @@ Before do
   FactoryBot.create(:mefstat, code: "1111")
   FactoryBot.create(:mefstat, code: "4221")
 
+  url = ENV.fetch "APLYPRO_SYGNE_API"
   data = Rails.root.join("mock/data", FIXTURE_NAME).read
 
-  stub_request(:get, "http://mock:3002/sygne/")
+  stub_request(:get, url)
     .with(
       headers: {
         "Accept" => "*/*",

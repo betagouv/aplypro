@@ -4,7 +4,9 @@ on: push
 
 env:
   DATABASE_URL: postgres://postgres:dummy@localhost:5432/test
-  APLYPRO_ESTABLISHMENTS_BOOTSTRAP_URL: http://fake
+  APLYPRO_ESTABLISHMENTS_BOOTSTRAP_URL: http://etabs
+  APLYPRO_SYGNE_API: http://sygne
+  APLYPRO_MEFSTATS_BOOTSTRAP_URL: http://mefstats
   RAILS_ENV: test
 
 jobs:
