@@ -26,7 +26,7 @@
 #  * zeus: 'zeus rspec' (requires the server to be started separately)
 #  * 'just' rspec: 'rspec'
 
-guard :rspec, cmd: "bundle exec rspec" do
+guard :rspec, cmd: "bin/rspec" do
   require "guard/rspec/dsl"
   dsl = Guard::RSpec::Dsl.new(self)
 
@@ -77,7 +77,7 @@ end
 cucumber_options = {
   # Below are examples overriding defaults
 
-  # cmd: 'bin/cucumber',
+  cmd: 'bin/cucumber',
   cmd_additional_args: "--profile default",
 
   # all_after_pass: false,

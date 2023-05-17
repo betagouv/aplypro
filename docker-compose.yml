@@ -15,6 +15,7 @@ services:
       RUBY_DEBUG_HOST: 0.0.0.0
       RUBY_DEBUG_NO_RELINE: true
       APLYPRO_ESTABLISHMENTS_BOOTSTRAP_URL: "http://mock:3002/list-etabs"
+      APLYPRO_MEFSTATS_BOOTSTRAP_URL: "http://mock:3002/list-mefstats"
     depends_on:
       - db
   db:

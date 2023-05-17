@@ -69,6 +69,7 @@ end
 group :test do
   gem "capybara"
   gem "cucumber-rails", require: false
+  gem "database_cleaner-active_record"
   gem "faker", require: false
   gem "guard"
   gem "guard-cucumber"
@@ -90,4 +91,9 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  gem "spring"
+  gem "spring-watcher-listen"
+  gem "spring-commands-rspec"
+  gem "spring-commands-cucumber"
+  gem "spring-commands-rubocop"
 end

@@ -2,7 +2,7 @@
 
 class CreateEstablishments < ActiveRecord::Migration[7.0]
   def change
-    create_table :establishments, id: false, primary_key: :uai do |t|
+    create_table :establishments do |t|
       t.string :uai, null: false
       t.string :name, null: false
       t.string :denomination, null: false

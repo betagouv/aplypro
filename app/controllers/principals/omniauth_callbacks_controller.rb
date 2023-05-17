@@ -5,9 +5,9 @@ module Principals
     skip_before_action :verify_authenticity_token, only: :developer
 
     def developer
-      @principal = Principal.from_omniauth(forged_developer_hash(attrs))
+      @principal = Principal.from_omniauth(forged_developer_hash(request.env["omniauth.auth"]))
 
-      if @principal.persisted?
+      if @principal.save
         flash[:notice] = t("auth.success")
         sign_in_and_redirect @principal
       else
@@ -20,7 +20,6 @@ module Principals
 
     def forged_developer_hash(attrs)
       forged = {
-        "info" => { uat: "-1" },
         "credentials" => { token: "fake token", secret: "fake secret" }
       }
 

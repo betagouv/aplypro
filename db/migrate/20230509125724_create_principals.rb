@@ -2,7 +2,7 @@
 
 class CreatePrincipals < ActiveRecord::Migration[7.0]
   def change
-    create_table :principals, primary_key: %i[uid provider] do |t|
+    create_table :principals do |t|
       t.string :uid, null: false
       t.string :provider, null: false
 
@@ -13,6 +13,8 @@ class CreatePrincipals < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+
+    add_index :principals, [:uid, :provider], unique: true
     add_index :principals, :email, unique: true
   end
 end

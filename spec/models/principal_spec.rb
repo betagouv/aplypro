@@ -7,9 +7,9 @@ RSpec.describe Principal do
     expect(build(:principal)).to be_valid
   end
 
-  # describe 'associations' do
-  #   it { should belong_to(:category).class_name('MenuCategory') }
-  # end
+  describe 'associations' do
+    it { should belong_to(:establishment).class_name('Establishment') }
+  end
 
   describe "validations" do
     %w[uid name email provider token secret email].each do |attr|

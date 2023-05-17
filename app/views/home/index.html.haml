@@ -9,4 +9,7 @@
       permet de renseigner les périodes de stage validées par les
       lycéens professionnels.
 
-    = link_to 'Connexion', root_path, class: 'fr-btn'
+    - if current_principal.nil?
+      = link_to 'Connexion', root_path, class: 'fr-btn'
+    - else
+      %h2 Connecté comme #{current_principal.name}

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class Establishment < ApplicationRecord
-  self.primary_key = :uai
-
   validates :name, :uai, presence: true
   validates :uai, uniqueness: true
+
+  has_many :classes, class_name: "Classe"
 
   BOOTSTRAP_URL = ENV.fetch("APLYPRO_ESTABLISHMENTS_BOOTSTRAP_URL")
 
