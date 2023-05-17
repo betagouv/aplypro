@@ -10,5 +10,5 @@ fr:
     service_name: "Aplypro"
     service_description: "Allocation pour les lycéens professionnels"
   auth:
-    success: "Connexion effectuée avec succès"
+    success: "Connexion réussie"
     failure: "La connexion a échouée"
