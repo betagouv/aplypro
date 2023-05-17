@@ -195,6 +195,9 @@ GEM
     hashie (5.0.0)
     html-attributes-utils (1.0.0)
       activesupport (>= 6.1.4.4)
+    httparty (0.21.0)
+      mini_mime (>= 1.0.0)
+      multi_xml (>= 0.5.2)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     importmap-rails (1.1.5)
@@ -235,6 +238,7 @@ GEM
     minitest (5.18.0)
     msgpack (1.7.0)
     multi_test (1.1.0)
+    multi_xml (0.6.0)
     nenv (0.3.0)
     net-imap (0.3.4)
       date
@@ -478,6 +482,7 @@ DEPENDENCIES
   guard-cucumber
   guard-rspec
   haml-rails
+  httparty
   importmap-rails
   jbuilder
   omniauth-rails_csrf_protection
