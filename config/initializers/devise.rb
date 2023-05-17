@@ -269,7 +269,8 @@ Devise.setup do |config|
   config.sign_out_via = :delete
 
   # ==> OmniAuth
-  config.omniauth :developer
+  config.omniauth :developer,
+                  :fields => [:email, :name, :uai]
 
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
