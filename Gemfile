@@ -91,4 +91,9 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  gem "spring"
+  gem "spring-watcher-listen"
+  gem "spring-commands-rspec"
+  gem "spring-commands-cucumber"
+  gem "spring-commands-rubocop"
 end
