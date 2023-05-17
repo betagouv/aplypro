@@ -13,3 +13,4 @@
       = link_to 'Connexion', root_path, class: 'fr-btn'
     - else
       %h2 Connecté comme #{current_principal.name}
+      = button_to 'Déconnexion', destroy_principal_session_path, method: :delete, class: 'fr-btn'
