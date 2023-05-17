@@ -1,1 +1,16 @@
 - content_for(:page_title) { "Tableau de bord" }
+
+%h1= @etab
+%h2.fr-h5= @etab.city.capitalize
+
+%p= @etab.postal_code
+
+%hr
+
+- if @classes.none?
+  %p Nous récupérons la liste de vos élèves.
+- else
+  %h3 #{@classes.count} classes
+  %ul
+    - @classes.each do |c|
+      %li= link_to c.label, '#'

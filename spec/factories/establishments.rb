@@ -6,5 +6,7 @@ FactoryBot.define do
     name { Faker::Educator.secondary_school }
     denomination { "LYCEE GENERAL ET TECHNOLOGIQUE" }
     nature { Faker::Number.between(from: 300, to: 399) }
+    postal_code { Faker::Address.postcode }
+    city { Faker::Address.city }
   end
 end

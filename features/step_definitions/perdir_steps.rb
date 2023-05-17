@@ -10,6 +10,10 @@ Et("mon établissement n'est pas encore hydraté") do
   @etab.classes.delete_all
 end
 
+Et("mon établissement a été hydraté") do
+  @classes = FactoryBot.create_list(:classe, 4, establishment: @etab)
+end
+
 Quand("je me connecte") do
   steps %(
     Quand je me rends sur la page d'accueil

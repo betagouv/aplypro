@@ -1,3 +1,22 @@
 # frozen_string_literal: true
 
 require "webmock/cucumber"
+
+FIXTURE_NAME = "sygne-students-for-uai.json"
+
+Before do
+  FactoryBot.create(:mefstat, code: "1111")
+  FactoryBot.create(:mefstat, code: "4221")
+
+  data = Rails.root.join("mock/data", FIXTURE_NAME).read
+
+  stub_request(:get, "http://mock:3002/sygne/")
+    .with(
+      headers: {
+        "Accept" => "*/*",
+        "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+        "User-Agent" => "Ruby"
+      }
+    )
+    .to_return(status: 200, body: data, headers: {})
+end

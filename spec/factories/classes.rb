@@ -2,6 +2,6 @@ FactoryBot.define do
   factory :classe do
     establishment
     mefstat
-    label { "6EME2" }
+    sequence(:label) { |n| "3EME#{n}" }
   end
 end
