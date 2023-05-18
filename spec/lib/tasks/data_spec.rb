@@ -2,8 +2,6 @@
 
 require "rails_helper"
 
-FIXTURE_NAME = "fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre.csv"
-
 describe "Data tasks", type: :task do
   subject(:task) { Rake::Task["data:fetch_establishments"] }
 
@@ -12,7 +10,8 @@ describe "Data tasks", type: :task do
   end
 
   before do
-    data = Rails.root.join("mock/data", FIXTURE_NAME).read
+    fixture = "fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre.csv"
+    data = Rails.root.join("mock/data", fixture).read
 
     stub_request(:get, Establishment::BOOTSTRAP_URL)
       .with(

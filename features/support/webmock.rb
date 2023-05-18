@@ -2,14 +2,13 @@
 
 require "webmock/cucumber"
 
-FIXTURE_NAME = "sygne-students-for-uai.json"
-
 Before do
   FactoryBot.create(:mefstat, code: "1111")
   FactoryBot.create(:mefstat, code: "4221")
 
   url = ENV.fetch "APLYPRO_SYGNE_API"
-  data = Rails.root.join("mock/data", FIXTURE_NAME).read
+  fixture = "sygne-students-for-uai.json"
+  data = Rails.root.join("mock/data", fixture).read
 
   stub_request(:get, url)
     .with(

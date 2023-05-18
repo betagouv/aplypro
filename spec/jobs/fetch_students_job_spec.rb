@@ -2,13 +2,12 @@
 
 require "rails_helper"
 
-FIXTURE_NAME = "sygne-students-for-uai.json"
-
 RSpec.describe FetchStudentsJob do
   let(:etab) { create(:establishment) }
 
   before do
-    data = Rails.root.join("mock/data", FIXTURE_NAME).read
+    fixture = "sygne-students-for-uai.json"
+    data = Rails.root.join("mock/data", fixture).read
     url = ENV.fetch "APLYPRO_SYGNE_API"
 
     stub_request(:get, url)
