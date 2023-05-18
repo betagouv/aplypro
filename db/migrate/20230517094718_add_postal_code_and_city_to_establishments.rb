@@ -2,6 +2,9 @@
 
 class AddPostalCodeAndCityToEstablishments < ActiveRecord::Migration[7.0]
   def change
-    add_column :establishments, :postal_code, :string, bulk: true
+    change_table :establishments, bulk: true do |t|
+      t.string :postal_code
+      t.string :city
+    end
   end
 end
