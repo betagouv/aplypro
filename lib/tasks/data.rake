@@ -15,6 +15,8 @@ end
 def download_to(uri, path)
   log_around "Downloading #{uri} into #{path}" do
     File.write(path, Net::HTTP.get(URI(uri)).force_encoding("UTF-8"))
+
+    File.read(path)
   end
 end
 
