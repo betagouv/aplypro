@@ -7,7 +7,7 @@ module Principals
     def developer
       @principal = Principal.from_omniauth(forged_developer_hash(request.env["omniauth.auth"]))
 
-      if @principal.save
+      if @principal.save!
         flash[:notice] = t("auth.success")
         sign_in_and_redirect @principal
       else
