@@ -14,3 +14,8 @@ Style/StringLiterals:
 
 Style/Documentation:
   Enabled: false
+
+# see https://github.com/rubocop/ruby-style-guide/issues/329
+# I am team "if not" (when it makes sense)
+Style/NegatedIf:
+  Enabled: false
