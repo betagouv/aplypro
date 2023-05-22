@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_17_094718) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_22_131051) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -66,6 +66,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_17_094718) do
     t.index ["uid", "provider"], name: "index_principals_on_uid_and_provider", unique: true
   end
 
+  create_table "students", primary_key: "ine", id: :string, force: :cascade do |t|
+    t.bigint "classe_id", null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["classe_id"], name: "index_students_on_classe_id"
+  end
+
   add_foreign_key "classes", "mefstats"
   add_foreign_key "principals", "establishments"
+  add_foreign_key "students", "classes", column: "classe_id"
 end
