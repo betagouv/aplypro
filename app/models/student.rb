@@ -26,5 +26,4 @@ class Student < ApplicationRecord
 
     Student.new(attributes)
   end
-
 end

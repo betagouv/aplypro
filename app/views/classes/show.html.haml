@@ -3,7 +3,7 @@
   .fr-collapse
     %ol.fr-breadcrumb__list
       %li
-        %a.fr-breadcrumb__link{href: classes_path}Classes
+        %a.fr-breadcrumb__link{href: classes_path}Liste des classes
       %li
         %a.fr-breadcrumb__link{aria: { current: true }}= @classe.label
 
@@ -11,7 +11,7 @@
 %h2 Liste des élèves
 %em= @etab
 
-.fr-table.fr-mt-3w
+.fr-table.fr-mt-3w.fr-table--layout-fixed
   %table
     %caption Élèves
     %thead
@@ -27,4 +27,5 @@
           %td= student
           %td 0
           %td
-            = dsfr_button label: 'Voir les PFMPs', level: :secondary
+            -# FIXME: we cannot have the INE in the URL
+            = dsfr_link_to "Voir le profil de l'élève", class_student_path(@classe, student)
