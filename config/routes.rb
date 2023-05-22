@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :establishments, only: :index
-  resources :classes, only: %i[show index]
+  resources :classes, only: %i[show index] do
+    resources :students, only: %i[show]
+  end
 
   devise_for :principals, controllers: { omniauth_callbacks: "principals/omniauth_callbacks" }
 
