@@ -32,6 +32,6 @@ class Establishment < ApplicationRecord
   end
 
   def to_s
-    name
+    [name, city, postal_code].join(" - ")
   end
 end

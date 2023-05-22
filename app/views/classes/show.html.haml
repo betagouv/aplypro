@@ -1,0 +1,30 @@
+%nav.fr-breadcrumb{role: 'navigation'}
+  %button.fr-breadcrumb__button Voir le fil d'arianne
+  .fr-collapse
+    %ol.fr-breadcrumb__list
+      %li
+        %a.fr-breadcrumb__link{href: classes_path}Classes
+      %li
+        %a.fr-breadcrumb__link{aria: { current: true }}= @classe.label
+
+%h1= @classe.label
+%h2 Liste des élèves
+%em= @etab
+
+.fr-table.fr-mt-3w
+  %table
+    %caption Élèves
+    %thead
+      %th{scope: "col"} INE
+      %th{scope: "col"} Nom
+      %th{scope: "col"} PFMPs
+      %th{scope: "col"} Actions
+
+    %tbody
+      - @classe.students.each do |student|
+        %tr
+          %td= student.ine
+          %td= student
+          %td 0
+          %td
+            = dsfr_button label: 'Voir les PFMPs', level: :secondary

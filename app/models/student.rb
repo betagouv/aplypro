@@ -16,7 +16,7 @@ class Student < ApplicationRecord
   }.freeze
 
   def to_s
-    [first_name, last_name].join
+    [first_name, last_name].join("  ")
   end
 
   def self.from_sygne_hash(hash)
@@ -26,4 +26,5 @@ class Student < ApplicationRecord
 
     Student.new(attributes)
   end
+
 end

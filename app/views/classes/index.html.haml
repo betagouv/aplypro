@@ -1,11 +1,9 @@
-- content_for(:page_title) { "Tableau de bord" }
+- content_for(:page_title) { ["Liste des classes", @etab.name].join(" - ") }
 
-%h1= @etab
-%h2.fr-h5= @etab.city.capitalize
+%h1 Liste des classes
+%em= @etab
 
-%p= @etab.postal_code
-
-%hr
+.fr-mt-3w
 
 - if @classes.none?
   %p Nous récupérons la liste de vos élèves.
@@ -22,4 +20,4 @@
           %tr
             %td= c.label
             %td= c.students.count
-            %td=dsfr_link_to 'Voir la classe', '#'
+            %td=dsfr_link_to 'Voir la classe', c
