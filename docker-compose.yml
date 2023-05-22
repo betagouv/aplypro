@@ -16,7 +16,7 @@ services:
       RUBY_DEBUG_NO_RELINE: true
       APLYPRO_ESTABLISHMENTS_BOOTSTRAP_URL: "http://mock:3002/list-etabs"
       APLYPRO_MEFSTATS_BOOTSTRAP_URL: "http://mock:3002/list-mefstats"
-      APLYPRO_SYGNE_API: "http://mock:3002/sygne/"
+      APLYPRO_SYGNE_API: "http://mock:3002/sygne/generated/%s"
     depends_on:
       - db
   db:
