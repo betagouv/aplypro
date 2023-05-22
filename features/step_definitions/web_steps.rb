@@ -24,6 +24,12 @@ Quand("je remplis {string} avec {string}") do |label, value|
   fill_in label, with: value
 end
 
+Quand("je clique sur {string} dans la rangée {string}") do |link, row|
+  within('tr', text: row) do
+    click_link(link)
+  end
+end
+
 Alors("debug") do
   debugger # rubocop:disable Lint/Debugger
 end
