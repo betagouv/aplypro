@@ -15,17 +15,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_131051) do
   enable_extension "plpgsql"
 
   create_table "classes", force: :cascade do |t|
-    t.bigint "establishment_id", null: false
     t.bigint "mefstat_id", null: false
     t.string "label"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["establishment_id"], name: "index_classes_on_establishment_id"
+    t.string "establishment_id", null: false
     t.index ["mefstat_id"], name: "index_classes_on_mefstat_id"
   end
 
-  create_table "establishments", force: :cascade do |t|
-    t.string "uai", null: false
+  create_table "establishments", primary_key: "uai", id: :string, force: :cascade do |t|
     t.string "name", null: false
     t.string "denomination", null: false
     t.string "nature", null: false
@@ -60,9 +58,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_131051) do
     t.datetime "last_sign_in_at", precision: nil
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
-    t.bigint "establishment_id", null: false
+    t.string "establishment_id", null: false
     t.index ["email"], name: "index_principals_on_email", unique: true
-    t.index ["establishment_id"], name: "index_principals_on_establishment_id"
     t.index ["uid", "provider"], name: "index_principals_on_uid_and_provider", unique: true
   end
 
@@ -75,7 +72,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_131051) do
     t.index ["classe_id"], name: "index_students_on_classe_id"
   end
 
+  add_foreign_key "classes", "establishments", primary_key: "uai"
   add_foreign_key "classes", "mefstats"
-  add_foreign_key "principals", "establishments"
+  add_foreign_key "principals", "establishments", primary_key: "uai"
   add_foreign_key "students", "classes", column: "classe_id"
 end
