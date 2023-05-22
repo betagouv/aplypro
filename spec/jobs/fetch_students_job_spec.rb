@@ -9,7 +9,7 @@ RSpec.describe FetchStudentsJob do
     fixture = "sygne-students-for-uai.json"
     data = Rails.root.join("mock/data", fixture).read
 
-    stub_request(:get, %r{http://mock:3002/sygne/generated/**})
+    stub_request(:get, %r{http://mock:3002/sygne/generated/*})
       .with(
         headers: {
           "Accept" => "*/*",
