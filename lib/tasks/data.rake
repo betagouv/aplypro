@@ -19,7 +19,7 @@ namespace :data do
              .map(&:attributes)
              .map { |h| h.except(*AUTO_KEYS) }
 
-    Establishment.insert_all(models) # rubocop:disable Rails/SkipsModelValidations
+    Establishment.upsert_all(models) # rubocop:disable Rails/SkipsModelValidations
   end
 
   desc "fetches the public list of mefstats and filter out the ones we need"
