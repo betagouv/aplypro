@@ -7,6 +7,8 @@ class ClassesController < ApplicationController
 
   def index
     @classes = @etab.classes
+
+    FetchStudentsJob.perform_later(@etab) if @classes.none?
   end
 
   def show; end
