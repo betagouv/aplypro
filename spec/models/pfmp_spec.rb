@@ -3,5 +3,9 @@
 require "rails_helper"
 
 RSpec.describe Pfmp do
-  pending "add some examples to (or delete) #{__FILE__}"
+  subject(:pfmp) { build(:pfmp) }
+
+  describe "associations" do
+    it { is_expected.to belong_to(:student) }
+  end
 end

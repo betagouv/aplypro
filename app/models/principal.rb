@@ -18,4 +18,8 @@ class Principal < ApplicationRecord
     end
   end
   # rubocop:enable Metrics/AbcSize
+
+  def to_s
+    name
+  end
 end

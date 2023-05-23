@@ -1,3 +1,5 @@
+- content_for(:page_title) { [@student.to_s, @student.classe.to_s].join(" - ")}
+
 %nav.fr-breadcrumb{role: 'navigation'}
   %button.fr-breadcrumb__button Voir le fil d'arianne
   .fr-collapse
@@ -9,6 +11,7 @@
       %li
         %a.fr-breadcrumb__link{aria: { current: true }}= @student
 
+= render 'shared/etab_banner'
 %h1 Profil de #{@student}
 
 .actions.fr-py-3w
