@@ -25,7 +25,7 @@
         %tr
           %td= student.ine
           %td= student
-          %td 0
+          %td= student.pfmps.count
           %td
             -# FIXME: we cannot have the INE in the URL
             = dsfr_link_to "Voir le profil de l'élève", class_student_path(@classe, student)

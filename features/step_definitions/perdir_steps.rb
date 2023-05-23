@@ -42,3 +42,11 @@ Alors("le fil d'Ariane affiche {string}") do |path|
 
   expect(breadcrumbs).to eq components
 end
+
+Quand("l'élève n'a réalisé aucune PFMP") do
+  @student.pfmps.delete_all
+end
+
+Alors("l'élève a {int} PFMP") do |count|
+  expect(@student.pfmps.count).to eq count
+end

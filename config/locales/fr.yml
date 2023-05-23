@@ -12,3 +12,8 @@ fr:
   auth:
     success: "Connexion réussie"
     failure: "La connexion a échouée"
+  pfmps:
+    new:
+      success: La PFMP a été enregistrée avec succès
+    statuses:
+      pending: En attente

@@ -9,6 +9,8 @@ class Student < ApplicationRecord
 
   has_one :establishment, through: :classe
 
+  has_many :pfmps
+
   SYGNE_MAPPING = {
     "prenom" => :first_name,
     "nom" => :last_name,

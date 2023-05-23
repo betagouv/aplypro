@@ -2,9 +2,8 @@
 
 class ClassesController < ApplicationController
   before_action :authenticate_principal!
-  before_action :find_etab
-  before_action :find_classe, only: :show
-
+  before_action :set_etab
+  before_action :set_classe, only: :show
 
   def index
     @classes = @etab.classes
@@ -14,11 +13,11 @@ class ClassesController < ApplicationController
 
   private
 
-  def find_etab
+  def set_etab
     @etab = current_principal.establishment
   end
 
-  def find_classe
+  def set_classe
     @classe = Classe.find(params[:id])
   end
 end

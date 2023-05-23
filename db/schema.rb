@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_22_131051) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_22_231400) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -41,6 +41,26 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_131051) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_mefstats_on_code", unique: true
+  end
+
+  create_table "pfmp_transitions", force: :cascade do |t|
+    t.string "to_state", null: false
+    t.text "metadata", default: "{}"
+    t.integer "sort_key", null: false
+    t.integer "pfmp_id", null: false
+    t.boolean "most_recent", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pfmp_id", "most_recent"], name: "index_pfmp_transitions_parent_most_recent", unique: true, where: "most_recent"
+    t.index ["pfmp_id", "sort_key"], name: "index_pfmp_transitions_parent_sort", unique: true
+  end
+
+  create_table "pfmps", force: :cascade do |t|
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "student_id", null: false
   end
 
   create_table "principals", force: :cascade do |t|
@@ -74,6 +94,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_131051) do
 
   add_foreign_key "classes", "establishments", primary_key: "uai"
   add_foreign_key "classes", "mefstats"
+  add_foreign_key "pfmp_transitions", "pfmps"
+  add_foreign_key "pfmps", "students", primary_key: "ine"
   add_foreign_key "principals", "establishments", primary_key: "uai"
   add_foreign_key "students", "classes", column: "classe_id"
 end

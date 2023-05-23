@@ -2,7 +2,9 @@
 
 Rails.application.routes.draw do
   resources :classes, only: %i[show index] do
-    resources :students, only: %i[show]
+    resources :students, only: %i[show] do
+      resources :pfmps
+    end
   end
 
   devise_for :principals, controllers: { omniauth_callbacks: "principals/omniauth_callbacks" }

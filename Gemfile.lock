@@ -409,6 +409,7 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
+    statesman (10.2.2)
     stimulus-rails (1.2.1)
       railties (>= 6.0.0)
     swd (2.0.2)
@@ -502,6 +503,7 @@ DEPENDENCIES
   spring-commands-rubocop
   spring-watcher-listen
   sprockets-rails
+  statesman
   stimulus-rails
   turbo-rails
   tzinfo-data
