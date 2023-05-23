@@ -8,12 +8,11 @@
         %a.fr-breadcrumb__link{aria: { current: true }}= @classe.label
 
 %h1= @classe.label
-%h2 Liste des élèves
 %em= @etab
 
 .fr-table.fr-mt-3w.fr-table--layout-fixed
   %table
-    %caption Élèves
+    %caption Liste des élèves (#{@classe.students.count})
     %thead
       %th{scope: "col"} INE
       %th{scope: "col"} Nom

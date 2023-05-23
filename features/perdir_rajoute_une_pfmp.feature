@@ -18,4 +18,6 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Et que je remplis "Date de fin" avec "20/03/2023"
     Et que je clique sur "Enregistrer"
     Alors la page contient "La PFMP a été enregistrée avec succès"
-    Et l'élève a 1 PFMP
+    Et je peux voir dans le tableau "Périodes de formation en milieu professionnel (PFMP)"
+      |      Début |        Fin | État       | Commentaire |
+      | 2023-03-17 | 2023-03-20 | En attente |             |

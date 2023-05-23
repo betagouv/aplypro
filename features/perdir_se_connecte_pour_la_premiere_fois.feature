@@ -13,4 +13,4 @@ Fonctionnalité: Le personnel de direction se connecte
     Et que mon établissement a été hydraté
     Quand je me connecte
     Alors le titre de la page contient "Liste des classes"
-    Et la page contient "4 classes"
+    Et la page contient "Liste des classes (4)"

@@ -16,16 +16,18 @@
 - if @classes.none?
   %p Nous récupérons la liste de vos élèves.
 - else
-  .fr-table
+  .fr-table.fr-table--layout-fixed
     %table
-      %caption #{@classes.count} classes
+      %caption Liste des classes (#{@classes.count})
       %thead
         %th{scope: "col"} Label
         %th{scope: "col"} Effectif
+        %th{scope: "col"} Nombre de PFMPs
         %th{scope: "col"} Actions
       %tbody
-        - @classes.each do |c|
+        - @classes.each do |classe|
           %tr
-            %td= c.label
-            %td= c.students.count
-            %td=dsfr_link_to 'Voir les élèves', c
+            %td= classe.label
+            %td= classe.students.count
+            %td= 0
+            %td=dsfr_link_to 'Voir les élèves', classe

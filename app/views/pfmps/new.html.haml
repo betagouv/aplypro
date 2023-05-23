@@ -14,13 +14,17 @@
 %h1 Ajouter une PFMP pour #{@student}
 
 = form_with model: @pfmp, url: class_student_pfmps_path(@classe.id, @student.ine), method: "post" do |form|
-  .fr-input-group.fr-col-2
+  .fr-input-group.fr-col-3
     = form.label :start_date, "Date de début", class: 'fr-label'
     = form.date_field :start_date, class: 'fr-input'
 
-  .fr-input-group.fr-col-2
+  .fr-input-group.fr-col-3
     = form.label :end_date, "Date de fin", class: 'fr-label'
     = form.date_field :end_date, class: 'fr-input'
+
+  .fr-input-group.fr-col-7
+    = form.label :comment, "Commentaire (optionnel)", class: 'fr-label'
+    = form.text_area :comment, class: 'fr-input'
 
   .fr-input-group
     = form.submit "Enregistrer", class: 'fr-btn'
