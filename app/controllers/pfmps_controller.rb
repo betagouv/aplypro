@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class PfmpsController < StudentsController
-  before_action :set_classe, only: [:new, :create]
-  before_action :set_student, only: [:new, :create]
+  before_action :set_classe, only: %i[new create]
+  before_action :set_student, only: %i[new create]
 
   def new
     @pfmp = Pfmp.new

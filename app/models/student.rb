@@ -6,10 +6,8 @@ class Student < ApplicationRecord
   validates :ine, :first_name, :last_name, presence: true
 
   belongs_to :classe
-
   has_one :establishment, through: :classe
-
-  has_many :pfmps
+  has_many :pfmps, dependent: :destroy
 
   SYGNE_MAPPING = {
     "prenom" => :first_name,

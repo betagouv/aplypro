@@ -30,6 +30,6 @@ RSpec.describe FetchStudentsJob do
   end
 
   it "creates a bunch of student" do
-    expect { described_class.new.perform(etab) }.to change { Student.count }.by(2)
+    expect { described_class.new.perform(etab) }.to change(Student, :count).by(2)
   end
 end

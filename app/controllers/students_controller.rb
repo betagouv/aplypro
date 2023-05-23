@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 class StudentsController < ClassesController
   before_action :set_student
 
-  def show
-  end
+  def show; end
 
   private
 

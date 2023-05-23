@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Student, type: :model do
+RSpec.describe Student do
   it "has a valid factory" do
     expect(build(:student)).to be_valid
   end
@@ -14,15 +14,15 @@ RSpec.describe Student, type: :model do
   it { is_expected.to validate_presence_of(:ine) }
 
   describe ".from_sygne_hash" do
-    let!(:attrs) {
+    let!(:attrs) do
       {
         "ine" => "123123",
         "prenom" => "Jean",
         "nom" => "Tonic"
       }
-    }
+    end
 
-    let(:student) { Student.from_sygne_hash(attrs) }
+    let(:student) { described_class.from_sygne_hash(attrs) }
 
     Student::SYGNE_MAPPING.each do |attr, col|
       it "parses the `#{attr}` attribute into the `#{col}` column" do
