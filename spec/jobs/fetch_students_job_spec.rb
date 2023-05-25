@@ -8,8 +8,9 @@ RSpec.describe FetchStudentsJob do
   before do
     fixture = "sygne-students-for-uai.json"
     data = Rails.root.join("mock/data", fixture).read
+    url = ENV.fetch("APLYPRO_SYGNE_API") % etab.uai
 
-    stub_request(:get, %r{http://mock:3002/sygne/generated/*})
+    stub_request(:get, url)
       .with(
         headers: {
           "Accept" => "*/*",
