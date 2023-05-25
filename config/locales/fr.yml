@@ -4,6 +4,15 @@ fr:
       establishment:
         uai: "UAI"
         name: "Nom"
+  pages:
+    titles:
+      classes:
+        index: Liste des classes
+        show: Classe de %{name}
+      students:
+        show: "%{name}"
+      pfmps:
+        new: "Ajouter une PFMP"
 
   global:
     sponsor: "Direction\nInterministérielle\ndu Numérique"

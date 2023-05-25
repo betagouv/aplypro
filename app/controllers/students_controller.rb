@@ -3,7 +3,12 @@
 class StudentsController < ClassesController
   before_action :set_student
 
-  def show; end
+  def show
+    add_breadcrumb t("pages.titles.classes.index"), classes_path
+    add_breadcrumb @classe.to_s, class_path(@classe)
+
+    infer_page_title(name: @student.full_name, classe: @classe)
+  end
 
   private
 

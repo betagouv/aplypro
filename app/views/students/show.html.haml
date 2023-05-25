@@ -1,26 +1,9 @@
-- content_for(:page_title) { [@student.to_s, @student.classe.to_s].join(" - ")}
-
-%nav.fr-breadcrumb{role: 'navigation'}
-  %button.fr-breadcrumb__button Voir le fil d'arianne
-  .fr-collapse
-    %ol.fr-breadcrumb__list
-      %li
-        %a.fr-breadcrumb__link{href: classes_path}Liste des classes
-      %li
-        %a.fr-breadcrumb__link{href: class_path(@classe)}= @classe
-      %li
-        %a.fr-breadcrumb__link{aria: { current: true }}= @student
-
-= render 'shared/etab_banner'
-%h1 Profil de #{@student}
-
-.actions.fr-py-3w
-  = link_to "Ajouter une PFMP", new_class_student_pfmp_path(@classe, @student), class: 'fr-btn'
+- content_for(:page_title) { [@page_title, t("pages.titles.classes.show", name: @classe.label)].join(" - ") }
 
 - if @student.pfmps.none?
   %p Aucune PFMP enregistrée pour le moment.
 - else
-  .fr-table.fr-mt-3w.fr-table--layout-fixed
+  .fr-table.fr-table--layout-fixed
     %table
       %caption Périodes de formation en milieu professionnel (PFMP)
       %thead
@@ -32,7 +15,10 @@
       %tbody
         - @student.pfmps.each do |p|
           %tr
-            %td= p.start_date
-            %td= p.end_date
+            %td= l p.start_date
+            %td= l p.end_date
             %td= dsfr_badge(status: p.state_machine.state_to_badge) { t("pfmps.statuses.#{p.state_machine.current_state}") }
             %td
+
+.actions.fr-py-3w
+  = link_to "Ajouter une PFMP", new_class_student_pfmp_path(@classe, @student), class: 'fr-btn'

@@ -1,17 +1,4 @@
-%nav.fr-breadcrumb{role: 'navigation'}
-  %button.fr-breadcrumb__button Voir le fil d'arianne
-  .fr-collapse
-    %ol.fr-breadcrumb__list
-      %li
-        %a.fr-breadcrumb__link{href: classes_path}Liste des classes
-      %li
-        %a.fr-breadcrumb__link{aria: { current: true }}= @classe
-
-= render 'shared/etab_banner'
-
-%h1= @classe
-
-.fr-table.fr-mt-3w.fr-table--layout-fixed
+.fr-table.fr-table--layout-fixed
   %table
     %caption Liste des élèves (#{@classe.students.count})
     %thead

@@ -1,25 +1,9 @@
-- content_for(:page_title) { ["Liste des classes", @etab.name].join(" - ") }
-
-%nav.fr-breadcrumb{role: 'navigation'}
-  %button.fr-breadcrumb__button Voir le fil d'arianne
-  .fr-collapse
-    %ol.fr-breadcrumb__list
-      %li
-        %a.fr-breadcrumb__link{aria: { current: true }}Liste des classes
-
-
-= render 'shared/etab_banner'
-
-%h1 Liste des classes
-
-.fr-mt-3w
-
 - if @classes.none?
   %p Nous récupérons la liste de vos élèves.
 - else
   .fr-table.fr-table--layout-fixed
     %table
-      %caption Liste des classes (#{@classes.count})
+      %caption.fr-h1 Liste des classes
       %thead
         %th{scope: "col"} Label
         %th{scope: "col"} Effectif

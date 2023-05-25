@@ -1,16 +1,3 @@
-%nav.fr-breadcrumb{role: 'navigation'}
-  %button.fr-breadcrumb__button Voir le fil d'arianne
-  .fr-collapse
-    %ol.fr-breadcrumb__list
-      %li
-        %a.fr-breadcrumb__link{href: classes_path}Liste des classes
-      %li
-        %a.fr-breadcrumb__link{href: class_path(@classe)}= @classe.label
-      %li
-        %a.fr-breadcrumb__link{href: class_student_path(@classe, @student)}= @student
-      %li
-        %a.fr-breadcrumb__link{aria: { current: true }}Ajouter une PFMP
-
 %h1 Ajouter une PFMP pour #{@student}
 
 = form_with model: @pfmp, url: class_student_pfmps_path(@classe.id, @student.ine), method: "post" do |form|
