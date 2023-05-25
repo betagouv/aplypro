@@ -16,8 +16,22 @@ Alors("la page contient {string}") do |content|
   expect(page).to have_content(content)
 end
 
-Alors("le titre de la page contient {string}") do |content|
-  expect(page.title).to include content
+Alors("le titre de la page contient {string}") do |text|
+  expect(page.title.gsub("  ", " ")).to include text
+end
+
+Alors("il y a un titre de premier niveau contenant {string}") do |text|
+  # le titre est soit le premier h1 ou la légende du premier tableau
+  element = page.all("h1").first || page.all("table caption").first
+
+  expect(element.text).to include(text)
+end
+
+Alors("la page est titrée {string}") do |text|
+  steps %(
+    Alors il y a un titre de premier niveau contenant "#{text}"
+    Et le titre de la page contient "#{text}"
+  )
 end
 
 Quand("je remplis {string} avec {string}") do |label, value|

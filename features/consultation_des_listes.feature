@@ -9,5 +9,5 @@ Fonctionnalité: Le personnel de direction consulte les listes
   Scénario: Le personnel de direction consulte le profil d'un élève
     Quand je clique sur "Voir les élèves" dans la rangée "3EMEB"
     Et que je clique sur "Voir le profil de l'élève" dans la rangée "Marie Curie"
-    Alors la page contient "Profil de Marie Curie"
-    Et le fil d'Ariane affiche "Liste des classes > 3EMEB > Marie Curie"
+    Alors la page est titrée "Marie Curie"
+    Et le fil d'Ariane affiche "Liste des classes > Classe de 3EMEB > Marie Curie"

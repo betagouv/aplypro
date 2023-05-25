@@ -19,5 +19,5 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Et que je clique sur "Enregistrer"
     Alors la page contient "La PFMP a été enregistrée avec succès"
     Et je peux voir dans le tableau "Périodes de formation en milieu professionnel (PFMP)"
-      |      Début |        Fin | État       | Commentaire |
-      | 2023-03-17 | 2023-03-20 | En attente |             |
+      | Début      | Fin        | État       | Commentaire |
+      | 17/03/2023 | 20/03/2023 | En attente |             |

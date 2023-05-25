@@ -12,5 +12,4 @@ Fonctionnalité: Le personnel de direction se connecte
     Sachant que je suis directeur de l'établissement "DINUM"
     Et que mon établissement a été hydraté
     Quand je me connecte
-    Alors le titre de la page contient "Liste des classes"
-    Et la page contient "Liste des classes (4)"
+    Alors la page est titrée "Liste des classes"
