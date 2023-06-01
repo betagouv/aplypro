@@ -46,7 +46,7 @@ jobs:
           path: /tmp/rails-template.tar
           key: ${{ github.sha }}-rails-template
       - run: docker load --input /tmp/rails-template.tar
-      - run: docker run --rm rails-template:latest bundle exec rubocop
+      - run: docker run --rm --entrypoint="" rails-template:latest bundle exec rubocop
   unit-tests:
     name: "Unit tests: RSpec"
     runs-on: ubuntu-latest
