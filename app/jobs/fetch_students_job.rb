@@ -17,8 +17,15 @@ class FetchStudentsJob < ApplicationJob
   def extract_classes(data, etab)
     classes = data.group_by { |s| [s["classe"], s["niveau"]] }
 
-    classes.keys.map do |label, mefstat|
-      etab.classes.find_or_create_by(label:, mefstat: Mefstat.find_by(code: mefstat))
+    classes.map do |classe, eleves|
+      label, mefstat = classe
+
+      etab
+        .classes
+        .find_or_create_by(label:, mefstat: Mefstat.find_by(code: mefstat))
+        .tap do |c|
+        c.students << eleves.map { |e| Student.from_sygne_hash(e) }
+      end
     end
   end
 

@@ -8,7 +8,7 @@ RSpec.describe FetchStudentsJob do
   before do
     fixture = "sygne-students-for-uai.json"
     data = Rails.root.join("mock/data", fixture).read
-    url = ENV.fetch "APLYPRO_SYGNE_API"
+    url = ENV.fetch("APLYPRO_SYGNE_API") % etab.uai
 
     stub_request(:get, url)
       .with(
@@ -28,5 +28,9 @@ RSpec.describe FetchStudentsJob do
     described_class.new.perform(etab)
 
     expect(etab.classes).not_to be_empty
+  end
+
+  it "creates a bunch of student" do
+    expect { described_class.new.perform(etab) }.to change(Student, :count).by(2)
   end
 end

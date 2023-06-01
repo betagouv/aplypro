@@ -1,0 +1,18 @@
+.fr-table.fr-table--layout-fixed
+  %table
+    %caption Liste des élèves (#{@classe.students.count})
+    %thead
+      %th{scope: "col"} INE
+      %th{scope: "col"} Nom
+      %th{scope: "col"} PFMPs
+      %th{scope: "col"} Actions
+
+    %tbody
+      - @classe.students.each do |student|
+        %tr
+          %td= student.ine
+          %td= student
+          %td= student.pfmps.count
+          %td
+            -# FIXME: we cannot have the INE in the URL
+            = dsfr_link_to "Voir le profil de l'élève", class_student_path(@classe, student)

@@ -1,0 +1,24 @@
+- content_for(:page_title) { [@page_title, t("pages.titles.classes.show", name: @classe.label)].join(" - ") }
+
+- if @student.pfmps.none?
+  %p Aucune PFMP enregistrée pour le moment.
+- else
+  .fr-table.fr-table--layout-fixed
+    %table
+      %caption Périodes de formation en milieu professionnel (PFMP)
+      %thead
+        %th{scope: "col"} Début
+        %th{scope: "col"} Fin
+        %th{scope: "col"} État
+        %th{scope: "col"} Commentaire
+
+      %tbody
+        - @student.pfmps.each do |p|
+          %tr
+            %td= l p.start_date
+            %td= l p.end_date
+            %td= dsfr_badge(status: p.state_machine.state_to_badge) { t("pfmps.statuses.#{p.state_machine.current_state}") }
+            %td
+
+.actions.fr-py-3w
+  = link_to "Ajouter une PFMP", new_class_student_pfmp_path(@classe, @student), class: 'fr-btn'

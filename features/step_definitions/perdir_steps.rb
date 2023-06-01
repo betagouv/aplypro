@@ -25,3 +25,28 @@ Quand("je me connecte") do
     Et que la page contient "Connexion réussie"
   )
 end
+
+Sachantque("il y a une élève {string} au sein de la classe {string}") do |name, classe|
+  @etab ||= FactoryBot.create(:establishment)
+
+  first, last = name.split # not great
+
+  @classe = FactoryBot.create(:classe, establishment: @etab, label: classe)
+  @student = FactoryBot.create(:student, classe: @classe, first_name: first, last_name: last)
+end
+
+Alors("le fil d'Ariane affiche {string}") do |path|
+  components = path.split(" > ")
+
+  breadcrumbs = page.all("nav.fr-breadcrumb li").map(&:text)
+
+  expect(breadcrumbs).to eq components
+end
+
+Quand("l'élève n'a réalisé aucune PFMP") do
+  @student.pfmps.delete_all
+end
+
+Alors("l'élève a {int} PFMP") do |count|
+  expect(@student.pfmps.count).to eq count
+end

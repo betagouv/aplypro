@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Establishment < ApplicationRecord
+  self.primary_key = "uai"
+
   validates :name, :uai, presence: true
   validates :uai, uniqueness: true
 
@@ -30,6 +32,6 @@ class Establishment < ApplicationRecord
   end
 
   def to_s
-    name
+    [name, city.capitalize, postal_code].join(" – ")
   end
 end

@@ -4,6 +4,15 @@ fr:
       establishment:
         uai: "UAI"
         name: "Nom"
+  pages:
+    titles:
+      classes:
+        index: Liste des classes
+        show: Classe de %{name}
+      students:
+        show: "%{name}"
+      pfmps:
+        new: "Ajouter une PFMP"
 
   global:
     sponsor: "Direction\nInterministérielle\ndu Numérique"
@@ -12,3 +21,8 @@ fr:
   auth:
     success: "Connexion réussie"
     failure: "La connexion a échouée"
+  pfmps:
+    new:
+      success: La PFMP a été enregistrée avec succès
+    statuses:
+      pending: En attente

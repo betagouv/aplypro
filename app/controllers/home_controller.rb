@@ -2,7 +2,7 @@
 
 class HomeController < ApplicationController
   def index
-    return if principal_signed_in?
+    (redirect_to classes_path and return) if principal_signed_in?
 
     redirect_to login_url
   end

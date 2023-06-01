@@ -10,22 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_17_094718) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_22_231400) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "classes", force: :cascade do |t|
-    t.bigint "establishment_id", null: false
     t.bigint "mefstat_id", null: false
     t.string "label"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["establishment_id"], name: "index_classes_on_establishment_id"
+    t.string "establishment_id", null: false
     t.index ["mefstat_id"], name: "index_classes_on_mefstat_id"
   end
 
-  create_table "establishments", force: :cascade do |t|
-    t.string "uai", null: false
+  create_table "establishments", primary_key: "uai", id: :string, force: :cascade do |t|
     t.string "name", null: false
     t.string "denomination", null: false
     t.string "nature", null: false
@@ -45,6 +43,26 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_17_094718) do
     t.index ["code"], name: "index_mefstats_on_code", unique: true
   end
 
+  create_table "pfmp_transitions", force: :cascade do |t|
+    t.string "to_state", null: false
+    t.text "metadata", default: "{}"
+    t.integer "sort_key", null: false
+    t.integer "pfmp_id", null: false
+    t.boolean "most_recent", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pfmp_id", "most_recent"], name: "index_pfmp_transitions_parent_most_recent", unique: true, where: "most_recent"
+    t.index ["pfmp_id", "sort_key"], name: "index_pfmp_transitions_parent_sort", unique: true
+  end
+
+  create_table "pfmps", force: :cascade do |t|
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "student_id", null: false
+  end
+
   create_table "principals", force: :cascade do |t|
     t.string "uid", null: false
     t.string "provider", null: false
@@ -60,12 +78,24 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_17_094718) do
     t.datetime "last_sign_in_at", precision: nil
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
-    t.bigint "establishment_id", null: false
+    t.string "establishment_id", null: false
     t.index ["email"], name: "index_principals_on_email", unique: true
-    t.index ["establishment_id"], name: "index_principals_on_establishment_id"
     t.index ["uid", "provider"], name: "index_principals_on_uid_and_provider", unique: true
   end
 
+  create_table "students", primary_key: "ine", id: :string, force: :cascade do |t|
+    t.bigint "classe_id", null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["classe_id"], name: "index_students_on_classe_id"
+  end
+
+  add_foreign_key "classes", "establishments", primary_key: "uai"
   add_foreign_key "classes", "mefstats"
-  add_foreign_key "principals", "establishments"
+  add_foreign_key "pfmp_transitions", "pfmps"
+  add_foreign_key "pfmps", "students", primary_key: "ine"
+  add_foreign_key "principals", "establishments", primary_key: "uai"
+  add_foreign_key "students", "classes", column: "classe_id"
 end

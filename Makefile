@@ -10,6 +10,10 @@ up:
 down:
 	docker-compose down
 
+.PHONY: db
+db:
+	$(DOCKER-RUN) db psql -U postgres -h db -d development
+
 sh:
 	$(DOCKER-RUN) web $(BUNDLE-EXEC) bash
 

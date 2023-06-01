@@ -3,21 +3,30 @@
   %head
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
     %title
-      = yield(:page_title) if content_for?(:page_title)
+      - if content_for?(:page_title)
+        = yield(:page_title)
+      - else
+        = @page_title
       \- #{t("global.service_name")}
     %meta{:content => "width=device-width, initial-scale=1, shrink-to-fit=no", :name => "viewport"}/
     = csrf_meta_tags
     = csp_meta_tag
-    = stylesheet_link_tag "application", "data-turbo-track": "reload"
     = stylesheet_link_tag "dsfr.min.css", "data-turbo-track": "reload"
+    = stylesheet_link_tag "application", "data-turbo-track": "reload"
     = javascript_include_tag "dsfr.module.min.js", type: 'module'
     = javascript_include_tag "dsfr.nomodule.min.js", nomodule: true
     = javascript_importmap_tags
   %body
     = render 'shared/skiplinks'
     = render 'shared/header'
+    - if principal_signed_in?
+      = render 'shared/etab_banner'
     .fr-container
       %main#main.fr-py-3w
         = render 'shared/flash'
+        - if principal_signed_in?
+          = render_breadcrumbs(builder: DsfrHelper::BreadcrumbBuilder)
+          - if @page_title and not @inhibit_title
+            %h1= @page_title
         = yield
     = render 'shared/footer'
