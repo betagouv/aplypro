@@ -11,7 +11,7 @@ class Fetcher
   def initialize(url)
     @logger = ActiveSupport::TaggedLogging.new(Rails.logger).tagged("DATA")
     @uri = URI(url)
-    @target = DESTINATION.join(@uri.path)
+    @target = DESTINATION.join(@uri.path[1..]) # we don't want the leading slash
 
     @logger.debug("Fetcher pointed at #{@uri}")
   end
