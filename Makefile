@@ -25,3 +25,6 @@ debug:
 
 cl:
 	$(DOCKER-RUN) web bin/rails console
+
+seed:
+	$(DOCKER-RUN) web bin/rails data:fetch_establishments data:fetch_mefstats
