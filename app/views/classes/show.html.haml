@@ -4,6 +4,7 @@
     %thead
       %th{scope: "col"} INE
       %th{scope: "col"} Nom
+      %th{scope: "col"} Prénom
       %th{scope: "col"} PFMPs
       %th{scope: "col"} Actions
 
@@ -11,7 +12,8 @@
       - @classe.students.each do |student|
         %tr
           %td= student.ine
-          %td= student
+          %td= student.last_name
+          %td= student.first_name
           %td= student.pfmps.count
           %td
             -# FIXME: we cannot have the INE in the URL

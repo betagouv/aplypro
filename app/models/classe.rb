@@ -3,7 +3,7 @@
 class Classe < ApplicationRecord
   belongs_to :establishment
   belongs_to :mefstat
-  has_many :students, dependent: :destroy
+  has_many :students, -> { order "last_name" }, dependent: :destroy
 
   def to_s
     "Classe de #{label}"

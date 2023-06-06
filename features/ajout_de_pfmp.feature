@@ -6,7 +6,7 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Et qu'il y a une élève "Marie Curie" au sein de la classe "3EMEB"
     Et que je me connecte
     Et que je clique sur "Voir les élèves" dans la rangée "3EMEB"
-    Et que je clique sur "Voir le profil de l'élève" dans la rangée "Marie Curie"
+    Et que je clique sur "Voir le profil de l'élève" dans la rangée "Curie Marie"
 
   Scénario: Le personnel de direction peut voir le nombre de PFMP réalisée
     Quand l'élève n'a réalisé aucune PFMP
