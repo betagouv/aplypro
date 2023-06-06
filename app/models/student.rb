@@ -9,6 +9,9 @@ class Student < ApplicationRecord
   has_one :establishment, through: :classe
   has_many :pfmps, dependent: :destroy
 
+  has_many :ribs, dependent: :destroy
+  has_one :rib, -> { where(archived_at: nil) }
+
   SYGNE_MAPPING = {
     "prenom" => :first_name,
     "nom" => :last_name,

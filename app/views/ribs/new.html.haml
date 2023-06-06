@@ -1,0 +1,13 @@
+%h1 Ajout de coordonnés bancaires pour #{@student}
+
+= form_with model: @rib, url: class_student_ribs_path(@classe.id, @student.ine), method: "post" do |form|
+  .fr-input-group.fr-col-md-3
+    = form.label :iban, "IBAN", class: 'fr-label'
+    = form.text_field :iban, class: 'fr-input'
+
+  .fr-input-group.fr-col-md-3
+    = form.label :bic, "BIC", class: 'fr-label'
+    = form.text_field :bic, class: 'fr-input'
+
+  .fr-input-group
+    = form.submit "Enregistrer", class: 'fr-btn'

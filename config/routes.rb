@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :classes, only: %i[show index] do
     resources :students, only: %i[show] do
       resources :pfmps
+      resources :ribs
     end
   end
 

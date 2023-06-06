@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_22_231400) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_06_160103) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -83,6 +83,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_231400) do
     t.index ["uid", "provider"], name: "index_principals_on_uid_and_provider", unique: true
   end
 
+  create_table "ribs", force: :cascade do |t|
+    t.string "iban"
+    t.string "bic"
+    t.datetime "archived_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "student_id", null: false
+  end
+
   create_table "students", primary_key: "ine", id: :string, force: :cascade do |t|
     t.bigint "classe_id", null: false
     t.string "first_name"
@@ -97,5 +106,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_231400) do
   add_foreign_key "pfmp_transitions", "pfmps"
   add_foreign_key "pfmps", "students", primary_key: "ine"
   add_foreign_key "principals", "establishments", primary_key: "uai"
+  add_foreign_key "ribs", "students", primary_key: "ine"
   add_foreign_key "students", "classes", column: "classe_id"
 end
