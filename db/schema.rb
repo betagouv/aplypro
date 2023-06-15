@@ -14,6 +14,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_06_160103) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "bank_infos", force: :cascade do |t|
+    t.string "iban"
+    t.string "bic"
+    t.datetime "archived_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "student_id", null: false
+  end
+
   create_table "classes", force: :cascade do |t|
     t.bigint "mefstat_id", null: false
     t.string "label"
@@ -101,6 +110,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_06_160103) do
     t.index ["classe_id"], name: "index_students_on_classe_id"
   end
 
+  add_foreign_key "bank_infos", "students", primary_key: "ine"
   add_foreign_key "classes", "establishments", primary_key: "uai"
   add_foreign_key "classes", "mefstats"
   add_foreign_key "pfmp_transitions", "pfmps"
