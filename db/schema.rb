@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_06_160103) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_15_143825) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,26 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_06_160103) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_mefstats_on_code", unique: true
+  end
+
+  create_table "payment_transitions", force: :cascade do |t|
+    t.string "to_state", null: false
+    t.text "metadata", default: "{}"
+    t.integer "sort_key", null: false
+    t.integer "payment_id", null: false
+    t.boolean "most_recent", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["payment_id", "most_recent"], name: "index_payment_transitions_parent_most_recent", unique: true, where: "most_recent"
+    t.index ["payment_id", "sort_key"], name: "index_payment_transitions_parent_sort", unique: true
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.bigint "pfmp_id", null: false
+    t.float "amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pfmp_id"], name: "index_payments_on_pfmp_id"
   end
 
   create_table "pfmp_transitions", force: :cascade do |t|
@@ -113,6 +133,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_06_160103) do
   add_foreign_key "bank_infos", "students", primary_key: "ine"
   add_foreign_key "classes", "establishments", primary_key: "uai"
   add_foreign_key "classes", "mefstats"
+  add_foreign_key "payment_transitions", "payments"
+  add_foreign_key "payments", "pfmps"
   add_foreign_key "pfmp_transitions", "pfmps"
   add_foreign_key "pfmps", "students", primary_key: "ine"
   add_foreign_key "principals", "establishments", primary_key: "uai"

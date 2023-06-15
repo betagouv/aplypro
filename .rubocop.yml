@@ -19,3 +19,6 @@ Style/Documentation:
 # I am team "if not" (when it makes sense)
 Style/NegatedIf:
   Enabled: false
+
+RSpec/NestedGroups:
+  Max: 5

@@ -31,3 +31,5 @@ fr:
       success: La PFMP a été enregistrée avec succès
     statuses:
       pending: En attente
+    payments:
+      blocked: "Informations de paiement manquantes"
