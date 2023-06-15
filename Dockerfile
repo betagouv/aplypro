@@ -2,9 +2,7 @@ FROM ruby:3.2-slim
 
 EXPOSE 3000
 
-RUN apt-get update && apt-get upgrade -y && apt-get install --no-install-recommends -y curl build-essential docker libpq-dev
-
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && apt-get install -y --no-install-recommends nodejs
+RUN apt-get update && apt-get upgrade -y && apt-get install --no-install-recommends -y curl build-essential docker libpq-dev nodejs npm
 
 # do the bundle install in another directory with the strict essential
 # (Gemfile and Gemfile.lock) to allow further steps to be cached
