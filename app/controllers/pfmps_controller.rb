@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class PfmpsController < StudentsController
-  before_action :set_classe, only: %i[new create]
-  before_action :set_student, only: %i[new create]
+  before_action :set_classe, only: %i[new create show]
+  before_action :set_student, only: %i[new create show]
 
   def new
     add_breadcrumb t("pages.titles.classes.index"), classes_path
@@ -17,6 +17,17 @@ class PfmpsController < StudentsController
     @inhibit_title = true
 
     @pfmp = Pfmp.new
+  end
+
+  def show
+    add_breadcrumb t("pages.titles.classes.index"), classes_path
+    add_breadcrumb t("pages.titles.classes.show", name: @classe.label), class_path(@classe)
+    add_breadcrumb(
+      t("pages.titles.students.show", name: @student.full_name, classe: @classe.label),
+      class_student_path(@classe, @student)
+    )
+
+    @pfmp = Pfmp.find(params[:id])
   end
 
   def create
