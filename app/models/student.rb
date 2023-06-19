@@ -8,9 +8,10 @@ class Student < ApplicationRecord
   belongs_to :classe
   has_one :establishment, through: :classe
   has_many :pfmps, dependent: :destroy
+  has_many :payments, through: :pfmps
 
   has_many :ribs, dependent: :destroy
-  has_one :rib, -> { where(archived_at: nil) }
+  has_one :rib, -> { where(archived_at: nil) }, dependent: :destroy, inverse_of: :student
 
   SYGNE_MAPPING = {
     "prenom" => :first_name,
@@ -23,7 +24,7 @@ class Student < ApplicationRecord
   end
 
   def full_name
-    [first_name, last_name].join("  ")
+    [first_name, last_name].join(" ")
   end
 
   def self.from_sygne_hash(hash)
@@ -32,5 +33,11 @@ class Student < ApplicationRecord
     end
 
     Student.new(attributes)
+  end
+
+  def rib_changed!
+    pfmps.each do |p|
+      p.setup_payment! if p.unscheduled?
+    end
   end
 end

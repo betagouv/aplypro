@@ -20,6 +20,10 @@ class ClassesController < ApplicationController
     infer_page_title(name: @classe.label)
   end
 
+  def pfmps
+    @pfmps = Payment.in_state(:pending).map(&:pfmp)
+  end
+
   private
 
   def set_etab

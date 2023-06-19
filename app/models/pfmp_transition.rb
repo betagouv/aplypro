@@ -3,7 +3,7 @@
 class PfmpTransition < ApplicationRecord
   include Statesman::Adapters::ActiveRecordTransition
 
-  belongs_to :pfmp, inverse_of: :pfmp_transitions
+  belongs_to :pfmp
 
   after_destroy :update_most_recent, if: :most_recent?
 
@@ -14,5 +14,9 @@ class PfmpTransition < ApplicationRecord
     return if last_transition.blank?
 
     last_transition.update_column(:most_recent, true)
+  end
+
+  def to_s
+    t("pfmps.statuses.#{current_state}")
   end
 end

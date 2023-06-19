@@ -11,3 +11,14 @@ Fonctionnalité: Le personnel de direction consulte les listes
     Et que je clique sur "Voir le profil de l'élève" dans la rangée "Curie Marie"
     Alors la page est titrée "Marie Curie"
     Et le fil d'Ariane affiche "Liste des classes > Classe de 3EMEB > Marie Curie"
+
+  Scénario: Le personnel de direction peut voir la complétion des saisies de coordonnées bancaires
+    Quand je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "3EMEB"
+    Et que je consulte la liste des classes
+    Alors la page contient "1/"
+
+  Scénario: Le personnel de direction peut voir les prochains paiements
+    Sachant que je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "3EMEB"
+    Et que je renseigne une PFMP pour "Marie Curie"
+    Quand je consulte la liste des classes
+    Alors la page contient "Il y a 1 PFMPs en attente de paiement"

@@ -33,3 +33,4 @@ fr:
       pending: En attente
     payments:
       blocked: "Informations de paiement manquantes"
+      pending: "En attente"

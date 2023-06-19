@@ -4,7 +4,7 @@ class Pfmp < ApplicationRecord
   belongs_to :student
 
   has_many :transitions, class_name: "PfmpTransition", autosave: false, dependent: :destroy
-  has_many :payments, -> { order(updated_at: :asc) }, dependent: :destroy
+  has_many :payments, -> { order(updated_at: :asc) }, dependent: :destroy, inverse_of: :pfmp
 
   # FIXME: this is bound to disappear ; a PFMP doesn't really
   # transition into any states, but it might trigger one or more
@@ -20,6 +20,10 @@ class Pfmp < ApplicationRecord
     )
   end
 
+  after_create do
+    setup_payment! if payable?
+  end
+
   def setup_payment!
     payments.create!(amount: calculate_amount)
   end
@@ -33,11 +37,19 @@ class Pfmp < ApplicationRecord
     payments.last
   end
 
+  def payable?
+    student.rib.present?
+  end
+
+  def unscheduled?
+    payments.none?
+  end
+
   def payment_state
-    if payments.none?
-      :blocked
-    else
+    if payable?
       latest_payment.state_machine.current_state
+    else
+      :blocked
     end
   end
 end

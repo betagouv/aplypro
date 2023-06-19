@@ -18,6 +18,11 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Et que je remplis "Date de fin" avec "20/03/2023"
     Et que je clique sur "Enregistrer"
     Alors la page contient "La PFMP a été enregistrée avec succès"
-    Et je peux voir dans le tableau "Liste des PFMPs"
-      | Début      | Fin        | État       | Commentaire |
-      | 17/03/2023 | 20/03/2023 | En attente |             |
+    Et je peux voir dans le tableau "Périodes de formation en milieu professionnel (PFMP)"
+      | Début      | Fin        | Montant | État du paiement                    | Commentaire |
+      | 17/03/2023 | 20/03/2023 |      42 | Informations de paiement manquantes |             |
+
+  Scénario: Le paiment est en attente dès que je rajoute les coordonnées bancaires
+    Quand je consulte le profil de l'élève "Marie Curie"
+    Et que je renseigne une PFMP pour "Marie Curie"
+    Alors la page contient "Informations de paiement manquantes"

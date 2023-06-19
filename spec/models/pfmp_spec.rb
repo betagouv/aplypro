@@ -18,13 +18,16 @@ RSpec.describe Pfmp do
     end
 
     context "when there are many payments" do
-      let(:old) { create(:payment, pfmp: pfmp, updated_at: Date.yesterday) }
-      let(:future) { create(:payment, pfmp: pfmp, updated_at: Date.tomorrow) }
-      let(:new) { create(:payment, pfmp: pfmp, updated_at: Date.today) }
+      let!(:old) { create(:payment, pfmp:, updated_at: Date.yesterday) }
+      let!(:future) { create(:payment, pfmp:, updated_at: Date.tomorrow) }
+      let!(:new) { create(:payment, pfmp:, updated_at: Time.zone.now) }
 
       it "knows the latest payment" do
-        expect(pfmp.payments).to eq [old, new, future]
         expect(pfmp.latest_payment).to eq future
+      end
+
+      it "sorts them chronologically" do
+        expect(pfmp.payments).to eq [old, new, future]
       end
     end
 

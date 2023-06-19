@@ -15,4 +15,4 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
     Et que je remplis "IBAN" avec "FR608761361276N1BLJ0ZGCJE80"
     Et que je remplis "BIC" avec "ANTSGB2LXXX"
     Et que je clique sur "Enregistrer"
-    Alors la page contient "IBAN : FR608761361276N1BLJ0ZGCJE80"
+    Alors la page contient "IBAN FR60XXXXXXXXXXXXXXXXXXXXXXX"
