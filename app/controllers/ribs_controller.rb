@@ -26,11 +26,12 @@ class RibsController < StudentsController
   def create
     @rib = Rib.new(rib_params)
 
-    if @rib.save
-      redirect_to class_student_path(@classe, @student), notice: t("ribs.new.success")
-    else
-      respond_to do |format|
-        format.html { render :new }
+    respond_to do |format|
+      if @rib.save
+        format.html { redirect_to class_student_path(@classe, @student), notice: t("ribs.new.success") }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @rib.errors, status: :unprocessable_entity }
       end
     end
   end

@@ -71,6 +71,7 @@ GEM
     aes_key_wrap (1.1.0)
     ast (2.4.2)
     attr_required (1.0.1)
+    bank-contact (0.0.6)
     bcrypt (3.1.18)
     bindata (2.4.15)
     bindex (0.8.1)
@@ -473,6 +474,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  bank-contact
   bootsnap
   breadcrumbs_on_rails
   capybara

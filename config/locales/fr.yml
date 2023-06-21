@@ -1,6 +1,9 @@
 fr:
   activerecord:
     attributes:
+      rib:
+        iban: "IBAN"
+        bic: "Code BIC"
       establishment:
         uai: "UAI"
         name: "Nom"

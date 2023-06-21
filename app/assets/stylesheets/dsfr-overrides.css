@@ -1,3 +1,9 @@
 .fr-breadcrumb {
   margin-bottom: 1rem;
 }
+
+/* https://github.com/alphagov/govuk-frontend/blob/main/packages/govuk-frontend/src/govuk/components/input/_index.scss#L59 */
+.fr-input--extra-spacing {
+  letter-spacing: .05em;
+  font-variant-numeric: tabular-nums;
+}
