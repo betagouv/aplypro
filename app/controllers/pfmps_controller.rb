@@ -33,11 +33,12 @@ class PfmpsController < StudentsController
   def create
     @pfmp = Pfmp.new(pfmp_params.merge(student: @student))
 
-    if @pfmp.save
-      redirect_to class_student_path(@classe, @student), notice: t("pfmps.new.success")
-    else
-      respond_to do |format|
-        format.html { render :new }
+    respond_to do |format|
+      if @pfmp.save
+        format.html { redirect_to class_student_path(@classe, @student), notice: t("pfmps.new.success") }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @pfmp.errors, status: :unprocessable_entity }
       end
     end
   end

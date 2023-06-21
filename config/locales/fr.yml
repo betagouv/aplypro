@@ -6,14 +6,20 @@ fr:
       rib:
         iban: "Un IBAN français contient 27 caractères et commence par FR"
         bic: "Le code BIC est composé de 8 ou de 11 caractères"
-
     attributes:
+      pfmp:
+        start_date: "Date de début"
+        end_date: "Date de fin"
       rib:
         iban: "IBAN"
         bic: "BIC"
       establishment:
         uai: "UAI"
         name: "Nom"
+    save_label: "L'enregistrement %{cod} a échoué car :"
+    save_labels:
+      pfmp: "de la PFMP"
+      rib: "du RIB"
   pages:
     titles:
       classes:

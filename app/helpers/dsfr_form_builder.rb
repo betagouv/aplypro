@@ -8,6 +8,8 @@
 # It takes inspiration from the GOV.UK Form Builder API
 # (https://govuk-form-builder.netlify.app/form-elements/text-input/)
 class DsfrFormBuilder < ActionView::Helpers::FormBuilder
+  include TranslationHelper
+
   INPUT_WIDTH_MAPPING = { xs: 3, s: 4, m: 6, l: 8 }.freeze
 
   # Builds a DSFR text field with a label, an optional hint and a text
@@ -19,7 +21,7 @@ class DsfrFormBuilder < ActionView::Helpers::FormBuilder
   #
   # [1]: https://design-system.service.gov.uk/components/text-input/#codes-and-sequences
   def dsfr_text_field(attribute, opts)
-    @template.content_tag(:div, class: input_group_classes(attribute, opts)) do
+    dsfr_input_group(attribute, opts) do
       @template.safe_join(
         [
           label_with_hint(attribute),
@@ -30,9 +32,48 @@ class DsfrFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  def dsfr_date_field(attribute, opts = {})
+    dsfr_input_group(attribute, opts) do
+      @template.safe_join(
+        [
+          label_with_hint(attribute),
+          date_field(attribute, class: input_classes(opts), **opts),
+          error_message(attribute)
+        ]
+      )
+    end
+  end
+
+  def dsfr_input_group(attribute, opts, &block)
+    @template.content_tag(:div, class: input_group_classes(attribute, opts)) do
+      yield(block)
+    end
+  end
+
   # FIXME: merge HTML classes at some point
   def dsfr_submit(label, opts = {})
     submit(label, opts.merge(class: "fr-btn"))
+  end
+
+  def dsfr_error_summary
+    return "" if @object.errors.none?
+
+    @template.content_tag(:div, class: "fr-alert fr-alert--error fr-my-3w") do
+      @template.safe_join(
+        [
+          @template.content_tag(:h2, class: "fr-alert__title") { save_label(@object) },
+          @template.content_tag(:p) do
+            @template.content_tag(:ul) do
+              @template.safe_join(
+                @object.errors.full_messages.map do |message|
+                  @template.content_tag(:li, message)
+                end
+              )
+            end
+          end
+        ]
+      )
+    end
   end
 
   private
@@ -51,17 +92,13 @@ class DsfrFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def hint(attribute)
-    text = I18n.t(i18n_hint_scope_for(attribute), default: nil)
+    text = hint_for(@object, attribute)
 
     return if text.blank?
 
     @template.content_tag(:span, class: "fr-hint-text") do
       text
     end
-  end
-
-  def i18n_hint_scope_for(attribute)
-    "activerecord.hints.#{@object.model_name.element}.#{attribute}"
   end
 
   def error_message(attr)

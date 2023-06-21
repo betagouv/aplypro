@@ -6,6 +6,8 @@ class Pfmp < ApplicationRecord
   has_many :transitions, class_name: "PfmpTransition", autosave: false, dependent: :destroy
   has_many :payments, -> { order(updated_at: :asc) }, dependent: :destroy, inverse_of: :pfmp
 
+  validates :start_date, :end_date, presence: true
+
   # FIXME: this is bound to disappear ; a PFMP doesn't really
   # transition into any states, but it might trigger one or more
   # payments and *they* will go through different states. Keeping the
