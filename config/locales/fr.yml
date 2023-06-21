@@ -1,6 +1,16 @@
 fr:
+  errors:
+   format: "L'attribut %{attribute} %{message}"
   activerecord:
+    hints:
+      rib:
+        iban: "Un IBAN français contient 27 caractères et commence par FR"
+        bic: "Le code BIC est composé de 8 ou de 11 caractères"
+
     attributes:
+      rib:
+        iban: "IBAN"
+        bic: "BIC"
       establishment:
         uai: "UAI"
         name: "Nom"

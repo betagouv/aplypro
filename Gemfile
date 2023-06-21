@@ -41,6 +41,9 @@ gem "dsfr-view-components"
 # nicer templates
 gem "haml-rails"
 
+# ribs validation
+gem "bank-contact"
+
 # user auth
 gem "devise"
 gem "devise-i18n"

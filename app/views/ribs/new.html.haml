@@ -1,13 +1,15 @@
 %h1 Ajout de coordonnés bancaires pour #{@student}
 
-= form_with model: @rib, url: class_student_ribs_path(@classe.id, @student.ine), method: "post" do |form|
-  .fr-input-group.fr-col-md-3
-    = form.label :iban, "IBAN", class: 'fr-label'
-    = form.text_field :iban, class: 'fr-input'
+= form_with model: @rib, url: class_student_ribs_path(@classe.id, @student.ine), method: "post", builder: DsfrFormBuilder do |form|
+  - if @rib.errors.any?
+    #error_explanation
+      %h2 L'enregistrement du RIB a échoué à cause de #{pluralize(@rib.errors.count, "erreur")} :
+      %ul
+        - @rib.errors.full_messages.each do |message|
+          %li= message
 
-  .fr-input-group.fr-col-md-3
-    = form.label :bic, "BIC", class: 'fr-label'
-    = form.text_field :bic, class: 'fr-input'
+  = form.dsfr_text_field(:iban, code: true, width: 's')
 
-  .fr-input-group
-    = form.submit "Enregistrer", class: 'fr-btn'
+  = form.dsfr_text_field(:bic, code: true, width: 'xs')
+
+  = form.dsfr_submit "Enregistrer"

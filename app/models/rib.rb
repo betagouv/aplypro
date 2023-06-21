@@ -5,6 +5,10 @@ class Rib < ApplicationRecord
 
   validates :iban, :bic, presence: true
 
+  # courtesy of gem 'bank-account'
+  validates :iban, iban: true
+  validates :bic, bic: true
+
   after_create do
     student.rib_changed!
   end
