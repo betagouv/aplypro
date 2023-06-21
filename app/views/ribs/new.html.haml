@@ -1,15 +1,9 @@
 %h1 Ajout de coordonnés bancaires pour #{@student}
 
 = form_with model: @rib, url: class_student_ribs_path(@classe.id, @student.ine), method: "post", builder: DsfrFormBuilder do |form|
-  - if @rib.errors.any?
-    #error_explanation
-      %h2 L'enregistrement du RIB a échoué à cause de #{pluralize(@rib.errors.count, "erreur")} :
-      %ul
-        - @rib.errors.full_messages.each do |message|
-          %li= message
+  = form.dsfr_error_summary
 
   = form.dsfr_text_field(:iban, code: true, width: 's')
-
   = form.dsfr_text_field(:bic, code: true, width: 'xs')
 
   = form.dsfr_submit "Enregistrer"

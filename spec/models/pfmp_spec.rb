@@ -10,6 +10,11 @@ RSpec.describe Pfmp do
     it { is_expected.to have_many(:payments) }
   end
 
+  describe "validations" do
+    it { is_expected.to validate_presence_of(:start_date) }
+    it { is_expected.to validate_presence_of(:end_date) }
+  end
+
   describe "payments" do
     context "when the PFMP is new" do
       it "has no payments" do

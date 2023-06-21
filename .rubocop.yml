@@ -23,3 +23,6 @@ Style/NegatedIf:
 
 RSpec/NestedGroups:
   Max: 5
+
+Style/HashSyntax:
+  EnforcedShorthandSyntax: either
