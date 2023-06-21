@@ -1,0 +1,23 @@
+- add_breadcrumb('Liste des PFMPs')
+
+%p
+  Le prochain paiement pour les PFMPs validées est le
+  %strong= l Date.today.end_of_week(:friday)
+  \.
+.fr-table.fr-table--layout-fixed
+  %table
+    %caption.fr-h1 Liste des PFMPs
+    %thead
+      %th{scope: "col"} Classe
+      %th{scope: "col"} Élève
+      %th{scope: "col"} Statut
+      %th{scope: "col"} Montant
+      %th{scope: "col"} Actions
+    %tbody
+      - @pfmps.each do |pfmp|
+        %tr
+          %td= pfmp.student.classe
+          %td= pfmp.student
+          %td= dsfr_badge(status: pfmp.state_machine.state_to_badge) { t("pfmps.statuses.#{pfmp.state_machine.current_state}") }
+          %td= number_to_currency(pfmp.calculate_amount)
+          %td= dsfr_link_to 'Voir la PFMP', class_student_pfmp_path(class_id: pfmp.student.classe.id, student_id: pfmp.student.id, id: pfmp.id)

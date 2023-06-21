@@ -1,5 +1,21 @@
 - content_for(:page_title) { [@page_title, t("pages.titles.classes.show", name: @classe.label)].join(" - ") }
 
+%section.fr-mb-3w
+  %h2 Coordonnées bancaires
+
+  - if @student.rib.nil?
+    %p Aucune coordonnées enregistrées
+
+    = link_to "Renseigner les coordonnées bancaires", new_class_student_rib_path(@classe.id, @student.id), class: 'fr-btn'
+  - else
+    %dl
+      %dt
+        %strong IBAN
+      %dd= @student.rib.safe_iban
+      %dt
+        %strong BIC
+      %dd= @student.rib.bic
+
 - if @student.pfmps.none?
   %p Aucune PFMP enregistrée pour le moment.
 - else
@@ -9,7 +25,8 @@
       %thead
         %th{scope: "col"} Début
         %th{scope: "col"} Fin
-        %th{scope: "col"} État
+        %th{scope: "col"} Montant
+        %th{scope: "col"} État du paiement
         %th{scope: "col"} Commentaire
 
       %tbody
@@ -17,7 +34,8 @@
           %tr
             %td= l p.start_date
             %td= l p.end_date
-            %td= dsfr_badge(status: p.state_machine.state_to_badge) { t("pfmps.statuses.#{p.state_machine.current_state}") }
+            %td= number_to_currency(p.calculate_amount)
+            %td= dsfr_badge(status: payment_status(p)) { t("pfmps.payments.#{p.payment_state}") }
             %td
 
 .actions.fr-py-3w

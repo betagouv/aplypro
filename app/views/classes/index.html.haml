@@ -1,6 +1,8 @@
 - if @classes.none?
   %p Nous récupérons la liste de vos élèves.
 - else
+  - if @classes.map(&:pfmps).any?
+    = render 'pfmp_banner'
   .fr-table.fr-table--layout-fixed
     %table
       %caption.fr-h1 Liste des classes
@@ -8,11 +10,13 @@
         %th{scope: "col"} Label
         %th{scope: "col"} Effectif
         %th{scope: "col"} Nombre de PFMPs
+        %th{scope: "col"} Coordonnées bancaires
         %th{scope: "col"} Actions
       %tbody
         - @classes.each do |classe|
           %tr
             %td= classe.label
             %td= classe.students.count
-            %td= 0
+            %td= classe.pfmps.count
+            %td= avancement_ribs(classe)
             %td=dsfr_link_to 'Voir les élèves', classe

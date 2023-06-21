@@ -1,0 +1,19 @@
+%h1
+  PFMP
+  = @pfmp.id
+  pour
+  = @pfmp.student
+
+%ul
+  %li
+    Date de début :
+    = @pfmp.start_date
+
+  %li
+    Date de fin :
+    = @pfmp.end_date
+
+  %li
+    Montant : (
+    = @pfmp.end_date - @pfmp.start_date
+    ) ✕ 10 € / jour = XX €

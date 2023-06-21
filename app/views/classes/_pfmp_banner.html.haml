@@ -1,0 +1,7 @@
+- @pfmps = Payment.in_state(:pending).map(&:pfmp)
+
+.fr-highlight
+  %p
+    Il y a
+    = dsfr_link_to "#{@pfmps.count} PFMPs en attente de paiement", '/pfmps'
+    \.
