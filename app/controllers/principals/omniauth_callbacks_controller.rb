@@ -2,11 +2,23 @@
 
 module Principals
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
-    skip_before_action :verify_authenticity_token, only: :developer
+    skip_before_action :verify_authenticity_token
 
     def developer
-      @principal = Principal.from_omniauth(forged_developer_hash(request.env["omniauth.auth"]))
+      @principal = Principal.from_developer(data)
 
+      save_and_redirect!
+    end
+
+    def fim
+      @principal = Principal.from_fim(data)
+
+      save_and_redirect!
+    end
+
+    private
+
+    def save_and_redirect!
       if @principal.save!
         flash[:notice] = t("auth.success")
         sign_in_and_redirect @principal
@@ -16,14 +28,8 @@ module Principals
       end
     end
 
-    private
-
-    def forged_developer_hash(attrs)
-      forged = {
-        "credentials" => { token: "fake token", secret: "fake secret" }
-      }
-
-      attrs.merge(forged)
+    def data
+      request.env["omniauth.auth"]
     end
   end
 end

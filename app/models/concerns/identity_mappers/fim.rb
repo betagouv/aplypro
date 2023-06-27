@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module IdentityMappers
   class Fim
     attr_accessor :attributes

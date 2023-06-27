@@ -16,4 +16,23 @@ RSpec.describe Principal do
       it { is_expected.to validate_presence_of(attr) }
     end
   end
+
+  describe ".from_fim" do
+    before do
+      create(:establishment, uai: "E020202K")
+    end
+
+    let(:data) { JSON.parse(File.read("spec/models/data/fim.json")) }
+    let(:principal) { described_class.from_fim(data) }
+
+    {
+      name: "Ens2D05 Pourtest5",
+      email: "ens2d05.pourtest5@ac-bordeaux.fr",
+      establishment_id: "E020202K"
+    }.each do |attr, value|
+      it "maps the `#{attr} attribute" do
+        expect(principal[attr]).to eq value
+      end
+    end
+  end
 end
