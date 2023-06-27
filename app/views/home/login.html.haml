@@ -7,4 +7,4 @@
   stages.
 
 - Principal.omniauth_providers.each do |sym|
-  = button_to sym, principal_developer_omniauth_authorize_path, method: :post, remote: false, data: { turbo: false }, class: "fr-btn"
+  = button_to sym, send("principal_#{sym}_omniauth_authorize_path".to_sym), method: :post, remote: false, data: { turbo: false }, class: "fr-btn"
