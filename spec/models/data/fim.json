@@ -1,0 +1,18 @@
+{
+  "provider": "fim",
+  "uid": "some uid",
+  "info": {
+    "name": "Ens2D05 Pourtest5",
+    "email": "ens2d05.pourtest5@ac-bordeaux.fr"
+  },
+  "credentials": {
+    "token": "fake token",
+    "expires_in": 300
+  },
+  "extra": {
+    "raw_info": {
+      "FrEduRne": "E020202K$UAJ$PU$ENS$E020202K$T3$CLG$340",
+      "FrEduRneResp": "X"
+    }
+  }
+}
