@@ -6,6 +6,7 @@ class Establishment < ApplicationRecord
   validates :name, :uai, presence: true
   validates :uai, uniqueness: true
 
+  has_one :principal, dependent: :nullify
   has_many :classes, class_name: "Classe", dependent: :destroy
 
   BOOTSTRAP_URL = ENV.fetch("APLYPRO_ESTABLISHMENTS_BOOTSTRAP_URL")

@@ -4,7 +4,7 @@ require "rails_helper"
 require "csv"
 
 RSpec.describe Establishment do
-  subject(:etab) { build(:establishment) }
+  subject(:etab) { build(:establishment, :with_fim_principal) }
 
   it { is_expected.to validate_presence_of(:name) }
   it { is_expected.to validate_presence_of(:uai) }
@@ -45,6 +45,12 @@ RSpec.describe Establishment do
       end
 
       it { is_expected.to be_second_degree }
+    end
+  end
+
+  describe "principal connection" do
+    it "knows it's got a principal" do
+      expect(etab.principal).not_to be_nil
     end
   end
 end

@@ -6,7 +6,7 @@ Before do
   FactoryBot.create(:mefstat, code: "1111")
   FactoryBot.create(:mefstat, code: "4221")
 
-  url = ENV.fetch "APLYPRO_SYGNE_API"
+  url = ENV.fetch "APLYPRO_SYGNE_URL"
   fixture = "sygne-students-for-uai.json"
   data = Rails.root.join("mock/data", fixture).read
 
