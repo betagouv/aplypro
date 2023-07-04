@@ -3,34 +3,15 @@
 require "rails_helper"
 
 RSpec.describe FetchStudentsJob do
-  let(:etab) { create(:establishment) }
+  let(:etab) { create(:establishment, :with_fim_principal) }
 
   before do
-    fixture = "sygne-students-for-uai.json"
-    data = Rails.root.join("mock/data", fixture).read
-    url = ENV.fetch("APLYPRO_SYGNE_API") % etab.uai
-
-    stub_request(:get, url)
-      .with(
-        headers: {
-          "Accept" => "*/*",
-          "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-          "User-Agent" => "Ruby"
-        }
-      )
-      .to_return(status: 200, body: data, headers: {})
-
-    create(:mefstat, code: "1111")
-    create(:mefstat, code: "4221")
+    allow(StudentApi).to receive(:fetch_students!)
   end
 
-  it "fetches the students and classes for the etab" do
+  it "calls the matchingStudentApi proxy" do
     described_class.new.perform(etab)
 
-    expect(etab.classes).not_to be_empty
-  end
-
-  it "creates a bunch of student" do
-    expect { described_class.new.perform(etab) }.to change(Student, :count).by(2)
+    expect(StudentApi).to have_received(:fetch_students!).with(etab)
   end
 end
