@@ -15,8 +15,17 @@ services:
       RUBY_DEBUG_HOST: 0.0.0.0
       RUBY_DEBUG_NO_RELINE: true
       APLYPRO_ESTABLISHMENTS_BOOTSTRAP_URL: "http://mock:3002/list-etabs"
+      APLYPRO_FIM_CLIENT_ID: aplypro-fim-id
+      APLYPRO_FIM_CLIENT_SECRET: aplypro-fim-secret
+      APLYPRO_FIM_HOST: localhost:1080 # FIXME: keycloak via Docker is a nightmare
+      APLYPRO_FIM_ISSUER: localhost:3001/realms/aplypro-local
+      APLYPRO_FIM_REDIRECT_URI: http://localhost:3000/principals/auth/fim/callback
+      APLYPRO_FIM_SCOPE: openid email profile lescopes
       APLYPRO_MEFSTATS_BOOTSTRAP_URL: "http://mock:3002/list-mefstats"
-      APLYPRO_SYGNE_API: "http://mock:3002/sygne/generated/%s"
+      APLYPRO_SYGNE_CLIENT_ID: local sygne client id
+      APLYPRO_SYGNE_SECRET: local sygne secret
+      APLYPRO_SYGNE_TOKEN_URL: http://mock:3002/sygne/token
+      APLYPRO_SYGNE_URL: "http://mock:3002/sygne/generated/%s"
     depends_on:
       - db
   db:
