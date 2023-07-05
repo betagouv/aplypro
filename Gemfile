@@ -51,7 +51,7 @@ gem "omniauth_openid_connect"
 gem "omniauth-rails_csrf_protection"
 
 # data fetching
-gem "httparty"
+gem "faraday"
 
 # state management
 gem "statesman"
