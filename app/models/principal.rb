@@ -27,7 +27,10 @@ class Principal < ApplicationRecord
 
       mapper = IdentityMappers::Fim.new(attrs["extra"]["raw_info"])
 
-      principal.establishment_id = mapper.uai
+      etab = Establishment.find_or_create_by!(uai: mapper.uai)
+
+      principal.establishment = etab
+      etab.queue_refresh
 
       principal
     end
@@ -35,7 +38,11 @@ class Principal < ApplicationRecord
     def from_developer(attrs)
       principal = from_oidc(oidcize_dev_hash(attrs))
 
-      principal.establishment_id = attrs["info"]["uai"]
+      etab = Establishment.find_or_create_by!(uai: attrs["info"]["uai"])
+
+      principal.establishment = etab
+
+      etab.queue_refresh
 
       principal
     end
