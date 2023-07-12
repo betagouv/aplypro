@@ -33,9 +33,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_143825) do
   end
 
   create_table "establishments", primary_key: "uai", id: :string, force: :cascade do |t|
-    t.string "name", null: false
-    t.string "denomination", null: false
-    t.string "nature", null: false
+    t.string "name"
+    t.string "denomination"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "postal_code"
@@ -101,10 +100,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_143825) do
     t.string "email", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "remember_created_at", precision: nil
+    t.datetime "remember_created_at"
     t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at", precision: nil
-    t.datetime "last_sign_in_at", precision: nil
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.string "establishment_id", null: false
