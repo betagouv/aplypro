@@ -25,3 +25,6 @@ debug:
 
 cl:
 	$(DOCKER-RUN) web bin/rails console
+
+rs:
+	docker-compose exec web touch tmp/restart.txt
