@@ -19,12 +19,13 @@ module StudentApi
 
       classes.map do |classe, eleves|
         label, mefstat = classe
+        m = Mefstat.find_or_create_by!(code: mefstat, label: "some code", short: "some other code")
 
         @establishment
           .classes
           .find_or_create_by(
             label:,
-            mefstat: Mefstat.find_or_create_by(code: mefstat)
+            mefstat: m
           )
           .tap do |c|
           c.students << eleves.map { |e| Student.from_sygne_hash(e) }
