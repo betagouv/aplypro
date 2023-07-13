@@ -22,6 +22,7 @@ services:
       APLYPRO_FIM_REDIRECT_URI: http://localhost:3000/principals/auth/fim/callback
       APLYPRO_FIM_SCOPE: openid email profile lescopes
       APLYPRO_MEFSTATS_BOOTSTRAP_URL: "http://mock:3002/list-mefstats"
+      APLYPRO_SENTRY_DNS:
       APLYPRO_SYGNE_CLIENT_ID: local sygne client id
       APLYPRO_SYGNE_SECRET: local sygne secret
       APLYPRO_SYGNE_TOKEN_URL: http://mock:3002/sygne/token
