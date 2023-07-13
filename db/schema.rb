@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_15_143825) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_13_072215) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -33,9 +33,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_143825) do
   end
 
   create_table "establishments", primary_key: "uai", id: :string, force: :cascade do |t|
-    t.string "name", null: false
-    t.string "denomination", null: false
-    t.string "nature", null: false
+    t.string "name"
+    t.string "denomination"
+    t.string "nature"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "postal_code"
