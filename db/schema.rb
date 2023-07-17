@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_13_072215) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_13_131807) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -24,12 +24,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_13_072215) do
   end
 
   create_table "classes", force: :cascade do |t|
-    t.bigint "mefstat_id", null: false
+    t.bigint "mef_id", null: false
     t.string "label"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "establishment_id", null: false
-    t.index ["mefstat_id"], name: "index_classes_on_mefstat_id"
+    t.index ["mef_id"], name: "index_classes_on_mef_id"
   end
 
   create_table "establishments", primary_key: "uai", id: :string, force: :cascade do |t|
@@ -43,13 +43,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_13_072215) do
     t.index ["uai"], name: "index_establishments_on_uai", unique: true
   end
 
-  create_table "mefstats", force: :cascade do |t|
-    t.integer "code", null: false
+  create_table "mefs", force: :cascade do |t|
+    t.string "code", null: false
     t.string "label", null: false
     t.string "short", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["code"], name: "index_mefstats_on_code", unique: true
+    t.string "mefstat11", null: false
+    t.index ["code"], name: "index_mefs_on_code", unique: true
+    t.index ["mefstat11"], name: "index_mefs_on_mefstat11"
   end
 
   create_table "payment_transitions", force: :cascade do |t|
@@ -132,7 +134,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_13_072215) do
 
   add_foreign_key "bank_infos", "students", primary_key: "ine"
   add_foreign_key "classes", "establishments", primary_key: "uai"
-  add_foreign_key "classes", "mefstats"
+  add_foreign_key "classes", "mefs"
   add_foreign_key "payment_transitions", "payments"
   add_foreign_key "payments", "pfmps"
   add_foreign_key "pfmp_transitions", "pfmps"
