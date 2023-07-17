@@ -3,36 +3,35 @@
 class Establishment < ApplicationRecord
   self.primary_key = "uai"
 
-  validates :name, :uai, presence: true
-  validates :uai, uniqueness: true
+  validates :uai, presence: true, uniqueness: true
 
   has_one :principal, dependent: :nullify
   has_many :classes, class_name: "Classe", dependent: :destroy
 
-  BOOTSTRAP_URL = ENV.fetch("APLYPRO_ESTABLISHMENTS_BOOTSTRAP_URL")
-
-  CSV_MAPPING = {
-    "numero_uai" => :uai,
-    "appellation_officielle" => :name,
-    "denomination_principale" => :denomination,
-    "nature_uai" => :nature,
-    "code_postal_uai" => :postal_code,
-    "localite_acheminement_uai" => :city
+  API_MAPPING = {
+    "nom_etablissement" => :name,
+    "libelle_nature" => :denomination,
+    "code_postal" => :postal_code,
+    "nom_commune" => :city
   }.freeze
-
-  def self.from_csv(csv)
-    attributes = CSV_MAPPING.to_h do |col, attr|
-      [attr, csv[col]]
-    end
-
-    Establishment.new(attributes)
-  end
-
-  def second_degree?
-    nature.start_with?("3")
-  end
 
   def to_s
     [name, city.capitalize, postal_code].join(" – ")
+  end
+
+  def queue_refresh
+    FetchEstablishmentJob.perform_now(self)
+  end
+
+  def fetch_data!
+    raw = EstablishmentApi.fetch!(uai)
+
+    data = raw["records"].first["fields"]
+
+    attributes = API_MAPPING.to_h do |col, attr|
+      [attr, data[col]]
+    end
+
+    update!(attributes)
   end
 end
