@@ -8,8 +8,8 @@ module StudentApi
       @establishment = establishment
     end
 
-    def endpoint
-      ENV.fetch("APLYPRO_#{identifier}_URL") % @establishment.uai
+    def base_url
+      ENV.fetch("APLYPRO_#{identifier.upcase}_URL")
     end
 
     def identifier

@@ -2,6 +2,14 @@
 
 module StudentApi
   class Sygne < Base
+    def identifier
+      "SYGNE"
+    end
+
+    def endpoint
+      base_url % @establishment.uai
+    end
+
     def fetch_and_parse!
       data = fetch!
 
@@ -38,10 +46,6 @@ module StudentApi
         secret: ENV.fetch("APLYPRO_SYGNE_SECRET"),
         token_endpoint: ENV.fetch("APLYPRO_SYGNE_TOKEN_URL")
       )
-    end
-
-    def identifier
-      "SYGNE"
     end
   end
 end
