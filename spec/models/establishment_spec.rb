@@ -8,30 +8,25 @@ RSpec.describe Establishment do
 
   it { is_expected.to validate_presence_of(:uai) }
   it { is_expected.to validate_uniqueness_of(:uai) }
+  it { is_expected.to have_one(:principal) }
 
-  # describe ".from_api" do
-  #   subject(:parsed) { described_class.from_csv(csv) }
+  describe "data refresh" do
+    context "when it is created" do
+      it "calls the queue_refresh method" do
+        expect { etab.save }.to have_enqueued_job(FetchEstablishmentJob).with(etab)
 
-  #   let(:csv) do
-  #     CSV
-  #       .read(
-  #         "mock/data/fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre.csv",
-  #         col_sep: ";",
-  #         headers: true
-  #       )
-  #       .first
-  #   end
+        etab.save
+      end
+    end
 
-  #   Establishment::API_MAPPING.each do |col, attr|
-  #     it "parses the `#{col}` column into the `#{attr}` attribute" do
-  #       expect(parsed[attr]).to(eq csv[col])
-  #     end
-  #   end
-  # end
+    context "when it is updated" do
+      before do
+        etab.save
+      end
 
-  describe "principal connection" do
-    it "knows it's got a principal" do
-      expect(etab.principal).not_to be_nil
+      it "does not call the queue_refresh method" do
+        expect { etab.update!(name: "New name") }.not_to have_enqueued_job
+      end
     end
   end
 end

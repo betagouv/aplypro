@@ -8,6 +8,8 @@ class Establishment < ApplicationRecord
   has_one :principal, dependent: :nullify
   has_many :classes, class_name: "Classe", dependent: :destroy
 
+  after_create :queue_refresh
+
   API_MAPPING = {
     "nom_etablissement" => :name,
     "libelle_nature" => :denomination,
@@ -20,7 +22,7 @@ class Establishment < ApplicationRecord
   end
 
   def queue_refresh
-    FetchEstablishmentJob.perform_now(self)
+    FetchEstablishmentJob.perform_later(self)
   end
 
   def fetch_data!

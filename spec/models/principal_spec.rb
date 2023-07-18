@@ -19,7 +19,6 @@ RSpec.describe Principal do
 
   describe ".from_fim" do
     before do
-      allow_any_instance_of(Establishment).to receive(:queue_refresh)
       create(:establishment, uai: "E020202K")
     end
 

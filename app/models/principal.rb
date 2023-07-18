@@ -30,7 +30,6 @@ class Principal < ApplicationRecord
       etab = Establishment.find_or_create_by!(uai: mapper.uai)
 
       principal.establishment = etab
-      etab.queue_refresh
 
       principal
     end
@@ -41,8 +40,6 @@ class Principal < ApplicationRecord
       etab = Establishment.find_or_create_by!(uai: attrs["info"]["uai"])
 
       principal.establishment = etab
-
-      etab.queue_refresh
 
       principal
     end
