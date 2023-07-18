@@ -11,7 +11,7 @@ module IdentityMappers
     end
 
     def parse_rne
-      FREDURNE_MAPPING.zip(attributes["FrEduRne"].split("$")).to_h
+      FREDURNE_MAPPING.zip(attributes["FrEduRne"].first.split("$")).to_h
     end
 
     def uai

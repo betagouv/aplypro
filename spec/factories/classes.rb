@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :classe do
     establishment
-    mefstat
+    mef
     sequence(:label) { |n| "3EME#{n}" }
   end
 end

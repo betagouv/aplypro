@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "./mock/factories/api_student"
 
 describe StudentApi::Sygne do
   subject(:api) { described_class.new(establishment) }
 
   let(:establishment) { create(:establishment, :with_fim_principal) }
   let(:payload) { JSON.generate({ access_token: "foobar", token_type: "Bearer" }) }
+  let(:data) { Rails.root.join("mock/data/sygne-students-for-uai.json").read }
 
   before do
-    fixture = "sygne-students-for-uai.json"
-    data = Rails.root.join("mock/data", fixture).read
     url = ENV.fetch("APLYPRO_SYGNE_URL") % establishment.uai
 
     stub_request(:get, url)
@@ -38,5 +38,22 @@ describe StudentApi::Sygne do
     api.fetch!
 
     expect(WebMock).to have_requested(:post, ENV.fetch("APLYPRO_SYGNE_TOKEN_URL"))
+  end
+
+  describe "parsing" do
+    context "when the mef code is right" do
+      let!(:mefs) { Mef.all.sample(10).map(&:code) }
+      let(:data) { mefs.map { |code| build(:sygne_student, mef: code) } }
+
+      it "records the students" do
+        expect { api.fetch_and_parse! }.to change(Student, :count).by(10)
+      end
+
+      it "upserts the students" do
+        api.fetch_and_parse!
+
+        expect { api.fetch_and_parse! }.not_to change(Student, :count)
+      end
+    end
   end
 end

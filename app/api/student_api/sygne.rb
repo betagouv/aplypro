@@ -15,19 +15,19 @@ module StudentApi
     end
 
     def parse!(data)
-      classes = data.group_by { |s| [s["classe"], s["niveau"]] }
+      classes = data.group_by { |s| [s["classe"], s["mef"]] }
 
-      classes.map do |classe, eleves|
-        label, mefstat = classe
+      classes.each do |classe, eleves|
+        label, mef = classe
 
-        @establishment
-          .classes
-          .find_or_create_by(
-            label:,
-            mefstat: Mefstat.find_or_create_by(code: mefstat)
-          )
-          .tap do |c|
-          c.students << eleves.map { |e| Student.from_sygne_hash(e) }
+        m = Mef.find_by!(code: mef)
+
+        klass = @establishment.classes.find_or_create_by!(label:, mef: m)
+
+        eleves.map do |attributes|
+          Student.find_or_initialize_by(ine: attributes["ine"]) do |student|
+            student.update!(Student.map_sygne_hash(attributes).merge({ classe: klass }))
+          end
         end
       end
     end

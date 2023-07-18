@@ -1,16 +1,10 @@
 # frozen_string_literal: true
 
 require "webmock/cucumber"
+require "./mock/factories/api_student"
 
 Before do
-  FactoryBot.create(:mefstat, code: "1111")
-  FactoryBot.create(:mefstat, code: "4221")
-
-  url = ENV.fetch "APLYPRO_SYGNE_URL"
-  fixture = "sygne-students-for-uai.json"
-  data = Rails.root.join("mock/data", fixture).read
-
-  stub_request(:get, url)
+  stub_request(:get, ENV.fetch("APLYPRO_SYGNE_URL"))
     .with(
       headers: {
         "Accept" => "*/*",
@@ -18,5 +12,5 @@ Before do
         "User-Agent" => "Ruby"
       }
     )
-    .to_return(status: 200, body: data, headers: {})
+    .to_return(status: 200, body: FactoryBot.build_list(:sygne_student, 10), headers: {})
 end

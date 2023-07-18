@@ -11,7 +11,7 @@
   },
   "extra": {
     "raw_info": {
-      "FrEduRne": "E020202K$UAJ$PU$ENS$E020202K$T3$CLG$340",
+      "FrEduRne": ["E020202K$UAJ$PU$ENS$E020202K$T3$CLG$340"],
       "FrEduRneResp": "X"
     }
   }

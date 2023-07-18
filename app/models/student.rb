@@ -27,12 +27,10 @@ class Student < ApplicationRecord
     [first_name, last_name].join(" ")
   end
 
-  def self.from_sygne_hash(hash)
-    attributes = SYGNE_MAPPING.to_h do |attr, col|
+  def self.map_sygne_hash(hash)
+    SYGNE_MAPPING.to_h do |attr, col|
       [col, hash[attr]]
     end
-
-    Student.new(attributes)
   end
 
   def rib_changed!

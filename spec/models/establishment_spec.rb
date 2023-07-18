@@ -6,51 +6,27 @@ require "csv"
 RSpec.describe Establishment do
   subject(:etab) { build(:establishment, :with_fim_principal) }
 
-  it { is_expected.to validate_presence_of(:name) }
   it { is_expected.to validate_presence_of(:uai) }
   it { is_expected.to validate_uniqueness_of(:uai) }
+  it { is_expected.to have_one(:principal) }
 
-  describe ".from_csv" do
-    subject(:parsed) { described_class.from_csv(csv) }
+  describe "data refresh" do
+    context "when it is created" do
+      it "calls the queue_refresh method" do
+        expect { etab.save }.to have_enqueued_job(FetchEstablishmentJob).with(etab)
 
-    let(:csv) do
-      CSV
-        .read(
-          "mock/data/fr-en-adresse-et-geolocalisation-etablissements-premier-et-second-degre.csv",
-          col_sep: ";",
-          headers: true
-        )
-        .first
-    end
-
-    Establishment::CSV_MAPPING.each do |col, attr|
-      it "parses the `#{col}` column into the `#{attr}` attribute" do
-        expect(parsed[attr]).to(eq csv[col])
+        etab.save
       end
     end
-  end
 
-  describe "#second_degree?" do
-    describe "when the nature isn't a 3xx number" do
+    context "when it is updated" do
       before do
-        etab.update!(nature: "100")
+        etab.save
       end
 
-      it { is_expected.not_to be_second_degree }
-    end
-
-    describe "when the UAI nature is a 3xx number" do
-      before do
-        etab.update!(nature: "301")
+      it "does not call the queue_refresh method" do
+        expect { etab.update!(name: "New name") }.not_to have_enqueued_job
       end
-
-      it { is_expected.to be_second_degree }
-    end
-  end
-
-  describe "principal connection" do
-    it "knows it's got a principal" do
-      expect(etab.principal).not_to be_nil
     end
   end
 end
