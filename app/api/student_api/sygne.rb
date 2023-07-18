@@ -23,6 +23,32 @@ module StudentApi
     end
 
     def parse!(data)
+      method = "parse_on_#{criteria}!"
+
+      send(method, data)
+    end
+
+    def criteria
+      ENV.fetch("APLYPRO_SYGNE_USE_MEFSTAT4").present? ? "mefstat4" : "mef"
+    end
+
+    def parse_on_mefstat4!(data)
+      mefs = Mef.all # this is awful but it's temporary
+
+      classes = data.group_by { |s| [s["classe"], s["niveau"]] }
+
+      classes.each do |classe, eleves|
+        label, niveau = classe
+
+        m = mefs.find { |mef| mef.mefstat4 == niveau }
+
+        klass = @establishment.classes.find_or_create_by!(label:, mef: m)
+
+        parse_eleves!(klass, eleves)
+      end
+    end
+
+    def parse_on_mef!(data)
       classes = data.group_by { |s| [s["classe"], s["mef"]] }
 
       classes.each do |classe, eleves|
@@ -32,10 +58,14 @@ module StudentApi
 
         klass = @establishment.classes.find_or_create_by!(label:, mef: m)
 
-        eleves.map do |attributes|
-          Student.find_or_initialize_by(ine: attributes["ine"]) do |student|
-            student.update!(Student.map_sygne_hash(attributes).merge({ classe: klass }))
-          end
+        parse_eleves!(klass, eleves)
+      end
+    end
+
+    def parse_eleves!(klass, eleves)
+      eleves.map do |attributes|
+        Student.find_or_initialize_by(ine: attributes["ine"]) do |student|
+          student.update!(Student.map_sygne_hash(attributes).merge({ classe: klass }))
         end
       end
     end
