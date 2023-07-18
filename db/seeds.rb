@@ -2,6 +2,10 @@
 
 require "csv"
 
+logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
+
+logger.info "[seeds] inserting MEF codes..."
+
 data = CSV.read(Rails.root.join("data/mefs.csv"), headers: true)
 
 MAPPING = {
@@ -27,3 +31,5 @@ data.each do |entry|
 
   mef.update!(attributes)
 end
+
+logger.info "[seeds] done inserting MEF codes."
