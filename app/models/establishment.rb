@@ -18,7 +18,17 @@ class Establishment < ApplicationRecord
   }.freeze
 
   def to_s
+    return "" if no_data?
+
     [name, city.capitalize, postal_code].join(" – ")
+  end
+
+  def no_data?
+    !refreshed?
+  end
+
+  def refreshed?
+    name.present?
   end
 
   def queue_refresh

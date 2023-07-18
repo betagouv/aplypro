@@ -93,19 +93,4 @@ RSpec.configure do |config|
   #   # test failures related to randomization by passing the same `--seed` value
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
-
-  etab = File.read("./mock/data/etab.json")
-
-  config.before do
-    stub_request(:get, /data.education.gouv.fr/)
-      .with(
-        headers: {
-          "Accept" => "*/*",
-          "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-          "Content-Type" => "application/json",
-          "User-Agent" => "Faraday v2.7.9"
-        }
-      )
-      .to_return(status: 200, body: etab, headers: {})
-  end
 end
