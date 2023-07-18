@@ -12,5 +12,5 @@ Before do
         "User-Agent" => "Ruby"
       }
     )
-    .to_return(status: 200, body: FactoryBot.build_list(:sygne_student, 10, mef: Mef.first.code), headers: {})
+    .to_return(status: 200, body: FactoryBot.build_list(:sygne_student, 10), headers: {})
 end
