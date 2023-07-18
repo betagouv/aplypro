@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ReworkMefstatTable < ActiveRecord::Migration[7.0]
   def change
     rename_table(:mefstats, :mefs)

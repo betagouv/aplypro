@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_13_131807) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_18_092519) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_13_131807) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "mefstat11", null: false
+    t.integer "ministry", null: false
     t.index ["code"], name: "index_mefs_on_code", unique: true
     t.index ["mefstat11"], name: "index_mefs_on_mefstat11"
   end
