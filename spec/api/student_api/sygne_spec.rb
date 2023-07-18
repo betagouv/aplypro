@@ -11,9 +11,7 @@ describe StudentApi::Sygne do
   let(:data) { Rails.root.join("mock/data/sygne-students-for-uai.json").read }
 
   before do
-    url = ENV.fetch("APLYPRO_SYGNE_URL") % establishment.uai
-
-    stub_request(:get, url)
+    stub_request(:get, api.endpoint)
       .with(
         headers: {
           "Accept" => "*/*",
@@ -38,6 +36,12 @@ describe StudentApi::Sygne do
     api.fetch!
 
     expect(WebMock).to have_requested(:post, ENV.fetch("APLYPRO_SYGNE_TOKEN_URL"))
+  end
+
+  it "calls the correct endpoint" do
+    api.fetch!
+
+    expect(WebMock).to have_requested(:get, %r{etablissements/#{establishment.uai}/eleves})
   end
 
   describe "parsing" do

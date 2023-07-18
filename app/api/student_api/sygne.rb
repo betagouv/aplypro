@@ -7,7 +7,7 @@ module StudentApi
     end
 
     def endpoint
-      base_url % @establishment.uai
+      base_url + format("etablissements/%s/eleves/", @establishment.uai)
     end
 
     def fetch_and_parse!
@@ -40,7 +40,7 @@ module StudentApi
       classes.each do |classe, eleves|
         label, niveau = classe
 
-        m = mefs.find { |mef| mef.mefstat4 == niveau }
+        m = mefs.find { |mef| mef.mefstat4 == niveau.to_s }
 
         klass = @establishment.classes.find_or_create_by!(label:, mef: m)
 
