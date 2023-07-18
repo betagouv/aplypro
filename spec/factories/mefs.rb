@@ -6,5 +6,6 @@ FactoryBot.define do
     label { "MyString" }
     short { "MyString" }
     mefstat11 { 1234 }
+    ministry { Mef.ministries[:menj] }
   end
 end

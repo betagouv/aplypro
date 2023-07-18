@@ -43,7 +43,7 @@ describe StudentApi::Sygne do
   describe "parsing" do
     context "when the mef code is right" do
       let!(:mefs) { Mef.all.sample(10).map(&:code) }
-      let(:data) { mefs.map { |code| FactoryBot.build(:sygne_student, mef: code) } }
+      let(:data) { mefs.map { |code| build(:sygne_student, mef: code) } }
 
       it "records the students" do
         expect { api.fetch_and_parse! }.to change(Student, :count).by(10)

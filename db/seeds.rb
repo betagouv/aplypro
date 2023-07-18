@@ -17,8 +17,12 @@ data.each do |entry|
 
   mef = Mef.find_or_initialize_by(code:)
 
-  attributes = MAPPING.transform_values do |k, v|
-    [k, entry[v]]
+  attributes = MAPPING.transform_values do |value|
+    if value == "MINISTERE"
+      Mef.ministries[entry[value].downcase]
+    else
+      entry[value]
+    end
   end
 
   mef.update!(attributes)

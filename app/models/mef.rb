@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class Mef < ApplicationRecord
-  validates :label, :code, :short, presence: true
+  enum :ministry, %i[menj masa armee mer]
+
+  validates :label, :code, :short, :mefstat11, :ministry, presence: true
   validates :code, uniqueness: true
 
   def mefstat4
