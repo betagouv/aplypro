@@ -25,17 +25,17 @@ jobs:
       - uses: docker/build-push-action@v3
         with:
           context: .
-          tags: rails-template:latest
-          outputs: type=docker,dest=/tmp/rails-template.tar
+          tags: aplypro:latest
+          outputs: type=docker,dest=/tmp/aplypro.tar
           cache-from: type=gha
           cache-to: type=gha,mode=max
       -
         name: Cache image
-        id: rails-template-docker
+        id: aplypro-docker
         uses: actions/cache@v3
         with:
-          path: /tmp/rails-template.tar
-          key: ${{ github.sha }}-rails-template
+          path: /tmp/aplypro.tar
+          key: ${{ github.sha }}-aplypro
   lint:
     name: "Linting: Rubocop"
     runs-on: ubuntu-latest
@@ -44,10 +44,10 @@ jobs:
       - uses: docker/setup-buildx-action@v2
       - uses: actions/cache@v3
         with:
-          path: /tmp/rails-template.tar
-          key: ${{ github.sha }}-rails-template
-      - run: docker load --input /tmp/rails-template.tar
-      - run: docker run --rm --entrypoint="" rails-template:latest bundle exec rubocop
+          path: /tmp/aplypro.tar
+          key: ${{ github.sha }}-aplypro
+      - run: docker load --input /tmp/aplypro.tar
+      - run: docker run --rm --entrypoint="" aplypro:latest bundle exec rubocop
   unit-tests:
     name: "Unit tests: RSpec"
     runs-on: ubuntu-latest
@@ -68,9 +68,9 @@ jobs:
       - uses: docker/setup-buildx-action@v2
       - uses: actions/cache@v3
         with:
-          path: /tmp/rails-template.tar
-          key: ${{ github.sha }}-rails-template
-      - run: docker load --input /tmp/rails-template.tar
+          path: /tmp/aplypro.tar
+          key: ${{ github.sha }}-aplypro
+      - run: docker load --input /tmp/aplypro.tar
       - run: |
           docker run \
             --network="host" \
@@ -80,7 +80,7 @@ jobs:
             -e APLYPRO_SYGNE_SECRET \
             -e APLYPRO_SYGNE_TOKEN_URL \
             -e RAILS_ENV \
-            --rm rails-template bundle exec rspec
+            --rm aplypro bundle exec rspec
   integration-tests:
     name: "Integration tests: Cucumber"
     runs-on: ubuntu-latest
@@ -101,9 +101,9 @@ jobs:
       - uses: docker/setup-buildx-action@v2
       - uses: actions/cache@v3
         with:
-          path: /tmp/rails-template.tar
-          key: ${{ github.sha }}-rails-template
-      - run: docker load --input /tmp/rails-template.tar
+          path: /tmp/aplypro.tar
+          key: ${{ github.sha }}-aplypro
+      - run: docker load --input /tmp/aplypro.tar
       - run: |
           docker run \
             --network="host" \
@@ -113,4 +113,4 @@ jobs:
             -e APLYPRO_SYGNE_SECRET \
             -e APLYPRO_SYGNE_TOKEN_URL \
             -e RAILS_ENV \
-            --rm rails-template bundle exec cucumber
+            --rm aplypro bundle exec cucumber
