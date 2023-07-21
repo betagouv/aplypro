@@ -270,8 +270,10 @@ Devise.setup do |config|
   config.sign_out_via = :delete
 
   # ==> OmniAuth
-  config.omniauth :developer,
-                  fields: %i[email name uai]
+  unless Rails.env.production?
+    config.omniauth :developer,
+                    fields: %i[email name uai]
+  end
 
   unless Rails.env.test?
     config.omniauth :openid_connect,
