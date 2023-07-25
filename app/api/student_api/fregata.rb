@@ -16,11 +16,10 @@ module StudentApi
     def fetch!
       @now = DateTime.now.httpdate
 
-      Faraday.get(
-        endpoint,
-        { rne: @establishment.uai, anneeScolaireId: SCHOOL_YEAR },
-        { "Authorization" => signature_header, "Date" => @now }
-      )
+      params = { rne: @establishment.uai, anneeScolaireId: SCHOOL_YEAR }
+      headers = { "Authorization" => signature_header, "Date" => @now }
+
+      client.get(endpoint, params, headers).body
     end
 
     def endpoint
@@ -28,6 +27,12 @@ module StudentApi
     end
 
     private
+
+    def client
+      @client ||= Faraday.new do |f|
+        f.response :json
+      end
+    end
 
     def signature
       str = "date: #{@now}"
