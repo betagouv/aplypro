@@ -3,7 +3,9 @@
 module StudentApi
   class << self
     def fetch_students!(establishment)
-      api_for(establishment).fetch_and_parse!
+      collection = api_for(establishment).fetch_and_parse!
+
+      collection.each(&:save)
     end
 
     def api_for(establishment)
@@ -12,6 +14,8 @@ module StudentApi
       case provider
       when "fim"
         Sygne.new(establishment)
+      when "masa"
+        Fregata.new(establishment)
       else
         raise "Provider has no matching API"
       end

@@ -12,22 +12,4 @@ RSpec.describe Student do
   it { is_expected.to validate_presence_of(:first_name) }
   it { is_expected.to validate_presence_of(:last_name) }
   it { is_expected.to validate_presence_of(:ine) }
-
-  describe ".map_sygne_hash" do
-    let!(:attrs) do
-      {
-        "ine" => "123123",
-        "prenom" => "Jean",
-        "nom" => "Tonic"
-      }
-    end
-
-    let(:student) { described_class.map_sygne_hash(attrs) }
-
-    Student::SYGNE_MAPPING.each do |attr, col|
-      it "parses the `#{attr}` attribute into the `#{col}` column" do
-        expect(student[col]).to eq attrs[attr]
-      end
-    end
-  end
 end

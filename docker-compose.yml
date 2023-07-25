@@ -14,13 +14,15 @@ services:
       RUBY_DEBUG_PORT: 12345
       RUBY_DEBUG_HOST: 0.0.0.0
       RUBY_DEBUG_NO_RELINE: true
-      APLYPRO_ESTABLISHMENTS_DATA_URL: http://mock:3002/etab-info
       APLYPRO_FIM_CLIENT_ID: aplypro-fim-id
       APLYPRO_FIM_CLIENT_SECRET: aplypro-fim-secret
       APLYPRO_FIM_HOST: localhost:1080 # FIXME: keycloak via Docker is a nightmare
       APLYPRO_FIM_ISSUER: localhost:3001/realms/aplypro-local
       APLYPRO_FIM_REDIRECT_URI: http://localhost:3000/principals/auth/fim/callback
       APLYPRO_FIM_SCOPE: openid email profile lescopes
+      APLYPRO_FREGATA_KEY_ID: aplypro-fregata-key
+      APLYPRO_FREGATA_SECRET: aplypro-fregata-secret
+      APLYPRO_FREGATA_URL: http://mock:3002/fregata/inscriptions
       APLYPRO_SENTRY_DNS:
       APLYPRO_SYGNE_CLIENT_ID: local sygne client id
       APLYPRO_SYGNE_SECRET: local sygne secret
@@ -40,17 +42,17 @@ services:
     image: sj26/mailcatcher
     ports:
       - "1080:1080"
-  keycloak:
-    image: quay.io/keycloak/keycloak
-    environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-      KC_HTTP_PORT: 1090
-    volumes:
-      - .local/keycloak/:/opt/keycloak/data/
-    entrypoint: /opt/keycloak/bin/kc.sh start-dev
-    ports:
-      - "3001:1090"
+  # keycloak:
+  #   image: quay.io/keycloak/keycloak
+  #   environment:
+  #     KEYCLOAK_ADMIN: admin
+  #     KEYCLOAK_ADMIN_PASSWORD: admin
+  #     KC_HTTP_PORT: 1090
+  #   volumes:
+  #     - .local/keycloak/:/opt/keycloak/data/
+  #   entrypoint: /opt/keycloak/bin/kc.sh start-dev
+  #   ports:
+  #     - "3001:1090"
   mock:
     environment:
       PORT: 3002

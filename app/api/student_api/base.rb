@@ -13,7 +13,29 @@ module StudentApi
     end
 
     def identifier
-      raise
+      self.class.name.demodulize
     end
+
+    def response
+      @response ||= fetch!
+    end
+
+    def parse
+      mapper.send(:map_payload, response, establishment)
+    end
+
+    def mapper
+      "Student::Mappers::#{identifier}".constantize
+    end
+
+    def inspect
+      "#{self.class.name}: #{establishment.uai}"
+    end
+
+    def clear!
+      @response = nil
+    end
+
+    alias fetch_and_parse! parse
   end
 end

@@ -12,5 +12,9 @@ FactoryBot.define do
     trait :with_fim_principal do
       association :principal, provider: "fim" # rubocop:disable FactoryBot/AssociationStyle
     end
+
+    trait :with_masa_principal do
+      association :principal, provider: "masa" # rubocop:disable FactoryBot/AssociationStyle
+    end
   end
 end

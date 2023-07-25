@@ -12,6 +12,9 @@ env:
   APLYPRO_SYGNE_TOKEN_URL: http://sygne/token
   APLYPRO_SYGNE_SECRET: CI sygne secret
   APLYPRO_SYGNE_CLIENT_ID: CI sygne client id
+  APLYPRO_FREGATA_KEY_ID: aplypro-fregata-key
+  APLYPRO_FREGATA_SECRET: aplypro-fregata-secret
+  APLYPRO_FREGATA_URL: http://mock:3002/fregata/inscriptions
   RAILS_ENV: test
 
 jobs:
@@ -79,6 +82,9 @@ jobs:
             -e APLYPRO_SYGNE_SECRET \
             -e APLYPRO_SYGNE_TOKEN_URL \
             -e RAILS_ENV \
+            -e APLYPRO_FREGATA_KEY_ID \
+            -e APLYPRO_FREGATA_SECRET \
+            -e APLYPRO_FREGATA_URL \
             --rm aplypro bundle exec rspec
   integration-tests:
     name: "Integration tests: Cucumber"
@@ -110,5 +116,8 @@ jobs:
             -e APLYPRO_SYGNE_CLIENT_ID \
             -e APLYPRO_SYGNE_SECRET \
             -e APLYPRO_SYGNE_TOKEN_URL \
+            -e APLYPRO_FREGATA_KEY_ID \
+            -e APLYPRO_FREGATA_SECRET \
+            -e APLYPRO_FREGATA_URL \
             -e RAILS_ENV \
             --rm aplypro bundle exec cucumber
