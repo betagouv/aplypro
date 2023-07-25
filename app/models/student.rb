@@ -13,24 +13,12 @@ class Student < ApplicationRecord
   has_many :ribs, dependent: :destroy
   has_one :rib, -> { where(archived_at: nil) }, dependent: :destroy, inverse_of: :student
 
-  SYGNE_MAPPING = {
-    "prenom" => :first_name,
-    "nom" => :last_name,
-    "ine" => :ine
-  }.freeze
-
   def to_s
     full_name
   end
 
   def full_name
     [first_name, last_name].join(" ")
-  end
-
-  def self.map_sygne_hash(hash)
-    SYGNE_MAPPING.to_h do |attr, col|
-      [col, hash[attr]]
-    end
   end
 
   def rib_changed!

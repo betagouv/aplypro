@@ -11,7 +11,7 @@ describe StudentApi::Sygne do
   let(:data) { Rails.root.join("mock/data/sygne-students-for-uai.json").read }
 
   before do
-    stub_request(:get, api.endpoint)
+    stub_request(:get, /#{api.endpoint}/)
       .with(
         headers: {
           "Accept" => "*/*",
@@ -42,48 +42,5 @@ describe StudentApi::Sygne do
     api.fetch!
 
     expect(WebMock).to have_requested(:get, %r{etablissements/#{establishment.uai}/eleves})
-  end
-
-  describe "parsing" do
-    before do
-      allow(ENV).to receive(:fetch).and_call_original
-    end
-
-    context "when the APLYPRO_SYGNE_USE_MEFSTAT4 flag is set" do
-      let(:data) { build_list(:sygne_student, 10, mef: "0000", niveau: "2212") }
-
-      before do
-        allow(ENV)
-          .to receive(:fetch)
-          .with("APLYPRO_SYGNE_USE_MEFSTAT4")
-          .and_return("some value that is not empty")
-      end
-
-      it "uses the MEFSTAT4 to parse the classes" do
-        expect { api.fetch_and_parse! }.to change(Student, :count).by(10)
-      end
-    end
-
-    context "when the APLYPRO_SYGNE_USE_MEFSTAT4 flag is unset" do
-      let!(:mefs) { Mef.all.sample(10).map(&:code) }
-      let(:data) { mefs.map { |code| build(:sygne_student, mef: code) } }
-
-      before do
-        allow(ENV)
-          .to receive(:fetch)
-          .with("APLYPRO_SYGNE_USE_MEFSTAT4")
-          .and_return("")
-      end
-
-      it "records the students" do
-        expect { api.fetch_and_parse! }.to change(Student, :count).by(10)
-      end
-
-      it "upserts the students" do
-        api.fetch_and_parse!
-
-        expect { api.fetch_and_parse! }.not_to change(Student, :count)
-      end
-    end
   end
 end
