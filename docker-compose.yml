@@ -14,6 +14,7 @@ services:
       RUBY_DEBUG_PORT: 12345
       RUBY_DEBUG_HOST: 0.0.0.0
       RUBY_DEBUG_NO_RELINE: true
+      APLYPRO_ENV: development
       APLYPRO_FIM_CLIENT_ID: aplypro-fim-id
       APLYPRO_FIM_CLIENT_SECRET: aplypro-fim-secret
       APLYPRO_FIM_HOST: localhost:1080 # FIXME: keycloak via Docker is a nightmare

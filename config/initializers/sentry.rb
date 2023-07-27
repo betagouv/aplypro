@@ -12,4 +12,11 @@ Sentry.init do |config|
   config.traces_sampler = lambda do |_context|
     true
   end
+
+  config.include_local_variables = true
+
+  # this is provided by Scalingo
+  config.release = ENV.fetch("CONTAINER_VERSION", nil)
+
+  config.environment = ENV.fetch("APLYPRO_ENV")
 end
