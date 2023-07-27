@@ -9,4 +9,8 @@ class Mef < ApplicationRecord
   def mefstat4
     mefstat11.slice(0..3)
   end
+
+  def to_s
+    [code, short, label].join(" - ")
+  end
 end
