@@ -9,7 +9,7 @@ class EstablishmentApi
         req.params["refine.identifiant_de_l_etablissement"] = uai
       end
 
-      JSON.parse(response.body)
+      response.body
     end
 
     private
@@ -19,7 +19,9 @@ class EstablishmentApi
         url: url,
         params: { dataset: DATASET },
         headers: { "Content-Type" => "application/json" }
-      )
+      ) do |f|
+        f.response :json
+      end
     end
 
     def url
