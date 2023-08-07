@@ -7,6 +7,8 @@
 #
 # It takes inspiration from the GOV.UK Form Builder API
 # (https://govuk-form-builder.netlify.app/form-elements/text-input/)
+
+# rubocop:disable Metrics/ClassLength, it's a WIP
 class DsfrFormBuilder < ActionView::Helpers::FormBuilder
   include TranslationHelper
 
@@ -29,6 +31,19 @@ class DsfrFormBuilder < ActionView::Helpers::FormBuilder
           error_message(attribute)
         ]
       )
+    end
+  end
+
+  def dsfr_check_box(attribute, opts = {})
+    dsfr_input_group(attribute, opts) do
+      @template.content_tag(:div, class: "fr-checkbox-group") do
+        @template.safe_join(
+          [
+            check_box(attribute, class: input_classes(opts), **opts),
+            label_with_hint(attribute)
+          ]
+        )
+      end
     end
   end
 
@@ -136,3 +151,4 @@ class DsfrFormBuilder < ActionView::Helpers::FormBuilder
     "fr-col-md-#{INPUT_WIDTH_MAPPING[width.to_sym] || 12}"
   end
 end
+# rubocop:enable Metrics/ClassLength
