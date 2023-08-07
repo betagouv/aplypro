@@ -10,18 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_18_092519) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_07_153825) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "bank_infos", force: :cascade do |t|
-    t.string "iban"
-    t.string "bic"
-    t.datetime "archived_at", precision: nil
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "student_id", null: false
-  end
 
   create_table "classes", force: :cascade do |t|
     t.bigint "mef_id", null: false
@@ -104,10 +95,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_18_092519) do
     t.string "email", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "remember_created_at", precision: nil
+    t.datetime "remember_created_at"
     t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at", precision: nil
-    t.datetime "last_sign_in_at", precision: nil
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.string "establishment_id", null: false
@@ -130,10 +121,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_18_092519) do
     t.string "last_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "birthdate", null: false
     t.index ["classe_id"], name: "index_students_on_classe_id"
   end
 
-  add_foreign_key "bank_infos", "students", primary_key: "ine"
   add_foreign_key "classes", "establishments", primary_key: "uai"
   add_foreign_key "classes", "mefs"
   add_foreign_key "payment_transitions", "payments"
