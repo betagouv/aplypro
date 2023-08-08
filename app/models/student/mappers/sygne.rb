@@ -7,7 +7,8 @@ class Student
         SYGNE_MAPPING = {
           "prenom" => :first_name,
           "nom" => :last_name,
-          "ine" => :ine
+          "ine" => :ine,
+          "dateNaissance" => :birthdate
         }.freeze
 
         def map_attributes(attrs)

@@ -3,7 +3,7 @@
 class Student < ApplicationRecord
   self.primary_key = "ine"
 
-  validates :ine, :first_name, :last_name, presence: true
+  validates :ine, :first_name, :last_name, :birthdate, presence: true
 
   belongs_to :classe
   has_one :establishment, through: :classe

@@ -7,7 +7,8 @@ class Student
         FREGATA_MAPPING = {
           ine: "apprenant.ine",
           first_name: "apprenant.prenomUsuel",
-          last_name: "apprenant.nomUsuel"
+          last_name: "apprenant.nomUsuel",
+          birthdate: "apprenant.dateNaissance"
         }.freeze
 
         def map_attributes(attrs)
