@@ -48,6 +48,10 @@ Quand("je clique sur {string} dans la rangée {string}") do |link, row|
   end
 end
 
+Quand("je choisis {string}") do |option|
+  choose option
+end
+
 Alors("je peux voir dans le tableau {string}") do |caption, table|
   expect(page).to have_table(caption, with_rows: table.rows)
 end

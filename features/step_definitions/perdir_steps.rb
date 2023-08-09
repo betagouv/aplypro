@@ -64,14 +64,10 @@ Quand("je consulte le profil de l'élève {string}") do |name|
 end
 
 Quand("je renseigne les coordonnées bancaires de l'élève {string} de la classe {string}") do |name, _label|
-  rib = FactoryBot.build(:rib)
-
   steps %(
     Quand je consulte le profil de l'élève "#{name}"
     Et que je clique sur "Renseigner les coordonnées bancaires"
-    Et que je remplis "IBAN" avec "#{rib.iban}"
-    Et que je remplis "BIC" avec "#{rib.bic}"
-    Et que je clique sur "Enregistrer"
+    Et que je renseigne des coordonnées bancaires
   )
 end
 

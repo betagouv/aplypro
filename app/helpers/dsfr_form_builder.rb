@@ -65,6 +65,34 @@ class DsfrFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  def dsfr_radio_buttons(attribute, choices, opts = {})
+    @template.content_tag(:fieldset, class: "fr-fieldset") do
+      @template.safe_join(
+        [
+          @template.content_tag(
+            :legend,
+            @object.class.human_attribute_name(attribute),
+            class: "fr-fieldset__legend--regular fr-fieldset__legend"
+          ),
+          choices.map { |choice| dsfr_radio_option(attribute, choice, opts) }
+        ]
+      )
+    end
+  end
+
+  def dsfr_radio_option(attribute, value, opts = {})
+    @template.content_tag(:div, class: "fr-fieldset__element") do
+      @template.content_tag(:div, class: "fr-radio-group") do
+        @template.safe_join(
+          [
+            radio_button(attribute, value, **opts),
+            label([attribute, value].join("_").to_sym)
+          ]
+        )
+      end
+    end
+  end
+
   # FIXME: merge HTML classes at some point
   def dsfr_submit(label, opts = {})
     submit(label, opts.merge(class: "fr-btn"))
