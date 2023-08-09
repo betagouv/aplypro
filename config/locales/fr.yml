@@ -4,6 +4,7 @@ fr:
   activerecord:
     hints:
       rib:
+        name: "Nom du titulaire du compte"
         iban: "Un IBAN français contient 27 caractères et commence par FR"
         bic: "Le code BIC est composé de 8 ou de 11 caractères"
     attributes:
@@ -11,8 +12,12 @@ fr:
         start_date: "Date de début"
         end_date: "Date de fin"
       rib:
+        name: "Titulaire du compte"
         iban: "IBAN"
         bic: "BIC"
+        personal: "Propriété des coordonnées bancaires"
+        personal_true: "Les coordonnées bancaires appartiennent à l'élève"
+        personal_false: "Les coordonnées bancaires appartiennent au représentant légal de l'élève"
       establishment:
         uai: "UAI"
         name: "Nom"

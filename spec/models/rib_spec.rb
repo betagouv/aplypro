@@ -12,5 +12,6 @@ RSpec.describe Rib do
   describe "validations" do
     it { is_expected.to validate_presence_of(:iban) }
     it { is_expected.to validate_presence_of(:bic) }
+    it { is_expected.to validate_presence_of(:name) }
   end
 end

@@ -41,7 +41,9 @@ class RibsController < StudentsController
   def rib_params
     params.require(:rib).permit(
       :iban,
-      :bic
+      :bic,
+      :name,
+      :personal
     ).with_defaults(student: @student)
   end
 
