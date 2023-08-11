@@ -7,10 +7,13 @@ fr:
         name: "Nom du titulaire du compte"
         iban: "Un IBAN français contient 27 caractères et commence par FR"
         bic: "Le code BIC est composé de 8 ou de 11 caractères"
+      pfmp:
+        day_count: "Le nombre de jours présent sur l'attestation. Il doit être entier (pas de demi-journées)."
     attributes:
       pfmp:
         start_date: "Date de début"
         end_date: "Date de fin"
+        day_count: "Nombre de jours effectués"
       rib:
         name: "Titulaire du compte"
         iban: "IBAN"

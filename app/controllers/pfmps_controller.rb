@@ -48,7 +48,8 @@ class PfmpsController < StudentsController
   def pfmp_params
     params.require(:pfmp).permit(
       :start_date,
-      :end_date
+      :end_date,
+      :day_count
     )
   end
 

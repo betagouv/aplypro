@@ -25,6 +25,7 @@
       %thead
         %th{scope: "col"} Début
         %th{scope: "col"} Fin
+        %th{scope: "col"} Nombre de jours
         %th{scope: "col"} Montant
         %th{scope: "col"} État du paiement
         %th{scope: "col"} Commentaire
@@ -34,6 +35,7 @@
           %tr
             %td= l p.start_date
             %td= l p.end_date
+            %td= p.day_count
             %td= number_to_currency(p.calculate_amount)
             %td= dsfr_badge(status: payment_status(p)) { t("pfmps.payments.#{p.payment_state}") }
             %td

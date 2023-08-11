@@ -81,6 +81,7 @@ Quand("je renseigne une PFMP pour {string}") do |name|
     Quand je clique sur "Ajouter une PFMP"
     Et que je remplis "Date de début" avec "17/03/2023"
     Et que je remplis "Date de fin" avec "20/03/2023"
+    Et que je remplis "Nombre de jours effectués" avec "10"
     Et que je clique sur "Enregistrer"
   )
 end
