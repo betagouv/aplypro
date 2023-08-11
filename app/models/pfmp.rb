@@ -7,6 +7,7 @@ class Pfmp < ApplicationRecord
   has_many :payments, -> { order(updated_at: :asc) }, dependent: :destroy, inverse_of: :pfmp
 
   validates :start_date, :end_date, presence: true
+  validates :day_count, numericality: { only_integer: true, allow_nil: true, greater_than: 0 }
 
   # FIXME: this is bound to disappear ; a PFMP doesn't really
   # transition into any states, but it might trigger one or more

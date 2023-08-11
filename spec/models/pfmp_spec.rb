@@ -13,6 +13,7 @@ RSpec.describe Pfmp do
   describe "validations" do
     it { is_expected.to validate_presence_of(:start_date) }
     it { is_expected.to validate_presence_of(:end_date) }
+    it { is_expected.to validate_numericality_of(:day_count).only_integer.is_greater_than(0) }
   end
 
   describe "payments" do
