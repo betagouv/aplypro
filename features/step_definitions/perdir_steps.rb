@@ -31,11 +31,12 @@ Quand("je me connecte") do
   )
 end
 
-Sachantque("il y a une élève {string} au sein de la classe {string}") do |name, classe|
+Sachantque("il y a une élève {string} au sein de la classe {string} pour une formation {string}") do |name, classe, mef|
   @etab ||= FactoryBot.create(:establishment)
 
   first, last = name.split # not great
 
+  @mef = Mef.find_by(code: mef)
   @classe = FactoryBot.create(:classe, establishment: @etab, label: classe)
   @student = FactoryBot.create(:student, classe: @classe, first_name: first, last_name: last)
 end
@@ -75,13 +76,20 @@ Quand("je consulte la liste des classes") do
   visit classes_path
 end
 
-Quand("je renseigne une PFMP pour {string}") do |name|
+Quand("je renseigne une PFMP de {int} jours pour {string}") do |days, name|
   steps %(
     Quand je consulte le profil de l'élève "#{name}"
     Quand je clique sur "Ajouter une PFMP"
     Et que je remplis "Date de début" avec "17/03/2023"
     Et que je remplis "Date de fin" avec "20/03/2023"
-    Et que je remplis "Nombre de jours effectués" avec "10"
+    Et que je remplis "Nombre de jours effectués" avec "#{days}"
     Et que je clique sur "Enregistrer"
   )
+end
+
+Sachantque(
+  "mon établissement propose une formation {string} rémunérée à {int} euros par jour et plafonnée à {int} euros par an"
+) do |mef, rate, cap|
+  mef = FactoryBot.create(:mef, code: mef, label: mef, short: mef)
+  mef.wage.update!(daily_rate: rate, yearly_cap: cap)
 end
