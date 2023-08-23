@@ -32,6 +32,7 @@ describe Student::Mappers::Sygne do
   context "when the APLYPRO_SYGNE_USE_MEFSTAT4 flag is unset" do
     let!(:mefs) { Mef.all.sample(10).map(&:code) }
     let(:data) { mefs.map { |code| build(:sygne_student, mef: code) } }
+    let(:irrelevant) { build_list(:sygne_student, 20, mef: "-123") }
 
     before do
       allow(ENV)

@@ -29,12 +29,16 @@ class Student
             .map do |key, eleves|
             label, mef_or_mefstat4 = key
 
-            Classe.find_or_initialize_by(establishment:, label:, mef: find_mef(mef_or_mefstat4)).tap do |k|
+            mef = find_mef(mef_or_mefstat4)
+
+            next if mef.nil?
+
+            Classe.find_or_initialize_by(establishment:, label:, mef:).tap do |k|
               k.students << eleves.map do |e|
                 Student.find_or_initialize_by(ine: e["ine"]).tap { |s| s.update(map_attributes(e)) }
               end
             end
-          end
+          end.compact
         end
         # rubocop:enable Metrics/AbcSize
 
@@ -48,7 +52,7 @@ class Student
           if use_mefstat4?
             @all.find { |m| m.mefstat4 == mef_or_mefstat4 }
           else
-            @all.find_by!(code: mef_or_mefstat4)
+            @all.find_by(code: mef_or_mefstat4)
           end
         end
       end

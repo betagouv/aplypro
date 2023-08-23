@@ -23,7 +23,9 @@ class Student
 
           data.map do |klass, students|
             code = students.first["sectionReference"]["codeMef"].slice(..-2)
-            mef = Mef.find_by!(code:)
+            mef = Mef.find_by(code:)
+
+            next if mef.nil?
 
             Classe.new(establishment: etab, mef:, label: klass["code"]).tap do |k|
               eleves = students.map do |e|
@@ -36,7 +38,7 @@ class Student
 
               k.students << eleves
             end
-          end
+          end.compact
         end
         # rubocop:enable Metrics/AbcSize
       end
