@@ -16,7 +16,7 @@
         - @classes.each do |classe|
           %tr
             %td= classe.label
-            %td= classe.students.count
-            %td= classe.pfmps.count
+            %td= classe.students.size
+            %td= classe.students.map(&:pfmps).size
             %td= avancement_ribs(classe)
             %td=dsfr_link_to 'Voir les élèves', classe
