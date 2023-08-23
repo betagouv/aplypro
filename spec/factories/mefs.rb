@@ -7,5 +7,9 @@ FactoryBot.define do
     short { "MyString" }
     mefstat11 { 1234 }
     ministry { Mef.ministries[:menj] }
+
+    after :create do |m|
+      create(:wage, mefstat4: m.mefstat4)
+    end
   end
 end

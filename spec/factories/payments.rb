@@ -14,5 +14,11 @@ FactoryBot.define do
 
       after(:create, &:complete!)
     end
+
+    trait :failed do
+      processing
+
+      after(:create, &:fail!)
+    end
   end
 end

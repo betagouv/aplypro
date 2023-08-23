@@ -28,6 +28,10 @@ class Payment < ApplicationRecord
     state_machine.transition_to!(:success)
   end
 
+  def fail!
+    state_machine.transition_to!(:failed)
+  end
+
   delegate :can_transition_to?,
            :current_state, :history, :last_transition, :last_transition_to,
            :transition_to!, :transition_to, :in_state?, to: :state_machine

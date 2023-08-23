@@ -5,7 +5,7 @@ Quand("je me rends sur la page d'accueil") do
 end
 
 Quand("print the page") do
-  log page.html
+  log page.body
 end
 
 Quand("je clique sur {string}") do |label|
