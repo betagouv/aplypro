@@ -3,7 +3,15 @@
 require "rails_helper"
 
 RSpec.describe Pfmp do
-  subject(:pfmp) { create(:pfmp) }
+  subject(:pfmp) do
+    student = create(:student)
+    student.classe.update!(mef: mef)
+
+    create(:pfmp, student: student).tap { |p| p.payments.destroy_all }
+  end
+
+  let(:mef) { create(:mef) }
+  let(:wage) { mef.wage }
 
   describe "associations" do
     it { is_expected.to belong_to(:student) }
@@ -29,11 +37,46 @@ RSpec.describe Pfmp do
       let!(:new) { create(:payment, pfmp:, updated_at: Time.zone.now) }
 
       it "knows the latest payment" do
-        expect(pfmp.latest_payment).to eq future
+        expect(pfmp.reload.latest_payment).to eq future
       end
 
       it "sorts them chronologically" do
-        expect(pfmp.payments).to eq [old, new, future]
+        expect(pfmp.reload.payments).to eq [old, new, future]
+      end
+    end
+
+    describe "calculate_amount" do
+      before do
+        wage.update!(daily_rate: 10)
+      end
+
+      it "is equal to the number of days time the daily rate" do
+        expect(pfmp.calculate_amount).to eq(10 * pfmp.day_count)
+      end
+
+      it "takes into account the yearly cap" do
+        pfmp.day_count = 200
+
+        expect(pfmp.calculate_amount).to eq mef.wage.yearly_cap
+      end
+
+      it "takes into account the previous payments" do
+        max = wage.yearly_cap
+
+        previous = create(:pfmp, student: pfmp.student)
+        create(:payment, :successful, amount: max - 10, pfmp: previous)
+
+        expect(pfmp.calculate_amount).to eq(10)
+      end
+
+      it "does not take into account the previous, failed payments" do
+        create(:payment, :failed, pfmp: pfmp, amount: 1000)
+
+        expect(pfmp.calculate_amount).to eq(10 * pfmp.day_count)
+      end
+
+      it "does not take into account the pending payments" do
+        skip "unclear what to do if there is some pending allowance"
       end
     end
 
@@ -41,6 +84,19 @@ RSpec.describe Pfmp do
       context "when there are no payments" do
         it "creates a new payment" do
           expect { pfmp.setup_payment! }.to change(Payment, :count).by(1)
+        end
+      end
+
+      context "when the student has already reached the yearly cap" do
+        before do
+          create(:pfmp, student: pfmp.student, day_count: 200).tap do |p|
+            p.latest_payment.transition_to!(:processing)
+            p.latest_payment.transition_to!(:success)
+          end
+        end
+
+        it "does not create a payment" do
+          expect { pfmp.setup_payment! }.not_to change(Payment, :count)
         end
       end
 

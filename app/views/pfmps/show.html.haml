@@ -7,13 +7,15 @@
 %ul
   %li
     Date de début :
-    = @pfmp.start_date
+    = l @pfmp.start_date
 
   %li
     Date de fin :
-    = @pfmp.end_date
+    = l @pfmp.end_date
 
   %li
-    Montant : (
-    = @pfmp.end_date - @pfmp.start_date
-    ) ✕ 10 € / jour = XX €
+    Nombre de jours :
+    = @pfmp.day_count
+
+  %li
+    = @pfmp.breakdown

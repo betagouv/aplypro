@@ -23,16 +23,21 @@ class Pfmp < ApplicationRecord
     )
   end
 
-  after_create do
-    setup_payment! if payable?
-  end
+  after_create :setup_payment!
 
   def setup_payment!
-    payments.create!(amount: calculate_amount)
+    payments.create!(amount: calculate_amount) if payment_due?
   end
 
   def calculate_amount
-    42 # we don't have the legal numbers yet
+    [
+      day_count * wage.daily_rate,
+      student.allowance_left
+    ].min
+  end
+
+  def wage
+    student.current_level.wage
   end
 
   # FIXME: use has_one instead
@@ -44,8 +49,16 @@ class Pfmp < ApplicationRecord
     student.rib.present?
   end
 
+  def payment_due?
+    student.allowance_left > 0 # rubocop:disable Style:NumericPredicate
+  end
+
   def unscheduled?
     payments.none?
+  end
+
+  def breakdown
+    I18n.t("pfmps.breakdown", days: day_count, rate: wage.daily_rate, total: calculate_amount)
   end
 
   def payment_state

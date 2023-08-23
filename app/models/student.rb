@@ -26,4 +26,18 @@ class Student < ApplicationRecord
       p.setup_payment! if p.unscheduled?
     end
   end
+
+  def used_allowance
+    payments.in_state(:success).map(&:amount).sum
+  end
+
+  def allowance_left
+    current_level.wage.yearly_cap - used_allowance
+  end
+
+  # FIXME: this will eventually handle the multiple classes a student
+  # may belong or have belonged to.
+  def current_level
+    classe.mef
+  end
 end

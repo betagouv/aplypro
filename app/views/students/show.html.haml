@@ -28,7 +28,6 @@
         %th{scope: "col"} Nombre de jours
         %th{scope: "col"} Montant
         %th{scope: "col"} État du paiement
-        %th{scope: "col"} Commentaire
 
       %tbody
         - @student.pfmps.each do |p|
@@ -36,9 +35,8 @@
             %td= l p.start_date
             %td= l p.end_date
             %td= p.day_count
-            %td= number_to_currency(p.calculate_amount)
+            %td= p.breakdown
             %td= dsfr_badge(status: payment_status(p)) { t("pfmps.payments.#{p.payment_state}") }
-            %td
 
 .actions.fr-py-3w
   = link_to "Ajouter une PFMP", new_class_student_pfmp_path(@classe, @student), class: 'fr-btn'

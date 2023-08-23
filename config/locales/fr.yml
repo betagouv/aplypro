@@ -58,3 +58,4 @@ fr:
     payments:
       blocked: "Informations de paiement manquantes"
       pending: "En attente"
+    breakdown: "%{days} jours × %{rate}€ par jour = %{total}€"
