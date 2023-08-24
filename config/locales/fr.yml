@@ -59,3 +59,25 @@ fr:
       blocked: "Informations de paiement manquantes"
       pending: "En attente"
     breakdown: "%{days} jours × %{rate}€ par jour = %{total}€"
+  mefs:
+    labels:
+      1BT: 1ère bac technologique
+      TBT: Terminale bac technologique
+      1CAP1: CAP en 1 an
+      1CAP2: 1ère année de CAP
+      1CAP2A: 1ère année de CAP agricole
+      2CAP2: 2ène année de CAP
+      2CAP2A: 2ème année de CAP agricole
+      2CAP3: 2ème année CAP en 3 ans
+      3CAP3: 3ème année de CAP en 3 ans
+      2NDPRO: Seconde professionnelle
+      2DPROA: Seconde professionnelle agricole
+      1ERPRO: Première professionnelle
+      1EPROA: Première professionnelle agricole
+      TLEPRO: Terminale professionnelle
+      TLPROA: Terminale professionnelle agricole
+      MC: Mention complémentaire
+      FORM:
+      1BMA1: Brevet des métiers d'arts en 1 an
+      1BMA2: 1ère année Brevet des métiers d'arts
+      2BMA2: 2ème année Brevet des métiers d'arts
