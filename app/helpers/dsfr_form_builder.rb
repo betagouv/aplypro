@@ -12,22 +12,19 @@
 class DsfrFormBuilder < ActionView::Helpers::FormBuilder
   include TranslationHelper
 
-  INPUT_WIDTH_MAPPING = { xs: 3, s: 4, m: 6, l: 8 }.freeze
-
   # Builds a DSFR text field with a label, an optional hint and a text
   # field with autocompletion disabled by default. A hash of options
   # can be passed to customise the field:
   #
-  #   * code: whether the input should use extra spacing and slashed zeros[1]
-  #   * width: a tee-shirt size indicator that maps columns in INPUT_WIDTH_MAPPING
+  #   * code: whether the input should use extra spacing and slashed zeros[1].
   #
   # [1]: https://design-system.service.gov.uk/components/text-input/#codes-and-sequences
-  def dsfr_text_field(attribute, opts)
+  def dsfr_text_field(attribute, opts = {})
     dsfr_input_group(attribute, opts) do
       @template.safe_join(
         [
           label_with_hint(attribute),
-          text_field(attribute, class: input_classes(opts), autocomplete: "off", **opts),
+          text_field(attribute, class: input_classes(opts), autocomplete: "off", **opts.except(:class)),
           error_message(attribute)
         ]
       )
@@ -170,13 +167,9 @@ class DsfrFormBuilder < ActionView::Helpers::FormBuilder
       [
         "fr-input-group",
         @object.errors[attribute].any? ? "fr-input-group--error" : nil,
-        opts[:width] && input_group_width(opts[:width])
+        opts[:class]
       ]
     )
-  end
-
-  def input_group_width(width)
-    "fr-col-md-#{INPUT_WIDTH_MAPPING[width.to_sym] || 12}"
   end
 end
 # rubocop:enable Metrics/ClassLength

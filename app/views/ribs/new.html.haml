@@ -1,12 +1,14 @@
 %h1 Ajout de coordonnés bancaires pour #{@student}
 
-= form_with model: @rib, url: class_student_ribs_path(@classe.id, @student.ine), method: "post", builder: DsfrFormBuilder do |form|
-  = form.dsfr_error_summary
+.fr-grid-row
+  = form_with model: @rib, url: class_student_ribs_path(@classe.id, @student.ine), method: "post", builder: DsfrFormBuilder do |form|
+    = form.dsfr_error_summary
 
-  = form.dsfr_text_field(:name, width: 's')
-  = form.dsfr_text_field(:iban, code: true, width: 's')
-  = form.dsfr_text_field(:bic, code: true, width: 'xs')
+    = form.dsfr_text_field(:name, class: 'fr-col-md-4')
 
-  = form.dsfr_radio_buttons(:personal,  [false, true])
+    = form.dsfr_text_field(:iban, code: true, class: 'fr-col-md-6')
+    = form.dsfr_text_field(:bic, code: true, class: 'fr-col-md-3')
 
-  = form.dsfr_submit "Enregistrer"
+    = form.dsfr_radio_buttons(:personal,  [false, true])
+
+    = form.dsfr_submit "Enregistrer"
