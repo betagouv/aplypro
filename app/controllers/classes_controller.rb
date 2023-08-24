@@ -8,7 +8,7 @@ class ClassesController < ApplicationController
   def index
     infer_page_title
 
-    @classes = @etab.classes
+    @classes = @etab.classes.includes(students: %i[pfmps rib])
     @inhibit_title = true
 
     FetchStudentsJob.perform_later(@etab) if @classes.none?
@@ -31,6 +31,6 @@ class ClassesController < ApplicationController
   end
 
   def set_classe
-    @classe = Classe.find(params[:id])
+    @classe = Classe.includes(students: %i[pfmps rib]).find(params[:id])
   end
 end

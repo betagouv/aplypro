@@ -2,8 +2,8 @@
 
 module ClassesHelper
   def avancement_ribs(classe)
-    complete = classe.students.count(&:rib)
-    all = classe.students.count
+    complete = classe.students.map(&:rib).compact.size
+    all = classe.students.size
 
     "#{complete}/#{all}"
   end
