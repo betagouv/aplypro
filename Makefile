@@ -20,6 +20,9 @@ sh:
 guard:
 	$(DOCKER-RUN) web $(BUNDLE-EXEC) guard
 
+lint:
+	$(DOCKER-RUN) web $(BUNDLE-EXEC) rubocop
+
 debug:
 	$(DOCKER-RUN) web $(BUNDLE-EXEC) rdbg -A web 12345
 
