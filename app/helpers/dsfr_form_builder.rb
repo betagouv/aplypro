@@ -157,9 +157,14 @@ class DsfrFormBuilder < ActionView::Helpers::FormBuilder
     join_classes(
       [
         "fr-input",
-        opts[:code] && "fr-input--code"
+        opts[:code] && "fr-input--code",
+        input_width_class(opts)
       ]
     )
+  end
+
+  def input_width_class(opts)
+    opts[:width].split.map { |spec| "fr-col-#{spec}" }.join(" ")
   end
 
   def input_group_classes(attribute, opts)

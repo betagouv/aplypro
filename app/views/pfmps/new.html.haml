@@ -3,9 +3,9 @@
 = form_with model: @pfmp, url: class_student_pfmps_path(@classe.id, @student.ine), method: "post", builder: DsfrFormBuilder do |form|
   = form.dsfr_error_summary
 
-  = form.dsfr_date_field(:start_date, width: 'xs')
-  = form.dsfr_date_field(:end_date, width: 'xs')
+  = form.dsfr_date_field(:start_date, width: 'sm-4 md-3 lg-2')
+  = form.dsfr_date_field(:end_date, width: 'sm-4 md-3 lg-2')
 
-  = form.dsfr_text_field(:day_count, width: 'xs')
+  = form.dsfr_text_field(:day_count, width: 'md-1 sm-2 xs-2')
 
   = form.dsfr_submit "Enregistrer"
