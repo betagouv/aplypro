@@ -9,12 +9,10 @@ class Pfmp < ApplicationRecord
   validates :start_date, :end_date, presence: true
   validates :day_count, numericality: { only_integer: true, allow_nil: true, greater_than: 0 }
 
-  # FIXME: this is bound to disappear ; a PFMP doesn't really
-  # transition into any states, but it might trigger one or more
-  # payments and *they* will go through different states. Keeping the
-  # plumbing in case we need it but will remove if not.
-  #
-  # Note to self: never write anticipatory code
+  delegate :can_transition_to?,
+           :current_state, :history, :last_transition, :last_transition_to,
+           :transition_to!, :transition_to, :in_state?, to: :state_machine
+
   def state_machine
     @state_machine ||= PfmpStateMachine.new(
       self,
@@ -22,8 +20,6 @@ class Pfmp < ApplicationRecord
       association_name: :transitions
     )
   end
-
-  after_create :setup_payment!
 
   def setup_payment!
     payments.create!(amount: calculate_amount) if payment_due?
