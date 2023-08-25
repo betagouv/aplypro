@@ -18,6 +18,6 @@
         %tr
           %td= pfmp.student.classe
           %td= pfmp.student
-          %td= dsfr_badge(status: pfmp.state_machine.state_to_badge) { t("pfmps.statuses.#{pfmp.state_machine.current_state}") }
+          %td= pfmp.status_badge
           %td= number_to_currency(pfmp.calculate_amount)
           %td= dsfr_link_to 'Voir la PFMP', class_student_pfmp_path(class_id: pfmp.student.classe.id, student_id: pfmp.student.id, id: pfmp.id)
