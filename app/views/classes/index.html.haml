@@ -1,7 +1,7 @@
 - if @classes.none?
   %p Nous récupérons la liste de vos élèves.
 - else
-  - if Pfmp.in_state(:pending).any?
+  - if Pfmp.in_state(:completed).any?
     = render 'pfmp_banner'
   .fr-table.fr-table--no-caption
     %table

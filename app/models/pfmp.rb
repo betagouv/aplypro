@@ -29,6 +29,10 @@ class Pfmp < ApplicationRecord
     )
   end
 
+  after_save do
+    transition_to!(:completed) if day_count.present?
+  end
+
   def setup_payment!
     payments.create!(amount: calculate_amount) if payment_due?
   end

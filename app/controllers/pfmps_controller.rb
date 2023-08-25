@@ -9,7 +9,7 @@ class PfmpsController < StudentsController
 
     # FIXME: this is awful but we need to scope the PFMPs to the
     # current establishment and I cannot think of a better way now.
-    @pfmps = @etab.classes.includes(:pfmps).map(&:pfmps).flatten
+    @pfmps = @etab.classes.includes(pfmps: [:transitions]).map(&:pfmps).flatten.group_by(&:current_state)
   end
 
   def show

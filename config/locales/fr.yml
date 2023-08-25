@@ -56,7 +56,9 @@ fr:
     new:
       success: La PFMP a été enregistrée avec succès
     states:
-      pending: En attente
+      pending: À compléter
+      completed: À valider
+      validated: Validée
     payments:
       blocked: "Informations de paiement manquantes"
       pending: "Planifié"

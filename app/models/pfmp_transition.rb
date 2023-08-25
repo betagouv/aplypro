@@ -10,7 +10,7 @@ class PfmpTransition < ApplicationRecord
   private
 
   def update_most_recent
-    last_transition = pfmp.pfmp_transitions.order(:sort_key).last
+    last_transition = pfmp.transitions.order(:sort_key).last
     return if last_transition.blank?
 
     last_transition.update_column(:most_recent, true)

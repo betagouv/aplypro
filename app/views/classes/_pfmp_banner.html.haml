@@ -1,7 +1,8 @@
-- @pfmps = Pfmp.in_state(:pending)
+- @pfmps = Pfmp.in_state(:completed)
 
-.fr-highlight
-  %p
-    Il y a
-    = dsfr_link_to "#{pluralize(@pfmps.size, 'PFMP')} à valider", '/pfmps'
-    \.
+- unless @pfmps.empty?
+  .fr-highlight
+    %p
+      Il y a
+      = dsfr_link_to "#{pluralize(@pfmps.size, 'PFMP')} à valider", '/pfmps'
+      \.

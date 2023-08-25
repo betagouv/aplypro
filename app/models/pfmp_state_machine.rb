@@ -4,11 +4,13 @@ class PfmpStateMachine
   include Statesman::Machine
 
   state :pending, initial: true
+  state :completed
   state :validated
 
-  transition from: :pending, to: :validated
+  transition from: :pending, to: :completed
+  transition from: :completed, to: :validated
 
-  guard_transition(to: :validated) do |pfmp|
+  guard_transition(to: :completed) do |pfmp|
     pfmp.day_count.present?
   end
 
