@@ -1,7 +1,7 @@
-- @pfmps = Payment.in_state(:pending).map(&:pfmp)
+- @pfmps = Pfmp.in_state(:pending)
 
 .fr-highlight
   %p
     Il y a
-    = dsfr_link_to "#{@pfmps.count} PFMPs en attente de paiement", '/pfmps'
+    = dsfr_link_to "#{pluralize(@pfmps.size, 'PFMP')} à valider", '/pfmps'
     \.

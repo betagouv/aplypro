@@ -3,6 +3,11 @@
 class Pfmp < ApplicationRecord
   belongs_to :student
 
+  include Statesman::Adapters::ActiveRecordQueries[
+    transition_class: PfmpTransition,
+    initial_state: PfmpStateMachine.initial_state,
+  ]
+
   has_many :transitions, class_name: "PfmpTransition", autosave: false, dependent: :destroy
   has_many :payments, -> { order(updated_at: :asc) }, dependent: :destroy, inverse_of: :pfmp
 
