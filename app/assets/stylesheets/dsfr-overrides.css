@@ -12,3 +12,7 @@
   letter-spacing: .07em;
   font-variant-numeric: tabular-nums slashed-zero;
 }
+
+.fr-tabs__panel {
+  transition: none;
+}
