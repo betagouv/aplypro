@@ -8,7 +8,7 @@ class ClassesController < ApplicationController
   def index
     infer_page_title
 
-    @classes = @etab.classes.includes(students: %i[pfmps rib])
+    @classes = @etab.classes.includes(:mef, students: %i[pfmps rib])
     @inhibit_title = true
 
     FetchStudentsJob.perform_later(@etab) if @classes.none?
