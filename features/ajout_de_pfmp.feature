@@ -20,7 +20,10 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
       | Début      | Fin        | Montant                      | État du paiement                    |
       | 17/03/2023 | 20/03/2023 | 3 jours × 15€ par jour = 45€ | Informations de paiement manquantes |
 
-  Scénario: Le paiment est en attente dès que je rajoute les coordonnées bancaires
-    Quand je consulte le profil de l'élève "Marie Curie"
-    Et que je renseigne une PFMP de 4 jours pour "Marie Curie"
-    Alors la page contient "Informations de paiement manquantes"
+  Scénario: Le personnel de direction peut rajouter une PFMP pour toute la classe
+    Quand je vais voir la classe "3EMEB"
+    Et que je clique sur "Renseigner une PFMP pour toute la classe"
+    Et que je remplis "Date de début" avec "17/03/2023"
+    Et que je remplis "Date de fin" avec "20/03/2023"
+    Et que je clique sur "Enregistrer"
+    Alors tous les élèves ont une PFMP du "17/03/2023" au "20/03/2023"

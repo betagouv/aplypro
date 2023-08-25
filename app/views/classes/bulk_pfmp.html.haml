@@ -1,0 +1,12 @@
+.fr-grid-row
+  .fr-col-md-7.fr-mb-3w
+    %p
+      Ce formulaire vous permet d'anticiper les périodes de stage pour
+      une classe en rajoutant une PFMP simultanément à tous les élèves.
+
+    = dsfr_alert(type: :warning, title: "Attention") do
+      Les PFMPs résultantes sont enregistrées pour chaque élève. Il
+      n'est pas possible de les modifier ensemble passé ce formulaire
+      \: vous pourrez les ajuster au cas par cas.
+
+= render partial: 'pfmps/form', locals: { url: create_bulk_pfmp_class_path(@classe), hide_day_count: true }
