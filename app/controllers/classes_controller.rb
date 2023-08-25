@@ -54,6 +54,6 @@ class ClassesController < ApplicationController
   end
 
   def set_classe
-    @classe = Classe.includes(students: :rib).find(params[:id])
+    @classe = Classe.includes(students: %i[pfmps rib]).find(params[:id])
   end
 end
