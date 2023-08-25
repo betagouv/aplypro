@@ -15,6 +15,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :pfmps, only: :index
+
   devise_for :principals, controllers: { omniauth_callbacks: "principals/omniauth_callbacks" }
 
   devise_scope :principal do
@@ -25,5 +27,4 @@ Rails.application.routes.draw do
   root "home#index"
 
   get "/login", to: "home#login"
-  get "/pfmps", to: "classes#pfmps"
 end

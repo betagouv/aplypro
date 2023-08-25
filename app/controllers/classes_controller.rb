@@ -3,13 +3,15 @@
 class ClassesController < ApplicationController
   before_action :authenticate_principal!
   before_action :set_etab
+  before_action :set_all_classes, only: :index
   before_action :set_classe, only: %i[show bulk_pfmp create_bulk_pfmp]
+
+  def set_all_classes
+    @classes = @etab.classes.includes(:mef, students: %i[pfmps rib])
+  end
 
   def index
     infer_page_title
-
-    @classes = @etab.classes.includes(:mef, students: %i[pfmps rib])
-    @inhibit_title = true
 
     FetchStudentsJob.perform_later(@etab) if @classes.none?
   end
@@ -34,10 +36,6 @@ class ClassesController < ApplicationController
     @pfmp = Pfmp.new
 
     infer_page_title
-  end
-
-  def pfmps
-    @pfmps = Payment.in_state(:pending).map(&:pfmp)
   end
 
   private
