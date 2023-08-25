@@ -1,0 +1,12 @@
+- target = defined?(url) ? url : class_student_pfmps_path(@classe.id, @student.ine)
+
+= form_with model: @pfmp, url: target, method: "post", builder: DsfrFormBuilder do |form|
+  = form.dsfr_error_summary
+
+  = form.dsfr_date_field(:start_date, width: 'sm-4 md-3 lg-2')
+  = form.dsfr_date_field(:end_date, width: 'sm-4 md-3 lg-2')
+
+  - unless defined?(hide_day_count) && hide_day_count
+    = form.dsfr_text_field(:day_count, width: 'md-1 sm-2 xs-2')
+
+  = form.dsfr_submit "Enregistrer"

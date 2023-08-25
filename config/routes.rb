@@ -4,6 +4,11 @@ Rails.application.routes.draw do
   resources :establishments, only: :index
 
   resources :classes, only: %i[show index] do
+    member do
+      get "bulk_pfmp"
+      post "create_bulk_pfmp"
+    end
+
     resources :students, only: %i[show] do
       resources :pfmps
       resources :ribs

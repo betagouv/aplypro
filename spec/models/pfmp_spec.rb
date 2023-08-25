@@ -24,6 +24,26 @@ RSpec.describe Pfmp do
     it { is_expected.to validate_numericality_of(:day_count).only_integer.is_greater_than(0) }
   end
 
+  describe "initial state" do
+    it { is_expected.to be_in_state(:pending) }
+  end
+
+  describe "validating" do
+    context "when there is no day_count" do
+      before do
+        pfmp.update!(day_count: nil)
+      end
+
+      it "cannot be moved to validated" do
+        expect { pfmp.transition_to!(:validated) }.to raise_error Statesman::GuardFailedError
+      end
+    end
+
+    it "triggers the creation of a payment" do
+      expect { pfmp.transition_to!(:validated) }.to change(Payment, :count).by(1)
+    end
+  end
+
   describe "payments" do
     context "when the PFMP is new" do
       it "has no payments" do
@@ -89,7 +109,7 @@ RSpec.describe Pfmp do
 
       context "when the student has already reached the yearly cap" do
         before do
-          create(:pfmp, student: pfmp.student, day_count: 200).tap do |p|
+          create(:pfmp, :validated, student: pfmp.student, day_count: 200).tap do |p|
             p.latest_payment.transition_to!(:processing)
             p.latest_payment.transition_to!(:success)
           end

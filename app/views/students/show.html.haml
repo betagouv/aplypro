@@ -26,6 +26,7 @@
         %th{scope: "col"} Début
         %th{scope: "col"} Fin
         %th{scope: "col"} Nombre de jours
+        %th{scope: "col"} État
         %th{scope: "col"} Montant
         %th{scope: "col"} État du paiement
 
@@ -35,8 +36,9 @@
             %td= l p.start_date
             %td= l p.end_date
             %td= p.day_count
-            %td= p.breakdown
-            %td= dsfr_badge(status: payment_status(p)) { t("pfmps.payments.#{p.payment_state}") }
+            %td= p.current_state
+            %td= p.latest_payment&.amount
+            %td= p.latest_payment&.current_state
 
 .actions.fr-py-3w
   = link_to "Ajouter une PFMP", new_class_student_pfmp_path(@classe, @student), class: 'fr-btn'

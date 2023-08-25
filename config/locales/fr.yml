@@ -33,6 +33,7 @@ fr:
       classes:
         index: Liste des classes
         show: Classe de %{name}
+        bulk_pfmp: Ajout d'une PFMP pour toute la classe
       students:
         show: "%{name}"
       pfmps:
@@ -53,7 +54,7 @@ fr:
   pfmps:
     new:
       success: La PFMP a été enregistrée avec succès
-    statuses:
+    states:
       pending: En attente
     payments:
       blocked: "Informations de paiement manquantes"

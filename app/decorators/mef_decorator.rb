@@ -16,4 +16,13 @@ module MefDecorator
   def category
     I18n.t("mefs.labels.#{index}")
   end
+
+  def summary
+    content_tag(:p) do
+      [
+        content_tag(:abbr, index, title: category),
+        content_tag(:em, specialty)
+      ].join(" : ").html_safe # rubocop:disable Rails/OutputSafety
+    end
+  end
 end

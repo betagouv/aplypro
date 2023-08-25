@@ -4,10 +4,10 @@
   = form_with model: @rib, url: class_student_ribs_path(@classe.id, @student.ine), method: "post", builder: DsfrFormBuilder do |form|
     = form.dsfr_error_summary
 
-    = form.dsfr_text_field(:name, class: 'fr-col-md-4')
+    = form.dsfr_text_field(:name, width: 'md-4')
 
-    = form.dsfr_text_field(:iban, code: true, class: 'fr-col-md-6')
-    = form.dsfr_text_field(:bic, code: true, class: 'fr-col-md-3')
+    = form.dsfr_text_field(:iban, code: true, width: 'md-6')
+    = form.dsfr_text_field(:bic, code: true, width: 'md-3')
 
     = form.dsfr_radio_buttons(:personal,  [false, true])
 

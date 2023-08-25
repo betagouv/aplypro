@@ -93,3 +93,18 @@ Sachantque(
   mef = FactoryBot.create(:mef, code: mef, label: mef, short: mef)
   mef.wage.update!(daily_rate: rate, yearly_cap: cap)
 end
+
+Quand("je vais voir la classe {string}") do |label|
+  visit class_path(Classe.find_by(label:))
+end
+
+Alors("tous les élèves ont une PFMP du {string} au {string}") do |start_date, end_date|
+  expect(@classe.students.all? { |s| s.pfmps.exists?(start_date:, end_date:) })
+end
+
+# FIXME: we're relying on global state here via the @student variable
+# but we should keep using a name reference to do it via the user
+# interface instead of prying directly at the model.
+Quand("je valide la dernière PFMP de l'élève") do
+  @student.pfmps.last.transition_to!(:validated)
+end
