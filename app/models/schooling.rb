@@ -5,4 +5,6 @@ class Schooling < ApplicationRecord
   belongs_to :classe
 
   has_many :pfmps, dependent: :destroy
+
+  has_one :mef, through: :classe
 end

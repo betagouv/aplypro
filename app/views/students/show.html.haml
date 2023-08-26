@@ -4,7 +4,7 @@
   %h2 Coordonnées bancaires
 
   - if @student.rib.nil?
-    %p Aucune coordonnées enregistrées
+    %p Aucune coordonnées bancaires enregistrées pour le moment.
 
     = link_to "Renseigner les coordonnées bancaires", new_class_student_rib_path(@classe.id, @student.id), class: 'fr-btn'
   - else
@@ -19,26 +19,7 @@
 - if @student.pfmps.none?
   %p Aucune PFMP enregistrée pour le moment.
 - else
-  .fr-table.fr-table--layout-fixed
-    %table
-      %caption Périodes de formation en milieu professionnel (PFMP)
-      %thead
-        %th{scope: "col"} Début
-        %th{scope: "col"} Fin
-        %th{scope: "col"} Nombre de jours
-        %th{scope: "col"} État
-        %th{scope: "col"} Montant
-        %th{scope: "col"} État du paiement
-
-      %tbody
-        - @student.pfmps.each do |p|
-          %tr
-            %td= l p.start_date
-            %td= l p.end_date
-            %td= p.day_count
-            %td= p.current_state
-            %td= p.latest_payment&.amount
-            %td= p.latest_payment&.current_state
+  = render partial: 'pfmps/pfmp_table', locals: { pfmps: @student.pfmps, for_student: true }
 
 .actions.fr-py-3w
   = link_to "Ajouter une PFMP", new_class_student_pfmp_path(@classe, @student), class: 'fr-btn'

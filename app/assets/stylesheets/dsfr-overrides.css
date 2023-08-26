@@ -16,3 +16,7 @@
 .fr-tabs__panel {
   transition: none;
 }
+
+.fr-table .fr-link {
+  font-size: inherit;
+}

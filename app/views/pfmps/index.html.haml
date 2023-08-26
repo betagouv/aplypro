@@ -10,4 +10,7 @@
 = dsfr_tabs do |tabs|
   - PfmpStateMachine.states.each do |state|
     = tabs.tab title: pfmp_state_tab_title(state, @pfmps[state] || []), active: true do
-      = render partial: 'pfmp_table', locals: { pfmps: @pfmps[state] }
+      - if @pfmps[state].blank?
+        %p Aucune PFMPs dans cette catégorie.
+      - else
+        = render partial: 'pfmp_table', locals: { pfmps: @pfmps[state] }

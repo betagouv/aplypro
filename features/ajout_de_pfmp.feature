@@ -16,9 +16,10 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
   Scénario: Le personnel de direction peut rajouter une PFMP
     Quand je renseigne une PFMP de 3 jours pour "Marie Curie"
     Alors la page contient "La PFMP a été enregistrée avec succès"
-    Et je peux voir dans le tableau "Périodes de formation en milieu professionnel (PFMP)"
-      | Début      | Fin        | Montant | État du paiement |
-      | 17/03/2023 | 20/03/2023 |         |                  |
+    Et je peux voir dans le tableau "Liste des PFMPs"
+      | Classe          | Date de début | Date de fin | Nombre de jours | Montant | Actions      |
+      | Classe de 3EMEB | 17/03/2023    | 20/03/2023  |               3 | 3,00 €  | Voir la PFMP |
+
 
   Scénario: Le personnel de direction peut rajouter une PFMP pour toute la classe
     Quand je vais voir la classe "3EMEB"

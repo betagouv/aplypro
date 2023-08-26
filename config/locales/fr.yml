@@ -28,6 +28,9 @@ fr:
     save_labels:
       pfmp: "de la PFMP"
       rib: "du RIB"
+  menu:
+    classes: Classes
+    pfmps: PFMPs
   pages:
     titles:
       classes:

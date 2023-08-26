@@ -5,10 +5,15 @@
   - unless disabled
     = form.dsfr_error_summary
 
+  - unless defined?(bulk_edit)
+    .fr-select-group.fr-col-3
+      = form.label :schooling_id, "Formation concernée", class: 'fr-label'
+      = form.select :schooling_id, @student.classes, {}, { class: 'fr-select', disabled: true }
+
   = form.dsfr_date_field(:start_date, width: 'sm-4 md-3 lg-2', disabled:)
   = form.dsfr_date_field(:end_date, width: 'sm-4 md-3 lg-2', disabled:)
 
-  - unless defined?(hide_day_count) && hide_day_count
+  - unless defined?(bulk_edit)
     = form.dsfr_text_field(:day_count, width: 'md-1 sm-2 xs-2', disabled:)
 
   - unless disabled

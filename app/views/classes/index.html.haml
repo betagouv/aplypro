@@ -1,8 +1,7 @@
 - if @classes.none?
   %p Nous récupérons la liste de vos élèves.
 - else
-  - if Pfmp.in_state(:completed).any?
-    = render 'pfmp_banner'
+  = render 'pfmp_banner' if @completed_pfmps.any?
   .fr-table.fr-table--no-caption
     %table
       %caption.fr-h1 Liste des classes
@@ -24,4 +23,4 @@
             %td= classe.students.size
             %td= classe.students.map(&:pfmps).flatten.size
             %td= avancement_ribs(classe)
-            %td=dsfr_link_to 'Voir les élèves', classe
+            %td= dsfr_link_to 'Voir les élèves', classe

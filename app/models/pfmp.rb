@@ -42,6 +42,8 @@ class Pfmp < ApplicationRecord
   end
 
   def calculate_amount
+    return if day_count.nil?
+
     [
       day_count * wage.daily_rate,
       student.allowance_left
