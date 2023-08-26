@@ -39,7 +39,7 @@ class PfmpsController < StudentsController
   end
 
   def create
-    @pfmp = Pfmp.new(pfmp_params.merge(student: @student))
+    @pfmp = Pfmp.new(pfmp_params.merge(schooling: @student.current_schooling))
 
     respond_to do |format|
       if @pfmp.save

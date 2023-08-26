@@ -4,8 +4,9 @@ class Classe < ApplicationRecord
   belongs_to :establishment
   belongs_to :mef
 
-  has_many :students, -> { order "last_name" }, dependent: :destroy, inverse_of: :classe
-  has_many :pfmps, through: :students
+  has_many :schoolings
+  has_many :students, -> { order "last_name" }, dependent: nil, through: :schoolings
+  has_many :pfmps, through: :schoolings
 
   def create_bulk_pfmp(pfmp_params)
     students.each do |student|

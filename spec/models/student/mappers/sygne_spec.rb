@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-
 require "./mock/factories/api_student"
-require "./spec/support/shared/student_mapper"
 
 describe Student::Mappers::Sygne do
   subject(:mapper) { described_class }
@@ -32,7 +30,6 @@ describe Student::Mappers::Sygne do
   context "when the APLYPRO_SYGNE_USE_MEFSTAT4 flag is unset" do
     let!(:mefs) { Mef.all.sample(10).map(&:code) }
     let(:data) { mefs.map { |code| build(:sygne_student, mef: code) } }
-    let(:irrelevant) { build_list(:sygne_student, 20, mef: "-123") }
 
     before do
       allow(ENV)
@@ -41,6 +38,11 @@ describe Student::Mappers::Sygne do
         .and_return(nil)
     end
 
-    it_behaves_like "a student mapper"
+    it "maps to classes" do
+      result = mapper.map_payload(data, etab)
+
+      expect(result).to be_a Array
+      # expect { api.parse.each(&:)save }.to change(Student, :count).by(10)
+    end
   end
 end

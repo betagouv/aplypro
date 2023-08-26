@@ -50,7 +50,7 @@ Alors("le fil d'Ariane affiche {string}") do |path|
 end
 
 Quand("l'élève n'a réalisé aucune PFMP") do
-  @student.pfmps.delete_all
+  @student.current_schooling.pfmps.delete_all
 end
 
 Alors("l'élève a {int} PFMP") do |count|

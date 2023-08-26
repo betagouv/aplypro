@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 class Pfmp < ApplicationRecord
-  belongs_to :student
+  belongs_to :schooling
 
-  has_one :classe, through: :student
+  has_one :classe, through: :schooling
+  has_one :student, through: :schooling
+
+  has_one :mef, through: :classe
   has_one :establishment, through: :classe
 
   has_many :transitions, class_name: "PfmpTransition", autosave: false, dependent: :destroy
@@ -21,6 +24,7 @@ class Pfmp < ApplicationRecord
            :current_state, :history, :last_transition, :last_transition_to,
            :transition_to!, :transition_to, :in_state?, to: :state_machine
 
+  delegate :wage, to: :mef
   def state_machine
     @state_machine ||= PfmpStateMachine.new(
       self,
@@ -42,10 +46,6 @@ class Pfmp < ApplicationRecord
       day_count * wage.daily_rate,
       student.allowance_left
     ].min
-  end
-
-  def wage
-    student.current_level.wage
   end
 
   # FIXME: use has_one instead

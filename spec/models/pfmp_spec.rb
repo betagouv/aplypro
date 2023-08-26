@@ -8,12 +8,11 @@ RSpec.describe Pfmp do
   end
 
   let(:mef) { create(:mef) }
-  let(:student) do
-    create(:student).tap { |student| student.classe.update!(mef: mef) }
-  end
+  let(:classe) { create(:classe, mef: mef) }
+  let(:student) { create(:schooling).student }
 
   describe "associations" do
-    it { is_expected.to belong_to(:student) }
+    it { is_expected.to belong_to(:schooling) }
     it { is_expected.to have_many(:payments) }
   end
 
