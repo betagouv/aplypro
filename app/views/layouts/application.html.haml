@@ -18,9 +18,9 @@
     = javascript_importmap_tags
   %body
     = render 'shared/skiplinks'
-    = render 'shared/header'
     - if principal_signed_in?
       = render 'shared/etab_banner'
+    = render 'shared/header'
     .fr-container
       %main#main.fr-py-3w
         = render 'shared/flash'

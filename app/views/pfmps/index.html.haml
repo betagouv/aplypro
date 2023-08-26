@@ -1,0 +1,13 @@
+.fr-col-md-7.fr-highlight
+  %p La mise en paiement des PFMPs validées démarrera en janvier 2024.
+  -# %p
+  -#   Les paiements pour les PFMPs validées seront déclenchés le
+  -#   %strong
+  -#     = l Date.today.end_of_week(:friday)
+  -#     (dans #{(Date.today.end_of_week - Date.today).to_i} jours)
+  -#   \. Si les coordonnées bancaires de l'élève ne sont pas encore renseignées les paiements resteront en attente.
+
+= dsfr_tabs do |tabs|
+  - PfmpStateMachine.states.each do |state|
+    = tabs.tab title: pfmp_state_tab_title(state, @pfmps[state] || []), active: true do
+      = render partial: 'pfmp_table', locals: { pfmps: @pfmps[state] }

@@ -3,16 +3,19 @@
 class Pfmp < ApplicationRecord
   belongs_to :student
 
-  include Statesman::Adapters::ActiveRecordQueries[
-    transition_class: PfmpTransition,
-    initial_state: PfmpStateMachine.initial_state,
-  ]
+  has_one :classe, through: :student
+  has_one :establishment, through: :classe
 
   has_many :transitions, class_name: "PfmpTransition", autosave: false, dependent: :destroy
   has_many :payments, -> { order(updated_at: :asc) }, dependent: :destroy, inverse_of: :pfmp
 
   validates :start_date, :end_date, presence: true
   validates :day_count, numericality: { only_integer: true, allow_nil: true, greater_than: 0 }
+
+  include Statesman::Adapters::ActiveRecordQueries[
+    transition_class: PfmpTransition,
+    initial_state: PfmpStateMachine.initial_state,
+  ]
 
   delegate :can_transition_to?,
            :current_state, :history, :last_transition, :last_transition_to,
@@ -24,6 +27,10 @@ class Pfmp < ApplicationRecord
       transition_class: PfmpTransition,
       association_name: :transitions
     )
+  end
+
+  after_save do
+    transition_to!(:completed) if day_count.present?
   end
 
   def setup_payment!

@@ -38,6 +38,7 @@ fr:
         show: "%{name}"
       pfmps:
         new: "Ajouter une PFMP"
+        index: "Liste des PFMPs"
       ribs:
         new: "Ajout de coordonnées bancaires"
 
@@ -55,10 +56,12 @@ fr:
     new:
       success: La PFMP a été enregistrée avec succès
     states:
-      pending: En attente
+      pending: À compléter
+      completed: À valider
+      validated: Validée
     payments:
       blocked: "Informations de paiement manquantes"
-      pending: "En attente"
+      pending: "Planifié"
     breakdown: "%{days} jours × %{rate}€ par jour = %{total}€"
   mefs:
     labels:

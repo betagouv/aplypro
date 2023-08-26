@@ -1,0 +1,25 @@
+- if pfmps.blank?
+  %p Aucune PFMPs dans cette catégorie.
+- else
+  .fr-table.fr-table--layout-fixed.fr-table--no-caption
+    %table
+      %caption.fr-h1 Liste des PFMPs
+      %thead
+        %th{scope: "col"} Classe
+        %th{scope: "col"} Élève
+        %th{scope: "col"} Date de début
+        %th{scope: "col"} Date de fin
+        %th{scope: "col"} Nombre de jours
+        %th{scope: "col"} Montant
+        %th{scope: "col"} Actions
+      %tbody
+        - pfmps.each do |pfmp|
+          = link_to(class_student_pfmp_path(class_id: pfmp.student.classe.id, student_id: pfmp.student.id, id: pfmp.id), {}) do
+            %tr
+              %td= pfmp.student.classe
+              %td= pfmp.student
+              %td= l pfmp.start_date
+              %td= l pfmp.end_date
+              %td= pfmp.day_count
+              %td= pfmp.latest_payment&.amount
+              %td= dsfr_link_to 'Voir la PFMP', class_student_pfmp_path(class_id: pfmp.student.classe.id, student_id: pfmp.student.id, id: pfmp.id)

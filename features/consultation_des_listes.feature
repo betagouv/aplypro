@@ -17,8 +17,7 @@ Fonctionnalité: Le personnel de direction consulte les listes
     Et que je consulte la liste des classes
     Alors la page contient "1/"
 
-  Scénario: Le personnel de direction peut voir les prochains paiements
-    Sachant que je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "3EMEB"
-    Et que je renseigne une PFMP de 3 jours pour "Marie Curie"
+  Scénario: Le personnel de direction est averti des PFMPs à valider
+    Sachant que je renseigne une PFMP de 3 jours pour "Marie Curie"
     Quand je consulte la liste des classes
     Alors la page contient "Il y a 1 PFMP à valider"

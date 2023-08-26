@@ -5,9 +5,14 @@ FactoryBot.define do
     student
     start_date { "2023-05-22" }
     end_date { "2023-05-22" }
-    day_count { rand(1..6) } # lovely roll dice
+
+    trait :completed do
+      day_count { rand(1..6) } # lovely roll dice
+    end
 
     trait :validated do
+      completed
+
       after(:create) do |pfmp|
         pfmp.transition_to!(:validated)
       end

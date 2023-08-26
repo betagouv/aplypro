@@ -4,6 +4,14 @@ class PfmpsController < StudentsController
   before_action :set_classe, only: %i[new create show]
   before_action :set_student, only: %i[new create show]
 
+  def index
+    infer_page_title
+
+    # FIXME: this is awful but we need to scope the PFMPs to the
+    # current establishment and I cannot think of a better way now.
+    @pfmps = @etab.classes.includes(pfmps: [:transitions]).map(&:pfmps).flatten.group_by(&:current_state)
+  end
+
   def show
     add_breadcrumb t("pages.titles.classes.index"), classes_path
     add_breadcrumb t("pages.titles.classes.show", name: @classe.label), class_path(@classe)
