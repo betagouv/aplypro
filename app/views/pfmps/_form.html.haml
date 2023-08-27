@@ -1,20 +1,17 @@
-- target = defined?(url) ? url : class_student_pfmps_path(@classe.id, @student.ine)
 - disabled = defined?(editable) ? editable : false
 
-= form_with model: @pfmp, url: target, method: "post", builder: DsfrFormBuilder do |form|
+= form_with model: [@classe, @student, @pfmp], builder: DsfrFormBuilder do |form|
   - unless disabled
     = form.dsfr_error_summary
 
-  - unless defined?(bulk_edit)
-    .fr-select-group.fr-col-3
-      = form.label :schooling_id, "Formation concernée", class: 'fr-label'
-      = form.select :schooling_id, @student.classes, {}, { class: 'fr-select', disabled: true }
+  .fr-select-group.fr-col-3
+    = form.label :schooling_id, "Formation", class: 'fr-label'
+    = form.select :schooling_id, @student.classes, {}, { class: 'fr-select', disabled: true }
 
   = form.dsfr_date_field(:start_date, width: 'sm-4 md-3 lg-2', disabled:)
   = form.dsfr_date_field(:end_date, width: 'sm-4 md-3 lg-2', disabled:)
 
-  - unless defined?(bulk_edit)
-    = form.dsfr_text_field(:day_count, width: 'md-1 sm-2 xs-2', disabled:)
+  = form.dsfr_text_field(:day_count, width: 'md-1 sm-2 xs-2', disabled:)
 
   - unless disabled
-    = form.dsfr_submit "Enregistrer"
+    = form.submit nil, { class: 'fr-btn' }
