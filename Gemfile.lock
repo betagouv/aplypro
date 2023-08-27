@@ -297,6 +297,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.7.1)
     rack (2.2.8)
+    rack-mini-profiler (3.1.1)
+      rack (>= 1.2.0)
     rack-oauth2 (2.2.0)
       activesupport
       attr_required
@@ -506,6 +508,7 @@ DEPENDENCIES
   omniauth_openid_connect
   pg
   puma (~> 5.0)
+  rack-mini-profiler
   rails (~> 7.0.3, >= 7.0.3.1)
   rspec
   rspec-rails
