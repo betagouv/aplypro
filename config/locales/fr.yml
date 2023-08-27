@@ -35,7 +35,7 @@ fr:
     titles:
       classes:
         index: Liste des classes
-        show: Classe de %{name}
+        show: "%{name}"
         bulk_pfmp: Ajout d'une PFMP pour toute la classe
       students:
         show: "%{name}"

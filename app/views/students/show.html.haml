@@ -1,7 +1,7 @@
 - content_for(:page_title) { [@page_title, t("pages.titles.classes.show", name: @classe.label)].join(" - ") }
 
 %section.fr-mb-3w
-  %h2 Coordonnées bancaires
+  %h2.fr-h4 Coordonnées bancaires
 
   - if @student.rib.nil?
     %p Aucune coordonnées bancaires enregistrées pour le moment.

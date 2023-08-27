@@ -15,7 +15,7 @@ class ClassesController < ApplicationController
   def show
     add_breadcrumb t("pages.titles.classes.index"), classes_path
 
-    infer_page_title(name: @classe.label)
+    infer_page_title(name: @classe)
   end
 
   def create_bulk_pfmp
