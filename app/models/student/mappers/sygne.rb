@@ -40,7 +40,6 @@ class Student
                 .each do |student|
                 Schooling.find_or_create_by(classe: k, student:)
               end
-
             end
           end.compact
         end

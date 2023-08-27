@@ -47,7 +47,7 @@ class ClassesController < ApplicationController
   end
 
   def set_all_classes
-    @classes = @etab.classes.includes(:mef, students: [:rib, pfmps: [:transitions]])
+    @classes = @etab.classes.includes(:mef, students: [:rib, { pfmps: [:transitions] }])
   end
 
   def set_completed_pfmps

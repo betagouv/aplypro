@@ -31,7 +31,9 @@ Quand("je me connecte") do
   )
 end
 
-Sachantque("il y a un(e) élève {string} au sein de la classe {string} pour une formation {string}") do |name, classe, mef|
+Sachantque(
+  "il y a un(e) élève {string} au sein de la classe {string} pour une formation {string}"
+) do |name, classe, mef|
   @etab ||= FactoryBot.create(:establishment)
 
   first, last = name.split # not great

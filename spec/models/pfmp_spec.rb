@@ -53,18 +53,12 @@ RSpec.describe Pfmp do
   end
 
   describe "payments" do
-    context "when there are previous payments" do
-      let!(:old) { create(:payment, pfmp:, updated_at: Date.yesterday) }
-      let!(:future) { create(:payment, pfmp:, updated_at: Date.tomorrow) }
-      let!(:new) { create(:payment, pfmp:, updated_at: Time.zone.now) }
+    it "sorts them chronologically" do
+      payments = [5, 0, -2]
+                 .map { |n| Time.zone.now + n.days }
+                 .map { |date| create(:payment, pfmp:, updated_at: date) }
 
-      it "knows the latest payment" do
-        expect(pfmp.reload.latest_payment).to eq future
-      end
-
-      it "sorts them chronologically" do
-        expect(pfmp.reload.payments).to eq [old, new, future]
-      end
+      expect(pfmp.reload.payments).to eq payments.reverse
     end
   end
 

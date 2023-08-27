@@ -22,8 +22,6 @@ class PfmpsController < StudentsController
     )
 
     infer_page_title({ name: @student.full_name })
-
-    @pfmp = Pfmp.find(params[:id])
   end
 
   def new
