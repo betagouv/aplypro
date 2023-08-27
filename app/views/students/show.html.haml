@@ -8,13 +8,13 @@
 
     = link_to "Renseigner les coordonnées bancaires", new_class_student_rib_path(@classe.id, @student.id), class: 'fr-btn'
   - else
-    %dl
-      %dt
-        %strong IBAN
-      %dd= @student.rib.safe_iban
-      %dt
-        %strong BIC
-      %dd= @student.rib.bic
+    %ul
+      %li
+        IBAN :
+        %code=@student.rib.iban
+      %li
+        BIC :
+        %code=@student.rib.bic
 
 - if @student.pfmps.none?
   %p Aucune PFMP enregistrée pour le moment.
