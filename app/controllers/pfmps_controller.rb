@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class PfmpsController < StudentsController
-  before_action :set_classe, only: %i[new create show]
-  before_action :set_student, only: %i[new create show]
+  before_action :set_classe, except: :index
+  before_action :set_student, except: :index
+  before_action :set_pfmp, only: %i[show edit update]
 
   def index
     infer_page_title
@@ -19,6 +20,8 @@ class PfmpsController < StudentsController
       t("pages.titles.students.show", name: @student.full_name, classe: @classe.label),
       class_student_path(@classe, @student)
     )
+
+    infer_page_title({ name: @student.full_name })
 
     @pfmp = Pfmp.find(params[:id])
   end
@@ -38,6 +41,8 @@ class PfmpsController < StudentsController
     @pfmp = Pfmp.new
   end
 
+  def edit; end
+
   def create
     @pfmp = Pfmp.new(pfmp_params.merge(schooling: @student.current_schooling))
 
@@ -51,6 +56,16 @@ class PfmpsController < StudentsController
     end
   end
 
+  def update
+    respond_to do |format|
+      if @pfmp.update(pfmp_params)
+        format.html { redirect_to class_student_path(@classe, @student), notice: t("pfmps.edit.success") }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
 
   def pfmp_params
@@ -59,6 +74,10 @@ class PfmpsController < StudentsController
       :end_date,
       :day_count
     )
+  end
+
+  def set_pfmp
+    @pfmp = Pfmp.find_by(id: params[:id])
   end
 
   def set_student

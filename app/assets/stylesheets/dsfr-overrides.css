@@ -20,3 +20,8 @@
 .fr-table .fr-link {
   font-size: inherit;
 }
+
+.fr-table td, .fr-table th {
+  overflow: clip;
+  text-overflow: ellipsis;
+}
