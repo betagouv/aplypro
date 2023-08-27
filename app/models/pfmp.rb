@@ -34,7 +34,9 @@ class Pfmp < ApplicationRecord
   end
 
   after_save do
-    transition_to!(:completed) if day_count.present?
+    if in_state?(:pending) && day_count.present? # rubocop:disable Style/IfUnlessModifier
+      transition_to!(:completed)
+    end
   end
 
   def setup_payment!
