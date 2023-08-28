@@ -27,20 +27,23 @@ class Student
 
             next if mef.nil?
 
-            Classe.new(establishment: etab, mef:, label: klass["code"]).tap do |k|
-              eleves = students.map do |e|
-                attributes = map_attributes(e)
-
-                next if attributes[:ine].nil?
-
-                Student.find_or_initialize_by(ine: attributes[:ine]).tap { |s| s.update(attributes) }
-              end.compact
-
-              k.students << eleves
+            Classe.find_or_create_by!(establishment: etab, mef:, label: klass["code"]).tap do |k|
+              students
+                .map { |e| make_student(e) }
+                .compact
+                .each { |student| Schooling.find_or_create_by!(classe: k, student:) }
             end
           end.compact
         end
         # rubocop:enable Metrics/AbcSize
+
+        def make_student(data)
+          attributes = map_attributes(data)
+
+          Student.find_or_initialize_by(ine: attributes[:ine]).tap do |student|
+            student.assign_attributes(attributes)
+          end
+        end
       end
     end
   end

@@ -3,8 +3,8 @@
 FactoryBot.define do
   factory :mef do
     code { Faker::Number.number(digits: 10) }
-    label { "MyString" }
-    short { "MyString" }
+    label { "1CG" }
+    short { "1ERE COLLAGE DE GOMETTES" }
     mefstat11 { 1234 }
     ministry { Mef.ministries[:menj] }
 

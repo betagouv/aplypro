@@ -33,14 +33,25 @@ class Student
 
             next if mef.nil?
 
-            Classe.find_or_initialize_by(establishment:, label:, mef:).tap do |k|
-              k.students << eleves.map do |e|
-                Student.find_or_initialize_by(ine: e["ine"]).tap { |s| s.update(map_attributes(e)) }
+            Classe.find_or_create_by!(establishment: establishment, mef:, label:).tap do |k|
+              eleves
+                .map { |e| make_student(e) }
+                .compact
+                .each do |student|
+                Schooling.find_or_create_by(classe: k, student:)
               end
             end
           end.compact
         end
         # rubocop:enable Metrics/AbcSize
+
+        def make_student(data)
+          attributes = map_attributes(data)
+
+          Student.find_or_initialize_by(ine: attributes["ine"]).tap do |student|
+            student.assign_attributes(attributes)
+          end
+        end
 
         def use_mefstat4?
           ENV.fetch("APLYPRO_SYGNE_USE_MEFSTAT4").present?

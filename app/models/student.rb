@@ -5,9 +5,15 @@ class Student < ApplicationRecord
 
   validates :ine, :first_name, :last_name, :birthdate, presence: true
 
-  belongs_to :classe
+  has_many :schoolings, dependent: :destroy
+  has_many :classes, through: :schoolings, source: "classe"
+
+  has_many :pfmps, -> { order "pfmps.start_date" }, through: :schoolings
+
+  has_one :current_schooling, class_name: "Schooling", dependent: :destroy
+  has_one :classe, through: :current_schooling
+
   has_one :establishment, through: :classe
-  has_many :pfmps, dependent: :destroy
   has_many :payments, through: :pfmps
 
   has_many :ribs, dependent: :destroy
@@ -32,12 +38,6 @@ class Student < ApplicationRecord
   end
 
   def allowance_left
-    current_level.wage.yearly_cap - used_allowance
-  end
-
-  # FIXME: this will eventually handle the multiple classes a student
-  # may belong or have belonged to.
-  def current_level
-    classe.mef
+    current_schooling.mef.wage.yearly_cap - used_allowance
   end
 end

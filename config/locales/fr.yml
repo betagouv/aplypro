@@ -1,6 +1,10 @@
 fr:
-  errors:
-   format: "L'attribut %{attribute} %{message}"
+  helpers:
+    submit:
+      pfmp:
+        create: Enregistrer la PFMP
+        update: Modifier la PFMP
+  format: "L'attribut %{attribute} %{message}"
   activerecord:
     hints:
       rib:
@@ -28,17 +32,21 @@ fr:
     save_labels:
       pfmp: "de la PFMP"
       rib: "du RIB"
+  menu:
+    classes: Classes
+    pfmps: PFMPs
   pages:
     titles:
       classes:
         index: Liste des classes
-        show: Classe de %{name}
+        show: "%{name}"
         bulk_pfmp: Ajout d'une PFMP pour toute la classe
       students:
         show: "%{name}"
       pfmps:
         new: "Ajouter une PFMP"
         index: "Liste des PFMPs"
+        show: "PFMP pour %{name}"
       ribs:
         new: "Ajout de coordonnées bancaires"
 
@@ -53,6 +61,8 @@ fr:
     new:
       success: Coordonnées bancaires enregistrées avec succès
   pfmps:
+    edit:
+      success: La PFMP a bien été mise à jour
     new:
       success: La PFMP a été enregistrée avec succès
     states:

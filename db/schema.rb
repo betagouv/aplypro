@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_14_085951) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_26_134628) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -83,8 +83,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_14_085951) do
     t.date "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "student_id", null: false
     t.integer "day_count"
+    t.bigint "schooling_id", null: false
+    t.index ["schooling_id"], name: "index_pfmps_on_schooling_id"
   end
 
   create_table "principals", force: :cascade do |t|
@@ -118,14 +119,24 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_14_085951) do
     t.boolean "personal", default: false, null: false
   end
 
-  create_table "students", primary_key: "ine", id: :string, force: :cascade do |t|
+  create_table "schoolings", force: :cascade do |t|
+    t.date "start_date"
+    t.date "end_date"
+    t.string "student_id", null: false
     t.bigint "classe_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["classe_id"], name: "index_schoolings_on_classe_id"
+    t.index ["student_id"], name: "index_schoolings_on_student_id"
+  end
+
+  create_table "students", primary_key: "ine", id: :string, force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "birthdate", null: false
-    t.index ["classe_id"], name: "index_students_on_classe_id"
+    t.bigint "current_schooling"
   end
 
   create_table "wages", force: :cascade do |t|
@@ -141,8 +152,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_14_085951) do
   add_foreign_key "payment_transitions", "payments"
   add_foreign_key "payments", "pfmps"
   add_foreign_key "pfmp_transitions", "pfmps"
-  add_foreign_key "pfmps", "students", primary_key: "ine"
+  add_foreign_key "pfmps", "schoolings"
   add_foreign_key "principals", "establishments", primary_key: "uai"
   add_foreign_key "ribs", "students", primary_key: "ine"
-  add_foreign_key "students", "classes", column: "classe_id"
+  add_foreign_key "schoolings", "classes", column: "classe_id"
+  add_foreign_key "schoolings", "students", primary_key: "ine"
+  add_foreign_key "students", "schoolings", column: "current_schooling"
 end

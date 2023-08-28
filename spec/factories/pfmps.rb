@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :pfmp do
-    student
+    schooling
     start_date { "2023-05-22" }
     end_date { "2023-05-22" }
 

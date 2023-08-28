@@ -31,13 +31,15 @@ Quand("je me connecte") do
   )
 end
 
-Sachantque("il y a une élève {string} au sein de la classe {string} pour une formation {string}") do |name, classe, mef|
+Sachantque(
+  "il y a un(e) élève {string} au sein de la classe {string} pour une formation {string}"
+) do |name, classe, mef|
   @etab ||= FactoryBot.create(:establishment)
 
   first, last = name.split # not great
 
-  @mef = Mef.find_by(code: mef)
-  @classe = FactoryBot.create(:classe, establishment: @etab, label: classe)
+  @mef = FactoryBot.create(:mef, label: mef)
+  @classe = FactoryBot.create(:classe, establishment: @etab, label: classe, mef: @mef)
   @student = FactoryBot.create(:student, classe: @classe, first_name: first, last_name: last)
 end
 
@@ -50,7 +52,7 @@ Alors("le fil d'Ariane affiche {string}") do |path|
 end
 
 Quand("l'élève n'a réalisé aucune PFMP") do
-  @student.pfmps.delete_all
+  @student.current_schooling.pfmps.delete_all
 end
 
 Alors("l'élève a {int} PFMP") do |count|

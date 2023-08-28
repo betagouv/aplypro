@@ -3,12 +3,8 @@
 class ClassesController < ApplicationController
   before_action :authenticate_principal!
   before_action :set_etab
-  before_action :set_all_classes, only: :index
+  before_action :set_all_classes, :set_completed_pfmps, only: :index
   before_action :set_classe, only: %i[show bulk_pfmp create_bulk_pfmp]
-
-  def set_all_classes
-    @classes = @etab.classes.includes(:mef, students: %i[pfmps rib])
-  end
 
   def index
     infer_page_title
@@ -19,7 +15,7 @@ class ClassesController < ApplicationController
   def show
     add_breadcrumb t("pages.titles.classes.index"), classes_path
 
-    infer_page_title(name: @classe.label)
+    infer_page_title(name: @classe)
   end
 
   def create_bulk_pfmp
@@ -35,6 +31,9 @@ class ClassesController < ApplicationController
   def bulk_pfmp
     @pfmp = Pfmp.new
 
+    add_breadcrumb t("pages.titles.classes.index"), classes_path
+    add_breadcrumb t("pages.titles.classes.show", name: @classe.label), class_path(@classe)
+
     infer_page_title
   end
 
@@ -45,6 +44,14 @@ class ClassesController < ApplicationController
       :start_date,
       :end_date
     )
+  end
+
+  def set_all_classes
+    @classes = @etab.classes.includes(:mef, students: [:rib, { pfmps: [:transitions] }])
+  end
+
+  def set_completed_pfmps
+    @completed_pfmps = @classes.map(&:pfmps).flatten.select { |p| p.in_state?(:completed) }
   end
 
   def set_etab
