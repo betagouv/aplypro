@@ -35,7 +35,8 @@ RSpec.shared_examples "a student mapper" do
   end
 
   it "skips mefs that aren't relevant" do
-    expect { mapper.map_payload(data.concat(irrelevant), etab) }.to change(Student, :count)
-                                                                .by(data.size - irrelevant.size)
+    result = mapper.map_payload(data.concat(irrelevant), etab)
+
+    expect { result.each(&:save!) }.not_to change(Student, :count)
   end
 end

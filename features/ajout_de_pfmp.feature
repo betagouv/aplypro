@@ -18,7 +18,7 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Alors la page contient "La PFMP a été enregistrée avec succès"
     Et je peux voir dans le tableau "Liste des PFMPs"
       | Classe          | Date de début | Date de fin | Nombre de jours | Montant | Actions      |
-      | Classe de 3EMEB | 17/03/2023    | 20/03/2023  |               3 | 3,00 €  | Voir la PFMP |
+      | Classe de 3EMEB | 17/03/2023    | 20/03/2023  |               3 | 45,00 € | Voir la PFMP |
 
   Scénario: Le personnel de direction peut rajouter une PFMP pour toute la classe
     Quand je vais voir la classe "3EMEB"
@@ -35,5 +35,5 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Et que je clique sur "Modifier la PFMP"
     Alors la page contient "La PFMP a bien été mise à jour"
     Et je peux voir dans le tableau "Liste des PFMPs"
-      | Classe          | Date de début | Date de fin | Nombre de jours | Montant | Actions      |
-      | Classe de 3EMEB | 17/03/2023    | 20/03/2023  |              10 | 10,00 € | Voir la PFMP |
+      | Classe          | Date de début | Date de fin | Nombre de jours | Montant  | Actions      |
+      | Classe de 3EMEB | 17/03/2023    | 20/03/2023  |              10 | 150,00 € | Voir la PFMP |
