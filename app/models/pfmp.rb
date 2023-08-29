@@ -65,10 +65,6 @@ class Pfmp < ApplicationRecord
     student.allowance_left > 0 # rubocop:disable Style:NumericPredicate
   end
 
-  def unscheduled?
-    payments.none?
-  end
-
   def breakdown
     I18n.t("pfmps.breakdown", days: day_count, rate: wage.daily_rate, total: calculate_amount)
   end
