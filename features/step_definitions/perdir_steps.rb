@@ -110,3 +110,29 @@ end
 Quand("je valide la dernière PFMP de l'élève") do
   @student.pfmps.last.transition_to!(:validated)
 end
+
+Sachantque("je renseigne une PFMP provisoire pour {string}") do |name|
+  steps %(
+    Quand je consulte le profil de l'élève "#{name}"
+    Et que je clique sur "Ajouter une PFMP"
+    Et que je remplis "Date de début" avec "17/03/2023"
+    Et que je remplis "Date de fin" avec "20/03/2023"
+    Et que je clique sur "Enregistrer"
+  )
+end
+
+Quand("je consulte la liste des PFMPs {string}") do |tab|
+  steps %(
+    Quand je clique sur "Liste des PFMPs"
+    Et que je clique sur "#{tab}"
+  )
+end
+
+Quand("je renseigne {int} jours pour la dernière PFMP de {string}") do |days, name|
+  steps %(
+    Quand je consulte le profil de l'élève "#{name}"
+    Et que je clique sur "Voir la PFMP"
+    Et que je remplis "Nombre de jours" avec "#{days}"
+    Et que je clique sur "Modifier la PFMP"
+  )
+end
