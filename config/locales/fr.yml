@@ -33,8 +33,8 @@ fr:
       pfmp: "de la PFMP"
       rib: "du RIB"
   menu:
-    classes: Classes
-    pfmps: PFMPs
+    classes: Liste des classes
+    pfmps: Liste des PFMPs
   pages:
     titles:
       classes:
@@ -66,8 +66,12 @@ fr:
     new:
       success: La PFMP a été enregistrée avec succès
     states:
+      pending: Nombre de jours à compléter
+      completed: Complétées
+      validated: Validées
+    state:
       pending: À compléter
-      completed: À valider
+      completed: Complétée
       validated: Validée
     payments:
       blocked: "Informations de paiement manquantes"

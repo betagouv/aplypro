@@ -17,8 +17,4 @@ class PfmpStateMachine
   after_transition(to: :validated) do |pfmp| # rubocop:disable Style/SymbolProc
     pfmp.setup_payment!
   end
-
-  def state_to_badge
-    :new
-  end
 end

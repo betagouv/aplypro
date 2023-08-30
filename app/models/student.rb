@@ -27,12 +27,6 @@ class Student < ApplicationRecord
     [first_name, last_name].join(" ")
   end
 
-  def rib_changed!
-    pfmps.each do |p|
-      p.setup_payment! if p.unscheduled?
-    end
-  end
-
   def used_allowance
     payments.in_state(:success).map(&:amount).sum
   end
