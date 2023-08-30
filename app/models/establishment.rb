@@ -6,7 +6,7 @@ class Establishment < ApplicationRecord
   validates :uai, presence: true, uniqueness: true
 
   has_one :principal, dependent: :nullify
-  has_many :classes, class_name: "Classe", dependent: :destroy
+  has_many :classes, -> { order "label" }, class_name: "Classe", dependent: :destroy, inverse_of: :establishment
 
   after_create :queue_refresh
 
