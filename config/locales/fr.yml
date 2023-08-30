@@ -69,6 +69,10 @@ fr:
       pending: Nombre de jours à compléter
       completed: Complétées
       validated: Validées
+    state:
+      pending: À compléter
+      completed: Complétée
+      validated: Validée
     payments:
       blocked: "Informations de paiement manquantes"
       pending: "Planifié"

@@ -16,9 +16,9 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
   Scénario: Le personnel de direction peut rajouter une PFMP
     Quand je renseigne une PFMP de 3 jours pour "Marie Curie"
     Alors la page contient "La PFMP a été enregistrée avec succès"
-    Et je peux voir dans le tableau "Liste des PFMPs"
-      | Classe          | Date de début | Date de fin | Nombre de jours | Montant | Actions      |
-      | Classe de 3EMEB | 17/03/2023    | 20/03/2023  |               3 | 45,00 € | Voir la PFMP |
+    Et je peux voir dans le tableau "Liste des PFMPs de l'élève"
+      | État      | Date de début | Date de fin | Nombre de jours | Montant | Actions      |
+      | Complétée | 17/03/2023    | 20/03/2023  |               3 | 45,00 € | Modifier la PFMP |
 
   Scénario: Le personnel de direction peut rajouter une PFMP pour toute la classe
     Quand je vais voir la classe "3EMEB"
@@ -30,10 +30,10 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
 
   Scénario: Le personnel de direction peut modifier une PFMP
     Quand je renseigne une PFMP de 3 jours pour "Marie Curie"
-    Et que je clique sur "Voir la PFMP"
+    Et que je clique sur "Modifier la PFMP"
     Et que je remplis "Nombre de jours" avec "10"
     Et que je clique sur "Modifier la PFMP"
     Alors la page contient "La PFMP a bien été mise à jour"
-    Et je peux voir dans le tableau "Liste des PFMPs"
-      | Classe          | Date de début | Date de fin | Nombre de jours | Montant  | Actions      |
-      | Classe de 3EMEB | 17/03/2023    | 20/03/2023  |              10 | 150,00 € | Voir la PFMP |
+    Et je peux voir dans le tableau "Liste des PFMPs de l'élève"
+      | État      | Date de début | Date de fin | Nombre de jours | Montant  | Actions          |
+      | Complétée | 17/03/2023    | 20/03/2023  |              10 | 150,00 € | Modifier la PFMP |

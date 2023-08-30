@@ -19,7 +19,7 @@
 - if @student.pfmps.none?
   %p Aucune PFMP enregistrée pour le moment.
 - else
-  = render partial: 'pfmps/pfmp_table', locals: { pfmps: @student.pfmps, for_student: true }
+  = render partial: 'pfmps/pfmp_student_table'
 
 .actions.fr-py-3w
   = link_to "Ajouter une PFMP", new_class_student_pfmp_path(@classe, @student), class: 'fr-btn'

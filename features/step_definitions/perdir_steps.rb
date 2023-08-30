@@ -131,7 +131,7 @@ end
 Quand("je renseigne {int} jours pour la dernière PFMP de {string}") do |days, name|
   steps %(
     Quand je consulte le profil de l'élève "#{name}"
-    Et que je clique sur "Voir la PFMP"
+    Et que je clique sur "Modifier la PFMP"
     Et que je remplis "Nombre de jours" avec "#{days}"
     Et que je clique sur "Modifier la PFMP"
   )

@@ -1,23 +1,22 @@
 .fr-table.fr-table--layout-fixed
   %table
-    %caption Liste des PFMPs
+    %caption Liste des PFMPs de l'élève
     %thead
-      %th{scope: "col"} Classe
-      %th{scope: "col"} Élève
+      %th{scope: "col"} État
       %th{scope: "col"} Date de début
       %th{scope: "col"} Date de fin
       %th{scope: "col"} Nombre de jours
       %th{scope: "col"} Montant
       %th{scope: "col"} Actions
     %tbody
-      - pfmps.each do |pfmp|
+      - @student.pfmps.each do |pfmp|
         %tr
-          %td= pfmp.student.classe
-          %td= dsfr_link_to pfmp.student, class_student_path(class_id: pfmp.classe, id: pfmp.student)
+          %td= pfmp.status_badge
           %td= l pfmp.start_date
           %td= l pfmp.end_date
           %td= pfmp.day_count
-          %td= number_to_currency(pfmp.calculate_amount)
+          %td
+            %strong= number_to_currency(pfmp.calculate_amount)
           %td
             %ul
               %li= dsfr_link_to('Modifier la PFMP', class_student_pfmp_path(class_id: pfmp.classe.id, student_id: pfmp.student.id, id: pfmp.id))
