@@ -12,14 +12,12 @@ class Principal < ApplicationRecord
     # can't figure out a pattern I like quite yet
     def from_oidc(attrs)
       # we can't use find_or_create because a bunch of fields are mandatory
-      principal = Principal.find_or_initialize_by(uid: attrs["uid"], provider: attrs["provider"])
-
-      principal.token = attrs["credentials"]["token"]
-      principal.secret = "nope"
-      principal.name = attrs["info"]["name"]
-      principal.email = attrs["info"]["email"]
-
-      principal
+      Principal.find_or_initialize_by(uid: attrs["uid"], provider: attrs["provider"]).tap do |principal|
+        principal.token = attrs["credentials"]["token"]
+        principal.secret = "nope"
+        principal.name = attrs["info"]["name"]
+        principal.email = attrs["info"]["email"]
+      end
     end
 
     def from_fim(attrs)
@@ -35,13 +33,9 @@ class Principal < ApplicationRecord
     end
 
     def from_developer(attrs)
-      principal = from_oidc(oidcize_dev_hash(attrs))
-
-      etab = Establishment.find_or_create_by!(uai: attrs["info"]["uai"])
-
-      principal.establishment = etab
-
-      principal
+      from_oidc(oidcize_dev_hash(attrs)).tap do |principal|
+        principal.establishment = Establishment.find_or_create_by!(uai: attrs["info"]["uai"])
+      end
     end
 
     private
