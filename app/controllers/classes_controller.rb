@@ -2,7 +2,6 @@
 
 class ClassesController < ApplicationController
   before_action :authenticate_principal!
-  before_action :set_etab
   before_action :set_all_classes, only: :index
   before_action :set_classe, only: %i[show bulk_pfmp create_bulk_pfmp]
 
@@ -48,10 +47,6 @@ class ClassesController < ApplicationController
 
   def set_all_classes
     @classes = @etab.classes.includes(:mef, students: %i[rib pfmps])
-  end
-
-  def set_etab
-    @etab = current_principal.establishment
   end
 
   def set_classe
