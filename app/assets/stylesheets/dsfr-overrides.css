@@ -25,3 +25,19 @@
   overflow: clip;
   text-overflow: ellipsis;
 }
+
+.fr-hint-text {
+  font-size: 0.95rem;
+}
+
+.fr-nav__link {
+  font-size: 1rem;
+}
+
+.fr-breadcrumb__link {
+  font-size: 0.9rem;
+}
+
+:root {
+  --text-mention-grey: #585858; /* complies with AAA 7:1 contrast ratio */
+}
