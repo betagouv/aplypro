@@ -17,6 +17,6 @@ class StudentsController < ClassesController
   end
 
   def set_classe
-    @classe = Classe.find_by(id: params[:class_id])
+    find_class_or_redirect(params[:class_id])
   end
 end

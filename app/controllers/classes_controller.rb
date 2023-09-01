@@ -50,6 +50,15 @@ class ClassesController < ApplicationController
   end
 
   def set_classe
-    @classe = Classe.includes(students: %i[pfmps rib]).find(params[:id])
+    find_class_or_redirect(params[:id])
+  end
+
+  def find_class_or_redirect(id)
+    @classe = Classe
+              .includes(students: %i[pfmps rib])
+              .where(establishment: @etab)
+              .find(id)
+  rescue ActiveRecord::RecordNotFound
+    redirect_to classes_path, alert: t("errors.classes.not_found") and return
   end
 end
