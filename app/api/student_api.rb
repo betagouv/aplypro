@@ -12,7 +12,7 @@ module StudentApi
       provider = establishment.principal&.provider
 
       case provider
-      when "fim"
+      when "fim", "developer"
         Sygne.new(establishment)
       when "masa"
         Fregata.new(establishment)

@@ -13,10 +13,14 @@ class StudentsController < ClassesController
   private
 
   def set_student
-    @student = @classe.students.find_by(ine: params[:id])
+    @student = @classe.students.includes(:rib, :pfmps).find_by(ine: params[:id])
   end
 
   def set_classe
-    @classe = Classe.find_by(id: params[:class_id])
+    @classe = Classe
+              .where(establishment: @etab)
+              .find(params[:class_id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to classes_path, alert: t("errors.classes.not_found") and return
   end
 end

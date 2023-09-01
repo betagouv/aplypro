@@ -80,6 +80,7 @@ group :test do
   gem "guard"
   gem "guard-cucumber"
   gem "guard-rspec"
+  gem "rails-controller-testing"
   gem "rspec"
   gem "rubocop"
   gem "rubocop-rails"

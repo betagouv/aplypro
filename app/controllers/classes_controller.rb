@@ -2,8 +2,7 @@
 
 class ClassesController < ApplicationController
   before_action :authenticate_principal!
-  before_action :set_etab
-  before_action :set_all_classes, :set_completed_pfmps, only: :index
+  before_action :set_all_classes, only: :index
   before_action :set_classe, only: %i[show bulk_pfmp create_bulk_pfmp]
 
   def index
@@ -47,18 +46,15 @@ class ClassesController < ApplicationController
   end
 
   def set_all_classes
-    @classes = @etab.classes.includes(:mef, students: [:rib, { pfmps: [:transitions] }])
-  end
-
-  def set_completed_pfmps
-    @completed_pfmps = @classes.map(&:pfmps).flatten.select { |p| p.in_state?(:completed) }
-  end
-
-  def set_etab
-    @etab = current_principal.establishment
+    @classes = @etab.classes.includes(:mef, students: %i[rib pfmps])
   end
 
   def set_classe
-    @classe = Classe.includes(students: %i[pfmps rib]).find(params[:id])
+    @classe = Classe
+              .includes(students: %i[pfmps rib])
+              .where(establishment: @etab)
+              .find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to classes_path, alert: t("errors.classes.not_found") and return
   end
 end

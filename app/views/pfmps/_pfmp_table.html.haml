@@ -12,7 +12,7 @@
     %tbody
       - pfmps.each do |pfmp|
         %tr
-          %td= pfmp.student.classe
+          %td= pfmp.classe
           %td= dsfr_link_to pfmp.student, class_student_path(class_id: pfmp.classe, id: pfmp.student)
           %td= l pfmp.start_date
           %td= l pfmp.end_date
