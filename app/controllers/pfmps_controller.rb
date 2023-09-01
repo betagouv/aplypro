@@ -8,11 +8,10 @@ class PfmpsController < ApplicationController
   def index
     infer_page_title
 
-    # FIXME: this is awful but we need to scope the PFMPs to the
-    # current establishment and I cannot think of a better way now.
     @pfmps = Pfmp
              .includes(:student, :payments, :transitions, classe: [:mef])
-             .where(classe: { establishment: @etab }).group_by(&:current_state)
+             .where(classe: { establishment: @etab })
+             .group_by(&:current_state)
   end
 
   def show
