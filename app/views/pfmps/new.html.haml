@@ -1,3 +1,12 @@
 %h1 Ajouter une PFMP pour #{@student}
 
+.fr-col-6
+  .fr-highlight
+    %p
+      Le calcul du montant à payer de la PFMP est fait
+      %strong uniquement à partir du nombre de jours reporté sur l'attestation de fin de stage
+      \. La date de début et la date de fin sont renseignables à titre
+      purement indicatif. Aucun calcul n'est réalisé entre les deux
+      dates pour déterminer la somme.
+
 = render 'form'
