@@ -1,5 +1,8 @@
 - disabled = defined?(editable) ? editable : false
 
+.fr-col-6.fr-mb-3w
+  = render 'dates_warning'
+
 = form_with model: [@classe, @student, @pfmp], builder: DsfrFormBuilder do |form|
   - unless disabled
     = form.dsfr_error_summary
