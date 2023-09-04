@@ -1,19 +1,17 @@
 .fr-grid-row
   .fr-col-md-6
     %p
-      Ce formulaire vous permet d'anticiper les périodes de stage pour
-      une classe en rajoutant une PFMP simultanément à tous les élèves.
-
-.fr-grid-row
-  .fr-col-md-6.fr-mb-3w
-    = render 'pfmps/dates_warning'
+      Ce formulaire vous permet d'anticiper les périodes de stage
+      d'une classe en renseignant une même PFMP pour chacun de ses
+      élèves.
 
 .fr-grid-row
   .fr-col-md-6.fr-mb-3w
     = dsfr_alert(type: :warning, title: "La PFMP est dupliquées pour chaque élève") do
-      La PFMP renseignée est dupliquée pour chaque élève de la classe. Il
-      n'est pas possible de la modifier au niveau de la classe passé ce formulaire
-      \: vous pourrez les ajuster au cas par cas.
+      La PFMP que vous allez renseigner est dupliquée pour chaque
+      élève de la classe. Il n'est pas possible de la modifier à
+      l'échelle de la classe passé ce formulaire : vous devrez les
+      ajuster au cas par cas.
 
 = form_with model: @pfmp, url: create_bulk_pfmp_class_path(@classe), builder: DsfrFormBuilder do |form|
   = form.dsfr_error_summary
