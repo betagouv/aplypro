@@ -275,22 +275,20 @@ Devise.setup do |config|
                     fields: %i[email name uai]
   end
 
-  unless Rails.env.test?
-    config.omniauth :openid_connect,
-                    {
-                      name: :fim,
-                      scope: ENV.fetch("APLYPRO_FIM_SCOPE"),
-                      response_type: :code,
-                      issuer: ENV.fetch("APLYPRO_FIM_ISSUER"),
-                      discovery: true,
-                      client_options: {
-                        redirect_uri: ENV.fetch("APLYPRO_FIM_REDIRECT_URI"),
-                        host: ENV.fetch("APLYPRO_FIM_HOST"),
-                        identifier: ENV.fetch("APLYPRO_FIM_CLIENT_ID"),
-                        secret: ENV.fetch("APLYPRO_FIM_CLIENT_SECRET")
-                      }
+  config.omniauth :openid_connect,
+                  {
+                    name: :fim,
+                    scope: ENV.fetch("APLYPRO_FIM_SCOPE"),
+                    response_type: :code,
+                    issuer: ENV.fetch("APLYPRO_FIM_ISSUER"),
+                    discovery: true,
+                    client_options: {
+                      redirect_uri: ENV.fetch("APLYPRO_FIM_REDIRECT_URI"),
+                      host: ENV.fetch("APLYPRO_FIM_HOST"),
+                      identifier: ENV.fetch("APLYPRO_FIM_CLIENT_ID"),
+                      secret: ENV.fetch("APLYPRO_FIM_CLIENT_SECRET")
                     }
-  end
+                  }
 
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
