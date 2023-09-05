@@ -43,7 +43,7 @@ fr:
       classes:
         index: Liste des classes
         show: "%{name}"
-        bulk_pfmp: Ajout d'une PFMP pour toute la classe
+        bulk_pfmp: Ajout d'une PFMP provisoire pour toute la classe
       students:
         show: "%{name}"
       pfmps:
