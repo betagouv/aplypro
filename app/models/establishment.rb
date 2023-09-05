@@ -46,4 +46,8 @@ class Establishment < ApplicationRecord
 
     update!(attributes)
   end
+
+  def select_label
+    [uai, name].join(" - ")
+  end
 end

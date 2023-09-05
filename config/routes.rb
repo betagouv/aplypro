@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  resources :principals, only: :update
   resources :establishments, only: :index
 
   resources :classes, only: %i[show index] do
@@ -27,4 +28,5 @@ Rails.application.routes.draw do
   root "home#index"
 
   get "/login", to: "home#login"
+  get "/select_etab", to: "home#select_etab"
 end

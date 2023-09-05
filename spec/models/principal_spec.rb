@@ -8,7 +8,7 @@ RSpec.describe Principal do
   end
 
   describe "associations" do
-    it { is_expected.to belong_to(:establishment).class_name("Establishment") }
+    it { is_expected.to belong_to(:establishment).class_name("Establishment").optional }
   end
 
   describe "validations" do
@@ -27,8 +27,7 @@ RSpec.describe Principal do
 
     {
       name: "Ens2D05 Pourtest5",
-      email: "ens2d05.pourtest5@ac-bordeaux.fr",
-      establishment_id: "E020202K"
+      email: "ens2d05.pourtest5@ac-bordeaux.fr"
     }.each do |attr, value|
       it "maps the `#{attr} attribute" do
         expect(principal[attr]).to eq value

@@ -2,9 +2,10 @@
 
 Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
   Contexte:
-    Sachant que je suis directeur de l'établissement "DINUM"
+    Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
+    Et que je me connecte en tant que personnel MENJ
     Et qu'il y a une élève "Marie Curie" au sein de la classe "3EMEB" pour une formation "Développement"
-    Et que je me connecte
+    Et que je rafraîchis la page
     Et que je clique sur "Voir les élèves" dans la rangée "3EMEB"
     Et que je clique sur "Voir le profil de l'élève" dans la rangée "Curie Marie"
 
