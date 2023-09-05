@@ -17,19 +17,15 @@ class Student
           end
         end
 
-        # FIXME: this can definitely be simplified, and will be once
-        # the use_mefstat4? hack is gone for a start.
-        #
+        # FIXME: this can definitely be simplified
         # rubocop:disable Metrics/AbcSize
         def map_payload(payload, establishment)
-          mefkey = use_mefstat4? ? "niveau" : "mef"
-
           payload
-            .group_by { |obj| [obj["classe"], obj[mefkey]] }
+            .group_by { |obj| [obj["classe"], obj["codeMef"]] }
             .map do |key, eleves|
-            label, mef_or_mefstat4 = key
+            label, code = key
 
-            mef = find_mef(mef_or_mefstat4)
+            mef = Mef.find_by(code: code.slice(..-2))
 
             next if mef.nil?
 
@@ -50,20 +46,6 @@ class Student
 
           Student.find_or_initialize_by(ine: attributes["ine"]).tap do |student|
             student.assign_attributes(attributes)
-          end
-        end
-
-        def use_mefstat4?
-          ENV.fetch("APLYPRO_SYGNE_USE_MEFSTAT4").present?
-        end
-
-        def find_mef(mef_or_mefstat4)
-          @all ||= Mef.all
-
-          if use_mefstat4?
-            @all.find { |m| m.mefstat4 == mef_or_mefstat4 }
-          else
-            @all.find_by(code: mef_or_mefstat4)
           end
         end
       end
