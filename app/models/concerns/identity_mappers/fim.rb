@@ -4,7 +4,7 @@ module IdentityMappers
   class Fim
     attr_accessor :attributes
 
-    ACCEPTED_ESTABLISHMENT_TYPES = %w[LYC].freeze
+    ACCEPTED_ESTABLISHMENT_TYPES = %w[LYC LP].freeze
     FREDURNERESP_MAPPING = %i[uai type category activity tna_sym tty_code tna_code].freeze
 
     def initialize(attributes)

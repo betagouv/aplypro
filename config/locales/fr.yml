@@ -40,6 +40,8 @@ fr:
     pfmps: Liste des PFMPs
   pages:
     titles:
+      home:
+        login: Connexion
       classes:
         index: Liste des classes
         show: "%{name}"

@@ -38,6 +38,6 @@ end
 Sachantque("je me connecte en tant que personnel MENJ") do
   steps %(
     Quand je me rends sur la page d'accueil
-    Et que je clique sur "fim"
+    Et que je clique sur "Accéder au portail de connexion"
   )
 end

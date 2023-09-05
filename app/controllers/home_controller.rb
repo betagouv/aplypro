@@ -7,5 +7,7 @@ class HomeController < ApplicationController
     redirect_to login_url
   end
 
-  def login; end
+  def login
+    infer_page_title
+  end
 end

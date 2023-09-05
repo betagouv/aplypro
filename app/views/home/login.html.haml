@@ -1,10 +1,8 @@
-- content_for(:page_title) { "Connexion" }
+%h1 Connexion requise
 
-%h1 Connexion
-
+.fr-col-md-6
+  %p
+    Vous devez vous connecter pour accéder à Aplypro et à la gestion
+    des PFMPs.
 %p
-  Vous devez vous connecter pour accéder aux services de gestion des
-  stages.
-
-- Principal.omniauth_providers.each do |sym|
-  = button_to sym, send("principal_#{sym}_omniauth_authorize_path".to_sym), method: :post, remote: false, data: { turbo: false }, class: "fr-btn"
+  = button_to "Accéder au portail de connexion", send("principal_fim_omniauth_authorize_path".to_sym), method: :post, remote: false, data: { turbo: false }, class: "fr-btn"
