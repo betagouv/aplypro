@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class PfmpsController < ApplicationController
+  before_action :authenticate_principal!
+
   before_action :set_classe, except: :index
   before_action :set_student, except: :index
   before_action :set_pfmp, only: %i[show edit update]
