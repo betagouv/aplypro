@@ -48,6 +48,10 @@ Quand("je clique sur {string} dans la rangée {string}") do |link, row|
   end
 end
 
+Quand("je sélectionne {string} pour {string}") do |option, name|
+  select option, from: name
+end
+
 Quand("je choisis {string}") do |option|
   choose option
 end
@@ -58,4 +62,8 @@ end
 
 Alors("debug") do
   debugger # rubocop:disable Lint/Debugger
+end
+
+Quand("je rafraîchis la page") do
+  visit current_path
 end

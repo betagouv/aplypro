@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 def make_fredurne(uai, activity = "ADF")
-  [uai, "UAJ", "PU", activity, uai, "T3", "LYC", "340"].join("$")
+  [uai, "UAJ", "PU", activity, "T3", "LYC", "340"].join("$")
 end
 
 def make_fim_hash(name:, email:, raw_info:)
@@ -30,7 +30,7 @@ Sachantque("je suis un personnel MENJ directeur de l'établissement {string}") d
     name: Faker::Name.name,
     email: Faker::Internet.email,
     raw_info: {
-      FrEduRne: uais.map { |u| make_fredurne(u) }
+      FrEduRneResp: uais.map { |u| make_fredurne(u) }
     }
   )
 end

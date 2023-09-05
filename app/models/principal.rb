@@ -5,7 +5,7 @@ class Principal < ApplicationRecord
 
   validates :uid, :provider, :name, :token, :secret, :email, presence: true
 
-  belongs_to :establishment
+  belongs_to :establishment, optional: true
 
   class << self
     # ideally all these methods would live in some OIDC-factory but I
@@ -21,15 +21,7 @@ class Principal < ApplicationRecord
     end
 
     def from_fim(attrs)
-      principal = from_oidc(attrs)
-
-      mapper = IdentityMappers::Fim.new(attrs["extra"]["raw_info"])
-
-      etab = Establishment.find_or_create_by!(uai: mapper.uai)
-
-      principal.establishment = etab
-
-      principal
+      from_oidc(attrs)
     end
 
     def from_developer(attrs)

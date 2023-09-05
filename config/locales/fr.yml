@@ -7,7 +7,7 @@ fr:
   format: "L'attribut %{attribute} %{message}"
   errors:
     classes:
-      not_found: "La classe que vous avez demandé n'existe pas."
+      not_found: "La classe que vous avez demandée n'existe pas."
   activerecord:
     hints:
       rib:

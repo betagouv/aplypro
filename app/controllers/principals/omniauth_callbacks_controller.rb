@@ -7,29 +7,40 @@ module Principals
     def developer
       @principal = Principal.from_developer(data)
 
-      save_and_redirect!
+      return unless @principal.save!
+
+      sign_in_and_redirect @principal
     end
 
     def fim
       @principal = Principal.from_fim(data)
+      @mapper = IdentityMappers::Fim.new(fim_extra_data).tap(&:create_all_establishments!)
 
-      save_and_redirect!
+      if @principal.save!
+        sign_in(@principal) and redirect_or_update
+      else
+        redirect_to login_path, alert: t("auth.failure")
+      end
     end
 
     private
 
-    def save_and_redirect!
-      if @principal.save!
-        flash[:notice] = t("auth.success")
-        sign_in_and_redirect @principal
+    def redirect_or_update
+      if @mapper.establishments.many?
+        render action: :select_etab
       else
-        flash[:alert] = t("auth.failure")
-        redirect_to login_path
+        @principal.update!(establishment: @mapper.establishments.first)
+
+        redirect_to classes_path, notice: t("auth.success")
       end
     end
 
     def data
       request.env["omniauth.auth"]
+    end
+
+    def fim_extra_data
+      data["extra"]["raw_info"]
     end
   end
 end

@@ -7,7 +7,10 @@ Fonctionnalité: Le personnel de direction se connecte
     Alors le titre de la page contient "Liste des classes"
     Et la page contient "Nous récupérons la liste de vos élèves"
 
-  Scénario: Le personnel de direction du MENJ doit choisir son établissements
+  Scénario: Le personnel de direction du MENJ doit choisir son établissement
     Sachant que je suis un personnel MENJ directeur de l'établissement "123, 456, 789"
     Quand je me connecte en tant que personnel MENJ
-    Alors le titre de la page contient "Choix de l'établissement"
+    Et que je sélectionne "123" pour "Établissement"
+    Et que je clique sur "Continuez avec cet établissement"
+    Alors la page contient "Nous récupérons la liste de vos élèves"
+    Et la page contient "Lycée de la Mer Paul Bousquet"

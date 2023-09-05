@@ -2,9 +2,10 @@
 
 Fonctionnalité: Le personnel de direction consulte les listes
   Contexte:
-    Sachant que je suis directeur de l'établissement "DINUM"
+    Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
+    Et que je me connecte en tant que personnel MENJ
     Et qu'il y a une élève "Marie Curie" au sein de la classe "3EMEB" pour une formation "Développement"
-    Et que je me connecte
+    Et que je rafraîchis la page
 
   Scénario: Le personnel de direction consulte le profil d'un élève
     Quand je clique sur "Voir les élèves" dans la rangée "3EMEB"
