@@ -54,7 +54,7 @@ class Student
         end
 
         def use_mefstat4?
-          ENV.fetch("APLYPRO_SYGNE_USE_MEFSTAT4").present?
+          ENV.fetch("APLYPRO_SYGNE_USE_MEFSTAT4", nil).present?
         end
 
         def find_mef(mef_or_mefstat4)
