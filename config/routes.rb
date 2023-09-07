@@ -16,7 +16,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :pfmps, only: :index
+  resources :pfmps, only: :index do
+    post "validate"
+    collection do
+      get "validate_all", to: "pfmps#validate_all"
+    end
+  end
 
   devise_for :principals, controllers: { omniauth_callbacks: "principals/omniauth_callbacks" }
 

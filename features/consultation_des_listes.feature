@@ -11,7 +11,7 @@ Fonctionnalité: Le personnel de direction consulte les listes
     Quand je clique sur "Voir les élèves" dans la rangée "3EMEB"
     Et que je clique sur "Voir le profil de l'élève" dans la rangée "Curie Marie"
     Alors la page est titrée "Marie Curie"
-    Et le fil d'Ariane affiche "Liste des classes > Classe de 3EMEB > Marie Curie"
+    Et le fil d'Ariane affiche "Liste des classes > 3EMEB > Marie Curie"
 
   Scénario: Le personnel de direction peut voir la complétion des saisies de coordonnées bancaires
     Quand je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "3EMEB"

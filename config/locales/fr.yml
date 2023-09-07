@@ -52,6 +52,9 @@ fr:
         new: "Ajouter une PFMP"
         index: "Liste des PFMPs"
         show: "PFMP pour %{name}"
+        edit: "Modifier la PFMP de %{name}"
+        validate: "Validation"
+        validate_all: "Validation des PFMPs complétées"
       ribs:
         new: "Ajout de coordonnées bancaires"
 
@@ -78,6 +81,13 @@ fr:
       pending: À compléter
       completed: Complétée
       validated: Validée
+    state_explanations:
+      validated: |
+        Le nombre de jours réalisés a été renseigné et l'approbation
+        du chef de l'établissement a été donnée pour déclencher le
+        paiement résultant. La PFMP n'est pas modifiable si une
+        tentative de paiement est en cours.
+
     payments:
       blocked: "Informations de paiement manquantes"
       pending: "Planifié"
