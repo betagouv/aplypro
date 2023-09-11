@@ -14,3 +14,8 @@ Fonctionnalité: Le personnel de direction se connecte
     Et que je clique sur "Continuez avec cet établissement"
     Alors la page contient "Nous récupérons la liste de vos élèves"
     Et la page contient "Lycée de la Mer Paul Bousquet"
+
+  Scénario: Un personnel du MENJ sans établissements en responsabilité est informé
+    Sachant que je suis un personnel MENJ de l'établissement "123"
+    Quand je me connecte en tant que personnel MENJ
+    Alors la page contient "aucun établissement sous votre direction"

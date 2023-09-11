@@ -14,7 +14,16 @@ module Principals
 
     def fim
       @principal = Principal.from_fim(data)
-      @mapper = IdentityMappers::Fim.new(fim_extra_data).tap(&:create_all_establishments!)
+
+      begin
+        @mapper = IdentityMappers::Fim
+                  .new(fim_extra_data)
+                  .tap(&:create_all_establishments!)
+      rescue IdentityMappers::Fim::EmptyResponsibilitiesError => e
+        Sentry.capture_exception(e)
+
+        redirect_to login_path, alert: t("auth.no_responsibilities") and return
+      end
 
       if @principal.save!
         sign_in(@principal) and redirect_or_update

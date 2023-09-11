@@ -68,6 +68,14 @@ fr:
     service_name: "Aplypro"
     service_description: "Allocation pour les lycéens professionnels"
   auth:
+    no_responsibilities:
+      title: "Erreur d'authentification"
+      content: |
+        Le guichet d'authentification n'indique aucun établissement sous
+        votre direction. Aplypro n'est ouvert qu'aux personnels de
+        direction pour le moment. Il peut s'agir d'une erreur dans la
+        configuration de votre profil. Nos équipes ont été
+        notifiées.
     success: "Connexion réussie"
     failure: "La connexion a échouée"
   ribs:
