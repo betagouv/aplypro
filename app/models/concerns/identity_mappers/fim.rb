@@ -2,6 +2,15 @@
 
 module IdentityMappers
   class Fim
+    class EmptyResponsibilitiesError < StandardError
+      attr_reader :attributes
+
+      def initialize(msg = "No responsibilites indicated", attributes = {})
+        @attributes = attributes
+        super(msg)
+      end
+    end
+
     attr_accessor :attributes
 
     ACCEPTED_ESTABLISHMENT_TYPES = %w[LYC LP].freeze
@@ -16,9 +25,19 @@ module IdentityMappers
     end
 
     def responsibilities
+      raise EmptyResponsibilitiesError.new(nil, attributes) if no_responsibilites?
+
       attributes["FrEduRneResp"]
         .map { |raw| map_responsibility(raw) }
         .filter { |line| relevant?(line) }
+    end
+
+    def no_responsibilites?
+      attributes["FrEduRneResp"].blank? || attributes["FrEduRneResp"] == no_value
+    end
+
+    def no_value
+      "X" # their choice not mine
     end
 
     def multiple_establishments?

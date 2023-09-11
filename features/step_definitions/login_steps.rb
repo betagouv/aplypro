@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
-def make_fredurne(uai, activity = "ADF")
+def make_fredurneresp(uai, activity = "ADF")
   [uai, "UAJ", "PU", activity, "T3", "LYC", "340"].join("$")
+end
+
+def make_fredurne(uai)
+  [uai, "UAJ", "PU", "ADM", uai, "T3", "LYC", "340"].join("$")
 end
 
 def make_fim_hash(name:, email:, raw_info:)
@@ -23,6 +27,16 @@ def make_fim_hash(name:, email:, raw_info:)
   )
 end
 
+Sachantque("je suis un personnel MENJ de l'établissement {string}") do |uai|
+  OmniAuth.config.mock_auth[:fim] = make_fim_hash(
+    name: Faker::Name.name,
+    email: Faker::Internet.email,
+    raw_info: {
+      FrEduRne: make_fredurne(uai)
+    }
+  )
+end
+
 Sachantque("je suis un personnel MENJ directeur de l'établissement {string}") do |uai|
   uais = uai.split(", ")
 
@@ -30,7 +44,7 @@ Sachantque("je suis un personnel MENJ directeur de l'établissement {string}") d
     name: Faker::Name.name,
     email: Faker::Internet.email,
     raw_info: {
-      FrEduRneResp: uais.map { |u| make_fredurne(u) }
+      FrEduRneResp: uais.map { |u| make_fredurneresp(u) }
     }
   )
 end
