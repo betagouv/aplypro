@@ -14,7 +14,6 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
       | Classe | Élève       | Date de début | Date de fin | Nombre de jours | Montant | Actions      |
       | 3EMEB  | Marie Curie | 17/03/2023    | 20/03/2023  |                 |         | Voir la PFMP |
 
-
   Scénario: La PFMP passe dans l'onglet "Complétées" lorsque je renseigne le nombre de jours
     Quand je renseigne 3 jours pour la dernière PFMP de "Marie Curie"
     Et que je consulte la liste des PFMPs "Nombre de jours à compléter"

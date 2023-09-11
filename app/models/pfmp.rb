@@ -36,8 +36,8 @@ class Pfmp < ApplicationRecord
   after_save do
     if day_count.present?
       transition_to!(:completed) if in_state?(:pending)
-    else
-      transition_to!(:pending) if in_state?(:completed, :validated)
+    elsif in_state?(:completed, :validated)
+      transition_to!(:pending)
     end
   end
 

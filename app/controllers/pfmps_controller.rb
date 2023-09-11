@@ -75,7 +75,7 @@ class PfmpsController < ApplicationController
 
     @pfmp.transition_to!(:validated)
 
-    redirect_to validate_all_pfmps_path, notice: "La PFMP de #{@pfmp.student} a bien été validée"
+    redirect_back_or_to validate_all_pfmps_path, notice: "La PFMP de #{@pfmp.student} a bien été validée"
   end
 
   private

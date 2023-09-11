@@ -12,42 +12,7 @@
   %hr
 
   = form_with url: pfmp_validate_path(@pfmp), method: :post do |form|
-    .fr-col-md-7.fr-my-4w.fr-highlight
-      %p.fr-text--lead
-        L'élève
-        %strong= @pfmp.student.full_name
-        , classe de
-        %strong= @pfmp.classe
-      %p.fr-text--lead
-        a effectué une période de formation en milieu professionnel
-        %strong
-          du
-          = l @pfmp.start_date
-          au
-          = l @pfmp.end_date
-
-      %p.fr-text--lead
-        en validant une période effective de
-        %strong
-          = @pfmp.day_count
-          jours.
-
-      %p.fr-text--lead
-        Le niveau
-        %strong= @pfmp.mef.label
-
-      %p.fr-text--lead
-        prévoyant une rémunération à
-        %strong<
-          = number_to_currency(@pfmp.wage.daily_rate)
-          \ par jour
-        ,
-
-      %p.fr-text--lead
-        un paiement de
-        %strong= number_to_currency(@pfmp.calculate_amount)
-        va être déclenché en sa faveur.
-
+    = render 'pfmp_breakdown'
     .fr-btns-group.fr-btns-group--inline.fr-mt-6w
       = form.submit "Valider cette PFMP et passer à la suivante", class: 'fr-btn'
       = dsfr_button label: "Ignorer et passer à la suivante", level: :secondary

@@ -1,7 +1,8 @@
-.fr-table.fr-table--layout-fixed
+.fr-table
   %table
     %caption Liste des PFMPs
     %thead
+      %th{scope: "col"} Statut
       %th{scope: "col"} Classe
       %th{scope: "col"} Élève
       %th{scope: "col"} Date de début
@@ -12,6 +13,7 @@
     %tbody
       - pfmps.each do |pfmp|
         %tr
+          %td= pfmp.status_badge
           %td= dsfr_link_to pfmp.classe
           %td= dsfr_link_to pfmp.student, class_student_path(class_id: pfmp.classe, id: pfmp.student)
           %td= l pfmp.start_date
