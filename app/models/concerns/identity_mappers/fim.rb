@@ -33,7 +33,7 @@ module IdentityMappers
     end
 
     def no_responsibilites?
-      attributes["FrEduRneResp"].blank? || attributes["FrEduRneResp"] == no_value
+      attributes["FrEduRneResp"].blank? || attributes["FrEduRneResp"].all? { |value| value == no_value }
     end
 
     def no_value
