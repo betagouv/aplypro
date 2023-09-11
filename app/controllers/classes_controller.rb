@@ -51,7 +51,7 @@ class ClassesController < ApplicationController
 
   def set_classe
     @classe = Classe
-              .includes(students: %i[pfmps rib])
+              .includes(students: [:rib, { pfmps: :transitions }])
               .where(establishment: @etab)
               .find(params[:id])
   rescue ActiveRecord::RecordNotFound

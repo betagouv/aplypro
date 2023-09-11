@@ -1,0 +1,34 @@
+.fr-table
+  %table
+    %tbody
+      %tr
+        %td Statut
+        %td= @pfmp.status_badge
+      %tr
+        %td Elève
+        %td= @pfmp.student.full_name
+      %tr
+        %td Classe
+        %td= @pfmp.classe
+      %tr
+        %td Formation
+        %td= @pfmp.mef.label
+      %tr
+        %td Taux journalier pour la formation
+        %td= number_to_currency(@pfmp.wage.daily_rate)
+      %tr
+        %td Plafond annuel pour la formation
+        %td= number_to_currency(@pfmp.wage.yearly_cap)
+      %tr
+        %td Total des paiements déjà perçus par l'élève
+        %td= number_to_currency(@pfmp.student.used_allowance)
+      %tr
+        %td Allocation restante à l'élève
+        %td= number_to_currency(@pfmp.student.allowance_left)
+      %tr
+        %td Nombre de jours validés
+        %td= @pfmp.day_count
+      %tr
+        %td Montant à valider
+        %td
+          %strong= @pfmp.breakdown

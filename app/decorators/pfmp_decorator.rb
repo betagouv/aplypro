@@ -8,8 +8,19 @@ module PfmpDecorator
   }.freeze
 
   def status_badge
-    label = t("pfmps.state.#{current_state}")
+    dsfr_badge(status: PFMP_STATE_MAPPING[current_state.to_sym], classes: ["fr-badge--sm"]) do
+      status_to_s
+    end
+  end
 
-    dsfr_badge(status: PFMP_STATE_MAPPING[current_state.to_sym]) { label }
+  def status_to_s
+    t("pfmps.state.#{current_state}")
+  end
+
+  def listing_to_s
+    [
+      status_badge,
+      [l(start_date), l(end_date)].join(" - ")
+    ].join(" ").html_safe
   end
 end

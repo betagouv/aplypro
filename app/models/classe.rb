@@ -15,6 +15,6 @@ class Classe < ApplicationRecord
   end
 
   def to_s
-    "Classe de #{label}"
+    label
   end
 end
