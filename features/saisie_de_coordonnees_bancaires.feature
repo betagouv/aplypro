@@ -14,3 +14,12 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
     Et que je clique sur "Renseigner les coordonnées bancaires"
     Lorsque je renseigne des coordonnées bancaires
     Alors la page contient "Coordonnées bancaires enregistrées avec succès"
+
+  Scénario: Le personnel de direction peut modifier un RIB
+    Sachant que je clique sur "Renseigner les coordonnées bancaires"
+    Et que je renseigne des coordonnées bancaires
+    Et que je clique sur "Modifier les coordonnées bancaires"
+    Et que je remplis "Titulaire du compte" avec "Murie Carrie"
+    Et que je clique sur "Modifier les coordonnées bancaires"
+    Alors la page contient "Coordonnées bancaires mises à jour"
+    Et la page contient "Murie Carrie"

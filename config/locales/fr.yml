@@ -1,6 +1,9 @@
 fr:
   helpers:
     submit:
+      rib:
+        create: "Enregistrer les coordonnées bancaires"
+        update: "Modifier les coordonnées bancaires"
       pfmp:
         create: Enregistrer la PFMP
         update: Modifier la PFMP
@@ -14,6 +17,8 @@ fr:
         name: "Nom du titulaire du compte"
         iban: "Un IBAN français contient 27 caractères et commence par FR"
         bic: "Le code BIC est composé de 8 ou de 11 caractères"
+        personal: |
+          L'appartenance du RIB est requise pour informer le paiement
       pfmp:
         day_count: "Le nombre de jours présent sur l'attestation. Il doit être entier (pas de demi-journées)."
     attributes:
@@ -66,8 +71,10 @@ fr:
     success: "Connexion réussie"
     failure: "La connexion a échouée"
   ribs:
-    new:
+    create:
       success: Coordonnées bancaires enregistrées avec succès
+    update:
+      success: Coordonnées bancaires mises à jour
   pfmps:
     edit:
       success: La PFMP a bien été mise à jour

@@ -1,0 +1,11 @@
+= form_with model: [@classe, @student, @rib], builder: DsfrFormBuilder do |form|
+  = form.dsfr_error_summary
+
+  = form.dsfr_text_field(:name, width: 'md-4')
+
+  = form.dsfr_text_field(:iban, code: true, width: 'md-6')
+  = form.dsfr_text_field(:bic, code: true, width: 'md-3')
+
+  = form.dsfr_radio_buttons(:personal,  [false, true])
+
+  = form.submit nil, { class: 'fr-btn' }

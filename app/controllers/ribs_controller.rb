@@ -1,12 +1,9 @@
 # frozen_string_literal: true
 
 class RibsController < StudentsController
-  before_action :set_classe, only: %i[new create]
-  before_action :set_student, only: %i[new create]
-
-  def index; end
-
-  def show; end
+  before_action :set_classe, only: %i[new create edit update]
+  before_action :set_student, only: %i[new create edit update]
+  before_action :set_rib, only: %i[edit update]
 
   def new
     add_breadcrumb t("pages.titles.classes.index"), classes_path
@@ -23,16 +20,26 @@ class RibsController < StudentsController
     @rib = Rib.new
   end
 
+  def edit; end
+
   def create
     @rib = Rib.new(rib_params)
 
     respond_to do |format|
       if @rib.save
-        format.html { redirect_to class_student_path(@classe, @student), notice: t("ribs.new.success") }
+        format.html { redirect_to class_student_path(@classe, @student), notice: t(".success") }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @rib.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def update
+    if @rib.update(rib_params)
+      redirect_to class_student_path(@classe, @student), notice: t(".success")
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -48,10 +55,14 @@ class RibsController < StudentsController
   end
 
   def set_student
-    @student = @classe.students.find_by(ine: params[:student_id])
+    @student = @classe.students.find(params[:student_id])
   end
 
   def set_classe
-    @classe = Classe.find_by(id: params[:class_id])
+    @classe = Classe.find(params[:class_id])
+  end
+
+  def set_rib
+    @rib = @student.ribs.find(params[:id])
   end
 end
