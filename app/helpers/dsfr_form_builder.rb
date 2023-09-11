@@ -68,7 +68,7 @@ class DsfrFormBuilder < ActionView::Helpers::FormBuilder
         [
           @template.content_tag(
             :legend,
-            @object.class.human_attribute_name(attribute),
+            @object.class.human_attribute_name(attribute).concat(hint(attribute)).html_safe, # rubocop:disable Rails/OutputSafety
             class: "fr-fieldset__legend--regular fr-fieldset__legend"
           ),
           choices.map { |choice| dsfr_radio_option(attribute, choice, opts) }

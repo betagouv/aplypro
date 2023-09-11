@@ -10,11 +10,16 @@
   - else
     %ul
       %li
+        Titulaire :
+        %span= @student.rib.name
+      %li
         IBAN :
-        %code=@student.rib.iban
+        %code= @student.rib.iban
       %li
         BIC :
-        %code=@student.rib.bic
+        %code= @student.rib.bic
+
+    = link_to "Modifier les coordonnées bancaires", edit_class_student_rib_path(@classe.id, @student.id, @student.rib.id), class: 'fr-btn fr-btn--secondary'
 
 - if @student.pfmps.none?
   %p Aucune PFMP enregistrée pour le moment.
