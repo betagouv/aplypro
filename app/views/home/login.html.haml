@@ -4,5 +4,17 @@
   %p
     Vous devez vous connecter pour accéder à Aplypro et à la gestion
     des PFMPs.
+- if ENV.fetch("APLYPRO_ENV") == "development"
+  = button_to "Auth développeur",
+    principal_developer_omniauth_authorize_path,
+    method: :post,
+    remote: false,
+    data: { turbo: false },
+    class: "fr-btn fr-my-3w"
 %p
-  = button_to "Accéder au portail de connexion", send("principal_fim_omniauth_authorize_path".to_sym), method: :post, remote: false, data: { turbo: false }, class: "fr-btn"
+  = button_to "Accéder au portail de connexion",
+    principal_fim_omniauth_authorize_path,
+    method: :post,
+    remote: false,
+    data: { turbo: false },
+    class: "fr-btn"
