@@ -17,6 +17,12 @@ module IdentityMappers
     FREDURNERESP_MAPPING = %i[uai type category activity tna_sym tty_code tna_code].freeze
 
     def initialize(attributes)
+      Sentry.add_breadcrumb(Sentry::Breadcrumb.new(
+                              data: attributes,
+                              category: "auth",
+                              message: "Trying to parse FIM authentication data"
+                            ))
+
       @attributes = attributes
     end
 
