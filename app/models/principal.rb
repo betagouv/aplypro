@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Principal < ApplicationRecord
-  devise :omniauthable, omniauth_providers: %i[developer fim]
+  devise :omniauthable, omniauth_providers: %i[developer fim masa]
 
   validates :uid, :provider, :name, :token, :secret, :email, presence: true
 
@@ -18,10 +18,6 @@ class Principal < ApplicationRecord
         principal.name = attrs["info"]["name"]
         principal.email = attrs["info"]["email"]
       end
-    end
-
-    def from_fim(attrs)
-      from_oidc(attrs)
     end
 
     def from_developer(attrs)

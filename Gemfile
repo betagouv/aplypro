@@ -47,6 +47,7 @@ gem "bank-contact"
 # user auth
 gem "devise"
 gem "devise-i18n"
+gem "omniauth-oauth2"
 gem "omniauth_openid_connect"
 gem "omniauth-rails_csrf_protection"
 

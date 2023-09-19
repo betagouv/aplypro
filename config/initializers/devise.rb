@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "strategies/cas"
+
 # Assuming you have not yet modified this file, each configuration option below
 # is set to its default value. Note that some are commented out while others
 # are not: uncommented lines are intended to protect your configuration from
@@ -275,20 +277,33 @@ Devise.setup do |config|
                     fields: %i[email name uai]
   end
 
-  config.omniauth :openid_connect,
-                  {
-                    name: :fim,
-                    scope: ENV.fetch("APLYPRO_FIM_SCOPE"),
-                    response_type: :code,
-                    issuer: ENV.fetch("APLYPRO_FIM_ISSUER"),
-                    discovery: true,
-                    client_options: {
-                      redirect_uri: ENV.fetch("APLYPRO_FIM_REDIRECT_URI"),
-                      host: ENV.fetch("APLYPRO_FIM_HOST"),
-                      identifier: ENV.fetch("APLYPRO_FIM_CLIENT_ID"),
-                      secret: ENV.fetch("APLYPRO_FIM_CLIENT_SECRET")
-                    }
-                  }
+  config.omniauth :openid_connect, {
+    name: :fim,
+    scope: ENV.fetch("APLYPRO_FIM_SCOPE"),
+    response_type: :code,
+    issuer: ENV.fetch("APLYPRO_FIM_ISSUER"),
+    discovery: true,
+    client_options: {
+      redirect_uri: ENV.fetch("APLYPRO_FIM_REDIRECT_URI"),
+      host: ENV.fetch("APLYPRO_FIM_HOST"),
+      identifier: ENV.fetch("APLYPRO_FIM_CLIENT_ID"),
+      secret: ENV.fetch("APLYPRO_FIM_CLIENT_SECRET")
+    }
+  }
+
+  config.omniauth :cas, ENV.fetch("APLYPRO_CAS_CLIENT_ID"), ENV.fetch("APLYPRO_CAS_CLIENT_SECRET"), {
+    name: :masa,
+    token_params: {
+      redirect_uri: ENV.fetch("APLYPRO_CAS_REDIRECT_URI")
+    },
+    client_options: {
+      site: ENV.fetch("APLYPRO_CAS_SITE_ROOT"),
+      authorize_url: "authorize",
+      token_url: "accessToken",
+      auth_scheme: :request_body,
+      redirect_uri: ENV.fetch("APLYPRO_CAS_REDIRECT_URI")
+    }
+  }
 
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
