@@ -30,6 +30,7 @@ class Student
             Classe.find_or_create_by!(establishment: etab, mef:, label: klass["code"]).tap do |k|
               students
                 .map { |e| make_student(e) }
+                .reject { |e| e.ine.nil? }
                 .compact
                 .each { |student| Schooling.find_or_create_by!(classe: k, student:) }
             end
