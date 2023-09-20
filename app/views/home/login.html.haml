@@ -18,3 +18,11 @@
     remote: false,
     data: { turbo: false },
     class: "fr-btn"
+
+%p
+  = button_to "Accéder au portail de connexion MASA",
+    principal_masa_omniauth_authorize_path,
+    method: :post,
+    remote: false,
+    data: { turbo: false },
+    class: "fr-btn"
