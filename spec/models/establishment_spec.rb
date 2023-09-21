@@ -6,6 +6,21 @@ require "csv"
 RSpec.describe Establishment do
   subject(:etab) { build(:establishment, :with_fim_principal) }
 
+  let!(:fixture) { Rails.root.join("mock/data/etab.json").read }
+
+  before do
+    stub_request(:get, /#{ENV.fetch('APLYPRO_ESTABLISHMENTS_DATA_URL')}/)
+      .with(
+        headers: {
+          "Accept" => "*/*",
+          "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+          "Content-Type" => "application/json",
+          "User-Agent" => "Faraday v2.7.10"
+        }
+      )
+      .to_return(status: 200, body: fixture, headers: { "Content-Type" => "application/json" })
+  end
+
   it { is_expected.to validate_presence_of(:uai) }
   it { is_expected.to validate_uniqueness_of(:uai) }
   it { is_expected.to have_one(:principal) }
@@ -26,6 +41,14 @@ RSpec.describe Establishment do
 
       it "does not call the queue_refresh method" do
         expect { etab.update!(name: "New name") }.not_to have_enqueued_job
+      end
+    end
+  end
+
+  describe "fetch_data!" do
+    Establishment::API_MAPPING.each_value do |attr|
+      it "updates the `#{attr}' attribute" do
+        expect { etab.fetch_data! }.to change(etab, attr)
       end
     end
   end
