@@ -7,7 +7,7 @@ module Principals
     rescue_from IdentityMappers::Errors::Error, ActiveRecord::RecordInvalid, with: :authentication_failure
 
     def developer
-      @principal = Principal.from_developer(data)
+      @principal = Principal.from_developer(auth_hash)
 
       @principal.save!
 
