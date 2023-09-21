@@ -14,7 +14,9 @@ class Establishment < ApplicationRecord
     "nom_etablissement" => :name,
     "libelle_nature" => :denomination,
     "code_postal" => :postal_code,
-    "nom_commune" => :city
+    "nom_commune" => :city,
+    "telephone" => :telephone,
+    "mail" => :email
   }.freeze
 
   def to_s
