@@ -3,3 +3,7 @@ default:
   - --strict
   - --color
   - --fail-fast
+
+wip:
+  - --profile=default
+  - --tags=@wip
