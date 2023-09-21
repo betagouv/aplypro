@@ -3,7 +3,7 @@
 class PfmpsController < ApplicationController
   before_action :authenticate_principal!
 
-  before_action :set_classe, :set_student, :set_breadcrumbs, only: %i[new create edit show update]
+  before_action :set_classe, :set_student, :set_breadcrumbs, except: %i[validate_al index]
   before_action :set_pfmp, only: %i[show edit update validate]
 
   def index
@@ -71,8 +71,6 @@ class PfmpsController < ApplicationController
     add_breadcrumb t("pages.titles.pfmps.index"), pfmps_path
     add_breadcrumb t("pages.titles.pfmps.validate")
 
-    @pfmp = Pfmp.find(params[:pfmp_id])
-
     @pfmp.transition_to!(:validated)
 
     redirect_back_or_to validate_all_pfmps_path, notice: "La PFMP de #{@pfmp.student} a bien été validée"
@@ -89,7 +87,7 @@ class PfmpsController < ApplicationController
   end
 
   def set_pfmp
-    @pfmp = Pfmp.find_by(id: params[:id])
+    @pfmp = @student.pfmps.find_by(id: params[:id])
   end
 
   def set_student
@@ -97,7 +95,11 @@ class PfmpsController < ApplicationController
   end
 
   def set_classe
-    @classe = Classe.find_by(id: params[:class_id])
+    @classe = Classe
+              .where(establishment: @etab)
+              .find(params[:class_id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to classes_path, alert: t("errors.classes.not_found") and return
   end
 
   def set_breadcrumbs

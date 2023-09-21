@@ -11,13 +11,17 @@ Rails.application.routes.draw do
     end
 
     resources :students, only: %i[show] do
-      resources :pfmps
+      resources :pfmps do
+        member do
+          post "validate"
+        end
+      end
+
       resources :ribs
     end
   end
 
   resources :pfmps, only: :index do
-    post "validate"
     collection do
       get "validate_all", to: "pfmps#validate_all"
     end
