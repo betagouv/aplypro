@@ -45,3 +45,11 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Et que je clique sur "Voir la PFMP"
     Et que je clique sur "Valider"
     Alors la page contient "La PFMP de Marie Curie a bien été validée"
+
+  Scénario: Le personnel de direction peut supprimer une PFMP
+    Quand je renseigne une PFMP de 4 jours pour "Marie Curie"
+    Et que je clique sur "Voir la PFMP"
+    Et que je clique sur "Supprimer la PFMP"
+    Et que je clique sur "Confirmer la suppression"
+    Alors la page contient "La PFMP de Marie Curie a bien été supprimée"
+    Et la page contient "Aucune PFMP enregistrée pour le moment"

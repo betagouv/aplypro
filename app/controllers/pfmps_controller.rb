@@ -3,8 +3,8 @@
 class PfmpsController < ApplicationController
   before_action :authenticate_principal!
 
-  before_action :set_classe, :set_student, :set_breadcrumbs, except: %i[validate_al index]
-  before_action :set_pfmp, only: %i[show edit update validate]
+  before_action :set_classe, :set_student, :set_breadcrumbs, except: %i[validate_all index]
+  before_action :set_pfmp, only: %i[show edit update validate confirm_deletion destroy]
 
   def index
     infer_page_title
@@ -74,6 +74,21 @@ class PfmpsController < ApplicationController
     @pfmp.transition_to!(:validated)
 
     redirect_back_or_to validate_all_pfmps_path, notice: "La PFMP de #{@pfmp.student} a bien été validée"
+  end
+
+  def confirm_deletion
+    add_breadcrumb(
+      t("pages.titles.pfmps.show", name: @student.full_name),
+      class_student_pfmp_path(@classe, @student, @pfmp)
+    )
+
+    infer_page_title
+  end
+
+  def destroy
+    @pfmp.destroy
+
+    redirect_to class_student_path(@classe, @student), notice: "La PFMP de #{@pfmp.student} a bien été supprimée"
   end
 
   private
