@@ -119,3 +119,7 @@ Quand("je renseigne {int} jours pour la dernière PFMP de {string}") do |days, n
     Et que je clique sur "Modifier la PFMP"
   )
 end
+
+Alors("il n'y a pas de personnel de direction enregistré dans la base de données") do
+  expect(Principal.count).to eq 0
+end

@@ -4,10 +4,12 @@ module Principals
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     skip_before_action :verify_authenticity_token
 
+    rescue_from IdentityMappers::Errors::Error, ActiveRecord::RecordInvalid, with: :authentication_failure
+
     def developer
       @principal = Principal.from_developer(data)
 
-      return unless @principal.save!
+      @principal.save!
 
       sign_in_and_redirect @principal
     end
@@ -15,15 +17,9 @@ module Principals
     def oidc
       parse_identity
 
-      begin
-        check_principal!
-        check_responsibilites!
-        check_multiple_etabs!
-      rescue IdentityMappers::Errors::EmptyResponsibilitiesError => e
-        Sentry.capture_exception(e)
-
-        redirect_to login_path, alert: t("auth.no_responsibilities") and return
-      end
+      check_responsibilites!
+      check_principal!
+      check_multiple_etabs!
     end
 
     def masa
@@ -35,15 +31,15 @@ module Principals
     end
 
     def failure
-      exception = request.env["omniauth.error"]
+      raise IdentityMappers::Errors::OmniauthError, request.env["omniauth.error"]&.message
+    end
 
-      if exception
-        Sentry.capture_exception(exception)
-      else
-        Sentry.capture_message("Authorization failed for unknown reason")
-      end
+    def authentication_failure(error)
+      Sentry.capture_exception(error)
 
-      redirect_to root_path, alert: t("auth.failure")
+      key = error.class.to_s.demodulize.underscore
+
+      redirect_to login_path, alert: t("auth.errors.#{key}")
     end
 
     private
@@ -65,7 +61,7 @@ module Principals
     end
 
     def check_principal!
-      redirect_to login_path, alert: t("auth.failure") and return unless @principal.save
+      @principal.save!
 
       sign_in(@principal)
     end

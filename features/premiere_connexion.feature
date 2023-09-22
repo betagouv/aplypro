@@ -25,3 +25,4 @@ Fonctionnalité: Le personnel de direction se connecte
     Sachant que je suis un personnel MENJ de l'établissement "123"
     Quand je me connecte en tant que personnel MENJ
     Alors la page contient "aucun établissement sous votre direction"
+    Et il n'y a pas de personnel de direction enregistré dans la base de données
