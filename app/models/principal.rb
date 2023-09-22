@@ -32,6 +32,7 @@ class Principal < ApplicationRecord
     def oidcize_dev_hash(attrs)
       attrs.merge(
         {
+          "provider" => attrs["info"]["provider"],
           "credentials" => {
             "token" => "dev token"
           },

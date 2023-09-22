@@ -1,0 +1,13 @@
+.fr-col-md-6
+  = dsfr_alert(type: :warning, title: "La suppression de la PFMP est définitive")
+
+.fr-col-md-6.fr-mt-3w
+  %ul
+    %li
+      Dates: du #{l @pfmp.start_date} au #{l @pfmp.end_date}
+    %li
+      Nombre de jours: #{@pfmp.day_count || "non renseigné"}
+    %li
+      Statut : #{@pfmp.status_badge}
+
+  = button_to "Confirmer la suppression", class_student_pfmp_path(@classe, @student, @pfmp), method: :delete, class: 'fr-btn fr-btn--danger fr-btn--secondary fr-mt-3w'

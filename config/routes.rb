@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
   resources :principals, only: :update
   resources :establishments, only: :index
@@ -14,6 +15,7 @@ Rails.application.routes.draw do
       resources :pfmps do
         member do
           post "validate"
+          get "confirm_deletion"
         end
       end
 
@@ -39,3 +41,4 @@ Rails.application.routes.draw do
   get "/login", to: "home#login"
   get "/select_etab", to: "home#select_etab"
 end
+# rubocop:enable Metrics/BlockLength

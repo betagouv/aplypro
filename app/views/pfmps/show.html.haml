@@ -30,3 +30,4 @@
     - if @pfmp.in_state?(:completed)
       = button_to "Valider", validate_class_student_pfmp_path(@classe, @student, @pfmp), class: 'fr-btn'
     = link_to "Modifier la PFMP", edit_class_student_pfmp_path(@classe, @student, @pfmp), class: 'fr-btn fr-btn--secondary'
+    = link_to "Supprimer la PFMP", confirm_deletion_class_student_pfmp_path(@classe, @student, @pfmp), class: 'fr-btn fr-btn--secondary'

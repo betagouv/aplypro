@@ -7,3 +7,19 @@
   padding: 0.5rem 0;
   background: var(--background-alt-brown-cafe-creme);
 }
+
+.fr-btn--danger {
+  box-shadow: 0px 0px 0px 1px var(--red-marianne-425-625);
+  background: var(--background-action-high-red-marianne);
+  color: white;
+}
+
+.fr-btn--danger:hover {
+  background-color: var(--background-action-high-red-marianne-hover) !important;
+  text-color: white;
+}
+
+.fr-btn--danger:active {
+  background-color: var(--background-action-high-red-marianne-active) !important;
+  text-color: white;
+}

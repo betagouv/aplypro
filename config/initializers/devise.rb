@@ -274,7 +274,7 @@ Devise.setup do |config|
   # ==> OmniAuth
   unless Rails.env.production?
     config.omniauth :developer,
-                    fields: %i[email name uai]
+                    fields: %i[email name uai provider]
   end
 
   config.omniauth :openid_connect, {
