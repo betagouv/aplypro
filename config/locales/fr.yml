@@ -8,6 +8,11 @@ fr:
         create: Enregistrer la PFMP
         update: Modifier la PFMP
   format: "L'attribut %{attribute} %{message}"
+  links:
+    classes:
+      show: "Voir la classe de %{label}"
+    students:
+      show: "Voir le profil de %{name}"
   errors:
     classes:
       not_found: "La classe que vous avez demandée n'existe pas."

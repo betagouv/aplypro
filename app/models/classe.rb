@@ -15,6 +15,10 @@ class Classe < ApplicationRecord
   end
 
   def to_s
-    label
+    "Classe de #{label}"
+  end
+
+  def to_long_s
+    [label, mef.specialty].join(" - ")
   end
 end
