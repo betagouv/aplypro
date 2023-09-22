@@ -34,6 +34,18 @@ module Principals
       oidc
     end
 
+    def failure
+      exception = request.env["omniauth.error"]
+
+      if exception
+        Sentry.capture_exception(exception)
+      else
+        Sentry.capture_message("Authorization failed for unknown reason")
+      end
+
+      redirect_to root_path, alert: t("auth.failure")
+    end
+
     private
 
     def parse_identity

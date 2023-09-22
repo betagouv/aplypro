@@ -77,7 +77,12 @@ fr:
         configuration de votre profil. Nos équipes ont été
         notifiées.
     success: "Connexion réussie"
-    failure: "La connexion a échouée"
+    failure:
+      title: La connexion a échoué
+      content: |
+        Une erreur inconnue a eu lieu pendant la connexion. L'équipe
+        technique a été notifiée du problème.
+
   ribs:
     create:
       success: Coordonnées bancaires enregistrées avec succès
