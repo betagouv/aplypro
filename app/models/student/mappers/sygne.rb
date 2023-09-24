@@ -29,7 +29,7 @@ class Student
 
             next if mef.nil?
 
-            Classe.find_or_create_by!(establishment: establishment, mef:, label:).tap do |k|
+            Classe.find_or_create_by!(establishment: establishment, mef:, label:, start_year: 2023).tap do |k|
               eleves
                 .map { |e| make_student(e) }
                 .compact

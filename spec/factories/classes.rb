@@ -5,5 +5,6 @@ FactoryBot.define do
     establishment
     mef
     sequence(:label) { |n| "3EME#{n}" }
+    start_year { 2023 }
   end
 end
