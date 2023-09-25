@@ -4,7 +4,8 @@
   %p
     Vous devez vous connecter pour accéder à Aplypro et à la gestion
     des PFMPs.
-- if ENV.fetch("APLYPRO_ENV") == "development"
+- true_production = Rails.env.production? && ENV.fetch("APLYPRO_ENV") == "production"
+- unless true_production
   = button_to "Auth développeur",
     principal_developer_omniauth_authorize_path,
     method: :post,
