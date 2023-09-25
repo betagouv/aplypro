@@ -1,6 +1,6 @@
 - content_for(:page_title) { [@page_title, t("pages.titles.classes.show", name: @classe.label)].join(" - ") }
 
-%section.fr-mb-3w
+%section
   %h2.fr-h4 Coordonnées bancaires
 
   - if @student.rib.nil?
@@ -21,10 +21,12 @@
 
     = link_to "Modifier les coordonnées bancaires", edit_class_student_rib_path(@classe.id, @student.id, @student.rib.id), class: 'fr-btn fr-btn--secondary'
 
-- if @student.pfmps.none?
-  %p Aucune PFMP enregistrée pour le moment.
-- else
-  = render partial: 'pfmps/pfmp_student_table'
+%section.fr-mt-3w
+  %h2.fr-h4 Liste des PFMPs de l'élève
+  - if @student.pfmps.none?
+    %p Aucune PFMP enregistrée pour le moment.
+  - else
+    = render partial: 'pfmps/pfmp_student_table'
 
 .actions.fr-py-3w
   = link_to "Ajouter une PFMP", new_class_student_pfmp_path(@classe, @student), class: 'fr-btn'

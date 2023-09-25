@@ -5,26 +5,24 @@
   %table
     %caption Liste des élèves (#{@classe.students.count})
     %thead
-      %th{scope: "col"} Nom
-      %th{scope: "col"} Prénom
+      %th{scope: "col"} Élève
       %th{scope: "col"} PFMPs
       %th{scope: "col"} RIB présent
-      %th{scope: "col"} Actions
 
     %tbody
       - @classe.students.each do |student|
         %tr
-          %td= student.last_name
-          %td= student.first_name
           %td
-            %ul
-            - student.pfmps.each do |pfmp|
-              %li= dsfr_link_to pfmp.listing_to_s, class_student_pfmp_path(@classe, student, pfmp)
+            = dsfr_link_to student.index_name, class_student_path(@classe, student), title: t("links.students.show", name: student)
+          %td
+            - if student.pfmps.none?
+              aucune
+            - else
+              %ul
+                - student.pfmps.each do |pfmp|
+                  %li= dsfr_link_to pfmp.listing_to_s, class_student_pfmp_path(@classe, student, pfmp)
           %td
             - if student.rib.present?
               = dsfr_badge(status: :success) { "Oui"}
             - else
               = dsfr_link_to "Rajouter le RIB", new_class_student_rib_path(@classe, student)
-          %td
-            -# FIXME: we cannot have the INE in the URL
-            = dsfr_link_to "Voir le profil de l'élève", class_student_path(@classe, student)

@@ -7,8 +7,8 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Et que mon établissement propose une formation "Développement" rémunérée à 15 euros par jour et plafonnée à 200 euros par an
     Et qu'il y a une élève "Marie Curie" au sein de la classe "3EMEB" pour une formation "Développement"
     Quand je rafraîchis la page
-    Et que je clique sur "Voir les élèves" dans la rangée "3EMEB"
-    Et que je clique sur "Voir le profil de l'élève" dans la rangée "Curie Marie"
+    Et que je clique sur "Voir la classe" dans la rangée "3EMEB"
+    Et que je clique sur "Voir le profil" dans la rangée "Curie Marie"
 
   Scénario: Le personnel de direction peut voir le nombre de PFMP réalisée
     Quand l'élève n'a réalisé aucune PFMP
@@ -18,8 +18,8 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Quand je renseigne une PFMP de 3 jours pour "Marie Curie"
     Alors la page contient "La PFMP a été enregistrée avec succès"
     Et je peux voir dans le tableau "Liste des PFMPs de l'élève"
-      | État      | Date de début | Date de fin | Nombre de jours | Montant | Actions      |
-      | Complétée | 17/03/2023    | 20/03/2023  |               3 | 45,00 € | Voir la PFMP |
+      | État      | Nombre de jours | Montant |
+      | Complétée |               3 | 45,00 € |
 
   Scénario: Le personnel de direction peut rajouter une PFMP pour toute la classe
     Quand je vais voir la classe "3EMEB"
@@ -37,8 +37,8 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Et que je clique sur "Modifier la PFMP"
     Alors la page contient "La PFMP a bien été mise à jour"
     Et je peux voir dans le tableau "Liste des PFMPs de l'élève"
-      | État      | Date de début | Date de fin | Nombre de jours | Montant  | Actions      |
-      | Complétée | 17/03/2023    | 20/03/2023  |              10 | 150,00 € | Voir la PFMP |
+      | État      |  Nombre de jours | Montant
+      | Complétée |               10 | 150,00 €
 
   Scénario: Le personnel de direction peut valider une PFMP individuellement
     Quand je renseigne une PFMP de 3 jours pour "Marie Curie"

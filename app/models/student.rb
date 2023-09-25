@@ -27,6 +27,10 @@ class Student < ApplicationRecord
     [first_name, last_name].join(" ")
   end
 
+  def index_name
+    [last_name, first_name].join(" ")
+  end
+
   def used_allowance
     payments.in_state(:success).map(&:amount).sum
   end
