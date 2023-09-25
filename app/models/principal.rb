@@ -36,9 +36,10 @@ class Principal < ApplicationRecord
           "credentials" => {
             "token" => "dev token"
           },
+          "uid" => "developer",
           "info" => {
-            "name" => attrs["uid"],
-            "email" => attrs["uid"]
+            "name" => "Aplypo Dev",
+            "email" => "aplypro-dev@beta.gouv.fr"
           }
         }
       )

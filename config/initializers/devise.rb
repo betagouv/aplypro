@@ -272,9 +272,11 @@ Devise.setup do |config|
   config.sign_out_via = :delete
 
   # ==> OmniAuth
-  unless Rails.env.production?
+  true_production = Rails.env.production? && ENV.fetch("APLYPRO_ENV") == "production"
+
+  unless true_production
     config.omniauth :developer,
-                    fields: %i[email name uai provider]
+                    fields: [:uai, { provider: %i[masa fim] }]
   end
 
   config.omniauth :openid_connect, {
