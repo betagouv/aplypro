@@ -7,6 +7,10 @@ class HomeController < ApplicationController
     redirect_to login_url
   end
 
+  def maintenance
+    @msg = ENV.fetch("APLYPRO_MAINTENANCE_REASON")
+  end
+
   def login
     infer_page_title
   end
