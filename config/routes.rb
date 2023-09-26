@@ -38,6 +38,7 @@ Rails.application.routes.draw do
 
   root "home#index"
 
+  get "/maintenance", to: "home#maintenance"
   get "/login", to: "home#login"
   get "/select_etab", to: "home#select_etab"
 end
