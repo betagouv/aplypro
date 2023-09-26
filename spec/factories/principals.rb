@@ -11,5 +11,10 @@ FactoryBot.define do
     secret { "MyString" }
     token { "MyString" }
     email { Faker::Internet.email }
+    welcomed { true }
+
+    trait :newbie do
+      welcomed { false }
+    end
   end
 end

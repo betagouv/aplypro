@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class EstablishmentsController < ApplicationController
-  def index
-    @etabs = Establishment.all
+  def create_attributive_decisions
+    GenerateAttributiveDecisionsJob.perform_later(@etab)
+
+    redirect_to classes_path, notice: t("flash.attributive_decisions_generating")
   end
 end

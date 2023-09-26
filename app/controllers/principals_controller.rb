@@ -9,8 +9,6 @@ class PrincipalsController < ApplicationController
     end
   end
 
-  def update_establishment; end
-
   private
 
   def principal_params

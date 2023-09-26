@@ -20,6 +20,7 @@ module Principals
       check_responsibilites!
       check_principal!
       check_multiple_etabs!
+      fetch_students!
     end
 
     def masa
@@ -73,12 +74,19 @@ module Principals
     def check_multiple_etabs!
       if @mapper.establishments.many?
         @mapper.create_all_establishments!
+
         render action: :select_etab
       else
         @principal.update!(establishment: @mapper.establishments.first)
 
         redirect_to classes_path, notice: t("auth.success")
       end
+    end
+
+    def fetch_students!
+      jobs = @mapper.establishments.map { |e| FetchStudentsJob.new(e) }
+
+      ActiveJob.perform_all_later(jobs)
     end
 
     def auth_hash

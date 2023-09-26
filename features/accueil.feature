@@ -3,8 +3,15 @@
 # Note : les IDEs et leurs plugins Cucumber sont censés pouvoir gérer
 # l'internationalisation et donc les mots-clés en français aussi.
 
-Fonctionnalité: La page d'accueil me salue
-  Scénario:
-    Quand je me rends sur la page d'accueil
-    Alors la page contient "Direction Interministérielle du Numérique"
-    Et la page contient "Allocation pour les lycéens professionnels"
+Fonctionnalité: Accueil sur l'application
+  Contexte:
+    Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
+    Et que je me connecte en tant que personnel MENJ
+    Et qu'il y a une élève "Marie Curie" au sein de la classe "3EMEB" pour une formation "Développement"
+
+  Scénario: Le personnel de direction voit un écran d'accueil la première fois
+    Quand je rafraîchis la page
+    Alors la page contient "Bienvenue sur Aplypro"
+    Et la page ne contient pas "Liste des classes"
+    Quand je clique sur "Continuer"
+    Alors la page contient "Liste des classes"

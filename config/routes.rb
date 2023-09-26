@@ -3,7 +3,10 @@
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
   resources :principals, only: :update
-  resources :establishments, only: :index
+
+  resources :establishments do
+    post "create_attributive_decisions"
+  end
 
   resources :classes, only: %i[show index] do
     member do
@@ -37,6 +40,8 @@ Rails.application.routes.draw do
   end
 
   root "home#index"
+
+  get "/welcome", to: "home#welcome"
 
   get "/maintenance", to: "home#maintenance"
   get "/login", to: "home#login"

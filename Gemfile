@@ -44,6 +44,12 @@ gem "haml-rails"
 # ribs validation
 gem "bank-contact"
 
+# document generation
+gem "hexapdf"
+
+# document storage
+gem "aws-sdk-s3", require: false
+
 # user auth
 gem "devise"
 gem "devise-i18n"

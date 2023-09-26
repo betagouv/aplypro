@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class StudentsController < ClassesController
-  before_action :set_student
+  before_action :set_classe, :set_student
 
   def show
     add_breadcrumb t("pages.titles.classes.index"), classes_path

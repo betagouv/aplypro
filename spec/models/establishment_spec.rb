@@ -14,8 +14,7 @@ RSpec.describe Establishment do
         headers: {
           "Accept" => "*/*",
           "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-          "Content-Type" => "application/json",
-          "User-Agent" => "Faraday v2.7.10"
+          "Content-Type" => "application/json"
         }
       )
       .to_return(status: 200, body: fixture, headers: { "Content-Type" => "application/json" })

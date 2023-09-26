@@ -7,6 +7,12 @@ class HomeController < ApplicationController
     redirect_to login_url
   end
 
+  def welcome
+    @inhibit_nav = true
+
+    current_principal.update!(welcomed: true)
+  end
+
   def maintenance
     @msg = ENV.fetch("APLYPRO_MAINTENANCE_REASON")
   end

@@ -16,6 +16,10 @@ Alors("la page contient {string}") do |content|
   expect(page).to have_content(content)
 end
 
+Alors("la page ne contient pas {string}") do |content|
+  expect(page).not_to have_content(content)
+end
+
 Alors("la page contient {string} dans la rangée {string} du tableau {string}") do |content, row, caption|
   expect(page).to have_table(caption, with_rows: [row, content])
 end
