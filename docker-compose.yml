@@ -2,6 +2,7 @@ version: '3'
 
 services:
   web:
+    image: aplypro
     build: .
     volumes:
       - "./:/app"
@@ -9,33 +10,20 @@ services:
     ports:
       - "3000:3000"
       - "12345:12345"
-    environment:
-      DATABASE_URL: 'postgresql://postgres:dummy@db:5433'
-      RUBY_DEBUG_PORT: 12345
-      RUBY_DEBUG_HOST: 0.0.0.0
-      RUBY_DEBUG_NO_RELINE: "true"
-      APLYPRO_ENV: development
-      APLYPRO_ESTABLISHMENTS_DATA_URL: http://mock:3002/etab-info
-      APLYPRO_FIM_CLIENT_ID: aplypro-fim-id
-      APLYPRO_FIM_CLIENT_SECRET: aplypro-fim-secret
-      APLYPRO_FIM_HOST: localhost:1080 # FIXME: keycloak via Docker is a nightmare
-      APLYPRO_FIM_ISSUER: localhost:3001/realms/aplypro-local
-      APLYPRO_FIM_REDIRECT_URI: http://localhost:3000/principals/auth/fim/callback
-      APLYPRO_FIM_SCOPE: openid email profile lescopes
-      APLYPRO_FREGATA_KEY_ID: aplypro-fregata-key
-      APLYPRO_FREGATA_SECRET: aplypro-fregata-secret
-      APLYPRO_FREGATA_URL: http://mock:3002/fregata/inscriptions
-      APLYPRO_CAS_CLIENT_ID: aplypro-masa-id
-      APLYPRO_CAS_CLIENT_SECRET: aplypro-cas-secret
-      APLYPRO_CAS_SITE_ROOT: nope
-      APLYPRO_CAS_REDIRECT_URI: nope
-      APLYPRO_SENTRY_DNS:
-      APLYPRO_SYGNE_CLIENT_ID: local sygne client id
-      APLYPRO_SYGNE_SECRET: local sygne secret
-      APLYPRO_SYGNE_TOKEN_URL: http://mock:3002/sygne/token
-      APLYPRO_SYGNE_URL: http://mock:3002/sygne/v1/
+    env_file:
+       - '.env.local'
     depends_on:
       - db
+      - redis
+  worker:
+    image: aplypro
+    env_file:
+      - '.env.local'
+    command: ["bundle", "exec", "sidekiq"]
+    volumes:
+      - "./:/app"
+      - "/app/node_modules"
+    entrypoint: ''
   db:
     image: postgres
     environment:
@@ -49,6 +37,10 @@ services:
     image: sj26/mailcatcher
     ports:
       - "1080:1080"
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
   # keycloak:
   #   image: quay.io/keycloak/keycloak
   #   environment:

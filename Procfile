@@ -1,2 +1,3 @@
 web: bundle exec puma -C config/puma.rb
-postdeploy: bundle exec rails db:migrate
+worker: bundle exec sidekiq -v
+postdeploy: bundle exec rails db:prepare
