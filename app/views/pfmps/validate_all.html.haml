@@ -11,7 +11,7 @@
 
   %hr
 
-  = form_with url: pfmp_validate_path(@pfmp), method: :post do |form|
+  = form_with url: validate_class_student_pfmp_path(@pfmp.classe, @pfmp.student, @pfmp), method: :post do |form|
     = render 'pfmp_breakdown'
     .fr-btns-group.fr-btns-group--inline.fr-mt-6w
       = form.submit "Valider cette PFMP et passer à la suivante", class: 'fr-btn'
