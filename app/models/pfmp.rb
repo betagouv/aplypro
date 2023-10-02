@@ -13,6 +13,11 @@ class Pfmp < ApplicationRecord
   has_many :payments, -> { order(updated_at: :asc) }, dependent: :destroy, inverse_of: :pfmp
 
   validates :start_date, :end_date, presence: true
+
+  validates :end_date,
+            comparison: { greater_than_or_equal_to: :start_date },
+            if: -> { start_date && end_date }
+
   validates :day_count, numericality: { only_integer: true, allow_nil: true, greater_than: 0 }
 
   include Statesman::Adapters::ActiveRecordQueries[
