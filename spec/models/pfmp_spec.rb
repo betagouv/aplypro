@@ -20,6 +20,15 @@ RSpec.describe Pfmp do
     it { is_expected.to validate_presence_of(:start_date) }
     it { is_expected.to validate_presence_of(:end_date) }
     it { is_expected.to validate_numericality_of(:day_count).only_integer.is_greater_than(0) }
+
+    context "when the end date is before the start" do
+      before do
+        pfmp.start_date = Time.zone.now
+        pfmp.end_date = Date.yesterday
+      end
+
+      it { is_expected.not_to be_valid }
+    end
   end
 
   describe "states" do

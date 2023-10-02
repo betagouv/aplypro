@@ -47,13 +47,14 @@ class PfmpsController < ApplicationController
   def create
     @pfmp = Pfmp.new(pfmp_params.merge(schooling: @student.current_schooling))
 
-    respond_to do |format|
-      if @pfmp.save
-        format.html { redirect_to class_student_path(@classe, @student), notice: t("pfmps.new.success") }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @pfmp.errors, status: :unprocessable_entity }
-      end
+    if @pfmp.save
+      redirect_to class_student_path(@classe, @student), notice: t("pfmps.new.success")
+    else
+      @page_title = t("pages.titles.pfmps.new")
+      @inhibit_title = true
+      add_breadcrumb(t("pages.titles.pfmps.new"))
+
+      render :new, status: :unprocessable_entity
     end
   end
 

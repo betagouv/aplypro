@@ -2,7 +2,8 @@
   = render 'dates_warning'
 
 = form_with model: [@classe, @student, @pfmp], builder: DsfrFormBuilder do |form|
-  = form.dsfr_error_summary
+  .fr-col-md-6
+    = form.dsfr_error_summary
 
   = form.dsfr_date_field(:start_date, width: 'sm-4 md-3 lg-2')
   = form.dsfr_date_field(:end_date, width: 'sm-4 md-3 lg-2')

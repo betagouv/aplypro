@@ -17,6 +17,12 @@ fr:
     classes:
       not_found: "La classe que vous avez demandée n'existe pas."
   activerecord:
+    errors:
+      models:
+        pfmp:
+          attributes:
+            end_date:
+              greater_than_or_equal_to: "doit être ultérieure à la date de début"
     hints:
       rib:
         name: "Nom du titulaire du compte"
