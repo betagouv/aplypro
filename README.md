@@ -18,6 +18,8 @@ professionnel (PFMP).
 
 ## Démarrage
 
+Use `git submodule init` and `git submodule update` to init and update the content from `https://github.com/betagouv/aplypro-mock-data` in the `mock/` folder
+
 ```sh
 docker-compose up
 ```

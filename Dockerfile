@@ -8,7 +8,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install --no-install-recomme
 # (Gemfile and Gemfile.lock) to allow further steps to be cached
 # (namely the NPM steps)
 WORKDIR /bundle
-COPY Gemfile Gemfile.lock .
+COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
 # Move to the main folder
@@ -17,7 +17,7 @@ WORKDIR /app
 # We can't do the WORKDIR trick here because npm modules need to be
 # installed in the root folder (since they're installed locally in
 # node_modules)
-COPY package.json package-lock.json .
+COPY package.json package-lock.json ./
 
 RUN npm i
 
