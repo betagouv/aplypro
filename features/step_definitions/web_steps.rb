@@ -9,7 +9,7 @@ Quand("print the page") do
 end
 
 Quand("je clique sur {string}") do |label|
-  click_on label
+  click_link_or_button label # rubocop:disable Capybara/ClickLinkOrButtonStyle
 end
 
 Alors("la page contient {string}") do |content|

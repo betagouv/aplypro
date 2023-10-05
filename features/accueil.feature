@@ -10,7 +10,8 @@ Fonctionnalité: Accueil sur l'application
     Et qu'il y a une élève "Marie Curie" au sein de la classe "3EMEB" pour une formation "Développement"
 
   Scénario: Le personnel de direction voit un écran d'accueil la première fois
-    Quand je rafraîchis la page
+    Quand je n'ai pas encore vu l'écran d'accueil
+    Et que je rafraîchis la page
     Alors la page contient "Bienvenue sur Aplypro"
     Et la page ne contient pas "Liste des classes"
     Quand je clique sur "Continuer"
