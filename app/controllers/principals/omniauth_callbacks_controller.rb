@@ -2,16 +2,16 @@
 
 module Principals
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
+    include DeveloperOidc
+
     skip_before_action :verify_authenticity_token
 
     rescue_from IdentityMappers::Errors::Error, ActiveRecord::RecordInvalid, with: :authentication_failure
 
     def developer
-      @principal = Principal.from_developer(auth_hash)
+      oidcize_dev_hash(auth_hash)
 
-      @principal.save!
-
-      sign_in_and_redirect @principal
+      oidc
     end
 
     def oidc
