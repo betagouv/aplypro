@@ -26,7 +26,7 @@ Bundler.require(*Rails.groups)
 module Aplypro
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults 7.1
 
     config.i18n.default_locale = :fr
     config.i18n.fallbacks = [:en]
