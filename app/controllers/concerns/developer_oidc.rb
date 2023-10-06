@@ -38,9 +38,19 @@ module DeveloperOidc
     {
       extra: {
         raw_info: {
-          FrEduRneResp: ["#{uai}$UAJ$PU$N$T3$LYC$340"]
+          **responsibility_hash(attrs, uai)
         }
       }
     }
+  end
+
+  def responsibility_hash(attrs, uai)
+    line = ["#{uai}$UAJ$PU$N$T3$LYC$340"]
+
+    if attrs["info"]["provider"] == "fim"
+      { FrEduRneResp: line }
+    else
+      { attributes: { fr_edu_rne_resp: line } }
+    end
   end
 end
