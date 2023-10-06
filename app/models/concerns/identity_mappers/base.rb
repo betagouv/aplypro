@@ -45,7 +45,7 @@ module IdentityMappers
     end
 
     def create_all_establishments!
-      establishments.each(&:fetch_data!)
+      establishments.filter(&:no_data?).each(&:fetch_data!)
     end
   end
 end

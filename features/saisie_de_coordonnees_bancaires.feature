@@ -4,6 +4,7 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
   Contexte:
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que je me connecte en tant que personnel MENJ
+    Et que je passe l'écran d'accueil
     Et qu'il y a une élève "Marie Curie" au sein de la classe "3EMEB" pour une formation "Développement"
     Et que je rafraîchis la page
     Et que je clique sur "Voir la classe" dans la rangée "3EMEB"

@@ -31,3 +31,6 @@ cl:
 
 rs:
 	docker-compose exec web touch tmp/restart.txt
+
+wipe:
+	$(DOCKER-RUN) web bin/rails db:reset

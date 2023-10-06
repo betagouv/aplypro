@@ -10,7 +10,7 @@ class Payment < ApplicationRecord
 
   belongs_to :pfmp
 
-  validates :amount, numericality: { greated_than: 0 }
+  validates :amount, numericality: { greater_than: 0 }
 
   def state_machine
     @state_machine ||= PaymentStateMachine.new(

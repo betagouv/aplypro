@@ -2,16 +2,16 @@
 
 module Principals
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
+    include DeveloperOidc
+
     skip_before_action :verify_authenticity_token
 
     rescue_from IdentityMappers::Errors::Error, ActiveRecord::RecordInvalid, with: :authentication_failure
 
     def developer
-      @principal = Principal.from_developer(auth_hash)
+      oidcize_dev_hash(auth_hash)
 
-      @principal.save!
-
-      sign_in_and_redirect @principal
+      oidc
     end
 
     def oidc
@@ -20,6 +20,7 @@ module Principals
       check_responsibilites!
       check_principal!
       check_multiple_etabs!
+      fetch_students!
     end
 
     def masa
@@ -73,12 +74,19 @@ module Principals
     def check_multiple_etabs!
       if @mapper.establishments.many?
         @mapper.create_all_establishments!
+
         render action: :select_etab
       else
         @principal.update!(establishment: @mapper.establishments.first)
 
         redirect_to classes_path, notice: t("auth.success")
       end
+    end
+
+    def fetch_students!
+      jobs = @mapper.establishments.map { |e| FetchStudentsJob.new(e) }
+
+      ActiveJob.perform_all_later(jobs)
     end
 
     def auth_hash

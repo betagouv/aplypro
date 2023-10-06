@@ -1,4 +1,6 @@
 fr:
+  flash:
+    attributive_decisions_generating: "Les décisions d'attribution sont en train d'être générées. Vous pourrez les retrouver en consultant le profil d'une classe ou d'un élève."
   helpers:
     submit:
       rib:
@@ -132,6 +134,9 @@ fr:
       blocked: "Informations de paiement manquantes"
       pending: "Planifié"
     breakdown: "%{days} jours × %{rate}€ par jour = %{total}€"
+  ministries:
+    masa: Ministère de l'Agriculture et de la Souveraineté Alimentaire (MASA)
+    menj: Ministère de l'Éducation Nationale et de la Jeunesse (MENJ)
   mefs:
     labels:
       1BT: 1ère bac technologique

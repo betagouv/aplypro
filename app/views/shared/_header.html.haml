@@ -1,5 +1,5 @@
 = dsfr_header logo_text: t("global.sponsor"), title: t("global.service_name"), tagline: t("global.service_description") do |header|
-  - unless current_principal.nil?
+  - if current_principal and not @inhibit_nav
     - %i(classes pfmps).each do |item|
       - path = send("#{item}_path")
       = header.with_direct_link_simple title: t("menu.#{item}"),

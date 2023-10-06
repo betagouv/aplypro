@@ -27,7 +27,7 @@ class Student
 
             next if mef.nil?
 
-            Classe.find_or_create_by!(establishment: etab, mef:, label: klass["code"]).tap do |k|
+            Classe.find_or_create_by!(establishment: etab, mef:, label: klass["code"], start_year: 2023).tap do |k|
               students
                 .map { |e| make_student(e) }
                 .reject { |e| e.ine.nil? }

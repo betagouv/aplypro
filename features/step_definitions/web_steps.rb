@@ -9,11 +9,15 @@ Quand("print the page") do
 end
 
 Quand("je clique sur {string}") do |label|
-  click_on label
+  click_link_or_button label # rubocop:disable Capybara/ClickLinkOrButtonStyle
 end
 
 Alors("la page contient {string}") do |content|
   expect(page).to have_content(content)
+end
+
+Alors("la page ne contient pas {string}") do |content|
+  expect(page).not_to have_content(content)
 end
 
 Alors("la page contient {string} dans la rangée {string} du tableau {string}") do |content, row, caption|

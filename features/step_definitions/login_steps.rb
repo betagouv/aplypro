@@ -93,3 +93,7 @@ Sachantque("je me connecte en tant que personnel MASA") do
     Et que je clique sur "Accéder au portail de connexion MASA"
   )
 end
+
+Sachantque("je passe l'écran d'accueil") do
+  steps %(Quand je clique sur "Continuer")
+end

@@ -4,6 +4,7 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
   Contexte:
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que je me connecte en tant que personnel MENJ
+    Et que je passe l'écran d'accueil
     Et que mon établissement propose une formation "Développement" rémunérée à 15 euros par jour et plafonnée à 200 euros par an
     Et qu'il y a une élève "Marie Curie" au sein de la classe "3EMEB" pour une formation "Développement"
     Quand je rafraîchis la page

@@ -123,3 +123,7 @@ end
 Alors("il n'y a pas de personnel de direction enregistré dans la base de données") do
   expect(Principal.count).to eq 0
 end
+
+Quand("je n'ai pas encore vu l'écran d'accueil") do
+  @etab.principal.update!(welcomed: false)
+end

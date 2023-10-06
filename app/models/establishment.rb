@@ -6,7 +6,9 @@ class Establishment < ApplicationRecord
   validates :uai, presence: true, uniqueness: true
 
   has_one :principal, dependent: :nullify
+
   has_many :classes, -> { order "label" }, class_name: "Classe", dependent: :destroy, inverse_of: :establishment
+  has_many :schoolings, through: :classes
 
   after_create :queue_refresh
 
@@ -23,6 +25,17 @@ class Establishment < ApplicationRecord
     return "" if no_data?
 
     [name, city.capitalize, postal_code].join(" – ")
+  end
+
+  def attributive_decisions
+    classes
+      .current
+      .includes(:schoolings)
+      .flat_map(&:attributive_decisions_attachments)
+  end
+
+  def never_generated_attributive_decisions?
+    attributive_decisions.none?
   end
 
   def no_data?

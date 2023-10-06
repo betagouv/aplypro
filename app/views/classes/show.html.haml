@@ -1,7 +1,7 @@
-.actions.fr-mb-3w
+.actions.fr-mb-4w
   = link_to 'Renseigner une PFMP pour toute la classe', bulk_pfmp_class_path(@classe), class: 'fr-btn fr-btn--secondary'
 
-.fr-table
+.fr-table.fr-table--no-caption
   %table
     %caption Liste des élèves (#{@classe.students.count})
     %thead
@@ -15,12 +15,10 @@
           %td
             = dsfr_link_to student.index_name, class_student_path(@classe, student), title: t("links.students.show", name: student)
           %td
-            - if student.pfmps.none?
-              aucune
-            - else
-              %ul
-                - student.pfmps.each do |pfmp|
-                  %li= dsfr_link_to pfmp.listing_to_s, class_student_pfmp_path(@classe, student, pfmp)
+            %ul
+              - student.pfmps.each do |pfmp|
+                %li= dsfr_link_to pfmp.listing_to_s, class_student_pfmp_path(@classe, student, pfmp)
+              %li= dsfr_link_to "Rajouter une PFMP", new_class_student_pfmp_path(@classe, student)
           %td
             - if student.rib.present?
               = dsfr_badge(status: :success) { "Oui"}

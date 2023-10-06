@@ -6,9 +6,9 @@ class ClassesController < ApplicationController
   before_action :set_classe, only: %i[show bulk_pfmp create_bulk_pfmp]
 
   def index
-    infer_page_title
+    redirect_to welcome_path and return unless current_principal.welcomed?
 
-    FetchStudentsJob.perform_later(@etab) if @classes.none?
+    infer_page_title
   end
 
   def show
@@ -46,7 +46,7 @@ class ClassesController < ApplicationController
   end
 
   def set_all_classes
-    @classes = @etab.classes.includes(:mef, students: %i[rib pfmps])
+    @classes = @etab.classes.includes(:mef, students: %i[rib pfmps], schoolings: :attributive_decision_attachment)
   end
 
   def set_classe

@@ -1,7 +1,15 @@
 # frozen_string_literal: true
 
 class EstablishmentsController < ApplicationController
-  def index
-    @etabs = Establishment.all
+  def create_attributive_decisions
+    # NOTE: the job already toggles the progress indicator
+    # (`generating_attributive_decisions = true`) but if the job is
+    # slow to kick-off the page reload is too fast and we get the
+    # redirect flash below + the dialog asking them to generate them.
+    @etab.update!(generating_attributive_decisions: true)
+
+    GenerateAttributiveDecisionsJob.perform_later(@etab)
+
+    redirect_to classes_path, notice: t("flash.attributive_decisions_generating")
   end
 end

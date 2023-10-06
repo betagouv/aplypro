@@ -276,7 +276,7 @@ Devise.setup do |config|
 
   unless true_production
     config.omniauth :developer,
-                    fields: [:uai, { provider: %i[masa fim] }]
+                    fields: [:uai, { provider: %i[fim masa] }]
   end
 
   config.omniauth :openid_connect, {

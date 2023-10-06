@@ -7,6 +7,12 @@ class Classe < ApplicationRecord
   has_many :schoolings, dependent: nil
   has_many :students, -> { order "last_name" }, dependent: nil, through: :schoolings
   has_many :pfmps, through: :schoolings
+  has_many :attributive_decisions_attachments, through: :schoolings, source: :attributive_decision_attachment
+
+  validates :label, :start_year, presence: true
+  validates :start_year, numericality: { only_integer: true, greater_than_or_equal_to: 2023 }
+
+  scope :current, -> { where(start_year: ENV.fetch("APLYPRO_SCHOOL_YEAR")) }
 
   def create_bulk_pfmp(pfmp_params)
     students.each do |student|
