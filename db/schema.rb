@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_05_135540) do
+ActiveRecord::Schema[7.1].define(version: 2023_10_09_055753) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -121,27 +121,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_05_135540) do
     t.index ["schooling_id"], name: "index_pfmps_on_schooling_id"
   end
 
-  create_table "principals", force: :cascade do |t|
-    t.string "uid", null: false
-    t.string "provider", null: false
-    t.string "name", null: false
-    t.string "secret", null: false
-    t.string "token", null: false
-    t.string "email", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "remember_created_at"
-    t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string "current_sign_in_ip"
-    t.string "last_sign_in_ip"
-    t.string "establishment_id"
-    t.boolean "welcomed", default: false, null: false
-    t.index ["email"], name: "index_principals_on_email", unique: true
-    t.index ["uid", "provider"], name: "index_principals_on_uid_and_provider", unique: true
-  end
-
   create_table "ribs", force: :cascade do |t|
     t.string "iban"
     t.string "bic"
@@ -173,6 +152,27 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_05_135540) do
     t.bigint "current_schooling"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "uid", null: false
+    t.string "provider", null: false
+    t.string "name", null: false
+    t.string "secret", null: false
+    t.string "token", null: false
+    t.string "email", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.string "establishment_id"
+    t.boolean "welcomed", default: false, null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
+  end
+
   create_table "wages", force: :cascade do |t|
     t.integer "daily_rate", null: false
     t.string "mefstat4", null: false
@@ -189,9 +189,9 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_05_135540) do
   add_foreign_key "payments", "pfmps"
   add_foreign_key "pfmp_transitions", "pfmps"
   add_foreign_key "pfmps", "schoolings"
-  add_foreign_key "principals", "establishments", primary_key: "uai"
   add_foreign_key "ribs", "students", primary_key: "ine"
   add_foreign_key "schoolings", "classes", column: "classe_id"
   add_foreign_key "schoolings", "students", primary_key: "ine"
   add_foreign_key "students", "schoolings", column: "current_schooling"
+  add_foreign_key "users", "establishments", primary_key: "uai"
 end

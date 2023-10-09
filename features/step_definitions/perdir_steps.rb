@@ -16,7 +16,7 @@ end
 Sachantque(
   "il y a un(e) élève {string} au sein de la classe {string} pour une formation {string}"
 ) do |name, classe, mef|
-  @etab ||= Principal.last.establishment
+  @etab ||= User.last.establishment
 
   first, last = name.split # not great
 
@@ -121,9 +121,9 @@ Quand("je renseigne {int} jours pour la dernière PFMP de {string}") do |days, n
 end
 
 Alors("il n'y a pas de personnel de direction enregistré dans la base de données") do
-  expect(Principal.count).to eq 0
+  expect(User.count).to eq 0
 end
 
 Quand("je n'ai pas encore vu l'écran d'accueil") do
-  @etab.principal.update!(welcomed: false)
+  @etab.user.update!(welcomed: false)
 end

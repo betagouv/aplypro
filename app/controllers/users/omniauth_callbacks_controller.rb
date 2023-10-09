@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Principals
+module Users
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     include DeveloperOidc
 
@@ -18,7 +18,7 @@ module Principals
       parse_identity
 
       check_responsibilites!
-      check_principal!
+      check_user!
       check_multiple_etabs!
       fetch_students!
     end
@@ -49,7 +49,7 @@ module Principals
       data = auth_hash
       raw = data.extra.raw_info
 
-      @principal = Principal.from_oidc(data)
+      @user = User.from_oidc(data)
 
       @mapper = case data.provider.to_sym
                 when :fim
@@ -61,10 +61,10 @@ module Principals
                 end
     end
 
-    def check_principal!
-      @principal.save!
+    def check_user!
+      @user.save!
 
-      sign_in(@principal)
+      sign_in(@user)
     end
 
     def check_responsibilites!
@@ -77,7 +77,7 @@ module Principals
 
         render action: :select_etab
       else
-        @principal.update!(establishment: @mapper.establishments.first)
+        @user.update!(establishment: @mapper.establishments.first)
 
         redirect_to classes_path, notice: t("auth.success")
       end

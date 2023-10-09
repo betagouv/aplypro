@@ -9,7 +9,7 @@ module StudentApi
     end
 
     def api_for(establishment)
-      provider = establishment.principal&.provider
+      provider = establishment.user&.provider
 
       case provider
       when "fim", "developer"

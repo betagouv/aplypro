@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 class ClassesController < ApplicationController
-  before_action :authenticate_principal!
+  before_action :authenticate_user!
   before_action :set_all_classes, only: :index
   before_action :set_classe, only: %i[show bulk_pfmp create_bulk_pfmp]
 
   def index
-    redirect_to welcome_path and return unless current_principal.welcomed?
+    redirect_to welcome_path and return unless current_user.welcomed?
 
     infer_page_title
   end

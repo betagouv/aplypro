@@ -9,7 +9,7 @@ describe Student::Mappers::Fregata do
   subject(:mapper) { described_class }
 
   let!(:fixture) { Rails.root.join("mock/data/fregata-students.json").read }
-  let(:etab) { create(:establishment, :with_masa_principal) }
+  let(:etab) { create(:establishment, :with_masa_user) }
   let(:data) { JSON.parse(fixture) }
 
   let(:irrelevant) do

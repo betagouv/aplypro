@@ -5,10 +5,10 @@ require "rails_helper"
 RSpec.describe "StudentsControllers" do
   let(:schooling) { create(:schooling) }
   let(:student) { schooling.student }
-  let(:principal) { create(:principal, establishment: student.classe.establishment) }
+  let(:user) { create(:user, establishment: student.classe.establishment) }
 
   before do
-    sign_in(principal)
+    sign_in(user)
   end
 
   describe "GET /student" do
