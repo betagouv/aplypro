@@ -40,5 +40,4 @@ node_modules
 # Keycloak's data folder
 .local
 
-# ruby console config
 .irbrc

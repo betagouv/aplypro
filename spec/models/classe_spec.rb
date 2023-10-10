@@ -31,4 +31,18 @@ RSpec.describe Classe do
       expect(described_class.current).to contain_exactly(current)
     end
   end
+
+  describe ".with_attributive_decisions" do
+    let(:classe_with_no_ad) { create(:classe, :with_students) }
+    let(:classe_with_ad) { create(:classe, :with_students) }
+
+    before do
+      create(:schooling, :with_attributive_decision, classe: classe_with_ad)
+      create(:schooling, classe: classe_with_no_ad)
+    end
+
+    it "returns the classes which have attributive decisions" do
+      expect(described_class.with_attributive_decisions).to contain_exactly(classe_with_ad)
+    end
+  end
 end

@@ -19,8 +19,10 @@ RSpec.describe "EstablishmentsController" do
         expect(response).to have_http_status(:found)
       end
 
-      it "create some documents" do
-        expect(establishment.attributive_decisions.size).to eq classe.students.size
+      it "queues the document creation job" do
+        expect do
+          post establishment_create_attributive_decisions_path(establishment)
+        end.to have_enqueued_job(GenerateAttributiveDecisionsJob)
       end
     end
 
@@ -38,7 +40,9 @@ RSpec.describe "EstablishmentsController" do
       end
 
       it "does not create any documents" do
-        expect(establishment.attributive_decisions).to be_empty
+        expect do
+          post establishment_create_attributive_decisions_path(establishment)
+        end.not_to have_enqueued_job(GenerateAttributiveDecisionsJob)
       end
     end
   end

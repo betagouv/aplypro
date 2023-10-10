@@ -20,6 +20,8 @@ class Establishment < ApplicationRecord
   has_many :classes, -> { order "label" }, class_name: "Classe", dependent: :destroy, inverse_of: :establishment
   has_many :schoolings, through: :classes
 
+  has_one_attached :attributive_decisions_zip
+
   after_create :queue_refresh
 
   API_MAPPING = {
@@ -43,15 +45,8 @@ class Establishment < ApplicationRecord
     invitations.exists?(email: email)
   end
 
-  def attributive_decisions
-    classes
-      .current
-      .includes(:schoolings)
-      .flat_map(&:attributive_decisions_attachments)
-  end
-
   def never_generated_attributive_decisions?
-    attributive_decisions.none?
+    classes.current.with_attributive_decisions.none?
   end
 
   def no_data?
@@ -80,5 +75,22 @@ class Establishment < ApplicationRecord
 
   def select_label
     [uai, name].join(" - ")
+  end
+
+  def attributive_decisions_zip_filename
+    "decisions_attributions-#{uai}-#{I18n.l(DateTime.now, format: '%d_%m_%Y')}.zip"
+  end
+
+  def rattach_attributive_decisions_zip!(output)
+    name = attributive_decisions_zip_filename
+
+    attributive_decisions_zip.purge if attributive_decisions_zip.present?
+
+    attributive_decisions_zip.attach(
+      io: output,
+      key: [Rails.env, name].join("/"),
+      filename: name,
+      content_type: "application/zip"
+    )
   end
 end

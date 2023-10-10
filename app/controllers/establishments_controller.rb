@@ -12,6 +12,6 @@ class EstablishmentsController < ApplicationController
 
     GenerateAttributiveDecisionsJob.perform_later(@etab)
 
-    redirect_to classes_path, notice: t("flash.attributive_decisions_generating")
+    redirect_to classes_path
   end
 end
