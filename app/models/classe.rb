@@ -13,6 +13,7 @@ class Classe < ApplicationRecord
   validates :start_year, numericality: { only_integer: true, greater_than_or_equal_to: 2023 }
 
   scope :current, -> { where(start_year: ENV.fetch("APLYPRO_SCHOOL_YEAR")) }
+  scope :with_attributive_decisions, -> { joins(schoolings: :attributive_decision_attachment) }
 
   def create_bulk_pfmp(pfmp_params)
     @pfmp = Pfmp.new(pfmp_params)

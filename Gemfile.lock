@@ -466,7 +466,8 @@ GEM
       rubocop-factory_bot (~> 2.22)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
-    sentry-rails (5.12.0)
+    rubyzip (2.3.2)
+    sentry-rails (5.11.0)
       railties (>= 5.0)
       sentry-ruby (~> 5.12.0)
     sentry-ruby (5.12.0)
@@ -596,6 +597,7 @@ DEPENDENCIES
   rubocop
   rubocop-rails
   rubocop-rspec
+  rubyzip
   sentry-rails
   sentry-ruby
   shoulda-matchers
