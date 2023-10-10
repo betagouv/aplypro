@@ -166,7 +166,7 @@ class AttributeDecisionGenerator
   end
 
   def header
-    composer.image("./app/assets/images/Republique_Francaise_RVB.png", height: 100, position: :float)
+    composer.image(Rails.root.join("app/assets/images/Republique_Francaise_RVB.png").to_s, height: 100, position: :float)
     composer.text("Décision d'attribution annuelle".upcase, style: :title, margin: [150, 0, 0, 0])
     composer.text("Relative au versement d’une allocation en faveur des lycéens de la voie professionnelle dans le cadre de la valorisation des périodes de formation en milieu professionnel".upcase, style: :subtitle)
     composer.text("année scolaire 2023 - 2024".upcase, style: :subtitle, margin: [10, 0, 50, 0])

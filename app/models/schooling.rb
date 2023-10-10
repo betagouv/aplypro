@@ -19,12 +19,6 @@ class Schooling < ApplicationRecord
     ].join("_").concat(".pdf")
   end
 
-  def generate_attributive_decision
-    Tempfile.create("da") do |file|
-      GenerateAttributiveDecisionsJob.new.generate_and_attach_ad_to_schooling(self, file)
-    end
-  end
-
   def rattach_attributive_decision!(output)
     name = attributive_decision_filename
 
