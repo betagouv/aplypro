@@ -35,6 +35,10 @@ class Establishment < ApplicationRecord
     "mail" => :email
   }.freeze
 
+  def current_schoolings
+    classes.current.includes(:schoolings).flat_map(&:schoolings)
+  end
+
   def to_s
     return "" if no_data?
 
@@ -77,19 +81,12 @@ class Establishment < ApplicationRecord
     [uai, name].join(" - ")
   end
 
-  def attributive_decisions_zip_filename
-    "decisions_attributions-#{uai}-#{I18n.l(DateTime.now, format: '%d_%m_%Y')}.zip"
-  end
-
-  def rattach_attributive_decisions_zip!(output)
-    name = attributive_decisions_zip_filename
-
+  def rattach_attributive_decisions_zip!(content, filename)
     attributive_decisions_zip.purge if attributive_decisions_zip.present?
 
     attributive_decisions_zip.attach(
-      io: output,
-      key: [Rails.env, name].join("/"),
-      filename: name,
+      io: content,
+      filename: filename,
       content_type: "application/zip"
     )
   end
