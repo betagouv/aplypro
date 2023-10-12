@@ -127,3 +127,19 @@ end
 Quand("je n'ai pas encore vu l'écran d'accueil") do
   @etab.user.update!(welcomed: false)
 end
+
+Sachantque("j'invite {string} à rejoindre l'application") do |email|
+  steps %(
+    Quand je vais consulter la liste des invitations
+    Et que je clique sur "Autoriser un nouvel email"
+    Et que je remplis "Email" avec "#{email}"
+    Et que je clique sur "Autoriser l'email"
+  )
+end
+
+Lorsque("je vais consulter la liste des invitations") do
+  steps %(
+    Quand je me rends sur la page d'accueil
+    Et que je clique sur "Gestion des accès"
+  )
+end

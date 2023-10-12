@@ -5,6 +5,9 @@ class User < ApplicationRecord
 
   validates :uid, :provider, :name, :token, :secret, :email, presence: true
 
+
+  has_many :invitations, dependent: :nullify
+
   belongs_to :establishment, optional: true
 
   class << self

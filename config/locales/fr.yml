@@ -21,6 +21,11 @@ fr:
   activerecord:
     errors:
       models:
+        invitation:
+          attributes:
+            email:
+              invalid: "n'est pas valide : seuls les emails académiques sont autorisés."
+              taken: ": cet email est déjà autorisé."
         pfmp:
           attributes:
             end_date:
@@ -56,8 +61,12 @@ fr:
   menu:
     classes: Liste des classes
     pfmps: Liste des PFMPs
+    invitations: Gestion des accès
   pages:
     titles:
+      invitations:
+        index: Gestion des accès
+        new: Autoriser un email
       home:
         login: Connexion
       classes:

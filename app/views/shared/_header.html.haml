@@ -5,3 +5,7 @@
       = header.with_direct_link_simple title: t("menu.#{item}"),
                                        path: path,
                                        html_attributes: { "aria-current" => current_path?(path) ? "page" : nil }.compact
+    - if current_user.establishment.present?
+      = header.with_direct_link_simple title: t("menu.invitations"),
+                                       path: establishment_invitations_path(@etab),
+                                       html_attributes: { "aria-current" => current_path?(establishment_invitations_path(@etab)) ? "page" : nil }.compact

@@ -4,7 +4,9 @@
 Rails.application.routes.draw do
   resources :users, only: :update
 
-  resources :establishments do
+  resources :establishments, only: %w[edit update] do
+    resources :invitations
+
     post "create_attributive_decisions"
   end
 

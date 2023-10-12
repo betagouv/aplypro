@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_09_055753) do
+ActiveRecord::Schema[7.1].define(version: 2023_10_11_223534) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -65,6 +65,16 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_09_055753) do
     t.boolean "fetching_students", default: false, null: false
     t.boolean "generating_attributive_decisions", default: false, null: false
     t.index ["uai"], name: "index_establishments_on_uai", unique: true
+  end
+
+  create_table "invitations", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "email", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "establishment_id", null: false
+    t.index ["establishment_id", "email"], name: "index_invitations_on_establishment_id_and_email", unique: true
+    t.index ["user_id"], name: "index_invitations_on_user_id"
   end
 
   create_table "mefs", force: :cascade do |t|
@@ -185,6 +195,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_09_055753) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "classes", "establishments", primary_key: "uai"
   add_foreign_key "classes", "mefs"
+  add_foreign_key "invitations", "establishments", primary_key: "uai"
+  add_foreign_key "invitations", "users"
   add_foreign_key "payment_transitions", "payments"
   add_foreign_key "payments", "pfmps"
   add_foreign_key "pfmp_transitions", "pfmps"
