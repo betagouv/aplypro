@@ -125,7 +125,7 @@ Alors("il n'y a pas de personnel de direction enregistré dans la base de donné
 end
 
 Quand("je n'ai pas encore vu l'écran d'accueil") do
-  @etab.user.update!(welcomed: false)
+  @etab.users.directors.first.update!(welcomed: false)
 end
 
 Sachantque("j'invite {string} à rejoindre l'application") do |email|

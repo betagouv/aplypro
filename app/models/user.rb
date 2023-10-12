@@ -5,6 +5,8 @@ class User < ApplicationRecord
 
   validates :uid, :provider, :name, :token, :secret, :email, presence: true
 
+  has_many :establishment_users, dependent: :destroy
+  has_many :establishments, through: :establishment_users
 
   has_many :invitations, dependent: :nullify
 

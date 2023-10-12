@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_11_223534) do
+ActiveRecord::Schema[7.1].define(version: 2023_10_12_102522) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,15 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_11_223534) do
     t.string "establishment_id", null: false
     t.string "start_year", null: false
     t.index ["mef_id"], name: "index_classes_on_mef_id"
+  end
+
+  create_table "establishment_users", id: false, force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "granted_by_id"
+    t.integer "role", null: false
+    t.string "establishment_id", null: false
+    t.index ["granted_by_id"], name: "index_establishment_users_on_granted_by_id"
+    t.index ["user_id"], name: "index_establishment_users_on_user_id"
   end
 
   create_table "establishments", primary_key: "uai", id: :string, force: :cascade do |t|
@@ -195,6 +204,9 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_11_223534) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "classes", "establishments", primary_key: "uai"
   add_foreign_key "classes", "mefs"
+  add_foreign_key "establishment_users", "establishments", primary_key: "uai"
+  add_foreign_key "establishment_users", "users"
+  add_foreign_key "establishment_users", "users", column: "granted_by_id"
   add_foreign_key "invitations", "establishments", primary_key: "uai"
   add_foreign_key "invitations", "users"
   add_foreign_key "payment_transitions", "payments"

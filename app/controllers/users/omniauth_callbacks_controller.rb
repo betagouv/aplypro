@@ -17,9 +17,17 @@ module Users
     def oidc
       parse_identity
 
-      check_responsibilites!
+      begin
+        check_responsibilites!
+      rescue IdentityMappers::Errors::EmptyResponsibilitiesError
+        check_access_list!
+      rescue IdentityMappers::Errors::NoDelegationsError
+        raise IdentityMappers::Errors::NoAccessFound
+      end
+
       check_user!
-      check_multiple_etabs!
+      save_roles!
+      choose_roles!
       fetch_students!
     end
 
@@ -61,6 +69,16 @@ module Users
                 end
     end
 
+    def save_roles!
+      @mapper.establishments.each do |e|
+        EstablishmentUser.create!(user: @user, establishment: e, role: :dir)
+      end
+
+      @mapper.authorised_establishments_for(@user.email).each do |e|
+        EstablishmentUser.create!(user: @user, establishment: e, role: :authorised)
+      end
+    end
+
     def check_user!
       @user.save!
 
@@ -71,15 +89,23 @@ module Users
       raise(IdentityMappers::Errors::EmptyResponsibilitiesError, nil) if @mapper.responsibilities.none?
     end
 
-    def check_multiple_etabs!
-      if @mapper.establishments.many?
-        @mapper.create_all_establishments!
+    def check_access_list!
+      authorisations = @mapper.authorised_establishments_for(@user.email)
 
-        render action: :select_etab
-      else
-        @user.update!(establishment: @mapper.establishments.first)
+      raise(IdentityMappers::Errors::NotAuthorisedError, nil) if authorisations.none?
+    end
+
+    def choose_roles!
+      roles = @user.establishment_users
+
+      if roles.one?
+        @user.update!(establishment: roles.first.establishment)
 
         redirect_to classes_path, notice: t("auth.success")
+      else
+        @user.establishments.each(&:fetch_data!)
+
+        render action: :select_etab
       end
     end
 

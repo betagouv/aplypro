@@ -7,6 +7,18 @@ class Establishment < ApplicationRecord
 
   has_many :invitations, dependent: :nullify
 
+  has_many :establishment_users, dependent: :destroy
+
+  has_many :users, through: :establishment_users do
+    def authorised
+      where(establishment_users: { role: :authorised })
+    end
+
+    def directors
+      where(establishment_users: { role: :dir })
+    end
+  end
+
   has_many :classes, -> { order "label" }, class_name: "Classe", dependent: :destroy, inverse_of: :establishment
   has_many :schoolings, through: :classes
 
@@ -25,6 +37,10 @@ class Establishment < ApplicationRecord
     return "" if no_data?
 
     [name, city.capitalize, postal_code].join(" – ")
+  end
+
+  def invites?(email)
+    invitations.find_by(email: email)
   end
 
   def attributive_decisions

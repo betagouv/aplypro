@@ -97,6 +97,12 @@ fr:
         content: |
           Une erreur inconnue a eu lieu pendant la connexion. L'équipe
           technique a été notifiée du problème.
+      not_authorised_error:
+        title: "Erreur d'authentification"
+        content: |
+          Votre adresse e-mail n'est pas connue
+          d'Aplypro. Assurez-vous que votre personnel de direction l'a
+          explicitement autorisé dans leur interface Aplypro.
       empty_responsibilities_error:
         title: "Erreur d'authentification"
         content: |
@@ -105,6 +111,11 @@ fr:
           direction pour le moment. Il peut s'agir d'une erreur dans la
           configuration de votre profil. Nos équipes ont été
           notifiées.
+      no_access_found:
+        title: "Erreur d'authentification"
+        content: |
+          Le guichet d'authentification n'indique pas d'établissement
+          sous votre responsabilité ou de délégations connues.
     success: "Connexion réussie"
 
   ribs:

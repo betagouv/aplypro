@@ -19,5 +19,13 @@ module IdentityMappers
         super(msg)
       end
     end
+
+    class NotAuthorisedError < Error
+      attr_reader :attributes
+
+      def initialize(msg = "No delegations indicated")
+        super(msg)
+      end
+    end
   end
 end

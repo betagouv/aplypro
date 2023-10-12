@@ -22,7 +22,6 @@ RSpec.describe Establishment do
 
   it { is_expected.to validate_presence_of(:uai) }
   it { is_expected.to validate_uniqueness_of(:uai) }
-  it { is_expected.to have_one(:user) }
 
   describe "data refresh" do
     context "when it is created" do

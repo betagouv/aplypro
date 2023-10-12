@@ -5,7 +5,9 @@ module IdentityMappers
     attr_accessor :attributes
 
     ACCEPTED_ESTABLISHMENT_TYPES = %w[LYC LP].freeze
+
     FREDURNERESP_MAPPING = %i[uai type category activity tna_sym tty_code tna_code].freeze
+    FREDURNE_MAPPING     = %i[uai type category activity uaj tna_sym tty_code tna_code].freeze
 
     def initialize(attributes)
       Sentry.add_breadcrumb(Sentry::Breadcrumb.new(
@@ -36,6 +38,20 @@ module IdentityMappers
 
     def relevant?(attrs)
       ACCEPTED_ESTABLISHMENT_TYPES.include?(attrs[:tty_code])
+    end
+
+    def map_establishment(line)
+      FREDURNE_MAPPING.zip(line.split("$")).to_h
+    end
+
+    def authorised_establishments_for(email)
+      return [] if attributes["FrEduRne"].blank?
+
+      Array(attributes["FrEduRne"])
+        .reject { |line| no_value?(line) }
+        .map    { |line| map_establishment(line) }
+        .map    { |attrs| Establishment.find_or_create_by!(uai: attrs[:uai]) }
+        .select { |etab| etab.invites?(email) }
     end
 
     def establishments

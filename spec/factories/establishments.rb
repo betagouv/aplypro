@@ -10,11 +10,19 @@ FactoryBot.define do
     city { Faker::Address.city }
 
     trait :with_fim_user do
-      association :user, provider: "fim" # rubocop:disable FactoryBot/AssociationStyle
+      after(:create) do |establishment|
+        user = create(:user, provider: "fim")
+
+        create(:establishment_user, establishment: establishment, user: user, role: :dir)
+      end
     end
 
     trait :with_masa_user do
-      association :user, provider: "masa" # rubocop:disable FactoryBot/AssociationStyle
+      after(:create) do |establishment|
+        user = create(:user, provider: "masa")
+
+        create(:establishment_user, establishment: establishment, user: user, role: :dir)
+      end
     end
   end
 end

@@ -9,7 +9,10 @@ module StudentApi
     end
 
     def api_for(establishment)
-      provider = establishment.user&.provider
+      # maybe we should store the provider straight into the
+      # establishment? see `mock/data/etab.json` for an example of the
+      # "ministere_tutelle" attribute.
+      provider = establishment.users.directors.first.provider
 
       case provider
       when "fim", "developer"
