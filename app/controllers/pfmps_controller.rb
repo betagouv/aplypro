@@ -2,7 +2,6 @@
 
 class PfmpsController < ApplicationController
   before_action :authenticate_user!
-
   before_action :set_classe, :set_student, :set_breadcrumbs, except: %i[validate_all index]
   before_action :set_pfmp, only: %i[show edit update validate confirm_deletion destroy]
 
@@ -59,12 +58,10 @@ class PfmpsController < ApplicationController
   end
 
   def update
-    respond_to do |format|
-      if @pfmp.update(pfmp_params)
-        format.html { redirect_to class_student_path(@classe, @student), notice: t("pfmps.edit.success") }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-      end
+    if @pfmp.update(pfmp_params)
+      redirect_to class_student_path(@classe, @student), notice: t("pfmps.edit.success")
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -82,7 +79,7 @@ class PfmpsController < ApplicationController
 
     @pfmp.transition_to!(:validated)
 
-    redirect_back_or_to validate_all_pfmps_path, notice: "La PFMP de #{@pfmp.student} a bien été validée"
+    redirect_back_or_to validate_all_pfmps_path, notice: t("flash.pfmps.validated", name: @student.full_name)
   end
 
   def confirm_deletion
@@ -97,7 +94,7 @@ class PfmpsController < ApplicationController
   def destroy
     @pfmp.destroy
 
-    redirect_to class_student_path(@classe, @student), notice: "La PFMP de #{@pfmp.student} a bien été supprimée"
+    redirect_to class_student_path(@classe, @student), notice: t("flash.pfmps.destroyed", name: @student.full_name)
   end
 
   private
@@ -119,9 +116,7 @@ class PfmpsController < ApplicationController
   end
 
   def set_classe
-    @classe = Classe
-              .where(establishment: @etab)
-              .find(params[:class_id])
+    @classe = Classe.where(establishment: @etab).find(params[:class_id])
   rescue ActiveRecord::RecordNotFound
     redirect_to classes_path, alert: t("errors.classes.not_found") and return
   end
