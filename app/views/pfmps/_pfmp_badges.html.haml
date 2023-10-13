@@ -1,0 +1,5 @@
+.fr-badge-group
+  - @pfmp.all_status_badges.each_with_index do |status_badge, index|
+    - if index > 0
+      %span.inter-badge-arrow.fr-mr-1w →
+    = status_badge

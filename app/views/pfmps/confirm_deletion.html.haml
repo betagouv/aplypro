@@ -10,4 +10,6 @@
     %li
       Statut : #{@pfmp.status_badge}
 
-  = button_to "Confirmer la suppression", class_student_pfmp_path(@classe, @student, @pfmp), method: :delete, class: 'fr-btn fr-btn--danger fr-btn--secondary fr-mt-3w'
+  .fr-btns-group.fr-btns-group--inline.fr-mt-3w
+    = link_to "Annuler", class_student_pfmp_path(@classe, @student, @pfmp), class: 'fr-btn fr-btn--secondary'
+    = button_to "Confirmer la suppression", class_student_pfmp_path(@classe, @student, @pfmp), method: :delete, class: 'fr-btn fr-btn--danger fr-btn--secondary'

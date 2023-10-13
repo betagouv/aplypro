@@ -41,6 +41,7 @@ fr:
     - vendredi
     - samedi
     formats:
+      pfmp_listing: "%b %Y"
       default: "%d/%m/%Y"
       long: "%-d %B %Y"
       short: "%-d %b"
