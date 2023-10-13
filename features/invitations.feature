@@ -7,10 +7,10 @@ Fonctionnalité: Gestion des accès à l'application
     Et que je passe l'écran d'accueil
 
   Scénario: Je peux inviter une nouvelle personne sur l'application
-    Lorsque j'invite "marie.curie@education.gouv.fr" à rejoindre l'application
+    Lorsque j'autorise "marie.curie@education.gouv.fr" à rejoindre l'application
     Lorsque je vais consulter la liste des invitations
     Alors la page contient "marie.curie@education.gouv.fr"
 
   Scénario: Je ne peux pas inviter que des emails académiques
-    Lorsque j'invite "marie.curie@gmail.com" à rejoindre l'application
+    Lorsque j'autorise "marie.curie@gmail.com" à rejoindre l'application
     Alors la page contient "seuls les emails académiques"

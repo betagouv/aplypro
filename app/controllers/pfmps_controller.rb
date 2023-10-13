@@ -69,6 +69,14 @@ class PfmpsController < ApplicationController
   end
 
   def validate
+    if !current_user.can_validate?
+      redirect_back_or_to(
+        validate_all_pfmps_path,
+        alert: t("flash.pfmps.not_authorised_to_validate"),
+        status: :forbidden
+      ) and return
+    end
+
     add_breadcrumb t("pages.titles.pfmps.index"), pfmps_path
     add_breadcrumb t("pages.titles.pfmps.validate")
 

@@ -28,4 +28,26 @@ RSpec.describe "PfmpsController" do
       it { is_expected.to redirect_to classes_path }
     end
   end
+
+  describe "POST /validate" do
+    let(:pfmp) { create(:pfmp, :completed, student: student) }
+
+    context "when validating as a director" do
+      it "returns 200" do
+        post validate_class_student_pfmp_path(class_id: schooling.classe.id, student_id: student.id, id: pfmp.id)
+
+        expect(response).to have_http_status(:found)
+      end
+    end
+
+    context "when validating as an autorised personnel" do
+      let(:user) { create(:user, role: "authorised", establishment: student.classe.establishment) }
+
+      it "returns 403 (Forbidden)" do
+        post validate_class_student_pfmp_path(class_id: schooling.classe.id, student_id: student.id, id: pfmp.id)
+
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
 end
