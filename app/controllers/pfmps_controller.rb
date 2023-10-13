@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PfmpsController < ApplicationController
-  before_action :authenticate_principal!
+  before_action :authenticate_user!
 
   before_action :set_classe, :set_student, :set_breadcrumbs, except: %i[validate_all index]
   before_action :set_pfmp, only: %i[show edit update validate confirm_deletion destroy]

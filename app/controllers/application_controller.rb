@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_establishment
-    @etab = current_principal&.establishment
+    @etab = current_user&.establishment
   end
 
   def infer_page_title(attrs = {})

@@ -30,5 +30,5 @@ Fonctionnalité: Le personnel de direction se connecte
   Scénario: Un personnel du MENJ sans établissements en responsabilité est informé
     Sachant que je suis un personnel MENJ de l'établissement "123"
     Quand je me connecte en tant que personnel MENJ
-    Alors la page contient "aucun établissement sous votre direction"
+    Alors la page contient "votre personnel de direction"
     Et il n'y a pas de personnel de direction enregistré dans la base de données

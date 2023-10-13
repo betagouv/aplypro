@@ -2,9 +2,11 @@
 
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
-  resources :principals, only: :update
+  resources :users, only: :update
 
-  resources :establishments do
+  resources :establishments, only: %w[edit update] do
+    resources :invitations
+
     post "create_attributive_decisions"
   end
 
@@ -32,11 +34,11 @@ Rails.application.routes.draw do
     end
   end
 
-  devise_for :principals, controllers: { omniauth_callbacks: "principals/omniauth_callbacks" }
+  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
 
-  devise_scope :principal do
+  devise_scope :user do
     # get "/login", to: "devise/sessions#new"
-    delete "sign_out", to: "devise/sessions#destroy", as: :destroy_principal_session
+    delete "sign_out", to: "devise/sessions#destroy", as: :destroy_user_session
   end
 
   root "home#index"

@@ -9,12 +9,20 @@ FactoryBot.define do
     postal_code { Faker::Address.postcode }
     city { Faker::Address.city }
 
-    trait :with_fim_principal do
-      association :principal, provider: "fim" # rubocop:disable FactoryBot/AssociationStyle
+    trait :with_fim_user do
+      after(:create) do |establishment|
+        user = create(:user, provider: "fim")
+
+        create(:establishment_user, establishment: establishment, user: user, role: :dir)
+      end
     end
 
-    trait :with_masa_principal do
-      association :principal, provider: "masa" # rubocop:disable FactoryBot/AssociationStyle
+    trait :with_masa_user do
+      after(:create) do |establishment|
+        user = create(:user, provider: "masa")
+
+        create(:establishment_user, establishment: establishment, user: user, role: :dir)
+      end
     end
   end
 end

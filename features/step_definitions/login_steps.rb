@@ -68,6 +68,13 @@ Sachantque("je suis un personnel MASA directeur de l'établissement {string}") d
   )
 end
 
+Sachantque("je me déconnecte") do
+  steps %(
+    Quand je me rends sur la page d'accueil
+    Et que je clique sur "Déconnexion"
+  )
+end
+
 Sachantque("je suis un personnel MENJ directeur de l'établissement {string}") do |uai|
   uais = uai.split(", ")
 
@@ -76,6 +83,16 @@ Sachantque("je suis un personnel MENJ directeur de l'établissement {string}") d
     email: Faker::Internet.email,
     raw_info: {
       FrEduRneResp: uais.map { |u| make_fredurneresp(u) }
+    }
+  )
+end
+
+Quand("je suis un personnel MENJ de l'établissement {string} avec l'email {string}") do |uai, email|
+  OmniAuth.config.mock_auth[:fim] = make_fim_hash(
+    name: Faker::Name.name,
+    email: email,
+    raw_info: {
+      FrEduRne: [uai].map { |u| make_fredurne(u) }
     }
   )
 end

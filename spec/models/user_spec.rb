@@ -2,9 +2,9 @@
 
 require "rails_helper"
 
-RSpec.describe Principal do
+RSpec.describe User do
   it "has a valid factory" do
-    expect(build(:principal)).to be_valid
+    expect(build(:user)).to be_valid
   end
 
   describe "associations" do

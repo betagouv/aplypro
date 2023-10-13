@@ -8,7 +8,7 @@
       la liste ci-dessous.
 
     .fr-select-group.fr-col-7
-      = form_with model: @principal, builder: DsfrFormBuilder do |form|
+      = form_with model: @user, builder: DsfrFormBuilder do |form|
         .fr-input-group
           = form.label :establishment_id, "Établissement", class: 'fr-label'
           = form.select :establishment_id, @mapper.establishments.map { |e| [e.select_label, e.id] }, {}, { class: 'fr-select' }

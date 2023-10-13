@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe FetchStudentsJob do
-  let(:etab) { create(:establishment, :with_fim_principal) }
+  let(:etab) { create(:establishment, :with_fim_user) }
 
   before do
     allow(StudentApi).to receive(:fetch_students!)

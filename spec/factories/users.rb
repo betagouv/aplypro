@@ -3,7 +3,7 @@
 require "faker"
 
 FactoryBot.define do
-  factory :principal do
+  factory :user do
     establishment
     uid { Faker::Alphanumeric.alpha }
     name { Faker::Name.name }

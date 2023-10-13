@@ -1,0 +1,20 @@
+.fr-col-md-7
+  %p
+    Entrez ci-dessous l'adresse email académique du personnel que vous
+    souhaitez autoriser.
+
+  = dsfr_alert(type: :warning, title: "Seuls les emails académiques sont autorisés", classes: 'fr-my-3w') do
+    %p
+      Ces emails doivent impérativement finir par
+      %ul
+        - Invitation::VALID_DOMAINS.each do |domain|
+          %li
+            %code= domain
+
+
+  = form_with model: [@etab, @invitation], builder: DsfrFormBuilder do |form|
+    = form.dsfr_error_summary
+
+    = form.dsfr_text_field(:email, type: "email", class: 'fr-col-sm-8 fr-col-md-9 fr-col-lg-7')
+
+    = form.submit "Autoriser l'email", { class: 'fr-btn' }

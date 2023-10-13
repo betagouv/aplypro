@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Principals
+module Users
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     include DeveloperOidc
 
@@ -17,9 +17,17 @@ module Principals
     def oidc
       parse_identity
 
-      check_responsibilites!
-      check_principal!
-      check_multiple_etabs!
+      begin
+        check_responsibilites!
+      rescue IdentityMappers::Errors::EmptyResponsibilitiesError
+        check_access_list!
+      rescue IdentityMappers::Errors::NoDelegationsError
+        raise IdentityMappers::Errors::NoAccessFound
+      end
+
+      check_user!
+      save_roles!
+      choose_roles!
       fetch_students!
     end
 
@@ -49,7 +57,7 @@ module Principals
       data = auth_hash
       raw = data.extra.raw_info
 
-      @principal = Principal.from_oidc(data)
+      @user = User.from_oidc(data)
 
       @mapper = case data.provider.to_sym
                 when :fim
@@ -61,25 +69,43 @@ module Principals
                 end
     end
 
-    def check_principal!
-      @principal.save!
+    def save_roles!
+      @mapper.establishments.each do |e|
+        EstablishmentUser.create!(user: @user, establishment: e, role: :dir)
+      end
 
-      sign_in(@principal)
+      @mapper.authorised_establishments_for(@user.email).each do |e|
+        EstablishmentUser.create!(user: @user, establishment: e, role: :authorised)
+      end
+    end
+
+    def check_user!
+      @user.save!
+
+      sign_in(@user)
     end
 
     def check_responsibilites!
       raise(IdentityMappers::Errors::EmptyResponsibilitiesError, nil) if @mapper.responsibilities.none?
     end
 
-    def check_multiple_etabs!
-      if @mapper.establishments.many?
-        @mapper.create_all_establishments!
+    def check_access_list!
+      authorisations = @mapper.authorised_establishments_for(@user.email)
 
-        render action: :select_etab
-      else
-        @principal.update!(establishment: @mapper.establishments.first)
+      raise(IdentityMappers::Errors::NotAuthorisedError, nil) if authorisations.none?
+    end
+
+    def choose_roles!
+      roles = @user.establishment_users
+
+      if roles.one?
+        @user.update!(establishment: roles.first.establishment)
 
         redirect_to classes_path, notice: t("auth.success")
+      else
+        @user.establishments.each(&:fetch_data!)
+
+        render action: :select_etab
       end
     end
 

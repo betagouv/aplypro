@@ -2,7 +2,7 @@
 
 class HomeController < ApplicationController
   def index
-    (redirect_to classes_path and return) if principal_signed_in?
+    (redirect_to classes_path and return) if user_signed_in?
 
     redirect_to login_url
   end
@@ -10,7 +10,7 @@ class HomeController < ApplicationController
   def welcome
     @inhibit_nav = true
 
-    current_principal.update!(welcomed: true)
+    current_user.update!(welcomed: true)
   end
 
   def maintenance

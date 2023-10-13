@@ -42,6 +42,17 @@
   font-size: 0.9rem;
 }
 
+.fr-error-text {
+  font-size: 0.9rem;
+}
+
 :root {
   --text-mention-grey: #585858; /* complies with AAA 7:1 contrast ratio */
+}
+
+code {
+  font-size: 1rem;
+  font-family: Marianne;
+  font-style: italic;
+  Background: var(--artwork-background-beige-gris-galet);
 }

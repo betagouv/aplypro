@@ -5,10 +5,10 @@ require "rails_helper"
 RSpec.describe "ClassesControllers" do
   let(:classe) { create(:classe) }
   let(:establishment) { classe.establishment }
-  let(:principal) { create(:principal, establishment: establishment) }
+  let(:user) { create(:user, establishment: establishment) }
 
   before do
-    sign_in(principal)
+    sign_in(user)
   end
 
   describe "GET /index" do
@@ -26,7 +26,7 @@ RSpec.describe "ClassesControllers" do
 
     it { is_expected.to render_template(:show) }
 
-    context "when the classe doesn't belong to the establishment of the principal" do
+    context "when the classe doesn't belong to the establishment of the user" do
       before do
         get class_path(create(:classe))
       end

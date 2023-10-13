@@ -7,14 +7,14 @@
 - true_production = Rails.env.production? && ENV.fetch("APLYPRO_ENV") == "production"
 - unless true_production
   = button_to "Auth développeur",
-    principal_developer_omniauth_authorize_path,
+    user_developer_omniauth_authorize_path,
     method: :post,
     remote: false,
     data: { turbo: false },
     class: "fr-btn fr-my-3w"
 %p
   = button_to "Accéder au portail de connexion",
-    principal_fim_omniauth_authorize_path,
+    user_fim_omniauth_authorize_path,
     method: :post,
     remote: false,
     data: { turbo: false },
@@ -22,7 +22,7 @@
 
 %p
   = button_to "Accéder au portail de connexion MASA",
-    principal_masa_omniauth_authorize_path,
+    user_masa_omniauth_authorize_path,
     method: :post,
     remote: false,
     data: { turbo: false },

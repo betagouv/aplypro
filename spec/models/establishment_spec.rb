@@ -4,7 +4,7 @@ require "rails_helper"
 require "csv"
 
 RSpec.describe Establishment do
-  subject(:etab) { build(:establishment, :with_fim_principal) }
+  subject(:etab) { build(:establishment, :with_fim_user) }
 
   let!(:fixture) { Rails.root.join("mock/data/etab.json").read }
 
@@ -22,7 +22,6 @@ RSpec.describe Establishment do
 
   it { is_expected.to validate_presence_of(:uai) }
   it { is_expected.to validate_uniqueness_of(:uai) }
-  it { is_expected.to have_one(:principal) }
 
   describe "data refresh" do
     context "when it is created" do

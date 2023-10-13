@@ -1,7 +1,11 @@
 = dsfr_header logo_text: t("global.sponsor"), title: t("global.service_name"), tagline: t("global.service_description") do |header|
-  - if current_principal and not @inhibit_nav
+  - if current_user and not @inhibit_nav
     - %i(classes pfmps).each do |item|
       - path = send("#{item}_path")
       = header.with_direct_link_simple title: t("menu.#{item}"),
                                        path: path,
                                        html_attributes: { "aria-current" => current_path?(path) ? "page" : nil }.compact
+    - if current_user.establishment.present?
+      = header.with_direct_link_simple title: t("menu.invitations"),
+                                       path: establishment_invitations_path(@etab),
+                                       html_attributes: { "aria-current" => current_path?(establishment_invitations_path(@etab)) ? "page" : nil }.compact

@@ -6,7 +6,7 @@ require "./mock/factories/api_student"
 describe StudentApi::Sygne do
   subject(:api) { described_class.new(establishment) }
 
-  let(:establishment) { create(:establishment, :with_fim_principal) }
+  let(:establishment) { create(:establishment, :with_fim_user) }
   let(:payload) { JSON.generate({ access_token: "foobar", token_type: "Bearer" }) }
   let(:data) { Rails.root.join("mock/data/sygne-students-for-uai.json").read }
 

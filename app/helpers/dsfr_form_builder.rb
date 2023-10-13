@@ -164,6 +164,8 @@ class DsfrFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def input_width_class(opts)
+    return "" if opts[:width].blank?
+
     opts[:width].split.map { |spec| "fr-col-#{spec}" }.join(" ")
   end
 
