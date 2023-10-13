@@ -27,3 +27,13 @@
 .beta-banner {
   background-color: var(--background-default-grey-hover);
 }
+
+.fr-badge.is_disabled {
+  background-color: var(--background-contrast-grey-active);
+  color: white;
+}
+
+.inter-badge-arrow {
+  background-color: initial;
+  font-size: 1rem;
+}
