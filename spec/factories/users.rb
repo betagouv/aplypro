@@ -16,5 +16,15 @@ FactoryBot.define do
     trait :newbie do
       welcomed { false }
     end
+
+    transient do
+      role { "dir" }
+    end
+
+    after(:create) do |user, evaluator|
+      EstablishmentUser
+        .find_or_initialize_by(establishment: user.establishment, user: user)
+        .update!(role: evaluator.role)
+    end
   end
 end

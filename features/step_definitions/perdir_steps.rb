@@ -128,7 +128,7 @@ Quand("je n'ai pas encore vu l'écran d'accueil") do
   @etab.users.directors.first.update!(welcomed: false)
 end
 
-Sachantque("j'invite {string} à rejoindre l'application") do |email|
+Sachantque("j'autorise {string} à rejoindre l'application") do |email|
   steps %(
     Quand je vais consulter la liste des invitations
     Et que je clique sur "Autoriser un nouvel email"

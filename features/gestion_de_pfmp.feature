@@ -47,6 +47,13 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Et que je clique sur "Valider"
     Alors la page contient "La PFMP de Marie Curie a bien été validée"
 
+  Scénario: Le personnel autorisé ne peut pas valider une PFMP individuellement
+    Sachant que je me connecte en tant que personnel autorisé de l'établissement
+    Et que je passe l'écran d'accueil
+    Et que je renseigne une PFMP de 3 jours pour "Marie Curie"
+    Quand je clique sur "Voir la PFMP"
+    Alors la page ne contient pas "Valider"
+
   Scénario: Le personnel de direction peut supprimer une PFMP
     Quand je renseigne une PFMP de 4 jours pour "Marie Curie"
     Et que je clique sur "Voir la PFMP"

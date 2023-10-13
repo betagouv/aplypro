@@ -40,7 +40,7 @@ class Establishment < ApplicationRecord
   end
 
   def invites?(email)
-    invitations.find_by(email: email)
+    invitations.exists?(email: email)
   end
 
   def attributive_decisions

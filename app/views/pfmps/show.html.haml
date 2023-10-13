@@ -27,7 +27,7 @@
 
   %h2.fr-h5 Actions
   .fr-btns-group.fr-btns-group--inline
-    - if @pfmp.in_state?(:completed)
+    - if @pfmp.in_state?(:completed) and current_user.can_validate?
       = button_to "Valider", validate_class_student_pfmp_path(@classe, @student, @pfmp), class: 'fr-btn'
     = link_to "Modifier la PFMP", edit_class_student_pfmp_path(@classe, @student, @pfmp), class: 'fr-btn fr-btn--secondary'
     = link_to "Supprimer la PFMP", confirm_deletion_class_student_pfmp_path(@classe, @student, @pfmp), class: 'fr-btn fr-btn--secondary'

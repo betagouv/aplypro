@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  include UserAuthorisation
+
   devise :omniauthable, omniauth_providers: %i[developer fim masa]
 
   validates :uid, :provider, :name, :token, :secret, :email, presence: true
 
   has_many :establishment_users, dependent: :destroy
   has_many :establishments, through: :establishment_users
-
   has_many :invitations, dependent: :nullify
 
   belongs_to :establishment, optional: true
