@@ -71,11 +71,15 @@ module Users
 
     def save_roles!
       @mapper.establishments.each do |e|
-        EstablishmentUser.create!(user: @user, establishment: e, role: :dir)
+        EstablishmentUser
+          .where(user: @user, establishment: e, role: :dir)
+          .first_or_create
       end
 
       @mapper.authorised_establishments_for(@user.email).each do |e|
-        EstablishmentUser.create!(user: @user, establishment: e, role: :authorised)
+        EstablishmentUser
+          .where(user: @user, establishment: e, role: :authorised)
+          .first_or_create
       end
     end
 
@@ -103,7 +107,9 @@ module Users
 
         redirect_to classes_path, notice: t("auth.success")
       else
+        clear_previous_establishment!
         @user.establishments.each(&:fetch_data!)
+        @inhibit_nav = true
 
         render action: :select_etab
       end
@@ -113,6 +119,10 @@ module Users
       jobs = @mapper.establishments.map { |e| FetchStudentsJob.new(e) }
 
       ActiveJob.perform_all_later(jobs)
+    end
+
+    def clear_previous_establishment!
+      @user.update!(establishment: nil)
     end
 
     def auth_hash

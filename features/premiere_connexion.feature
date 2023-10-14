@@ -32,3 +32,10 @@ Fonctionnalité: Le personnel de direction se connecte
     Quand je me connecte en tant que personnel MENJ
     Alors la page contient "votre personnel de direction"
     Et il n'y a pas de personnel de direction enregistré dans la base de données
+
+  Scénario: Un personnel de direction du MENJ peut se reconnecter sans problèmes
+    Sachant que je suis un personnel MENJ directeur de l'établissement "123"
+    Et que je me connecte en tant que personnel MENJ
+    Et que je me déconnecte
+    Quand je me connecte en tant que personnel MENJ
+    Alors la page contient "Liste des classes"
