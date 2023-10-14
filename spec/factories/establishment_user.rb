@@ -4,5 +4,6 @@ FactoryBot.define do
   factory :establishment_user do
     establishment
     user
+    role { "dir" }
   end
 end

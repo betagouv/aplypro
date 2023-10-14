@@ -6,5 +6,7 @@ class EstablishmentUser < ApplicationRecord
 
   enum role: { dir: 0, authorised: 1 }
 
-  validates :role, presence: true
+  validates :role,
+            presence: true,
+            uniqueness: { scope: %i[establishment_id user_id] }
 end

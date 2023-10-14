@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_12_102522) do
+ActiveRecord::Schema[7.1].define(version: 2023_10_14_100213) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -57,6 +57,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_12_102522) do
     t.bigint "granted_by_id"
     t.integer "role", null: false
     t.string "establishment_id", null: false
+    t.index ["establishment_id", "user_id", "role"], name: "idx_on_establishment_id_user_id_role_6ec408f62c", unique: true
     t.index ["granted_by_id"], name: "index_establishment_users_on_granted_by_id"
     t.index ["user_id"], name: "index_establishment_users_on_user_id"
   end

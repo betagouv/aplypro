@@ -5,12 +5,11 @@ module UserAuthorisation
 
   included do
     def current_role
-      # this is awful
-      establishment_users.find_by({ establishment_id: establishment.id }).role
+      establishment_users.find_by({ establishment_id: establishment.id })
     end
 
     def director?
-      current_role == "dir"
+      current_role.dir?
     end
 
     def can_authorise?

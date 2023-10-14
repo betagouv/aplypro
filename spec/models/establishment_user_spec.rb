@@ -12,5 +12,16 @@ RSpec.describe EstablishmentUser do
 
   describe "validations" do
     it { is_expected.to validate_presence_of(:role) }
+
+    it {
+      # Rubocop is unhappy because you can't use implicit subjects
+      # outside of one-line blocks, but if this was to be a one-liner then
+      # the line would be too long... tough times.
+      is_expected.to( # rubocop:disable RSpec/ImplicitSubject
+        validate_uniqueness_of(:role)
+          .scoped_to(:establishment_id, :user_id)
+          .ignoring_case_sensitivity
+      )
+    }
   end
 end

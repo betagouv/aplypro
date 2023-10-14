@@ -104,9 +104,8 @@ fr:
       not_authorised_error:
         title: "Erreur d'authentification"
         content: |
-          Votre adresse e-mail n'est pas connue
-          d'Aplypro. Assurez-vous que votre personnel de direction l'a
-          explicitement autorisé dans leur interface Aplypro.
+          Votre adresse e-mail n'est pas reconnue par Aplypro : votre
+          personnel de direction doit l'avoir autorisée au préalable.
       empty_responsibilities_error:
         title: "Erreur d'authentification"
         content: |
