@@ -123,3 +123,7 @@ Sachantque("je me connecte en tant que personnel autorisé de l'établissement")
     Et que je me connecte en tant que personnel MENJ
   )
 end
+
+Sachantque("l'accès est limité aux UAIs {string}") do |str|
+  ENV.update("APLYPRO_RESTRICTED_ACCESS" => str)
+end

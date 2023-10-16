@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Users
+  # rubocop:disable Metrics/ClassLength
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     include DeveloperOidc
 
@@ -27,6 +28,7 @@ module Users
 
       check_user!
       save_roles!
+      check_limited_access!
       choose_roles!
       fetch_students!
     end
@@ -47,6 +49,8 @@ module Users
       Sentry.capture_exception(error)
 
       key = error.class.to_s.demodulize.underscore
+
+      sign_out(current_user) if user_signed_in?
 
       redirect_to login_path, alert: t("auth.errors.#{key}")
     end
@@ -125,8 +129,22 @@ module Users
       @user.update!(establishment: nil)
     end
 
+    def check_limited_access!
+      allowed_uais = ENV
+                     .fetch("APLYPRO_RESTRICTED_ACCESS", "")
+                     .split(",")
+                     .map(&:strip)
+
+      return if allowed_uais.blank?
+
+      allowed = @user.establishments.find { |e| allowed_uais.include?(e.uai) }
+
+      raise IdentityMappers::Errors::NoLimitedAccessError unless allowed
+    end
+
     def auth_hash
       request.env["omniauth.auth"]
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

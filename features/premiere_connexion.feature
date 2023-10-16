@@ -39,3 +39,9 @@ Fonctionnalité: Le personnel de direction se connecte
     Et que je me déconnecte
     Quand je me connecte en tant que personnel MENJ
     Alors la page contient "Liste des classes"
+
+  Scénario: Un personnel de direction du MENJ hors de la bêta privée ne peut pas rentrer dans l'application
+    Sachant que je suis un personnel MENJ directeur de l'établissement "123"
+    Et que l'accès est limité aux UAIs "456"
+    Quand je me connecte en tant que personnel MENJ
+    Alors la page contient "Accès restreint"
