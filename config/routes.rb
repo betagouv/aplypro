@@ -48,5 +48,6 @@ Rails.application.routes.draw do
   get "/maintenance", to: "home#maintenance"
   get "/login", to: "home#login"
   get "/select_etab", to: "home#select_etab"
+  get "/legal", to: "home#legal"
 end
 # rubocop:enable Metrics/BlockLength

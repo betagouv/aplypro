@@ -20,4 +20,6 @@ class HomeController < ApplicationController
   def login
     infer_page_title
   end
+
+  def legal; end
 end
