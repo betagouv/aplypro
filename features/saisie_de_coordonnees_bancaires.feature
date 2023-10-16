@@ -11,13 +11,13 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
     Et que je clique sur "Voir le profil" dans la rangée "Curie Marie"
 
   Scénario: Le personnel de direction saisit un RIB pour la première fois
-    Sachant que la page contient "Aucune coordonnées bancaires enregistrées"
-    Et que je clique sur "Renseigner les coordonnées bancaires"
+    Sachant que la page contient "Aucune coordonnée bancaire enregistrée"
+    Et que je clique sur "Saisir les coordonnées bancaires"
     Lorsque je renseigne des coordonnées bancaires
     Alors la page contient "Coordonnées bancaires enregistrées avec succès"
 
   Scénario: Le personnel de direction peut modifier un RIB
-    Sachant que je clique sur "Renseigner les coordonnées bancaires"
+    Sachant que je clique sur "Saisir les coordonnées bancaires"
     Et que je renseigne des coordonnées bancaires
     Et que je clique sur "Modifier les coordonnées bancaires"
     Et que je remplis "Titulaire du compte" avec "Murie Carrie"
