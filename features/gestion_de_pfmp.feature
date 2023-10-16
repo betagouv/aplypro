@@ -17,7 +17,7 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
 
   Scénario: Le personnel de direction peut rajouter une PFMP
     Quand je renseigne une PFMP de 3 jours pour "Marie Curie"
-    Alors la page contient "La PFMP a été enregistrée avec succès"
+    Alors la page contient "La PFMP a bien été enregistrée"
     Et je peux voir dans le tableau "Liste des PFMPs de l'élève"
       | État      | Nombre de jours | Montant |
       | Complétée |               3 | 45,00 € |

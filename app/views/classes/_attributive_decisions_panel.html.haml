@@ -1,0 +1,5 @@
+- if @etab.never_generated_attributive_decisions? && !@etab.generating_attributive_decisions
+  = dsfr_alert(type: :info, title: "Génération des décisions d'attribution", classes: 'fr-my-3w fr-col-md-7') do
+    %p Les décisions d'attribution sont les documents qui ouvrent les droits à l'allocation. Un document est généré par élève. Voulez-vous générer ces documents maintenant ?
+
+    = button_to "Générer les décisions d'attribution", establishment_create_attributive_decisions_path(@etab), class: 'fr-btn fr-btn--secondary fr-mt-2w'

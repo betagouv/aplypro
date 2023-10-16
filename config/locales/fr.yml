@@ -130,7 +130,7 @@ fr:
     edit:
       success: La PFMP a bien été mise à jour
     new:
-      success: La PFMP a été enregistrée avec succès
+      success: La PFMP a bien été enregistrée
     states:
       pending: Nombre de jours à compléter
       completed: Complétées
