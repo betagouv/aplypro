@@ -19,5 +19,9 @@ module UserAuthorisation
     def can_validate?
       director?
     end
+
+    def can_generate_attributive_decisions?
+      director?
+    end
   end
 end
