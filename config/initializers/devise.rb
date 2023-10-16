@@ -276,7 +276,12 @@ Devise.setup do |config|
 
   unless true_production
     config.omniauth :developer,
-                    fields: [:uai, { provider: %i[fim masa] }]
+                    fields: [
+                      :uai,
+                      :email,
+                      { "Portail de connexion" => ["MENJ (FIM)", "MASA (CAS)"] },
+                      { "Role assumé" => ["Personnel de direction", "Personnel autorisé"] }
+                    ]
   end
 
   config.omniauth :openid_connect, {
