@@ -2,8 +2,8 @@
 
 require "rails_helper"
 
-RSpec.describe EstablishmentUser do
-  subject(:function) { build(:establishment_user, :director) }
+RSpec.describe EstablishmentUserRole do
+  subject(:function) { build(:establishment_user_role, :director) }
 
   describe "associations" do
     it { is_expected.to belong_to(:establishment).class_name("Establishment") }

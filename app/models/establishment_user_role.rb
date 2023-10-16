@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class EstablishmentUser < ApplicationRecord
+class EstablishmentUserRole < ApplicationRecord
   belongs_to :establishment
   belongs_to :user
 

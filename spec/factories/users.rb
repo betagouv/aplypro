@@ -19,7 +19,7 @@ FactoryBot.define do
 
     trait :director do
       after(:create) do |user, _|
-        EstablishmentUser
+        EstablishmentUserRole
           .find_or_initialize_by(establishment: user.establishment, user: user)
           .update!(role: :dir)
       end
@@ -27,7 +27,7 @@ FactoryBot.define do
 
     trait :authorised do
       after(:create) do |user, _|
-        EstablishmentUser
+        EstablishmentUserRole
           .find_or_initialize_by(establishment: user.establishment, user: user)
           .update!(role: :authorised)
       end

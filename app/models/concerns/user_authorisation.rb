@@ -5,7 +5,7 @@ module UserAuthorisation
 
   included do
     def current_role
-      establishment_users.find_by({ establishment_id: establishment.id })
+      establishment_user_roles.find_by({ establishment_id: establishment.id })
     end
 
     def director?

@@ -7,8 +7,8 @@ class User < ApplicationRecord
 
   validates :uid, :provider, :name, :token, :secret, :email, presence: true
 
-  has_many :establishment_users, dependent: :destroy
-  has_many :establishments, through: :establishment_users
+  has_many :establishment_user_roles, dependent: :destroy
+  has_many :establishments, through: :establishment_user_roles
   has_many :invitations, dependent: :nullify
 
   belongs_to :establishment, optional: true

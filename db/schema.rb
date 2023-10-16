@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_14_100213) do
+ActiveRecord::Schema[7.1].define(version: 2023_10_16_101548) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,14 +52,14 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_14_100213) do
     t.index ["mef_id"], name: "index_classes_on_mef_id"
   end
 
-  create_table "establishment_users", id: false, force: :cascade do |t|
+  create_table "establishment_user_roles", id: false, force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "granted_by_id"
     t.integer "role", null: false
     t.string "establishment_id", null: false
-    t.index ["establishment_id", "user_id", "role"], name: "idx_on_establishment_id_user_id_role_6ec408f62c", unique: true
-    t.index ["granted_by_id"], name: "index_establishment_users_on_granted_by_id"
-    t.index ["user_id"], name: "index_establishment_users_on_user_id"
+    t.index ["establishment_id", "user_id", "role"], name: "idx_on_establishment_id_user_id_role_28eb292707", unique: true
+    t.index ["granted_by_id"], name: "index_establishment_user_roles_on_granted_by_id"
+    t.index ["user_id"], name: "index_establishment_user_roles_on_user_id"
   end
 
   create_table "establishments", primary_key: "uai", id: :string, force: :cascade do |t|
@@ -205,9 +205,9 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_14_100213) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "classes", "establishments", primary_key: "uai"
   add_foreign_key "classes", "mefs"
-  add_foreign_key "establishment_users", "establishments", primary_key: "uai"
-  add_foreign_key "establishment_users", "users"
-  add_foreign_key "establishment_users", "users", column: "granted_by_id"
+  add_foreign_key "establishment_user_roles", "establishments", primary_key: "uai"
+  add_foreign_key "establishment_user_roles", "users"
+  add_foreign_key "establishment_user_roles", "users", column: "granted_by_id"
   add_foreign_key "invitations", "establishments", primary_key: "uai"
   add_foreign_key "invitations", "users"
   add_foreign_key "payment_transitions", "payments"
