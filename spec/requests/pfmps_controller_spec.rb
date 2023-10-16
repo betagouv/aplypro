@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "PfmpsController" do
   let(:schooling) { create(:schooling) }
   let(:student) { schooling.student }
-  let(:user) { create(:user, establishment: student.classe.establishment) }
+  let(:user) { create(:user, :director, establishment: student.classe.establishment) }
   let(:pfmp) { create(:pfmp, student: student) }
 
   before do
@@ -40,8 +40,8 @@ RSpec.describe "PfmpsController" do
       end
     end
 
-    context "when validating as an autorised personnel" do
-      let(:user) { create(:user, role: "authorised", establishment: student.classe.establishment) }
+    context "when validating as an authorised personnel" do
+      let(:user) { create(:user, :authorised, establishment: student.classe.establishment) }
 
       it "returns 403 (Forbidden)" do
         post validate_class_student_pfmp_path(class_id: schooling.classe.id, student_id: student.id, id: pfmp.id)

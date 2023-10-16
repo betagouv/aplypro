@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe EstablishmentUser do
-  subject(:function) { build(:establishment_user) }
+  subject(:function) { build(:establishment_user, :director) }
 
   describe "associations" do
     it { is_expected.to belong_to(:establishment).class_name("Establishment") }
