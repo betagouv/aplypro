@@ -51,7 +51,7 @@ end
 Quand("je renseigne les coordonnées bancaires de l'élève {string} de la classe {string}") do |name, _label|
   steps %(
     Quand je consulte le profil de l'élève "#{name}"
-    Et que je clique sur "Renseigner les coordonnées bancaires"
+    Et que je clique sur "Saisir les coordonnées bancaires"
     Et que je renseigne des coordonnées bancaires
   )
 end

@@ -7,11 +7,8 @@
 
 .fr-grid-row
   .fr-col-md-6.fr-mb-3w
-    = dsfr_alert(type: :warning, title: "La PFMP est dupliquée pour chaque élève") do
-      La PFMP que vous allez renseigner est dupliquée pour chaque
-      élève de la classe. Il n'est pas possible de la modifier à
-      l'échelle de la classe passé ce formulaire : vous devrez les
-      ajuster au cas par cas.
+    = dsfr_alert(type: :warning, title: "La PFMP saisie au niveau de la classe est dupliquée pour chaque élève de la classe") do
+      Important : Une PFMP saisie au niveau de la classe peut être modifiée au niveau de chaque élève.
 
 = form_with model: @pfmp, url: create_bulk_pfmp_class_path(@classe), builder: DsfrFormBuilder do |form|
   = form.dsfr_error_summary

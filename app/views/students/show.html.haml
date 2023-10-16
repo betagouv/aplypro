@@ -4,9 +4,9 @@
   %h2.fr-h4 Coordonnées bancaires
 
   - if @student.rib.nil?
-    %p Aucune coordonnées bancaires enregistrées pour le moment.
+    %p Aucune coordonnée bancaire enregistrée pour le moment.
 
-    = link_to "Renseigner les coordonnées bancaires", new_class_student_rib_path(@classe.id, @student.id), class: 'fr-btn'
+    = link_to "Saisir les coordonnées bancaires", new_class_student_rib_path(@classe.id, @student.id), class: 'fr-btn'
   - else
     %ul
       %li

@@ -134,7 +134,7 @@ class DsfrFormBuilder < ActionView::Helpers::FormBuilder
   def hint(attribute)
     text = hint_for(@object, attribute)
 
-    return if text.blank?
+    return "" if text.blank?
 
     @template.content_tag(:span, class: "fr-hint-text") do
       text

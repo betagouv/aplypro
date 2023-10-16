@@ -36,11 +36,9 @@ fr:
               greater_than_or_equal_to: "doit être ultérieure à la date de début"
     hints:
       rib:
-        name: "Nom du titulaire du compte"
+        name: "Noms et prénoms du titulaire du compte"
         iban: "Un IBAN français contient 27 caractères et commence par FR"
         bic: "Le code BIC est composé de 8 ou de 11 caractères"
-        personal: |
-          L'appartenance du RIB est requise pour informer le paiement
       pfmp:
         day_count: "Le nombre de jours présent sur l'attestation. Il doit être entier (pas de demi-journées)."
     attributes:
@@ -54,7 +52,7 @@ fr:
         bic: "BIC"
         personal: "Propriété des coordonnées bancaires"
         personal_true: "Les coordonnées bancaires appartiennent à l'élève"
-        personal_false: "Les coordonnées bancaires appartiennent au représentant légal de l'élève"
+        personal_false: "Les coordonnées bancaires appartiennent à un représentant légal ou à un tiers"
       establishment:
         uai: "UAI"
         name: "Nom"
@@ -76,7 +74,7 @@ fr:
       classes:
         index: Liste des classes
         show: "%{name}"
-        bulk_pfmp: Ajout d'une PFMP provisoire pour toute la classe
+        bulk_pfmp: Ajout d'une PFMP pour toute la classe
       students:
         show: "%{name}"
       pfmps:
@@ -85,7 +83,7 @@ fr:
         show: "PFMP pour %{name}"
         edit: "Modifier la PFMP de %{name}"
         validate: "Validation"
-        validate_all: "Validation des PFMPs complétées"
+        validate_all: "Validation des PFMPs saisies"
         confirm_deletion: "Suppression de la PFMP"
       ribs:
         new: "Ajout de coordonnées bancaires"
@@ -139,11 +137,11 @@ fr:
       success: La PFMP a bien été enregistrée
     states:
       pending: Nombre de jours à compléter
-      completed: Complétées
+      completed: Saisies à valider
       validated: Validées
     state:
       pending: À compléter
-      completed: Complétée
+      completed: Saisie à valider
       validated: Validée
     state_explanations:
       pending: |
@@ -154,10 +152,7 @@ fr:
         PFMP est maintenant sujet à l'approbation du chef
         d'établissement sans quoi le paiement ne peut pas être déclenché.
       validated: |
-        Le nombre de jours réalisés a été renseigné et l'approbation
-        du chef de l'établissement a été donnée pour déclencher le
-        paiement résultant. La PFMP n'est pas modifiable si une
-        tentative de paiement est en cours.</strong>
+        La PFMP a été validée. La demande de paiement sera envoyée à l'ASP à partir de janvier 2024.
 
     payments:
       blocked: "Informations de paiement manquantes"

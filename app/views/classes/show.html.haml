@@ -1,5 +1,5 @@
 .actions.fr-mb-4w
-  = link_to 'Renseigner une PFMP pour toute la classe', bulk_pfmp_class_path(@classe), class: 'fr-btn fr-btn--secondary'
+  = link_to 'Saisir une PFMP pour toute la classe', bulk_pfmp_class_path(@classe), class: 'fr-btn fr-btn--secondary'
 
 .fr-table.fr-table--no-caption
   %table
@@ -18,9 +18,9 @@
             %ul
               - student.pfmps.each do |pfmp|
                 %li= dsfr_link_to pfmp.listing_to_s, class_student_pfmp_path(@classe, student, pfmp)
-              %li= dsfr_link_to "Rajouter une PFMP", new_class_student_pfmp_path(@classe, student)
+              %li= dsfr_link_to "Ajouter une PFMP individuelle", new_class_student_pfmp_path(@classe, student)
           %td
             - if student.rib.present?
               = dsfr_badge(status: :success) { "Oui"}
             - else
-              = dsfr_link_to "Rajouter le RIB", new_class_student_rib_path(@classe, student)
+              = dsfr_link_to "Saisir le RIB", new_class_student_rib_path(@classe, student)
