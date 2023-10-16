@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "ClassesControllers" do
   let(:classe) { create(:classe) }
   let(:establishment) { classe.establishment }
-  let(:user) { create(:user, establishment: establishment) }
+  let(:user) { create(:user, :director, establishment: establishment) }
 
   before do
     sign_in(user)

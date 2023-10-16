@@ -4,6 +4,9 @@ FactoryBot.define do
   factory :establishment_user do
     establishment
     user
-    role { "dir" }
+
+    trait :director do
+      role { "dir" }
+    end
   end
 end
