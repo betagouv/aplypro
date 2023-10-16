@@ -13,10 +13,10 @@ module OmniAuth
 
       label_field(key, key.capitalize)
 
-      @html << "\n<select name='#{key}'>\n"
+      @html << "\n<select style='padding: 5px; margin: 5px auto 20px;' name='#{key}'>\n"
 
       values.each do |value|
-        @html << "\n<option value='#{value}'>#{value}</option>"
+        @html << "\n<option style='padding: 10px auto' value='#{value}'>#{value}</option>"
       end
 
       @html << "\n</select>"
