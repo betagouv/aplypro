@@ -7,15 +7,15 @@ class Establishment < ApplicationRecord
 
   has_many :invitations, dependent: :nullify
 
-  has_many :establishment_users, dependent: :destroy
+  has_many :establishment_user_roles, dependent: :destroy
 
-  has_many :users, through: :establishment_users do
+  has_many :users, through: :establishment_user_roles do
     def authorised
-      where(establishment_users: { role: :authorised })
+      where(establishment_user_roles: { role: :authorised })
     end
 
     def directors
-      where(establishment_users: { role: :dir })
+      where(establishment_user_roles: { role: :dir })
     end
   end
 

@@ -11,17 +11,13 @@ FactoryBot.define do
 
     trait :with_fim_user do
       after(:create) do |establishment|
-        user = create(:user, provider: "fim")
-
-        create(:establishment_user, establishment: establishment, user: user, role: :dir)
+        create(:user, :director, provider: "fim", establishment: establishment)
       end
     end
 
     trait :with_masa_user do
       after(:create) do |establishment|
-        user = create(:user, provider: "masa")
-
-        create(:establishment_user, establishment: establishment, user: user, role: :dir)
+        create(:user, :director, provider: "masa", establishment: establishment)
       end
     end
   end

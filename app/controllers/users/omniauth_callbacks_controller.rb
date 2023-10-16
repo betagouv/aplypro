@@ -71,13 +71,13 @@ module Users
 
     def save_roles!
       @mapper.establishments.each do |e|
-        EstablishmentUser
+        EstablishmentUserRole
           .where(user: @user, establishment: e, role: :dir)
           .first_or_create
       end
 
       @mapper.authorised_establishments_for(@user.email).each do |e|
-        EstablishmentUser
+        EstablishmentUserRole
           .where(user: @user, establishment: e, role: :authorised)
           .first_or_create
       end
@@ -100,18 +100,18 @@ module Users
     end
 
     def choose_roles!
-      roles = @user.establishment_users
+      establishments = @user.establishments
 
-      if roles.one?
-        @user.update!(establishment: roles.first.establishment)
-
-        redirect_to classes_path, notice: t("auth.success")
-      else
+      if establishments.many?
         clear_previous_establishment!
-        @user.establishments.each(&:fetch_data!)
+        establishments.each(&:fetch_data!)
         @inhibit_nav = true
 
         render action: :select_etab
+      else
+        @user.update!(establishment: establishments.first)
+
+        redirect_to classes_path, notice: t("auth.success")
       end
     end
 
