@@ -9,6 +9,7 @@
         = @page_title
       \- #{t("global.service_name")}
     %meta{:content => "width=device-width, initial-scale=1, shrink-to-fit=no", :name => "viewport"}/
+    %meta{:content => "noindex, nofollow", :name => "robots"}/
     = csrf_meta_tags
     = csp_meta_tag
     = stylesheet_link_tag "dsfr.min.css", "data-turbo-track": "reload"
