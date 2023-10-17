@@ -15,9 +15,31 @@ RSpec.describe Invitation do
     it { is_expected.to validate_uniqueness_of(:email).scoped_to(:establishment_id) }
   end
 
-  context "when the email ends with an authorised domain" do
-    subject(:invitation) { build(:invitation, email: "user@education.gouv.fr.gmail.com") }
+  describe "valid domains" do
+    %w[
+      test@gouv.fr
+      test@education.gouv.fr
+      test@educagri.fr
+      test@ac-montpellier.fr
+      test@sub.ac-montpellier.fr
+      test@sub.educagri.fr
+    ].each do |email|
+      it "allows `#{email}`" do
+        expect(build(:invitation, email: email)).to be_valid
+      end
+    end
+  end
 
-    it { is_expected.not_to be_valid }
+  describe "invalid domains" do
+    %w[
+      test@legouv.fr
+      test@educagri.io.fr
+      test@ac-perpignan.fr
+      test@academie-montpellier.fr
+    ].each do |email|
+      it "does not allow `#{email}`" do
+        expect(build(:invitation, email: email)).not_to be_valid
+      end
+    end
   end
 end

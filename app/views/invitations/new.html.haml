@@ -5,7 +5,7 @@
 
   = dsfr_alert(type: :warning, title: "Seuls les emails académiques sont autorisés", classes: 'fr-my-3w') do
     %p
-      Ces emails doivent impérativement finir par
+      L'email renseigné doit impérativement finir par :
       %ul
         - Invitation::VALID_DOMAINS.each do |domain|
           %li
