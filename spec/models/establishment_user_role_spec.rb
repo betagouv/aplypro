@@ -18,8 +18,8 @@ RSpec.describe EstablishmentUserRole do
       # outside of one-line blocks, but if this was to be a one-liner then
       # the line would be too long... tough times.
       is_expected.to( # rubocop:disable RSpec/ImplicitSubject
-        validate_uniqueness_of(:role)
-          .scoped_to(:establishment_id, :user_id)
+        validate_uniqueness_of(:user)
+          .scoped_to(:establishment_id)
           .ignoring_case_sensitivity
       )
     }

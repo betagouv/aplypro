@@ -57,7 +57,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_16_101548) do
     t.bigint "granted_by_id"
     t.integer "role", null: false
     t.string "establishment_id", null: false
-    t.index ["establishment_id", "user_id", "role"], name: "idx_on_establishment_id_user_id_role_28eb292707", unique: true
+    t.index ["establishment_id", "user_id"], name: "index_establishment_user_roles_on_establishment_id_and_user_id", unique: true
     t.index ["granted_by_id"], name: "index_establishment_user_roles_on_granted_by_id"
     t.index ["user_id"], name: "index_establishment_user_roles_on_user_id"
   end
