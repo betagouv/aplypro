@@ -19,6 +19,7 @@
     = javascript_importmap_tags
   %body
     = render 'shared/skiplinks'
+    = render 'shared/analytics' if Rails.env.production?
     - if user_signed_in?
       = render 'shared/etab_banner'
     = render 'shared/header'
