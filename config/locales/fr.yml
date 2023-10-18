@@ -90,8 +90,8 @@ fr:
 
   global:
     sponsor: "Direction\nInterministérielle\ndu Numérique"
-    service_name: "Aplypro"
-    service_description: "Allocation pour les lycéens professionnels"
+    service_name: "APLyPro"
+    service_description: "Application pour les lycéens professionnels"
   auth:
     errors:
       omniauth_error:
@@ -102,19 +102,19 @@ fr:
       no_limited_access_error:
         title: Accès restreint
         content: |
-          Aplypro est actuellement en test avec une sélection
+          APLyPro est actuellement en test avec une sélection
           d'établissements pilotes. Le lancement national aura lieu
           prochainement.
       not_authorised_error:
         title: "Erreur d'authentification"
         content: |
-          Votre adresse e-mail n'est pas reconnue par Aplypro : votre
+          Votre adresse e-mail n'est pas reconnue par APLyPro : votre
           personnel de direction doit l'avoir autorisée au préalable.
       empty_responsibilities_error:
         title: "Erreur d'authentification"
         content: |
           Le guichet d'authentification n'indique aucun établissement sous
-          votre direction. Aplypro n'est ouvert qu'aux personnels de
+          votre direction. APLyPro n'est ouvert qu'aux personnels de
           direction pour le moment. Il peut s'agir d'une erreur dans la
           configuration de votre profil. Nos équipes ont été
           notifiées.

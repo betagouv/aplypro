@@ -4,7 +4,7 @@ Fonctionnalité: Le personnel de direction se connecte
   Scénario: Le personnel de direction du MENJ peut se connecter
     Sachant que je suis un personnel MENJ directeur de l'établissement "1234567"
     Quand je me connecte en tant que personnel MENJ
-    Alors la page contient "Bienvenue sur Aplypro"
+    Alors la page contient "Bienvenue sur APLyPro"
     Et que je clique sur "Continuer"
     Alors le titre de la page contient "Liste des classes"
     Et la page contient "Nous récupérons la liste de vos élèves"
@@ -12,7 +12,7 @@ Fonctionnalité: Le personnel de direction se connecte
   Scénario: Le personnel de direction du MASA peut se connecter
     Sachant que je suis un personnel MASA directeur de l'établissement "1234567"
     Quand je me connecte en tant que personnel MASA
-    Alors la page contient "Bienvenue sur Aplypro"
+    Alors la page contient "Bienvenue sur APLyPro"
     Et que je clique sur "Continuer"
     Alors le titre de la page contient "Liste des classes"
     Et la page contient "Nous récupérons la liste de vos élèves"

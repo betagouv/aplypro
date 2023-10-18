@@ -11,7 +11,7 @@ Fonctionnalité: Gestion des accès à l'application
 
   Scénario: Je peux me connecter à l'application si mon email a été autorisé
     Lorsque je me connecte en tant que personnel MENJ
-    Alors la page contient "Bienvenue sur Aplypro"
+    Alors la page contient "Bienvenue sur APLyPro"
 
   Scénario: Je ne peux me connecter à l'application si mon email n'a pas été autorisé
     Sachant que je suis un personnel MENJ de l'établissement "DINUM" avec l'email "louis.pasteur@education.gouv.fr"
