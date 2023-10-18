@@ -16,15 +16,19 @@
 
 .fr-btn--danger:hover {
   background-color: var(--background-action-high-red-marianne-hover) !important;
-  text-color: white;
+  color: white;
 }
 
 .fr-btn--danger:active {
   background-color: var(--background-action-high-red-marianne-active) !important;
-  text-color: white;
+  color: white;
 }
 
 .beta-banner {
+  background-color: var(--background-default-grey-hover);
+}
+
+.connection-panel {
   background-color: var(--background-default-grey-hover);
 }
 
@@ -37,3 +41,5 @@
   background-color: initial;
   font-size: 1rem;
 }
+>>>>>>> variant B
+======= end
