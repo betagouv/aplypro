@@ -1,4 +1,4 @@
-# Aplypro
+# APLyPro
 
 Allocation pour les lycéens professionnels.
 
