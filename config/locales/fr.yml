@@ -70,7 +70,7 @@ fr:
         index: Gestion des accès
         new: Autoriser un email
       home:
-        login: Connexion
+        login: Connexion à APLyPro
       classes:
         index: Liste des classes
         show: "%{name}"
