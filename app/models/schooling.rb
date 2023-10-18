@@ -25,7 +25,7 @@ class Schooling < ApplicationRecord
 
     attributive_decision.attach(
       io: output,
-      key: [ENV.fetch("APLYPRO_ENV"), name].join("/"),
+      key: [Rails.env, name].join("/"),
       filename: name,
       content_type: "application/pdf"
     )

@@ -17,6 +17,4 @@ Sentry.init do |config|
 
   # this is provided by Scalingo
   config.release = ENV.fetch("CONTAINER_VERSION", nil)
-
-  config.environment = ENV.fetch("APLYPRO_ENV")
 end
