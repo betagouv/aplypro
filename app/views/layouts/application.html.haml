@@ -20,7 +20,7 @@
   %body
     = render 'shared/skiplinks'
     = render 'shared/analytics' if Rails.env.production?
-    - if user_signed_in?
+    - if @etab
       = render 'shared/etab_banner'
     = render 'shared/header'
     .fr-container
