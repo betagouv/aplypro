@@ -16,12 +16,12 @@
 
 .fr-btn--danger:hover {
   background-color: var(--background-action-high-red-marianne-hover) !important;
-  text-color: white;
+  color: white;
 }
 
 .fr-btn--danger:active {
   background-color: var(--background-action-high-red-marianne-active) !important;
-  text-color: white;
+  color: white;
 }
 
 .beta-banner {
