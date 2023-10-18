@@ -28,6 +28,10 @@
   background-color: var(--background-default-grey-hover);
 }
 
+.connection-panel {
+  background-color: var(--background-default-grey-hover);
+}
+
 .fr-badge.is_disabled {
   background-color: var(--background-contrast-grey-active);
   color: white;
@@ -37,3 +41,5 @@
   background-color: initial;
   font-size: 1rem;
 }
+>>>>>>> variant B
+======= end

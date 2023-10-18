@@ -1,28 +1,59 @@
-%h1 Connexion requise
+%h1 Connexion à APLyPro
 
-.fr-col-md-6
-  %p
-    Vous devez vous connecter pour accéder à APLyPro et à la gestion
-    des PFMPs.
-- unless Rails.env.production?
-  = button_to "Auth développeur",
-    user_developer_omniauth_authorize_path,
-    method: :post,
-    remote: false,
-    data: { turbo: false },
-    class: "fr-btn fr-my-3w"
-%p
-  = button_to "Accéder au portail de connexion",
-    user_fim_omniauth_authorize_path,
-    method: :post,
-    remote: false,
-    data: { turbo: false },
-    class: "fr-btn"
+.fr-grid-row.fr-grid-row--gutters
+  .fr-col-md-6.fr-col-12
+    .connection-panel.fr-p-3w
+      =image_tag "90px-Bloc_Marianne.png"
+      %h2 
+        MINISTÈRE 
+        %br
+        DE L'ÉDUCATION
+        %br
+        NATIONALE
+        %br
+        ET DE LA JEUNESSE
+      %p
+        Je suis chef d'établissement, adjoint, ou personnel invité.
+      %ul.fr-btns-group
+        %li
+          = button_to "Se Connecter",
+            user_fim_omniauth_authorize_path,
+            method: :post,
+            remote: false,
+            data: { turbo: false },
+            class: "fr-btn fr-mb-0"
 
-%p
-  = button_to "Accéder au portail de connexion MASA",
-    user_masa_omniauth_authorize_path,
-    method: :post,
-    remote: false,
-    data: { turbo: false },
-    class: "fr-btn"
+  .fr-col-md-6.fr-col-12
+    .connection-panel.fr-p-3w
+      =image_tag "90px-Bloc_Marianne.png" 
+      %h2
+        MINISTÈRE 
+        %br
+        DE L'AGRICULTURE
+        %br
+        ET DE LA SOUVERAINETÉ
+        %br
+        ALIMENTATAIRE
+      %p Je suis chef d'établissement, adjoint, ou personnel invité.
+      %ul.fr-btns-group
+        %li
+          = button_to "Se Connecter",
+            user_masa_omniauth_authorize_path,
+            method: :post,
+            remote: false,
+            data: { turbo: false },
+            class: "fr-btn fr-mb-0" 
+
+  - unless Rails.env.production?
+    .fr-col-md-6.fr-col-12
+      .connection-panel.fr-p-3w
+        %h2 Développeur de la DINUM
+        %p Je suis un développeur de la DINUM et je sais ce que je fait.
+        %ul.fr-btns-group
+          %li
+            = button_to "Se Connecter",
+              user_developer_omniauth_authorize_path,
+              method: :post,
+              remote: false,
+              data: { turbo: false },
+              class: "fr-btn fr-mb-0"
