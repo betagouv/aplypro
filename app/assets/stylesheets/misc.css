@@ -23,3 +23,7 @@
   background-color: var(--background-action-high-red-marianne-active) !important;
   text-color: white;
 }
+
+.beta-banner {
+  background-color: var(--background-default-grey-hover);
+}

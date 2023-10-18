@@ -1,0 +1,8 @@
+.beta-banner
+  .fr-container
+    .fr-grid-row
+      .fr-col-12.fr-py-2w
+        = dsfr_badge(status: :warning, classes: ['fr-badge--no-icon']) { "Beta" }
+        Ce service est nouveau –
+        = mail_to ENV.fetch("APLYPRO_SUPPORT_EMAIL", "aplypro@beta.gouv.fr"), "faites-nous part de vos retours"
+        pour nous aider à l'améliorer.
