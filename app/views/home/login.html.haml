@@ -1,60 +1,8 @@
 .fr-grid-row.fr-grid-row--gutters
-  .fr-col-md-6.fr-col-12
-    .connection-panel.fr-p-4w
-      =image_tag "90px-Bloc_Marianne.png"
-      %h2 
-        MINISTÈRE 
-        %br
-        DE L'ÉDUCATION
-        %br
-        NATIONALE
-        %br
-        ET DE LA JEUNESSE
-      %p
-        Je suis chef d'établissement, adjoint, ou personnel invité.
-      %ul.fr-btns-group
-        %li
-          = button_to "Se Connecter",
-            user_fim_omniauth_authorize_path,
-            title: "Se Connecter (MENJ)",
-            method: :post,
-            remote: false,
-            data: { turbo: false },
-            class: "fr-btn fr-mb-0"
-
-  .fr-col-md-6.fr-col-12
-    .connection-panel.fr-p-4w
-      =image_tag "90px-Bloc_Marianne.png" 
-      %h2
-        MINISTÈRE 
-        %br
-        DE L'AGRICULTURE
-        %br
-        ET DE LA SOUVERAINETÉ
-        %br
-        ALIMENTATAIRE
-      %p Je suis chef d'établissement, adjoint, ou personnel invité.
-      %ul.fr-btns-group
-        %li
-          = button_to "Se Connecter",
-            user_masa_omniauth_authorize_path,
-            title: "Se Connecter (MASA)",
-            method: :post,
-            remote: false,
-            data: { turbo: false },
-            class: "fr-btn fr-mb-0" 
-
-  - unless Rails.env.production?
+  - User.omniauth_providers.each do |provider|
     .fr-col-md-6.fr-col-12
-      .connection-panel.fr-p-4w
-        %h2 Développeur de la DINUM
-        %p Je suis un développeur de la DINUM et je sais ce que je fait.
-        %ul.fr-btns-group
-          %li
-            = button_to "Se Connecter",
-              user_developer_omniauth_authorize_path,
-              title: "Se Connecter  (Dev)",
-              method: :post,
-              remote: false,
-              data: { turbo: false },
-              class: "fr-btn fr-mb-0"
+      = render 'connection_panel',
+        name: t("omniauth.#{provider}.title"),
+        description: t("omniauth.#{provider}.description"),
+        button: t("omniauth.#{provider}.button"),
+        path: omniauth_authorize_path(User, provider)

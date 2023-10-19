@@ -1,4 +1,4 @@
-.fr-logo {
+.fr-logo, .connection-panel h2 {
   white-space: pre-line;
 }
 
@@ -41,5 +41,3 @@
   background-color: initial;
   font-size: 1rem;
 }
->>>>>>> variant B
-======= end

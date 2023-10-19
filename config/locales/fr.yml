@@ -183,3 +183,16 @@ fr:
       1BMA1: Brevet des métiers d'arts en 1 an
       1BMA2: 1ère année Brevet des métiers d'arts
       2BMA2: 2ème année Brevet des métiers d'arts
+  omniauth:
+    masa:
+      title: "Ministère\n de l'Agriculture\n et de la Souveraineté\n Alimentaire"
+      description: "Je suis chef d'établissement, adjoint, ou personnel invité."
+      button: Se connecter (MASA)
+    fim:
+      title: "Ministère\n de l'Éducation\n Nationale\n et de la Jeunesse"
+      description: "Je suis chef d'établissement, adjoint, ou personnel invité."
+      button: Se connecter (MENJ)
+    developer:
+      title: Développeur
+      description: "Je travaille au développement d'APLyPro."
+      button: Se connecter (développeur)
