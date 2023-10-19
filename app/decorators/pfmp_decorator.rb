@@ -33,6 +33,6 @@ module PfmpDecorator
         l(start_date, format: :pfmp_listing),
         l(end_date, format: :pfmp_listing)
       ].uniq.join(" - ")
-    ].join(" ")
+    ].join(" ").html_safe
   end
 end
