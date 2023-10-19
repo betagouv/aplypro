@@ -14,8 +14,9 @@
         Je suis chef d'établissement, adjoint, ou personnel invité.
       %ul.fr-btns-group
         %li
-          = button_to "Se Connecter (MENJ)",
+          = button_to "Se Connecter",
             user_fim_omniauth_authorize_path,
+            title: "Se Connecter (MENJ)",
             method: :post,
             remote: false,
             data: { turbo: false },
@@ -35,8 +36,9 @@
       %p Je suis chef d'établissement, adjoint, ou personnel invité.
       %ul.fr-btns-group
         %li
-          = button_to "Se Connecter (MASA)",
+          = button_to "Se Connecter",
             user_masa_omniauth_authorize_path,
+            title: "Se Connecter (MASA)",
             method: :post,
             remote: false,
             data: { turbo: false },
@@ -49,8 +51,9 @@
         %p Je suis un développeur de la DINUM et je sais ce que je fait.
         %ul.fr-btns-group
           %li
-            = button_to "Se Connecter (Dev)",
+            = button_to "Se Connecter",
               user_developer_omniauth_authorize_path,
+              title: "Se Connecter  (Dev)",
               method: :post,
               remote: false,
               data: { turbo: false },
