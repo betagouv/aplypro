@@ -20,16 +20,10 @@
             .fr-header__tools-links
               %ul.fr-btns-group
                 %li
-                  %div 
+                  %div
                     .fr-px-2w.fr-pb-1w
-                      = current_user.name 
+                      = current_user.name
                     = button_to 'Se déconnecter', destroy_user_session_path, method: :delete, class: "fr-btn fr-icon-lock-line"
-
-          -# .fr-mt-2w
-          -#   = dsfr_badge(status: :warning, classes: ['fr-badge--no-icon']) { "Beta" }
-          -#   Ce service est nouveau –
-          -#   = dsfr_link_to "faites-nous part de vos retours", class: ""
-          -#   pour nous aider à l'améliorer.
 
   #modal-476.fr-header__menu.fr-modal{"aria-labelledby" => "button-477"}
     .fr-container
