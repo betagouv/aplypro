@@ -3,7 +3,7 @@
 class User < ApplicationRecord
   include UserAuthorisation
 
-  devise :omniauthable, omniauth_providers: %i[developer fim masa]
+  devise :omniauthable, omniauth_providers: %i[fim masa developer]
 
   validates :uid, :provider, :name, :token, :secret, :email, presence: true
 

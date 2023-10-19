@@ -100,14 +100,14 @@ end
 Sachantque("je me connecte en tant que personnel MENJ") do
   steps %(
     Quand je me rends sur la page d'accueil
-    Et que je clique sur "Se Connecter (MENJ)"
+    Et que je clique sur "Se connecter (MENJ)"
   )
 end
 
 Sachantque("je me connecte en tant que personnel MASA") do
   steps %(
     Quand je me rends sur la page d'accueil
-    Et que je clique sur "Se Connecter (MASA)"
+    Et que je clique sur "Se connecter (MASA)"
   )
 end
 

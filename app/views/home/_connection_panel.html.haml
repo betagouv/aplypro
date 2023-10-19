@@ -1,0 +1,13 @@
+.connection-panel.fr-p-4w
+  = image_tag "90px-Bloc_Marianne.png"
+  %h2~ name.upcase
+
+  %p= description
+
+  = button_to "Se connecter",
+    path,
+    title: button,
+    method: :post,
+    remote: false,
+    data: { turbo: false },
+    class: "fr-btn"
