@@ -30,6 +30,15 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Et que je clique sur "Enregistrer"
     Alors tous les élèves ont une PFMP du "17/03/2023" au "20/03/2023"
 
+  Scénario: Le personnel de direction est informé d'une erreur de saisie pour toute la classe
+    Étant donné que je vais voir la classe "3EMEB"
+    Et que je clique sur "Saisir une PFMP pour toute la classe"
+    Et que je remplis "Date de début" avec "17/03/2023"
+    Et que je remplis "Date de fin" avec "10/03/2023"
+    Quand je clique sur "Enregistrer"
+    Alors la page contient "doit être ultérieure à la date de début"
+    Et la page ne contient pas "Schooling"
+
   Scénario: Le personnel de direction peut modifier une PFMP
     Quand je renseigne une PFMP de 3 jours pour "Marie Curie"
     Et que je clique sur "Voir la PFMP"

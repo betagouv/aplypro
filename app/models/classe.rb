@@ -15,6 +15,10 @@ class Classe < ApplicationRecord
   scope :current, -> { where(start_year: ENV.fetch("APLYPRO_SCHOOL_YEAR")) }
 
   def create_bulk_pfmp(pfmp_params)
+    @pfmp = Pfmp.new(pfmp_params)
+
+    return false if @pfmp.invalid?
+
     students.each do |student|
       student.current_schooling.pfmps.create!(pfmp_params)
     end

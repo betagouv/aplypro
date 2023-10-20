@@ -18,12 +18,15 @@ class ClassesController < ApplicationController
   end
 
   def create_bulk_pfmp
-    respond_to do |format|
-      if @classe.create_bulk_pfmp(pfmp_params)
-        format.html { redirect_to class_path(@classe), notice: t("pfmps.new.success") }
-      else
-        format.html { render :bulk_pfmp, status: :unprocessable_entity }
-      end
+    @pfmp = Pfmp.new(pfmp_params)
+
+    if @classe.create_bulk_pfmp(pfmp_params)
+      redirect_to class_path(@classe), notice: t("pfmps.new.success")
+    else
+      @pfmp.save # save to populate the errors hash
+      @pfmp.errors.delete(:schooling) # remove the one about schooling
+
+      render :bulk_pfmp, status: :unprocessable_entity
     end
   end
 
