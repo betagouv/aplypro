@@ -1,6 +1,6 @@
 - if flash.any?
   .fr-grid-row
-    .fr-col-7.flash.fr-mb-3w
+    .fr-col-md-6.flash.fr-mb-3w
       - if flash[:notice].present?
         - if flash[:notice].is_a? String
           = dsfr_alert(type: :info, title: flash[:notice])

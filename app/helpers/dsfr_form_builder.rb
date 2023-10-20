@@ -98,7 +98,7 @@ class DsfrFormBuilder < ActionView::Helpers::FormBuilder
   def dsfr_error_summary
     return "" if @object.errors.none?
 
-    @template.content_tag(:div, class: "fr-alert fr-alert--error fr-my-3w") do
+    @template.content_tag(:div, class: "fr-col-md-6 fr-alert fr-alert--error fr-my-3w") do
       @template.safe_join(
         [
           @template.content_tag(:h2, class: "fr-alert__title") { save_label(@object) },
