@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Student < ApplicationRecord
-  self.primary_key = "ine"
-
   validates :ine, :first_name, :last_name, :birthdate, presence: true
 
   has_many :schoolings, dependent: :destroy

@@ -75,12 +75,16 @@ module Users
 
     def save_roles!
       @mapper.establishments.each do |e|
+        e.save! unless e.persisted?
+
         EstablishmentUserRole
           .where(user: @user, establishment: e, role: :dir)
           .first_or_create
       end
 
       @mapper.authorised_establishments_for(@user.email).each do |e|
+        e.save! unless e.persisted?
+
         EstablishmentUserRole
           .where(user: @user, establishment: e, role: :authorised)
           .first_or_create
