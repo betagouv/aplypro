@@ -43,26 +43,29 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_16_101548) do
   end
 
   create_table "classes", force: :cascade do |t|
+    t.bigint "establishment_id"
     t.bigint "mef_id", null: false
     t.string "label"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "establishment_id", null: false
     t.string "start_year", null: false
+    t.index ["establishment_id"], name: "index_classes_on_establishment_id"
     t.index ["mef_id"], name: "index_classes_on_mef_id"
   end
 
   create_table "establishment_user_roles", id: false, force: :cascade do |t|
-    t.bigint "user_id"
+    t.bigint "establishment_id", null: false
+    t.bigint "user_id", null: false
     t.bigint "granted_by_id"
     t.integer "role", null: false
-    t.string "establishment_id", null: false
     t.index ["establishment_id", "user_id"], name: "index_establishment_user_roles_on_establishment_id_and_user_id", unique: true
+    t.index ["establishment_id"], name: "index_establishment_user_roles_on_establishment_id"
     t.index ["granted_by_id"], name: "index_establishment_user_roles_on_granted_by_id"
     t.index ["user_id"], name: "index_establishment_user_roles_on_user_id"
   end
 
-  create_table "establishments", primary_key: "uai", id: :string, force: :cascade do |t|
+  create_table "establishments", force: :cascade do |t|
+    t.string "uai", null: false
     t.string "name"
     t.string "denomination"
     t.string "nature"
@@ -78,12 +81,13 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_16_101548) do
   end
 
   create_table "invitations", force: :cascade do |t|
+    t.bigint "establishment_id", null: false
     t.bigint "user_id", null: false
     t.string "email", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "establishment_id", null: false
     t.index ["establishment_id", "email"], name: "index_invitations_on_establishment_id_and_email", unique: true
+    t.index ["establishment_id"], name: "index_invitations_on_establishment_id"
     t.index ["user_id"], name: "index_invitations_on_user_id"
   end
 
@@ -142,34 +146,38 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_16_101548) do
   end
 
   create_table "ribs", force: :cascade do |t|
+    t.bigint "student_id", null: false
     t.string "iban"
     t.string "bic"
     t.datetime "archived_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "student_id", null: false
     t.string "name", null: false
     t.boolean "personal", default: false, null: false
+    t.index ["student_id"], name: "index_ribs_on_student_id"
   end
 
   create_table "schoolings", force: :cascade do |t|
+    t.bigint "student_id", null: false
+    t.bigint "classe_id", null: false
     t.date "start_date"
     t.date "end_date"
-    t.string "student_id", null: false
-    t.bigint "classe_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["classe_id"], name: "index_schoolings_on_classe_id"
     t.index ["student_id"], name: "index_schoolings_on_student_id"
   end
 
-  create_table "students", primary_key: "ine", id: :string, force: :cascade do |t|
+  create_table "students", force: :cascade do |t|
+    t.string "ine", null: false
     t.string "first_name"
     t.string "last_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "birthdate", null: false
-    t.bigint "current_schooling"
+    t.bigint "current_schooling_id"
+    t.index ["current_schooling_id"], name: "index_students_on_current_schooling_id"
+    t.index ["ine"], name: "index_students_on_ine", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -187,9 +195,10 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_16_101548) do
     t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
-    t.string "establishment_id"
+    t.bigint "establishment_id"
     t.boolean "welcomed", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["establishment_id"], name: "index_users_on_establishment_id"
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
@@ -203,20 +212,19 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_16_101548) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "classes", "establishments", primary_key: "uai"
   add_foreign_key "classes", "mefs"
-  add_foreign_key "establishment_user_roles", "establishments", primary_key: "uai"
+  add_foreign_key "establishment_user_roles", "establishments"
   add_foreign_key "establishment_user_roles", "users"
   add_foreign_key "establishment_user_roles", "users", column: "granted_by_id"
-  add_foreign_key "invitations", "establishments", primary_key: "uai"
+  add_foreign_key "invitations", "establishments"
   add_foreign_key "invitations", "users"
   add_foreign_key "payment_transitions", "payments"
   add_foreign_key "payments", "pfmps"
   add_foreign_key "pfmp_transitions", "pfmps"
   add_foreign_key "pfmps", "schoolings"
-  add_foreign_key "ribs", "students", primary_key: "ine"
+  add_foreign_key "ribs", "students"
   add_foreign_key "schoolings", "classes", column: "classe_id"
-  add_foreign_key "schoolings", "students", primary_key: "ine"
-  add_foreign_key "students", "schoolings", column: "current_schooling"
-  add_foreign_key "users", "establishments", primary_key: "uai"
+  add_foreign_key "schoolings", "students"
+  add_foreign_key "students", "schoolings", column: "current_schooling_id"
+  add_foreign_key "users", "establishments"
 end

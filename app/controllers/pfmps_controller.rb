@@ -112,7 +112,7 @@ class PfmpsController < ApplicationController
   end
 
   def set_student
-    @student = @classe.students.find_by(ine: params[:student_id])
+    @student = @classe.students.find(params[:student_id])
   end
 
   def set_classe
