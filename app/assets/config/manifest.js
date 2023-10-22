@@ -5,5 +5,7 @@
 //= link dsfr.module.min.js
 //= link dsfr.nomodule.min.js
 
+//= link favicon/favicon.ico
+
 //= link_tree ../../javascript .js
 //= link_tree ../../../vendor/javascript .js

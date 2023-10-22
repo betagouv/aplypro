@@ -17,6 +17,7 @@
     = javascript_include_tag "dsfr.module.min.js", type: 'module'
     = javascript_include_tag "dsfr.nomodule.min.js", nomodule: true
     = javascript_importmap_tags
+    = favicon_link_tag "favicon/favicon.ico"
   %body
     = render 'shared/skiplinks'
     = render 'shared/analytics' if Rails.env.production?
