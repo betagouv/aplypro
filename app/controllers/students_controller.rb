@@ -13,7 +13,7 @@ class StudentsController < ClassesController
   private
 
   def set_student
-    @student = @classe.students.includes(:rib, :pfmps).find_by(ine: params[:id])
+    @student = @classe.students.includes(:rib, :pfmps).find(params[:id])
   end
 
   def set_classe
