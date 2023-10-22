@@ -16,11 +16,7 @@ MAPPING = {
   ministry: "MINISTERE"
 }.freeze
 
-data.each do |entry|
-  code = entry[MAPPING[:code]]
-
-  mef = Mef.find_or_initialize_by(code:)
-
+mefs = data.map do |entry|
   attributes = MAPPING.transform_values do |value|
     if value == "MINISTERE"
       Mef.ministries[entry[value].downcase]
@@ -29,8 +25,10 @@ data.each do |entry|
     end
   end
 
-  mef.update!(attributes)
+  attributes
 end
+
+Mef.upsert_all(mefs, unique_by: :code) # rubocop:disable Rails/SkipsModelValidations
 
 logger.info "[seeds] done inserting MEF codes."
 
