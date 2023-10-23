@@ -8,6 +8,8 @@ FactoryBot.define do
     nature { Faker::Number.between(from: 300, to: 399) }
     postal_code { Faker::Address.postcode }
     city { Faker::Address.city }
+    address_line1 { Faker::Address.street_address }
+    address_line2 { Faker::Address.secondary_address }
 
     trait :with_fim_user do
       after(:create) do |establishment|
