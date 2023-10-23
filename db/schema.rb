@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_16_101548) do
+ActiveRecord::Schema[7.1].define(version: 2023_10_23_084115) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -74,6 +74,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_16_101548) do
     t.string "email"
     t.boolean "fetching_students", default: false, null: false
     t.boolean "generating_attributive_decisions", default: false, null: false
+    t.string "address_line1"
+    t.string "address_line2"
     t.index ["uai"], name: "index_establishments_on_uai", unique: true
   end
 
