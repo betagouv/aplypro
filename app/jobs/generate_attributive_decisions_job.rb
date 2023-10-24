@@ -36,7 +36,7 @@ class GenerateAttributiveDecisionsJob < ApplicationJob
       target = File.join(schooling.classe.label, schooling.attributive_decision_filename)
 
       Tempfile.create do |file|
-        AttributeDecisionGenerator.new(schooling.student).generate!(file)
+        AttributeDecisionGenerator.new(schooling).generate!(file)
 
         file.rewind
 

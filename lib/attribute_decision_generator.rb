@@ -4,11 +4,12 @@
 class AttributeDecisionGenerator
   include ActionView::Helpers::NumberHelper
 
-  attr_reader :composer, :student
+  attr_reader :composer, :schooling
 
-  def initialize(student)
+  def initialize(schooling)
     @composer = HexaPDF::Composer.new(page_size: :A4, margin: 48)
-    @student = student
+
+    @schooling = schooling
   end
 
   def generate!(file_descriptor)
@@ -20,7 +21,7 @@ class AttributeDecisionGenerator
   private
 
   def render
-    schooling = student.current_schooling
+    student = @schooling.student
 
     setup_styles!
 
@@ -52,13 +53,13 @@ class AttributeDecisionGenerator
 
     composer.text(" Le montant de l’allocation due pour chaque PFMP est calculé selon les modalités suivantes :")
 
-    composer.text("Nombre de jours de PFMP réalisés × #{number_to_currency(schooling.mef.wage.daily_rate)}", align: :center)
+    composer.text("Nombre de jours de PFMP réalisés × #{number_to_currency(@schooling.mef.wage.daily_rate)}", align: :center)
 
     composer.text(" Article 4 : Montant maximal accordé", style: :paragraph_title)
 
     composer.text(" Par la présente décision, l’État vous attribue l’allocation maximale annuelle prévisionnelle suivante :")
 
-    composer.text(" #{I18n.t('ministries.' + schooling.mef.ministry)} : #{number_to_currency(schooling.mef.wage.yearly_cap)}", align: :center)
+    composer.text(" #{I18n.t('ministries.' + @schooling.mef.ministry)} : #{number_to_currency(schooling.mef.wage.yearly_cap)}", align: :center)
 
     composer.text(" Article 5 : Modalité de versement de l’allocation", style: :paragraph_title)
 
