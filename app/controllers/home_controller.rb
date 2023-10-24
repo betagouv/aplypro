@@ -4,9 +4,17 @@ class HomeController < ApplicationController
   layout "maintenance", only: :maintenance
 
   def index
-    (redirect_to classes_path and return) if user_signed_in?
+    (redirect_to home_path and return) if user_signed_in?
 
     redirect_to login_url
+  end
+
+  def home
+    current_classes = @etab.classes.current
+    @students_count = current_classes.joins(:students).count
+    @attributive_decisions_count = current_classes.with_attributive_decisions.count
+    @ribs_count = current_classes.joins(students: :rib).count
+    @pfmps_counts = pfmp_counts
   end
 
   def welcome
@@ -24,4 +32,11 @@ class HomeController < ApplicationController
   end
 
   def legal; end
+
+  private
+
+  def pfmp_counts
+    pfmps = Pfmp.joins(schooling: :classe).merge(Classe.current).where("classes.establishment_id": @etab.id)
+    t("pfmps.states").keys.index_with({}) { |state| pfmps.in_state(state).count }
+  end
 end

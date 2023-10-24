@@ -13,6 +13,6 @@ Fonctionnalité: Accueil sur l'application
     Quand je n'ai pas encore vu l'écran d'accueil
     Et que je rafraîchis la page
     Alors la page contient "Bienvenue sur APLyPro"
-    Et la page ne contient pas "Liste des classes"
+    Et la page ne contient pas "Année scolaire"
     Quand je clique sur "Continuer"
-    Alors la page contient "Liste des classes"
+    Alors la page contient "Année scolaire"

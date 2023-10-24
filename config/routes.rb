@@ -28,7 +28,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :pfmps, only: :index do
+  resources :pfmps, only: %i[index] do
     collection do
       get "validate_all", to: "pfmps#validate_all"
     end
@@ -44,6 +44,7 @@ Rails.application.routes.draw do
   root "home#index"
 
   get "/welcome", to: "home#welcome"
+  get "/home", to: "home#home"
 
   get "/maintenance", to: "home#maintenance"
   get "/login", to: "home#login"
