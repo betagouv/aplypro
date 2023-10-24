@@ -1,0 +1,43 @@
+!!!
+%html{"data-fr-scheme" => "system"}
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title
+      Maintenance
+      \- #{t("global.service_name")}
+    %meta{:content => "width=device-width, initial-scale=1, shrink-to-fit=no", :name => "viewport"}/
+    %meta{:content => "noindex, nofollow", :name => "robots"}/
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag "dsfr.min.css", "data-turbo-track": "reload"
+    = stylesheet_link_tag "application", "data-turbo-track": "reload"
+    = javascript_include_tag "dsfr.module.min.js", type: 'module'
+    = javascript_include_tag "dsfr.nomodule.min.js", nomodule: true
+    = javascript_importmap_tags
+  %body
+    = render 'shared/skiplinks'
+    = render 'shared/analytics' if Rails.env.production?
+
+    %header.fr-header{role: "banner"}
+      .fr-header__body
+        .fr-container
+          .fr-header__body-row
+            .fr-header__brand.fr-enlarge-link
+              .fr-header__brand-top
+                .fr-header__logo
+                  %p.fr-logo
+                    = t("global.sponsor")
+                .fr-header__navbar
+                  %button#button-477.fr-btn--menu.fr-btn{"aria-controls" => "modal-476", "aria-haspopup" => "menu", "data-fr-opened" => "false", title: "Menu"} Menu
+              .fr-header__service
+                %a{href: "/", title: "Accueil - APLyPro - Direction Interministérielle du Numérique"}
+                  %p.fr-header__service-title
+                    = t("global.service_name")
+                %p.fr-header__service-tagline
+                  = t("global.service_description")
+
+    .fr-container
+      %main#main.fr-pt-3w.fr-pb-6w
+        %h1.fr-mb-5w= @page_title
+        = yield
+    = render 'shared/footer'
