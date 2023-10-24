@@ -1,11 +1,11 @@
 .fr-col-md-7
   - if @etab.generating_attributive_decisions
     = dsfr_alert(type: :info, title: "Édition des décisions d'attribution en cours", classes: 'fr-my-3w') do
-      %p Les décisions d'attribution sont en train d'être générées, veuillez rafraichir la page dans quelques minutes.
+      %p Les décisions d'attribution sont en train d'être éditées, veuillez rafraichir la page dans quelques minutes.
   - else
     - if @etab.never_generated_attributive_decisions?
       = dsfr_alert(type: :info, title: "Éditer les décisions d'attribution", classes: 'fr-my-3w') do
-        %p Les décisions d'attribution sont les documents qui ouvrent les droits à l'allocation. Un document est généré par élève. Voulez-vous générer ces documents maintenant ?
+        %p La décision d’attribution annuelle rend éligible l’élève à percevoir l’allocation. Ce document doit obligatoirement être transmis à l’élève et conservé par l’établissement en cas de contrôle de la chaîne des dépenses publiques.
         = button_to "Éditer les décisions d'attribution", establishment_create_attributive_decisions_path(@etab), class: 'fr-btn fr-btn--secondary fr-mt-2w'
     - elsif @etab.attributive_decisions_zip.attached?
       .fr-callout
