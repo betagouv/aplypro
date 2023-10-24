@@ -1,6 +1,5 @@
 fr:
   flash:
-    attributive_decisions_generating: "Les décisions d'attribution sont en train d'être générées. Vous pourrez les retrouver en consultant le profil d'une classe ou d'un élève."
     pfmps:
       not_authorised_to_validate: Seuls les personnels de direction peuvent valider les PFMPs
       destroyed: La PFMP de %{name} a bien été supprimée
