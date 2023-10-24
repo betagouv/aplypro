@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class HomeController < ApplicationController
+  layout "maintenance", only: :maintenance
+
   def index
     (redirect_to classes_path and return) if user_signed_in?
 
