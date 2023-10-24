@@ -3,8 +3,5 @@
 
 - t("questions").each do |q|
   .fr-py-2w
-    %h3.fr-h4
-      %span
-      = q[:title]
-    %p
-      = q[:answer]
+    %h3.fr-h4= q[:title]
+    %p= q[:answer]
