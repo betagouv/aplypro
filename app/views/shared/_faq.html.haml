@@ -1,0 +1,10 @@
+%h2
+  Foire aux questions
+
+- t("questions").each do |q|
+  .fr-py-2w
+    %h3.fr-h4
+      %span
+      = q[:title]
+    %p
+      = q[:answer]

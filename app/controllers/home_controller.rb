@@ -16,7 +16,7 @@ class HomeController < ApplicationController
   end
 
   def maintenance
-    @msg = ENV.fetch("APLYPRO_MAINTENANCE_REASON")
+    @msg = ENV.fetch("APLYPRO_MAINTENANCE_REASON", nil)
   end
 
   def login
