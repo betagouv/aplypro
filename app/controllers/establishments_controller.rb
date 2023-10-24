@@ -12,6 +12,6 @@ class EstablishmentsController < ApplicationController
 
     GenerateAttributiveDecisionsJob.perform_later(@etab)
 
-    redirect_to classes_path
+    redirect_to home_path
   end
 end

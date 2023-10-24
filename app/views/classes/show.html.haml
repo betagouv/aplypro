@@ -23,4 +23,4 @@
             - if student.rib.present?
               = dsfr_badge(status: :success) { "Oui"}
             - else
-              = dsfr_link_to "Saisir le RIB", new_class_student_rib_path(@classe, student)
+              = dsfr_link_to "Saisir les coordonnées bancaires", new_class_student_rib_path(@classe, student)

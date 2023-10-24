@@ -5,6 +5,7 @@ Fonctionnalité: Le personnel de direction consulte les listes
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que je me connecte en tant que personnel MENJ
     Et que je passe l'écran d'accueil
+    Et que je clique sur "Élèves"
     Et qu'il y a une élève "Marie Curie" au sein de la classe "3EMEB" pour une formation "Développement"
     Et que je rafraîchis la page
 

@@ -60,8 +60,11 @@ fr:
       pfmp: "de la PFMP"
       rib: "du RIB"
   menu:
-    classes: Liste des classes
-    pfmps: Liste des PFMPs
+    home: Accueil
+    classes: Élèves
+    new_rib: Saisir des coord. bancaires
+    new_pfmp: Saisir une PFMP
+    validate_all_pfmps: Envoyer en paiement
     invitations: Gestion des accès
   pages:
     titles:
@@ -135,7 +138,7 @@ fr:
     new:
       success: La PFMP a bien été enregistrée
     states:
-      pending: Nombre de jours à compléter
+      pending: À compléter
       completed: Saisies à valider
       validated: Validées
     state:

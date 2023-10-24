@@ -1,4 +1,4 @@
-.fr-logo, .connection-panel h2 {
+.fr-logo, .gray-panel h2 {
   white-space: pre-line;
 }
 
@@ -28,7 +28,7 @@
   background-color: var(--background-default-grey-hover);
 }
 
-.connection-panel {
+.gray-panel {
   background-color: var(--background-default-grey-hover);
 }
 
@@ -40,4 +40,9 @@
 .inter-badge-arrow {
   background-color: initial;
   font-size: 1rem;
+}
+
+.home .gray-panel {
+  padding: 2rem;
+  margin-bottom: 2rem;
 }

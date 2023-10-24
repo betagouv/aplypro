@@ -1,20 +1,21 @@
-.fr-col-md-7
-  - if @etab.generating_attributive_decisions
-    = dsfr_alert(type: :info, title: "Édition des décisions d'attribution en cours", classes: 'fr-my-3w') do
-      %p Les décisions d'attribution sont en train d'être éditées, veuillez rafraichir la page dans quelques minutes.
-  - else
-    - if @etab.never_generated_attributive_decisions?
-      = dsfr_alert(type: :info, title: "Éditer les décisions d'attribution", classes: 'fr-my-3w') do
-        %p La décision d’attribution annuelle rend éligible l’élève à percevoir l’allocation. Ce document doit obligatoirement être transmis à l’élève et conservé par l’établissement en cas de contrôle de la chaîne des dépenses publiques.
-        = button_to "Éditer les décisions d'attribution", establishment_create_attributive_decisions_path(@etab), class: 'fr-btn fr-btn--secondary fr-mt-2w'
-    - elsif @etab.attributive_decisions_zip.attached?
-      .fr-callout
-        %h2.fr-callout__title
-          Décisions d'attributions
-        %p.fr-callout__text
-          Vous pouvez retrouver les décisions d'attribution dans le
-          profil de chaque élève ou télécharger l'ensemble des
-          décisions d'attribution pour votre établissement avec le
-          bouton ci-dessous :
 
-        = link_to "Télécharger toutes les décisions d'attribution", url_for(@etab.attributive_decisions_zip), class: 'fr-btn', target: :download
+.fr-grid-row.fr-grid-row--top
+  %h2.fr-col 1. Décisions d'attribution
+  = indicator_badge(@attributive_decisions_count, @students_count)
+
+%p La décision d'attribution annuelle rend éligible l'élève à percevoir l'allocation. Ce document doit obligatoirement être transmis à l'élève et conservé par l'établissement en cas de contrôle de la chaîne des dépenses publiques.
+
+- if @etab.generating_attributive_decisions
+  = dsfr_alert(type: :info, title: "Édition des décisions d'attribution en cours", classes: 'fr-mt-3w') do
+    %p Les décisions d'attribution sont en train d'être éditées, veuillez rafraichir la page dans quelques minutes.
+- else
+  - if @etab.never_generated_attributive_decisions?
+    %ul.fr-btns-group
+      - if current_user.can_generate_attributive_decisions?
+        %li= button_to "Éditer les décisions d'attribution", establishment_create_attributive_decisions_path(@etab), class: 'fr-btn fr-btn--primary fr-mb-0'
+      - else
+        %li= button_to "Vous n'avez pas le droit d'éditer les décisions d'attribution", "#", class: 'fr-btn fr-btn--primary fr-mb-0', disabled: true
+
+  - elsif @etab.attributive_decisions_zip.attached?
+    %ul.fr-btns-group
+      %li= link_to "Télécharger l'ensemble des décisions d'attribution", url_for(@etab.attributive_decisions_zip), class: 'fr-btn fr-btn--primary fr-mb-0', target: :download

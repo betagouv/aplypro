@@ -6,16 +6,14 @@ Fonctionnalité: Le personnel de direction se connecte
     Quand je me connecte en tant que personnel MENJ
     Alors la page contient "Bienvenue sur APLyPro"
     Et que je clique sur "Continuer"
-    Alors le titre de la page contient "Liste des classes"
-    Et la page contient "Nous récupérons la liste de vos élèves"
+    Alors la page contient "Année scolaire"
 
   Scénario: Le personnel de direction du MASA peut se connecter
     Sachant que je suis un personnel MASA directeur de l'établissement "1234567"
     Quand je me connecte en tant que personnel MASA
     Alors la page contient "Bienvenue sur APLyPro"
     Et que je clique sur "Continuer"
-    Alors le titre de la page contient "Liste des classes"
-    Et la page contient "Nous récupérons la liste de vos élèves"
+    Alors la page contient "Année scolaire"
 
   Scénario: Le personnel de direction du MENJ doit choisir son établissement
     Sachant que je suis un personnel MENJ directeur de l'établissement "123, 456, 789"
@@ -24,7 +22,7 @@ Fonctionnalité: Le personnel de direction se connecte
     Et que je sélectionne "123" pour "Établissement"
     Et que je clique sur "Continuez avec cet établissement"
     Et que je passe l'écran d'accueil
-    Alors la page contient "Nous récupérons la liste de vos élèves"
+    Alors la page contient "Année scolaire"
     Et la page contient "Lycée de la Mer Paul Bousquet"
 
   Scénario: Un personnel du MENJ sans établissements en responsabilité est informé
@@ -38,7 +36,8 @@ Fonctionnalité: Le personnel de direction se connecte
     Et que je me connecte en tant que personnel MENJ
     Et que je me déconnecte
     Quand je me connecte en tant que personnel MENJ
-    Alors la page contient "Liste des classes"
+    Alors la page contient "Liste des classes" 
+    # Wtf pourquoi ce test est green ? on devrait atterir sur la home, pas la liste des classes
 
   Scénario: Un personnel de direction du MENJ hors de la bêta privée ne peut pas rentrer dans l'application
     Sachant que je suis un personnel MENJ directeur de l'établissement "123"
