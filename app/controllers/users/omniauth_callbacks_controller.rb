@@ -95,6 +95,7 @@ module Users
       @user.save!
 
       sign_in(@user)
+      Sentry.set_user(id: @user.id)
     end
 
     def check_responsibilites!
