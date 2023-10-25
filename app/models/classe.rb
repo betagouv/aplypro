@@ -18,10 +18,12 @@ class Classe < ApplicationRecord
   def create_bulk_pfmp(pfmp_params)
     @pfmp = Pfmp.new(pfmp_params)
 
-    return false if @pfmp.invalid?
-
-    students.each do |student|
-      student.current_schooling.pfmps.create!(pfmp_params)
+    Pfmp.transaction do
+      students.each do |student|
+        student.current_schooling.pfmps.create!(pfmp_params)
+      end
+    rescue ActiveRecord::RecordInvalid
+      false
     end
   end
 

@@ -83,7 +83,7 @@ Quand("je vais voir la classe {string}") do |label|
 end
 
 Alors("tous les élèves ont une PFMP du {string} au {string}") do |start_date, end_date|
-  expect(@classe.students.all? { |s| s.pfmps.exists?(start_date:, end_date:) })
+  expect(@classe.students.all? { |s| s.pfmps.exists?(start_date:, end_date:) }).to be_truthy
 end
 
 # FIXME: we're relying on global state here via the @student variable

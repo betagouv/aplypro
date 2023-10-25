@@ -23,12 +23,13 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
       | Saisie à valider |               3 | 45,00 € |
 
   Scénario: Le personnel de direction peut rajouter une PFMP pour toute la classe
-    Quand je vais voir la classe "3EMEB"
+    Sachant que je vais voir la classe "3EMEB"
     Et que je clique sur "Saisir une PFMP pour toute la classe"
     Et que je remplis "Date de début" avec "17/03/2023"
     Et que je remplis "Date de fin" avec "20/03/2023"
-    Et que je clique sur "Enregistrer"
+    Quand je clique sur "Enregistrer"
     Alors tous les élèves ont une PFMP du "17/03/2023" au "20/03/2023"
+    Et la page contient "La PFMP a bien été enregistrée"
 
   Scénario: Le personnel de direction est informé d'une erreur de saisie pour toute la classe
     Étant donné que je vais voir la classe "3EMEB"
