@@ -40,7 +40,7 @@ module DeveloperOidc
       },
       "uid" => attrs["info"]["email"],
       "info" => {
-        "name" => "Aplypo Dev",
+        "name" => "Developer Account",
         "email" => attrs["info"]["email"]
       }
     }
