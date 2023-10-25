@@ -9,12 +9,6 @@ module IdentityMappers
     FREDURNE_MAPPING     = %i[uai type category activity uaj tna_sym tty_code tna_code].freeze
 
     def initialize(attributes)
-      Sentry.add_breadcrumb(Sentry::Breadcrumb.new(
-                              data: attributes,
-                              category: "auth",
-                              message: "Trying to parse authentication data"
-                            ))
-
       @attributes = normalize(attributes)
     end
 
