@@ -81,6 +81,10 @@ class Establishment < ApplicationRecord
     [uai, name].join(" - ")
   end
 
+  def address
+    [address_line1, address_line2, postal_code, city].join(", ")
+  end
+
   def rattach_attributive_decisions_zip!(content, filename)
     attributive_decisions_zip.purge if attributive_decisions_zip.present?
 

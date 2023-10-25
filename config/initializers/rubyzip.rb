@@ -4,4 +4,4 @@ require "zip"
 
 Zip.unicode_names = true
 Zip.force_entry_names_encoding = "UTF-8"
-Zip.on_exists_proc = true
+Zip.continue_on_exists_proc = true
