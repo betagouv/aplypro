@@ -3,9 +3,7 @@
 module StudentApi
   class << self
     def fetch_students!(establishment)
-      collection = api_for(establishment).fetch_and_parse!
-
-      collection.each(&:save!)
+      api_for(establishment).fetch_and_parse!
     end
 
     def api_for(establishment)

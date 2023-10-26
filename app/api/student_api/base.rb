@@ -21,7 +21,7 @@ module StudentApi
     end
 
     def parse
-      mapper.send(:map_payload, response, establishment)
+      mapper.new(response, establishment).parse!
     end
 
     def mapper
