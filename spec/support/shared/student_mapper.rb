@@ -2,41 +2,97 @@
 
 require "rails_helper"
 
-RSpec.shared_examples "a student mapper" do
-  let(:result) { mapper.map_payload(data, etab) }
-  let(:student) { result.first.students.first } # first class, first student
+RSpec.shared_examples "a student mapper" do |skip_changed = false|
+  subject(:mapper) { described_class.new(data, establishment) }
 
-  it "returns an array of Classes" do
-    expect(result).to be_an_array_of Classe
+  it "upserts the students" do
+    expect { mapper.parse! }.to change(Student, :count).by_at_most(data.length)
   end
 
-  it "parses all the students" do
-    expect(result.map(&:students).flatten.length).to eq data.length
+  it "doesn't duplicate students" do
+    mapper.parse!
+
+    expect { mapper.parse! }.not_to change(Student, :count)
+  end
+
+  it "doesn't crash on students without an INE" do
+    expect { described_class.new(nil_ine_payload, establishment).parse! }.not_to raise_error
+  end
+
+  it "doesn't crash on an empty payload" do
+    expect { described_class.new(empty_payload, establishment).parse! }.not_to raise_error
   end
 
   it "upserts the classes" do
-    result.each(&:save)
-
-    expect { result.each(&:save!) }.not_to change(Classe, :count)
+    expect { mapper.parse! }.to change(Classe, :count)
   end
 
-  it "upserts the students" do
-    result.each(&:save!)
+  it "creates schoolings" do
+    expect { mapper.parse! }.to change(Schooling, :count).by_at_most(data.length)
+  end
 
-    expect { result.each(&:save!) }.not_to change(Student, :count)
+  it "marks the schoolings as current" do
+    mapper.parse!
+
+    Student.find_each do |student|
+      expect(student.current_schooling).not_to be_nil
+    end
   end
 
   describe "student attributes parsing" do
+    before { mapper.parse! }
+
     %i[first_name last_name ine birthdate].each do |attr|
       it "parses the '#{attr}' attribute" do
-        expect(student[attr]).not_to be_nil
+        expect(Student.last[attr]).not_to be_nil
       end
     end
   end
 
-  it "skips mefs that aren't relevant" do
-    result = mapper.map_payload(data.concat(irrelevant), etab)
+  describe "when there are irrelevant MEFS" do
+    let(:data) { irrelevant_mefs_payload }
 
-    expect { result.each(&:save!) }.not_to change(Student, :count)
+    it "skips them" do
+      expect { mapper.parse! }.not_to change(Student, :count)
+    end
+  end
+
+  unless skip_changed
+    describe "subsequent updates" do
+      let(:student) { Student.find_by(ine: student_ine) }
+
+      before { mapper.parse! }
+
+      describe "when a student is not in a class anymore" do
+        let(:new_mapper) { described_class.new(gone_student_payload, establishment) }
+
+        include_examples "student has moved"
+      end
+
+      describe "when a student has changed class" do
+        let(:new_mapper) { described_class.new(changed_class_student_payload, establishment) }
+
+        include_examples "student has moved"
+      end
+
+      describe "when a student has changed establishment" do
+        let(:new_establishment) { create(:establishment) }
+        let(:new_mapper) { described_class.new(changed_class_student_payload, new_establishment) }
+
+        include_examples "student has moved"
+      end
+    end
+  end
+end
+
+RSpec.shared_examples "student has moved" do
+  it "removes the current schooling on that student" do
+    expect { new_mapper.parse! }.to(change { student.reload.current_schooling })
+  end
+
+  it "sets the end date on the old schooling" do
+    schooling = student.current_schooling
+
+    expect { new_mapper.parse! }.to change { schooling.reload.end_date }.from(nil).to(Time.zone.today)
   end
 end

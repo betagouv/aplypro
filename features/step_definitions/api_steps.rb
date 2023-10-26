@@ -33,6 +33,23 @@ def mock_sygne_students_with!(payload)
     .to_return(status: 200, body: payload, headers: {})
 end
 
+def mock_fregata_students_with!(payload)
+  url = ENV.fetch("APLYPRO_FREGATA_URL")
+
+  stub_request(:get, %r{#{url}/*})
+    .with(
+      headers: {
+        "Accept" => "*/*",
+        "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+      }
+    )
+    .to_return(status: 200, body: payload, headers: {})
+end
+
+Sachantque("l'API FREGATA renvoie une liste d'élèves") do
+  mock_fregata_students_with!(FactoryBot.build_list(:fregata_student, 10))
+end
+
 Sachantque("l'API SYGNE renvoie une liste d'élèves") do
   mock_sygne_students_with!(FactoryBot.build_list(:sygne_student, 10))
 end

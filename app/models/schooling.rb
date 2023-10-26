@@ -9,6 +9,15 @@ class Schooling < ApplicationRecord
   has_many :pfmps, dependent: :destroy
 
   has_one :mef, through: :classe
+  has_one :establishment, through: :classe
+
+  after_create do
+    if student.current_schooling.present? && student.current_schooling != self
+      student.current_schooling.update!(end_date: Time.zone.now)
+    end
+
+    student.update!(current_schooling: self)
+  end
 
   def attributive_decision_filename
     [

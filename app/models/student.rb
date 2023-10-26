@@ -8,7 +8,7 @@ class Student < ApplicationRecord
 
   has_many :pfmps, -> { order "pfmps.start_date" }, through: :schoolings
 
-  has_one :current_schooling, class_name: "Schooling", dependent: :destroy
+  belongs_to :current_schooling, optional: true, class_name: "Schooling", dependent: :destroy
   has_one :classe, through: :current_schooling
 
   has_one :establishment, through: :classe

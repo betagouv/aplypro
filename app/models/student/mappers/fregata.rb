@@ -2,49 +2,43 @@
 
 class Student
   module Mappers
-    module Fregata
-      class << self
-        FREGATA_MAPPING = {
-          ine: "apprenant.ine",
-          first_name: "apprenant.prenomUsuel",
-          last_name: "apprenant.nomUsuel",
-          birthdate: "apprenant.dateNaissance"
-        }.freeze
+    class Fregata < Base
+      FREGATA_MAPPING = {
+        ine: "apprenant.ine",
+        first_name: "apprenant.prenomUsuel",
+        last_name: "apprenant.nomUsuel",
+        birthdate: "apprenant.dateNaissance"
+      }.freeze
 
-        def map_attributes(attrs)
-          FREGATA_MAPPING.transform_values do |path|
-            attrs.dig(*path.split("."))
-          end
+      def map_student_attributes(attrs)
+        FREGATA_MAPPING.transform_values do |path|
+          attrs.dig(*path.split("."))
         end
+      end
 
-        # rubocop:disable Metrics/AbcSize
-        def map_payload(payload, etab)
-          data = payload.group_by { |item| item["division"] }
+      def classes_with_students
+        payload
+          .group_by { |item| [item["division"]["libelle"], item["sectionReference"]["codeMef"]] }
+          .map do |attributes, students|
+          label, code = attributes
 
-          data.map do |klass, students|
-            code = students.first["sectionReference"]["codeMef"].slice(..-2)
-            mef = Mef.find_by(code:)
+          mef = Mef.find_by(code: chop_mef_code(code))
 
-            next if mef.nil?
+          next if mef.nil?
 
-            Classe.find_or_create_by!(establishment: etab, mef:, label: klass["code"], start_year: 2023).tap do |k|
-              students
-                .map { |e| make_student(e) }
-                .reject { |e| e.ine.nil? }
-                .compact
-                .each { |student| Schooling.find_or_create_by!(classe: k, student:) }
-            end
-          end.compact
-        end
-        # rubocop:enable Metrics/AbcSize
+          klass = Classe.find_or_create_by!(
+            establishment:,
+            mef:,
+            label:,
+            start_year: @year
+          )
 
-        def make_student(data)
-          attributes = map_attributes(data)
+          [klass, students]
+        end.compact
+      end
 
-          Student.find_or_initialize_by(ine: attributes[:ine]).tap do |student|
-            student.assign_attributes(attributes)
-          end
-        end
+      def no_class_for_entry?(entry)
+        entry["division"].blank?
       end
     end
   end

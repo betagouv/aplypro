@@ -2,52 +2,43 @@
 
 class Student
   module Mappers
-    module Sygne
-      class << self
-        SYGNE_MAPPING = {
-          "prenom" => :first_name,
-          "nom" => :last_name,
-          "ine" => :ine,
-          "dateNaissance" => :birthdate
-        }.freeze
+    class Sygne < Base
+      SYGNE_MAPPING = {
+        "prenom" => :first_name,
+        "nom" => :last_name,
+        "ine" => :ine,
+        "dateNaissance" => :birthdate
+      }.freeze
 
-        def map_attributes(attrs)
-          SYGNE_MAPPING.to_h do |attr, col|
-            [col, attrs[attr]]
-          end
+      def map_student_attributes(attrs)
+        SYGNE_MAPPING.to_h do |attr, col|
+          [col, attrs[attr]]
         end
+      end
 
-        # FIXME: this can definitely be simplified
-        # rubocop:disable Metrics/AbcSize
-        def map_payload(payload, establishment)
-          payload
-            .group_by { |obj| [obj["classe"], obj["codeMef"]] }
-            .map do |key, eleves|
-            label, code = key
+      def classes_with_students
+        payload
+          .group_by { |entry| [entry["classe"], entry["codeMef"]] }
+          .map do |attributes, students|
+          label, code = attributes
 
-            mef = Mef.find_by(code: code.slice(..-2))
+          mef = Mef.find_by(code: code.slice(..-2))
 
-            next if mef.nil?
+          next if mef.nil? || label.nil?
 
-            Classe.find_or_create_by!(establishment: establishment, mef:, label:, start_year: 2023).tap do |k|
-              eleves
-                .map { |e| make_student(e) }
-                .compact
-                .each do |student|
-                Schooling.find_or_create_by(classe: k, student:)
-              end
-            end
-          end.compact
-        end
-        # rubocop:enable Metrics/AbcSize
+          klass = Classe.find_or_create_by!(
+            label:,
+            mef:,
+            establishment: establishment,
+            start_year: @year
+          )
 
-        def make_student(data)
-          attributes = map_attributes(data)
+          [klass, students]
+        end.compact
+      end
 
-          Student.find_or_initialize_by(ine: attributes["ine"]).tap do |student|
-            student.assign_attributes(attributes)
-          end
-        end
+      def no_class_for_entry?(entry)
+        entry["classe"].blank?
       end
     end
   end
