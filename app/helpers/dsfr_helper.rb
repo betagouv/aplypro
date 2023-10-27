@@ -5,6 +5,8 @@ module DsfrHelper
     def render
       # rubocop:disable Rails/HelperInstanceVariable
       @context.dsfr_breadcrumbs do |component|
+        return "" if @elements.one?
+
         @elements.map do |element|
           component.breadcrumb(href: element.path, label: element.name)
         end
