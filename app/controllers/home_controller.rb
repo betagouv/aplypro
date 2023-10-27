@@ -10,6 +10,9 @@ class HomeController < ApplicationController
   end
 
   def home
+    @page_title = t("pages.titles.home.home")
+    @inhibit_title = true
+
     current_classes = @etab.classes.current
     @students_count = current_classes.joins(:students).count
     @attributive_decisions_count = current_classes.with_attributive_decisions.count
