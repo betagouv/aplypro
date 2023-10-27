@@ -33,7 +33,7 @@ module HomeHelper
 
   def pfmp_badge(state, pfmps_counts)
     count_tag = content_tag(:div, class: "fr-mr-1w") do
-      pfmps_counts[state].to_s
+      pfmps_counts[state.to_s].to_s
     end
 
     [
