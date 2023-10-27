@@ -36,7 +36,10 @@ class HomeController < ApplicationController
   private
 
   def pfmp_counts
-    pfmps = Pfmp.joins(schooling: :classe).merge(Classe.current).where("classes.establishment_id": @etab.id)
-    t("pfmps.states").keys.index_with({}) { |state| pfmps.in_state(state).count }
+    pfmps = Pfmp
+            .joins(schooling: :classe)
+            .merge(@etab.classes.current)
+
+    PfmpStateMachine.states.index_with { |state| pfmps.in_state(state).count }
   end
 end
