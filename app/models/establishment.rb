@@ -49,10 +49,6 @@ class Establishment < ApplicationRecord
     invitations.exists?(email: email)
   end
 
-  def never_generated_attributive_decisions?
-    classes.current.with_attributive_decisions.none?
-  end
-
   def no_data?
     !refreshed?
   end
