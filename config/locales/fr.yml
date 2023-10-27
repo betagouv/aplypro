@@ -1,4 +1,6 @@
 fr:
+  year:
+    "Année scolaire %{start_year} - %{end_year}"
   flash:
     pfmps:
       not_authorised_to_validate: Seuls les personnels de direction peuvent valider les PFMPs
@@ -72,6 +74,7 @@ fr:
         index: Gestion des accès
         new: Autoriser un email
       home:
+        home: Accueil
         login: Connexion à APLyPro
       classes:
         index: Liste des classes
