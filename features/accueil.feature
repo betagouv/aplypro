@@ -7,7 +7,7 @@ Fonctionnalité: Accueil sur l'application
   Contexte:
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que je me connecte en tant que personnel MENJ
-    Et qu'il y a une élève "Marie Curie" au sein de la classe "3EMEB" pour une formation "Développement"
+    Et qu'il y a une élève "Marie Curie" au sein de la classe "2NDEB" pour une formation "Développement"
 
   Scénario: Le personnel de direction voit un écran d'accueil la première fois
     Quand je n'ai pas encore vu l'écran d'accueil
@@ -18,7 +18,7 @@ Fonctionnalité: Accueil sur l'application
     Alors la page contient "Année scolaire"
 
   Scénario: Le personnel voit un aperçu des données sur la page d'accueil
-    Quand je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "3EMEB"
+    Quand je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"
     Et que je me rends sur la page d'accueil
     Alors le panneau "Décisions d'attribution" contient un compteur à "0 / 1"
     Et le panneau "Coordonnées bancaires" contient un compteur à "1 / 1"

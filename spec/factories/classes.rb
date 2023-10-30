@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :classe do
     establishment
     mef
-    sequence(:label) { |n| "3EME#{n}" }
+    sequence(:label) { |n| "2NDE#{n}" }
     start_year { 2023 }
 
     trait :with_students do
