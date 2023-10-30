@@ -12,7 +12,7 @@ def make_fim_hash(name:, email:, raw_info:)
   OmniAuth::AuthHash.new(
     {
       provider: "fim",
-      uid: Faker::Alphanumeric.alpha(number: 10),
+      uid: email,
       credentials: {
         token: "test token"
       },
