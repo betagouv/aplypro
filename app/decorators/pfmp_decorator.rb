@@ -27,12 +27,13 @@ module PfmpDecorator
   end
 
   def listing_to_s
+    safe_join([status_badge, " ", formatted_dates])
+  end
+
+  def formatted_dates
     [
-      status_badge,
-      [
-        l(start_date, format: :pfmp_listing),
-        l(end_date, format: :pfmp_listing)
-      ].uniq.join(" - ")
-    ].join(" ").html_safe
+      l(start_date, format: :pfmp_listing),
+      l(end_date, format: :pfmp_listing)
+    ].uniq.join(" - ")
   end
 end
