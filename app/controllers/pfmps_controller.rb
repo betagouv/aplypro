@@ -2,25 +2,15 @@
 
 class PfmpsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_classe, :set_student, :set_breadcrumbs, except: %i[validate_all index]
+  before_action :check_authorisation, only: %i[validate validate_all]
+  before_action :set_classe, :set_student, :set_breadcrumbs, except: :validate_all
   before_action :set_pfmp, only: %i[show edit update validate confirm_deletion destroy]
-
-  def index
-    infer_page_title
-
-    @pfmps = Pfmp
-             .includes(:student, :payments, :transitions, classe: [:mef])
-             .where(classe: { establishment: @etab })
-             .group_by(&:current_state)
-  end
 
   def show
     infer_page_title({ name: @student.full_name })
   end
 
   def validate_all
-    add_breadcrumb t("pages.titles.pfmps.index"), pfmps_path
-
     infer_page_title
 
     @pfmps = Pfmp
@@ -66,14 +56,6 @@ class PfmpsController < ApplicationController
   end
 
   def validate
-    if !current_user.can_validate?
-      redirect_back_or_to(
-        validate_all_pfmps_path,
-        alert: t("flash.pfmps.not_authorised_to_validate"),
-        status: :forbidden
-      ) and return
-    end
-
     add_breadcrumb t("pages.titles.pfmps.index"), pfmps_path
     add_breadcrumb t("pages.titles.pfmps.validate")
 
@@ -127,6 +109,16 @@ class PfmpsController < ApplicationController
     add_breadcrumb(
       t("pages.titles.students.show", name: @student.full_name, classe: @classe.label),
       class_student_path(@classe, @student)
+    )
+  end
+
+  def check_authorisation
+    return if current_user.can_validate?
+
+    redirect_back_or_to(
+      root_path,
+      alert: t("flash.pfmps.not_authorised_to_validate"),
+      status: :forbidden
     )
   end
 end
