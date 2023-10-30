@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-Alors("le panel de décision d'attribution contient {string}") do |content|
-  expect(page).to have_css("#attributive_decision_panel", text: content)
+Alors("le panneau {string} contient un compteur à {string}") do |title, counter_string|
+  expect(page.find(".gray-panel", text: title)).to have_content(counter_string)
 end

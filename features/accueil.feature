@@ -16,3 +16,11 @@ Fonctionnalité: Accueil sur l'application
     Et la page ne contient pas "Année scolaire"
     Quand je clique sur "Continuer"
     Alors la page contient "Année scolaire"
+
+  Scénario: Le personnel voit un aperçu des données sur la page d'accueil
+    Quand je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "3EMEB"
+    Et que je me rends sur la page d'accueil
+    Alors le panneau "Décisions d'attribution" contient un compteur à "0 / 1"
+    Et le panneau "Coordonnées bancaires" contient un compteur à "1 / 1"
+    Et le panneau "Périodes de formation en milieu professionnel" contient un compteur à "0"
+    Et le panneau "PFMP validées" contient un compteur à "0"
