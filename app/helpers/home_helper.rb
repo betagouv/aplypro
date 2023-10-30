@@ -36,10 +36,7 @@ module HomeHelper
       pfmps_counts[state.to_s].to_s
     end
 
-    [
-      count_tag,
-      status_badge(state)
-    ].join("\n")
+    count_tag.concat(status_badge(state))
   end
 
   def school_year_to_s
