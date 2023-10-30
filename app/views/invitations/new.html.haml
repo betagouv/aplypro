@@ -1,8 +1,4 @@
 .fr-col-md-6
-  %p
-    Entrez ci-dessous l'adresse email académique du personnel que vous
-    souhaitez autoriser.
-
   = form_with model: [@etab, @invitation], builder: DsfrFormBuilder do |form|
     = form.dsfr_error_summary
 

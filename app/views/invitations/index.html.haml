@@ -1,7 +1,7 @@
 .fr-col-lg-6.fr-col-md-8
   %p.fr-text--lead
-    Vous pouvez autoriser un ou plusieurs collaborateurs à se
-    connecter à APLyPro en renseignant leur email académique. Ils
+    Vous pouvez autoriser un ou plusieurs collaborateurs à accéder
+    à APLyPro en renseignant leur email académique. Ils
     pourront saisir des RIB et des PFMPs.
   %p
     Les personnels de direction restent les seuls à pouvoir à
@@ -10,13 +10,11 @@
 
   = link_to "Autoriser un nouvel email", new_establishment_invitation_path(@etab), class: 'fr-btn fr-btn--primary'
 
-  - if @invitations.none?
-    %p Vous n'avez pas encore autorisé d'accès.
-  - else
-
+  - if @invitations.any?
     .fr-table
       %table
         %tbody
           - @invitations.each do |invite|
             %tr
               %td= invite.email
+              %td= button_to "Retirer l'autorisation", establishment_invitation_path(@etab, invite), method: :delete, class: "fr-btn fr-btn--danger"

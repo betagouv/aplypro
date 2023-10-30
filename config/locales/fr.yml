@@ -2,8 +2,12 @@ fr:
   year:
     "Année scolaire %{start_year} - %{end_year}"
   flash:
+    invites:
+      created: L'email %{email} est maintenant autorisé à accéder à APLyPro
+      destroyed: L'email %{email} n'est plus autorisé à accéder à APLyPro
     pfmps:
       not_authorised_to_validate: Seuls les personnels de direction peuvent valider les PFMPs
+      not_authorised_to_authorise: Seuls les personnels de direction peuvent gérer les accès
       destroyed: La PFMP de %{name} a bien été supprimée
       validated: La PFMP de %{name} a bien été validée
   helpers:
@@ -72,7 +76,7 @@ fr:
     titles:
       invitations:
         index: Gestion des accès
-        new: Autoriser un email
+        new: Autoriser un email à accéder à APLyPro
       home:
         home: Accueil
         login: Connexion à APLyPro
