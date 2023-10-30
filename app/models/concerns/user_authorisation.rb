@@ -12,8 +12,12 @@ module UserAuthorisation
       current_role.dir?
     end
 
-    def can_authorise?
+    def can_invite?
       director?
+    end
+
+    def cannot_invite?
+      !can_invite?
     end
 
     def can_validate?

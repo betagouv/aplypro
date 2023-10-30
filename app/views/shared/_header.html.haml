@@ -37,7 +37,7 @@
               %li.fr-nav__item
                 %a.fr-nav__link{ href: path, target: "_self", "aria-current" => current_path?(path) ? "page" : nil }
                   = t("menu.#{item}")
-            - if current_user.establishment.present? && current_user.can_authorise?
+            - if current_user.establishment.present? && current_user.can_invite?
               %li.fr-nav__item
                 %a.fr-nav__link{ href: establishment_invitations_path(@etab), target: "_self", "aria-current" => current_path?(establishment_invitations_path(@etab)) ? "page" : nil }
                   = t("menu.invitations")
