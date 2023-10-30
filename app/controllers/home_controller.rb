@@ -10,6 +10,8 @@ class HomeController < ApplicationController
   end
 
   def home
+    redirect_to welcome_path and return unless current_user.welcomed?
+
     @page_title = t("pages.titles.home.home")
     @inhibit_title = true
 
