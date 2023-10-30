@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class InvitationsController < ApplicationController
-  before_action :check_authorisation
+  before_action :handle_unauthorised
   before_action :set_invitation, only: :destroy
 
   def index
@@ -47,7 +47,7 @@ class InvitationsController < ApplicationController
     @invitation = @etab.invitations.find(params[:id])
   end
 
-  def check_authorisation
+  def handle_unauthorised
     return if current_user.can_authorise?
 
     redirect_back_or_to(
