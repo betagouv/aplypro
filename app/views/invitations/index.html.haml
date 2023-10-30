@@ -17,4 +17,4 @@
           - @invitations.each do |invite|
             %tr
               %td= invite.email
-              %td= button_to "Retirer l'autorisation", establishment_invitation_path(@etab, invite), method: :delete, class: "fr-btn fr-btn--danger"
+              %td= button_to "Retirer l'accès", establishment_invitation_path(@etab, invite), method: :delete, class: "fr-btn fr-btn--danger"

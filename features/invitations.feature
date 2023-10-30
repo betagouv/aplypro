@@ -14,3 +14,8 @@ Fonctionnalité: Gestion des accès à l'application
   Scénario: Je ne peux pas inviter que des emails académiques
     Lorsque j'autorise "marie.curie@gmail.com" à rejoindre l'application
     Alors la page contient "seuls les emails académiques"
+
+  Scénario: Je peux supprimer une invitation
+    Lorsque j'autorise "marie.curie@education.gouv.fr" à rejoindre l'application
+    Et que je clique sur "Retirer l'accès"
+    Alors la page contient "n'est plus autorisé à accéder à APLyPro"
