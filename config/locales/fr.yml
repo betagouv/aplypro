@@ -7,7 +7,7 @@ fr:
       destroyed: L'email %{email} n'est plus autorisé à accéder à APLyPro
     pfmps:
       not_authorised_to_validate: Seuls les personnels de direction peuvent valider les PFMPs
-      not_authorised_to_authorise: Seuls les personnels de direction peuvent gérer les accès
+      not_authorised_to_invite: Seuls les personnels de direction peuvent gérer les accès
       destroyed: La PFMP de %{name} a bien été supprimée
       validated: La PFMP de %{name} a bien été validée
   helpers:

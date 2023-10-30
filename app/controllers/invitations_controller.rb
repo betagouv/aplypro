@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class InvitationsController < ApplicationController
-  before_action :handle_unauthorised
+  before_action :check_authorised_to_invite
   before_action :set_invitation, only: :destroy
 
   def index
@@ -47,13 +47,13 @@ class InvitationsController < ApplicationController
     @invitation = @etab.invitations.find(params[:id])
   end
 
-  def handle_unauthorised
-    return if current_user.can_authorise?
-
-    redirect_back_or_to(
-      root_path,
-      alert: t("flash.pfmps.not_authorised_to_authorise"),
-      status: :forbidden
-    )
+  def check_authorised_to_invite
+    if current_user.cannot_invite? # rubocop:disable Style/GuardClause
+      redirect_back_or_to(
+        root_path,
+        alert: t("flash.pfmps.not_authorised_to_invite"),
+        status: :forbidden
+      )
+    end
   end
 end
