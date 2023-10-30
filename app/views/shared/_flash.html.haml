@@ -1,14 +1,13 @@
 - if flash.any?
-  .fr-grid-row
-    .fr-col-md-6.flash.fr-mb-3w
-      - if flash[:notice].present?
-        - if flash[:notice].is_a? String
-          = dsfr_alert(type: :info, title: flash[:notice])
-        - else
-          = dsfr_alert(type: :info, title: flash[:notice]["title"]) { flash[:notice]["content"] }
+  .flash.fr-mb-3w
+    - if flash[:notice].present?
+      - if flash[:notice].is_a? String
+        = dsfr_alert(type: :info, title: flash[:notice])
+      - else
+        = dsfr_alert(type: :info, title: flash[:notice]["title"]) { flash[:notice]["content"] }
 
-      - if flash[:alert].present?
-        - if flash[:alert].is_a? String
-          = dsfr_alert(type: :warning, title: flash[:alert])
-        - else
-          = dsfr_alert(type: :warning, title: flash[:alert]["title"]) { flash[:alert]["content"] }
+    - if flash[:alert].present?
+      - if flash[:alert].is_a? String
+        = dsfr_alert(type: :warning, title: flash[:alert])
+      - else
+        = dsfr_alert(type: :warning, title: flash[:alert]["title"]) { flash[:alert]["content"] }
