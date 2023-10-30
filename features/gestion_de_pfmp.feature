@@ -6,10 +6,10 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Et que je me connecte en tant que personnel MENJ
     Et que je passe l'écran d'accueil
     Et que mon établissement propose une formation "Développement" rémunérée à 15 euros par jour et plafonnée à 200 euros par an
-    Et qu'il y a une élève "Marie Curie" au sein de la classe "3EMEB" pour une formation "Développement"
+    Et qu'il y a une élève "Marie Curie" au sein de la classe "2NDEB" pour une formation "Développement"
     Quand je rafraîchis la page
     Et que je clique sur "Élèves"
-    Et que je clique sur "Voir la classe" dans la rangée "3EMEB"
+    Et que je clique sur "Voir la classe" dans la rangée "2NDEB"
     Et que je clique sur "Voir le profil" dans la rangée "Curie Marie"
 
   Scénario: Le personnel de direction peut voir le nombre de PFMP réalisée
@@ -24,7 +24,7 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
       | Saisie à valider |               3 | 45,00 € |
 
   Scénario: Le personnel de direction peut rajouter une PFMP pour toute la classe
-    Sachant que je vais voir la classe "3EMEB"
+    Sachant que je vais voir la classe "2NDEB"
     Et que je clique sur "Saisir une PFMP pour toute la classe"
     Et que je remplis "Date de début" avec "17/03/2023"
     Et que je remplis "Date de fin" avec "20/03/2023"
@@ -33,7 +33,7 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Et la page contient "La PFMP a bien été enregistrée"
 
   Scénario: Le personnel de direction est informé d'une erreur de saisie pour toute la classe
-    Étant donné que je vais voir la classe "3EMEB"
+    Étant donné que je vais voir la classe "2NDEB"
     Et que je clique sur "Saisir une PFMP pour toute la classe"
     Et que je remplis "Date de début" avec "17/03/2023"
     Et que je remplis "Date de fin" avec "10/03/2023"
