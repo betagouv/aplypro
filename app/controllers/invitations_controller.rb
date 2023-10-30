@@ -48,12 +48,12 @@ class InvitationsController < ApplicationController
   end
 
   def check_authorisation
-    if !current_user.can_authorise?
-      redirect_back_or_to(
-        root_path,
-        alert: t("flash.pfmps.not_authorised_to_authorise"),
-        status: :forbidden
-      ) and return
-    end
+    return if current_user.can_authorise?
+
+    redirect_back_or_to(
+      root_path,
+      alert: t("flash.pfmps.not_authorised_to_authorise"),
+      status: :forbidden
+    )
   end
 end
