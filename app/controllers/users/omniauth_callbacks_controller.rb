@@ -120,7 +120,7 @@ module Users
       else
         @user.update!(establishment: establishments.first)
 
-        redirect_to classes_path, notice: t("auth.success")
+        redirect_to root_path, notice: t("auth.success")
       end
     end
 

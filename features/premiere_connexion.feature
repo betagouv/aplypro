@@ -36,8 +36,7 @@ Fonctionnalité: Le personnel de direction se connecte
     Et que je me connecte en tant que personnel MENJ
     Et que je me déconnecte
     Quand je me connecte en tant que personnel MENJ
-    Alors la page contient "Liste des classes" 
-    # Wtf pourquoi ce test est green ? on devrait atterir sur la home, pas la liste des classes
+    Alors le titre de la page contient "Accueil"
 
   Scénario: Un personnel de direction du MENJ hors de la bêta privée ne peut pas rentrer dans l'application
     Sachant que je suis un personnel MENJ directeur de l'établissement "123"
