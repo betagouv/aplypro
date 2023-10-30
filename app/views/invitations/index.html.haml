@@ -1,21 +1,22 @@
-.fr-col-md-6
+.fr-col-lg-6.fr-col-md-8
   %p.fr-text--lead
     Vous pouvez autoriser un ou plusieurs collaborateurs à se
     connecter à APLyPro en renseignant leur email académique. Ils
     pourront saisir des RIB et des PFMPs.
-
   %p
-    Les personnels de direction restent les seuls à pouvoir valider
-    les PFMPs, éditer les décisions d'attribution et gérer la liste
-    des accès.
+    Les personnels de direction restent les seuls à pouvoir à
+    éditer les décisions d'attribution, valider les PFMPs 
+    pour les envoyer en paiement et gérer la liste des accès.
 
-- if @invitations.none?
-  %p Vous n'avez pas encore autorisé d'accès.
-- else
-  %p Accès autorisés pour votre établissement (#{@etab.uai}) :
+  = link_to "Autoriser un nouvel email", new_establishment_invitation_path(@etab), class: 'fr-btn fr-btn--primary'
 
-  %ul
-    - @invitations.each do |invite|
-      %li= invite.email
+  - if @invitations.none?
+    %p Vous n'avez pas encore autorisé d'accès.
+  - else
 
-= dsfr_link_to "Autoriser un nouvel email", new_establishment_invitation_path(@etab)
+    .fr-table
+      %table
+        %tbody
+          - @invitations.each do |invite|
+            %tr
+              %td= invite.email
