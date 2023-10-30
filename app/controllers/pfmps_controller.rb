@@ -2,7 +2,7 @@
 
 class PfmpsController < ApplicationController
   before_action :authenticate_user!
-  before_action :check_authorisation, only: %i[validate validate_all]
+  before_action :check_authorised_to_validate, only: %i[validate validate_all]
   before_action :set_classe, :set_student, :set_breadcrumbs, except: :validate_all
   before_action :set_pfmp, only: %i[show edit update validate confirm_deletion destroy]
 
@@ -112,13 +112,13 @@ class PfmpsController < ApplicationController
     )
   end
 
-  def check_authorisation
-    return if current_user.can_validate?
-
-    redirect_back_or_to(
-      root_path,
-      alert: t("flash.pfmps.not_authorised_to_validate"),
-      status: :forbidden
-    )
+  def check_authorised_to_validate
+    if current_user.cannot_validate? # rubocop:disable Style/GuardClause
+      redirect_back_or_to(
+        root_path,
+        alert: t("flash.pfmps.not_authorised_to_validate"),
+        status: :forbidden
+      )
+    end
   end
 end

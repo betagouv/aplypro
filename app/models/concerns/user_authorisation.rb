@@ -20,6 +20,10 @@ module UserAuthorisation
       director?
     end
 
+    def cannot_validate?
+      !can_validate?
+    end
+
     def can_generate_attributive_decisions?
       director?
     end
