@@ -18,4 +18,6 @@
             - @invitations.each do |invite|
               %tr
                 %td= invite.email
-                %td= button_to "Retirer l'accès", establishment_invitation_path(@etab, invite), method: :delete, class: "fr-btn fr-btn--danger"
+                %td
+                  .fr-grid-row.fr-grid-row--right
+                    = button_to "Retirer l'accès", establishment_invitation_path(@etab, invite), method: :delete, class: "fr-btn fr-btn--danger"
