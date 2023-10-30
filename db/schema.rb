@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_23_084115) do
+ActiveRecord::Schema[7.1].define(version: 2023_10_30_135955) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -53,7 +53,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_23_084115) do
     t.index ["mef_id"], name: "index_classes_on_mef_id"
   end
 
-  create_table "establishment_user_roles", id: false, force: :cascade do |t|
+  create_table "establishment_user_roles", force: :cascade do |t|
     t.bigint "establishment_id", null: false
     t.bigint "user_id", null: false
     t.bigint "granted_by_id"
