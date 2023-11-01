@@ -26,14 +26,14 @@ class Student
 
           next if mef.nil?
 
-          klass = Classe.find_or_create_by!(
+          classe = Classe.find_or_create_by!(
             establishment:,
             mef:,
             label:,
             start_year: @year
           )
 
-          [klass, students]
+          [classe, students]
         end.compact
       end
 

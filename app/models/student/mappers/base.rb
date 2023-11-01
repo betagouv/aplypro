@@ -12,9 +12,9 @@ class Student
       end
 
       def parse!
-        classes_with_students.each do |klass, students_attrs|
+        classes_with_students.each do |classe, students_attrs|
           map_students(students_attrs).each do |student|
-            Schooling.find_or_create_by!(classe: klass, student: student)
+            Schooling.find_or_create_by!(classe: classe, student: student)
           end
         end
 
