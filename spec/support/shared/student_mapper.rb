@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.shared_examples "a student mapper" do |skip_changed = false|
+RSpec.shared_examples "a student mapper" do
   subject(:mapper) { described_class.new(data, establishment) }
 
   it "upserts the students" do
@@ -49,6 +49,14 @@ RSpec.shared_examples "a student mapper" do |skip_changed = false|
     end
   end
 
+  describe "when some students have already left on the first parse" do
+    subject(:mapper) { described_class.new(gone_student_payload, establishment) }
+
+    it "does not crash" do
+      expect { mapper.parse! }.not_to raise_error
+    end
+  end
+
   describe "when there are irrelevant MEFS" do
     let(:data) { irrelevant_mefs_payload }
 
@@ -57,30 +65,28 @@ RSpec.shared_examples "a student mapper" do |skip_changed = false|
     end
   end
 
-  unless skip_changed
-    describe "subsequent updates" do
-      let(:student) { Student.find_by(ine: student_ine) }
+  describe "subsequent updates" do
+    let(:student) { Student.find_by(ine: student_ine) }
 
-      before { mapper.parse! }
+    before { mapper.parse! }
 
-      describe "when a student is not in a class anymore" do
-        let(:new_mapper) { described_class.new(gone_student_payload, establishment) }
+    describe "when a student is not in a class anymore" do
+      let(:new_mapper) { described_class.new(gone_student_payload, establishment) }
 
-        include_examples "student has moved"
-      end
+      include_examples "student has moved"
+    end
 
-      describe "when a student has changed class" do
-        let(:new_mapper) { described_class.new(changed_class_student_payload, establishment) }
+    describe "when a student has changed class" do
+      let(:new_mapper) { described_class.new(changed_class_student_payload, establishment) }
 
-        include_examples "student has moved"
-      end
+      include_examples "student has moved"
+    end
 
-      describe "when a student has changed establishment" do
-        let(:new_establishment) { create(:establishment) }
-        let(:new_mapper) { described_class.new(changed_class_student_payload, new_establishment) }
+    describe "when a student has changed establishment" do
+      let(:new_establishment) { create(:establishment) }
+      let(:new_mapper) { described_class.new(changed_class_student_payload, new_establishment) }
 
-        include_examples "student has moved"
-      end
+      include_examples "student has moved"
     end
   end
 end

@@ -37,8 +37,14 @@ class Student
         end.compact
       end
 
-      def no_class_for_entry?(entry)
-        entry["division"].blank?
+      def student_is_gone?(entry)
+        left_establishment?(entry)
+      end
+
+      def left_establishment?(entry)
+        left_at = entry["apprenant"]["dateSortieEtablissement"]
+
+        Date.parse(left_at).past? if left_at.present?
       end
     end
   end
