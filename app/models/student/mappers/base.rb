@@ -23,8 +23,9 @@ class Student
 
       def check_schoolings!
         payload
-          .filter { |entry| no_class_for_entry?(entry) }
+          .filter { |entry| student_is_gone?(entry) }
           .map    { |entry| Student.find_by(ine: map_student_attributes(entry)[:ine]) }
+          .compact
           .each(&:close_current_schooling!)
       end
 

@@ -37,7 +37,11 @@ class Student
         end.compact
       end
 
-      def no_class_for_entry?(entry)
+      def student_is_gone?(entry)
+        no_classe_for_entry?(entry)
+      end
+
+      def no_classe_for_entry?(entry)
         entry["classe"].blank?
       end
     end
