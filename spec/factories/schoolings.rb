@@ -12,7 +12,7 @@ FactoryBot.define do
       end
     end
 
-    trait :past do
+    trait :closed do
       end_date { Date.yesterday }
     end
   end
