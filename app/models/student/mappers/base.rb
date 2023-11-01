@@ -41,8 +41,14 @@ class Student
         end.compact
       end
 
+      # the MEF codes from SYGNE and FREGATA all arrive with an extra
+      # character that seems to be used for academic vs national
+      # diplomas[1]. Chomp the extra bit since all of our MEFs (which
+      # we prepopulate through data/mefs.csv) are 10 characters long.
+      #
+      # [1]: https://bv.ac-nantes.fr/affelnet-lycee-resultatsetab/aide/104-ecr-formations.htm
       def chop_mef_code(code)
-        code.slice(..-2)
+        code.chop
       end
 
       def inspect
