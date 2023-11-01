@@ -92,7 +92,7 @@ fr:
         show: "PFMP pour %{name}"
         edit: "Modifier la PFMP de %{name}"
         validate: "Validation"
-        validate_all: "Valider des PFMPs et envoyer en paiement"
+        validate_all: "Valider des PFMPs à envoyer en paiement en 2024"
         confirm_deletion: "Suppression de la PFMP"
       ribs:
         new: "Ajout de coordonnées bancaires"
