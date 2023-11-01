@@ -36,4 +36,9 @@ class Student < ApplicationRecord
   def allowance_left
     current_schooling.mef.wage.yearly_cap - used_allowance
   end
+
+  def close_current_schooling!
+    current_schooling.update!(end_date: Time.zone.today)
+    update!(current_schooling: nil)
+  end
 end

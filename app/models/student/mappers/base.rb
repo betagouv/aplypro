@@ -23,13 +23,9 @@ class Student
 
       def check_schoolings!
         payload
-          .map { |entry| [entry, Student.find_by(ine: map_student_attributes(entry)[:ine])] }
-          .each do |entry, student|
-          if no_class_for_entry?(entry)
-            student.current_schooling.update!(end_date: Time.zone.today)
-            student.update!(current_schooling: nil)
-          end
-        end
+          .filter { |entry| no_class_for_entry?(entry) }
+          .map    { |entry| Student.find_by(ine: map_student_attributes(entry)[:ine]) }
+          .each(&:close_current_schooling!)
       end
 
       def map_students(payload)
