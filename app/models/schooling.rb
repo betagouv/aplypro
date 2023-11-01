@@ -11,7 +11,9 @@ class Schooling < ApplicationRecord
   has_one :mef, through: :classe
   has_one :establishment, through: :classe
 
-  after_create do
+  after_create :replace_former_schooling
+
+  def replace_former_schooling
     if student.current_schooling.present? && student.current_schooling != self
       student.current_schooling.update!(end_date: Time.zone.now)
     end
