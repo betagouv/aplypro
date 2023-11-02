@@ -16,25 +16,12 @@ class Student
         end
       end
 
-      def classes_with_students
-        payload
-          .group_by { |item| [item["division"]["libelle"], item["sectionReference"]["codeMef"]] }
-          .map do |attributes, students|
-          label, code = attributes
+      def classe_label(entry)
+        entry["division"]["libelle"]
+      end
 
-          mef = Mef.find_by(code: chop_mef_code(code))
-
-          next if mef.nil?
-
-          classe = Classe.find_or_create_by!(
-            establishment:,
-            mef:,
-            label:,
-            start_year: @year
-          )
-
-          [classe, students]
-        end.compact
+      def classe_mef_code(entry)
+        entry["sectionReference"]["codeMef"]
       end
 
       def student_is_gone?(entry)
