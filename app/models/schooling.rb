@@ -30,6 +30,15 @@ class Schooling < ApplicationRecord
     ].join("_").concat(".pdf")
   end
 
+  def attributive_decision_number
+    [
+      mef.ministry,
+      student.asp_file_reference,
+      ENV.fetch("APLYPRO_SCHOOL_YEAR"),
+      attributive_decision_version
+    ].join.upcase
+  end
+
   def rattach_attributive_decision!(output)
     name = attributive_decision_filename
 

@@ -1,9 +1,16 @@
 # frozen_string_literal: true
 
 class Student < ApplicationRecord
-  validates :ine, :first_name, :last_name, :birthdate, presence: true
+  validates :ine,
+            :first_name,
+            :last_name,
+            :birthdate,
+            :asp_file_reference,
+            presence: true
 
-  has_many :schoolings, dependent: :destroy
+  validates :asp_file_reference, uniqueness: true
+
+  has_many :schoolings, dependent: :delete_all
   has_many :classes, through: :schoolings, source: "classe"
 
   has_many :pfmps, -> { order "pfmps.start_date" }, through: :schoolings
@@ -16,6 +23,8 @@ class Student < ApplicationRecord
 
   has_many :ribs, dependent: :destroy
   has_one :rib, -> { where(archived_at: nil) }, dependent: :destroy, inverse_of: :student
+
+  before_validation :check_asp_file_reference
 
   def to_s
     full_name
@@ -40,5 +49,21 @@ class Student < ApplicationRecord
   def close_current_schooling!
     current_schooling.update!(end_date: Time.zone.today)
     update!(current_schooling: nil)
+  end
+
+  private
+
+  def check_asp_file_reference
+    return if asp_file_reference.present?
+
+    loop do
+      self.asp_file_reference = generate_asp_file_reference
+
+      break unless Student.exists?(asp_file_reference: asp_file_reference)
+    end
+  end
+
+  def generate_asp_file_reference
+    SecureRandom.alphanumeric(10).upcase
   end
 end
