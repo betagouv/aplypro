@@ -7,7 +7,7 @@
 
 - if @etab.generating_attributive_decisions
   = dsfr_alert(type: :info, title: "Édition des décisions d'attribution en cours", classes: 'fr-mt-3w') do
-    %p Les décisions d'attribution sont en train d'être éditées, veuillez rafraichir la page dans quelques minutes.
+    %p Les décisions d'attribution sont en train d'être éditées, veuillez rafraichir la page dans quelques minutes. Vous pouvez commencer à remplir des coordonnées bancaires ou des PFMP pendant ce temps.
 - else
   %ul.fr-btns-group
     - if @etab.attributive_decisions_zip.attached?
