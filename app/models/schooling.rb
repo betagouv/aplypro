@@ -23,8 +23,8 @@ class Schooling < ApplicationRecord
 
   def attributive_decision_filename
     [
-      student.first_name,
       student.last_name,
+      student.first_name,
       "décision-d-attribution",
       Time.zone.today
     ].join("_").concat(".pdf")

@@ -42,7 +42,7 @@ fr:
     hints:
       rib:
         name: "Noms et prénoms du titulaire du compte"
-        iban: "Un IBAN français contient 27 caractères et commence par FR"
+        iban: "Les deux premières lettres de l'IBAN doivent représenter un pays en zone SEPA. <a href='https://fr.iban.com/structure' target='_blank'>Voir des exemples</a>."
         bic: "Le code BIC est composé de 8 ou de 11 caractères"
       pfmp:
         day_count: "Le nombre de jours présent sur l'attestation. Il doit être entier (pas de demi-journées)."
