@@ -12,13 +12,50 @@ class Student
       end
 
       def parse!
-        classes_with_students.each do |classe, students_attrs|
-          map_students!(students_attrs).each do |student|
+        payload
+          .group_by { |entry| map_classe!(entry) }
+          .reject { |classe, _attrs| classe.nil? }
+          .transform_values! { |student_attrs| map_students!(student_attrs) }
+          .each do |classe, students|
+          students.each do |student|
             Schooling.find_or_create_by!(classe: classe, student: student)
           end
         end
 
         check_schoolings!
+      end
+
+      def map_classe!(entry)
+        label = classe_label(entry)
+        code  = classe_mef_code(entry)
+
+        mef = Mef.find_by(code: chop_mef_code(code))
+
+        return if label.nil? || mef.nil?
+
+        Classe.find_or_create_by!(
+          label:,
+          mef:,
+          establishment: establishment,
+          start_year: @year
+        )
+      end
+
+      def map_students!(students_attrs)
+        students_attrs
+          .map { |attrs| map_student!(attrs) }
+          .compact
+      end
+
+      def map_student!(attrs)
+        attributes = map_student_attributes(attrs)
+
+        return if attributes[:ine].nil?
+
+        Student
+          .find_or_initialize_by(ine: attributes[:ine])
+          .tap { |student| student.assign_attributes(attributes) }
+          .tap(&:save!)
       end
 
       def check_schoolings!
@@ -27,19 +64,6 @@ class Student
           .map    { |entry| Student.find_by(ine: map_student_attributes(entry)[:ine]) }
           .compact
           .each(&:close_current_schooling!)
-      end
-
-      def map_students!(payload)
-        payload.map do |attrs|
-          attributes = map_student_attributes(attrs)
-
-          next if attributes[:ine].nil?
-
-          Student
-            .find_or_initialize_by(ine: attributes[:ine])
-            .tap { |student| student.assign_attributes(attributes) }
-            .tap(&:save!)
-        end.compact
       end
 
       # the MEF codes from SYGNE and FREGATA all arrive with an extra
