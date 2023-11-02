@@ -139,6 +139,8 @@ class DsfrFormBuilder < ActionView::Helpers::FormBuilder
     @template.content_tag(:span, class: "fr-hint-text") do
       text
     end
+
+    @template.content_tag(:span, text.html_safe, class: "fr-hint-text") # rubocop:disable Rails/OutputSafety
   end
 
   def error_message(attr)
