@@ -3,7 +3,17 @@
 class FetchStudentsJob < ApplicationJob
   queue_as :default
 
-  def perform(etab)
-    StudentApi.fetch_students!(etab)
+  around_perform do |job, block|
+    establishment = job.arguments.first
+
+    establishment.update!(fetching_students: true)
+
+    block.call
+
+    establishment.update!(fetching_students: false)
+  end
+
+  def perform(establishment)
+    StudentApi.fetch_students!(establishment)
   end
 end

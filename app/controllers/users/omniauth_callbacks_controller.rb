@@ -28,9 +28,10 @@ module Users
 
       check_user!
       save_roles!
-      check_limited_access!
-      choose_roles!
-      fetch_students!
+      check_limited_access! # for the private beta
+      async_fetch_students!
+      fetch_establishments!
+      choose_redirect_page
     end
 
     def masa
@@ -108,12 +109,11 @@ module Users
       raise(IdentityMappers::Errors::NotAuthorisedError, nil) if authorisations.none?
     end
 
-    def choose_roles!
+    def choose_redirect_page
       establishments = @user.establishments
 
       if establishments.many?
         clear_previous_establishment!
-        establishments.each(&:fetch_data!)
         @inhibit_nav = true
 
         render action: :select_etab
@@ -124,10 +124,14 @@ module Users
       end
     end
 
-    def fetch_students!
+    def async_fetch_students!
       jobs = @mapper.establishments.map { |e| FetchStudentsJob.new(e) }
 
       ActiveJob.perform_all_later(jobs)
+    end
+
+    def fetch_establishments!
+      @mapper.establishments.each { |e| FetchEstablishmentJob.perform_now(e) }
     end
 
     def clear_previous_establishment!

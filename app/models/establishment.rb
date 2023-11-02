@@ -22,8 +22,6 @@ class Establishment < ApplicationRecord
 
   has_one_attached :attributive_decisions_zip
 
-  after_create :queue_refresh
-
   API_MAPPING = {
     "nom_etablissement" => :name,
     "libelle_nature" => :denomination,
@@ -55,22 +53,6 @@ class Establishment < ApplicationRecord
 
   def refreshed?
     name.present?
-  end
-
-  def queue_refresh
-    FetchEstablishmentJob.perform_later(self)
-  end
-
-  def fetch_data!
-    raw = EstablishmentApi.fetch!(uai)
-
-    data = raw["records"].first["fields"]
-
-    attributes = API_MAPPING.to_h do |col, attr|
-      [attr, data[col]]
-    end
-
-    update!(attributes)
   end
 
   def select_label

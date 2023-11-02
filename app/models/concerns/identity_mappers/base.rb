@@ -37,15 +37,18 @@ module IdentityMappers
       FREDURNE_MAPPING.zip(line.split("$")).to_h
     end
 
+    # rubocop:disable Metrics/AbcSize
     def authorised_establishments_for(email)
       return [] if attributes["FrEduRne"].blank?
 
       Array(attributes["FrEduRne"])
         .reject { |line| no_value?(line) }
         .map    { |line| map_establishment(line) }
-        .map    { |attrs| Establishment.find_or_create_by!(uai: attrs[:uai]) }
+        .map    { |attrs| Establishment.find_by(uai: attrs[:uai]) }
+        .compact
         .select { |etab| etab.invites?(email) }
     end
+    # rubocop:enable Metrics/AbcSize
 
     def establishments
       responsibilities
