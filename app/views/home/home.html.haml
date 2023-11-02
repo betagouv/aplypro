@@ -1,9 +1,9 @@
 .home.fr-container
   - if @etab.fetching_students
     .fr-grid-row
-      .fr-col-lg-7.fr-alert.fr-alert--info
-        %h1.fr-h3 Récupération des élèves en cours
-        %p Nous sommes en train de récupérer les données de vos élèves, veuillez rafraichir la page dans quelques minutes.
+      .fr-col-lg-7
+        = dsfr_alert(type: :info, title: "Récupération des élèves en cours") do
+          %p Nous sommes en train de récupérer les données de vos élèves, veuillez rafraichir la page dans quelques minutes.
 
   - else
     .fr-grid-row.fr-grid-row--center
