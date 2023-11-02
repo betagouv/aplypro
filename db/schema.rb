@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_30_135955) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_02_145756) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -166,6 +166,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_30_135955) do
     t.date "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "attributive_decision_version", default: 0
     t.index ["classe_id"], name: "index_schoolings_on_classe_id"
     t.index ["student_id"], name: "index_schoolings_on_student_id"
   end
@@ -178,6 +179,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_30_135955) do
     t.datetime "updated_at", null: false
     t.date "birthdate", null: false
     t.bigint "current_schooling_id"
+    t.string "asp_file_reference", null: false
+    t.index ["asp_file_reference"], name: "index_students_on_asp_file_reference", unique: true
     t.index ["current_schooling_id"], name: "index_students_on_current_schooling_id"
     t.index ["ine"], name: "index_students_on_ine", unique: true
   end

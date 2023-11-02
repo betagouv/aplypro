@@ -2,6 +2,8 @@
 
 require "rails_helper"
 
+require "attribute_decision_generator"
+
 RSpec.describe Schooling do
   describe "associations" do
     it { is_expected.to belong_to(:student).class_name("Student") }
@@ -30,6 +32,26 @@ RSpec.describe Schooling do
 
       it "doesn't set its own end date" do
         expect { schooling.save! }.not_to change(schooling, :end_date)
+      end
+    end
+  end
+
+  describe "attributive_decision_version" do
+    let(:schooling) { create(:schooling) }
+
+    it "defaults to 0" do
+      expect(schooling.attributive_decision_version).to eq 0
+    end
+
+    context "when an attributive decision is generated" do
+      before do
+        create(:user, :director, establishment: schooling.establishment)
+      end
+
+      it "bumps the version" do
+        expect do
+          AttributeDecisionGenerator.new(schooling).generate!(StringIO.new)
+        end.to change(schooling, :attributive_decision_version).from(0).to(1)
       end
     end
   end

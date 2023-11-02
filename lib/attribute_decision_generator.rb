@@ -14,9 +14,13 @@ class AttributeDecisionGenerator
   end
 
   def generate!(file_descriptor)
-    render
+    Schooling.transaction do
+      schooling.increment!(:attributive_decision_version)
 
-    composer.write(file_descriptor)
+      render
+
+      composer.write(file_descriptor)
+    end
   end
 
   private
@@ -177,8 +181,8 @@ class AttributeDecisionGenerator
      # leurs adjoints (FrEduRneResp + FrEduFonctAdm)
     director = establishment.users.directors.first
 
-    composer.text("Numéro de dossier administratif : #{student.ine}")
-    composer.text("Numéro de décision attributive : #{student.ine}")
+    composer.text("Numéro de dossier administratif : #{student.asp_file_reference}")
+    composer.text("Numéro de décision attributive : #{schooling.attributive_decision_number}")
     composer.text("Bénéficiaire : #{student}")
     composer.text("Adresse email de l'établissement : #{establishment.email}")
     composer.text("Téléphone de l'établissement : #{establishment.telephone}")
