@@ -1,0 +1,41 @@
+%h1 Année scolaire 2023-2024
+
+.gray-panel#attributive_decision_panel
+  = render 'classes/attributive_decisions_panel'
+
+.gray-panel
+  .fr-grid-row.fr-grid-row--top
+    %h2.fr-col 2. Coordonnées bancaires
+    = indicator_badge(@ribs_count, @students_count)
+
+  %p Afin de pouvoir verser l'allocation aux lycéens, APLyPro a besoin de leurs coordonnées bancaires, de celles d'un responsable légal ou d'un tiers.
+  %ul.fr-btns-group
+    %li= link_to "Choisir un élève pour saisir ses coordonnées bancaires", classes_path, class: "fr-btn fr-btn--primary fr-mb-0"
+
+.gray-panel
+  .fr-grid-row.fr-grid-row--top
+    %h2.fr-col 3. Périodes de formation en milieu professionnel
+
+    .fr-ml-2w
+      .fr-badge-group.fr-grid-row--right
+        = pfmp_badge(:pending, @pfmps_counts)
+      .fr-badge-group.fr-grid-row--right
+        = pfmp_badge(:completed, @pfmps_counts)
+
+  %p Pour calculer le montant des allocations à envoyer, APLyPro a besoin de connaître le nombre de jours travaillés des PFMPs de chaque élève.
+  %ul.fr-btns-group
+    %li= link_to "Choisir une classe ou un élève pour saisir une PFMP", classes_path, class: "fr-btn fr-btn--primary fr-mb-0"
+
+.gray-panel
+  .fr-grid-row.fr-grid-row--top
+    %h2.fr-col 4. PFMP validées à envoyer en paiement en 2024
+
+    .fr-badge-group.fr-ml-2w
+      = pfmp_badge(:validated, @pfmps_counts)
+
+  %p APLyPro a besoin de la validation du chef d'établissement pour chaque PFMP afin d'envoyer chaque demande de paiement à l'Agence de Services et de Paiement (ASP). Les paiements commenceront début 2024.
+  %ul.fr-btns-group
+    - if current_user.can_validate?
+      %li= link_to "Valider des PFMPs à envoyer en paiement", validate_all_pfmps_path, class: "fr-btn fr-btn--primary fr-mb-0"
+    - else
+      %li= button_to "Vous n'avez pas le droit de valider des PFMPs", "#", class: 'fr-btn fr-btn--primary fr-mb-0', disabled: true
