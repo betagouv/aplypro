@@ -3,18 +3,12 @@
 class Student
   module Mappers
     class Sygne < Base
-      SYGNE_MAPPING = {
-        "prenom" => :first_name,
-        "nom" => :last_name,
-        "ine" => :ine,
-        "dateNaissance" => :birthdate
+      STUDENT_MAPPING = {
+        ine: "ine",
+        first_name: "prenom",
+        last_name: "nom",
+        birthdate: "dateNaissance"
       }.freeze
-
-      def map_student_attributes(attrs)
-        SYGNE_MAPPING.to_h do |attr, col|
-          [col, attrs[attr]]
-        end
-      end
 
       def classe_label(entry)
         entry["classe"]

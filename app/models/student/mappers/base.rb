@@ -58,6 +58,12 @@ class Student
           .tap(&:save!)
       end
 
+      def map_student_attributes(attrs)
+        self.class::STUDENT_MAPPING.transform_values do |path|
+          attrs.dig(*path.split("."))
+        end
+      end
+
       def check_schoolings!
         payload
           .filter { |entry| student_is_gone?(entry) }

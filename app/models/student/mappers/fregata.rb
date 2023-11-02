@@ -3,18 +3,12 @@
 class Student
   module Mappers
     class Fregata < Base
-      FREGATA_MAPPING = {
+      STUDENT_MAPPING = {
         ine: "apprenant.ine",
         first_name: "apprenant.prenomUsuel",
         last_name: "apprenant.nomUsuel",
         birthdate: "apprenant.dateNaissance"
       }.freeze
-
-      def map_student_attributes(attrs)
-        FREGATA_MAPPING.transform_values do |path|
-          attrs.dig(*path.split("."))
-        end
-      end
 
       def classe_label(entry)
         entry["division"]["libelle"]
