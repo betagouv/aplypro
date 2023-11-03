@@ -24,10 +24,30 @@ require "rspec/rails"
 #
 # Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
 
+# FIXME: figure out why seeds *sometimes* get wiped, fix the offending
+# code and remove the below function.
+def check_missing_seed_data!
+  return unless Mef.count.zero?
+
+  abort <<~WARNING
+
+    You're missing seed data: `Mef.count` returned 0.
+
+    This is abnormal behaviour but in the meantime you can run
+
+    RAILS_ENV=test bin/rails db:seed
+
+    to fix the issue.
+
+  WARNING
+end
+
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
 begin
   ActiveRecord::Migration.maintain_test_schema!
+
+  check_missing_seed_data!
 rescue ActiveRecord::PendingMigrationError => e
   puts e.to_s.strip
   exit 1
