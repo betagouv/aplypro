@@ -30,7 +30,14 @@ class Establishment < ApplicationRecord
     "code_postal" => :postal_code,
     "nom_commune" => :city,
     "telephone" => :telephone,
-    "mail" => :email
+    "mail" => :email,
+    "code_type_contrat_prive" => :private_contract_type_code
+  }.freeze
+
+  # Find all codes here : https://infocentre.pleiade.education.fr/bcn/workspace/viewTable/n/N_CONTRAT_ETABLISSEMENT
+  CONTRACTS_STATUS = {
+    public: ["99"],
+    private_allowed: %w[30 31 40 41]
   }.freeze
 
   def current_schoolings
@@ -71,5 +78,24 @@ class Establishment < ApplicationRecord
       filename: filename,
       content_type: "application/zip"
     )
+  end
+
+  def contract_type
+    case private_contract_type_code
+    when *CONTRACTS_STATUS[:private_allowed]
+      :private_allowed
+    when *CONTRACTS_STATUS[:public]
+      :public
+    else
+      :other
+    end
+  end
+
+  def private_allowed?
+    contract_type == :private_allowed
+  end
+
+  def public?
+    contract_type == :public
   end
 end

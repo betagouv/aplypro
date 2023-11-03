@@ -13,4 +13,16 @@ class Mef < ApplicationRecord
   def mefstat4
     mefstat11.slice(0..3)
   end
+
+  def bop_code(establishment)
+    return ministry if ministry != "menj"
+
+    if establishment.private_allowed?
+      "enpr"
+    elsif establishment.public?
+      "enpu"
+    else
+      raise IdentityMappers::Errors::UnallowedPrivateEstablishment
+    end
+  end
 end
