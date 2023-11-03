@@ -42,9 +42,7 @@ class Student
       end
 
       def map_students!(students_attrs)
-        students_attrs
-          .map { |attrs| map_student!(attrs) }
-          .compact
+        students_attrs.filter_map { |attrs| map_student!(attrs) }
       end
 
       def map_student!(attrs)
@@ -67,8 +65,7 @@ class Student
       def check_schoolings!
         payload
           .filter { |entry| student_is_gone?(entry) }
-          .map    { |entry| Student.find_by(ine: map_student_attributes(entry)[:ine]) }
-          .compact
+          .filter_map { |entry| Student.find_by(ine: map_student_attributes(entry)[:ine]) }
           .each(&:close_current_schooling!)
       end
 
