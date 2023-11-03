@@ -2,6 +2,7 @@
 
 class HomeController < ApplicationController
   layout "maintenance", only: :maintenance
+  before_action :authenticate_user!, only: %i[home welcome]
 
   def index
     (redirect_to home_path and return) if user_signed_in?
