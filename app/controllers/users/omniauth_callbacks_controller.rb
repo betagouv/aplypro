@@ -31,7 +31,7 @@ module Users
       check_limited_access! # for the private beta
       async_fetch_students!
       fetch_establishments!
-      choose_redirect_page
+      choose_redirect_page!
     end
 
     def masa
@@ -109,7 +109,7 @@ module Users
       raise(IdentityMappers::Errors::NotAuthorisedError, nil) if authorisations.none?
     end
 
-    def choose_redirect_page
+    def choose_redirect_page!
       establishments = @user.establishments
 
       if establishments.many?
