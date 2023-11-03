@@ -32,7 +32,7 @@ class Schooling < ApplicationRecord
 
   def attributive_decision_number
     [
-      mef.ministry,
+      mef.bop_code(establishment),
       student.asp_file_reference,
       ENV.fetch("APLYPRO_SCHOOL_YEAR"),
       attributive_decision_version

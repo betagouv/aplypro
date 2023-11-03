@@ -35,5 +35,13 @@ module IdentityMappers
         super(msg)
       end
     end
+
+    class UnallowedPrivateEstablishment < Error
+      attr_reader :attributes
+
+      def initialize(msg = "The private establishment is not included in the reform")
+        super(msg)
+      end
+    end
   end
 end
