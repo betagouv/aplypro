@@ -62,4 +62,18 @@ RSpec.describe Student do
       end
     end
   end
+
+  describe "address?" do
+    context "when there are no adress attributes" do
+      subject { build(:student) }
+
+      it { is_expected.not_to be_addressable }
+    end
+
+    context "when there are some adress attributes" do
+      subject { build(:student, :with_address) }
+
+      it { is_expected.to be_addressable }
+    end
+  end
 end

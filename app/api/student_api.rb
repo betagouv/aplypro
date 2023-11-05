@@ -6,6 +6,10 @@ module StudentApi
       api_for(establishment).fetch_and_parse!
     end
 
+    def fetch_student_data!(student)
+      api_for(student.current_schooling.establishment).fetch_student_data!(student.ine)
+    end
+
     def api_for(establishment)
       # maybe we should store the provider straight into the
       # establishment? see `mock/data/etab.json` for an example of the
@@ -13,7 +17,7 @@ module StudentApi
       provider = establishment.users.directors.first.provider
 
       case provider
-      when "fim", "developer"
+      when "fim"
         Sygne.new(establishment)
       when "masa"
         Fregata.new(establishment)
