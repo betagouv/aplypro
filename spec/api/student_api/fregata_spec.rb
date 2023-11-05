@@ -6,7 +6,6 @@ describe StudentApi::Fregata do
   subject(:api) { described_class.new(establishment) }
 
   let(:establishment) { create(:establishment, :with_masa_user) }
-  let(:payload) { JSON.generate({ access_token: "foobar", token_type: "Bearer" }) }
 
   before do
     stub_request(:get, /#{api.endpoint}/)

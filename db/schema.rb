@@ -181,6 +181,12 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_08_161014) do
     t.date "birthdate", null: false
     t.bigint "current_schooling_id"
     t.string "asp_file_reference", null: false
+    t.string "address_line1"
+    t.string "address_line2"
+    t.string "postal_code"
+    t.string "city_insee_code"
+    t.string "city"
+    t.string "country_code"
     t.index ["asp_file_reference"], name: "index_students_on_asp_file_reference", unique: true
     t.index ["current_schooling_id"], name: "index_students_on_current_schooling_id"
     t.index ["ine"], name: "index_students_on_ine", unique: true

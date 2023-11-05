@@ -6,10 +6,16 @@ module StudentApi
       base_url + format("etablissements/%s/eleves/", @establishment.uai)
     end
 
-    def fetch!
-      with_token = client.access_token!
+    def student_endpoint(ine)
+      base_url + format("eleves/%s", ine)
+    end
 
-      with_token.get(endpoint).body
+    def fetch!
+      authenticated_client!.get(endpoint).body
+    end
+
+    def fetch_student_data!(ine)
+      authenticated_client!.get(student_endpoint(ine)).body
     end
 
     def client
@@ -18,6 +24,12 @@ module StudentApi
         secret: ENV.fetch("APLYPRO_SYGNE_SECRET"),
         token_endpoint: ENV.fetch("APLYPRO_SYGNE_TOKEN_URL")
       )
+    end
+
+    private
+
+    def authenticated_client!
+      client.access_token!
     end
   end
 end
