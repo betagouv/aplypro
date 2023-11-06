@@ -43,3 +43,14 @@ Fonctionnalité: Le personnel de direction se connecte
     Et que l'accès est limité aux UAIs "456"
     Quand je me connecte en tant que personnel MENJ
     Alors la page contient "Accès restreint"
+
+  # Les personnels de la Mer passent par la FIM mais n'ont pas les
+  # attributs "FrEduRneResp" et "FrEduFonctAdm" renseignés, c'est un
+  # choix volontaire du côté de la FIM. Pour palier au problème nous
+  # avons un attribut spécifique que nous pouvons renseigner pour
+  # forcer l'association entre le profil et un établissement en
+  # responsabilité.
+  Scénario: Un personnel de direction de la MER peut être introduit dans l'application
+    Sachant que je suis un personnel MENJ avec un accès spécifique pour l'UAI "456"
+    Quand je me connecte en tant que personnel MENJ
+    Alors la page contient "Connexion réussie"

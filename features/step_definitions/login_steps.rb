@@ -63,7 +63,8 @@ Sachantque("je suis un personnel MASA directeur de l'établissement {string}") d
     name: Faker::Name.name,
     email: Faker::Internet.email,
     raw_info: {
-      fr_edu_rne_resp: make_fredurneresp(uai)
+      fr_edu_rne_resp: make_fredurneresp(uai),
+      fr_edu_fonct_adm: "DIR"
     }
   )
 end
@@ -82,7 +83,18 @@ Sachantque("je suis un personnel MENJ directeur de l'établissement {string}") d
     name: Faker::Name.name,
     email: Faker::Internet.email,
     raw_info: {
-      FrEduRneResp: uais.map { |u| make_fredurneresp(u) }
+      FrEduRneResp: uais.map { |u| make_fredurneresp(u) },
+      FrEduFonctAdm: "DIR"
+    }
+  )
+end
+
+Sachantque("je suis un personnel MENJ avec un accès spécifique pour l'UAI {string}") do |uai|
+  OmniAuth.config.mock_auth[:fim] = make_fim_hash(
+    name: Faker::Name.name,
+    email: Faker::Internet.email,
+    raw_info: {
+      AplyproResp: uai
     }
   )
 end

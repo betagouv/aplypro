@@ -76,9 +76,17 @@ module DeveloperOidc
     line = ["#{uai}$UAJ$PU$N$T3$LYC$340"]
 
     if provider(attrs) == :fim
-      { FrEduRneResp: line }
+      {
+        FrEduRneResp: line,
+        FrEduFonctAdm: "DIR"
+      }
     else
-      { attributes: { fr_edu_rne_resp: line } }
+      {
+        attributes: {
+          fr_edu_rne_resp: line,
+          fr_edu_fonct_adm: "DIR"
+        }
+      }
     end
   end
 end

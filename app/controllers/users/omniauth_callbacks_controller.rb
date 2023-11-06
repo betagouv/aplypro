@@ -75,7 +75,7 @@ module Users
     end
 
     def save_roles!
-      @mapper.establishments.each do |e|
+      @mapper.establishments_in_responsibility.each do |e|
         e.save! unless e.persisted?
 
         EstablishmentUserRole
@@ -125,13 +125,13 @@ module Users
     end
 
     def async_fetch_students!
-      jobs = @mapper.establishments.map { |e| FetchStudentsJob.new(e) }
+      jobs = @mapper.establishments_in_responsibility.map { |e| FetchStudentsJob.new(e) }
 
       ActiveJob.perform_all_later(jobs)
     end
 
     def fetch_establishments!
-      @mapper.establishments.each { |e| FetchEstablishmentJob.perform_now(e) }
+      @mapper.establishments_in_responsibility.each { |e| FetchEstablishmentJob.perform_now(e) }
     end
 
     def clear_previous_establishment!
