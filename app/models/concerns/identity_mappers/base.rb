@@ -13,17 +13,29 @@ module IdentityMappers
       @attributes = normalize(attributes)
     end
 
+    def normalize(attributes)
+      attributes
+    end
+
     def map_responsibility(line)
       FREDURNERESP_MAPPING.zip(line.split("$")).to_h
     end
 
+    def map_establishment(line)
+      FREDURNE_MAPPING.zip(line.split("$")).to_h
+    end
+
     def responsibilities
-      return [] if attributes["FrEduRneResp"].blank?
+      return [] if attributes["FrEduRneResp"].blank? || !director?
 
       Array(attributes["FrEduRneResp"])
         .reject { |line| no_value?(line) }
         .map    { |line| map_responsibility(line) }
         .filter { |line| relevant?(line) }
+    end
+
+    def director?
+      attributes["FrEduFonctAdm"] == "DIR"
     end
 
     def no_value?(line)
@@ -34,10 +46,6 @@ module IdentityMappers
       ACCEPTED_ESTABLISHMENT_TYPES.include?(attrs[:tty_code])
     end
 
-    def map_establishment(line)
-      FREDURNE_MAPPING.zip(line.split("$")).to_h
-    end
-
     def authorised_establishments_for(email)
       return [] if attributes["FrEduRne"].blank?
 
@@ -45,10 +53,10 @@ module IdentityMappers
         .reject     { |line| no_value?(line) }
         .map        { |line| map_establishment(line) }
         .filter_map { |attrs| Establishment.find_by(uai: attrs[:uai]) }
-        .select { |etab| etab.invites?(email) }
+        .select     { |establishment| establishment.invites?(email) }
     end
 
-    def establishments
+    def establishments_in_responsibility
       responsibilities
         .pluck(:uai)
         .map { |uai| Establishment.find_or_create_by!(uai: uai) }
