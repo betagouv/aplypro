@@ -10,10 +10,11 @@
     %p Les décisions d'attribution sont en train d'être éditées, veuillez rafraichir la page dans quelques minutes. Vous pouvez commencer à remplir des coordonnées bancaires ou des PFMPs pendant ce temps.
 - else
   %ul.fr-btns-group
-    - if @etab.attributive_decisions_zip.attached?
-      %li= link_to "Télécharger l'ensemble des décisions d'attribution", url_for(@etab.attributive_decisions_zip), class: 'fr-btn fr-btn--primary fr-mb-0', target: :download
-    - else
-      - if current_user.can_generate_attributive_decisions?
-        %li= button_to "Éditer les décisions d'attribution", establishment_create_attributive_decisions_path(@etab), class: 'fr-btn fr-btn--primary fr-mb-0'
-      - else
-        %li= button_to "Vous n'avez pas le droit d'éditer les décisions d'attribution", "#", class: 'fr-btn fr-btn--primary fr-mb-0', disabled: true
+    %li= button_to "L'édition des décisions d'attribution n'est pas encore disponible", "#", class: 'fr-btn fr-btn--primary fr-mb-0', disabled: true
+    -# - if @etab.attributive_decisions_zip.attached?
+    -#   %li= link_to "Télécharger l'ensemble des décisions d'attribution", url_for(@etab.attributive_decisions_zip), class: 'fr-btn fr-btn--primary fr-mb-0', target: :download
+    -# - else
+      -# - if current_user.can_generate_attributive_decisions?
+      -#   %li= button_to "Éditer les décisions d'attribution", establishment_create_attributive_decisions_path(@etab), class: 'fr-btn fr-btn--primary fr-mb-0'
+      -# - else
+      -#   %li= button_to "Vous n'avez pas le droit d'éditer les décisions d'attribution", "#", class: 'fr-btn fr-btn--primary fr-mb-0', disabled: true
