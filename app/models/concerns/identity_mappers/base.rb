@@ -4,7 +4,7 @@ module IdentityMappers
   class Base
     attr_accessor :attributes
 
-    ACCEPTED_ESTABLISHMENT_TYPES = %w[LYC LP].freeze
+    ACCEPTED_ESTABLISHMENT_TYPES = %w[LYC LP SEP].freeze
     FREDURNERESP_MAPPING = %i[uai type category activity tna_sym tty_code tna_code].freeze
     FREDURNE_MAPPING     = %i[uai type category activity uaj tna_sym tty_code tna_code].freeze
 
