@@ -3,7 +3,11 @@
 class User < ApplicationRecord
   include UserAuthorisation
 
-  devise :omniauthable, omniauth_providers: %i[fim masa developer]
+  if Rails.env.production?
+    devise :omniauthable, omniauth_providers: %i[fim masa]
+  else
+    devise :omniauthable, omniauth_providers: %i[fim masa developer]
+  end
 
   validates :uid, :provider, :name, :token, :secret, :email, presence: true
 
