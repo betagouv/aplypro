@@ -18,6 +18,8 @@ module Users
     def oidc
       parse_identity
 
+      check_limited_access!
+
       begin
         check_responsibilites!
       rescue IdentityMappers::Errors::EmptyResponsibilitiesError
@@ -30,7 +32,6 @@ module Users
 
       check_user!
       save_roles!
-      check_limited_access! # for the private beta
       async_fetch_students!
       fetch_establishments!
       choose_redirect_page!
@@ -140,6 +141,10 @@ module Users
       @user.update!(establishment: nil)
     end
 
+    def all_establishments
+      @mapper.establishments_in_responsibility + @mapper.authorised_establishments_for(@user.email)
+    end
+
     def check_limited_access!
       allowed_uais = ENV
                      .fetch("APLYPRO_RESTRICTED_ACCESS", "")
@@ -148,7 +153,7 @@ module Users
 
       return if allowed_uais.blank?
 
-      allowed = @user.establishments.find { |e| allowed_uais.include?(e.uai) }
+      allowed = all_establishments.map(&:uai).intersect?(allowed_uais)
 
       raise IdentityMappers::Errors::NoLimitedAccessError unless allowed
     end
