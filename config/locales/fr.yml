@@ -131,7 +131,14 @@ fr:
         title: "Erreur d'authentification"
         content: |
           Le guichet d'authentification n'indique pas d'établissement
-          sous votre responsabilité ou de délégations connues.
+          sous votre responsabilité ou d'autorisations pour votre
+          adresse e-mail. Si vous êtes chef d'établissement
+          assurez-vous que vos informations sont bien renseignées dans
+          votre annuaire académique. Si vous n'êtes pas chef
+          d'établissement assurez-vous que votre adresse e-mail a bien
+          été autorisée par votre personnel de direction dans
+          l'application APlyPro (DELEG-CE n'est pas encore
+          disponible).
     success: "Connexion réussie"
 
   ribs:
