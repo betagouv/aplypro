@@ -70,6 +70,15 @@ RSpec.shared_examples "a student mapper" do
 
     before { mapper.parse! }
 
+    describe "when a student has already moved" do
+      it "can handle parsing it again" do
+        expect do
+          described_class.new(gone_student_payload, establishment).parse!
+          described_class.new(gone_student_payload, establishment).parse!
+        end.not_to raise_error
+      end
+    end
+
     describe "when a student is not in a class anymore" do
       let(:new_mapper) { described_class.new(gone_student_payload, establishment) }
 

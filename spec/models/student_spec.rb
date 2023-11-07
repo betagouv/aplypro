@@ -42,4 +42,24 @@ RSpec.describe Student do
     end
     # rubocop:enable RSpec/SubjectStub
   end
+
+  describe "close_current_schooling!" do
+    let(:schooling) { create(:schooling, student: student) }
+
+    it "removes the current schooling" do
+      expect { student.close_current_schooling! }.to change(student, :current_schooling).from(schooling).to(nil)
+    end
+
+    it "sets the end date" do
+      expect { student.close_current_schooling! }.to change(schooling, :end_date)
+    end
+
+    context "when there is no current schooling" do
+      before { student.close_current_schooling! }
+
+      it "does not crash" do
+        expect { student.close_current_schooling! }.not_to raise_error
+      end
+    end
+  end
 end
