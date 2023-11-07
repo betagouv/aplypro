@@ -47,6 +47,8 @@ class Student < ApplicationRecord
   end
 
   def close_current_schooling!
+    return if current_schooling.nil?
+
     current_schooling.update!(end_date: Time.zone.today)
     update!(current_schooling: nil)
   end
