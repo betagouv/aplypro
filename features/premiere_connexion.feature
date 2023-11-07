@@ -28,7 +28,7 @@ Fonctionnalité: Le personnel de direction se connecte
   Scénario: Un personnel du MENJ sans établissements en responsabilité est informé
     Sachant que je suis un personnel MENJ de l'établissement "123"
     Quand je me connecte en tant que personnel MENJ
-    Alors la page contient "pas d'établissement sous votre responsabilité ou de délégations"
+    Alors la page affiche une erreur d'authentification
     Et il n'y a pas de personnel de direction enregistré dans la base de données
 
   Scénario: Un personnel de direction du MENJ peut se reconnecter sans problèmes
@@ -42,7 +42,29 @@ Fonctionnalité: Le personnel de direction se connecte
     Sachant que je suis un personnel MENJ directeur de l'établissement "123"
     Et que l'accès est limité aux UAIs "456"
     Quand je me connecte en tant que personnel MENJ
-    Alors la page contient "Accès restreint"
+    Alors la page contient "sélection d'établissements pilotes"
+
+  Scénario: Un personnel MENJ est d'abord averti de la phase pilote
+    Sachant que je suis un personnel MENJ de l'établissement "123"
+    Et que l'accès est limité aux UAIs "456"
+    Quand je me connecte en tant que personnel MENJ
+    Alors la page contient "sélection d'établissements pilotes"
+
+  Scénario: Un personnel directeur MENJ est d'abord averti de la phase pilote
+    Sachant que je suis un personnel MENJ directeur de l'établissement "123"
+    Et que l'accès est limité aux UAIs "456"
+    Quand je me connecte en tant que personnel MENJ
+    Alors la page contient "sélection d'établissements pilotes"
+
+  Scénario: Un personnel du MENJ peut-être invité lors de la bêta privée
+    Sachant que l'accès est limité aux UAIs "123"
+    Et que je suis un personnel MENJ directeur de l'établissement "123"
+    Et que je me connecte en tant que personnel MENJ
+    Et que j'autorise "louis.pasteur@education.gouv.fr" à rejoindre l'application
+    Et que je me déconnecte
+    Et que je suis un personnel MENJ de l'établissement "123" avec l'email "louis.pasteur@education.gouv.fr"
+    Quand je me connecte en tant que personnel MENJ
+    Alors la page contient "Bienvenue sur APLyPro"
 
   # Les personnels de la Mer passent par la FIM mais n'ont pas les
   # attributs "FrEduRneResp" et "FrEduFonctAdm" renseignés, c'est un

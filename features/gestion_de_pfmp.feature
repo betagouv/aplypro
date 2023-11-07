@@ -59,7 +59,7 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Alors la page contient "La PFMP de Marie Curie a bien été validée"
 
   Scénario: Le personnel autorisé ne peut pas valider une PFMP individuellement
-    Sachant que je me connecte en tant que personnel autorisé de l'établissement
+    Sachant que je me connecte en tant que personnel autorisé de l'établissement "DINUM"
     Et que je passe l'écran d'accueil
     Et que je renseigne une PFMP de 3 jours pour "Marie Curie"
     Quand je clique sur "Voir la PFMP"
