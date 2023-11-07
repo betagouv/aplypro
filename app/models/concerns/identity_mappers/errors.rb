@@ -2,7 +2,7 @@
 
 module IdentityMappers
   module Errors
-    class Error < StandardError; end
+    class Error < ::StandardError; end
 
     class OmniauthError < Error
       def initialize(msg = "Omniauth failed without an exception")
@@ -24,6 +24,14 @@ module IdentityMappers
       attr_reader :attributes
 
       def initialize(msg = "No delegations indicated")
+        super(msg)
+      end
+    end
+
+    class NoAccessFound < Error
+      attr_reader :attributes
+
+      def initialize(msg = "No access conclusion")
         super(msg)
       end
     end

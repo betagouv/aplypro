@@ -16,7 +16,7 @@ Fonctionnalité: Gestion des accès à l'application
   Scénario: Je ne peux me connecter à l'application si mon email n'a pas été autorisé
     Sachant que je suis un personnel MENJ de l'établissement "DINUM" avec l'email "louis.pasteur@education.gouv.fr"
     Lorsque je me connecte en tant que personnel MENJ
-    Alors la page contient "adresse e-mail n'est pas reconnue"
+    Alors la page contient "pas d'établissement sous votre responsabilité ou de délégations"
 
   Scénario: Je ne peux pas gérer les accès en tant qu'invité
     Lorsque je me connecte en tant que personnel MENJ
@@ -33,4 +33,4 @@ Fonctionnalité: Gestion des accès à l'application
     Et que je me déconnecte
     Quand je suis un personnel MENJ de l'établissement "DINUM" avec l'email "marie.curie@education.gouv.fr"
     Et que je me connecte en tant que personnel MENJ
-    Alors la page contient "Votre adresse e-mail n'est pas reconnue"
+    Alors la page contient "pas d'établissement sous votre responsabilité ou de délégations"

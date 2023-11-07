@@ -21,9 +21,11 @@ module Users
       begin
         check_responsibilites!
       rescue IdentityMappers::Errors::EmptyResponsibilitiesError
-        check_access_list!
-      rescue IdentityMappers::Errors::NotAuthorisedError
-        raise IdentityMappers::Errors::NoAccessFound
+        begin
+          check_access_list!
+        rescue IdentityMappers::Errors::NotAuthorisedError
+          raise IdentityMappers::Errors::NoAccessFound
+        end
       end
 
       check_user!
