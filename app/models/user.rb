@@ -28,6 +28,7 @@ class User < ApplicationRecord
         user.secret = "nope"
         user.name = attrs["info"]["name"]
         user.email = attrs["info"]["email"]
+        user.oidc_attributes = attrs
       end
     end
   end
