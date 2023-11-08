@@ -10,6 +10,7 @@ class User < ApplicationRecord
   end
 
   validates :uid, :provider, :name, :token, :secret, :email, presence: true
+  normalizes :email, with: ->(email) { email.strip.downcase }
 
   has_many :establishment_user_roles, dependent: :destroy
   has_many :establishments, through: :establishment_user_roles

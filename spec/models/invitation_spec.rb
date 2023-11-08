@@ -12,7 +12,7 @@ RSpec.describe Invitation do
 
   describe "validations" do
     it { is_expected.to validate_presence_of :email }
-    it { is_expected.to validate_uniqueness_of(:email).scoped_to(:establishment_id) }
+    it { is_expected.to validate_uniqueness_of(:email).scoped_to(:establishment_id).case_insensitive }
   end
 
   describe "valid domains" do
@@ -40,6 +40,14 @@ RSpec.describe Invitation do
       it "does not allow `#{email}`" do
         expect(build(:invitation, email: email)).not_to be_valid
       end
+    end
+  end
+
+  describe "normalize email" do
+    let(:invitation) { create(:invitation, email: "MyEmail@educagri.fr") }
+
+    it "normalizes the email" do
+      expect(invitation.email).to eq "myemail@educagri.fr"
     end
   end
 end
