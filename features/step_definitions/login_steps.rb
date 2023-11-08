@@ -94,7 +94,7 @@ Sachantque("je suis un personnel MENJ avec un accès spécifique pour l'UAI {str
     name: Faker::Name.name,
     email: Faker::Internet.email,
     raw_info: {
-      AplyproResp: uai
+      "AplyproResp" => uai
     }
   )
 end
