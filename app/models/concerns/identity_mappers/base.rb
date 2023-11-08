@@ -17,21 +17,12 @@ module IdentityMappers
       attributes
     end
 
-    def map_responsibility(line)
+    def parse_responsibility_line(line)
       FREDURNERESP_MAPPING.zip(line.split("$")).to_h
     end
 
-    def map_establishment(line)
+    def parse_line(line)
       FREDURNE_MAPPING.zip(line.split("$")).to_h
-    end
-
-    def responsibilities
-      return [] if attributes["FrEduRneResp"].blank? || !director?
-
-      Array(attributes["FrEduRneResp"])
-        .reject { |line| no_value?(line) }
-        .map    { |line| map_responsibility(line) }
-        .filter { |line| relevant?(line) }
     end
 
     def director?
@@ -46,20 +37,45 @@ module IdentityMappers
       ACCEPTED_ESTABLISHMENT_TYPES.include?(attrs[:tty_code])
     end
 
-    def authorised_establishments_for(email)
-      return [] if attributes["FrEduRne"].blank?
+    def no_responsibilities?
+      establishments_in_responsibility.none?
+    end
 
-      Array(attributes["FrEduRne"])
-        .reject     { |line| no_value?(line) }
-        .map        { |line| map_establishment(line) }
-        .filter_map { |attrs| Establishment.find_by(uai: attrs[:uai]) }
+    def no_access_for_email?(email)
+      establishments_authorised_for(email).none?
+    end
+
+    def establishments_authorised_for(email)
+      normal_uais
+        .filter_map { |uai| Establishment.find_by(uai:) }
         .select     { |establishment| establishment.invites?(email) }
     end
 
     def establishments_in_responsibility
-      responsibilities
-        .pluck(:uai)
+      responsibility_uais
         .map { |uai| Establishment.find_or_create_by!(uai: uai) }
+    end
+
+    def responsibility_uais
+      return [] if !director?
+
+      Array(attributes["FrEduRneResp"])
+        .reject { |line| no_value?(line) }
+        .map    { |line| parse_responsibility_line(line) }
+        .filter { |attributes| relevant?(attributes) }
+        .pluck(:uai)
+    end
+
+    def normal_uais
+      Array(attributes["FrEduRne"])
+        .reject { |line| no_value?(line) }
+        .map    { |line| parse_line(line) }
+        .filter { |attributes| relevant?(attributes) }
+        .pluck(:uai)
+    end
+
+    def all_indicated_uais
+      responsibility_uais + normal_uais
     end
   end
 end

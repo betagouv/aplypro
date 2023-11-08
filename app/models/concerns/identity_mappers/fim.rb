@@ -6,12 +6,12 @@ module IdentityMappers
       attributes
     end
 
-    def responsibilities
+    def responsibility_uais
       aplypro_responsibilities + super
     end
 
     def aplypro_responsibilities
-      Array(attributes["AplyproResp"]).compact.map { |u| { uai: u } }
+      Array(attributes["AplyproResp"]).compact
     end
   end
 end

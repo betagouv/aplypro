@@ -27,6 +27,6 @@ FactoryBot.define do
       tna_code { "340" }
     end
 
-    initialize_with { [uai, type, category, function, activity, tna_sym, tty_code, tna_code].join("$") }
+    initialize_with { [uai, type, category, function, uaj, tna_sym, tty_code, tna_code].join("$") }
   end
 end

@@ -86,7 +86,7 @@ module Users
           .first_or_create
       end
 
-      @mapper.authorised_establishments_for(@user.email).each do |e|
+      @mapper.establishments_authorised_for(@user.email).each do |e|
         e.save! unless e.persisted?
 
         EstablishmentUserRole
@@ -103,13 +103,11 @@ module Users
     end
 
     def check_responsibilites!
-      raise(IdentityMappers::Errors::EmptyResponsibilitiesError, nil) if @mapper.responsibilities.none?
+      raise(IdentityMappers::Errors::EmptyResponsibilitiesError, nil) if @mapper.no_responsibilities?
     end
 
     def check_access_list!
-      authorisations = @mapper.authorised_establishments_for(@user.email)
-
-      raise(IdentityMappers::Errors::NotAuthorisedError, nil) if authorisations.none?
+      raise(IdentityMappers::Errors::NotAuthorisedError, nil) if @mapper.no_access_for_email?(@user.email)
     end
 
     def choose_redirect_page!
@@ -141,10 +139,6 @@ module Users
       @user.update!(establishment: nil)
     end
 
-    def all_establishments
-      @mapper.establishments_in_responsibility + @mapper.authorised_establishments_for(@user.email)
-    end
-
     def check_limited_access!
       allowed_uais = ENV
                      .fetch("APLYPRO_RESTRICTED_ACCESS", "")
@@ -153,7 +147,7 @@ module Users
 
       return if allowed_uais.blank?
 
-      allowed = all_establishments.map(&:uai).intersect?(allowed_uais)
+      allowed = allowed_uais.intersect?(@mapper.all_indicated_uais)
 
       raise IdentityMappers::Errors::NoLimitedAccessError unless allowed
     end

@@ -66,6 +66,16 @@ Fonctionnalité: Le personnel de direction se connecte
     Quand je me connecte en tant que personnel MENJ
     Alors la page contient "Bienvenue sur APLyPro"
 
+  Scénario: Un personnel du MENJ dans un UAI pilote peut-être refusé
+    Sachant que l'accès est limité aux UAIs "123"
+    Et que je suis un personnel MENJ directeur de l'établissement "123"
+    Et que je me connecte en tant que personnel MENJ
+    Et que j'autorise "louis.pasteur@education.gouv.fr" à rejoindre l'application
+    Et que je me déconnecte
+    Et que je suis un personnel MENJ de l'établissement "123" avec l'email "jean.michel@education.gouv.fr"
+    Quand je me connecte en tant que personnel MENJ
+    Alors la page affiche une erreur d'authentification
+
   # Les personnels de la Mer passent par la FIM mais n'ont pas les
   # attributs "FrEduRneResp" et "FrEduFonctAdm" renseignés, c'est un
   # choix volontaire du côté de la FIM. Pour palier au problème nous
