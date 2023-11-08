@@ -29,7 +29,7 @@ Fonctionnalité: Le personnel de direction se connecte
     Sachant que je suis un personnel MENJ de l'établissement "123"
     Quand je me connecte en tant que personnel MENJ
     Alors la page affiche une erreur d'authentification
-    Et il n'y a pas de personnel de direction enregistré dans la base de données
+    Mais il y a un compte utilisateur enregistré
 
   Scénario: Un personnel de direction du MENJ peut se reconnecter sans problèmes
     Sachant que je suis un personnel MENJ directeur de l'établissement "123"

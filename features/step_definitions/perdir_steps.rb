@@ -121,8 +121,8 @@ Quand("je renseigne {int} jours pour la dernière PFMP de {string}") do |days, n
   )
 end
 
-Alors("il n'y a pas de personnel de direction enregistré dans la base de données") do
-  expect(User.count).to eq 0
+Alors("il y a un compte utilisateur enregistré") do
+  expect(User.count).to eq 1
 end
 
 Quand("je n'ai pas encore vu l'écran d'accueil") do
