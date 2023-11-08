@@ -11,6 +11,8 @@ class Schooling < ApplicationRecord
   has_one :mef, through: :classe
   has_one :establishment, through: :classe
 
+  scope :current, -> { where(end_date: nil) }
+
   after_create :replace_former_schooling
 
   def replace_former_schooling

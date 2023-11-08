@@ -55,4 +55,20 @@ RSpec.describe Schooling do
       end
     end
   end
+
+  describe ".current" do
+    subject { described_class.current }
+
+    context "when the schooling is over" do
+      let(:schooling) { create(:schooling, :closed) }
+
+      it { is_expected.not_to include schooling }
+    end
+
+    context "when the schooling is active" do
+      let(:schooling) { create(:schooling) }
+
+      it { is_expected.to include schooling }
+    end
+  end
 end
