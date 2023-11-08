@@ -18,6 +18,8 @@ module Users
     def oidc
       parse_identity
 
+      @user.save!
+
       check_limited_access!
 
       begin
@@ -30,7 +32,7 @@ module Users
         end
       end
 
-      check_user!
+      log_user_in!
       save_roles!
       async_fetch_students!
       fetch_establishments!
@@ -95,9 +97,7 @@ module Users
       end
     end
 
-    def check_user!
-      @user.save!
-
+    def log_user_in!
       sign_in(@user)
       Sentry.set_user(id: @user.id)
     end
