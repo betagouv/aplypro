@@ -16,4 +16,12 @@ RSpec.describe User do
       it { is_expected.to validate_presence_of(attr) }
     end
   end
+
+  describe "normalize email" do
+    let(:user) { create(:user, email: "MyEmail@educagri.fr") }
+
+    it "normalizes the email" do
+      expect(user.email).to eq "myemail@educagri.fr"
+    end
+  end
 end

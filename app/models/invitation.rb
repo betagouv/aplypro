@@ -44,4 +44,5 @@ class Invitation < ApplicationRecord
   validates :email,
             presence: true, format: { with: VALID_EMAILS },
             uniqueness: { scope: :establishment_id }
+  normalizes :email, with: ->(email) { email.strip.downcase }
 end
