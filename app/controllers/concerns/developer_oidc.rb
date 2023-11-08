@@ -63,7 +63,7 @@ module DeveloperOidc
   end
 
   def authorised_hash(attrs, uai)
-    line = ["#{uai}$UAJ$PU$N$T3$LYC$340"]
+    line = ["#{uai}$UAJ$PU$ADM$111$T3$LYC$340"]
 
     if provider(attrs) == :fim
       { FrEduRne: line }
