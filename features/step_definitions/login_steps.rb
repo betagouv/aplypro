@@ -23,7 +23,7 @@ def make_cas_hash(name:, email:, raw_info:)
   OmniAuth::AuthHash.new(
     {
       provider: "masa",
-      uid: Faker::Alphanumeric.alpha(number: 10),
+      uid: email,
       credentials: {
         token: "test token"
       },
