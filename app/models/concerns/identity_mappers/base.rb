@@ -7,7 +7,7 @@ module IdentityMappers
     # List of establishment types : https://infocentre.pleiade.education.fr/bcn/workspace/viewTable/n/N_TYPE_UAI
     ACCEPTED_ESTABLISHMENT_TYPES = %w[LYC LP SEP EREA].freeze
     FREDURNERESP_MAPPING = %i[uai type category activity tna_sym tty_code tna_code].freeze
-    FREDURNE_MAPPING     = %i[uai type category activity uaj tna_sym tty_code tna_code].freeze
+    FREDURNE_MAPPING     = %i[uai type category function uaj tna_sym tty_code tna_code].freeze
 
     def initialize(attributes)
       @attributes = normalize(attributes)

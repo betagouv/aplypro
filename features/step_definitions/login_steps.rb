@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 
-def make_fredurneresp(uai, activity = "ADF")
-  [uai, "UAJ", "PU", activity, "T3", "LYC", "340"].join("$")
-end
-
-def make_fredurne(uai)
-  [uai, "UAJ", "PU", "ADM", uai, "T3", "LYC", "340"].join("$")
-end
-
 def make_fim_hash(name:, email:, raw_info:)
   OmniAuth::AuthHash.new(
     {
@@ -53,7 +45,7 @@ Sachantque("je suis un personnel MENJ de l'établissement {string}") do |uai|
     name: Faker::Name.name,
     email: Faker::Internet.email,
     raw_info: {
-      FrEduRne: make_fredurne(uai)
+      FrEduRne: FactoryBot.build(:fredurne, uai: uai)
     }
   )
 end
@@ -63,7 +55,7 @@ Sachantque("je suis un personnel MASA directeur de l'établissement {string}") d
     name: Faker::Name.name,
     email: Faker::Internet.email,
     raw_info: {
-      fr_edu_rne_resp: make_fredurneresp(uai),
+      fr_edu_rne_resp: FactoryBot.build(:fredurneresp, uai: uai),
       fr_edu_fonct_adm: "DIR"
     }
   )
@@ -83,7 +75,7 @@ Sachantque("je suis un personnel MENJ directeur de l'établissement {string}") d
     name: Faker::Name.name,
     email: Faker::Internet.email,
     raw_info: {
-      FrEduRneResp: uais.map { |u| make_fredurneresp(u) },
+      FrEduRneResp: uais.map { |u| FactoryBot.build(:fredurneresp, uai: u) },
       FrEduFonctAdm: "DIR"
     }
   )
@@ -104,7 +96,7 @@ Quand("je suis un personnel MENJ de l'établissement {string} avec l'email {stri
     name: Faker::Name.name,
     email: email,
     raw_info: {
-      FrEduRne: [uai].map { |u| make_fredurne(u) }
+      FrEduRne: [uai].map { |u| FactoryBot.build(:fredurne, uai: u) }
     }
   )
 end
