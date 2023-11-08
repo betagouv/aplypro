@@ -16,6 +16,8 @@ RSpec.describe Classe do
   end
 
   describe ".current" do
+    subject { described_class.current }
+
     let(:last_year) { create(:classe, start_year: 2020) }
     let(:next_year) { create(:classe, start_year: 2024) }
     let(:current) { create(:classe, start_year: 2023) }
@@ -27,8 +29,26 @@ RSpec.describe Classe do
         .and_return("2023")
     end
 
-    it "only returns the classes that started the same year as APLYPRO_SCHOOL_YEAR" do
-      expect(described_class.current).to contain_exactly(current)
+    it { is_expected.to contain_exactly(current) }
+  end
+
+  describe "create_bulk_pfmp" do
+    subject(:classe) { create(:classe, :with_students, students_count: 5) }
+
+    let(:params) { { start_date: Date.yesterday, end_date: Date.tomorrow } }
+
+    it "creates a PFMP for each student" do
+      expect { classe.create_bulk_pfmp(params) }.to change(Pfmp, :count).from(0).to(5)
+    end
+
+    context "when there are past/gone students" do
+      it "does not include them" do
+        student = classe.students.last
+
+        student.close_current_schooling!
+
+        expect { classe.create_bulk_pfmp(params) }.not_to change(student, :pfmps)
+      end
     end
   end
 

@@ -19,8 +19,8 @@ class Classe < ApplicationRecord
     @pfmp = Pfmp.new(pfmp_params)
 
     Pfmp.transaction do
-      students.each do |student|
-        student.current_schooling.pfmps.create!(pfmp_params)
+      schoolings.current.each do |schooling|
+        schooling.pfmps.create!(pfmp_params)
       end
     rescue ActiveRecord::RecordInvalid
       false
