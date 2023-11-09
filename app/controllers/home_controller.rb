@@ -30,6 +30,8 @@ class HomeController < ApplicationController
   end
 
   def maintenance
+    redirect_to root_path and return if !maintenance_mode?
+
     @msg = ENV.fetch("APLYPRO_MAINTENANCE_REASON")
   end
 
