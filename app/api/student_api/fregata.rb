@@ -7,16 +7,17 @@ module StudentApi
     SECRET = ENV.fetch("APLYPRO_FREGATA_SECRET")
     KEY = ENV.fetch("APLYPRO_FREGATA_KEY_ID")
 
-    # for some reason MASA has a strange year-encoding system that
-    # makes 2023 = 26, we'll have to model that at some point
-    SCHOOL_YEAR = 26
+    # MASA has a special encoding of the year, which happens to be the
+    # current year minus 1995. 2022-2023 was year 26, which means the
+    # offset is 1996. Because.
+    YEAR_OFFSET = 1996
 
     attr_reader :now
 
     def fetch!
       @now = DateTime.now.httpdate
 
-      params = { rne: @establishment.uai, anneeScolaireId: SCHOOL_YEAR }
+      params = { rne: @establishment.uai, anneeScolaireId: fregata_year }
       headers = { "Authorization" => signature_header, "Date" => @now }
 
       client.get(endpoint, params, headers).body
@@ -52,6 +53,10 @@ module StudentApi
       sig = params.map { |k, v| [k, v].join("=") }.join(",")
 
       "Signature #{sig}"
+    end
+
+    def fregata_year
+      ENV.fetch("APLYPRO_SCHOOL_YEAR").to_i - YEAR_OFFSET
     end
   end
 end
