@@ -33,4 +33,15 @@ describe StudentApi::Fregata do
       .to have_requested(:get, api.endpoint)
       .with(query: { rne: establishment.uai, anneeScolaireId: 44 })
   end
+
+  context "when the API returns a 401 error" do
+    before do
+      stub_request(:get, /#{api.endpoint}/)
+        .to_return(status: 401, body: "invalid signature", headers: {})
+    end
+
+    it "raises" do
+      expect { api.fetch! }.to raise_error Faraday::UnauthorizedError
+    end
+  end
 end

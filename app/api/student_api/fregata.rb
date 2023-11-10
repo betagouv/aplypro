@@ -32,6 +32,7 @@ module StudentApi
     def client
       @client ||= Faraday.new do |f|
         f.response :json
+        f.response :raise_error
       end
     end
 
