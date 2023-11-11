@@ -23,7 +23,7 @@ class Student
       end
 
       def left_establishment?(entry)
-        left_at = entry["apprenant"]["dateSortieEtablissement"]
+        left_at = entry["dateSortieEtablissement"]
 
         Date.parse(left_at).past? if left_at.present?
       end
