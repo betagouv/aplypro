@@ -64,7 +64,7 @@ class Student
 
       def check_schoolings!
         payload
-          .filter { |entry| student_is_gone?(entry) }
+          .filter { |entry| student_has_left_class?(entry) }
           .filter_map { |entry| Student.find_by(ine: map_student_attributes(entry)[:ine]) }
           .each(&:close_current_schooling!)
       end
@@ -77,6 +77,10 @@ class Student
       # [1]: https://bv.ac-nantes.fr/affelnet-lycee-resultatsetab/aide/104-ecr-formations.htm
       def chop_mef_code(code)
         code.chop
+      end
+
+      def student_has_left_class?(entry)
+        student_has_changed_class?(entry) || student_has_left_establishment?(entry)
       end
 
       def inspect

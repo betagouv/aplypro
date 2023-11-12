@@ -47,14 +47,18 @@ class Student
         student_attrs
       end
 
-      def student_is_gone?(entry)
-        left_establishment?(entry)
+      def student_has_changed_class?(entry)
+        timestamp_past?(entry["dateSortieFormation"])
       end
 
-      def left_establishment?(entry)
-        left_at = entry["dateSortieEtablissement"]
+      def student_has_left_establishment?(entry)
+        timestamp_past?(entry["dateSortieEtablissement"])
+      end
 
-        Date.parse(left_at).past? if left_at.present?
+      private
+
+      def timestamp_past?(value)
+        value.present? && Date.parse(value).past?
       end
     end
   end
