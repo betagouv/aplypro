@@ -40,12 +40,12 @@ class Student
         end
       end
 
-      def student_is_gone?(entry)
-        no_classe_for_entry?(entry)
+      def student_has_changed_class?(entry)
+        entry["classe"].blank?
       end
 
-      def no_classe_for_entry?(entry)
-        entry["classe"].blank?
+      def student_has_left_establishment?(_entry)
+        false
       end
     end
   end
