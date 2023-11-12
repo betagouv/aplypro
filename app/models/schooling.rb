@@ -13,15 +13,7 @@ class Schooling < ApplicationRecord
 
   scope :current, -> { where(end_date: nil) }
 
-  after_create :replace_former_schooling
-
-  def replace_former_schooling
-    if student.current_schooling.present? && student.current_schooling != self
-      student.current_schooling.update!(end_date: Time.zone.now)
-    end
-
-    student.update!(current_schooling: self)
-  end
+  validates :student_id, uniqueness: { conditions: -> { current } }
 
   def attributive_decision_filename
     [

@@ -43,15 +43,33 @@ RSpec.describe Student do
     # rubocop:enable RSpec/SubjectStub
   end
 
+  describe "current_schooling" do
+    subject(:current_schooling) { student.reload.current_schooling }
+
+    let!(:schooling) { create(:schooling, student: student) }
+
+    it { is_expected.to eq schooling }
+
+    context "when it is closed" do
+      before { schooling.update!(end_date: Date.yesterday) }
+
+      it { is_expected.to be_nil }
+    end
+
+    it "is always unique" do
+      expect { create(:schooling, student: student) }.to raise_error ActiveRecord::RecordInvalid
+    end
+  end
+
   describe "close_current_schooling!" do
-    let(:schooling) { create(:schooling, student: student) }
+    let!(:schooling) { create(:schooling, student: student) }
 
     it "removes the current schooling" do
-      expect { student.close_current_schooling! }.to change(student, :current_schooling).from(schooling).to(nil)
+      expect { student.close_current_schooling! }.to change { student.reload.current_schooling }.from(schooling).to(nil)
     end
 
     it "sets the end date" do
-      expect { student.close_current_schooling! }.to change(schooling, :end_date)
+      expect { student.reload.close_current_schooling! }.to(change { schooling.reload.end_date })
     end
 
     context "when there is no current schooling" do

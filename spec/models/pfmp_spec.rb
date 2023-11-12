@@ -4,12 +4,12 @@ require "rails_helper"
 
 RSpec.describe Pfmp do
   subject(:pfmp) do
-    create(:pfmp, student: student).tap { |p| p.payments.destroy_all }
+    create(:pfmp, schooling: schooling).tap { |p| p.payments.destroy_all }
   end
 
   let(:mef) { create(:mef) }
   let(:classe) { create(:classe, mef: mef) }
-  let(:student) { create(:schooling).student }
+  let(:schooling) { create(:schooling) }
 
   describe "associations" do
     it { is_expected.to belong_to(:schooling) }
@@ -121,7 +121,7 @@ RSpec.describe Pfmp do
 
   describe "setup_payment!" do
     subject(:pfmp) do
-      create(:pfmp, :completed, student: student).tap { |p| p.payments.destroy_all }
+      create(:pfmp, :completed, schooling: schooling).tap { |p| p.payments.destroy_all }
     end
 
     context "when there are no payments" do
@@ -132,7 +132,7 @@ RSpec.describe Pfmp do
 
     context "when the student has already reached the yearly cap" do
       before do
-        create(:pfmp, :validated, student: pfmp.student, day_count: 200).tap do |p|
+        create(:pfmp, :validated, schooling: pfmp.schooling, day_count: 200).tap do |p|
           p.latest_payment.transition_to!(:processing)
           p.latest_payment.transition_to!(:success)
         end
