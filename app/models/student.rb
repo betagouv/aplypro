@@ -11,17 +11,21 @@ class Student < ApplicationRecord
   validates :asp_file_reference, uniqueness: true
 
   has_many :schoolings, dependent: :delete_all
+
   has_many :classes, through: :schoolings, source: "classe"
 
   has_many :pfmps, -> { order "pfmps.start_date" }, through: :schoolings
 
-  belongs_to :current_schooling, optional: true, class_name: "Schooling", dependent: :destroy
+  has_one :current_schooling, -> { current }, class_name: "Schooling", dependent: :destroy, inverse_of: :student
+
   has_one :classe, through: :current_schooling
 
   has_one :establishment, through: :classe
+
   has_many :payments, through: :pfmps
 
   has_many :ribs, dependent: :destroy
+
   has_one :rib, -> { where(archived_at: nil) }, dependent: :destroy, inverse_of: :student
 
   before_validation :check_asp_file_reference
@@ -47,10 +51,7 @@ class Student < ApplicationRecord
   end
 
   def close_current_schooling!
-    return if current_schooling.nil?
-
-    current_schooling.update!(end_date: Time.zone.today)
-    update!(current_schooling: nil)
+    current_schooling&.update!(end_date: Time.zone.today)
   end
 
   private

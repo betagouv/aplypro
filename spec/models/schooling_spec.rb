@@ -12,26 +12,22 @@ RSpec.describe Schooling do
     it { is_expected.to have_one(:mef).class_name("Mef") }
   end
 
-  describe "callbacks" do
-    describe "after_create" do
-      subject(:schooling) { build(:schooling, student: student) }
+  describe "validations" do
+    let(:schooling) { create(:schooling) }
 
-      let(:student) { create(:student) }
+    describe "student_id" do
+      context "when there is another closed schooling" do
+        before { schooling.student.close_current_schooling! }
 
-      it "sets itself as the current schooling" do
-        expect { schooling.save! }.to change(student, :current_schooling).from(nil).to(schooling)
-      end
-
-      context "when there is already a schooling" do
-        let!(:previous) { create(:schooling, student: student) }
-
-        it "ends the previous one" do
-          expect { schooling.save! }.to change(previous, :end_date).from(nil).to(Time.zone.today)
+        it "creates a new schooling" do
+          expect { create(:schooling, student: schooling.student) }.to change(described_class, :count).by(1)
         end
       end
 
-      it "doesn't set its own end date" do
-        expect { schooling.save! }.not_to change(schooling, :end_date)
+      context "when there is an open schooling" do
+        it "raises an error" do
+          expect { create(:schooling, student: schooling.student) }.to raise_error(ActiveRecord::RecordInvalid)
+        end
       end
     end
   end
