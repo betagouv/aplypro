@@ -1,13 +1,17 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
-  before_action :authenticate_user!, :check_maintenance, :set_establishment
+  before_action :authenticate_user!, :check_maintenance, :set_establishment, :set_support_banner
 
   def after_sign_in_path_for(_resource)
     classes_path
   end
 
   protected
+
+  def set_support_banner
+    @support_banner = @etab && ENV.fetch("APLYPRO_UAIS_FOR_DINUM_SUPPORT", "").split(",").include?(@etab.uai)
+  end
 
   def check_maintenance
     return if request.path == maintenance_path # or endless redirect
