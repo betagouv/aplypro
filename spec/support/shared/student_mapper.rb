@@ -15,6 +15,12 @@ RSpec.shared_examples "a student mapper" do
     expect { mapper.parse! }.not_to change(Student, :count)
   end
 
+  it "parses schooling idempotently" do
+    mapper.parse!
+
+    expect { mapper.parse! }.not_to change(Schooling.current, :count)
+  end
+
   it "doesn't crash on students without an INE" do
     expect { described_class.new(nil_ine_payload, establishment).parse! }.not_to raise_error
   end

@@ -6,7 +6,7 @@ RSpec.describe "PfmpsController" do
   let(:schooling) { create(:schooling) }
   let(:student) { schooling.student }
   let(:user) { create(:user, :director, establishment: student.classe.establishment) }
-  let(:pfmp) { create(:pfmp, student: student) }
+  let(:pfmp) { create(:pfmp, schooling: schooling) }
 
   before do
     sign_in(user)
@@ -30,7 +30,7 @@ RSpec.describe "PfmpsController" do
   end
 
   describe "POST /validate" do
-    let(:pfmp) { create(:pfmp, :completed, student: student) }
+    let(:pfmp) { create(:pfmp, :completed, schooling: schooling) }
 
     context "when validating as a director" do
       it "returns 200" do

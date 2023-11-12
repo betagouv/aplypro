@@ -18,7 +18,10 @@ class Student
           .transform_values! { |student_attrs| map_students!(student_attrs) }
           .each do |classe, students|
           students.each do |student|
-            Schooling.find_or_create_by!(classe: classe, student: student)
+            if !Schooling.find_by(classe: classe, student: student)
+              student.close_current_schooling!
+              Schooling.create(classe: classe, student: student)
+            end
           end
         end
 
