@@ -6,6 +6,12 @@
         description: t("omniauth.#{provider}.description"),
         button: t("omniauth.#{provider}.button"),
         path: omniauth_authorize_path(User, provider)
+  .fr-col-md-6.fr-col-12
+    = render 'connection_panel',
+      name: t("omniauth.mer.title"),
+      description: t("omniauth.mer.description"),
+      button: t("omniauth.mer.button"),
+      path: omniauth_authorize_path(User, :fim)
 
 %hr.fr-mt-3w
 
