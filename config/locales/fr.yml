@@ -202,13 +202,17 @@ fr:
   omniauth:
     masa:
       title: "Ministère\n de l'Agriculture\n et de la Souveraineté\n Alimentaire"
-      description: "Je suis chef d'établissement, adjoint, ou personnel invité."
+      description: "Je me connecte via le portail du ministère de l'agriculture."
       button: Se connecter (MASA)
     fim:
       title: "Ministère\n de l'Éducation\n Nationale\n et de la Jeunesse"
-      description: "Je suis chef d'établissement, adjoint, ou personnel invité."
+      description: "Je me connecte via le portail de l'éducation nationale."
       button: Se connecter (MENJ)
+    mer:
+      title: "Secrétariat d'état\n chargé de la mer"
+      description: "Je me connecte via le portail de l'éducation nationale."
+      button: Se connecter (Mer)
     developer:
       title: Développeur
-      description: "Je travaille au développement d'APLyPro."
+      description: "Je me connecte en mode développeur pour tester l'application."
       button: Se connecter (développeur)
