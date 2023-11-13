@@ -2,12 +2,13 @@
 
 Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribution
   Contexte:
-    Sachant que l'API SYGNE renvoie une liste d'élèves
+    Sachant que l'API SYGNE renvoie une liste d'élèves pour l'établissement "DINUM"
+    Et que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que je me connecte en tant que personnel MENJ
     Et qu'il y a une élève "Marie Curie" au sein de la classe "2NDEB" pour une formation "Développement"
     Et que je passe l'écran d'accueil
-    Alors le panneau "Décisions d'attribution" contient un compteur à "0 / 1"
+    Et que le panneau "Décisions d'attribution" contient un compteur à "0 / 1"
 
   Scénario: Le personnel de direction peut lancer l'édition des décisions d'attribution
     Quand je clique sur "Éditer les décisions d'attribution"

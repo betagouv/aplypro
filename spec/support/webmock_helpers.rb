@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "./mock/factories/api_student"
+
 module WebmockHelpers
   class << self
     DEFAULT_TOKEN = JSON.generate({ access_token: "foobar", token_type: "Bearer" })

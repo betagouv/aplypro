@@ -53,15 +53,17 @@ class Student < ApplicationRecord
     update!(current_schooling: nil)
   end
 
-  def addressable?
+  def address
     [
       address_line1,
       address_line2,
       postal_code,
-      city_insee_code,
-      city,
-      country_code
-    ].compact.any?
+      city
+    ].compact.join(", ")
+  end
+
+  def missing_address?
+    address.blank?
   end
 
   private
