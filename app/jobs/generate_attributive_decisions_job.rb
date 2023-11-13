@@ -31,20 +31,29 @@ class GenerateAttributiveDecisionsJob < ApplicationJob
     establishment.rattach_attributive_decisions_zip!(File.open(filename), filename)
   end
 
+  def fetch_student_address!(student)
+    FetchStudentAddressJob.new(student).perform_now
+  end
+
+  def create_zip_file(zipfile, schooling)
+    target = File.join(schooling.classe.label, schooling.attributive_decision_filename)
+
+    Tempfile.create do |file|
+      AttributeDecisionGenerator.new(schooling).generate!(file)
+
+      file.rewind
+
+      schooling.rattach_attributive_decision!(file)
+
+      zipfile.add(target, file)
+      zipfile.commit
+    end
+  end
+
   def generate_attributive_decisions_zip!(zipfile, establishment)
     establishment.current_schoolings.each do |schooling|
-      target = File.join(schooling.classe.label, schooling.attributive_decision_filename)
-
-      Tempfile.create do |file|
-        AttributeDecisionGenerator.new(schooling).generate!(file)
-
-        file.rewind
-
-        schooling.rattach_attributive_decision!(file)
-
-        zipfile.add(target, file)
-        zipfile.commit
-      end
+      fetch_student_address!(schooling.student) if schooling.student.missing_address?
+      create_zip_file(zipfile, schooling)
     end
   end
 
