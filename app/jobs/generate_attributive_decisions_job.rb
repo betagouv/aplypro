@@ -31,9 +31,13 @@ class GenerateAttributiveDecisionsJob < ApplicationJob
     establishment.rattach_attributive_decisions_zip!(File.open(filename), filename)
   end
 
+  # rubocop:disable Metrics/AbcSize
+  # that's pretty ugly indeed
   def generate_attributive_decisions_zip!(zipfile, establishment)
     establishment.current_schoolings.each do |schooling|
       target = File.join(schooling.classe.label, schooling.attributive_decision_filename)
+
+      FetchStudentAddressJob.new(schooling.student).perform_now if schooling.student.missing_address?
 
       Tempfile.create do |file|
         AttributeDecisionGenerator.new(schooling).generate!(file)
@@ -47,6 +51,7 @@ class GenerateAttributiveDecisionsJob < ApplicationJob
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def attributive_decisions_zip_filename(establishment)
     today = I18n.l(DateTime.now, format: "%d_%m_%Y")
