@@ -23,11 +23,21 @@ module StudentApi
       client.get(endpoint, params, headers).body
     end
 
+    def fetch_student_data!(ine)
+      find_student_in_payload(ine)
+    end
+
     def endpoint
       base_url
     end
 
     private
+
+    def find_student_in_payload(ine)
+      m = mapper.new(response, @establishment)
+
+      response.find { |entry| m.map_student_attributes(entry)[:ine] == ine }
+    end
 
     def client
       @client ||= Faraday.new do |f|
