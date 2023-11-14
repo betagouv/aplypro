@@ -38,6 +38,13 @@ class Student
         end
       end
 
+      def map_student_attributes(attrs)
+        student_attrs = self.class::StudentMapper.new.call(attrs)
+        address_attrs = Student::AddressMappers::Fregata.new(attrs).address_attributes
+
+        student_attrs.merge(address_attrs)
+      end
+
       def student_is_gone?(entry)
         left_establishment?(entry)
       end
