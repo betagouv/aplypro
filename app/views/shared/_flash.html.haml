@@ -5,10 +5,10 @@
         - if flash[:notice].is_a? String
           = dsfr_alert(type: :info, title: flash[:notice])
         - else
-          = dsfr_alert(type: :info, title: flash[:notice]["title"]) { flash[:notice]["content"] }
+          = dsfr_alert(type: :info, title: flash[:notice]["title"]) { flash[:notice]["content"].html_safe }
 
       - if flash[:alert].present?
         - if flash[:alert].is_a? String
           = dsfr_alert(type: :warning, title: flash[:alert])
         - else
-          = dsfr_alert(type: :warning, title: flash[:alert]["title"]) { flash[:alert]["content"] }
+          = dsfr_alert(type: :warning, title: flash[:alert]["title"]) { flash[:alert]["content"].html_safe }
