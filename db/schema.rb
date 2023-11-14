@@ -169,7 +169,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_12_172554) do
     t.datetime "updated_at", null: false
     t.integer "attributive_decision_version", default: 0
     t.index ["classe_id"], name: "index_schoolings_on_classe_id"
-    t.index ["student_id", "end_date"], name: "index_schoolings_on_student_id_and_end_date", unique: true, where: "(end_date IS NULL)"
+    t.index ["student_id", "end_date"], name: "one_active_schooling_per_student", unique: true, where: "(end_date IS NULL)", nulls_not_distinct: true
     t.index ["student_id"], name: "index_schoolings_on_student_id"
   end
 
