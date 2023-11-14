@@ -33,6 +33,8 @@ class GenerateAttributiveDecisionsJob < ApplicationJob
 
   def fetch_student_address!(student)
     FetchStudentAddressJob.new(student).perform_now
+  rescue Faraday::Error => e
+    Sentry.capture_exception(e)
   end
 
   def create_zip_file(zipfile, schooling)

@@ -1,5 +1,7 @@
 fr:
  attributive_decision:
+   missing_address: adresse inconnue
+   address: résidant à l'adresse « %{address} »
    legal:
      - >-
        Vu le décret N° 2023-765 du 11/08/2023 relatif au versement
