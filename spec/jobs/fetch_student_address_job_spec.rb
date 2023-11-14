@@ -18,7 +18,7 @@ RSpec.describe FetchStudentAddressJob do
         country_code
       ].each do |attribute|
         it "updates the `#{attribute}` attribute" do
-          expect { described_class.new.perform(student) }.to change(student, attribute)
+          expect { described_class.new(student).perform_now }.to change(student, attribute)
         end
       end
     end
