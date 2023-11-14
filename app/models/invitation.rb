@@ -7,6 +7,8 @@ class Invitation < ApplicationRecord
   VALID_DOMAINS = %w[
     gouv.fr
     educagri.fr
+    mfr.asso.fr
+    cneap.fr.
     ac-aix-marseille.fr
     ac-amiens.fr
     ac-besancon.fr
