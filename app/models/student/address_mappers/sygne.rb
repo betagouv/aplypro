@@ -3,14 +3,26 @@
 class Student
   module AddressMappers
     class Sygne < Base
-      ADDRESS_MAPPING = {
-        postal_code: "adrResidenceEle.codePostal",
-        address_line1: "adrResidenceEle.adresseLigne1",
-        address_line2: "adrResidenceEle.adresseLigne2",
-        country_code: "adrResidenceEle.codePays",
-        city_insee_code: "adrResidenceEle.codeCommuneInsee",
-        city: "adrResidenceEle.libelleCommune"
-      }.freeze
+      class Mapper < Dry::Transformer::Pipe
+        import Dry::Transformer::HashTransformations
+
+        define! do
+          deep_symbolize_keys
+
+          unwrap :adrResidenceEle
+
+          rename_keys(
+            codePostal: :postal_code,
+            adresseLigne1: :address_line1,
+            adresseLigne2: :address_line2,
+            codePays: :country_code,
+            codeCommuneInsee: :city_insee_code,
+            libelleCommune: :city
+          )
+
+          accept_keys %i[postal_code country_code city city_insee_code address_line1 address_line2]
+        end
+      end
     end
   end
 end

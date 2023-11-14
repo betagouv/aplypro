@@ -26,10 +26,9 @@ class Student
       end
 
       def map_classe!(entry)
-        label = classe_label(entry)
-        code  = classe_mef_code(entry)
+        self.class::ClasseMapper.new.call(entry) => { label:, mef_code: }
 
-        mef = Mef.find_by(code: chop_mef_code(code))
+        mef = Mef.find_by(code: mef_code)
 
         return if label.nil? || mef.nil?
 
@@ -57,9 +56,7 @@ class Student
       end
 
       def map_student_attributes(attrs)
-        self.class::STUDENT_MAPPING.transform_values do |path|
-          attrs.dig(*path.split("."))
-        end
+        self.class::StudentMapper.new.call(attrs)
       end
 
       def check_schoolings!

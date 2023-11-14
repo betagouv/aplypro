@@ -10,9 +10,7 @@ class Student
       end
 
       def address_attributes
-        self.class::ADDRESS_MAPPING.transform_values do |path|
-          payload.dig(*path.split("."))
-        end
+        self.class::Mapper.new.call(payload)
       end
     end
   end

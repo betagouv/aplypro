@@ -3,28 +3,35 @@
 class Student
   module AddressMappers
     class Fregata < Base
-      ADDRESS_MAPPING = {
-        postal_code: "communeCodePostal",
-        country_code: "paysCodeInsee",
-        city_insee_code: "communeCodeInsee"
-      }.freeze
-
       def address_attributes
-        address = find_relevant_address["adresseIndividu"]
-
-        ADDRESS_MAPPING.transform_values do |path|
-          address.dig(*path.split("."))
-        end.merge!({ address_line1: scrape_address_lines(address) })
+        Mapper.new.call(principal_address)
       end
 
-      private
-
-      def find_relevant_address
-        payload["adressesApprenant"].find { |entry| entry["estPrioritaire"] == true }
+      def principal_address
+        payload["adressesApprenant"].find { |e| e["estPrioritaire"] == true }
       end
 
-      def scrape_address_lines(address_entry)
-        (2..6).map { |index| address_entry["ligne#{index}"] }.compact.join(" ")
+      class Mapper < Dry::Transformer::Pipe
+        import Dry::Transformer::HashTransformations
+        import Dry::Transformer::ArrayTransformations
+
+        define! do
+          deep_symbolize_keys
+
+          unwrap :adresseIndividu
+
+          rename_keys(
+            communeCodePostal: :postal_code,
+            paysCodeInsee: :country_code,
+            communeCodeInsee: :city_insee_code
+          )
+
+          nest :address_line1, %i[ligne2 ligne3 ligne4 ligne5 ligne6 ligne7]
+
+          map_value :address_line1, ->(hash) { hash.values.compact.join(" ") }
+
+          accept_keys %i[postal_code country_code city_insee_code address_line1]
+        end
       end
     end
   end
