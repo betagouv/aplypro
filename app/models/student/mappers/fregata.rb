@@ -3,19 +3,39 @@
 class Student
   module Mappers
     class Fregata < Base
-      STUDENT_MAPPING = {
-        ine: "apprenant.ine",
-        first_name: "apprenant.prenomUsuel",
-        last_name: "apprenant.nomUsuel",
-        birthdate: "apprenant.dateNaissance"
-      }.freeze
+      class StudentMapper < Dry::Transformer::Pipe
+        import Dry::Transformer::HashTransformations
 
-      def classe_label(entry)
-        entry["division"]["libelle"]
+        define! do
+          deep_symbolize_keys
+
+          unwrap :apprenant
+
+          rename_keys(
+            prenomUsuel: :first_name,
+            nomUsuel: :last_name,
+            dateNaissance: :birthdate
+          )
+
+          accept_keys %i[ine first_name last_name birthdate]
+        end
       end
 
-      def classe_mef_code(entry)
-        entry["sectionReference"]["codeMef"]
+      class ClasseMapper < Dry::Transformer::Pipe
+        import Dry::Transformer::HashTransformations
+
+        define! do
+          deep_symbolize_keys
+
+          unwrap :sectionReference
+          unwrap :division
+
+          rename_keys(codeMef: :mef_code, libelle: :label)
+
+          map_value :mef_code, ->(value) { value.chop }
+
+          accept_keys %i[label mef_code]
+        end
       end
 
       def student_is_gone?(entry)

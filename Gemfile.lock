@@ -171,6 +171,8 @@ GEM
     diff-lcs (1.5.0)
     drb (2.1.1)
       ruby2_keywords
+    dry-transformer (1.0.1)
+      zeitwerk (~> 2.6)
     dsfr-view-components (0.5.0)
       html-attributes-utils (~> 1)
       pagy (~> 6)
@@ -566,6 +568,7 @@ DEPENDENCIES
   debug
   devise
   devise-i18n
+  dry-transformer
   dsfr-view-components
   factory_bot_rails
   faker
