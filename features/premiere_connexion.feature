@@ -38,24 +38,6 @@ Fonctionnalité: Le personnel de direction se connecte
     Quand je me connecte en tant que personnel MENJ
     Alors le titre de la page contient "Accueil"
 
-  Scénario: Un personnel de direction du MENJ hors de la bêta privée ne peut pas rentrer dans l'application
-    Sachant que je suis un personnel MENJ directeur de l'établissement "123"
-    Et que l'accès est limité aux UAIs "456"
-    Quand je me connecte en tant que personnel MENJ
-    Alors la page contient "sélection d'établissements pilotes"
-
-  Scénario: Un personnel MENJ est d'abord averti de la phase pilote
-    Sachant que je suis un personnel MENJ de l'établissement "123"
-    Et que l'accès est limité aux UAIs "456"
-    Quand je me connecte en tant que personnel MENJ
-    Alors la page contient "sélection d'établissements pilotes"
-
-  Scénario: Un personnel directeur MENJ est d'abord averti de la phase pilote
-    Sachant que je suis un personnel MENJ directeur de l'établissement "123"
-    Et que l'accès est limité aux UAIs "456"
-    Quand je me connecte en tant que personnel MENJ
-    Alors la page contient "sélection d'établissements pilotes"
-
   Scénario: Un personnel du MENJ peut-être invité lors de la bêta privée
     Sachant que l'accès est limité aux UAIs "123"
     Et que je suis un personnel MENJ directeur de l'établissement "123"
