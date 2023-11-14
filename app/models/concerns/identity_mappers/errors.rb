@@ -36,14 +36,6 @@ module IdentityMappers
       end
     end
 
-    class NoLimitedAccessError < Error
-      attr_reader :attributes
-
-      def initialize(msg = "Not allowed in the private beta")
-        super(msg)
-      end
-    end
-
     class UnallowedPrivateEstablishment < Error
       attr_reader :attributes
 
