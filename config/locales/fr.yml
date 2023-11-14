@@ -119,20 +119,17 @@ fr:
           Le guichet d'authentification n'indique aucun établissement sous
           votre direction. APLyPro n'est ouvert qu'aux personnels de
           direction pour le moment. Il peut s'agir d'une erreur dans la
-          configuration de votre profil. Nos équipes ont été
-          notifiées.
+          configuration de votre profil.
       no_access_found:
         title: "Erreur d'authentification"
         content: |
-          Le guichet d'authentification n'indique pas d'établissement
-          sous votre responsabilité ou d'autorisations pour votre
-          adresse e-mail. Si vous êtes chef d'établissement
-          assurez-vous que vos informations sont bien renseignées dans
-          votre annuaire académique. Si vous n'êtes pas chef
-          d'établissement assurez-vous que votre adresse e-mail a bien
-          été autorisée par votre personnel de direction dans
-          l'application APlyPro (DELEG-CE n'est pas encore
-          disponible).
+          Le guichet d'authentification n'indique pas d'établissement concerné par l'allocation sous votre responsabilité, ni d'autorisations pour votre adresse e-mail. 
+          <ul>
+            <li>Assurez-vous que vous êtes bien rattaché à un établissement concerné par l'allocation dans votre annuaire académique ou COLENTAGRI.</li>
+            <li>Si vous êtes chef d'établissement, assurez-vous que vous avez bien ce rôle dans votre annuaire académique ou COLENTAGRI.</li>
+            <li>Si vous n'êtes pas chef d'établissement assurez-vous que votre adresse e-mail a bien été autorisée par votre personnel de direction dans l'application APlyPro (DELEG-CE n'est pas encore disponible).</li>
+          </ul>
+
     success: "Connexion réussie"
 
   ribs:
