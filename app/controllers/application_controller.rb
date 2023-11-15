@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def set_support_banner
-    @show_support_banner = eligible_for_support?(@etab)
+    @support_banner = @etab && ENV.fetch("APLYPRO_UAIS_FOR_DINUM_SUPPORT", "").split(",").include?(@etab.uai)
   end
 
   def check_maintenance
@@ -39,17 +39,5 @@ class ApplicationController < ActionController::Base
 
   def page_title_key
     ["pages", "titles", controller_name, action_name].join(".")
-  end
-
-  private
-
-  def eligible_for_support?(establishment)
-    return false if establishment.nil?
-
-    supported_uais = ENV
-                     .fetch("APLYPRO_DIRECT_SUPPORT_UAIS", "")
-                     .split(",")
-
-    supported_uais.include?(establishment.uai)
   end
 end

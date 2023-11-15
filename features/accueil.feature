@@ -24,12 +24,3 @@ Fonctionnalité: Accueil sur l'application
     Et le panneau "Coordonnées bancaires" contient un compteur à "1 / 1"
     Et le panneau "Périodes de formation en milieu professionnel" contient un compteur à "0"
     Et le panneau "PFMP validées" contient un compteur à "0"
-
-  Scénario: Le personnel voit un bandeau de support si son établissement est enlicé
-    Quand l'établissement "DINUM" fait parti des établissments soutenus directement
-    Et que je rafraîchis la page
-    Alors la page contient "faites-nous part de vos retours"
-
-  Scénario: Le personnel ne voit pas de bandeau de support si son établissement n'est pas enlicé
-    Quand je rafraîchis la page
-    Alors la page ne contient pas "faites-nous part de vos retours"
