@@ -11,9 +11,10 @@ class FetchStudentAddressJob < ApplicationJob
       .then do |data|
       mapper = api.address_mapper.new(data)
 
-      student.assign_attributes(mapper.address_attributes)
-
-      student.save!
+      if mapper.address_attributes.present?
+        student.assign_attributes(mapper.address_attributes)
+        student.save!
+      end
     end
   end
 end

@@ -42,7 +42,9 @@ class Student
         student_attrs = self.class::StudentMapper.new.call(attrs)
         address_attrs = Student::AddressMappers::Fregata.new(attrs).address_attributes
 
-        student_attrs.merge(address_attrs)
+        student_attrs.merge!(address_attrs) if address_attrs.present?
+
+        student_attrs
       end
 
       def student_is_gone?(entry)

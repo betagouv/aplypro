@@ -4,11 +4,17 @@ class Student
   module AddressMappers
     class Fregata < Base
       def address_attributes
+        return nil if addresses.blank?
+
         Mapper.new.call(principal_address)
       end
 
       def principal_address
-        payload["apprenant"]["adressesApprenant"].find { |e| e["estPrioritaire"] == true }
+        addresses.find { |e| e["estPrioritaire"] == true }
+      end
+
+      def addresses
+        payload["apprenant"]["adressesApprenant"]
       end
 
       class Mapper < Dry::Transformer::Pipe
