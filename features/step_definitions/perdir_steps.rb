@@ -14,6 +14,19 @@ Et("mon établissement a été hydraté") do
 end
 
 Sachantque(
+  "il y a un(e) élève {string} avec l'UAI {string} au sein de la classe {string} pour une formation {string}"
+) do |name, ine, classe, mef|
+  @etab ||= User.last.establishment
+
+  first, last = name.split # not great
+
+  @mef = FactoryBot.create(:mef, label: mef)
+  @classe = FactoryBot.create(:classe, establishment: @etab, label: classe, mef: @mef)
+  @student = FactoryBot.create(:student, first_name: first, last_name: last, ine: ine)
+  @student.schoolings.create!(classe: @classe)
+end
+
+Sachantque(
   "il y a un(e) élève {string} au sein de la classe {string} pour une formation {string}"
 ) do |name, classe, mef|
   @etab ||= User.last.establishment

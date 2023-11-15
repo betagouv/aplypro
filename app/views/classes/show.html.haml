@@ -5,14 +5,15 @@
 
 .fr-table.fr-table--no-caption
   %table
-    %caption Liste des élèves (#{@classe.students.count})
+    %caption Liste des élèves (#{@schoolings.count})
     %thead
       %th{scope: "col"} Élève
       %th{scope: "col"} PFMPs
       %th{scope: "col"} RIB présent
 
     %tbody
-      - @classe.students.each do |student|
+      - @schoolings.each do |schooling|
+        - student = schooling.student
         %tr
           %td
             = dsfr_link_to student.index_name, class_student_path(@classe, student), title: t("links.students.show", name: student)
