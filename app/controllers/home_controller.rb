@@ -42,6 +42,8 @@ class HomeController < ApplicationController
 
   def legal; end
 
+  def faq; end
+
   private
 
   def pfmp_counts

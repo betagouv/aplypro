@@ -1,7 +1,14 @@
-%h2
-  Foire aux questions
+.fr-col-md-7
+  %h1
+    Foire aux questions
 
-- t("questions").each do |q|
-  .fr-py-2w
-    %h3.fr-h4= q[:title]
-    %p= q[:answer]
+  %p 
+    Pour toutes les questions relatives à la réforme, se référer aux ressources disponibles sur 
+    = dsfr_link_to "sur Eduscol", "https://eduscol.education.fr/3860/allocation-de-stage-au-lycee-professionnel"
+    , notamment 
+    = dsfr_link_to "la F.A.Q.", "https://eduscol.education.fr/document/53313/download", target: :download
+
+  - t("questions").each do |q|
+    .fr-py-2w
+      %h2.fr-h4= q[:title]
+      %p= q[:answer].html_safe
