@@ -26,7 +26,7 @@ class Student
       end
 
       def map_classe!(entry)
-        self.class::ClasseMapper.new.call(entry) => { label:, mef_code: }
+        label, mef_code = self.class::ClasseMapper.new.call(entry).values_at(:label, :mef_code)
 
         mef = Mef.find_by(code: mef_code)
 
