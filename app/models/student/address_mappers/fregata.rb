@@ -8,7 +8,7 @@ class Student
       end
 
       def principal_address
-        payload["adressesApprenant"].find { |e| e["estPrioritaire"] == true }
+        payload["apprenant"]["adressesApprenant"].find { |e| e["estPrioritaire"] == true }
       end
 
       class Mapper < Dry::Transformer::Pipe
