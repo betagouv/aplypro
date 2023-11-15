@@ -20,6 +20,8 @@ module Users
 
       @user.save!
 
+      check_limited_access!
+
       begin
         check_responsibilites!
       rescue IdentityMappers::Errors::EmptyResponsibilitiesError
@@ -135,6 +137,19 @@ module Users
 
     def clear_previous_establishment!
       @user.update!(establishment: nil)
+    end
+
+    def check_limited_access!
+      allowed_uais = ENV
+                     .fetch("APLYPRO_RESTRICTED_ACCESS", "")
+                     .split(",")
+                     .map(&:strip)
+
+      return if allowed_uais.blank?
+
+      allowed = allowed_uais.intersect?(@mapper.all_indicated_uais)
+
+      raise IdentityMappers::Errors::NoLimitedAccessError unless allowed
     end
 
     def auth_hash
