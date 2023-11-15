@@ -21,7 +21,7 @@
   %body
     = render 'shared/skiplinks'
     = render 'shared/analytics' if Rails.env.production?
-    = render 'shared/support_banner' if @support_banner
+    = render 'shared/beta_banner'
     = render 'shared/header'
     - if @etab
       = render 'shared/etab_banner'
