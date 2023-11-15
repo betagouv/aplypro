@@ -1,7 +1,8 @@
 .fr-grid-row.fr-grid-row--gutters
-  .fr-col-md-6.fr-col-12
-    .fr-alert.fr-alert--warning
-      Vous ne pourrez vous connecter que si vous avez été sélectionné pour la phase de test.
+  .fr-col-md-6.fr-col-s-10
+    = dsfr_alert(type: :warning, title: "Lancement national à partir de 14h") do
+      L'accès à APLyPro sera ouvert à tous les établissements
+      %strong seulement à partir de 14h.
 
 .fr-grid-row.fr-grid-row--gutters#login-page
   - User.omniauth_providers.each do |provider|
