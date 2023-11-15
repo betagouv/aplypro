@@ -52,6 +52,19 @@ RSpec.describe Classe do
     end
   end
 
+  describe "#active_students" do
+    subject(:active_students) { classe.active_students }
+
+    let(:classe) { create(:classe, :with_students, students_count: 5) }
+    let(:old_student) { classe.students.last }
+
+    before do
+      old_student.close_current_schooling!
+    end
+
+    it { is_expected.not_to include old_student }
+  end
+
   describe ".with_attributive_decisions" do
     let(:classe_with_no_ad) { create(:classe, :with_students) }
     let(:classe_with_ad) { create(:classe, :with_students) }

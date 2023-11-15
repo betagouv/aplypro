@@ -49,14 +49,19 @@ class ClassesController < ApplicationController
   end
 
   def set_all_classes
-    @classes = @etab.classes.includes(:mef, students: %i[rib pfmps], schoolings: :attributive_decision_attachment)
+    @classes = @etab
+               .classes
+               .current
+               .includes(:mef, :active_pfmps, active_students: :rib)
   end
 
   def set_classe
     @classe = Classe
-              .includes(students: [:rib, { pfmps: :transitions }])
               .where(establishment: @etab)
+              .includes(active_schoolings: [student: :rib])
               .find(params[:id])
+
+    @schoolings = @classe.active_schoolings
   rescue ActiveRecord::RecordNotFound
     redirect_to classes_path, alert: t("errors.classes.not_found") and return
   end

@@ -16,6 +16,6 @@
           %tr
             %td
               = dsfr_link_to classe.to_long_s, classe, title: t("links.classes.show", label: classe.to_long_s)
-            %td= classe.students.size
-            %td= classe.students.map(&:pfmps).flatten.size
+            %td= classe.active_students.size
+            %td= classe.active_pfmps.size
             %td= avancement_ribs(classe)

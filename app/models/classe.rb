@@ -4,10 +4,28 @@ class Classe < ApplicationRecord
   belongs_to :establishment
   belongs_to :mef
 
-  has_many :schoolings, dependent: nil
+  has_many :schoolings, dependent: :destroy
+
   has_many :students, -> { order "last_name" }, dependent: nil, through: :schoolings
+
   has_many :pfmps, through: :schoolings
-  has_many :attributive_decisions_attachments, through: :schoolings, source: :attributive_decision_attachment
+
+  has_many :attributive_decisions_attachments,
+           through: :schoolings,
+           source: :attributive_decision_attachment
+
+  has_many :active_schoolings,
+           -> { current },
+           dependent: :destroy,
+           class_name: "Schooling",
+           inverse_of: :classe
+
+  has_many :active_students,
+           class_name: "Student",
+           through: :active_schoolings,
+           source: :student
+
+  has_many :active_pfmps, through: :active_students, class_name: "Pfmp", source: :pfmps
 
   validates :label, :start_year, presence: true
   validates :start_year, numericality: { only_integer: true, greater_than_or_equal_to: 2023 }
