@@ -72,6 +72,7 @@ fr:
     new_pfmp: Saisir une PFMP
     validate_all_pfmps: Envoyer en paiement
     invitations: Gestion des accès
+    faq: F.A.Q.
   pages:
     titles:
       invitations:

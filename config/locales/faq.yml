@@ -1,8 +1,29 @@
 fr:
   questions:
-    - title: Quand aurais-je accès à l'application ?
-      answer: Vous serez notifiés dès que l'application sera disponible.
-    - title: Mes élèves sont déjà partis en stage, puis-je saisir des stages sur APLyPro à posteriori ?
-      answer: Les stages peuvent être saisis à posteriori.
+    - title: Qui peut se connecter sur APLyPro ?
+      answer: |
+        Pour commencer sur APLyPro, le processus est le suivant :
+        <ol>
+          <li>Un(e) chef d'établissement se connecte sur APLyPro via le portail d'authentification du MENJ ou du MASA.</li>
+          <li>Il ou elle autorise l'accès à son personnel dans "Gestion des accès".</li>
+          <li>Le personnel autorisé peut alors se connecter sur APLyPro via le portail d'authentification du MENJ ou du MASA.</li>
+        </ol>
+    - title: Je n'arrive toujours pas à me connecter, que faire ?
+      answer: |
+        APLyPro se repose sur les portails d'authentification du MENJ et du MASA pour vous connecter. Vous pouvez vérifier :
+        <ul>
+          <li>Que vous êtes bien rattaché à un établissement concerné par l'allocation dans votre annuaire académique ou COLENTAGRI.</li>
+          <li>Si vous êtes chef d'établissement : que vous avez bien ce rôle dans votre annuaire académique ou COLENTAGRI.</li>
+          <li>Si vous n'êtes pas chef d'établissement : que votre adresse e-mail a bien été autorisée par votre personnel de direction dans l'application APlyPro.</li>
+        </ul>
+    - title: (MENJ) Puis-je utiliser DELEG-CE pour donner des accès ?
+      answer: DELEG-CE n'est pas encore implémenté pour APLyPro. Les autorisations d'accès se font uniquement via "Gestion des accès" dans APLyPro.
+    - title: Comment mettre à jour ma liste d'élèves ?
+      answer: APLyPro récupère les listes d'élèves et de classes de la BEE (Base Elèves Etablissements du MENJ) ou de Fregata (base d'élèves du MASA). Les mises à jour sont à effectuer dans ces bases et seront répercutées dans APLyPro.
     - title: Quand mes élèves seront-ils payés ?
-      answer: Les paiements débuteront en 2024. Mais vous pourrez quand même saisir toutes les informations nécessaires à l'avance, dès que l'application sera disponible.
+      answer: Les paiements débuteront en 2024. Mais vous pourrez quand même saisir toutes les informations nécessaires à l'avance.
+    - title: Les apprentis ont-ils concernés par l'allocation ?
+      answer: Si des apprentis apparaissent dans vos classes, ils ne sont pas concernés par l'allocation. Nous allons bientôt les retirer d'APLyPro, vous devez les ignorer lors de vos saisies.
+    - title: (MENJ) J'ai des cas d'élèves très particuliers, à qui poser mes questions ?
+      answer: Vous pouvez contacter votre référent académique "allocation de stage" pour toutes ces questions.
+    
