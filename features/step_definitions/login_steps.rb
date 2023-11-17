@@ -147,3 +147,34 @@ Alors("la page affiche une erreur d'authentification") do
     Alors la page contient "Erreur d'authentification"
   )
 end
+
+Alors("je n'ai pas accès aux actions de chef d'établissement") do
+  steps %(
+    Quand je me rends sur la page d'accueil
+    Alors la page ne contient pas "Gestion des accès"
+    Alors le panneau "Décisions d'attribution" ne contient pas "Éditer les décisions d'attribution"
+    Alors le panneau "PFMP validées à envoyer en paiement" ne contient pas "Valider des PFMPs à envoyer en paiement"
+  )
+end
+
+Sachantque("je suis un personnel MENJ de l'établissement {string} avec une délégation DELEG-CE pour APLyPro") do |uai|
+  OmniAuth.config.mock_auth[:fim] = make_fim_hash(
+    name: Faker::Name.name,
+    email: Faker::Internet.email,
+    raw_info: {
+      FrEduResDel: FactoryBot.build(:freduresdel, uai: uai)
+    }
+  )
+end
+
+Sachantque(
+  "je suis un personnel MENJ de l'établissement {string} avec une mauvaise délégation DELEG-CE pour APLyPro"
+) do |uai|
+  OmniAuth.config.mock_auth[:fim] = make_fim_hash(
+    name: Faker::Name.name,
+    email: Faker::Internet.email,
+    raw_info: {
+      FrEduResDel: FactoryBot.build(:freduresdel, uai: uai, applicationname: "apypo")
+    }
+  )
+end

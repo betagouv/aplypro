@@ -8,6 +8,9 @@ module IdentityMappers
     ACCEPTED_ESTABLISHMENT_TYPES = %w[LYC LP SEP EREA CFPA].freeze
     FREDURNERESP_MAPPING = %i[uai type category activity tna_sym tty_code tna_code].freeze
     FREDURNE_MAPPING     = %i[uai type category function uaj tna_sym tty_code tna_code].freeze
+    FREDURESDEL_MAPPING  = %i[name url begin_date end_date user_name responsibilities server_id module].freeze
+    FREDURESDEL_MARKER = "applicationname=aplypro"
+    FREDURESDEL_RESPONSIBILITIES_PREFIX = "FrEduRneResp="
 
     def initialize(attributes)
       @attributes = normalize(attributes)
@@ -15,6 +18,10 @@ module IdentityMappers
 
     def normalize(attributes)
       attributes
+    end
+
+    def parse_delegation_line(line)
+      FREDURESDEL_MAPPING.zip(line.split("|")).to_h
     end
 
     def parse_responsibility_line(line)
@@ -46,9 +53,14 @@ module IdentityMappers
     end
 
     def establishments_authorised_for(email)
-      normal_uais
-        .filter_map { |uai| Establishment.find_by(uai:) }
-        .select     { |establishment| establishment.invites?(email) }
+      establishments_invited = normal_uais
+                               .filter_map { |uai| Establishment.find_by(uai:) }
+                               .select     { |establishment| establishment.invites?(email) }
+
+      establishments_delegated = delegated_uais
+                                 .filter_map { |uai| Establishment.find_or_create_by!(uai: uai) }
+
+      establishments_invited | establishments_delegated
     end
 
     def establishments_in_responsibility
@@ -74,8 +86,34 @@ module IdentityMappers
         .pluck(:uai)
     end
 
+    def delegated_uais
+      delegated_responsibilities
+        .map      { |line| line.delete_prefix(FREDURESDEL_RESPONSIBILITIES_PREFIX) }
+        .flat_map { |line| line.split(";") }
+        .map      { |line| parse_responsibility_line(line) }
+        .filter   { |attributes| relevant?(attributes) }
+        .pluck(:uai)
+        .uniq
+    end
+
+    def delegated_responsibilities
+      Array(attributes["FrEduResDel"])
+        .reject { |line| no_value?(line) }
+        .map    { |line| parse_delegation_line(line) }
+        .select { |delegation| aplypro_delegation?(delegation[:url]) }
+        .pluck(:responsibilities)
+    end
+
+    def aplypro_delegation?(url)
+      url.include?(FREDURESDEL_MARKER)
+    end
+
     def all_indicated_uais
-      responsibility_uais + normal_uais
+      responsibility_uais | delegated_and_invited_uais
+    end
+
+    def delegated_and_invited_uais
+      normal_uais | delegated_uais
     end
   end
 end
