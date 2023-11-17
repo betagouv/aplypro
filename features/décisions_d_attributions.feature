@@ -8,7 +8,7 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Et que je me connecte en tant que personnel MENJ
     Et qu'il y a une élève "Marie Curie" au sein de la classe "2NDEB" pour une formation "Développement"
     Et que je passe l'écran d'accueil
-    Et que le panneau "Décisions d'attribution" contient un compteur à "0 / 1"
+    Et que le panneau "Décisions d'attribution" contient "0 / 1"
 
   Scénario: Le personnel de direction peut lancer l'édition des décisions d'attribution
     Quand je clique sur "Éditer les décisions d'attribution"
@@ -16,4 +16,4 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Quand toutes les tâches de fond sont terminées
     Et que je rafraîchis la page
     Alors la page contient "Télécharger l'ensemble des décisions d'attribution"
-    Alors le panneau "Décisions d'attribution" contient un compteur à "1 / 1"
+    Alors le panneau "Décisions d'attribution" contient "1 / 1"

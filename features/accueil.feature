@@ -21,14 +21,19 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Quand je clique sur "Continuer"
     Alors la page contient "Envoyer en paiement"
     Et la page contient "Gestion des accès"
+
+  Scénario: Le personnel de direction voit toutes les actions de directeur
+    Quand je clique sur "Continuer"
+    Alors le panneau "Décisions d'attribution" contient "Éditer les décisions d'attribution"
+    Alors le panneau "PFMP validées à envoyer en paiement" contient "Valider des PFMPs à envoyer en paiement"
     
   Scénario: Le personnel voit un aperçu des données sur la page d'accueil
     Quand je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"
     Et que je me rends sur la page d'accueil
-    Alors le panneau "Décisions d'attribution" contient un compteur à "0 / 1"
-    Et le panneau "Coordonnées bancaires" contient un compteur à "1 / 1"
-    Et le panneau "Périodes de formation en milieu professionnel" contient un compteur à "0"
-    Et le panneau "PFMP validées" contient un compteur à "0"
+    Alors le panneau "Décisions d'attribution" contient "0 / 1"
+    Et le panneau "Coordonnées bancaires" contient "1 / 1"
+    Et le panneau "Périodes de formation en milieu professionnel" contient "0"
+    Et le panneau "PFMP validées" contient "0"
 
   Scénario: Le personnel voit un bandeau de support si son établissement est enlicé
     Quand l'établissement "DINUM" fait parti des établissments soutenus directement

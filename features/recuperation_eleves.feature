@@ -8,7 +8,7 @@ Fonctionnalité: Le personnel de direction récupère correctement les élèves
     Et que je passe l'écran d'accueil
     Et que toutes les tâches de fond sont terminées
     Quand je me rends sur la page d'accueil
-    Alors le panneau "Décisions d'attribution" contient un compteur à "0 / 10"
+    Alors le panneau "Décisions d'attribution" contient "0 / 10"
 
   Scénario: Le personnel de direction MASA récupère ses élèves
     Sachant que l'API FREGATA renvoie une liste d'élèves pour l'établissement "DINUM"
@@ -17,4 +17,4 @@ Fonctionnalité: Le personnel de direction récupère correctement les élèves
     Et que je passe l'écran d'accueil
     Et que toutes les tâches de fond sont terminées
     Quand je me rends sur la page d'accueil
-    Alors le panneau "Décisions d'attribution" contient un compteur à "0 / 10"
+    Alors le panneau "Décisions d'attribution" contient "0 / 10"
