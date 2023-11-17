@@ -17,7 +17,7 @@ fr:
           <li>Si vous n'êtes pas chef d'établissement : que votre adresse e-mail a bien été autorisée par votre personnel de direction dans l'application APlyPro.</li>
         </ul>
     - title: (MENJ) Puis-je utiliser DELEG-CE pour donner des accès ?
-      answer: DELEG-CE n'est pas encore implémenté pour APLyPro. Les autorisations d'accès se font uniquement via "Gestion des accès" dans APLyPro.
+      answer: DELEG-CE est désormais implémenté pour APLyPro. Les délégations sont équivalentes aux autorisations d'accès via "Gestion des accès" dans APLyPro. Vous ne pourrez donc pas déléguer les droits pour la génération de décisions d'attribution, ni pour la validation de PFMPs.
     - title: Comment mettre à jour ma liste d'élèves ?
       answer: APLyPro récupère les listes d'élèves et de classes de la BEE (Base Elèves Etablissements du MENJ) ou de Fregata (base d'élèves du MASA). Les mises à jour sont à effectuer dans ces bases et seront répercutées dans APLyPro.
     - title: Quand mes élèves seront-ils payés ?
