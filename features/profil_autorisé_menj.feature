@@ -22,6 +22,7 @@ Fonctionnalité: Gestion des accès à l'application
     Lorsque je me connecte en tant que personnel MENJ
     Et que je passe l'écran d'accueil
     Alors la page ne contient pas "Gestion des accès"
+    Et la page ne contient pas "Envoyer en paiement"
 
   Scénario: Je ne peux plus me connecter à l'application en tant qu'invité si mon accès a été supprimé
     Lorsque je me connecte en tant que personnel MENJ

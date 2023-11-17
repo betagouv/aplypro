@@ -3,7 +3,7 @@
 # Note : les IDEs et leurs plugins Cucumber sont censés pouvoir gérer
 # l'internationalisation et donc les mots-clés en français aussi.
 
-Fonctionnalité: Accueil sur l'application
+Fonctionnalité: Accueil d'un personnel de direction sur l'application
   Contexte:
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que je me connecte en tant que personnel MENJ
@@ -17,6 +17,11 @@ Fonctionnalité: Accueil sur l'application
     Quand je clique sur "Continuer"
     Alors la page contient "Année scolaire"
 
+  Scénario: Le personnel de direction voit tous les menus
+    Quand je clique sur "Continuer"
+    Alors la page contient "Envoyer en paiement"
+    Et la page contient "Gestion des accès"
+    
   Scénario: Le personnel voit un aperçu des données sur la page d'accueil
     Quand je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"
     Et que je me rends sur la page d'accueil
@@ -33,3 +38,4 @@ Fonctionnalité: Accueil sur l'application
   Scénario: Le personnel ne voit pas de bandeau de support si son établissement n'est pas enlicé
     Quand je rafraîchis la page
     Alors la page ne contient pas "faites-nous part de vos retours"
+
