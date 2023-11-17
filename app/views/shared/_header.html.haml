@@ -32,11 +32,15 @@
       %nav#navigation-478.fr-nav{"aria-label" => "Menu principal", role: "navigation"}
         %ul.fr-nav__list
           - if current_user and not @inhibit_nav
-            - %i(home classes validate_all_pfmps).each do |item|
+            - %i(home classes).each do |item|
               - path = send("#{item}_path")
               %li.fr-nav__item
                 %a.fr-nav__link{ href: path, target: "_self", "aria-current" => current_path?(path) ? "page" : nil }
                   = t("menu.#{item}")
+            - if current_user.can_validate?
+              %li.fr-nav__item
+                %a.fr-nav__link{ href: validate_all_pfmps_path(@etab), target: "_self", "aria-current" => current_path?(validate_all_pfmps_path(@etab)) ? "page" : nil }
+                  = t("menu.validate_all_pfmps")
             - if current_user.establishment.present? && current_user.can_invite?
               %li.fr-nav__item
                 %a.fr-nav__link{ href: establishment_invitations_path(@etab), target: "_self", "aria-current" => current_path?(establishment_invitations_path(@etab)) ? "page" : nil }
