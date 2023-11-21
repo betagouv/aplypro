@@ -25,7 +25,8 @@ services:
       - "/app/node_modules"
     entrypoint: ''
   db:
-    image: postgres
+    # Scalingo only goes up to 14
+    image: postgres:14
     environment:
       POSTGRES_PASSWORD: 'dummy'
       PGPORT: 5433
