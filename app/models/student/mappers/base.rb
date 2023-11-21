@@ -12,11 +12,7 @@ class Student
       end
 
       def parse!
-        payload
-          .group_by { |entry| map_classe!(entry) }
-          .reject { |classe, _attrs| classe.nil? }
-          .transform_values! { |student_attrs| map_students!(student_attrs) }
-          .each do |classe, students|
+        classes_with_students.each do |classe, students|
           students.each do |student|
             if !Schooling.find_by(classe: classe, student: student)
               student.close_current_schooling!
@@ -26,6 +22,14 @@ class Student
         end
 
         check_schoolings!
+        check_missing_students!
+      end
+
+      def classes_with_students
+        payload
+          .group_by { |entry| map_classe!(entry) }
+          .reject { |classe, _attrs| classe.nil? }
+          .transform_values! { |student_attrs| map_students!(student_attrs) }
       end
 
       def map_classe!(entry)
@@ -56,6 +60,14 @@ class Student
           .find_or_initialize_by(ine: attributes[:ine])
           .tap { |student| student.assign_attributes(attributes) }
           .tap(&:save!)
+      end
+
+      def check_missing_students!
+        classes_with_students.each do |classe, students|
+          missing = classe.active_students - students
+
+          missing.each(&:close_current_schooling!)
+        end
       end
 
       def map_student_attributes(attrs)

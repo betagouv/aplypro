@@ -19,8 +19,3 @@ Fonctionnalité: Le personnel de direction consulte les listes
     Quand je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"
     Et que je consulte la liste des classes
     Alors la page contient "1/"
-
-  Scénario: Les élèves qui ne sont plus dans la classe ne sont pas affichés
-    Quand l'élève avec l'INE "test" a quitté l'établissement "DINUM"
-    Et que je clique sur "Voir la classe" dans la rangée "2NDEB"
-    Alors la page ne contient pas "Curie Marie"

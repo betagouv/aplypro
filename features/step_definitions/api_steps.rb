@@ -1,12 +1,27 @@
 # frozen_string_literal: true
 
-Sachantque("l'API FREGATA renvoie une liste d'élèves pour l'établissement {string}") do |uai|
-  WebmockHelpers.mock_fregata_students_with(uai, FactoryBot.build_list(:fregata_student, 10))
+# NOTE: l'API SYGNE est stateful : parce qu'un élève manquant est un
+# élève déscolarisé, il nous faut renvoyer les élèves précédents sous
+# peine de les voir disparaître, d'où @sygne_results.
+
+Sachantque(
+  "l'API SYGNE renvoie {int} élèves en {string} dont l'INE {string} pour l'établissement {string}"
+) do |count, classe, ine, uai|
+  @sygne_results = []
+
+  WebmockHelpers.mock_sygne_token_with
+
+  payload = FactoryBot.build_list(:sygne_student, count, classe: classe).tap do |students|
+    students.last["ine"] = ine
+  end
+
+  @sygne_results << payload
+
+  WebmockHelpers.mock_sygne_students_endpoint_with(uai, payload)
 end
 
-Sachantque("l'API SYGNE renvoie une liste d'élèves pour l'établissement {string}") do |uai|
-  WebmockHelpers.mock_sygne_token_with
-  WebmockHelpers.mock_sygne_students_endpoint_with(uai, FactoryBot.build_list(:sygne_student, 10))
+Sachantque("l'API FREGATA renvoie une liste d'élèves pour l'établissement {string}") do |uai|
+  WebmockHelpers.mock_fregata_students_with(uai, FactoryBot.build_list(:fregata_student, 10))
 end
 
 Sachantque("l'API SYGNE peut fournir les informations complètes des étudiants") do
@@ -18,10 +33,10 @@ Sachantque("les élèves de l'établissement {string} sont rafraîchis") do |uai
 end
 
 Sachantque("l'API SYGNE renvoie un élève avec l'INE {string} qui a quitté l'établissement {string}") do |ine, uai|
-  gone_payload = FactoryBot.build_list(:sygne_student, 1, :gone, ine: ine).to_json
+  payload_without_student = @sygne_results.last.dup.reject { |student| student["ine"] == ine }
 
   WebmockHelpers.mock_sygne_token_with
-  WebmockHelpers.mock_sygne_students_endpoint_with(uai, gone_payload)
+  WebmockHelpers.mock_sygne_students_endpoint_with(uai, payload_without_student)
 end
 
 Sachantque("l'API SYGNE renvoie une liste d'élèves vide") do

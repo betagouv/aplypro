@@ -2,7 +2,7 @@
 
 Fonctionnalité: Le personnel de direction récupère correctement les élèves
   Scénario: Le personnel de direction MENJ récupère ses élèves
-    Sachant que l'API SYGNE renvoie une liste d'élèves pour l'établissement "DINUM"
+    Sachant que l'API SYGNE renvoie 10 élèves en "1MELEC" dont l'INE "test" pour l'établissement "DINUM"
     Et que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que je me connecte en tant que personnel MENJ
     Et que je passe l'écran d'accueil

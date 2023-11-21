@@ -18,8 +18,9 @@ class HomeController < ApplicationController
     @inhibit_title = true
 
     current_classes = @etab.classes.current
-    @students_count = current_classes.joins(:students).count
-    @attributive_decisions_count = current_classes.with_attributive_decisions.count
+
+    @students_count = @etab.schoolings.current.includes(:student).count
+    @attributive_decisions_count = @etab.schoolings.current.joins(:attributive_decision_attachment).count
     @ribs_count = current_classes.joins(students: :rib).count
     @pfmps_counts = pfmp_counts
   end

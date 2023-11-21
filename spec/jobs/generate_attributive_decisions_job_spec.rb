@@ -4,10 +4,10 @@ require "rails_helper"
 require "support/webmock_helpers"
 
 RSpec.describe GenerateAttributiveDecisionsJob do
-  subject(:job) { described_class.new(etab) }
+  subject(:job) { described_class.new(establishment) }
 
-  let(:etab) { create(:establishment, :with_fim_user) }
-  let(:classes) { create_list(:classe, 2, :with_students, students_count: 3, establishment: etab) }
+  let(:establishment) { create(:establishment, :with_fim_user) }
+  let(:classes) { create_list(:classe, 2, :with_students, students_count: 3, establishment: establishment) }
   let(:students) { classes.flat_map(&:students) }
 
   before do
@@ -50,13 +50,30 @@ RSpec.describe GenerateAttributiveDecisionsJob do
   end
 
   it "generates one attributive decision per student" do
-    expect { described_class.perform_now(etab) }.to change(
+    expect { described_class.perform_now(establishment) }.to change(
       Schooling.joins(:attributive_decision_attachment),
       :count
     ).by(6)
   end
 
   it "generates an archive with all attributives decisions" do
-    expect { described_class.perform_now(etab) }.to change { etab.attributive_decisions_zip.attached? }.to true
+    expect { job.perform_now }.to change { establishment.attributive_decisions_zip.attached? }.to true
+  end
+
+  context "when there are inactive students" do
+    let(:generator) { instance_double(AttributeDecisionGenerator, generate!: nil) }
+    let(:student) { students.last }
+
+    before do
+      student.close_current_schooling!
+
+      allow(AttributeDecisionGenerator).to receive(:new).and_return generator
+    end
+
+    it "does not process them" do
+      described_class.perform_now(establishment)
+
+      expect(AttributeDecisionGenerator).not_to have_received(:new).with(student.schoolings.first)
+    end
   end
 end
