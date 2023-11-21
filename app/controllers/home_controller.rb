@@ -5,6 +5,8 @@ class HomeController < ApplicationController
 
   skip_before_action :authenticate_user!, only: %i[maintenance index login]
 
+  before_action :show_welcome_screen, only: :home
+
   def index
     (redirect_to home_path and return) if user_signed_in?
 
@@ -12,14 +14,12 @@ class HomeController < ApplicationController
   end
 
   def home
-    redirect_to welcome_path and return unless current_user.welcomed?
-
-    @page_title = t("pages.titles.home.home")
+    infer_page_title
     @inhibit_title = true
 
     current_classes = @etab.classes.current
 
-    @students_count = @etab.schoolings.current.includes(:student).count
+    @students_count = current_classes.joins(:active_students).count
     @attributive_decisions_count = @etab.schoolings.current.joins(:attributive_decision_attachment).count
     @ribs_count = current_classes.joins(students: :rib).count
     @pfmps_counts = pfmp_counts
@@ -53,5 +53,9 @@ class HomeController < ApplicationController
             .merge(@etab.classes.current)
 
     PfmpStateMachine.states.index_with { |state| pfmps.in_state(state).count }
+  end
+
+  def show_welcome_screen
+    redirect_to welcome_path and return unless current_user.welcomed?
   end
 end
