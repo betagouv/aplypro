@@ -2,13 +2,16 @@
 
 Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribution
   Contexte:
-    Sachant que l'API SYGNE renvoie une liste d'élèves pour l'établissement "DINUM"
+    Sachant que l'API SYGNE renvoie 10 élèves en "1MELEC" dont l'INE "test" pour l'établissement "DINUM"
     Et que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que je me connecte en tant que personnel MENJ
-    Et qu'il y a une élève "Marie Curie" au sein de la classe "2NDEB" pour une formation "Développement"
     Et que je passe l'écran d'accueil
-    Et que le panneau "Décisions d'attribution" contient "0 / 1"
+    Quand toutes les tâches de fond sont terminées
+
+  Scénario: Le personnel de direction peut voir le nombre de décisions à générer
+    Quand je rafraîchis la page
+    Alors le panneau "Décisions d'attribution" contient "0 / 10"
 
   Scénario: Le personnel de direction peut lancer l'édition des décisions d'attribution
     Quand je clique sur "Éditer les décisions d'attribution"
@@ -16,4 +19,4 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Quand toutes les tâches de fond sont terminées
     Et que je rafraîchis la page
     Alors la page contient "Télécharger l'ensemble des décisions d'attribution"
-    Alors le panneau "Décisions d'attribution" contient "1 / 1"
+    Et le panneau "Décisions d'attribution" contient "10 / 10"

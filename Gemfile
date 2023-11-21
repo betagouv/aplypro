@@ -95,6 +95,7 @@ group :test do
   gem "guard-rspec"
   gem "rails-controller-testing"
   gem "rspec"
+  gem "rspec-collection_matchers"
   gem "rubocop"
   gem "rubocop-rails"
   gem "rubocop-rspec"

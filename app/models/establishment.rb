@@ -18,7 +18,10 @@ class Establishment < ApplicationRecord
   end
 
   has_many :classes, -> { order "label" }, class_name: "Classe", dependent: :destroy, inverse_of: :establishment
+
   has_many :schoolings, through: :classes
+
+  has_many :students, through: :schoolings
 
   has_one_attached :attributive_decisions_zip
 
@@ -41,7 +44,7 @@ class Establishment < ApplicationRecord
   }.freeze
 
   def current_schoolings
-    classes.current.includes(:schoolings).flat_map(&:schoolings)
+    schoolings.current
   end
 
   def to_s

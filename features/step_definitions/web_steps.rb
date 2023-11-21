@@ -24,6 +24,10 @@ Alors("la page contient {string} dans la rangée {string} du tableau {string}") 
   expect(page).to have_table(caption, with_rows: [row, content])
 end
 
+Alors("le tableau {string} contient") do |caption, table|
+  expect(page).to have_table(caption, with_rows: table.rows)
+end
+
 Alors("le titre de la page contient {string}") do |text|
   expect(page.title.gsub("  ", " ")).to include text
 end
