@@ -6,7 +6,7 @@ Fonctionnalité: Le personnel de direction consulte les listes
     Et que je me connecte en tant que personnel MENJ
     Et que je passe l'écran d'accueil
     Et que je clique sur "Élèves"
-    Et qu'il y a une élève "Marie Curie" avec l'UAI "test" au sein de la classe "2NDEB" pour une formation "Développement"
+    Et qu'il y a une élève "Marie Curie" au sein de la classe "2NDEB" pour une formation "Développement"
     Et que je rafraîchis la page
 
   Scénario: Le personnel de direction consulte le profil d'un élève
