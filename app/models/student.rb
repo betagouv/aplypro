@@ -50,8 +50,8 @@ class Student < ApplicationRecord
     current_schooling.mef.wage.yearly_cap - used_allowance
   end
 
-  def close_current_schooling!
-    current_schooling&.update!(end_date: Time.zone.today)
+  def close_current_schooling!(date = Time.zone.today)
+    current_schooling&.update!(end_date: date)
   end
 
   def address

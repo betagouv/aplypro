@@ -72,6 +72,13 @@ RSpec.describe Student do
       expect { student.reload.close_current_schooling! }.to(change { schooling.reload.end_date })
     end
 
+    it "can use a specific end date" do
+      datetime = 5.days.ago
+
+      expect { student.close_current_schooling!(datetime) }
+        .to(change { schooling.reload.end_date }.to(datetime.to_date))
+    end
+
     context "when there is no current schooling" do
       before { student.close_current_schooling! }
 

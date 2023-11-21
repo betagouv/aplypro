@@ -48,11 +48,15 @@ class Student
       end
 
       def student_has_changed_class?(entry)
-        timestamp_past?(entry["dateSortieFormation"])
+        timestamp_past?(left_classe_at(entry))
       end
 
       def student_has_left_establishment?(entry)
         timestamp_past?(entry["dateSortieEtablissement"])
+      end
+
+      def left_classe_at(entry)
+        entry["dateSortieFormation"] || entry["dateSortieEtablissement"]
       end
 
       private

@@ -47,6 +47,10 @@ class Student
       def student_has_left_establishment?(_entry)
         false
       end
+
+      def left_classe_at(_entry)
+        nil # we don't know
+      end
     end
   end
 end
