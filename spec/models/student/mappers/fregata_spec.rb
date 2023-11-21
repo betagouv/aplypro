@@ -34,6 +34,26 @@ describe Student::Mappers::Fregata do
     expect(Student.all.map(&:missing_address?).uniq).to contain_exactly false
   end
 
+  context "when the student has left the establishment" do
+    let(:data) { build_list(:fregata_student, 1, :left_establishment, left_at: 3.days.ago, ine: "test") }
+
+    it "sets the correct end date on the previous schooling" do
+      mapper.new(data, establishment).parse!
+
+      expect(Student.find_by(ine: "test").schoolings.last.end_date).to eq 3.days.ago.to_date
+    end
+  end
+
+  context "when the student has left the class" do
+    let(:data) { build_list(:fregata_student, 1, :left_classe, left_classe_at: 4.days.ago, ine: "test") }
+
+    it "sets the correct end date on the previous schooling" do
+      mapper.new(data, establishment).parse!
+
+      expect(Student.find_by(ine: "test").schoolings.last.end_date).to eq 4.days.ago.to_date
+    end
+  end
+
   context "when there are multiple entries for the same student" do
     let(:data) do
       [
@@ -46,6 +66,22 @@ describe Student::Mappers::Fregata do
       mapper.new(data, establishment).parse!
 
       expect(Student.find_by(ine: last_ine).schoolings).to have(2).schoolings
+    end
+  end
+
+  # NOTE: we need a separate test because SYGNE's "student left" logic
+  # implies two calls (one with the student, a subsequent one
+  # without), whereas FREGATA can have a student gone straight away,
+  # because it is explicitly set in the timestamp attributes for it.
+  context "when a student has already left on the first parse" do
+    let(:data) { [build(:fregata_student, :left_establishment)] }
+
+    it "parses the student" do
+      expect { mapper.new(data, establishment).parse! }.to change(Student, :count).by(1)
+    end
+
+    it "closes the schooling straight away" do
+      expect { mapper.new(data, establishment).parse! }.not_to change(Schooling.current, :count)
     end
   end
 end

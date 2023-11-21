@@ -76,9 +76,13 @@ class Student
 
       def check_schoolings!
         payload
-          .filter { |entry| student_has_left_class?(entry) }
-          .filter_map { |entry| Student.find_by(ine: map_student_attributes(entry)[:ine]) }
-          .each(&:close_current_schooling!)
+          .filter { |entry| student_has_left_class?(entry) && find_existing_student(entry) }
+          .map    { |entry| [entry, find_existing_student(entry)] }
+          .each   { |entry, student| student.close_current_schooling!(left_classe_at(entry)) }
+      end
+
+      def find_existing_student(entry)
+        Student.find_by(ine: map_student_attributes(entry)[:ine])
       end
 
       # the MEF codes from SYGNE and FREGATA all arrive with an extra
