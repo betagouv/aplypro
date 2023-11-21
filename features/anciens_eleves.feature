@@ -1,6 +1,6 @@
 # language: fr
 
-@wip
+
 Fonctionnalité: Les anciens élèves ne sont pas inclus dans l'interface
   Contexte:
     Sachant que l'API SYGNE renvoie 10 élèves en "1MELEC" dont l'INE "test" pour l'établissement "DINUM"

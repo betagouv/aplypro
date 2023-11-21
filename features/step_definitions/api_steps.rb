@@ -38,8 +38,3 @@ Sachantque("l'API SYGNE renvoie un élève avec l'INE {string} qui a quitté l'�
   WebmockHelpers.mock_sygne_token_with
   WebmockHelpers.mock_sygne_students_endpoint_with(uai, payload_without_student)
 end
-
-Sachantque("l'API SYGNE renvoie une liste d'élèves vide") do
-  WebmockHelpers.mock_sygne_token_with
-  WebmockHelpers.mock_sygne_students_with!([])
-end
