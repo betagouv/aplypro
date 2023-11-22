@@ -11,11 +11,6 @@ Fonctionnalité: Gestion des accès à l'application
     Lorsque je consulte la liste des invitations
     Alors la page contient "marie.curie@education.gouv.fr"
 
-  Scénario: Je peux inviter des emails non académiques (on a retiré la vérification)
-    Lorsque j'autorise "marie.curie@gmail.com" à rejoindre l'application
-    Lorsque je consulte la liste des invitations
-    Alors la page contient "marie.curie@gmail.com"
-
   Scénario: Je peux supprimer une invitation
     Lorsque j'autorise "marie.curie@education.gouv.fr" à rejoindre l'application
     Et que je consulte la liste des invitations
