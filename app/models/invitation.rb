@@ -8,7 +8,7 @@ class Invitation < ApplicationRecord
     gouv.fr
     educagri.fr
     mfr.asso.fr
-    cneap.fr.
+    cneap.fr
     ac-aix-marseille.fr
     ac-amiens.fr
     ac-besancon.fr
@@ -44,7 +44,7 @@ class Invitation < ApplicationRecord
   VALID_EMAILS = /[\.@](#{VALID_DOMAINS.map { |d| Regexp.escape(d) }.join('|')})\Z/
 
   validates :email,
-            presence: true, format: { with: VALID_EMAILS },
+            presence: true,
             uniqueness: { scope: :establishment_id }
   normalizes :email, with: ->(email) { email.strip.downcase }
 end
