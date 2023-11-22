@@ -13,20 +13,26 @@ RSpec.describe Schooling do
   end
 
   describe "validations" do
-    let(:schooling) { create(:schooling) }
-
     describe "student_id" do
-      context "when there is another closed schooling" do
-        before { schooling.student.close_current_schooling! }
+      context "when there is another schooling" do
+        let!(:schooling) { create(:schooling) }
 
-        it "creates a new schooling" do
-          expect { create(:schooling, student: schooling.student) }.to change(described_class, :count).by(1)
+        context "with an end date" do
+          before { schooling.student.close_current_schooling! }
+
+          it "can create a new one" do
+            expect { create(:schooling, student: schooling.student) }.to change(described_class, :count).by(1)
+          end
         end
-      end
 
-      context "when there is an open schooling" do
-        it "raises an error" do
-          expect { create(:schooling, student: schooling.student) }.to raise_error(ActiveRecord::RecordInvalid)
+        context "without an end date" do
+          it "rejects the new one" do
+            expect { create(:schooling, student: schooling.student) }.to raise_error(ActiveRecord::RecordInvalid)
+          end
+
+          it "doesn't reject a closed schooling" do
+            expect { create(:schooling, :closed, student: schooling.student) }.to(change(described_class, :count).by(1))
+          end
         end
       end
     end
