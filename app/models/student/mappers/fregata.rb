@@ -47,22 +47,12 @@ class Student
         student_attrs
       end
 
-      def student_has_changed_class?(entry)
-        timestamp_past?(left_classe_at(entry))
-      end
-
-      def student_has_left_establishment?(entry)
-        timestamp_past?(entry["dateSortieEtablissement"])
+      def map_schooling!(classe, student, entry)
+        Schooling.find_or_create_by!(classe: classe, student: student, end_date: left_classe_at(entry))
       end
 
       def left_classe_at(entry)
         entry["dateSortieFormation"] || entry["dateSortieEtablissement"]
-      end
-
-      private
-
-      def timestamp_past?(value)
-        value.present? && Date.parse(value).past?
       end
     end
   end
