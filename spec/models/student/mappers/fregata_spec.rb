@@ -9,23 +9,16 @@ describe Student::Mappers::Fregata do
   subject(:mapper) { described_class }
 
   let(:establishment) { create(:establishment, :with_masa_user) }
-  let(:normal_payload) { build_list(:fregata_student, 2, classe_label: "1AGRO") }
-  let(:last_ine) { normal_payload.last["apprenant"]["ine"] }
+  let(:normal_payload) { build_list(:fregata_student, 2) }
 
   it_behaves_like "a student mapper" do
-    # the following lines to test with some massive staging payloads
+    # the following lines to test with real payloads
     # let!(:fixture) { Rails.root.join("mock/data/fregata-students.json").read }
     # let(:normal_payload) { JSON.parse(fixture) }
 
+    let(:normal_payload) { build_list(:fregata_student, 2) }
     let(:irrelevant_mefs_payload) { build_list(:fregata_student, 10, :irrelevant) }
     let(:nil_ine_payload) { normal_payload.push(build(:fregata_student, :no_ine)) }
-    let(:last_student_has_changed_class_payload) do
-      normal_payload.dup << build(:fregata_student, :changed_class, ine: last_ine)
-    end
-
-    let(:last_student_has_left_establishment_payload) do
-      normal_payload.dup << build(:fregata_student, :left_establishment, ine: last_ine)
-    end
   end
 
   it "also grabs the address" do
@@ -55,24 +48,26 @@ describe Student::Mappers::Fregata do
   end
 
   context "when there are multiple entries for the same student" do
+    subject(:student) { create(:student) }
+
     let(:data) do
       [
-        build(:fregata_student, ine: last_ine),
-        build(:fregata_student, :changed_class, ine: last_ine)
+        build(:fregata_student, classe_label: "new class", ine: student.ine),
+        build(:fregata_student, :left_classe, ine: student.ine)
       ]
     end
 
-    it "parses them correctly" do
-      mapper.new(data, establishment).parse!
+    before { mapper.new(data, establishment).parse! }
 
-      expect(Student.find_by(ine: last_ine).schoolings).to have(2).schoolings
+    it "parses them correctly" do
+      expect(student.schoolings).to have(2).schoolings
+    end
+
+    it "parses the correct current one" do
+      expect(student.current_schooling.classe.label).to eq "new class"
     end
   end
 
-  # NOTE: we need a separate test because SYGNE's "student left" logic
-  # implies two calls (one with the student, a subsequent one
-  # without), whereas FREGATA can have a student gone straight away,
-  # because it is explicitly set in the timestamp attributes for it.
   context "when a student has already left on the first parse" do
     let(:data) { [build(:fregata_student, :left_establishment)] }
 

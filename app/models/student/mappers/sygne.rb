@@ -40,16 +40,12 @@ class Student
         end
       end
 
-      def student_has_changed_class?(entry)
-        entry["classe"].blank?
-      end
+      def map_schooling!(classe, student, _entry)
+        schooling = Schooling.find_or_initialize_by(classe: classe, student: student)
 
-      def student_has_left_establishment?(_entry)
-        false
-      end
+        student.close_current_schooling! if schooling != student.current_schooling
 
-      def left_classe_at(_entry)
-        nil # we don't know
+        schooling.save!
       end
     end
   end
