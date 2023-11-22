@@ -13,7 +13,16 @@ class Schooling < ApplicationRecord
 
   scope :current, -> { where(end_date: nil) }
 
-  validates :student_id, uniqueness: { conditions: -> { current } }
+  validates :student, uniqueness: { scope: :end_date }, if: :open?
+  validates :student, uniqueness: { scope: [:classe] }, if: :closed?
+
+  def closed?
+    end_date.present?
+  end
+
+  def open?
+    !closed?
+  end
 
   def attributive_decision_filename
     [
