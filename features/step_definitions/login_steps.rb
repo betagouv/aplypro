@@ -101,6 +101,14 @@ Sachantque("je suis un personnel MENJ de l'établissement {string} avec l'email 
   )
 end
 
+Sachantque("je suis un personnel MENJ sans FrEduRne avec l'email {string}") do |email|
+  OmniAuth.config.mock_auth[:fim] = make_fim_hash(
+    name: Faker::Name.name,
+    email: email,
+    raw_info: {}
+  )
+end
+
 Sachantque("je suis un personnel MASA de l'établissement {string} avec l'email {string}") do |uai, email|
   OmniAuth.config.mock_auth[:masa] = make_cas_hash(
     name: Faker::Name.name,

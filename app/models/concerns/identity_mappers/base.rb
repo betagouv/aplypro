@@ -53,14 +53,15 @@ module IdentityMappers
     end
 
     def establishments_authorised_for(email)
-      establishments_invited = normal_uais
-                               .filter_map { |uai| Establishment.find_by(uai:) }
-                               .select     { |establishment| establishment.invites?(email) }
+      establishments_invited_for(email) | establishments_delegated
+    end
 
-      establishments_delegated = delegated_uais
-                                 .filter_map { |uai| Establishment.find_or_create_by!(uai: uai) }
+    def establishments_invited_for(email)
+      Establishment.joins(:invitations).where("invitations.email": email)
+    end
 
-      establishments_invited | establishments_delegated
+    def establishments_delegated
+      delegated_uais.filter_map { |uai| Establishment.find_or_create_by!(uai: uai) }
     end
 
     def establishments_in_responsibility
@@ -109,11 +110,7 @@ module IdentityMappers
     end
 
     def all_indicated_uais
-      responsibility_uais | delegated_and_invited_uais
-    end
-
-    def delegated_and_invited_uais
-      normal_uais | delegated_uais
+      responsibility_uais | normal_uais | delegated_uais
     end
   end
 end

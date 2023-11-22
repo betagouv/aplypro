@@ -12,9 +12,8 @@ fr:
       answer: |
         APLyPro se repose sur les portails d'authentification du MENJ et du MASA pour vous connecter. Vous pouvez vérifier :
         <ul>
-          <li>Que vous êtes bien rattaché à un établissement concerné par l'allocation dans votre annuaire académique ou COLENTAGRI.</li>
           <li>Si vous êtes chef d'établissement : que vous avez bien ce rôle dans votre annuaire académique ou COLENTAGRI.</li>
-          <li>Si vous n'êtes pas chef d'établissement : que votre adresse e-mail a bien été autorisée par votre personnel de direction dans l'application APlyPro.</li>
+          <li>Si vous n'êtes pas chef d'établissement : que votre adresse e-mail a bien été autorisée par votre personnel de direction dans l'application APlyPro (ou via DELEG-CE).</li>
         </ul>
     - title: (MENJ) Puis-je utiliser DELEG-CE pour donner des accès ?
       answer: DELEG-CE est désormais implémenté pour APLyPro. Les délégations sont équivalentes aux autorisations d'accès via "Gestion des accès" dans APLyPro. Vous ne pourrez donc pas déléguer les droits pour la génération de décisions d'attribution, ni pour la validation de PFMPs.
