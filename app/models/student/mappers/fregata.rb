@@ -48,7 +48,11 @@ class Student
       end
 
       def map_schooling!(classe, student, entry)
-        Schooling.find_or_create_by!(classe: classe, student: student, end_date: left_classe_at(entry))
+        schooling = Schooling.find_or_initialize_by(classe: classe, student: student)
+
+        schooling.end_date = left_classe_at(entry)
+
+        schooling.save!
       end
 
       def left_classe_at(entry)
