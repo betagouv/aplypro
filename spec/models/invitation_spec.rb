@@ -30,7 +30,7 @@ RSpec.describe Invitation do
     end
   end
 
-  describe "invalid domains" do
+  describe "other domains are actually valid (we removed the verification)" do
     %w[
       test@legouv.fr
       test@educagri.io.fr
@@ -38,7 +38,7 @@ RSpec.describe Invitation do
       test@academie-montpellier.fr
     ].each do |email|
       it "does not allow `#{email}`" do
-        expect(build(:invitation, email: email)).not_to be_valid
+        expect(build(:invitation, email: email)).to be_valid
       end
     end
   end
