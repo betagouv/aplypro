@@ -11,7 +11,9 @@ module StudentApi
     end
 
     def fetch!
-      authenticated_client!.get(endpoint).body
+      params = { "etat-scolarisation" => "true" }
+
+      authenticated_client!.get(endpoint, params).body
     end
 
     def fetch_student_data!(ine)
