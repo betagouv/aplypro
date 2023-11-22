@@ -6,10 +6,8 @@
 
     = form.submit "Autoriser l'email", { class: 'fr-btn' }
 
-    = dsfr_alert(type: :warning, title: "Seuls les emails académiques sont autorisés", classes: 'fr-my-3w') do
+    = dsfr_alert(type: :warning, title: t("invitations.alert.#{current_user.provider}"), classes: 'fr-my-3w') do
       %p
-        L'email renseigné doit impérativement finir par :
-        %ul
-          - Invitation::VALID_DOMAINS.each do |domain|
-            %li
-              %code= domain
+        L'email renseigné doit impérativement pouvoir se connecter via le portail de connexion du 
+        = t("omniauth.#{current_user.provider}.title")
+        pour pouvoir accéder à APLyPro.
