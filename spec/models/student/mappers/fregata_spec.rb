@@ -45,6 +45,22 @@ describe Student::Mappers::Fregata do
 
       expect(Student.find_by(ine: "test").schoolings.last.end_date).to eq 4.days.ago.to_date
     end
+
+    context "when there was already a previous schooling for this class" do
+      let(:previous_data) do
+        [
+          data.first.deep_dup.tap do |attrs|
+            attrs["dateSortieFormation"] = nil
+          end
+        ]
+      end
+
+      before { mapper.new(previous_data, establishment).parse! }
+
+      it "updates the end date in place" do
+        expect { mapper.new(data, establishment).parse! }.to change(Schooling.current, :count).by(-1)
+      end
+    end
   end
 
   context "when there are multiple entries for the same student" do
