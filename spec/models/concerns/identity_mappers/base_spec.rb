@@ -42,6 +42,35 @@ RSpec.describe IdentityMappers::Base do
     end
   end
 
+  describe "#establishments_authorised_for" do
+    subject(:result) { mapper.establishments_authorised_for(email) }
+
+    let(:email) { "jean.valjean@ac-paris.fr" }
+
+    it "contains the delegated establishment" do
+      expect(result.pluck(:uai)).to eq ["delegated"]
+    end
+
+    context "when there is no attributes" do
+      let(:attributes) { {} }
+
+      it { is_expected.to be_empty }
+    end
+
+    context "when there is an invitation for the email, even for an UAI not in the FrEduRne" do
+      let(:establishment) { create(:establishment, uai: "invited") }
+      let(:invitation) { create(:invitation, email: email, establishment: establishment) }
+
+      before do
+        invitation
+      end
+
+      it "contains the invited establishment" do
+        expect(result.pluck(:uai)).to eq %w[invited delegated]
+      end
+    end
+  end
+
   describe "#responsibility_uais" do
     context "when there is a FrEduRneResp" do
       subject(:result) { mapper.responsibility_uais }

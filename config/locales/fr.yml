@@ -132,7 +132,6 @@ fr:
         content: |
           Le guichet d'authentification n'indique pas d'établissement concerné par l'allocation sous votre responsabilité, ni d'autorisations pour votre adresse e-mail. 
           <ul>
-            <li>Assurez-vous que vous êtes bien rattaché à un établissement concerné par l'allocation dans votre annuaire académique ou COLENTAGRI.</li>
             <li>Si vous êtes chef d'établissement, assurez-vous que vous avez bien ce rôle dans votre annuaire académique ou COLENTAGRI.</li>
             <li>Si vous n'êtes pas chef d'établissement assurez-vous que votre adresse e-mail a bien été autorisée par votre personnel de direction dans l'application APlyPro (ou via DELEG-CE).</li>
           </ul>
