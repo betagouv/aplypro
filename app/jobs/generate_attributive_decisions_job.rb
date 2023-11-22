@@ -3,7 +3,10 @@
 require "attribute_decision_generator"
 
 class GenerateAttributiveDecisionsJob < ApplicationJob
-  queue_as :default
+  # this job touches on I/O quite a lot so we've got a separate
+  # "documents" queue that is configured in Docker and Scalingo to
+  # run a single thread and avoid concurrency issue.
+  queue_as :documents
 
   ARCHIVE_ROOT = Rails.root.join("tmp/archives")
 
