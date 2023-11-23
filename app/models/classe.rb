@@ -21,6 +21,7 @@ class Classe < ApplicationRecord
            inverse_of: :classe
 
   has_many :active_students,
+           -> { order "last_name" },
            class_name: "Student",
            through: :active_schoolings,
            source: :student
