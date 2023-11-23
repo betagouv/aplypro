@@ -46,5 +46,16 @@ describe Student::Mappers::Sygne do
         expect(student.current_schooling.classe.label).to eq "some new class"
       end
     end
+
+    context "when there is a schooling for that classe that was closed" do
+      let(:next_data) { normal_payload }
+      let(:schooling) { student.schoolings.last }
+
+      before { student.close_current_schooling! }
+
+      it "reopens the schooling" do
+        expect { mapper.parse! }.to change { student.reload.current_schooling }.from(nil).to(schooling)
+      end
+    end
   end
 end
