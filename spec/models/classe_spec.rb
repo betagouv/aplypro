@@ -63,6 +63,14 @@ RSpec.describe Classe do
     end
 
     it { is_expected.not_to include old_student }
+
+    it "orders them by last name" do
+      students = %w[Z A B M C].map { |name| create(:student, last_name: name) }
+
+      classe.students = students
+
+      expect(classe.active_students.map(&:last_name).join).to eq "ABCMZ"
+    end
   end
 
   describe ".with_attributive_decisions" do

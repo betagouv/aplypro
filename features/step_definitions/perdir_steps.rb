@@ -57,8 +57,14 @@ Quand("je renseigne les coordonnées bancaires de l'élève {string} de la class
   )
 end
 
+Quand("je clique sur {string} dans le menu principal") do |item|
+  within("nav#main") do
+    click_link(item)
+  end
+end
+
 Quand("je consulte la liste des classes") do
-  visit classes_path
+  steps %(Quand je clique sur "Élèves" dans le menu principal)
 end
 
 Quand("je renseigne une PFMP de {int} jours pour {string}") do |days, name|
@@ -142,5 +148,12 @@ Lorsque("je consulte la liste des invitations") do
   steps %(
     Quand je me rends sur la page d'accueil
     Et que je clique sur "Gestion des accès"
+  )
+end
+
+Quand("je consulte la classe de {string}") do |classe_label|
+  steps %(
+    Quand je consulte la liste des classes
+    Et que je clique sur "Voir la classe" dans la rangée "#{classe_label}"
   )
 end
