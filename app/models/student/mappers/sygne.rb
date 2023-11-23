@@ -46,9 +46,7 @@ class Student
         student.close_current_schooling! if schooling != student.current_schooling
 
         # we might have an existing closed schooling which needs to be re-opened
-        if schooling.end_date.present?
-          schooling.update!(end_date: nil)
-        end
+        schooling.reopen! if schooling.closed?
 
         schooling.save!
       end

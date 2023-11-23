@@ -20,6 +20,10 @@ class Schooling < ApplicationRecord
     end_date.present?
   end
 
+  def reopen!
+    update!(end_date: nil)
+  end
+
   def open?
     !closed?
   end
