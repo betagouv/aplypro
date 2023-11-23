@@ -19,6 +19,14 @@ RSpec.shared_examples "a student mapper" do
         expect { mapper.parse! }.not_to change(model, :count)
       end
     end
+
+    context "when the paylaod is the same" do
+      before { mapper.parse! }
+
+      it "does not change the active schoolings" do
+        expect { mapper.parse! }.not_to change(Schooling.current, :count)
+      end
+    end
   end
 
   context "with a payload that contains students without INEs" do
