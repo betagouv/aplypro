@@ -73,4 +73,12 @@ RSpec.describe Schooling do
       it { is_expected.to include schooling }
     end
   end
+
+  describe "#reopen!" do
+    let(:schooling) { create(:schooling, :closed) }
+
+    it "resets the end date" do
+      expect { schooling.reopen! }.to change(schooling, :open?).from(false).to(true)
+    end
+  end
 end
