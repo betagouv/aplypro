@@ -139,7 +139,9 @@ end
 
 Sachantque("je me connecte en tant que personnel autorisé de l'établissement {string}") do |uai|
   steps %(
-    Quand j'autorise "marie.curie@education.gouv.fr" à rejoindre l'application
+    Quand je suis un personnel MENJ directeur de l'établissement "#{uai}"
+    Et que je me connecte en tant que personnel MENJ
+    Et que j'autorise "marie.curie@education.gouv.fr" à rejoindre l'application
     Et que je me déconnecte
     Et que je suis un personnel MENJ de l'établissement "#{uai}" avec l'email "marie.curie@education.gouv.fr"
     Et que je me connecte en tant que personnel MENJ
