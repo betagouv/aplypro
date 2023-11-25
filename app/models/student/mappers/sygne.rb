@@ -32,7 +32,7 @@ class Student
         define! do
           deep_symbolize_keys
 
-          rename_keys(codeMef: :mef_code, classe: :label)
+          rename_keys(codeMefRatt: :mef_code, classe: :label)
 
           map_value :mef_code, ->(value) { value.chop }
 
