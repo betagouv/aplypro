@@ -18,3 +18,15 @@ Fonctionnalité: Le personnel de direction récupère correctement les élèves
     Et que toutes les tâches de fond sont terminées
     Quand je me rends sur la page d'accueil
     Alors le panneau "Décisions d'attribution" contient "0 / 10"
+
+  Scénario: Les listes sont rafraîchies à chaque connexion
+    Sachant que l'API SYGNE renvoie 10 élèves en "1MELEC" dont l'INE "test" pour l'établissement "DINUM"
+    Et que je me connecte en tant que personnel autorisé de l'établissement "DINUM"
+    Et que je passe l'écran d'accueil
+    Et que toutes les tâches de fond sont terminées
+    Et que je me déconnecte
+    Et que l'API SYGNE renvoie 10 élèves en "TERM ELEC" dont l'INE "test" pour l'établissement "DINUM"
+    Quand je me connecte en tant que personnel MENJ
+    Et que toutes les tâches de fond sont terminées
+    Et que je consulte la liste des classes
+    Alors la page contient "TERM ELEC"

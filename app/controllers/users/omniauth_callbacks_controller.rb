@@ -34,7 +34,6 @@ module Users
 
       log_user_in!
       save_roles!
-      async_fetch_students!
       fetch_establishments!
       choose_redirect_page!
     end
@@ -113,6 +112,8 @@ module Users
     def choose_redirect_page!
       establishments = @user.establishments
 
+      fetch_students_for!(establishments)
+
       if establishments.many?
         clear_previous_establishment!
         @inhibit_nav = true
@@ -125,10 +126,8 @@ module Users
       end
     end
 
-    def async_fetch_students!
-      jobs = @mapper.establishments_in_responsibility.map { |e| FetchStudentsJob.new(e) }
-
-      ActiveJob.perform_all_later(jobs)
+    def fetch_students_for!(establishments)
+      ActiveJob.perform_all_later(establishments.map { |e| FetchStudentsJob.new(e) })
     end
 
     def fetch_establishments!
