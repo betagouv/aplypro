@@ -10,7 +10,7 @@ describe Student::Mappers::Sygne do
   let(:normal_payload) { build_list(:sygne_student, 10, classe: "1MELEC") }
 
   it_behaves_like "a student mapper" do
-    let(:irrelevant_mefs_payload) { build_list(:sygne_student, 10, codeMef: "-1") }
+    let(:irrelevant_mefs_payload) { build_list(:sygne_student, 10, mef: "-1") }
     let(:nil_ine_payload) { normal_payload.push(build(:sygne_student, :no_ine)) }
   end
 
