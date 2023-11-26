@@ -10,8 +10,16 @@ describe Student::Mappers::Sygne do
   let(:normal_payload) { build_list(:sygne_student, 10, classe: "1MELEC") }
 
   it_behaves_like "a student mapper" do
-    let(:irrelevant_mefs_payload) { build_list(:sygne_student, 10, mef: "-1") }
+    let(:irrelevant_mefs_payload) { build_list(:sygne_student, 10, :irrelevant) }
     let(:nil_ine_payload) { normal_payload.push(build(:sygne_student, :no_ine)) }
+
+    let(:faulty_student_payload) do
+      normal_payload.tap { |entries| entries.sample.except!("codeMefRatt") }
+    end
+
+    let(:faulty_classe_payload) do
+      normal_payload.tap { |entries| entries.sample.except!("classe") }
+    end
   end
 
   describe "schoolings reconciliation" do

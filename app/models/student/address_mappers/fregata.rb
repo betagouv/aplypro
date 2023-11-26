@@ -14,7 +14,7 @@ class Student
       end
 
       def addresses
-        payload["apprenant"]["adressesApprenant"]
+        payload.dig("apprenant", "adressesApprenant")
       end
 
       class Mapper < Dry::Transformer::Pipe

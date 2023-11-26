@@ -19,6 +19,8 @@ describe Student::Mappers::Fregata do
     let(:normal_payload) { build_list(:fregata_student, 2) }
     let(:irrelevant_mefs_payload) { build_list(:fregata_student, 10, :irrelevant) }
     let(:nil_ine_payload) { normal_payload.push(build(:fregata_student, :no_ine)) }
+    let(:faulty_student_payload) { normal_payload.push(build(:fregata_student).except("apprenant")) }
+    let(:faulty_classe_payload) { normal_payload.push(build(:fregata_student).except("division")) }
   end
 
   it "also grabs the address" do

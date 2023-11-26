@@ -39,7 +39,8 @@ class Student
       end
 
       def map_student_attributes(attrs)
-        student_attrs = self.class::StudentMapper.new.call(attrs)
+        student_attrs = super(attrs)
+
         address_attrs = Student::AddressMappers::Fregata.new(attrs).address_attributes
 
         student_attrs.merge!(address_attrs) if address_attrs.present?

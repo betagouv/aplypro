@@ -3,6 +3,8 @@
 class Student
   module Mappers
     class Base
+      include Student::Mappers::Errors
+
       attr_reader :payload, :establishment, :year
 
       def initialize(payload, establishment)
@@ -12,31 +14,45 @@ class Student
       end
 
       def parse!
-        group_by_classes.each do |classe, entries|
+        map_classes!.each do |classe, entries|
           entries.each do |entry|
             student = map_student!(entry)
 
             next if student.nil? # ine == nil
 
-            map_schooling!(classe, student, entry)
+            begin
+              map_schooling!(classe, student, entry)
+            rescue StandardError => e
+              Sentry.capture_exception(
+                SchoolingParsingError.new(
+                  "Schooling parsing failed for #{establishment}: #{e.message}"
+                )
+              )
+            end
           end
         end
 
         check_missing_students!
       end
 
-      def group_by_classes
+      def check_missing_students!
+        map_classes!
+          .transform_values! { |student_attrs| map_students!(student_attrs) }
+          .each do |classe, students|
+          missing = classe.active_students - students
+
+          missing.each(&:close_current_schooling!)
+        end
+      end
+
+      def map_classes!
         payload
           .group_by { |entry| map_classe!(entry) }
           .except(nil)
       end
 
-      def classes_with_students
-        group_by_classes.transform_values! { |student_attrs| map_students!(student_attrs) }
-      end
-
       def map_classe!(entry)
-        label, mef_code = self.class::ClasseMapper.new.call(entry).values_at(:label, :mef_code)
+        label, mef_code = map_classe_attributes(entry)
 
         mef = Mef.find_by(code: mef_code)
 
@@ -48,6 +64,10 @@ class Student
           establishment: establishment,
           start_year: @year
         )
+      rescue ClasseParsingError => e
+        Sentry.capture_exception(e)
+
+        nil
       end
 
       def map_students!(students_attrs)
@@ -63,18 +83,22 @@ class Student
           .find_or_initialize_by(ine: attributes[:ine])
           .tap { |student| student.assign_attributes(attributes) }
           .tap(&:save!)
+      rescue StudentParsingError => e
+        Sentry.capture_exception(e)
+
+        nil
       end
 
-      def check_missing_students!
-        classes_with_students.each do |classe, students|
-          missing = classe.active_students - students
-
-          missing.each(&:close_current_schooling!)
-        end
+      def map_classe_attributes(attrs)
+        self.class::ClasseMapper.new.call(attrs).values_at(:label, :mef_code)
+      rescue StandardError => e
+        raise ClasseParsingError.new, "Classe parsing failure for #{establishment}: #{e.message}"
       end
 
       def map_student_attributes(attrs)
         self.class::StudentMapper.new.call(attrs)
+      rescue StandardError => e
+        raise StudentParsingError, "Student parsing failure for #{establishment}: #{e.message}"
       end
 
       def inspect

@@ -20,7 +20,7 @@ RSpec.shared_examples "a student mapper" do
       end
     end
 
-    context "when the paylaod is the same" do
+    context "when the payload is the same" do
       before { mapper.parse! }
 
       it "does not change the active schoolings" do
@@ -44,6 +44,30 @@ RSpec.shared_examples "a student mapper" do
       it "does not change the #{model} count" do
         expect { mapper.parse! }.not_to change(model, :count)
       end
+    end
+  end
+
+  context "when the student mapping crashes" do
+    let(:data) { faulty_student_payload }
+
+    it "catches the error" do
+      expect { mapper.parse! }.not_to raise_error
+    end
+
+    it "parses all the other students" do
+      expect { mapper.parse! }.to change(Schooling, :count).by(data.length - 1)
+    end
+  end
+
+  context "when the classe mapping crashes" do
+    let(:data) { faulty_classe_payload }
+
+    it "catches the error" do
+      expect { mapper.parse! }.not_to raise_error
+    end
+
+    it "parses all the other classes" do
+      expect { mapper.parse! }.to change(Classe, :count)
     end
   end
 
