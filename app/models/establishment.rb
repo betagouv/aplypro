@@ -50,7 +50,7 @@ class Establishment < ApplicationRecord
   def to_s
     return "" if no_data?
 
-    [name, city.capitalize, postal_code].join(" – ")
+    [uai, name, city.capitalize, postal_code].join(" – ")
   end
 
   def invites?(email)
