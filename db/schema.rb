@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_12_172554) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_27_123426) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -80,6 +80,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_12_172554) do
     t.string "address_line1"
     t.string "address_line2"
     t.string "private_contract_type_code"
+    t.string "academy_code"
+    t.string "academy_label"
     t.index ["uai"], name: "index_establishments_on_uai", unique: true
   end
 

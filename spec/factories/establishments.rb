@@ -11,6 +11,8 @@ FactoryBot.define do
     address_line1 { Faker::Address.street_address }
     address_line2 { Faker::Address.secondary_address }
     private_contract_type_code { "31" }
+    academy_code { "10" }
+    academy_label { "Marseille" }
 
     trait :with_fim_user do
       after(:create) do |establishment|

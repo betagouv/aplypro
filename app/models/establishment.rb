@@ -28,6 +28,8 @@ class Establishment < ApplicationRecord
   API_MAPPING = {
     "nom_etablissement" => :name,
     "libelle_nature" => :denomination,
+    "code_academie" => :academy_code,
+    "libelle_academie" => :academy_label,
     "adresse_1" => :address_line1,
     "adresse_2" => :address_line2,
     "code_postal" => :postal_code,
