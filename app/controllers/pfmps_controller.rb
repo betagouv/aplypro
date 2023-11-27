@@ -65,6 +65,8 @@ class PfmpsController < ApplicationController
   end
 
   def confirm_deletion
+    redirect_to class_student_path(@classe, @student) and return if @pfmp.nil?
+
     add_breadcrumb(
       t("pages.titles.pfmps.show", name: @student.full_name),
       class_student_pfmp_path(@classe, @student, @pfmp)
