@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "sidekiq/web"
+
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
   resources :users, only: :update
@@ -51,5 +53,22 @@ Rails.application.routes.draw do
   get "/select_etab", to: "home#select_etab"
   get "/legal", to: "home#legal"
   get "/faq", to: "home#faq"
+
+  Sidekiq::Web.use(Rack::Auth::Basic) do |user, password|
+    # https://github.com/sidekiq/sidekiq/wiki/Monitoring#rails-http-basic-auth-from-routes
+    # Protect against timing attacks:
+    # - See https://codahale.com/a-lesson-in-timing-attacks/
+    # - See https://thisdata.com/blog/timing-attacks-against-string-comparison/
+    # - Use & (do not use &&) so that it doesn't short circuit.
+    # - Use digests to stop length information leaking
+
+    allowed_user = Digest::SHA256.hexdigest(ENV.fetch("APLYPRO_SIDEKIQ_USER", nil))
+    allowed_password = Digest::SHA256.hexdigest(ENV.fetch("APLYPRO_SIDEKIQ_PASSWORD", nil))
+
+    Rack::Utils.secure_compare(Digest::SHA256.hexdigest(user), allowed_user) &
+      Rack::Utils.secure_compare(Digest::SHA256.hexdigest(password), allowed_password)
+  end
+
+  mount Sidekiq::Web => "/sidekiq"
 end
 # rubocop:enable Metrics/BlockLength
