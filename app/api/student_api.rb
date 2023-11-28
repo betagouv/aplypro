@@ -14,7 +14,7 @@ module StudentApi
       # maybe we should store the provider straight into the
       # establishment? see `mock/data/etab.json` for an example of the
       # "ministere_tutelle" attribute.
-      provider = establishment.users.directors.first.provider
+      provider = establishment.users.first.provider
 
       case provider
       when "fim"
