@@ -66,4 +66,14 @@ describe Student::Mappers::Sygne do
       end
     end
   end
+
+  describe "when there is no national MEF code" do
+    subject(:mapper) { described_class::ClasseMapper }
+
+    let(:entry) { build(:sygne_student, mef: nil) }
+
+    it "ignores the entry" do
+      expect { mapper.new.call(entry) }.not_to raise_error
+    end
+  end
 end
