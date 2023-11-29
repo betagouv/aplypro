@@ -58,6 +58,22 @@ RSpec.describe Schooling do
     end
   end
 
+  describe "attributive_decision_key" do
+    let(:schooling) { create(:schooling) }
+    let(:uai) { schooling.establishment.uai }
+
+    before do
+      schooling.classe.update!(label: "1ERE APEX TEST")
+      schooling.student.update!(first_name: "Jeanne", last_name: "DUPONT", asp_file_reference: "ref123")
+    end
+
+    it "creates a sane filename" do
+      key = "#{uai}/2023/1ere-apex-test/DUPONT_Jeanne/#{schooling.attributive_decision_number}"
+
+      expect(schooling.attributive_decision_key).to eq key
+    end
+  end
+
   describe ".current" do
     subject { described_class.current }
 
