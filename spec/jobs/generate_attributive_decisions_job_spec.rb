@@ -76,4 +76,17 @@ RSpec.describe GenerateAttributiveDecisionsJob do
       expect(AttributeDecisionGenerator).not_to have_received(:new).with(student.schoolings.first)
     end
   end
+
+  context "when another student with the same name already has an attributive decision" do
+    before do
+      student = students.first
+      same_name_student = create(:student, first_name: student.first_name, last_name: student.last_name)
+
+      create(:schooling, :with_attributive_decision, student: same_name_student)
+    end
+
+    it "doesn't fail" do
+      expect { described_class.perform_now(establishment) }.not_to raise_error
+    end
+  end
 end

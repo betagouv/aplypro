@@ -8,7 +8,7 @@ FactoryBot.define do
 
     trait :with_attributive_decision do
       after(:create) do |schooling|
-        schooling.attributive_decision.attach(io: StringIO.new("hello"), filename: "test.pdf")
+        schooling.rattach_attributive_decision!(StringIO.new("hello"))
       end
     end
 
