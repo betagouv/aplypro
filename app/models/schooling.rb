@@ -37,11 +37,11 @@ class Schooling < ApplicationRecord
     ].join("_").concat(".pdf")
   end
 
-  def attribute_decision_key
+  def attributive_decision_key
     [
       establishment.uai,
       ENV.fetch("APLYPRO_SCHOOL_YEAR"),
-      classe.label,
+      classe.label.parameterize,
       [student.last_name, student.first_name].join("_"),
       attributive_decision_number
     ].join("/")
@@ -63,7 +63,7 @@ class Schooling < ApplicationRecord
 
     attributive_decision.attach(
       io: output,
-      key: attribute_decision_key,
+      key: attributive_decision_key,
       filename: name,
       content_type: "application/pdf"
     )
