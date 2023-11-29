@@ -27,6 +27,9 @@ fr:
   errors:
     classes:
       not_found: "La classe que vous avez demandée n'existe pas."
+    students:
+      not_found: "L'élève demandé n'est pas ou plus dans cette classe."
+
   activerecord:
     errors:
       models:
@@ -130,7 +133,7 @@ fr:
       no_access_found:
         title: "Erreur d'authentification"
         content: |
-          Le guichet d'authentification n'indique pas d'établissement concerné par l'allocation sous votre responsabilité, ni d'autorisations pour votre adresse e-mail. 
+          Le guichet d'authentification n'indique pas d'établissement concerné par l'allocation sous votre responsabilité, ni d'autorisations pour votre adresse e-mail.
           <ul>
             <li>Si vous êtes chef d'établissement, assurez-vous que vous avez bien ce rôle dans votre annuaire académique ou COLENTAGRI.</li>
             <li>Si vous n'êtes pas chef d'établissement assurez-vous que votre adresse e-mail a bien été autorisée par votre personnel de direction dans l'application APlyPro (ou via DELEG-CE).</li>

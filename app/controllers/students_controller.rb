@@ -13,7 +13,9 @@ class StudentsController < ClassesController
   private
 
   def set_student
-    @student = @classe.students.includes(:rib, :pfmps).find(params[:id])
+    @student = @classe.active_students.includes(:rib, :pfmps).find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to @classe, alert: t("errors.students.not_found")
   end
 
   def set_classe
