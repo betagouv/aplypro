@@ -33,8 +33,18 @@ class Schooling < ApplicationRecord
       student.last_name,
       student.first_name,
       "décision-d-attribution",
-      Time.zone.today
+      attributive_decision_number
     ].join("_").concat(".pdf")
+  end
+
+  def attribute_decision_key
+    [
+      establishment.uai,
+      ENV.fetch("APLYPRO_SCHOOL_YEAR"),
+      classe.label,
+      [student.last_name, student.first_name].join("_"),
+      attributive_decision_number
+    ].join("/")
   end
 
   def attributive_decision_number
@@ -53,7 +63,7 @@ class Schooling < ApplicationRecord
 
     attributive_decision.attach(
       io: output,
-      key: [Rails.env, name].join("/"),
+      key: attribute_decision_key,
       filename: name,
       content_type: "application/pdf"
     )

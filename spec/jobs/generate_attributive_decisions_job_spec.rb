@@ -76,4 +76,22 @@ RSpec.describe GenerateAttributiveDecisionsJob do
       expect(AttributeDecisionGenerator).not_to have_received(:new).with(student.schoolings.first)
     end
   end
+
+  # rubocop:disable RSpec/MultipleMemoizedHelpers
+  context "when another student already has an attributive decision with the same name" do
+    let(:failure_student) { students.first }
+    let(:homonyme_student) do
+      create(:student, first_name: failure_student.first_name, last_name: failure_student.last_name)
+    end
+    let(:schooling) { create(:schooling, :with_attributive_decision, student: homonyme_student) }
+
+    before do
+      schooling
+    end
+
+    it "doesn't fail" do
+      expect { described_class.perform_now(establishment) }.not_to raise_error
+    end
+  end
+  # rubocop:enable RSpec/MultipleMemoizedHelpers
 end
