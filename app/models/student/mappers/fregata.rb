@@ -53,6 +53,8 @@ class Student
 
         schooling.end_date = left_classe_at(entry)
 
+        student.close_current_schooling! if schooling.open? && student.current_schooling != schooling
+
         schooling.save!
       end
 

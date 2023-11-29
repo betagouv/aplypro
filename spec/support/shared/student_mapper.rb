@@ -78,4 +78,18 @@ RSpec.shared_examples "a student mapper" do
       expect { mapper.parse! }.not_to raise_error
     end
   end
+
+  context "when a student is received in a new establishment" do
+    let(:data) { normal_payload }
+    let(:student) { Student.first }
+    let(:new_mapper) { described_class.new(data, create(:establishment)) }
+
+    before do
+      mapper.parse!
+    end
+
+    it "creates a new active schooling" do
+      expect { new_mapper.parse! }.to(change { student.reload.current_schooling })
+    end
+  end
 end
