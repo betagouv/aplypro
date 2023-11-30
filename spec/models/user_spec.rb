@@ -24,4 +24,20 @@ RSpec.describe User do
       expect(user.email).to eq "myemail@educagri.fr"
     end
   end
+
+  describe "can have the same email as another user from another provider" do
+    subject(:user_masa) { create(:user, email: user_fim.email, provider: :masa) }
+
+    let(:user_fim) { create(:user, provider: :fim) }
+
+    it { is_expected.to be_valid }
+  end
+
+  describe "cannot have the same email as another user from the same provider" do
+    subject(:user_masa) { build(:user, email: user_fim.email, provider: :fim) }
+
+    let(:user_fim) { create(:user, provider: :fim) }
+
+    it { is_expected.not_to be_valid }
+  end
 end
