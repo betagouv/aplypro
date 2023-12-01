@@ -188,3 +188,17 @@ Sachantque(
     }
   )
 end
+
+Sachantque("j'ai désormais le rôle de directeur pour l'établissement {string}") do |uai|
+  last_user = User.last
+
+  OmniAuth.config.mock_auth[:fim] = make_fim_hash(
+    name: last_user.name,
+    email: last_user.email,
+    raw_info: {
+      FrEduResDel: FactoryBot.build(:freduresdel, uai: uai),
+      FrEduRneResp: [FactoryBot.build(:fredurneresp, uai: uai)],
+      FrEduFonctAdm: "DIR"
+    }
+  )
+end
