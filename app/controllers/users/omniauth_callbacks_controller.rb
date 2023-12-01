@@ -79,21 +79,21 @@ module Users
     end
 
     def save_roles!
-      @mapper.establishments_in_responsibility.each do |e|
-        e.save! unless e.persisted?
-
-        EstablishmentUserRole
-          .where(user: @user, establishment: e, role: :dir)
-          .first_or_create
+      # Manage authorised establishments first, just in case someone has a
+      # former authorisation for an establishment now in responsibility.
+      @mapper.establishments_authorised_for(@user.email).each do |establishment|
+        save_role(establishment, :authorised)
       end
 
-      @mapper.establishments_authorised_for(@user.email).each do |e|
-        e.save! unless e.persisted?
-
-        EstablishmentUserRole
-          .where(user: @user, establishment: e, role: :authorised)
-          .first_or_create
+      @mapper.establishments_in_responsibility.each do |establishment|
+        save_role(establishment, :dir)
       end
+    end
+
+    def save_role(establishment, role)
+      EstablishmentUserRole
+        .find_or_create_by(user: @user, establishment: establishment)
+        .update(role: role)
     end
 
     def log_user_in!

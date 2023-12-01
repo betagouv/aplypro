@@ -95,3 +95,14 @@ Fonctionnalité: Le personnel de direction se connecte
     Sachant que je suis un personnel MENJ avec un accès spécifique pour l'UAI "456"
     Quand je me connecte en tant que personnel MENJ
     Alors la page contient "Connexion réussie"
+
+  Scénario: Un personnel change de rôle pour un établissement
+    Sachant que je suis un personnel MENJ de l'établissement "123" avec une délégation DELEG-CE pour APLyPro
+    Et que je me connecte en tant que personnel MENJ
+    Et que je passe l'écran d'accueil
+    Alors la page ne contient pas "Gestion des accès"
+    Et que je me déconnecte
+    Et que j'ai désormais le rôle de directeur pour l'établissement "123"
+    Et que je me connecte en tant que personnel MENJ
+    Alors la page contient "Gestion des accès"
+
