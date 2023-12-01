@@ -4,7 +4,7 @@ require "rails_helper"
 require "csv"
 
 RSpec.describe Establishment do
-  subject(:etab) { build(:establishment, :with_fim_user) }
+  subject(:etab) { build(:establishment, :sygne_provider) }
 
   it { is_expected.to validate_presence_of(:uai) }
   it { is_expected.to validate_uniqueness_of(:uai) }

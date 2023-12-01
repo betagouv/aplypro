@@ -2,6 +2,10 @@
 
 module IdentityMappers
   class Fim < Base
+    def students_provider
+      "sygne"
+    end
+
     def normalize(attributes)
       attributes
     end

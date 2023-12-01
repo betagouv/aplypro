@@ -6,7 +6,7 @@ require "./mock/factories/api_student"
 require "./spec/support/shared/student_mapper"
 
 describe Student::Mappers::Sygne do
-  let(:establishment) { create(:establishment, :with_fim_user) }
+  let(:establishment) { create(:establishment, :sygne_provider) }
   let(:normal_payload) { build_list(:sygne_student, 10, classe: "1MELEC") }
 
   it_behaves_like "a student mapper" do

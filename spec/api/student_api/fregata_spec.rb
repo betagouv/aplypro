@@ -5,7 +5,7 @@ require "rails_helper"
 describe StudentApi::Fregata do
   subject(:api) { described_class.new(establishment) }
 
-  let(:establishment) { create(:establishment, :with_masa_user) }
+  let(:establishment) { create(:establishment, :fregata_provider) }
 
   before do
     stub_request(:get, /#{api.endpoint}/)

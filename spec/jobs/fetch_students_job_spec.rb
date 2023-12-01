@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe FetchStudentsJob do
   include ActiveJob::TestHelper
 
-  let(:etab) { create(:establishment, :with_fim_user) }
+  let(:etab) { create(:establishment, :sygne_provider) }
 
   before do
     allow(StudentApi).to receive(:fetch_students!)

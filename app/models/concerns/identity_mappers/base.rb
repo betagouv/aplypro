@@ -16,6 +16,10 @@ module IdentityMappers
       @attributes = normalize(attributes)
     end
 
+    def students_provider
+      raise NotImplementedError
+    end
+
     def normalize(attributes)
       attributes
     end
@@ -61,12 +65,16 @@ module IdentityMappers
     end
 
     def establishments_delegated
-      delegated_uais.filter_map { |uai| Establishment.find_or_create_by!(uai: uai) }
+      delegated_uais.filter_map { |uai| find_or_create_establishment!(uai) }
     end
 
     def establishments_in_responsibility
       responsibility_uais
-        .map { |uai| Establishment.find_or_create_by!(uai: uai) }
+        .map { |uai| find_or_create_establishment!(uai) }
+    end
+
+    def find_or_create_establishment!(uai)
+      Establishment.find_or_create_by!(uai: uai, students_provider: students_provider)
     end
 
     def responsibility_uais

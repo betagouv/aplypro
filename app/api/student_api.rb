@@ -11,15 +11,10 @@ module StudentApi
     end
 
     def api_for(establishment)
-      # maybe we should store the provider straight into the
-      # establishment? see `mock/data/etab.json` for an example of the
-      # "ministere_tutelle" attribute.
-      provider = establishment.users.first.provider
-
-      case provider
-      when "fim"
+      case establishment.students_provider
+      when "sygne"
         Sygne.new(establishment)
-      when "masa"
+      when "fregata"
         Fregata.new(establishment)
       else
         raise "Provider has no matching API"
