@@ -2,6 +2,10 @@
 
 module IdentityMappers
   class Cas < Base
+    def students_provider
+      "fregata"
+    end
+
     def normalize(attributes)
       attributes["attributes"]
         .to_h

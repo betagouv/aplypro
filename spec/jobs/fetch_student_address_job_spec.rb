@@ -25,7 +25,7 @@ RSpec.describe FetchStudentAddressJob do
   end
 
   context "when the student is from SYGNE" do
-    let(:establishment) { create(:establishment, :with_fim_user) }
+    let(:establishment) { create(:establishment, :sygne_provider) }
 
     let(:token) { JSON.generate({ access_token: "foobar", token_type: "Bearer" }) }
     let(:payload) { Rails.root.join("mock/data/sygne-student.json").read }
@@ -40,7 +40,7 @@ RSpec.describe FetchStudentAddressJob do
   end
 
   context "when the student is from FREGATA" do
-    let(:establishment) { create(:establishment, :with_masa_user) }
+    let(:establishment) { create(:establishment, :fregata_provider) }
     let(:payload) { Rails.root.join("mock/data/fregata-students.json").read }
 
     before do

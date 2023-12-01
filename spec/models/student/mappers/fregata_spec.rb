@@ -8,7 +8,7 @@ require "./spec/support/shared/student_mapper"
 describe Student::Mappers::Fregata do
   subject(:mapper) { described_class }
 
-  let(:establishment) { create(:establishment, :with_masa_user) }
+  let(:establishment) { create(:establishment, :fregata_provider) }
   let(:normal_payload) { build_list(:fregata_student, 2) }
 
   it_behaves_like "a student mapper" do

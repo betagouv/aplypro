@@ -36,7 +36,8 @@ class Establishment < ApplicationRecord
     "nom_commune" => :city,
     "telephone" => :telephone,
     "mail" => :email,
-    "code_type_contrat_prive" => :private_contract_type_code
+    "code_type_contrat_prive" => :private_contract_type_code,
+    "ministere_tutelle" => :ministry
   }.freeze
 
   # Find all codes here : https://infocentre.pleiade.education.fr/bcn/workspace/viewTable/n/N_CONTRAT_ETABLISSEMENT

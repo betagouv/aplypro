@@ -45,6 +45,7 @@ RSpec.describe IdentityMappers::Base do
   describe "#establishments_authorised_for" do
     subject(:result) { mapper.establishments_authorised_for(email) }
 
+    let(:mapper) { IdentityMappers::Fim.new(attributes) }
     let(:email) { "jean.valjean@ac-paris.fr" }
 
     it "contains the delegated establishment" do

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe FetchEstablishmentJob do
-  let(:etab) { create(:establishment, :with_fim_user) }
+  let(:etab) { create(:establishment, :sygne_provider) }
   let!(:fixture) { Rails.root.join("mock/data/etab.json").read }
 
   before do
