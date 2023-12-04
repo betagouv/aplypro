@@ -2,7 +2,8 @@
 
 FactoryBot.define do
   factory :classe do
-    establishment
+    establishment factory: %i[establishment with_fim_user]
+
     mef
     sequence(:label) { |n| "2NDE#{n}" }
     start_year { 2023 }
