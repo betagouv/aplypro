@@ -12,9 +12,11 @@ class GenerateMissingAttributiveDecisionsJob < ApplicationJob
   end
 
   def perform(establishment)
-    establishment
-      .current_schoolings
-      .without_attributive_decisions
-      .each { |schooling| GenerateAttributiveDecisionJob.perform_now(schooling) }
+    jobs = establishment
+           .current_schoolings
+           .without_attributive_decisions
+           .map { |schooling| GenerateAttributiveDecisionJob.new(schooling) }
+
+    ActiveJob.perform_all_later(jobs)
   end
 end

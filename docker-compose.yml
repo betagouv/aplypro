@@ -19,16 +19,7 @@ services:
     image: aplypro
     env_file:
       - '.env.local'
-    command: ["bundle", "exec", "sidekiq", "--queue", "default"]
-    volumes:
-      - "./:/app"
-      - "/app/node_modules"
-    entrypoint: ''
-  worker-docs:
-    image: aplypro
-    env_file:
-      - '.env.local'
-    command: ["bundle", "exec", "sidekiq", "--queue", "documents", "--concurrency", "1"]
+    command: ["bundle", "exec", "sidekiq", "--queue", "default", "-c", "12"]
     volumes:
       - "./:/app"
       - "/app/node_modules"
