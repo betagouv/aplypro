@@ -23,8 +23,6 @@ class Establishment < ApplicationRecord
 
   has_many :students, through: :schoolings
 
-  has_one_attached :attributive_decisions_zip
-
   API_MAPPING = {
     "nom_etablissement" => :name,
     "libelle_nature" => :denomination,
@@ -102,5 +100,9 @@ class Establishment < ApplicationRecord
 
   def public?
     contract_type == :public
+  end
+
+  def all_attributive_decisions?
+    current_schoolings.without_attributive_decisions.none?
   end
 end

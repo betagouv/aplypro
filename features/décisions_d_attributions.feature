@@ -7,10 +7,10 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Et que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que je me connecte en tant que personnel MENJ
     Et que je passe l'écran d'accueil
-    Quand toutes les tâches de fond sont terminées
+    Et que toutes les tâches de fond sont terminées
+    Et je rafraîchis la page
 
   Scénario: Le personnel de direction peut voir le nombre de décisions à générer
-    Quand je rafraîchis la page
     Alors le panneau "Décisions d'attribution" contient "0 / 10"
 
   Scénario: Le personnel de direction peut lancer l'édition des décisions d'attribution
