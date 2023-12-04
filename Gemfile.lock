@@ -122,6 +122,7 @@ GEM
     coderay (1.1.3)
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
+    content_disposition (1.0.0)
     crack (0.4.5)
       rexml
     crass (1.0.6)
@@ -288,10 +289,6 @@ GEM
       net-protocol
     nio4r (2.6.1)
     nokogiri (1.15.5-aarch64-linux)
-      racc (~> 1.4)
-    nokogiri (1.15.5-arm64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.15.5-x86_64-linux)
       racc (~> 1.4)
     notiffany (0.1.3)
       nenv (~> 0.1)
@@ -465,7 +462,6 @@ GEM
       rubocop-factory_bot (~> 2.22)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
-    rubyzip (3.0.0.alpha)
     sentry-rails (5.13.0)
       railties (>= 5.0)
       sentry-ruby (~> 5.13.0)
@@ -554,10 +550,14 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.6.12)
+    zip_tricks (5.6.0)
+    zipline (1.5.0)
+      actionpack (>= 6.0, < 8.0)
+      content_disposition (~> 1.0)
+      zip_tricks (>= 4.2.1, < 6.0)
 
 PLATFORMS
   aarch64-linux
-  arm64-darwin-21
   x86_64-linux
 
 DEPENDENCIES
@@ -598,7 +598,6 @@ DEPENDENCIES
   rubocop
   rubocop-rails
   rubocop-rspec
-  rubyzip (= 3.0.0alpha)
   sentry-rails
   sentry-ruby
   shoulda-matchers
@@ -615,6 +614,7 @@ DEPENDENCIES
   tzinfo-data
   web-console
   webmock
+  zipline
 
 RUBY VERSION
    ruby 3.2.2p53

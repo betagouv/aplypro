@@ -68,7 +68,8 @@ RSpec.describe Schooling do
     end
 
     it "creates a sane filename" do
-      key = "#{uai}/2023/1ere-apex-test/DUPONT_Jeanne/#{schooling.attributive_decision_number}"
+      key =
+        "#{uai}/2023/1ere-apex-test/DUPONT_Jeanne_décision-d-attribution_#{schooling.attributive_decision_number}.pdf"
 
       expect(schooling.attributive_decision_key).to eq key
     end
