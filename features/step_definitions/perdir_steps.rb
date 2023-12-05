@@ -20,7 +20,7 @@ Sachantque(
 
   first, last = name.split # not great
 
-  @mef = FactoryBot.create(:mef, label: mef)
+  @mef = Mef.find_by(code: mef) || FactoryBot.create(:mef, label: mef)
   @classe = FactoryBot.create(:classe, establishment: @etab, label: classe, mef: @mef)
   @student = FactoryBot.create(:student, first_name: first, last_name: last)
   @student.schoolings.create!(classe: @classe)

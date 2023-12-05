@@ -7,8 +7,9 @@ RSpec.describe Wage do
   subject(:wage) { build(:wage) }
 
   describe "validations" do
-    it { is_expected.to validate_presence_of(:daily_rate) }
     it { is_expected.to validate_presence_of(:mefstat4) }
+    it { is_expected.to validate_presence_of(:ministry) }
+    it { is_expected.to validate_presence_of(:daily_rate) }
     it { is_expected.to validate_presence_of(:yearly_cap) }
 
     it { is_expected.to validate_numericality_of(:daily_rate).only_integer.is_greater_than(0) }
