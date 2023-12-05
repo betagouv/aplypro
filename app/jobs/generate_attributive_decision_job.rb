@@ -3,6 +3,8 @@
 require "attribute_decision_generator"
 
 class GenerateAttributiveDecisionJob < ApplicationJob
+  queue_as :documents
+
   around_perform do |job, block|
     schooling = job.arguments.first
 
