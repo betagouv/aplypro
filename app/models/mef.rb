@@ -7,7 +7,7 @@ class Mef < ApplicationRecord
   validates :code, uniqueness: true
 
   def wage
-    Wage.find_by(mefstat4: mefstat4)
+    Wage.find_by(mef_code: code)
   end
 
   def mefstat4

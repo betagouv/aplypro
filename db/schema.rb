@@ -221,10 +221,10 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_05_132300) do
 
   create_table "wages", force: :cascade do |t|
     t.integer "daily_rate", null: false
-    t.string "mefstat4", null: false
     t.integer "yearly_cap", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "mef_code", null: false
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

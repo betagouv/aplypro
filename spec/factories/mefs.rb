@@ -9,7 +9,7 @@ FactoryBot.define do
     ministry { Mef.ministries[:menj] }
 
     after :create do |m|
-      create(:wage, mefstat4: m.mefstat4)
+      create(:wage, mef_code: m.code)
     end
   end
 end

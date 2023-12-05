@@ -20,7 +20,7 @@ Sachantque(
 
   first, last = name.split # not great
 
-  @mef = FactoryBot.create(:mef, label: mef)
+  @mef = Mef.find_by(code: mef) || FactoryBot.create(:mef, label: mef)
   @classe = FactoryBot.create(:classe, establishment: @etab, label: classe, mef: @mef)
   @student = FactoryBot.create(:student, first_name: first, last_name: last)
   @student.schoolings.create!(classe: @classe)
@@ -81,7 +81,7 @@ end
 Sachantque(
   "mon établissement propose une formation {string} rémunérée à {int} euros par jour et plafonnée à {int} euros par an"
 ) do |mef, rate, cap|
-  mef = FactoryBot.create(:mef, code: mef, label: mef, short: mef)
+  mef = Mef.find_by(code: mef) || FactoryBot.create(:mef, code: mef, label: mef, short: mef)
   mef.wage.update!(daily_rate: rate, yearly_cap: cap)
 end
 

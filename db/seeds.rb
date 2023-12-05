@@ -2,7 +2,7 @@
 
 require "csv"
 require_relative "mef_seeder"
-require_relative "wage_mefstat4_seeder"
+require_relative "wage_seeder"
 
 MefSeeder.seed
-WageMefstat4Seeder.seed
+WageSeeder.seed
