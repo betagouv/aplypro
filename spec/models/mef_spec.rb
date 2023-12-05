@@ -50,4 +50,25 @@ RSpec.describe Mef do
       end
     end
   end
+
+  describe "associated wage of mef" do
+    {
+      "2712101021" => { daily_rate: 10, yearly_cap: 450 },
+      "2712101022" => { daily_rate: 15, yearly_cap: 675 },
+      "2762100132" => { daily_rate: 15, yearly_cap: 900 },
+      "2532210311" => { daily_rate: 15, yearly_cap: 1350 }
+    }.each do |mef_code, amounts|
+      context mef_code.to_s do
+        let(:wage) { described_class.find_by(code: mef_code).wage }
+
+        it "has daily_rate = #{amounts[:daily_rate]}" do
+          expect(wage.daily_rate).to eq amounts[:daily_rate]
+        end
+
+        it "#{mef_code} has yearly_cap = #{amounts[:yearly_cap]}" do
+          expect(wage.yearly_cap).to eq amounts[:yearly_cap]
+        end
+      end
+    end
+  end
 end
