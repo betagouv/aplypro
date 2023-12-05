@@ -11,22 +11,13 @@ RSpec.describe GenerateMissingAttributiveDecisionsJob do
   let(:students) { classes.flat_map(&:students) }
   let(:schooling) { students.last.current_schooling }
 
-  before do
-    ActiveJob::Base.queue_adapter = :test
-    WebmockHelpers.mock_sygne_token_with
-
-    students.each do |student|
-      WebmockHelpers.mock_sygne_student_endpoint_with(student.ine, build(:sygne_student, ine: student.ine).to_json)
-    end
-  end
-
   context "when there are no attributive decisions" do
-    before { allow(GenerateAttributiveDecisionJob).to receive(:perform_now) }
-
     it "generates one for each student" do
-      job.perform_now
+      expect { job.perform_now }.to have_enqueued_job(GenerateAttributiveDecisionJob).exactly(students.count)
+    end
 
-      expect(GenerateAttributiveDecisionJob).to have_received(:perform_now).exactly(students.count)
+    it "toggles the generating attribute on each schooling" do
+      expect { job.perform_now }.to change { schooling.reload.generating_attributive_decision }.from(false).to(true)
     end
   end
 

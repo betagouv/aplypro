@@ -12,6 +12,8 @@ RSpec.describe "EstablishmentsController" do
   end
 
   describe "POST create_attributive_decisions" do
+    before { create_list(:schooling, 10, establishment: establishment) }
+
     context "when the user is a director" do
       it "returns 200" do
         post establishment_create_attributive_decisions_path(establishment)

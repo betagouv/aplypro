@@ -46,4 +46,10 @@ RSpec.describe GenerateAttributiveDecisionJob do
   it "generates one attributive decision per student" do
     expect { job.perform_now }.to change { schooling.attributive_decision.attached? }.from(false).to(true)
   end
+
+  it "toggles the generating attributive decision boolean" do
+    schooling.update!(generating_attributive_decision: true)
+
+    expect { job.perform_now }.to change(schooling, :generating_attributive_decision).to(false)
+  end
 end
