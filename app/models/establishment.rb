@@ -106,4 +106,16 @@ class Establishment < ApplicationRecord
   def all_attributive_decisions?
     current_schoolings.without_attributive_decisions.none?
   end
+
+  def some_attributive_decisions?
+    current_schoolings.with_attributive_decisions.any?
+  end
+
+  def missing_attributive_decisions?
+    current_schoolings.without_attributive_decisions.any?
+  end
+
+  def some_attributive_decisions_generating?
+    current_schoolings.generating_attributive_decision.any?
+  end
 end

@@ -220,3 +220,11 @@ fr:
     alert:
       fim: "Seuls les emails de comptes académiques seront autorisés à se connecter"
       masa: "Seuls les emails de comptes EDUCAGRI seront autorisés à se connecter"
+  panels:
+    attributive_decisions:
+      download:
+        all: Télécharger l'ensemble des décisions d'attribution
+        partial: Télécharger les décisions d'attribution existantes
+      generate:
+        all: Éditer les décisions d'attribution
+        partial: Éditer %{count} décisions d'attribution manquantes

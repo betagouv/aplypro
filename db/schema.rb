@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_01_113835) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_05_132300) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -76,7 +76,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_113835) do
     t.string "telephone"
     t.string "email"
     t.boolean "fetching_students", default: false, null: false
-    t.boolean "generating_attributive_decisions", default: false, null: false
     t.string "address_line1"
     t.string "address_line2"
     t.string "private_contract_type_code"
@@ -172,6 +171,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_113835) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "attributive_decision_version", default: 0
+    t.boolean "generating_attributive_decision", default: false, null: false
     t.index ["classe_id"], name: "index_schoolings_on_classe_id"
     t.index ["student_id", "classe_id"], name: "one_schooling_per_class_student", unique: true
     t.index ["student_id"], name: "index_schoolings_on_student_id"

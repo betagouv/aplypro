@@ -6,8 +6,6 @@ class EstablishmentsController < ApplicationController
   def create_attributive_decisions
     redirect_to classes_path, status: :forbidden and return if !current_user.can_generate_attributive_decisions?
 
-    @etab.update!(generating_attributive_decisions: true)
-
     GenerateMissingAttributiveDecisionsJob.perform_later(@etab)
 
     redirect_to root_path
