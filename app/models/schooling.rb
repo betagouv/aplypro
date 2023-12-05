@@ -13,7 +13,9 @@ class Schooling < ApplicationRecord
 
   scope :current, -> { where(end_date: nil) }
 
+  scope :with_attributive_decisions, -> { joins(:attributive_decision_attachment) }
   scope :without_attributive_decisions, -> { where.missing(:attributive_decision_attachment) }
+  scope :generating_attributive_decision, -> { where(generating_attributive_decision: true) }
 
   validates :student, uniqueness: { scope: :end_date }, if: :open?
   validates :student, uniqueness: { scope: :classe }, if: :closed?

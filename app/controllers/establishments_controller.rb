@@ -6,7 +6,7 @@ class EstablishmentsController < ApplicationController
   def create_attributive_decisions
     redirect_to classes_path, status: :forbidden and return if !current_user.can_generate_attributive_decisions?
 
-    @etab.update!(generating_attributive_decisions: true)
+    mark_attributive_decision_generation!
 
     GenerateMissingAttributiveDecisionsJob.perform_later(@etab)
 
@@ -27,5 +27,15 @@ class EstablishmentsController < ApplicationController
 
   def attributive_decisions_archive_name
     "#{@etab.uai}_décisions_d_attribution_#{Time.zone.today}.zip"
+  end
+
+  # FIXME: this isn't great but the job might not have actually kicked
+  # in by the time the page is refreshed so trigger a synchronous DB
+  # update to mark the generation process as started
+  def mark_attributive_decision_generation!
+    @etab
+      .schoolings
+      .without_attributive_decisions
+      .update_all(generating_attributive_decision: true) # rubocop:disable Rails/SkipsModelValidations
   end
 end
