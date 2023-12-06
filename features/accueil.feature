@@ -24,9 +24,9 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
 
   Scénario: Le personnel de direction voit toutes les actions de directeur
     Quand je clique sur "Continuer"
-    Alors le panneau "Décisions d'attribution" contient "Éditer les décisions d'attribution"
+    Alors le panneau "Décisions d'attribution" contient "Éditer la décision d'attribution manquante"
     Alors le panneau "PFMP validées à envoyer en paiement" contient "Valider des PFMPs à envoyer en paiement"
-    
+
   Scénario: Le personnel voit un aperçu des données sur la page d'accueil
     Quand je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"
     Et que je me rends sur la page d'accueil
@@ -43,4 +43,3 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
   Scénario: Le personnel ne voit pas de bandeau de support si son établissement n'est pas enlicé
     Quand je rafraîchis la page
     Alors la page ne contient pas "faites-nous part de vos retours"
-
