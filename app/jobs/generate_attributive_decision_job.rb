@@ -5,6 +5,16 @@ require "attribute_decision_generator"
 class GenerateAttributiveDecisionJob < ApplicationJob
   queue_as :documents
 
+  sidekiq_options retry: 0
+
+  after_discard do |job|
+    schooling = job.arguments.first
+
+    schooling.update!(generating_attributive_decision: false)
+  end
+
+  retry_on Faraday::UnauthorizedError, wait: 1.second, attempts: 5
+
   around_perform do |job, block|
     schooling = job.arguments.first
 
@@ -16,7 +26,7 @@ class GenerateAttributiveDecisionJob < ApplicationJob
   end
 
   def perform(schooling)
-    FetchStudentAddressJob.perform_now(schooling.student) if schooling.student.missing_address?
+    FetchStudentAddressJob.new.perform(schooling.student) if schooling.student.missing_address?
 
     io = StringIO.new
 
