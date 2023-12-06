@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "../mef_seeder"
 require_relative "../wage_seeder"
 
 class AddMefCodeToWages < ActiveRecord::Migration[7.1]
@@ -7,10 +8,10 @@ class AddMefCodeToWages < ActiveRecord::Migration[7.1]
     Wage.delete_all
 
     change_table :wages, bulk: true do |table|
-      table.string :mef_code, null: false
+      table.references :mef
       table.remove :mefstat4
     end
-
+    MefSeeder.seed
     WageSeeder.seed
   end
 
@@ -18,7 +19,7 @@ class AddMefCodeToWages < ActiveRecord::Migration[7.1]
     Wage.delete_all
 
     change_table :wages, bulk: true do |table|
-      table.remove :mef_code
+      table.remove :mef_id
       table.string :mefstat4, null: false
     end
   end

@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :wage do
+    mef
     daily_rate { 1 }
-    mef_code { Faker::Number.number(digits: 10) }
     yearly_cap { 100 }
   end
 end
