@@ -10,15 +10,15 @@ module HomeHelper
   end
 
   def attributive_decisions_download_button(establishment)
-    return unless establishment.some_attributive_decisions?
+    count = establishment.current_schoolings.with_attributive_decisions.count
 
-    variant = establishment.all_attributive_decisions? ? "all" : "partial"
+    return if count.zero?
 
     button_to(
-      t("panels.attributive_decisions.download.#{variant}"),
+      t("panels.attributive_decisions.download", count: count),
       establishment_download_attributive_decisions_path(establishment),
       method: :post,
-      class: "fr-btn fr-btn--primary",
+      class: "fr-btn fr-btn--primary fr-mb-0",
       data: { turbo: false }
     )
   end
@@ -26,37 +26,19 @@ module HomeHelper
   def attributive_decisions_generation_button(establishment)
     return cannot_generate_attributive_decisions_button unless current_user.can_generate_attributive_decisions?
 
-    if establishment.some_attributive_decisions?
-      attributive_decision_partial_generation_button(establishment)
-    else
-      attributive_decision_first_time_generation_button(establishment)
-    end
-  end
-
-  def attributive_decision_partial_generation_button(establishment)
     count = establishment.current_schoolings.without_attributive_decisions.count
 
     button_to(
-      t("panels.attributive_decisions.generate.partial", count: count),
+      t("panels.attributive_decisions.generate", count: count),
       establishment_create_attributive_decisions_path(establishment),
       class: "fr-btn fr-btn--secondary",
       data: { turbo: false }
     )
   end
 
-  def attributive_decision_first_time_generation_button(establishment)
-    button_to(
-      t("panels.attributive_decisions.generate.all"),
-      establishment_create_attributive_decisions_path(establishment),
-      class: "fr-btn fr-btn--primary",
-      data: { turbo: false }
-    )
-  end
-
-  # FIXME: wrong semantics / bad UX
   def cannot_generate_attributive_decisions_button
     button_to(
-      t("panels.attributive_decisions.generate.forbidden"),
+      t("panels.attributive_decisions.not_allowed"),
       "#",
       class: "fr-btn fr-btn--primary",
       disabled: true
