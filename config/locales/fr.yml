@@ -223,9 +223,9 @@ fr:
   panels:
     attributive_decisions:
       download:
-        all: Télécharger l'ensemble des décisions d'attribution
-        partial: Télécharger les décisions d'attribution existantes
+        one: Télécharger la décision d'attribution
+        other: Télécharger %{count} décisions d'attribution
       generate:
-        all: Éditer les décisions d'attribution
-        partial: Éditer %{count} décisions d'attribution manquantes
-        forbidden: Vous n'avez pas le droit d'éditer les décisions d'attribution
+        one: Éditer la décision d'attribution manquante
+        other: Éditer %{count} décisions d'attribution manquantes
+      not_allowed: Vous n'avez pas le droit d'éditer les décisions d'attribution
