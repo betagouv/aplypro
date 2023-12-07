@@ -91,6 +91,7 @@ fr:
         index: Liste des classes
         show: "%{name}"
         bulk_pfmp: Ajout d'une PFMP pour toute la classe
+        bulk_pfmp_completion: Compléter des PFMPs
       students:
         show: "%{name}"
       pfmps:
@@ -157,6 +158,8 @@ fr:
       success: La PFMP a bien été mise à jour
     new:
       success: La PFMP a bien été enregistrée
+    update:
+      success: Les PFMPs ont bien été modifiées
     states:
       pending: À compléter
       completed: Saisies à valider

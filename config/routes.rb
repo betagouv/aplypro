@@ -17,6 +17,8 @@ Rails.application.routes.draw do
     member do
       get "bulk_pfmp"
       post "create_bulk_pfmp"
+      get "bulk_pfmp_completion"
+      put "update_bulk_pfmp"
     end
 
     resources :students, only: %i[show] do

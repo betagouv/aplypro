@@ -1,24 +1,28 @@
 = render partial: "alert_apprentices"
 
-.actions.fr-mb-4w
-  = link_to 'Saisir une PFMP pour toute la classe', bulk_pfmp_class_path(@classe), class: 'fr-btn fr-btn--secondary'
+.actions.fr-btns-group.fr-btns-group--inline
+  = link_to 'Saisir une PFMP pour toute la classe', bulk_pfmp_class_path(@classe), class: 'fr-btn fr-btn--primary'
+
+  - if @nb_pending_pfmp > 0
+    = link_to bulk_pfmp_completion_class_path(@classe), class: 'fr-btn fr-btn--secondary' do
+      = "Compléter #{@nb_pending_pfmp} #{"PFMP".pluralize(@nb_pending_pfmp)}"
+      = dsfr_badge(status: :new, classes: ["fr-badge--sm", "fr-ml-1w"]) do
+        = t("pfmps.states.pending")
+  
 
 .fr-table.fr-table--no-caption
   %table
     %caption Liste des élèves
     %thead
       %th{scope: "col"}
-        Élèves (
-        = @nb_students
-        )
+        Élèves
+        = "(#{@nb_students})"
       %th{scope: "col"} 
-        PFMPs (
-        = @nb_pfmps
-        )
+        PFMPs
+        = "(#{@nb_pfmps})"
       %th{scope: "col"} 
-        RIB présent (
-        = @nb_ribs
-        )
+        RIB présent
+        = "(#{@nb_ribs}/#{@nb_students})"
 
     %tbody
       - @classe.active_students.each do |student|
