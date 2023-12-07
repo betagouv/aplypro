@@ -7,9 +7,18 @@
   %table
     %caption Liste des élèves
     %thead
-      %th{scope: "col"} Élève
-      %th{scope: "col"} PFMPs
-      %th{scope: "col"} RIB présent
+      %th{scope: "col"}
+        Élèves (
+        = @nb_students
+        )
+      %th{scope: "col"} 
+        PFMPs (
+        = @nb_pfmps
+        )
+      %th{scope: "col"} 
+        RIB présent (
+        = @nb_ribs
+        )
 
     %tbody
       - @classe.active_students.each do |student|

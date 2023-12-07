@@ -13,6 +13,10 @@ class ClassesController < ApplicationController
 
   def show
     add_breadcrumb t("pages.titles.classes.index"), classes_path
+    @nb_students = @classe.active_students.count
+    @nb_pending_pfmp = @classe.pfmps.in_state(:pending).count
+    @nb_pfmps = @classe.active_pfmps.count
+    @nb_ribs = @classe.active_students.joins(:rib).count
 
     infer_page_title(name: @classe)
   end
