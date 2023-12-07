@@ -3,7 +3,7 @@
 class ClassesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_all_classes, only: :index
-  before_action :set_classe, only: %i[show bulk_pfmp create_bulk_pfmp]
+  before_action :set_classe, except: :index
 
   def index
     redirect_to welcome_path and return unless current_user.welcomed?
@@ -38,9 +38,36 @@ class ClassesController < ApplicationController
     @pfmp = Pfmp.new
 
     add_breadcrumb t("pages.titles.classes.index"), classes_path
-    add_breadcrumb t("pages.titles.classes.show", name: @classe.label), class_path(@classe)
+    add_breadcrumb t("pages.titles.classes.show", name: @classe), class_path(@classe)
 
     infer_page_title
+  end
+
+  def bulk_pfmp_completion
+    add_breadcrumb t("pages.titles.classes.index"), classes_path
+    add_breadcrumb t("pages.titles.classes.show", name: @classe), class_path(@classe)
+
+    infer_page_title
+
+    @pfmps = @classe
+             .pfmps
+             .in_state(:pending)
+             .joins(:student)
+             .order(:last_name, :first_name, :start_date)
+  end
+
+  def update_bulk_pfmp
+    @pfmps = bulk_pfmp_completion_params[:pfmps].map do |pfmp_params|
+      Pfmp.find(pfmp_params[:id]).tap do |pfmp|
+        pfmp.day_count = pfmp_params[:day_count]
+      end
+    end
+
+    if @pfmps.all?(&:save)
+      redirect_to class_path(@classe), notice: t("pfmps.update.success")
+    else
+      render :bulk_pfmp_completion, status: :unprocessable_entity
+    end
   end
 
   private
@@ -49,6 +76,12 @@ class ClassesController < ApplicationController
     params.require(:pfmp).permit(
       :start_date,
       :end_date
+    )
+  end
+
+  def bulk_pfmp_completion_params
+    params.require(:classe).permit(
+      pfmps: %i[id day_count]
     )
   end
 

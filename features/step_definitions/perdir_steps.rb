@@ -19,7 +19,6 @@ Sachantque(
   @etab ||= User.last.establishment
 
   first, last = name.split # not great
-
   @mef = Mef.find_by(label: mef) ||
          FactoryBot.create(:mef, label: mef)
   @classe = Classe.find_by(mef: @mef, establishment: @etab) ||
@@ -126,6 +125,18 @@ Quand("je renseigne {int} jours pour la dernière PFMP de {string}") do |days, n
     Et que je clique sur "Modifier la PFMP"
     Et que je remplis "Nombre de jours" avec "#{days}"
     Et que je clique sur "Modifier la PFMP"
+  )
+end
+
+Quand(
+  "Je saisis une PFMP pour toute la classe {string} avec les dates {string} et {string}"
+) do |classe, date_debut, date_fin|
+  steps %(
+    Quand je vais voir la classe "#{classe}"
+    Et que je clique sur "Saisir une PFMP pour toute la classe"
+    Et que je remplis "Date de début" avec "#{date_debut}"
+    Et que je remplis "Date de fin" avec "#{date_fin}"
+    Et que je clique sur "Enregistrer"
   )
 end
 
