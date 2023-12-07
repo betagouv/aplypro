@@ -9,7 +9,7 @@ module HomeHelper
     end
   end
 
-  def attributive_decisions_download_button(establishment)
+  def attributive_decisions_download_button(establishment, klass: "")
     count = establishment.current_schoolings.with_attributive_decisions.count
 
     return if count.zero?
@@ -18,12 +18,12 @@ module HomeHelper
       t("panels.attributive_decisions.download", count: count),
       establishment_download_attributive_decisions_path(establishment),
       method: :post,
-      class: "fr-btn fr-btn--primary fr-mb-0",
+      class: "fr-btn fr-btn--primary #{klass}",
       data: { turbo: false }
     )
   end
 
-  def attributive_decisions_generation_button(establishment)
+  def attributive_decisions_generation_button(establishment, klass: "")
     return cannot_generate_attributive_decisions_button unless current_user.can_generate_attributive_decisions?
 
     count = establishment.current_schoolings.without_attributive_decisions.count
@@ -31,16 +31,16 @@ module HomeHelper
     button_to(
       t("panels.attributive_decisions.generate", count: count),
       establishment_create_attributive_decisions_path(establishment),
-      class: "fr-btn fr-btn--secondary",
+      class: "fr-btn fr-btn--secondary #{klass}",
       data: { turbo: false }
     )
   end
 
-  def cannot_generate_attributive_decisions_button
+  def cannot_generate_attributive_decisions_button(klass: "")
     button_to(
       t("panels.attributive_decisions.not_allowed"),
       "#",
-      class: "fr-btn fr-btn--primary",
+      class: "fr-btn fr-btn--primary #{klass}",
       disabled: true
     )
   end

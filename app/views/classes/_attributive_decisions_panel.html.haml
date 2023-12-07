@@ -11,5 +11,8 @@
 - else
   %ul.fr-btns-group
     - if @etab.missing_attributive_decisions?
-      %li= attributive_decisions_generation_button(@etab)
-    %li= attributive_decisions_download_button(@etab)
+      - if current_user.can_generate_attributive_decisions?
+        %li= attributive_decisions_generation_button(@etab, klass: "fr-mb-0")
+      - else
+        %li= cannot_generate_attributive_decisions_button(klass: "fr-mb-0")
+    %li= attributive_decisions_download_button(@etab, klass: "fr-mb-0 fr-mt-2")
