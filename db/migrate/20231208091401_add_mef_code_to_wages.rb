@@ -2,15 +2,17 @@
 
 require_relative "../mef_seeder"
 require_relative "../wage_seeder"
+require_relative "../wage_mefstat4_seeder"
 
 class AddMefCodeToWages < ActiveRecord::Migration[7.1]
   def up
     Wage.delete_all
 
     change_table :wages, bulk: true do |table|
-      table.references :mef
-      table.remove :mefstat4
+      table.integer :ministry, null: false
+      table.jsonb :mef_codes
     end
+
     MefSeeder.seed
     WageSeeder.seed
   end
@@ -19,8 +21,8 @@ class AddMefCodeToWages < ActiveRecord::Migration[7.1]
     Wage.delete_all
 
     change_table :wages, bulk: true do |table|
-      table.remove :mef_id
-      table.string :mefstat4, null: false
+      table.remove :ministry
+      table.remove :mef_codes
     end
   end
 end

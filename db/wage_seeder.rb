@@ -6,7 +6,8 @@ class WageSeeder
   WAGE_MAPPING = {
     daily_rate: "FORFAIT JOURNALIER",
     yearly_cap: "PLAFOND MAX",
-    mef_code: "MEF"
+    mefstat4: "MEF_STAT_4",
+    ministry: "BOP"
   }.freeze
 
   # rubocop:disable Metrics/AbcSize
@@ -16,15 +17,12 @@ class WageSeeder
 
     data = CSV.read(Rails.root.join("data/mefs-amounts.csv"), headers: true)
 
-    wages = data.map { |d| d.fields(*WAGE_MAPPING.values) }
-    mef_ids_per_code = Mef.pluck(:code, :id).to_h
+    wages = data.map { |d| d.fields(*WAGE_MAPPING.values) }.uniq.compact
 
-    wages.each do |daily, yearly, mef_code|
-      mef_id = mef_ids_per_code[mef_code]
-      next unless mef_id
-
+    wages.each do |daily, yearly, mefstat4, ministry|
       Wage.find_or_initialize_by(
-        mef_id: mef_id,
+        mefstat4: mefstat4,
+        ministry: Wage.ministries[ministry.downcase],
         daily_rate: daily,
         yearly_cap: yearly
       ).save!

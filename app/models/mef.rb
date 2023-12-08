@@ -6,10 +6,12 @@ class Mef < ApplicationRecord
   validates :label, :code, :short, :mefstat11, :ministry, presence: true
   validates :code, uniqueness: true
 
-  has_one :wage, dependent: :destroy
-
   def mefstat4
     mefstat11.slice(0..3)
+  end
+
+  def wage
+    Wage.find_by(mefstat4: mefstat4, ministry: ministry)
   end
 
   def bop_code(establishment)
