@@ -27,7 +27,11 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :ribs
+      resources :ribs do
+        member do
+          get "confirm_deletion"
+        end
+      end
     end
   end
 

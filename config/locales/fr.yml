@@ -10,6 +10,9 @@ fr:
       not_authorised_to_invite: Seuls les personnels de direction peuvent gérer les accès
       destroyed: La PFMP de %{name} a bien été supprimée
       validated: La PFMP de %{name} a bien été validée
+    ribs:
+      destroyed: Les coordonnées bancaires de %{name} ont bien été supprimées
+
   helpers:
     submit:
       rib:
