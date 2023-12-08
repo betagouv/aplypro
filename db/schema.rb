@@ -224,8 +224,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_05_132300) do
     t.integer "yearly_cap", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "mef_id"
-    t.index ["mef_id"], name: "index_wages_on_mef_id"
+    t.string "mefstat4", null: false
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
