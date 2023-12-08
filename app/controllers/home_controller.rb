@@ -8,7 +8,7 @@ class HomeController < ApplicationController
   before_action :show_welcome_screen, only: :home
 
   def index
-    (redirect_to home_path and return) if user_signed_in?
+    redirect_to home_path and return if user_signed_in?
 
     redirect_to login_url
   end
