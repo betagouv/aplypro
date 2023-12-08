@@ -11,7 +11,10 @@ class Mef < ApplicationRecord
   end
 
   def wage
-    Wage.find_by(mefstat4: mefstat4, ministry: ministry)
+    wages = Wage.where(mefstat4: mefstat4, ministry: ministry)
+    return wages.first if wages.length == 1
+
+    wages.find { |wage| wage.mef_codes.include? code }
   end
 
   def bop_code(establishment)
