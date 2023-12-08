@@ -19,7 +19,10 @@
         BIC :
         %code= @student.rib.bic
 
-    = link_to "Modifier les coordonnées bancaires", edit_class_student_rib_path(@classe.id, @student.id, @student.rib.id), class: 'fr-btn fr-btn--secondary'
+    .fr-btns-group.fr-btns-group--inline
+      %li= link_to "Modifier les coordonnées bancaires", edit_class_student_rib_path(@classe.id, @student.id, @student.rib.id), class: 'fr-btn fr-btn--secondary'
+
+      %li= link_to "Supprimer les coordonnées bancaires", confirm_deletion_class_student_rib_path(@classe, @student, @student.rib), class: 'fr-btn fr-btn--secondary'
 
 %section.fr-mt-3w
   %h2.fr-h4 Liste des PFMPs de l'élève
