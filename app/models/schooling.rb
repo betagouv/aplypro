@@ -13,6 +13,10 @@ class Schooling < ApplicationRecord
 
   scope :current, -> { where(end_date: nil) }
 
+  scope :with_attributive_decisions, -> { joins(:attributive_decision_attachment) }
+  scope :without_attributive_decisions, -> { where.missing(:attributive_decision_attachment) }
+  scope :generating_attributive_decision, -> { where(generating_attributive_decision: true) }
+
   validates :student, uniqueness: { scope: :end_date }, if: :open?
   validates :student, uniqueness: { scope: :classe }, if: :closed?
 
@@ -42,8 +46,7 @@ class Schooling < ApplicationRecord
       establishment.uai,
       ENV.fetch("APLYPRO_SCHOOL_YEAR"),
       classe.label.parameterize,
-      [student.last_name, student.first_name].join("_"),
-      attributive_decision_number
+      attributive_decision_filename
     ].join("/")
   end
 

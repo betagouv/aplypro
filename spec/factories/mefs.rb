@@ -5,11 +5,11 @@ FactoryBot.define do
     code { Faker::Number.number(digits: 10) }
     label { "1CG" }
     short { "1ERE COLLAGE DE GOMETTES" }
-    mefstat11 { 1234 }
+    mefstat11 { Faker::Number.number(digits: 11) }
     ministry { Mef.ministries[:menj] }
 
     after :create do |m|
-      create(:wage, mefstat4: m.mefstat4)
+      create(:wage, mefstat4: m.mefstat4, ministry: m.ministry, mef_codes: [m.code])
     end
   end
 end

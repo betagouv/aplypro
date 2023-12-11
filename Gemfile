@@ -74,9 +74,9 @@ gem "active_decorator"
 
 gem "sidekiq"
 
-gem "rubyzip", "3.0.0alpha"
-
 gem "dry-transformer"
+
+gem "zipline"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

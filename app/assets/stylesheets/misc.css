@@ -46,3 +46,11 @@
   padding: 2rem;
   margin-bottom: 2rem;
 }
+
+.gray-panel .fr-btns-group li:nth(last-child) {
+  padding-bottom: 0;
+}
+
+.gray-panel .fr-btns-group li:nth(last-child) button {
+  margin-bottom: 0;
+}

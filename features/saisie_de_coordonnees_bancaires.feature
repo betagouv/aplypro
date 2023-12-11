@@ -25,3 +25,11 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
     Et que je clique sur "Modifier les coordonnées bancaires"
     Alors la page contient "Coordonnées bancaires mises à jour"
     Et la page contient "Murie Carrie"
+
+  Scénario: Le personnel de direction peut supprimer un RIB
+    Sachant que je clique sur "Saisir les coordonnées bancaires"
+    Et que je renseigne des coordonnées bancaires
+    Et que je clique sur "Supprimer les coordonnées bancaires"
+    Quand je clique sur "Confirmer la suppression"
+    Alors la page contient "Les coordonnées bancaires de Marie Curie ont bien été supprimées"
+    Et la page contient "Aucune coordonnée bancaire enregistrée pour le moment."

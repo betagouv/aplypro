@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 class RibsController < StudentsController
-  before_action :set_classe, only: %i[new create edit update]
-  before_action :set_student, only: %i[new create edit update]
-  before_action :set_rib, only: %i[edit update]
+  before_action :set_classe, :set_student
+  before_action :set_rib, except: %i[new create]
 
   def new
     add_breadcrumb t("pages.titles.classes.index"), classes_path
@@ -21,6 +20,8 @@ class RibsController < StudentsController
   end
 
   def edit; end
+
+  def confirm_deletion; end
 
   def create
     @rib = Rib.new(rib_params)
@@ -43,6 +44,12 @@ class RibsController < StudentsController
     end
   end
 
+  def destroy
+    @rib.destroy
+
+    redirect_to class_student_path(@classe, @student), notice: t("flash.ribs.destroyed", name: @student.full_name)
+  end
+
   private
 
   def rib_params
@@ -59,7 +66,9 @@ class RibsController < StudentsController
   end
 
   def set_classe
-    @classe = Classe.find(params[:class_id])
+    @classe = Classe.where(establishment: @etab).find(params[:class_id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to classes_path, alert: t("errors.classes.not_found"), status: :forbidden and return
   end
 
   def set_rib

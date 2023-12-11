@@ -12,6 +12,8 @@ RSpec.describe "EstablishmentsController" do
   end
 
   describe "POST create_attributive_decisions" do
+    before { create_list(:schooling, 10, establishment: establishment) }
+
     context "when the user is a director" do
       it "returns 200" do
         post establishment_create_attributive_decisions_path(establishment)
@@ -22,7 +24,7 @@ RSpec.describe "EstablishmentsController" do
       it "queues the document creation job" do
         expect do
           post establishment_create_attributive_decisions_path(establishment)
-        end.to have_enqueued_job(GenerateAttributiveDecisionsJob)
+        end.to have_enqueued_job(GenerateMissingAttributiveDecisionsJob)
       end
     end
 
@@ -42,7 +44,7 @@ RSpec.describe "EstablishmentsController" do
       it "does not create any documents" do
         expect do
           post establishment_create_attributive_decisions_path(establishment)
-        end.not_to have_enqueued_job(GenerateAttributiveDecisionsJob)
+        end.not_to have_enqueued_job(GenerateMissingAttributiveDecisionsJob)
       end
     end
   end

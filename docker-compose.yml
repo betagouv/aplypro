@@ -28,7 +28,7 @@ services:
     image: aplypro
     env_file:
       - '.env.local'
-    command: ["bundle", "exec", "sidekiq", "--queue", "documents", "--concurrency", "1"]
+    command: ["bundle", "exec", "sidekiq", "--queue", "documents"]
     volumes:
       - "./:/app"
       - "/app/node_modules"
