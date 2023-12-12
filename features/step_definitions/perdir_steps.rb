@@ -157,3 +157,7 @@ Quand("je consulte la classe de {string}") do |classe_label|
     Et que je clique sur "Voir la classe" dans la rangée "#{classe_label}"
   )
 end
+
+Alors("je peux voir l'écran d'accueil") do
+  step('la page contient "Bienvenue sur APLyPro"')
+end

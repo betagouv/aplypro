@@ -75,7 +75,7 @@ Fonctionnalité: Le personnel de direction se connecte
     Et que je suis un personnel MENJ de l'établissement "123" avec l'email "jean.michel@education.gouv.fr"
     Quand je me connecte en tant que personnel MENJ
     Alors la page affiche une erreur d'authentification
-  
+
   Scénario: Un personnel du MENJ sans UAI dans son FrEduRne peut se connecter si il a une invitation
     Sachant que je suis un personnel MENJ directeur de l'établissement "123"
     Et que je me connecte en tant que personnel MENJ
@@ -106,3 +106,11 @@ Fonctionnalité: Le personnel de direction se connecte
     Et que je me connecte en tant que personnel MENJ
     Alors la page contient "Gestion des accès"
 
+  @wip
+  Scénario: Un personnel du MASA peut gérer un établissement du MENJ
+    Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
+    Et que je me connecte en tant que personnel MENJ
+    Et que je me déconnecte
+    Et que je suis un personnel MASA directeur de l'établissement "DINUM"
+    Quand je me connecte en tant que personnel MASA
+    Alors je peux voir l'écran d'accueil
