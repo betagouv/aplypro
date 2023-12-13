@@ -6,6 +6,8 @@ class FetchEstablishmentJob < ApplicationJob
   def perform(establishment)
     raw = EstablishmentApi.fetch!(establishment.uai)
 
+    return if raw["records"].blank?
+
     data = raw["records"].first["fields"]
 
     attributes = Establishment::API_MAPPING.to_h do |col, attr|
