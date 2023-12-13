@@ -19,3 +19,13 @@ Fonctionnalité: Le personnel de direction consulte les listes
     Quand je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"
     Et que je consulte la liste des classes
     Alors la page contient "1/"
+
+  Scénario: La liste des élèves d'une classe est toujours triée par ordre alphabétique nom-prénom
+    Et que il y a un élève "Paul Allègre" au sein de la classe "2NDEB" pour une formation "Développement"
+    Et que il y a un élève "André Allègre" au sein de la classe "2NDEB" pour une formation "Développement"
+    Quand je clique sur "Voir la classe" dans la rangée "2NDEB"
+    Alors je peux voir dans le tableau "Liste des élèves" dans cet ordre :
+      | Élève         |
+      | Allègre André |
+      | Allègre Paul  |
+      | Curie Marie   |

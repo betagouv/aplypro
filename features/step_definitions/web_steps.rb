@@ -68,6 +68,16 @@ Alors("je peux voir dans le tableau {string}") do |caption, table|
   expect(page).to have_table(caption, with_rows: table.rows)
 end
 
+Alors("je peux voir dans le tableau {string} dans cet ordre :") do |caption, table_data|
+  within_table(caption) do
+    table_data.rows.each_with_index do |row, row_number|
+      row.each_with_index do |cel, cel_number|
+        expect(find("tr[#{row_number + 1}]/td[#{cel_number + 1}]")).to have_text(cel)
+      end
+    end
+  end
+end
+
 Alors("debug") do
   debugger # rubocop:disable Lint/Debugger
 end
