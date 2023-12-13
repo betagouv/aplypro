@@ -106,7 +106,6 @@ Fonctionnalité: Le personnel de direction se connecte
     Et que je me connecte en tant que personnel MENJ
     Alors la page contient "Gestion des accès"
 
-  @wip
   Scénario: Un personnel du MASA peut gérer un établissement du MENJ
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que je me connecte en tant que personnel MENJ
