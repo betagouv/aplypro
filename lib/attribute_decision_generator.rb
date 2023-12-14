@@ -176,7 +176,7 @@ class AttributeDecisionGenerator
   end
 
   def summary
-    establishment = @student.establishment
+    establishment = @schooling.establishment
 
      # FIXME: on ne peut pas distinguer les chefs d'établissements et
      # leurs adjoints (FrEduRneResp + FrEduFonctAdm)

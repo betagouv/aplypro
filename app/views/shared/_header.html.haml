@@ -29,7 +29,7 @@
     .fr-container
       %button.fr-btn--close.fr-btn{"aria-controls" => "modal-476", title: "Fermer"} Fermer
       .fr-header__menu-links
-      %nav#main.fr-nav{"aria-label" => "Menu principal", role: "navigation"}
+      %nav#main-nav.fr-nav{"aria-label" => "Menu principal", role: "navigation"}
         %ul.fr-nav__list
           - if current_user and not @inhibit_nav
             - %i(home classes).each do |item|

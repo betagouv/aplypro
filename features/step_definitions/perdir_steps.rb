@@ -20,8 +20,10 @@ Sachantque(
 
   first, last = name.split # not great
 
-  @mef = Mef.find_by(code: mef) || FactoryBot.create(:mef, label: mef)
-  @classe = FactoryBot.create(:classe, establishment: @etab, label: classe, mef: @mef)
+  @mef = Mef.find_by(label: mef) ||
+         FactoryBot.create(:mef, label: mef)
+  @classe = Classe.find_by(mef: @mef, establishment: @etab) ||
+            FactoryBot.create(:classe, establishment: @etab, label: classe, mef: @mef)
   @student = FactoryBot.create(:student, first_name: first, last_name: last)
   @student.schoolings.create!(classe: @classe)
 end
@@ -58,7 +60,7 @@ Quand("je renseigne les coordonnées bancaires de l'élève {string} de la class
 end
 
 Quand("je clique sur {string} dans le menu principal") do |item|
-  within("nav#main") do
+  within("nav#main-nav") do
     click_link(item)
   end
 end
@@ -156,4 +158,8 @@ Quand("je consulte la classe de {string}") do |classe_label|
     Quand je consulte la liste des classes
     Et que je clique sur "Voir la classe" dans la rangée "#{classe_label}"
   )
+end
+
+Alors("je peux voir l'écran d'accueil") do
+  step('la page contient "Bienvenue sur APLyPro"')
 end

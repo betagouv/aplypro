@@ -74,7 +74,11 @@ module IdentityMappers
     end
 
     def find_or_create_establishment!(uai)
-      Establishment.find_or_create_by!(uai: uai, students_provider: students_provider)
+      Establishment
+        .find_or_create_by!(uai: uai)
+        .tap do |establishment|
+          establishment.update({ students_provider: students_provider }) if establishment.students_provider.blank?
+        end
     end
 
     def responsibility_uais

@@ -35,4 +35,12 @@ RSpec.describe FetchEstablishmentJob do
       expect { described_class.perform_now(etab) }.to change(etab, attr)
     end
   end
+
+  context "when the EstablishmentApi returns no data" do
+    let(:fixture) { JSON.parse(Rails.root.join("mock/data/etab.json").read).merge({ "records" => [] }).to_json }
+
+    it "doesn't raise an error" do
+      expect { described_class.perform_now(etab) }.not_to raise_error
+    end
+  end
 end

@@ -20,17 +20,11 @@ module Users
 
       @user.save!
 
-      check_limited_access!
+      add_auth_breadcrumb(data: @user.id, message: "Successfully parsed user")
 
-      begin
-        check_responsibilites!
-      rescue IdentityMappers::Errors::EmptyResponsibilitiesError
-        begin
-          check_access_list!
-        rescue IdentityMappers::Errors::NotAuthorisedError
-          raise IdentityMappers::Errors::NoAccessFound
-        end
-      end
+      check_access!
+
+      add_auth_breadcrumb(data: @mapper.all_indicated_uais, message: "Found establishments")
 
       log_user_in!
       save_roles!
@@ -61,6 +55,18 @@ module Users
     end
 
     private
+
+    def check_access!
+      check_limited_access!
+
+      check_responsibilites!
+    rescue IdentityMappers::Errors::EmptyResponsibilitiesError
+      begin
+        check_access_list!
+      rescue IdentityMappers::Errors::NotAuthorisedError
+        raise IdentityMappers::Errors::NoAccessFound
+      end
+    end
 
     def parse_identity
       data = auth_hash
@@ -153,6 +159,16 @@ module Users
 
     def auth_hash
       request.env["omniauth.auth"]
+    end
+
+    def add_auth_breadcrumb(data:, message:)
+      Sentry.add_breadcrumb(
+        Sentry::Breadcrumb.new(
+          category: "auth",
+          data: data,
+          message: message
+        )
+      )
     end
   end
 end
