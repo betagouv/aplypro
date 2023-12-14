@@ -60,7 +60,7 @@ Quand("je renseigne les coordonnées bancaires de l'élève {string} de la class
 end
 
 Quand("je clique sur {string} dans le menu principal") do |item|
-  within("nav#main") do
+  within("nav#main-nav") do
     click_link(item)
   end
 end
