@@ -141,6 +141,9 @@ fr:
             <li>Si vous êtes chef d'établissement, assurez-vous que vous avez bien ce rôle dans votre annuaire académique ou COLENTAGRI.</li>
             <li>Si vous n'êtes pas chef d'établissement assurez-vous que votre adresse e-mail a bien été autorisée par votre personnel de direction dans l'application APlyPro (ou via DELEG-CE).</li>
           </ul>
+      record_invalid:
+        title: "Erreur lors du traitement de votre profil utilisateur"
+        content: "L'équipe technique a été notifiée du problème."
 
     success: "Connexion réussie"
 
