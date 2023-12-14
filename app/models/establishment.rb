@@ -49,25 +49,15 @@ class Establishment < ApplicationRecord
   end
 
   def to_s
-    return "" if no_data?
-
-    [uai, name, city.capitalize, postal_code].join(" – ")
+    [uai, name, city, postal_code].compact.join(" – ")
   end
 
   def invites?(email)
     invitations.exists?(email: email)
   end
 
-  def no_data?
-    !refreshed?
-  end
-
-  def refreshed?
-    name.present?
-  end
-
   def select_label
-    [uai, name].join(" - ")
+    [uai, name].compact.join(" - ")
   end
 
   def address
