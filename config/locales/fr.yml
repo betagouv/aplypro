@@ -32,7 +32,8 @@ fr:
       not_found: "La classe que vous avez demandée n'existe pas."
     students:
       not_found: "L'élève demandé n'est pas ou plus dans cette classe."
-
+    pfmps:
+      not_found: "La PFMP demandée n'est plus disponible ou a été supprimée."
   activerecord:
     errors:
       models:

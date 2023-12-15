@@ -92,7 +92,9 @@ class PfmpsController < ApplicationController
   end
 
   def set_pfmp
-    @pfmp = @student.pfmps.find_by(id: params[:id])
+    @pfmp = @student.pfmps.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to class_student_path(@classe, @student), alert: t("errors.pfmps.not_found") and return
   end
 
   def set_student
