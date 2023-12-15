@@ -27,6 +27,16 @@ RSpec.describe "PfmpsController" do
 
       it { is_expected.to redirect_to classes_path }
     end
+
+    context "when trying to access a deleted PFMP" do
+      before do
+        pfmp.destroy!
+
+        get class_student_pfmp_path(class_id: schooling.classe.id, student_id: schooling.student.id, id: pfmp.id)
+      end
+
+      it { is_expected.to redirect_to class_student_path(schooling.classe, student) }
+    end
   end
 
   describe "POST /validate" do
