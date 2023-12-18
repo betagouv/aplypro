@@ -87,4 +87,26 @@ RSpec.describe Student do
       end
     end
   end
+
+  describe "scopes" do
+    %w[rib address].each do |attr|
+      scope = "with_#{attr}"
+
+      describe scope do
+        subject { described_class.send(scope) }
+
+        context "when the student has a #{attr}" do
+          let(:student) { create(:student, scope) }
+
+          it { is_expected.to include student }
+        end
+
+        context "when the student does not have a #{attr}" do
+          let(:student) { create(:student) }
+
+          it { is_expected.not_to include student }
+        end
+      end
+    end
+  end
 end

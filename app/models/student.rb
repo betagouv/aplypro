@@ -28,7 +28,24 @@ class Student < ApplicationRecord
 
   has_one :rib, -> { where(archived_at: nil) }, dependent: :destroy, inverse_of: :student
 
+  scope :with_rib, -> { joins(:rib) }
+
+  scope :with_address, lambda {
+    where.not(address_line1: nil)
+         .where.not(address_line2: nil)
+         .where.not(postal_code: nil)
+         .where.not(country_code: nil)
+         .where.not(city: nil)
+  }
+
   before_validation :check_asp_file_reference
+
+  ADDRESS_FIELDS = %i[
+    address_line1
+    address_line2
+    postal_code
+    city
+  ].freeze
 
   def to_s
     full_name
@@ -55,12 +72,7 @@ class Student < ApplicationRecord
   end
 
   def address
-    [
-      address_line1,
-      address_line2,
-      postal_code,
-      city
-    ].compact.join(", ")
+    ADDRESS_FIELDS.map { |field| self[field] }.compact.join(", ")
   end
 
   def missing_address?
