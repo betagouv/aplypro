@@ -54,3 +54,7 @@
 .gray-panel .fr-btns-group li:nth(last-child) button {
   margin-bottom: 0;
 }
+
+.hidden {
+  display: none;
+}

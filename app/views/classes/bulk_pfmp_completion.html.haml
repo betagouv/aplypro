@@ -1,0 +1,26 @@
+.fr-col-md-6.fr-mb-3w
+  = dsfr_alert(type: :warning, title: "Munissez-vous des attestations de fin de stage") do
+    Le nombre de jours doit correspondre à celui qui figure dans l'attestation de fin de stage.
+
+= form_with url: update_bulk_pfmp_class_path(@classe), method: :put do |form|
+  .fr-table.fr-table--no-caption
+    %table
+      %caption Liste des pfmps à compléter de la classe #{@classe.label}
+      %thead
+        %th{scope: "col"} Élève
+        %th{scope: "col"} PFMP
+        %th{scope: "col"} Nombre de jours
+      %tbody
+      - @pfmps.each do |pfmp|
+        %tr
+          %td= dsfr_link_to pfmp.student.index_name, class_student_path(@classe, pfmp.student), title: t("links.students.show", name: pfmp.student), tabindex: "1"
+          %td= dsfr_link_to pfmp.formatted_dates, class_student_pfmp_path(@classe, pfmp.student, pfmp), tabindex: "1"
+          %td
+            - if pfmp.errors.any?
+              %p.fr-error-text= pfmp.errors.full_messages.join("\n")
+            = form.hidden_field "classe[pfmps][][id]", value: pfmp.id
+            = form.label "classe[pfmps][][day_count]", "Nombre de jours", class: "hidden"
+            = form.number_field "classe[pfmps][][day_count]", value: pfmp.day_count, class: "fr-input fr-col-md-3 fr-col-sm-6 fr-col-xs-12"
+
+
+  = form.submit "Enregistrer #{@pfmps.count} #{"PFMP".pluralize(@pfmps.count)}", class: "fr-btn fr-btn-primary"

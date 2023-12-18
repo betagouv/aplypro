@@ -32,7 +32,8 @@ fr:
       not_found: "La classe que vous avez demandée n'existe pas."
     students:
       not_found: "L'élève demandé n'est pas ou plus dans cette classe."
-
+    pfmps:
+      not_found: "La PFMP demandée n'est plus disponible ou a été supprimée."
   activerecord:
     errors:
       models:
@@ -91,6 +92,7 @@ fr:
         index: Liste des classes
         show: "%{name}"
         bulk_pfmp: Ajout d'une PFMP pour toute la classe
+        bulk_pfmp_completion: Compléter des PFMPs
       students:
         show: "%{name}"
       pfmps:
@@ -157,6 +159,8 @@ fr:
       success: La PFMP a bien été mise à jour
     new:
       success: La PFMP a bien été enregistrée
+    update:
+      success: Les PFMPs ont bien été modifiées
     states:
       pending: À compléter
       completed: Saisies à valider

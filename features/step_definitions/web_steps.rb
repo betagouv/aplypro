@@ -56,6 +56,12 @@ Quand("je clique sur {string} dans la rangée {string}") do |link, row|
   end
 end
 
+Quand("je remplis le champ {string} dans la rangée {string} avec {string}") do |locator, row, value|
+  within("tr", text: row) do
+    fill_in locator, with: value
+  end
+end
+
 Quand("je sélectionne {string} pour {string}") do |option, name|
   select option, from: name
 end
