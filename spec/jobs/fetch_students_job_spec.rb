@@ -28,7 +28,7 @@ RSpec.describe FetchStudentsJob do
       rescue Faraday::UnauthorizedError # rubocop:disable Lint/SuppressedException
       end
 
-      expect(StudentApi).to have_received(:fetch_students!).exactly(5).times
+      expect(StudentApi).to have_received(:fetch_students!).exactly(10).times
     end
   end
 end
