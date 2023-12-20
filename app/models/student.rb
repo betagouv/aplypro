@@ -32,7 +32,7 @@ class Student < ApplicationRecord
 
   scope :with_address, lambda {
     where.not(address_line1: nil)
-         .where.not(address_line2: nil)
+         .or(where.not(address_line2: nil))
          .where.not(postal_code: nil)
          .where.not(country_code: nil)
          .where.not(city: nil)
