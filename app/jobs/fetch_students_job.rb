@@ -3,7 +3,7 @@
 class FetchStudentsJob < ApplicationJob
   queue_as :default
 
-  retry_on Faraday::UnauthorizedError, wait: 1.second, attempts: 5
+  retry_on Faraday::UnauthorizedError, wait: 1.second, attempts: 10
 
   around_perform do |job, block|
     establishment = job.arguments.first

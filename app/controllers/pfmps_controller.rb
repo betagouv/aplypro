@@ -17,6 +17,7 @@ class PfmpsController < ApplicationController
              .in_state(:completed)
              .includes(:student, classe: :mef)
              .where(classe: { establishment: @etab })
+             .merge(Schooling.current)
 
     @pfmp = @pfmps.first
   end
