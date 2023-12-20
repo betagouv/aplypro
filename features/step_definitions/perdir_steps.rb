@@ -58,6 +58,11 @@ Quand("je renseigne les coordonnées bancaires de l'élève {string} de la class
   )
 end
 
+Quand("l'élève {string} a déjà des coordonnées bancaires") do |name|
+  student = find_student_by_full_name(name)
+  FactoryBot.create(:rib, student: student)
+end
+
 Quand("je clique sur {string} dans le menu principal") do |item|
   within("nav#main-nav") do
     click_link(item)
@@ -137,6 +142,15 @@ Quand(
     Et que je remplis "Date de début" avec "#{date_debut}"
     Et que je remplis "Date de fin" avec "#{date_fin}"
     Et que je clique sur "Enregistrer"
+  )
+end
+
+Quand("Je saisis les coordonées bancaires d'un tiers pour {string}") do |name|
+  steps %(
+    Quand je remplis le champ "Titulaire du compte" avec "Josette Curie" dans les champs de "#{name}"
+    Et que je remplis le champ "IBAN" avec "GB89DPQV73804842875981" dans les champs de "#{name}"
+    Et que je remplis le champ "BIC" avec "BARBGB2LSOU" dans les champs de "#{name}"
+    Et que je décoche "Les coordonnées bancaires appartiennent à l'élève" dans les champs de "#{name}"
   )
 end
 

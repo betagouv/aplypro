@@ -21,6 +21,13 @@ Rails.application.routes.draw do
       put "update_bulk_pfmp"
     end
 
+    resources :ribs, only: [] do
+      collection do
+        get "missing"
+        post "bulk_create"
+      end
+    end
+
     resources :students, only: %i[show] do
       resources :pfmps, except: :index do
         member do

@@ -105,6 +105,7 @@ fr:
         confirm_deletion: "Suppression de la PFMP"
       ribs:
         new: "Ajout de coordonnées bancaires"
+        missing: Saisir des coordonnées bancaires
 
   global:
     sponsor: "Direction\nInterministérielle\ndu Numérique"
