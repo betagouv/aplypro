@@ -9,6 +9,7 @@ describe Student::Mappers::Fregata do
   subject(:mapper) { described_class }
 
   let(:establishment) { create(:establishment, :fregata_provider) }
+  let(:uai) { establishment.uai }
   let(:normal_payload) { build_list(:fregata_student, 2) }
 
   it_behaves_like "a student mapper" do
@@ -24,7 +25,7 @@ describe Student::Mappers::Fregata do
   end
 
   it "also grabs the address" do
-    mapper.new(normal_payload, establishment).parse!
+    mapper.new(normal_payload, uai).parse!
 
     expect(Student.all.map(&:missing_address?).uniq).to contain_exactly false
   end
@@ -33,7 +34,7 @@ describe Student::Mappers::Fregata do
     let(:data) { build_list(:fregata_student, 1, :left_establishment, left_at: 3.days.ago, ine: "test") }
 
     it "sets the correct end date on the previous schooling" do
-      mapper.new(data, establishment).parse!
+      mapper.new(data, uai).parse!
 
       expect(Student.find_by(ine: "test").schoolings.last.end_date).to eq 3.days.ago.to_date
     end
@@ -43,7 +44,7 @@ describe Student::Mappers::Fregata do
     let(:data) { build_list(:fregata_student, 1, :left_classe, left_classe_at: 4.days.ago, ine: "test") }
 
     it "sets the correct end date on the previous schooling" do
-      mapper.new(data, establishment).parse!
+      mapper.new(data, uai).parse!
 
       expect(Student.find_by(ine: "test").schoolings.last.end_date).to eq 4.days.ago.to_date
     end
@@ -57,10 +58,10 @@ describe Student::Mappers::Fregata do
         ]
       end
 
-      before { mapper.new(previous_data, establishment).parse! }
+      before { mapper.new(previous_data, uai).parse! }
 
       it "updates the end date in place" do
-        expect { mapper.new(data, establishment).parse! }.to change(Schooling.current, :count).by(-1)
+        expect { mapper.new(data, uai).parse! }.to change(Schooling.current, :count).by(-1)
       end
     end
   end
@@ -75,7 +76,7 @@ describe Student::Mappers::Fregata do
       ]
     end
 
-    before { mapper.new(data, establishment).parse! }
+    before { mapper.new(data, uai).parse! }
 
     it "parses them correctly" do
       expect(student.schoolings).to have(2).schoolings
@@ -90,11 +91,11 @@ describe Student::Mappers::Fregata do
     let(:data) { [build(:fregata_student, :left_establishment)] }
 
     it "parses the student" do
-      expect { mapper.new(data, establishment).parse! }.to change(Student, :count).by(1)
+      expect { mapper.new(data, uai).parse! }.to change(Student, :count).by(1)
     end
 
     it "closes the schooling straight away" do
-      expect { mapper.new(data, establishment).parse! }.not_to change(Schooling.current, :count)
+      expect { mapper.new(data, uai).parse! }.not_to change(Schooling.current, :count)
     end
   end
 end
