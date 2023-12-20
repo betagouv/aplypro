@@ -17,6 +17,7 @@ class ClassesController < ApplicationController
     @nb_pending_pfmp = @classe.pfmps.in_state(:pending).count
     @nb_pfmps = @classe.active_pfmps.count
     @nb_ribs = @classe.active_students.joins(:rib).count
+    @nb_missing_ribs = @nb_students - @nb_ribs
 
     infer_page_title(name: @classe)
   end

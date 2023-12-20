@@ -16,11 +16,10 @@
           %td= dsfr_link_to pfmp.student.index_name, class_student_path(@classe, pfmp.student), title: t("links.students.show", name: pfmp.student), tabindex: "1"
           %td= dsfr_link_to pfmp.formatted_dates, class_student_pfmp_path(@classe, pfmp.student, pfmp), tabindex: "1"
           %td
-            - if pfmp.errors.any?
-              %p.fr-error-text= pfmp.errors.full_messages.join("\n")
             = form.hidden_field "classe[pfmps][][id]", value: pfmp.id
             = form.label "classe[pfmps][][day_count]", "Nombre de jours", class: "hidden"
             = form.number_field "classe[pfmps][][day_count]", value: pfmp.day_count, class: "fr-input fr-col-md-3 fr-col-sm-6 fr-col-xs-12"
-
+            - if pfmp.errors.any?
+              %p.fr-error-text= pfmp.errors.full_messages.join("\n")
 
   = form.submit "Enregistrer #{@pfmps.count} #{"PFMP".pluralize(@pfmps.count)}", class: "fr-btn fr-btn-primary"

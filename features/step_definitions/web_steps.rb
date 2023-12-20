@@ -20,10 +20,6 @@ Alors("la page ne contient pas {string}") do |content|
   expect(page).not_to have_content(content)
 end
 
-Alors("la page contient {string} dans la rangée {string} du tableau {string}") do |content, row, caption|
-  expect(page).to have_table(caption, with_rows: [row, content])
-end
-
 Alors("le tableau {string} contient") do |caption, table|
   expect(page).to have_table(caption, with_rows: table.rows)
 end
@@ -48,6 +44,24 @@ end
 
 Quand("je remplis {string} avec {string}") do |label, value|
   fill_in label, with: value
+end
+
+Quand("je remplis le champ {string} avec {string} dans les champs de {string}") do |label, value, fieldset_legend|
+  within_fieldset(fieldset_legend) do
+    fill_in label, with: value
+  end
+end
+
+Quand("je décoche {string} dans les champs de {string}") do |label, fieldset_legend|
+  within_fieldset(fieldset_legend) do
+    uncheck label
+  end
+end
+
+Quand("je coche {string} dans les champs de {string}") do |label, fieldset_legend|
+  wwithin_fieldset(fieldset_legend) do
+    check label
+  end
 end
 
 Quand("je clique sur {string} dans la rangée {string}") do |link, row|
