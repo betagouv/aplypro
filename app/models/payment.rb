@@ -11,6 +11,7 @@ class Payment < ApplicationRecord
   belongs_to :pfmp
 
   has_one :student, through: :pfmp
+  has_one :schooling, through: :pfmp
 
   validates :amount, numericality: { greater_than: 0 }
 
@@ -22,12 +23,16 @@ class Payment < ApplicationRecord
     )
   end
 
+  def mark_ready!
+    state_machine.transition_to!(:ready)
+  end
+
   def process!
     state_machine.transition_to!(:processing)
   end
 
   def complete!
-    state_machine.transition_to!(:success)
+    state_machine.transition_to!(:successful)
   end
 
   def fail!
