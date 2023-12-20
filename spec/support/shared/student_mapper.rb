@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.shared_examples "a student mapper" do
-  subject(:mapper) { described_class.new(data, establishment) }
+  subject(:mapper) { described_class.new(data, uai) }
 
   context "with a normal payload" do
     let(:data) { normal_payload }
@@ -33,7 +33,7 @@ RSpec.shared_examples "a student mapper" do
     let(:data) { nil_ine_payload }
 
     it "doesn't crash on students without an INE" do
-      expect { described_class.new(nil_ine_payload, establishment).parse! }.not_to raise_error
+      expect { described_class.new(nil_ine_payload, uai).parse! }.not_to raise_error
     end
   end
 
@@ -82,7 +82,7 @@ RSpec.shared_examples "a student mapper" do
   context "when a student is received in a new establishment" do
     let(:data) { normal_payload }
     let(:student) { Student.first }
-    let(:new_mapper) { described_class.new(data, create(:establishment)) }
+    let(:new_mapper) { described_class.new(data, create(:establishment).uai) }
 
     before do
       mapper.parse!

@@ -3,7 +3,7 @@
 module StudentApi
   class Sygne < Base
     def endpoint
-      base_url + format("etablissements/%s/eleves/", @establishment.uai)
+      base_url + format("etablissements/%s/eleves/", uai)
     end
 
     def student_endpoint(ine)
