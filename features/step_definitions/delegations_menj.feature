@@ -16,3 +16,9 @@ Fonctionnalité: Gestion des délégations par DELEG-CE
     Sachant que je suis un personnel MENJ de l'établissement "DINUM" avec une mauvaise délégation DELEG-CE pour APLyPro
     Lorsque je me connecte en tant que personnel MENJ
     Alors la page affiche une erreur d'authentification
+
+  Scénario: Je peux voir les données de mon établissement
+    Sachant que je suis un personnel MENJ de l'établissement "DINUM" avec une délégation DELEG-CE pour APLyPro
+    Lorsque je me connecte en tant que personnel MENJ
+    Et que je passe l'écran d'accueil
+    Alors la page contient "Lycée de la Mer Paul Bousquet"
