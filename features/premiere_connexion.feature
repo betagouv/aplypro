@@ -25,6 +25,19 @@ Fonctionnalité: Le personnel de direction se connecte
     Alors la page contient "Année scolaire"
     Et la page contient "Lycée de la Mer Paul Bousquet"
 
+  Scénario: Le personnel peut changer d'établissement
+    Sachant que je suis un personnel MENJ directeur de l'établissement "123, 456, 789"
+    Quand je me rends sur la page d'accueil
+    Et que je clique sur "Se connecter (MENJ)"
+    Et que je sélectionne "123" pour "Établissement"
+    Et que je clique sur "Continuez avec cet établissement"
+    Et que je passe l'écran d'accueil
+    Alors la page contient "123"
+    Quand je clique sur "Changer d'établissement"
+    Et que je sélectionne "456" pour "Établissement"
+    Et que je clique sur "Continuez avec cet établissement"
+    Alors la page contient "456"
+
   Scénario: Un personnel du MENJ sans établissements en responsabilité est informé
     Sachant que je suis un personnel MENJ de l'établissement "123"
     Quand je me connecte en tant que personnel MENJ

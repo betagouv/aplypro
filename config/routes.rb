@@ -11,6 +11,10 @@ Rails.application.routes.draw do
 
     post "create_attributive_decisions"
     post "download_attributive_decisions"
+
+    collection do
+      get "select"
+    end
   end
 
   resources :classes, only: %i[show index] do
