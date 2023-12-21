@@ -67,12 +67,14 @@ module HomeHelper
     end
   end
 
-  def pfmp_badge(state, pfmps_counts)
+  def pfmp_badge(status, pfmps_counts)
     count_tag = content_tag(:div, class: "fr-mr-1w") do
-      pfmps_counts[state.to_s].to_s
+      pfmps_counts[status.to_s].to_s
     end
 
-    count_tag.concat(status_badge(state))
+    content_tag(:div, class: "fr-badge-group fr-grid-row--right", "aria-label": t("pfmps.states.#{status}")) do
+      count_tag.concat(status_badge(status))
+    end
   end
 
   def school_year_to_s

@@ -49,7 +49,8 @@ class HomeController < ApplicationController
 
   def pfmp_counts
     pfmps = Pfmp
-            .joins(schooling: :classe)
+            .joins(:classe)
+            .merge(Schooling.current)
             .merge(@etab.classes.current)
 
     PfmpStateMachine.states.index_with { |state| pfmps.in_state(state).count }

@@ -17,3 +17,9 @@ Alors("le panneau {string} contient un compteur à {int} sur {int}") do |title, 
     expect(page).to have_content("#{low} / #{high}")
   end
 end
+
+Alors("l'indicateur de PFMP {string} affiche {int}") do |status, count|
+  within("div[aria-label=\"#{status}\"]") do
+    expect(page).to have_content(count)
+  end
+end

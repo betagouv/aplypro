@@ -27,6 +27,13 @@ Sachantque(
   @student.schoolings.create!(classe: @classe)
 end
 
+Sachantque("il y a un(e) élève avec une scolarité fermée qui a une PFMP") do
+  @etab ||= User.last.establishment
+  classe = @etab.classes.first || FactoryBot.create(:classe, establishment: establishment)
+  schooling = FactoryBot.create(:schooling, :closed, classe: classe)
+  FactoryBot.create(:pfmp, schooling: schooling)
+end
+
 Alors("le fil d'Ariane affiche {string}") do |path|
   components = path.split(" > ")
 
