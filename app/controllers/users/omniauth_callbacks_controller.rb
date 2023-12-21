@@ -137,7 +137,7 @@ module Users
     end
 
     def fetch_establishments!
-      @mapper.establishments_in_responsibility.each { |e| FetchEstablishmentJob.perform_now(e) }
+      @mapper.establishments_in_responsibility_and_delegated.each { |e| FetchEstablishmentJob.perform_now(e) }
     end
 
     def clear_previous_establishment!
