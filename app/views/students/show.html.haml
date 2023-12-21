@@ -26,7 +26,7 @@
 
 %section.fr-mt-3w
   %h2.fr-h4 Liste des PFMPs de l'élève
-  - if @student.pfmps.none?
+  - if @pfmps.none?
     %p Aucune PFMP enregistrée pour le moment.
   - else
     = render partial: 'pfmps/pfmp_student_table'
