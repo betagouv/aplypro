@@ -17,10 +17,10 @@
     %h2.fr-col 3. Périodes de formation en milieu professionnel
 
     .fr-ml-2w
-      .fr-badge-group.fr-grid-row--right
-        = pfmp_badge(:pending, @pfmps_counts)
-      .fr-badge-group.fr-grid-row--right
-        = pfmp_badge(:completed, @pfmps_counts)
+      
+      = pfmp_badge(:pending, @pfmps_counts)
+    
+      = pfmp_badge(:completed, @pfmps_counts)
 
   %p Pour calculer le montant des allocations à envoyer, APLyPro a besoin de connaître le nombre de jours travaillés des PFMPs de chaque élève.
   %ul.fr-btns-group
@@ -30,7 +30,7 @@
   .fr-grid-row.fr-grid-row--top
     %h2.fr-col 4. PFMP validées à envoyer en paiement en 2024
 
-    .fr-badge-group.fr-ml-2w
+    .fr-badge-group.fr-ml-2w#validated_count
       = pfmp_badge(:validated, @pfmps_counts)
 
   %p APLyPro a besoin de la validation du chef d'établissement pour chaque PFMP afin d'envoyer chaque demande de paiement à l'Agence de Services et de Paiement (ASP). Les paiements commenceront début 2024.
