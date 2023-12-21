@@ -39,6 +39,11 @@ Quand("l'élève n'a réalisé aucune PFMP") do
   @student.current_schooling.pfmps.delete_all
 end
 
+Quand("l'élève a une PFMP dans un autre établissement") do
+  schooling = FactoryBot.create(:schooling, :closed, student: @student)
+  FactoryBot.create(:pfmp, schooling: schooling)
+end
+
 Alors("l'élève a {int} PFMP") do |count|
   expect(@student.pfmps.count).to eq count
 end

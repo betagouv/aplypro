@@ -6,6 +6,7 @@ class StudentsController < ClassesController
   def show
     add_breadcrumb t("pages.titles.classes.index"), classes_path
     add_breadcrumb @classe.to_s, class_path(@classe)
+    @pfmps = @student.pfmps.joins(:classe).where({ classe: { establishment: @etab } })
 
     infer_page_title(name: @student.full_name, classe: @classe)
   end

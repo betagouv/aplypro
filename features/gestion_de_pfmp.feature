@@ -41,8 +41,8 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Et que je clique sur "Modifier la PFMP"
     Alors la page contient "La PFMP a bien été mise à jour"
     Et je peux voir dans le tableau "Liste des PFMPs de l'élève"
-      | État             |  Nombre de jours | Montant
-      | Saisie à valider |               10 | 150,00 €
+      | État             |  Nombre de jours | Montant  |
+      | Saisie à valider |               10 | 150,00 € |
 
   Scénario: Le personnel de direction peut valider une PFMP individuellement
     Quand je renseigne une PFMP de 3 jours pour "Marie Curie"
@@ -65,3 +65,8 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Et que je clique sur "Confirmer la suppression"
     Alors la page contient "La PFMP de Marie Curie a bien été supprimée"
     Et la page contient "Aucune PFMP enregistrée pour le moment"
+
+  Scénario: Le personnel ne peut pas voir les PFMPs d'autres établissements
+    Sachant que l'élève a une PFMP dans un autre établissement
+    Et que je rafraîchis la page
+    Alors la page contient "Aucune PFMP enregistrée pour le moment"
