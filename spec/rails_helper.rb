@@ -22,7 +22,7 @@ require "rspec/rails"
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-# Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
+Dir[Rails.root.join("spec", "support", "**", "*.rb")].each { |f| require f }
 
 # FIXME: figure out why seeds *sometimes* get wiped, fix the offending
 # code and remove the below function.
@@ -85,6 +85,14 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  config.define_derived_metadata(file_path: %r{spec/api/student_api/}) do |meta|
+    meta[:student_api] = true
+  end
+
+  config.when_first_matching_example_defined :student_api do
+    include WebmockHelpers
+  end
 end
 
 Shoulda::Matchers.configure do |config|

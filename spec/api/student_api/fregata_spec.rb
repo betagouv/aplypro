@@ -8,8 +8,7 @@ describe StudentApi::Fregata do
   let(:establishment) { create(:establishment, :fregata_provider) }
 
   before do
-    stub_request(:get, /#{api.endpoint}/)
-      .to_return(status: 200, body: "", headers: {})
+    mock_fregata_students_with(establishment.uai, "")
   end
 
   it "queries the right endpoint with the right parameters" do
