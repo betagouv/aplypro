@@ -17,24 +17,24 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Alors la page contient "Aucune PFMP enregistrée pour le moment."
 
   Scénario: Le personnel de direction peut rajouter une PFMP
-    Quand je renseigne une PFMP de 3 jours pour "Marie Curie"
+    Quand je renseigne une PFMP de 3 jours
     Alors la page contient "La PFMP a bien été enregistrée"
     Et je peux voir dans le tableau "Liste des PFMPs de l'élève"
       | État             | Nombre de jours | Montant |
       | Saisie à valider |               3 | 45,00 € |
 
   Scénario: Le personnel de direction peut rajouter une PFMP pour toute la classe
-    Quand Je saisis une PFMP pour toute la classe "2NDEB" avec les dates "17/03/2023" et "20/03/2023"
+    Quand je saisis une PFMP pour toute la classe "2NDEB" avec les dates "17/03/2023" et "20/03/2023"
     Alors tous les élèves ont une PFMP du "17/03/2023" au "20/03/2023"
     Et la page contient "La PFMP a bien été enregistrée"
 
   Scénario: Le personnel de direction est informé d'une erreur de saisie pour toute la classe
-    Quand Je saisis une PFMP pour toute la classe "2NDEB" avec les dates "17/03/2023" et "10/03/2023"
+    Quand je saisis une PFMP pour toute la classe "2NDEB" avec les dates "17/03/2023" et "10/03/2023"
     Alors la page contient "doit être ultérieure à la date de début"
     Et la page ne contient pas "Schooling"
 
   Scénario: Le personnel de direction peut modifier une PFMP
-    Quand je renseigne une PFMP de 3 jours pour "Marie Curie"
+    Quand je renseigne une PFMP de 3 jours
     Et que je clique sur "Voir la PFMP"
     Et que je clique sur "Modifier la PFMP"
     Et que je remplis "Nombre de jours" avec "10"
@@ -45,7 +45,7 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
       | Saisie à valider |               10 | 150,00 €
 
   Scénario: Le personnel de direction peut valider une PFMP individuellement
-    Quand je renseigne une PFMP de 3 jours pour "Marie Curie"
+    Quand je renseigne une PFMP de 3 jours
     Et que je clique sur "Voir la PFMP"
     Et que je clique sur "Valider"
     Alors la page contient "La PFMP de Marie Curie a bien été validée"
@@ -54,12 +54,13 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Sachant que je me déconnecte
     Et que je me connecte en tant que personnel autorisé de l'établissement "DINUM"
     Et que je passe l'écran d'accueil
-    Et que je renseigne une PFMP de 3 jours pour "Marie Curie"
+    Et que je vais voir le profil de "Marie Curie" dans la classe de "2NDEB"
+    Et que je renseigne une PFMP de 3 jours
     Quand je clique sur "Voir la PFMP"
     Alors la page ne contient pas "Valider"
 
   Scénario: Le personnel de direction peut supprimer une PFMP
-    Quand je renseigne une PFMP de 4 jours pour "Marie Curie"
+    Quand je renseigne une PFMP de 4 jours
     Et que je clique sur "Voir la PFMP"
     Et que je clique sur "Supprimer la PFMP"
     Et que je clique sur "Confirmer la suppression"

@@ -7,7 +7,7 @@ Fonctionnalité: Complétion des PFMPs d'une classe
     Et que je passe l'écran d'accueil
     Et qu'il y a une élève "Marie Curie" au sein de la classe "2NDEB" pour une formation "Développement"
     Et qu'il y a un élève "Paul Langevin" au sein de la classe "2NDEB" pour une formation "Développement"
-    Et que Je saisis une PFMP pour toute la classe "2NDEB" avec les dates "17/03/2023" et "20/03/2023"
+    Et que je saisis une PFMP pour toute la classe "2NDEB" avec les dates "17/03/2023" et "20/03/2023"
     Et que je clique sur "Compléter 2 PFMPs"
 
   Scénario: Le personnel peut accéder à la page de complétion des PFMPs à compléter

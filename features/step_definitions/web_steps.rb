@@ -52,16 +52,12 @@ Quand("je remplis le champ {string} avec {string} dans les champs de {string}") 
   end
 end
 
-Quand("je décoche {string} dans les champs de {string}") do |label, fieldset_legend|
-  within_fieldset(fieldset_legend) do
-    uncheck label
-  end
+Quand("je décoche {string}") do |label|
+  uncheck label
 end
 
-Quand("je coche {string} dans les champs de {string}") do |label, fieldset_legend|
-  wwithin_fieldset(fieldset_legend) do
-    check label
-  end
+Quand("je coche {string}") do
+  check label
 end
 
 Quand("je clique sur {string} dans la rangée {string}") do |link, row|
