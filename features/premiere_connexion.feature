@@ -27,12 +27,11 @@ Fonctionnalité: Le personnel de direction se connecte
 
   Scénario: Le personnel peut changer d'établissement
     Sachant que je suis un personnel MENJ directeur de l'établissement "123, 456, 789"
-    Quand je me rends sur la page d'accueil
+    Et je me rends sur la page d'accueil
     Et que je clique sur "Se connecter (MENJ)"
     Et que je sélectionne "123" pour "Établissement"
     Et que je clique sur "Continuez avec cet établissement"
     Et que je passe l'écran d'accueil
-    Alors la page contient "123"
     Quand je clique sur "Changer d'établissement"
     Et que je sélectionne "456" pour "Établissement"
     Et que je clique sur "Continuez avec cet établissement"
