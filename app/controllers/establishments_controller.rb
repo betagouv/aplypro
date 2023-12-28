@@ -24,6 +24,8 @@ class EstablishmentsController < ApplicationController
   end
 
   def select
+    infer_page_title
+
     @user = current_user
   end
 
