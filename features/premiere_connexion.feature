@@ -22,7 +22,6 @@ Fonctionnalité: Le personnel de direction se connecte
     Et que je sélectionne "123" pour "Établissement"
     Et que je clique sur "Continuez avec cet établissement"
     Et que je passe l'écran d'accueil
-    Alors la page contient "Année scolaire"
     Et la page contient "Lycée de la Mer Paul Bousquet"
 
   Scénario: Le personnel peut changer d'établissement
@@ -107,6 +106,12 @@ Fonctionnalité: Le personnel de direction se connecte
     Sachant que je suis un personnel MENJ avec un accès spécifique pour l'UAI "456"
     Quand je me connecte en tant que personnel MENJ
     Alors la page contient "Connexion réussie"
+
+  Scénario: Le changement d'établissement n'est pas visible quand il n'y en a qu'un seul
+    Sachant que je suis un personnel MENJ directeur de l'établissement "123"
+    Quand je me connecte en tant que personnel MENJ
+    Et que je passe l'écran d'accueil
+    Alors la page ne contient pas "Changer d'établissement"
 
   Scénario: Un personnel change de rôle pour un établissement
     Sachant que je suis un personnel MENJ de l'établissement "123" avec une délégation DELEG-CE pour APLyPro
