@@ -77,7 +77,7 @@ class Establishment < ApplicationRecord
   def contract_type
     case private_contract_type_code
     when *CONTRACTS_STATUS[:private_allowed]
-      :private_allowed
+      :private
     when *CONTRACTS_STATUS[:public]
       :public
     else
@@ -85,8 +85,8 @@ class Establishment < ApplicationRecord
     end
   end
 
-  def private_allowed?
-    contract_type == :private_allowed
+  def private?
+    contract_type == :private
   end
 
   def public?

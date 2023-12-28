@@ -10,11 +10,15 @@ FactoryBot.define do
     city { Faker::Address.city }
     address_line1 { Faker::Address.street_address }
     address_line2 { Faker::Address.secondary_address }
-    private_contract_type_code { "31" }
+    private_contract_type_code { "99" }
     academy_code { "10" }
     academy_label { "Marseille" }
     students_provider { nil }
     ministry { "MINISTERE DE L'EDUCATION NATIONALE" }
+
+    trait :private do
+      private_contract_type_code { "31" }
+    end
 
     trait :sygne_provider do
       students_provider { "sygne" }
