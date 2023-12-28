@@ -20,7 +20,7 @@ class Mef < ApplicationRecord
   def bop_code(establishment)
     return ministry if ministry != "menj"
 
-    if establishment.private_allowed?
+    if establishment.private?
       "enpr"
     elsif establishment.public?
       "enpu"
