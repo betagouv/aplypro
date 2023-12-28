@@ -20,12 +20,16 @@ class Payment < ApplicationRecord
     )
   end
 
+  def mark_ready!
+    state_machine.transition_to!(:ready)
+  end
+
   def process!
     state_machine.transition_to!(:processing)
   end
 
   def complete!
-    state_machine.transition_to!(:success)
+    state_machine.transition_to!(:successful)
   end
 
   def fail!
