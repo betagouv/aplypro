@@ -82,6 +82,8 @@ fr:
     faq: F.A.Q.
   pages:
     titles:
+      establishments:
+        select: Choix de l'établissement
       invitations:
         index: Gestion des accès
         new: Autoriser un email à accéder à APLyPro
