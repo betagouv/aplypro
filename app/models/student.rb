@@ -45,7 +45,7 @@ class Student < ApplicationRecord
   end
 
   def used_allowance
-    payments.in_state(:success).map(&:amount).sum
+    payments.in_state(:successful).map(&:amount).sum
   end
 
   def allowance_left
