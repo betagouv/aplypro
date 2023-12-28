@@ -11,6 +11,10 @@ Rails.application.routes.draw do
 
     post "create_attributive_decisions"
     post "download_attributive_decisions"
+
+    collection do
+      get "select"
+    end
   end
 
   resources :classes, only: %i[show index] do
@@ -19,6 +23,13 @@ Rails.application.routes.draw do
       post "create_bulk_pfmp"
       get "bulk_pfmp_completion"
       put "update_bulk_pfmp"
+    end
+
+    resources :ribs, only: [] do
+      collection do
+        get "missing"
+        post "bulk_create"
+      end
     end
 
     resources :students, only: %i[show] do

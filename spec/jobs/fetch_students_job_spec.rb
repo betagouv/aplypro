@@ -5,16 +5,16 @@ require "rails_helper"
 RSpec.describe FetchStudentsJob do
   include ActiveJob::TestHelper
 
-  let(:etab) { create(:establishment, :sygne_provider) }
+  let(:establishment) { create(:establishment, :sygne_provider) }
 
   before do
     allow(StudentApi).to receive(:fetch_students!)
   end
 
   it "calls the matchingStudentApi proxy" do
-    described_class.perform_now(etab)
+    described_class.perform_now(establishment)
 
-    expect(StudentApi).to have_received(:fetch_students!).with(etab)
+    expect(StudentApi).to have_received(:fetch_students!).with("sygne", establishment.uai)
   end
 
   context "when the underlying API fails" do
@@ -24,7 +24,7 @@ RSpec.describe FetchStudentsJob do
 
     it "rescues and retry" do
       perform_enqueued_jobs do
-        described_class.perform_now(etab)
+        described_class.perform_now(establishment)
       rescue Faraday::UnauthorizedError # rubocop:disable Lint/SuppressedException
       end
 

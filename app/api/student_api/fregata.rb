@@ -17,7 +17,7 @@ module StudentApi
     def fetch!
       @now = DateTime.now.httpdate
 
-      params = { rne: @establishment.uai, anneeScolaireId: fregata_year }
+      params = { rne: @uai, anneeScolaireId: fregata_year }
       headers = { "Authorization" => signature_header, "Date" => @now }
 
       client.get(endpoint, params, headers).body

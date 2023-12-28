@@ -27,6 +27,13 @@ Sachantque(
   @student.schoolings.create!(classe: @classe)
 end
 
+Sachantque("il y a un(e) élève avec une scolarité fermée qui a une PFMP") do
+  @etab ||= User.last.establishment
+  classe = @etab.classes.first || FactoryBot.create(:classe, establishment: establishment)
+  schooling = FactoryBot.create(:schooling, :closed, classe: classe)
+  FactoryBot.create(:pfmp, schooling: schooling)
+end
+
 Alors("le fil d'Ariane affiche {string}") do |path|
   components = path.split(" > ")
 
@@ -39,23 +46,27 @@ Quand("l'élève n'a réalisé aucune PFMP") do
   @student.current_schooling.pfmps.delete_all
 end
 
+Quand("l'élève a une PFMP dans un autre établissement") do
+  schooling = FactoryBot.create(:schooling, :closed, student: @student)
+  FactoryBot.create(:pfmp, schooling: schooling)
+end
+
 Alors("l'élève a {int} PFMP") do |count|
   expect(@student.pfmps.count).to eq count
 end
 
-# FIXME: this is hacks
-Quand("je consulte le profil de l'élève {string}") do |name|
-  student = find_student_by_full_name(name)
-
-  visit class_student_path(student.classe, student)
-end
-
-Quand("je renseigne les coordonnées bancaires de l'élève {string} de la classe {string}") do |name, _label|
+Quand("je renseigne les coordonnées bancaires de l'élève {string} de la classe {string}") do |name, label|
   steps %(
-    Quand je consulte le profil de l'élève "#{name}"
+    Quand je vais voir la classe "#{label}"
+    Et que je clique sur "Voir le profil de #{name}"
     Et que je clique sur "Saisir les coordonnées bancaires"
     Et que je renseigne des coordonnées bancaires
   )
+end
+
+Quand("l'élève {string} a déjà des coordonnées bancaires") do |name|
+  student = find_student_by_full_name(name)
+  FactoryBot.create(:rib, student: student)
 end
 
 Quand("je clique sur {string} dans le menu principal") do |item|
@@ -68,9 +79,15 @@ Quand("je consulte la liste des classes") do
   steps %(Quand je clique sur "Élèves" dans le menu principal)
 end
 
-Quand("je renseigne une PFMP de {int} jours pour {string}") do |days, name|
+Quand("je vais voir le profil de {string} dans la classe de {string}") do |name, label|
   steps %(
-    Quand je consulte le profil de l'élève "#{name}"
+    Quand je consulte la classe de "#{label}"
+    Et que je clique sur "Voir le profil de #{name}"
+  )
+end
+
+Quand("je renseigne une PFMP de {int} jours") do |days|
+  steps %(
     Quand je clique sur "Ajouter une PFMP"
     Et que je remplis "Date de début" avec "17/03/2023"
     Et que je remplis "Date de fin" avec "20/03/2023"
@@ -87,7 +104,11 @@ Sachantque(
 end
 
 Quand("je vais voir la classe {string}") do |label|
-  visit class_path(Classe.find_by(label:))
+  steps %(
+    Quand je me rends sur la page d'accueil
+    Et que je consulte la liste des classes
+    Et je clique sur "Voir la classe" dans la rangée "#{label}"
+  )
 end
 
 Alors("tous les élèves ont une PFMP du {string} au {string}") do |start_date, end_date|
@@ -129,7 +150,7 @@ Quand("je renseigne {int} jours pour la dernière PFMP de {string}") do |days, n
 end
 
 Quand(
-  "Je saisis une PFMP pour toute la classe {string} avec les dates {string} et {string}"
+  "je saisis une PFMP pour toute la classe {string} avec les dates {string} et {string}"
 ) do |classe, date_debut, date_fin|
   steps %(
     Quand je vais voir la classe "#{classe}"

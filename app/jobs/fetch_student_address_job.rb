@@ -4,7 +4,9 @@ class FetchStudentAddressJob < ApplicationJob
   queue_as :default
 
   def perform(student)
-    api = StudentApi.api_for(student.current_schooling.establishment)
+    establishment = student.current_schooling.establishment
+
+    api = StudentApi.api_for(establishment.students_provider, establishment.uai)
 
     api
       .fetch_student_data!(student.ine)

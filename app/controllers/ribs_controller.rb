@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class RibsController < StudentsController
-  before_action :set_classe, :set_student
-  before_action :set_rib, except: %i[new create]
+  before_action :set_classe
+  before_action :set_student, except: %i[missing bulk_create]
+  before_action :set_rib, only: %i[edit update destroy confirm_deletion]
 
   def new
     add_breadcrumb t("pages.titles.classes.index"), classes_path
@@ -50,6 +51,31 @@ class RibsController < StudentsController
     redirect_to class_student_path(@classe, @student), notice: t("flash.ribs.destroyed", name: @student.full_name)
   end
 
+  def missing
+    add_breadcrumb t("pages.titles.classes.index"), classes_path
+    add_breadcrumb t("pages.titles.classes.show", name: @classe), class_path(@classe)
+
+    infer_page_title
+
+    @ribs = @classe
+            .active_students
+            .includes(:rib)
+            .where("ribs.id": nil)
+            .map { |student| Rib.new(student: student, personal: true, name: student.full_name) }
+  end
+
+  def bulk_create
+    @ribs = bulk_ribs_params
+            .map { |rib_params| Rib.new(rib_params) }
+            .reject { |rib| [rib.iban, rib.bic].all?(&:blank?) }
+
+    if @ribs.each(&:save).all?(&:valid?)
+      redirect_to class_path(@classe), notice: t("ribs.create.success")
+    else
+      render :missing, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def rib_params
@@ -59,6 +85,21 @@ class RibsController < StudentsController
       :name,
       :personal
     ).with_defaults(student: @student)
+  end
+
+  def bulk_ribs_params
+    params
+      .require(:ribs)
+      .values
+      .map do |rib_params|
+        rib_params.permit(
+          :iban,
+          :bic,
+          :name,
+          :personal,
+          :student_id
+        )
+      end
   end
 
   def set_student

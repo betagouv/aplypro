@@ -1,6 +1,9 @@
 = render partial: "alert_apprentices"
 
 .actions.fr-btns-group.fr-btns-group--inline
+  - if @nb_missing_ribs > 0
+    = link_to "Saisir #{@nb_missing_ribs} #{"coordonnée".pluralize(@nb_missing_ribs)} #{"bancaire".pluralize(@nb_missing_ribs)}", missing_class_ribs_path(@classe), class: 'fr-btn fr-btn--primary'
+  
   = link_to 'Saisir une PFMP pour toute la classe', bulk_pfmp_class_path(@classe), class: 'fr-btn fr-btn--primary'
 
   - if @nb_pending_pfmp > 0
@@ -9,7 +12,6 @@
       = dsfr_badge(status: :new, classes: ["fr-badge--sm", "fr-ml-1w"]) do
         = t("pfmps.states.pending")
   
-
 .fr-table.fr-table--no-caption
   %table
     %caption Liste des élèves
@@ -18,11 +20,11 @@
         Élèves
         = "(#{@nb_students})"
       %th{scope: "col"} 
+        Coordonnées bancaires
+        = "(#{@nb_ribs}/#{@nb_students})"
+      %th{scope: "col"} 
         PFMPs
         = "(#{@nb_pfmps})"
-      %th{scope: "col"} 
-        RIB présent
-        = "(#{@nb_ribs}/#{@nb_students})"
 
     %tbody
       - @classe.active_students.each do |student|
@@ -30,12 +32,14 @@
           %td
             = dsfr_link_to student.index_name, class_student_path(@classe, student), title: t("links.students.show", name: student)
           %td
+            - if student.rib.present?
+              %p= dsfr_badge(status: :success) { "Saisies" }
+              = dsfr_link_to "Modifier les coordonnées bancaires", edit_class_student_rib_path(@classe, student, student.rib)
+            - else
+              %p= dsfr_badge(status: :error) { "Non saisies" }
+              = dsfr_link_to "Saisir les coordonnées bancaires", new_class_student_rib_path(@classe, student)
+          %td
             %ul
               - student.pfmps.each do |pfmp|
                 %li= dsfr_link_to pfmp.listing_to_s, class_student_pfmp_path(@classe, student, pfmp)
               %li= dsfr_link_to "Ajouter une PFMP individuelle", new_class_student_pfmp_path(@classe, student)
-          %td
-            - if student.rib.present?
-              = dsfr_badge(status: :success) { "Oui"}
-            - else
-              = dsfr_link_to "Saisir les coordonnées bancaires", new_class_student_rib_path(@classe, student)

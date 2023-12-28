@@ -73,6 +73,10 @@ module IdentityMappers
         .map { |uai| find_or_create_establishment!(uai) }
     end
 
+    def establishments_in_responsibility_and_delegated
+      establishments_in_responsibility + establishments_delegated
+    end
+
     def find_or_create_establishment!(uai)
       Establishment
         .find_or_create_by!(uai: uai)

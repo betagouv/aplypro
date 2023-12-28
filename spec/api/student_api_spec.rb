@@ -3,27 +3,23 @@
 require "rails_helper"
 
 describe StudentApi do
-  context "when asked for a FIM establishment" do
-    let(:etab) { create(:establishment, :sygne_provider) }
+  describe ".api_for" do
+    subject(:api_for) { described_class.api_for(provider, "123") }
 
-    it "uses an instance of the SYGNE API" do
-      expect(described_class.api_for(etab)).to be_a StudentApi::Sygne
+    %w[sygne fregata].each do |provider|
+      context "when asked for a #{provider.upcase} API" do
+        let(:provider) { provider }
+
+        it { is_expected.to be_a "StudentApi::#{provider.capitalize}".constantize }
+      end
     end
-  end
 
-  context "when asked for a MASA establishment" do
-    let(:etab) { create(:establishment, :fregata_provider) }
+    context "when asked for an unknown provider" do
+      let(:provider) { "foobar" }
 
-    it "uses an instance of the Fregata API" do
-      expect(described_class.api_for(etab)).to be_a StudentApi::Fregata
-    end
-  end
-
-  context "when asked for an unknown provider" do
-    let(:etab) { create(:establishment, students_provider: nil) }
-
-    it "raises an error" do
-      expect { described_class.fetch_students!(etab) }.to raise_error(/no matching API/)
+      it "raises an error" do
+        expect { api_for }.to raise_error(/no matching API/)
+      end
     end
   end
 end

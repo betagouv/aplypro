@@ -1,3 +1,5 @@
 .etab-banner
   .fr-container
-    %span.fr-text--sm= @etab
+    .fr-grid-row.fr-text--sm
+      .fr-col-sm.fr-col-12= @etab
+      = dsfr_link_to "Changer d'établissement", select_establishments_path, class: "fr-text--sm" #if current_user.establishments.many?

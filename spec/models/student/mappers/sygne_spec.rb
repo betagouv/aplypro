@@ -6,7 +6,7 @@ require "./mock/factories/api_student"
 require "./spec/support/shared/student_mapper"
 
 describe Student::Mappers::Sygne do
-  let(:establishment) { create(:establishment, :sygne_provider) }
+  let(:uai) { create(:establishment, :sygne_provider).uai }
   let(:normal_payload) { build_list(:sygne_student, 10, classe: "1MELEC") }
 
   it_behaves_like "a student mapper" do
@@ -23,11 +23,11 @@ describe Student::Mappers::Sygne do
   end
 
   describe "schoolings reconciliation" do
-    subject(:mapper) { described_class.new(next_data, establishment) }
+    subject(:mapper) { described_class.new(next_data, uai) }
 
     let(:student) { Student.find_by(ine: normal_payload.last["ine"]) }
 
-    before { described_class.new(normal_payload, establishment).parse! }
+    before { described_class.new(normal_payload, uai).parse! }
 
     context "when a student has disappeared" do
       let(:next_data) { normal_payload.dup.tap(&:pop) }

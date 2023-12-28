@@ -1,16 +1,10 @@
 %h1 Sélection de l'établissement
 
 .fr-grid-row
-  .fr-col-7
+  .fr-col-md-7
     %p
       Plusieurs établissements sont renseignés dans votre
       profil. Veuillez sélectionner celui que vous désirez piloter dans
       la liste ci-dessous.
 
-    .fr-select-group.fr-col-7
-      = form_with model: @user, builder: DsfrFormBuilder do |form|
-        .fr-input-group
-          = form.label :establishment_id, "Établissement", class: 'fr-label'
-          = form.select :establishment_id, @user.establishments.map { |e| [e.select_label, e.id] }, {}, { class: 'fr-select' }
-
-        = form.submit "Continuez avec cet établissement", class: 'fr-btn'
+    = render "establishments/select_form"

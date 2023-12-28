@@ -5,11 +5,12 @@ class Student
     class Base
       include Student::Mappers::Errors
 
-      attr_reader :payload, :establishment, :year
+      attr_reader :payload, :uai, :year, :establishment
 
-      def initialize(payload, establishment)
+      def initialize(payload, uai)
         @payload = payload
-        @establishment = establishment
+        @uai = uai
+        @establishment = Establishment.find_by(uai: uai)
         @year = ENV.fetch("APLYPRO_SCHOOL_YEAR")
       end
 
@@ -25,7 +26,7 @@ class Student
             rescue StandardError => e
               Sentry.capture_exception(
                 SchoolingParsingError.new(
-                  "Schooling parsing failed for #{establishment}: #{e.message}"
+                  "Schooling parsing failed for #{uai}: #{e.message}"
                 )
               )
             end
@@ -61,7 +62,7 @@ class Student
         Classe.find_or_create_by!(
           label:,
           mef:,
-          establishment: establishment,
+          establishment:,
           start_year: @year
         )
       rescue ClasseParsingError => e
@@ -92,17 +93,17 @@ class Student
       def map_classe_attributes(attrs)
         self.class::ClasseMapper.new.call(attrs).values_at(:label, :mef_code)
       rescue StandardError => e
-        raise ClasseParsingError.new, "Classe parsing failure for #{establishment}: #{e.message}"
+        raise ClasseParsingError.new, "Classe parsing failure for #{uai}: #{e.message}"
       end
 
       def map_student_attributes(attrs)
         self.class::StudentMapper.new.call(attrs)
       rescue StandardError => e
-        raise StudentParsingError, "Student parsing failure for #{establishment}: #{e.message}"
+        raise StudentParsingError, "Student parsing failure for #{uai}: #{e.message}"
       end
 
       def inspect
-        "#{self.class}<UAI: #{establishment.uai}>"
+        "#{self.class}<UAI: #{uai}>"
       end
     end
   end

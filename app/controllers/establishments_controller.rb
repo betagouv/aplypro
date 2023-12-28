@@ -23,6 +23,10 @@ class EstablishmentsController < ApplicationController
     zipline(documents, attributive_decisions_archive_name)
   end
 
+  def select
+    @user = current_user
+  end
+
   private
 
   def attributive_decisions_archive_name

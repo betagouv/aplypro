@@ -1,0 +1,39 @@
+= form_with scope: :ribs, url: bulk_create_class_ribs_path(@classe), method: :post do |f|
+  - @ribs.each do |rib|
+    = f.fields_for rib.student_id.to_s, rib do |form|
+      %fieldset.fr-fieldset.fr-m-0.fr-p-0
+        %legend.hidden= rib.student.index_name
+
+        .gray-panel.fr-mb-3w.fr-container.fr-p-3w
+          .fr-grid-row
+            .fr-col-md-5.fr-col-12.fr-pr-0.fr-pr-md-2w.fr-pb-2w.fr-pb-md-0
+
+              .fr-grid-md-row.fr-grid-row--middle
+                .fr-col.fr-mb-3w
+                  %h2= dsfr_link_to rib.student.index_name, class_student_path(@classe, rib.student), title: t("links.students.show", name: rib.student), tabindex: "1", class: 'fr-h3'
+                  = form.hidden_field :student_id
+
+                .fr-checkbox-group
+                  = form.check_box :personal
+                  = form.label :personal, t("activerecord.attributes.rib.personal_true"), classe: "fr-label"
+
+            .fr-col-md-7.fr-col-12
+              .fr-mb-2w
+                = form.label :name, "Titulaire du compte", class: "hidden"
+                = form.text_field :name, class: "fr-input", placeholder: "Titulaire du compte"
+                - rib.errors.full_messages_for(:name).each do |error_message|
+                  %p.fr-error-text= error_message
+
+              .fr-grid-row.fr-grid-row--middle.fr-grid-row--gutters
+                .fr-col-sm-8.fr-col-12
+                  = form.label :iban, "IBAN", class: "hidden"
+                  = form.text_field :iban, class: "fr-input fr-input--code", placeholder: "IBAN"
+                  - rib.errors.full_messages_for(:iban).each do |error_message|
+                    %p.fr-error-text= error_message
+
+                .fr-col-sm-4.fr-col-12
+                  = form.label :bic, "BIC", class: "hidden"
+                  = form.text_field :bic, class: "fr-input fr-input--code", placeholder: "BIC"
+                  - rib.errors.full_messages_for(:bic).each do |error_message|
+                    %p.fr-error-text= error_message
+  = f.submit "Enregistrer les coordonnées bancaires saisies", class: "fr-btn fr-btn-primary"

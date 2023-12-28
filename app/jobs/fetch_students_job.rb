@@ -16,6 +16,6 @@ class FetchStudentsJob < ApplicationJob
   end
 
   def perform(establishment)
-    StudentApi.fetch_students!(establishment)
+    StudentApi.fetch_students!(establishment.students_provider, establishment.uai)
   end
 end

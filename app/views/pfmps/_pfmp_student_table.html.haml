@@ -6,7 +6,7 @@
       %th{scope: "col"} Nombre de jours
       %th{scope: "col"} Montant
     %tbody
-      - @student.pfmps.each do |pfmp|
+      - @pfmps.each do |pfmp|
         %tr
           %td= dsfr_link_to pfmp.listing_to_s.html_safe, class_student_pfmp_path(@classe, @student, pfmp), title: "Voir la PFMP"
           %td= pfmp.day_count

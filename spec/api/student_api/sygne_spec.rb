@@ -4,7 +4,7 @@ require "rails_helper"
 require "./mock/factories/api_student"
 
 describe StudentApi::Sygne do
-  subject(:api) { described_class.new(establishment) }
+  subject(:api) { described_class.new(establishment.uai) }
 
   let(:establishment) { create(:establishment, :sygne_provider) }
   let(:payload) { JSON.generate({ access_token: "foobar", token_type: "Bearer" }) }

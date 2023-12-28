@@ -2,10 +2,10 @@
 
 module StudentApi
   class Base
-    attr_reader :establishment
+    attr_reader :uai
 
-    def initialize(establishment)
-      @establishment = establishment
+    def initialize(uai)
+      @uai = uai
     end
 
     def base_url
@@ -20,8 +20,8 @@ module StudentApi
       @response ||= fetch!
     end
 
-    def parse
-      mapper.new(response, establishment).parse!
+    def fetch_and_parse!
+      mapper.new(response, uai).parse!
     end
 
     def address_mapper
@@ -33,13 +33,11 @@ module StudentApi
     end
 
     def inspect
-      "#{self.class.name}: #{establishment.uai}"
+      "#{self.class.name}: #{uai}"
     end
 
     def clear!
       @response = nil
     end
-
-    alias fetch_and_parse! parse
   end
 end
