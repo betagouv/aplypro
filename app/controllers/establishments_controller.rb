@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 class EstablishmentsController < ApplicationController
+  include RoleCheck
+
   before_action :check_director,
-                :update_and_check_confirmed_director,
+                :update_confirmed_director!,
+                :check_confirmed_director_for_attributive_decision,
                 only: :create_attributive_decisions
 
   include Zipline
@@ -34,16 +37,8 @@ class EstablishmentsController < ApplicationController
 
   private
 
-  def check_director
-    redirect_to home_path, status: :forbidden and return unless current_user.can_try_to_generate_attributive_decisions?
-  end
-
-  def update_and_check_confirmed_director
-    update_confirmed_director!
-
-    return if current_user.can_generate_attributive_decisions?
-
-    redirect_to home_path, alert: t("panels.attributive_decisions.not_director") and return
+  def check_confirmed_director_for_attributive_decision
+    check_confirmed_director(alert_message: t("panels.attributive_decisions.not_director"))
   end
 
   def attributive_decisions_archive_name
@@ -58,9 +53,5 @@ class EstablishmentsController < ApplicationController
       .schoolings
       .without_attributive_decisions
       .update_all(generating_attributive_decision: true) # rubocop:disable Rails/SkipsModelValidations
-  end
-
-  def update_confirmed_director!
-    @etab.update(confirmed_director: current_user) if params[:confirmed_director] == "1"
   end
 end
