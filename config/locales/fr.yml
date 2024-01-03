@@ -241,4 +241,9 @@ fr:
       generate:
         one: Éditer la décision d'attribution manquante
         other: Éditer %{count} décisions d'attribution manquantes
+      confirm_director: Je confirme que <strong>je suis le responsable légal de l'établissement</strong> et que mon nom peut être inscrit sur les documents générés
+      confirm_director_information: "(Vous remplacerez %{name} en tant que chef d'établissement)"
       not_allowed: Vous n'avez pas le droit d'éditer les décisions d'attribution
+      not_director:
+        title: Vous devez être chef d'établissement
+        content: Si vous êtes adjoint, veuillez contacter votre chef d'établissement pour qu'il édite les décisions d'attributions et que son nom apparaisse dans les documents générés.

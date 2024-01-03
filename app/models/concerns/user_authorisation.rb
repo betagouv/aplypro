@@ -8,6 +8,10 @@ module UserAuthorisation
       establishment_user_roles.find_by({ establishment_id: establishment.id })
     end
 
+    def confirmed_director?
+      establishment.confirmed_director == self
+    end
+
     def director?
       current_role.dir?
     end
@@ -28,8 +32,12 @@ module UserAuthorisation
       !can_validate?
     end
 
-    def can_generate_attributive_decisions?
+    def can_try_to_generate_attributive_decisions?
       director?
+    end
+
+    def can_generate_attributive_decisions?
+      confirmed_director?
     end
   end
 end
