@@ -58,3 +58,16 @@
 .hidden {
   display: none;
 }
+
+/* Manage spacing between buttons for home panel */
+.buttons-group button, .buttons-group input[type="submit"] {
+  margin-bottom: 0;
+  width: 100%;
+  justify-content: center;
+}
+.buttons-group * {
+  margin-bottom: 1rem;
+}
+.buttons-group *:last-child {
+  margin-bottom: 0;
+}

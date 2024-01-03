@@ -32,5 +32,12 @@ FactoryBot.define do
           .update!(role: :authorised)
       end
     end
+
+    trait :confirmed_director do
+      director
+      after(:create) do |user, _|
+        user.establishment.update(confirmed_director: user)
+      end
+    end
   end
 end

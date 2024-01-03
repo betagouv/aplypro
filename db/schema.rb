@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_04_101419) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_04_143944) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -83,6 +83,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_04_101419) do
     t.string "academy_label"
     t.string "students_provider"
     t.string "ministry"
+    t.bigint "confirmed_director_id"
+    t.index ["confirmed_director_id"], name: "index_establishments_on_confirmed_director_id"
     t.index ["uai"], name: "index_establishments_on_uai", unique: true
   end
 
@@ -221,10 +223,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_04_101419) do
 
   create_table "wages", force: :cascade do |t|
     t.integer "daily_rate", null: false
-    t.string "mefstat4", null: false
     t.integer "yearly_cap", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "mefstat4", null: false
     t.integer "ministry", null: false
     t.jsonb "mef_codes"
   end
@@ -235,6 +237,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_04_101419) do
   add_foreign_key "establishment_user_roles", "establishments"
   add_foreign_key "establishment_user_roles", "users"
   add_foreign_key "establishment_user_roles", "users", column: "granted_by_id"
+  add_foreign_key "establishments", "users", column: "confirmed_director_id"
   add_foreign_key "invitations", "establishments"
   add_foreign_key "invitations", "users"
   add_foreign_key "payment_transitions", "payments"

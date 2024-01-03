@@ -47,7 +47,7 @@ RSpec.describe Schooling do
 
     context "when an attributive decision is generated" do
       before do
-        create(:user, :director, establishment: schooling.establishment)
+        create(:user, :confirmed_director, establishment: schooling.establishment)
       end
 
       it "bumps the version" do

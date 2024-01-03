@@ -15,6 +15,7 @@ FactoryBot.define do
     academy_label { "Marseille" }
     students_provider { nil }
     ministry { "MINISTERE DE L'EDUCATION NATIONALE" }
+    confirmed_director { nil }
 
     trait :sygne_provider do
       students_provider { "sygne" }

@@ -10,4 +10,10 @@ class EstablishmentUserRole < ApplicationRecord
 
   validates :user,
             uniqueness: { scope: %i[establishment_id] }
+
+  after_save :revoke_confirmed_director_if_not_director
+
+  def revoke_confirmed_director_if_not_director
+    establishment.update(confirmed_director: nil) if role == "authorised" && establishment.confirmed_director == user
+  end
 end
