@@ -1,0 +1,70 @@
+
+.fr-grid-row.fr-grid-row--middle
+  .gray-panel.fr-mb-3w.fr-p-3w.fr-mr-md-3w
+    %h2.fr-h4
+      = @total_amount
+      € à valider
+    .fr-grid-row.fr-grid-row--middle
+      .fr-mr-2w
+        = @pfmps.count
+        = "PFMP".pluralize @pfmps.count
+      = status_badge(:completed)
+
+  .gray-panel.fr-col-md.fr-mb-3w.fr-p-3w
+    %h2.fr-h4.mef-label= @classe.mef.label
+    .fr-grid-row
+      .fr-mr-3w
+        %strong
+          = @classe.mef.wage.daily_rate
+          € 
+        par jour travaillé
+      %div
+        %strong
+          = @classe.mef.wage.yearly_cap
+          € 
+        de plafond annuel
+
+= form_with scope: :validation, method: :post, url: validation_class_path(@classe) do |form|
+  .fr-table.fr-table--no-caption.fr-mb-3w
+    %table
+      %caption Liste des pfmps à valider
+      %thead
+        %th{scope: "col"}
+          Élèves
+        %th{scope: "col"} 
+          PFMP
+        %th{scope: "col"} 
+          Nombre de jours
+        %th{scope: "col"} 
+          Montant
+
+      %tbody
+        = form.collection_check_boxes "pfmp_ids", @pfmps, :id, :student_index_name, include_hidden: false do |f|
+          - pfmp = f.object
+          %tr
+            %td
+              .fr-grid-row
+                .fr-checkbox-group
+                  = f.check_box checked: true
+                  = f.label class: 'fr-label'
+                %ul.fr-badge-group.fr-ml-md-2w
+                  %li= attributive_decision_badge(pfmp.schooling)
+                  %li= rib_badge(pfmp.student)
+            %td
+              = link_to pfmp.formatted_dates, edit_class_student_pfmp_path(@classe, pfmp.student, pfmp), class: "fr-link", title: pfmp.full_dates
+            %td
+              = pfmp.day_count
+              jours
+            %td
+              = pfmp.calculate_amount
+              €
+
+  .fr-grid-row.fr-grid-row--top
+    .fr-mb-2w.fr-mr-md-2w
+      = form.submit t("validations.validate"), class: "fr-btn fr-btn--primary"
+    .fr-checkbox-group.fr-mb-2w.fr-mt-md-1w
+      = check_box_tag :confirmed_director, checked: current_user.confirmed_director?
+      = label_tag :confirmed_director, class: "fr-label" do
+        = t("validations.confirm_director").html_safe
+        .fr-text--sm.fr-mt-1w= confirmed_director_information
+

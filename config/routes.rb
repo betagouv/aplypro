@@ -23,6 +23,8 @@ Rails.application.routes.draw do
       post "create_bulk_pfmp"
       get "bulk_pfmp_completion"
       put "update_bulk_pfmp"
+      get "validation", to: "validations#show"
+      post "validation", to: "validations#validate"
     end
 
     resources :ribs, only: [] do
@@ -47,6 +49,8 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  resources :validations, only: :index
 
   resources :pfmps, only: %i[index] do
     collection do

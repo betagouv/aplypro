@@ -93,4 +93,20 @@ RSpec.describe Mef do
       end
     end
   end
+
+  describe "with_wage scope" do
+    let(:mefs) { create_list(:mef, 4) }
+    let(:wages) { mefs.map(&:wage) }
+    let(:mefs_collection) { described_class.where(id: mefs.pluck(:id)) }
+
+    before do
+      wages[0].update(mef_codes: [mefs[0].code, "123", "456"])
+      wages[1].update(mef_codes: ["123", mefs[1].code, "456"])
+      wages[2].update(mef_codes: ["123", "456", mefs[2].code])
+    end
+
+    it "joins the correct wages" do
+      expect(mefs_collection.with_wages.pluck(:"wages.id")).to match_array(wages.pluck(:id))
+    end
+  end
 end

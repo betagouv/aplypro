@@ -71,3 +71,7 @@
 .buttons-group *:last-child {
   margin-bottom: 0;
 }
+
+.mef-label {
+  word-break: break-all;
+}

@@ -1,0 +1,13 @@
+- if @classes.empty?
+  Il n'y a aucune PFMP à valider pour l'instant.
+- else
+  .fr-container--fluid
+    - @classes.each do |classe|
+      = link_to validation_class_path(classe) do
+        .gray-panel.fr-p-3w.fr-mb-3w
+          %h2.fr-h3= classe.to_long_s
+          .fr-grid-row.fr-grid-row--middle
+            .fr-mr-2w
+              = @classes_pfmps_counts[classe.id]
+              PFMPs
+            = status_badge(:completed)
