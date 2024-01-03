@@ -4,7 +4,13 @@ class EstablishmentsController < ApplicationController
   include Zipline
 
   def create_attributive_decisions
-    redirect_to classes_path, status: :forbidden and return if !current_user.can_generate_attributive_decisions?
+    redirect_to home_path, status: :forbidden and return if !current_user.can_generate_attributive_decisions?
+
+    update_confirmed_director!
+
+    unless current_user.confirmed_director?
+      redirect_to home_path, alert: t("panels.attributive_decisions.not_director") and return
+    end
 
     mark_attributive_decision_generation!
 
@@ -43,5 +49,9 @@ class EstablishmentsController < ApplicationController
       .schoolings
       .without_attributive_decisions
       .update_all(generating_attributive_decision: true) # rubocop:disable Rails/SkipsModelValidations
+  end
+
+  def update_confirmed_director!
+    current_user.update_confirmed_director(params[:confirmed_director])
   end
 end

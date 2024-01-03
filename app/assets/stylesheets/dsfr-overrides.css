@@ -56,3 +56,7 @@ code {
   font-style: italic;
   Background: var(--artwork-background-beige-gris-galet);
 }
+
+.fr-label {
+  white-space: break-spaces;
+}

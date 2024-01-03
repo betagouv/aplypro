@@ -36,4 +36,18 @@ RSpec.describe Establishment do
       end
     end
   end
+
+  describe "confirmed_director" do
+    subject { establishment.users.confirmed_director }
+
+    context "when there is an existing confirmed director" do
+      let!(:confirmed_director) { create(:user, :confirmed_director, establishment: establishment) }
+
+      it { is_expected.to eq confirmed_director }
+    end
+
+    context "when there isn't any existing confirmed director" do
+      it { is_expected.to be_nil }
+    end
+  end
 end

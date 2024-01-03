@@ -47,7 +47,7 @@ class AttributeDecisionGenerator
 
     composer.list do |list|
       list.text("les lycéens professionnels inscrits en formation initiale et sous statut scolaire dans les établissements et organismes de formation publics ou privés sous contrat d’association ET")
-     list.text("qui préparent un diplôme professionnel de niveau 3 ou 4 délivré par le ministère chargé de l’éducation, de l’agriculture ou de la mer ou inscrits au titre d’une action d’adaptation professionnelle ET")
+      list.text("qui préparent un diplôme professionnel de niveau 3 ou 4 délivré par le ministère chargé de l’éducation, de l’agriculture ou de la mer ou inscrits au titre d’une action d’adaptation professionnelle ET")
       list.text("qui réalisent des PFMP encadrées par une convention de stage.")
     end
 
@@ -178,9 +178,7 @@ class AttributeDecisionGenerator
   def summary
     establishment = @schooling.establishment
 
-     # FIXME: on ne peut pas distinguer les chefs d'établissements et
-     # leurs adjoints (FrEduRneResp + FrEduFonctAdm)
-    director = establishment.users.directors.first
+    director = establishment.users.confirmed_director || establishment.users.directors.first
 
     composer.text("Numéro de dossier administratif : #{student.asp_file_reference}")
     composer.text("Numéro de décision attributive : #{schooling.attributive_decision_number}")

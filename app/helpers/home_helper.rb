@@ -18,7 +18,7 @@ module HomeHelper
       t("panels.attributive_decisions.download", count: count),
       establishment_download_attributive_decisions_path(establishment),
       method: :post,
-      class: "fr-btn fr-btn--primary fr-mb-0",
+      class: "fr-btn fr-btn--primary",
       data: { turbo: false }
     )
   end
@@ -28,12 +28,7 @@ module HomeHelper
 
     count = establishment.current_schoolings.without_attributive_decisions.count
 
-    button_to(
-      t("panels.attributive_decisions.generate", count: count),
-      establishment_create_attributive_decisions_path(establishment),
-      class: "fr-btn fr-btn--secondary",
-      data: { turbo: false }
-    )
+    render partial: "home/attributive_decision_form", locals: { establishment: establishment, count: count }
   end
 
   def cannot_generate_attributive_decisions_button

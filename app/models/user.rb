@@ -37,4 +37,19 @@ class User < ApplicationRecord
   def to_s
     name
   end
+
+  def confirmed_director?
+    establishment_user_roles.exists?(establishment: establishment, confirmed_director: true)
+  end
+
+  def update_confirmed_director(is_confirmed)
+    establishment_user_roles.find_by(establishment: establishment).update(confirmed_director: is_confirmed)
+    remove_other_confirmed_directors! if is_confirmed
+  end
+
+  def remove_other_confirmed_directors!
+    establishment.establishment_user_roles.where.not(user: self).find_each do |role|
+      role.update(confirmed_director: false)
+    end
+  end
 end

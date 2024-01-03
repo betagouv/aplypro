@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_08_091401) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_03_091830) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -58,6 +58,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_08_091401) do
     t.bigint "user_id", null: false
     t.bigint "granted_by_id"
     t.integer "role", null: false
+    t.boolean "confirmed_director", default: false, null: false
     t.index ["establishment_id", "user_id"], name: "index_establishment_user_roles_on_establishment_id_and_user_id", unique: true
     t.index ["establishment_id"], name: "index_establishment_user_roles_on_establishment_id"
     t.index ["granted_by_id"], name: "index_establishment_user_roles_on_granted_by_id"
@@ -221,10 +222,10 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_08_091401) do
 
   create_table "wages", force: :cascade do |t|
     t.integer "daily_rate", null: false
-    t.string "mefstat4", null: false
     t.integer "yearly_cap", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "mefstat4", null: false
     t.integer "ministry", null: false
     t.jsonb "mef_codes"
   end

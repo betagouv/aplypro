@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-Alors("le panneau {string} contient {string}") do |title, counter_string|
-  expect(page.find(".gray-panel", text: title)).to have_content(counter_string)
+Alors("le panneau {string} contient {string}") do |title, text|
+  expect(page.find(".gray-panel", text: title)).to have_content(text).or(have_button(text))
 end
 
-Alors("le panneau {string} ne contient pas {string}") do |title, counter_string|
-  expect(page.find(".gray-panel", text: title)).not_to have_content(counter_string)
+Alors("le panneau {string} ne contient pas {string}") do |title, text|
+  expect(page.find(".gray-panel", text: title)).not_to have_content(text)
 end
 
 Quand("l'établissement {string} fait parti des établissments soutenus directement") do |uai|
@@ -22,4 +22,25 @@ Alors("l'indicateur de PFMP {string} affiche {int}") do |status, count|
   within("div[aria-label=\"#{status}\"]") do
     expect(page).to have_content(count)
   end
+end
+
+Lorsque("je suis responsable légal et que je génère les décisions d'attribution manquantes") do
+  steps %(
+    Lorsque je coche la case de responsable légal
+    Et que je clique sur "Éditer"
+  )
+end
+
+CONFIRM_DIRECTOR_LABEL = "Je confirme que je suis le responsable légal de l'établissement"
+
+Lorsque("je coche la case de responsable légal") do
+  steps %(
+    Lorsque je coche "#{CONFIRM_DIRECTOR_LABEL}"
+  )
+end
+
+Lorsque("je décoche la case de responsable légal") do
+  steps %(
+    Lorsque je décoche "#{CONFIRM_DIRECTOR_LABEL}"
+  )
 end
