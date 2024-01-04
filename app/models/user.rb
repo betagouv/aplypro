@@ -38,16 +38,4 @@ class User < ApplicationRecord
   def to_s
     name
   end
-
-  def confirmed_director?
-    establishment.confirmed_director == self
-  end
-
-  def update_confirmed_director(is_confirmed)
-    if is_confirmed
-      establishment.update(confirmed_director: self)
-    elsif confirmed_director?
-      establishment.update(confirmed_director_id: nil)
-    end
-  end
 end

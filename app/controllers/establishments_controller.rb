@@ -1,17 +1,14 @@
 # frozen_string_literal: true
 
 class EstablishmentsController < ApplicationController
+  before_action :ensure_director,
+                :update_confirmed_director!,
+                :check_confirmed_director,
+                only: :create_attributive_decisions
+
   include Zipline
 
   def create_attributive_decisions
-    redirect_to home_path, status: :forbidden and return if !current_user.can_generate_attributive_decisions?
-
-    update_confirmed_director!
-
-    unless current_user.confirmed_director?
-      redirect_to home_path, alert: t("panels.attributive_decisions.not_director") and return
-    end
-
     mark_attributive_decision_generation!
 
     GenerateMissingAttributiveDecisionsJob.perform_later(@etab)
@@ -51,11 +48,17 @@ class EstablishmentsController < ApplicationController
       .update_all(generating_attributive_decision: true) # rubocop:disable Rails/SkipsModelValidations
   end
 
-  def update_confirmed_director!
-    current_user.update_confirmed_director(confirmed_director_param)
+  def ensure_director
+    redirect_to home_path, status: :forbidden and return unless current_user.director?
   end
 
-  def confirmed_director_param
-    params[:confirmed_director] == "1"
+  def update_confirmed_director!
+    @etab.update!(confirmed_director: current_user) if params["confirmed_director"] == "1"
+  end
+
+  def check_confirmed_director
+    confirmed = current_user.confirmed_director?(@etab)
+
+    redirect_to home_path, alert: t("panels.attributive_decisions.not_director") unless confirmed
   end
 end

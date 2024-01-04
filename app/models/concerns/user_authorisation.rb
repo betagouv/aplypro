@@ -12,6 +12,10 @@ module UserAuthorisation
       current_role.dir?
     end
 
+    def confirmed_director?(establishment)
+      establishment.confirmed_director == self
+    end
+
     def can_invite?
       director?
     end

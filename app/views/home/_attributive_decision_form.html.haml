@@ -1,5 +1,5 @@
 = form_with method: :post, url: establishment_create_attributive_decisions_path(establishment) do |form|
   .fr-checkbox-group.fr-mb-2w
-    = form.check_box :confirmed_director, checked: current_user.confirmed_director?
+    = form.check_box :confirmed_director, checked: current_user.confirmed_director?(@etab)
     = form.label :confirmed_director, t("panels.attributive_decisions.confirm_director").html_safe, class: "fr-label"
   = form.submit t("panels.attributive_decisions.generate", count: count), class: "fr-btn fr-btn--secondary"

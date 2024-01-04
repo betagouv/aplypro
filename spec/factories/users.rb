@@ -35,8 +35,9 @@ FactoryBot.define do
 
     trait :confirmed_director do
       director
-      after(:create) do |user, _|
-        user.update_confirmed_director(true)
+
+      after(:create) do |user|
+        user.establishment.update!(confirmed_director: user)
       end
     end
   end
