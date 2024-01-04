@@ -178,7 +178,7 @@ class AttributeDecisionGenerator
   def summary
     establishment = @schooling.establishment
 
-    director = establishment.users.confirmed_director || establishment.users.directors.first
+    director = establishment.confirmed_director || establishment.users.directors.first
 
     composer.text("Numéro de dossier administratif : #{student.asp_file_reference}")
     composer.text("Numéro de décision attributive : #{schooling.attributive_decision_number}")

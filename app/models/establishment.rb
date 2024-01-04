@@ -15,11 +15,9 @@ class Establishment < ApplicationRecord
     def directors
       where(establishment_user_roles: { role: :dir })
     end
-
-    def confirmed_director
-      directors.find_by("establishment_user_roles.confirmed_director": true)
-    end
   end
+
+  belongs_to :confirmed_director, class_name: "User", optional: true
 
   has_many :classes, -> { order "label" }, class_name: "Classe", dependent: :destroy, inverse_of: :establishment
 

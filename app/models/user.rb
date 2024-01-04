@@ -15,6 +15,7 @@ class User < ApplicationRecord
 
   has_many :establishment_user_roles, dependent: :destroy
   has_many :establishments, through: :establishment_user_roles
+  has_many :directed_establishments, class_name: "Establishment", inverse_of: :confirmed_director, dependent: false
   has_many :invitations, dependent: :nullify
 
   belongs_to :establishment, optional: true
@@ -39,17 +40,14 @@ class User < ApplicationRecord
   end
 
   def confirmed_director?
-    establishment_user_roles.exists?(establishment: establishment, confirmed_director: true)
+    establishment.confirmed_director == self
   end
 
   def update_confirmed_director(is_confirmed)
-    establishment_user_roles.find_by(establishment: establishment).update(confirmed_director: is_confirmed)
-    remove_other_confirmed_directors! if is_confirmed
-  end
-
-  def remove_other_confirmed_directors!
-    establishment.establishment_user_roles.where.not(user: self).find_each do |role|
-      role.update(confirmed_director: false)
+    if is_confirmed
+      establishment.update(confirmed_director: self)
+    elsif confirmed_director?
+      establishment.update(confirmed_director_id: nil)
     end
   end
 end

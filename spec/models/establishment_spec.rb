@@ -38,7 +38,7 @@ RSpec.describe Establishment do
   end
 
   describe "confirmed_director" do
-    subject { establishment.users.confirmed_director }
+    subject { establishment.confirmed_director }
 
     context "when there is an existing confirmed director" do
       let!(:confirmed_director) { create(:user, :confirmed_director, establishment: establishment) }

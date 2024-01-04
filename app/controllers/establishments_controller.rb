@@ -52,6 +52,10 @@ class EstablishmentsController < ApplicationController
   end
 
   def update_confirmed_director!
-    current_user.update_confirmed_director(params[:confirmed_director])
+    current_user.update_confirmed_director(confirmed_director_param)
+  end
+
+  def confirmed_director_param
+    params[:confirmed_director] == "1"
   end
 end
