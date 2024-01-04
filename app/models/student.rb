@@ -58,8 +58,8 @@ class Student < ApplicationRecord
     [
       address_line1,
       address_line2,
-      postal_code,
-      city
+      address_postal_code,
+      address_city
     ].compact.join(", ")
   end
 
