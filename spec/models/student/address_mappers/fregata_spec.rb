@@ -19,7 +19,7 @@ describe Student::AddressMappers::Fregata do
   describe "mapper" do
     let(:address) { data.first["adressesApprenant"] }
 
-    it { is_expected.to include({ postal_code: "34080" }) }
+    it { is_expected.to include({ address_postal_code: "34080" }) }
     it { is_expected.to include({ address_line1: "80 RUE DU TEST 34080 MONTPELLIER FRANCE" }) }
   end
 end
