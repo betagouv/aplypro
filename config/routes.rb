@@ -8,6 +8,11 @@ Rails.application.routes.draw do
     get "select_establishment"
   end
 
+  namespace :admin do
+    resources :students
+    resources :classes
+  end
+
   resources :establishments, only: %w[edit update] do
     resources :invitations
 

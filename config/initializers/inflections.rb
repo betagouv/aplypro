@@ -16,4 +16,5 @@
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym "ASP"
   inflect.acronym "CSV"
+  inflect.singular "classes", "classe"
 end

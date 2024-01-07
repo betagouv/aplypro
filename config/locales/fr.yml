@@ -54,6 +54,10 @@ fr:
       pfmp:
         day_count: "Le nombre de jours présent sur l'attestation. Il doit être entier (pas de demi-journées)."
     attributes:
+      student:
+        ine: "INE"
+        first_name: "Prénom"
+        last_name: "Nom"
       pfmp:
         start_date: "Date de début"
         end_date: "Date de fin"

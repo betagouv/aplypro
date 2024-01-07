@@ -28,4 +28,8 @@ class Mef < ApplicationRecord
 
     code.to_sym
   end
+
+  def to_s
+    [short, label].join(" : ")
+  end
 end
