@@ -37,10 +37,17 @@ class Student
 
           rename_keys(
             communeCodeInsee: :birthplace_city_insee_code,
-            paysCodeInsee: :birthplace_country_insee_code
+            paysCodeInsee: :birthplace_country_insee_code,
+            sexeId: :biological_sex
           )
 
-          accept_keys %i[birthplace_city_insee_code birthplace_country_insee_code]
+          map_value :biological_sex, ->(x) { x.to_i }
+
+          accept_keys %i[
+            birthplace_city_insee_code
+            birthplace_country_insee_code
+            biological_sex
+          ]
         end
       end
 
@@ -63,7 +70,12 @@ class Student
 
           map_value :address_line1, ->(hash) { hash.values.compact.join(" ") }
 
-          accept_keys %i[address_postal_code address_country_code address_city_insee_code address_line1]
+          accept_keys %i[
+            address_postal_code
+            address_country_code
+            address_city_insee_code
+            address_line1
+          ]
         end
       end
     end
