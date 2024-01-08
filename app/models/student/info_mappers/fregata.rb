@@ -1,12 +1,21 @@
 # frozen_string_literal: true
 
 class Student
-  module AddressMappers
+  module InfoMappers
     class Fregata < Base
+      def attributes
+        Mapper
+          .new
+          .call(payload)
+          .tap do |attrs|
+          attrs.merge!(address_attributes) if address_attributes.present?
+        end
+      end
+
       def address_attributes
         return nil if addresses.blank?
 
-        Mapper.new.call(principal_address)
+        AddressMapper.new.call(principal_address)
       end
 
       def principal_address
@@ -18,6 +27,24 @@ class Student
       end
 
       class Mapper < Dry::Transformer::Pipe
+        import Dry::Transformer::HashTransformations
+        import Dry::Transformer::ArrayTransformations
+
+        define! do
+          deep_symbolize_keys
+
+          unwrap :apprenant
+
+          rename_keys(
+            communeCodeInsee: :birthplace_city_insee_code,
+            paysCodeInsee: :birthplace_country_insee_code
+          )
+
+          accept_keys %i[birthplace_city_insee_code birthplace_country_insee_code]
+        end
+      end
+
+      class AddressMapper < Dry::Transformer::Pipe
         import Dry::Transformer::HashTransformations
         import Dry::Transformer::ArrayTransformations
 

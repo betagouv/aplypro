@@ -4,8 +4,8 @@ require "rails_helper"
 
 require "./mock/factories/api_student"
 
-describe Student::AddressMappers::Fregata do
-  subject { described_class.new(data).address_attributes }
+describe Student::InfoMappers::Fregata do
+  subject(:attributes) { described_class.new(data).attributes }
 
   let!(:fixture) { Rails.root.join("mock/data/fregata-students.json").read }
   let(:data) { JSON.parse(fixture).first }
@@ -13,13 +13,15 @@ describe Student::AddressMappers::Fregata do
   context "when there is no address" do
     let(:data) { build(:fregata_student, :no_addresses) }
 
-    it { is_expected.to be_nil }
+    it "does not crash" do
+      expect { attributes }.not_to raise_error
+    end
   end
 
   describe "mapper" do
-    let(:address) { data.first["adressesApprenant"] }
-
     it { is_expected.to include({ address_postal_code: "34080" }) }
     it { is_expected.to include({ address_line1: "80 RUE DU TEST 34080 MONTPELLIER FRANCE" }) }
+    it { is_expected.to include({ birthplace_city_insee_code: "34000" }) }
+    it { is_expected.to include({ birthplace_country_insee_code: "99100" }) }
   end
 end

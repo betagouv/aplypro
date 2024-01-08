@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_04_143944) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_08_010009) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -194,6 +194,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_04_143944) do
     t.string "address_city_insee_code"
     t.string "address_city"
     t.string "address_country_code"
+    t.string "birthplace_city_insee_code"
+    t.string "birthplace_country_insee_code"
     t.index ["asp_file_reference"], name: "index_students_on_asp_file_reference", unique: true
     t.index ["ine"], name: "index_students_on_ine", unique: true
   end

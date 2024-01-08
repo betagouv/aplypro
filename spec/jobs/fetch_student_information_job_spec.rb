@@ -9,13 +9,15 @@ RSpec.describe FetchStudentInformationJob, :student_api do
   let(:schooling) { create(:schooling, classe: classe) }
   let(:student) { schooling.student }
 
-  shared_examples "maps the address correctly" do
+  shared_examples "maps all the extra fields correctly" do
     describe "attributes mapping" do
       %i[
         address_line1
         address_postal_code
         address_city_insee_code
         address_country_code
+        birthplace_city_insee_code
+        birthplace_country_insee_code
       ].each do |attribute|
         it "updates the `#{attribute}` attribute" do
           expect { described_class.new(student).perform_now }.to change(student, attribute)
@@ -36,7 +38,7 @@ RSpec.describe FetchStudentInformationJob, :student_api do
       WebmockHelpers.mock_sygne_student_endpoint_with(student.ine, payload)
     end
 
-    include_examples "maps the address correctly"
+    include_examples "maps all the extra fields correctly"
   end
 
   context "when the student is from FREGATA" do
@@ -49,7 +51,7 @@ RSpec.describe FetchStudentInformationJob, :student_api do
       WebmockHelpers.mock_fregata_students_with(establishment.uai, payload)
     end
 
-    include_examples "maps the address correctly"
+    include_examples "maps all the extra fields correctly"
   end
 end
 # rubocop:enable RSpec/MultipleMemoizedHelpers
