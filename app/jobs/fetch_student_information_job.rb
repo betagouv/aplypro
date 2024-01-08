@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class FetchStudentAddressJob < ApplicationJob
+class FetchStudentInformationJob < ApplicationJob
   queue_as :default
 
   def perform(student)
