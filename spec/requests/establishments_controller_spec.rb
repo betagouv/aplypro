@@ -15,6 +15,26 @@ RSpec.describe "EstablishmentsController" do
     sign_in(user)
   end
 
+  describe "POST download_attributive_decisions" do
+    let(:schoolings) { create_list(:schooling, 3, :with_attributive_decision, establishment: establishment) }
+
+    it "returns 200" do
+      post establishment_download_attributive_decisions_path(establishment)
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    context "when an attributive decision is missing" do
+      before { schoolings.last.attributive_decision.purge }
+
+      it "still returns 200" do
+        post establishment_download_attributive_decisions_path(establishment)
+
+        expect(response).to have_http_status(:ok)
+      end
+    end
+  end
+
   describe "POST create_attributive_decisions" do
     before { create_list(:schooling, 10, establishment: establishment) }
 

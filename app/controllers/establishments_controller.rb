@@ -20,6 +20,7 @@ class EstablishmentsController < ApplicationController
                 .current_schoolings
                 .with_attached_attributive_decision
                 .map(&:attributive_decision)
+                .filter(&:attached?)
                 .map { |d| [d, d.key] }
 
     zipline(documents, attributive_decisions_archive_name)
