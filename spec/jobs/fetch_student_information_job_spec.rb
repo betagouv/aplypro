@@ -18,6 +18,7 @@ RSpec.describe FetchStudentInformationJob, :student_api do
         address_country_code
         birthplace_city_insee_code
         birthplace_country_insee_code
+        biological_sex
       ].each do |attribute|
         it "updates the `#{attribute}` attribute" do
           expect { described_class.new(student).perform_now }.to change(student, attribute)

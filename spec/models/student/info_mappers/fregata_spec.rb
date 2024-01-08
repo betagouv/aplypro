@@ -23,5 +23,6 @@ describe Student::InfoMappers::Fregata do
     it { is_expected.to include({ address_line1: "80 RUE DU TEST 34080 MONTPELLIER FRANCE" }) }
     it { is_expected.to include({ birthplace_city_insee_code: "34000" }) }
     it { is_expected.to include({ birthplace_country_insee_code: "99100" }) }
+    it { is_expected.to include({ biological_sex: 1 }) }
   end
 end

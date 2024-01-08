@@ -6,8 +6,9 @@ require "./mock/factories/api_student"
 
 # rubocop:disable RSpec/MultipleMemoizedHelpers
 describe Student::InfoMappers::Sygne do
-  let(:data) { build(:sygne_student_info) }
+  let(:data) { build(:sygne_student_info, :male) }
 
+  let(:biological_sex) { data["codeSexe"] }
   let(:line_one) { data["adrResidenceEle"]["adresseLigne1"] }
   let(:line_two) { data["adrResidenceEle"]["adresseLigne2"] }
   let(:postal_code) { data["adrResidenceEle"]["codePostal"] }
@@ -25,6 +26,7 @@ describe Student::InfoMappers::Sygne do
     it { is_expected.to include(address_city: city) }
     it { is_expected.to include(address_city_insee_code: city_insee_code) }
     it { is_expected.to include(address_country_code: country_code) }
+    it { is_expected.to include(biological_sex: 1) }
     it { is_expected.to include(birthplace_city_insee_code: birthplace_city) }
     it { is_expected.to include(birthplace_country_insee_code: birthplace_country) }
   end

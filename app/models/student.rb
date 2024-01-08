@@ -10,6 +10,8 @@ class Student < ApplicationRecord
 
   validates :asp_file_reference, uniqueness: true
 
+  enum :biological_sex, { unknown: 0, male: 1, female: 2 }, validate: { allow_nil: true }, default: :unknown
+
   has_many :schoolings, dependent: :delete_all
 
   has_many :classes, through: :schoolings, source: "classe"
