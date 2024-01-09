@@ -5,15 +5,19 @@ module UserAuthorisation
 
   included do
     def current_role
+      return unless establishment
+
       establishment_user_roles.find_by({ establishment_id: establishment.id })
     end
 
     def confirmed_director?
+      return unless establishment
+
       establishment.confirmed_director == self
     end
 
     def director?
-      current_role.dir?
+      current_role&.dir?
     end
 
     def can_invite?

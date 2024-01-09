@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class EstablishmentsController < ApplicationController
+  skip_before_action :set_establishment, only: :select
+
   before_action :check_director,
                 :update_and_check_confirmed_director,
                 only: :create_attributive_decisions

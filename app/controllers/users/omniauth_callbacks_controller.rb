@@ -5,7 +5,7 @@ module Users
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     include DeveloperOidc
 
-    skip_before_action :verify_authenticity_token
+    skip_before_action :verify_authenticity_token, :set_establishment
 
     rescue_from IdentityMappers::Errors::Error, ActiveRecord::RecordInvalid, with: :authentication_failure
 

@@ -19,7 +19,7 @@ RSpec.describe "EstablishmentsController" do
     before { user.update!(establishment: nil) }
 
     it "redirects them towards the select page" do
-      get "/"
+      get "/home"
 
       expect(response).to redirect_to select_establishments_path
     end
