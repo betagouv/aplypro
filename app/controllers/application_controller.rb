@@ -24,7 +24,13 @@ class ApplicationController < ActionController::Base
   end
 
   def set_establishment
-    @etab = current_user&.establishment
+    return unless user_signed_in?
+
+    if current_user.establishment.nil?
+      redirect_to select_establishments_path
+    else
+      @etab = current_user.establishment
+    end
   end
 
   def infer_page_title(attrs = {})

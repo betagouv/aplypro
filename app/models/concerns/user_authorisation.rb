@@ -5,6 +5,8 @@ module UserAuthorisation
 
   included do
     def current_role
+      return if establishment.blank?
+
       establishment_user_roles.find_by({ establishment_id: establishment.id })
     end
 
@@ -13,7 +15,7 @@ module UserAuthorisation
     end
 
     def director?
-      current_role.dir?
+      current_role&.dir?
     end
 
     def can_invite?
