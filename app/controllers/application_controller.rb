@@ -25,6 +25,8 @@ class ApplicationController < ActionController::Base
 
   def set_establishment
     @etab = current_user&.establishment
+
+    redirect_to select_establishments_path and return if @etab.blank?
   end
 
   def infer_page_title(attrs = {})

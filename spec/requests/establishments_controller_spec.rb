@@ -15,6 +15,16 @@ RSpec.describe "EstablishmentsController" do
     sign_in(user)
   end
 
+  context "when the user does not have a selected establishment" do
+    before { user.update!(establishment: nil) }
+
+    it "redirects them towards the select page" do
+      get "/"
+
+      expect(response).to redirect_to select_establishments_path
+    end
+  end
+
   describe "POST download_attributive_decisions" do
     let(:schoolings) { create_list(:schooling, 3, :with_attributive_decision, establishment: establishment) }
 
