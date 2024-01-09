@@ -12,15 +12,22 @@ class Student
           unwrap :adrResidenceEle
 
           rename_keys(
-            codePostal: :postal_code,
+            codePostal: :address_postal_code,
             adresseLigne1: :address_line1,
             adresseLigne2: :address_line2,
-            codePays: :country_code,
-            codeCommuneInsee: :city_insee_code,
-            libelleCommune: :city
+            codePays: :address_country_code,
+            codeCommuneInsee: :address_city_insee_code,
+            libelleCommune: :address_city
           )
 
-          accept_keys %i[postal_code country_code city city_insee_code address_line1 address_line2]
+          accept_keys %i[
+            address_postal_code
+            address_country_code
+            address_city
+            address_city_insee_code
+            address_line1
+            address_line2
+          ]
         end
       end
     end

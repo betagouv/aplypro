@@ -20,9 +20,9 @@ describe Student::AddressMappers::Sygne do
 
     it { is_expected.to include(address_line1: line_one) }
     it { is_expected.to include(address_line2: line_two) }
-    it { is_expected.to include(city: city) }
-    it { is_expected.to include(city_insee_code: city_insee_code) }
-    it { is_expected.to include(country_code: country_code) }
+    it { is_expected.to include(address_city: city) }
+    it { is_expected.to include(address_city_insee_code: city_insee_code) }
+    it { is_expected.to include(address_country_code: country_code) }
   end
 end
 # rubocop:enable RSpec/MultipleMemoizedHelpers

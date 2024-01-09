@@ -10,10 +10,10 @@ FactoryBot.define do
     trait :with_address do
       address_line1 { Faker::Address.street_name }
       address_line2 { Faker::Address.street_name }
-      postal_code { Faker::Address.zip_code }
-      city_insee_code { Faker::Number.digit }
-      city { Faker::Address.city }
-      country_code { Faker::Number.digit }
+      address_postal_code { Faker::Address.zip_code }
+      address_city_insee_code { Faker::Number.digit }
+      address_city { Faker::Address.city }
+      address_country_code { Faker::Number.digit }
     end
   end
 end

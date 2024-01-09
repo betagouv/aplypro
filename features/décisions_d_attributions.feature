@@ -15,25 +15,31 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Et le panneau "Décisions d'attribution" contient "Éditer 10 décisions d'attribution manquantes"
 
   Scénario: Le personnel de direction peut lancer l'édition des décisions d'attribution
-    Lorsque je clique sur "Éditer 10 décisions d'attribution manquantes"
+    Lorsque je suis responsable légal et que je génère les décisions d'attribution manquantes
     Et que toutes les tâches de fond sont terminées
     Quand je me rends sur la page d'accueil
     Alors la page contient "Édition des décisions d'attribution en cours"
 
   Scénario: Le personnel peut télécharger l'ensemble des décisions d'attribution
-    Lorsque je clique sur "Éditer 10 décisions d'attribution manquantes"
+    Lorsque je suis responsable légal et que je génère les décisions d'attribution manquantes
     Et que la génération des décisions d'attribution manquantes est complètement finie
     Quand je me rends sur la page d'accueil
     Alors la page contient "Télécharger 10 décisions d'attribution"
     Et le panneau "Décisions d'attribution" contient "10 / 10"
 
   Scénario: Le personnel peut télécharger ou générer les décisions d'attribution manquantes
-    Quand je clique sur "Éditer 10 décisions d'attribution manquantes"
+    Lorsque je suis responsable légal et que je génère les décisions d'attribution manquantes
     Et que la génération des décisions d'attribution manquantes est complètement finie
     Et que l'API SYGNE renvoie 5 nouveaux élèves pour l'établissement "DINUM"
     Et que les élèves de l'établissement "DINUM" sont rafraîchis
     Quand je me rends sur la page d'accueil
-    Et que je clique sur "Éditer 5 décisions d'attribution manquantes"
+    Et que je suis responsable légal et que je génère les décisions d'attribution manquantes
     Et que la génération des décisions d'attribution manquantes est complètement finie
     Et que je rafraîchis la page
     Alors la page contient "Télécharger 15 décisions d'attribution"
+
+  Scénario: Le personnel qui ne coche pas la case de responsable légal ne peut pas générer les décisions d'attribution
+    Lorsque je décoche la case de responsable légal
+    Et que je clique sur "Éditer 10 décisions d'attribution manquantes"
+    Alors la page contient "Vous devez être chef d'établissement"
+    Et le panneau "Décisions d'attribution" contient "0 / 10"

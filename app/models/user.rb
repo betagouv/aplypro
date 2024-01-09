@@ -15,6 +15,7 @@ class User < ApplicationRecord
 
   has_many :establishment_user_roles, dependent: :destroy
   has_many :establishments, through: :establishment_user_roles
+  has_many :directed_establishments, class_name: "Establishment", inverse_of: :confirmed_director, dependent: :nullify
   has_many :invitations, dependent: :nullify
 
   belongs_to :establishment, optional: true

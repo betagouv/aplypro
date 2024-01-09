@@ -31,7 +31,7 @@ describe Student::Mappers::Fregata do
   end
 
   context "when the student has left the establishment" do
-    let(:data) { build_list(:fregata_student, 1, :left_establishment, left_at: 3.days.ago, ine: "test") }
+    let(:data) { build_list(:fregata_student, 1, :left_establishment, left_at: 3.days.ago, ine_value: "test") }
 
     it "sets the correct end date on the previous schooling" do
       mapper.new(data, uai).parse!
@@ -41,7 +41,7 @@ describe Student::Mappers::Fregata do
   end
 
   context "when the student has left the class" do
-    let(:data) { build_list(:fregata_student, 1, :left_classe, left_classe_at: 4.days.ago, ine: "test") }
+    let(:data) { build_list(:fregata_student, 1, :left_classe, left_classe_at: 4.days.ago, ine_value: "test") }
 
     it "sets the correct end date on the previous schooling" do
       mapper.new(data, uai).parse!
@@ -71,8 +71,8 @@ describe Student::Mappers::Fregata do
 
     let(:data) do
       [
-        build(:fregata_student, classe_label: "new class", ine: student.ine),
-        build(:fregata_student, :left_classe, ine: student.ine)
+        build(:fregata_student, classe_label: "new class", ine_value: student.ine),
+        build(:fregata_student, :left_classe, ine_value: student.ine)
       ]
     end
 

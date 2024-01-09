@@ -36,4 +36,19 @@ RSpec.describe Establishment do
       end
     end
   end
+
+  describe "confirmed_director" do
+    subject { establishment }
+
+    let!(:user) { create(:user, :confirmed_director) }
+    let(:establishment) { user.establishment }
+
+    it { is_expected.to be_valid }
+
+    context "when the confirmed_director is not a director" do
+      before { user.establishment_user_roles.first.update(role: :authorised) }
+
+      it { is_expected.not_to be_valid }
+    end
+  end
 end

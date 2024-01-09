@@ -56,3 +56,7 @@ code {
   font-style: italic;
   Background: var(--artwork-background-beige-gris-galet);
 }
+
+.fr-checkbox-group input[type=checkbox]+label {
+  display: inline;
+}

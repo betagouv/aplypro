@@ -95,25 +95,3 @@ RSpec.configure do |config|
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
 end
-
-RSpec::Matchers.define :be_an_array_of do |type|
-  match do |arr|
-    !arr.empty? && arr.all? { |item| expect(item).to be_a(type) }
-  end
-
-  failure_message do |array|
-    msg = "expected #{array} to only contain items of type '#{type}' but "
-
-    msg += if array.empty?
-             "it was empty"
-           else
-             "it had #{array.map(&:class).map(&:to_s)}"
-           end
-
-    msg
-  end
-
-  failure_message_when_negated do |array|
-    "expected #{array.map(&:class).map(&:name)} to not contain just #{type}"
-  end
-end

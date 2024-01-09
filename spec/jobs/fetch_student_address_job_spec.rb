@@ -13,9 +13,9 @@ RSpec.describe FetchStudentAddressJob do
     describe "attributes mapping" do
       %i[
         address_line1
-        postal_code
-        city_insee_code
-        country_code
+        address_postal_code
+        address_city_insee_code
+        address_country_code
       ].each do |attribute|
         it "updates the `#{attribute}` attribute" do
           expect { described_class.new(student).perform_now }.to change(student, attribute)

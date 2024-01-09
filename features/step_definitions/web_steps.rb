@@ -56,7 +56,7 @@ Quand("je décoche {string}") do |label|
   uncheck label
 end
 
-Quand("je coche {string}") do
+Quand("je coche {string}") do |label|
   check label
 end
 

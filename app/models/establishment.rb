@@ -17,11 +17,15 @@ class Establishment < ApplicationRecord
     end
   end
 
+  belongs_to :confirmed_director, class_name: "User", optional: true
+
   has_many :classes, -> { order "label" }, class_name: "Classe", dependent: :destroy, inverse_of: :establishment
 
   has_many :schoolings, through: :classes
 
   has_many :students, through: :schoolings
+
+  validate :ensure_confirmed_director_is_director
 
   API_MAPPING = {
     "nom_etablissement" => :name,
@@ -103,5 +107,11 @@ class Establishment < ApplicationRecord
 
   def some_attributive_decisions_generating?
     current_schoolings.generating_attributive_decision.any?
+  end
+
+  def ensure_confirmed_director_is_director
+    return if !confirmed_director || establishment_user_roles.find_by({ user: confirmed_director }).dir?
+
+    errors.add :confirmed_director, "is not a director"
   end
 end

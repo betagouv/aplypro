@@ -18,22 +18,17 @@ module HomeHelper
       t("panels.attributive_decisions.download", count: count),
       establishment_download_attributive_decisions_path(establishment),
       method: :post,
-      class: "fr-btn fr-btn--primary fr-mb-0",
+      class: "fr-btn fr-btn--primary",
       data: { turbo: false }
     )
   end
 
-  def attributive_decisions_generation_button(establishment)
-    return cannot_generate_attributive_decisions_button unless current_user.can_generate_attributive_decisions?
+  def attributive_decisions_generation_form(establishment)
+    return cannot_generate_attributive_decisions_button unless current_user.can_try_to_generate_attributive_decisions?
 
     count = establishment.current_schoolings.without_attributive_decisions.count
 
-    button_to(
-      t("panels.attributive_decisions.generate", count: count),
-      establishment_create_attributive_decisions_path(establishment),
-      class: "fr-btn fr-btn--secondary",
-      data: { turbo: false }
-    )
+    render partial: "home/attributive_decision_form", locals: { establishment: establishment, count: count }
   end
 
   def cannot_generate_attributive_decisions_button
@@ -81,5 +76,14 @@ module HomeHelper
     starting_year = ENV.fetch("APLYPRO_SCHOOL_YEAR").to_i
 
     t("year", start_year: starting_year, end_year: starting_year + 1)
+  end
+
+  def confirmed_director_information
+    return if current_user.establishment.confirmed_director.blank? || current_user.confirmed_director?
+
+    I18n.t(
+      "panels.attributive_decisions.confirm_director_information",
+      name: current_user.establishment.confirmed_director.name
+    )
   end
 end
