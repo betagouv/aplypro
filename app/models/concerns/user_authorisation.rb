@@ -3,6 +3,7 @@
 module UserAuthorisation
   extend ActiveSupport::Concern
 
+  # rubocop:disable Metrics/BlockLength
   included do
     def current_role
       return unless establishment
@@ -11,7 +12,7 @@ module UserAuthorisation
     end
 
     def confirmed_director?
-      return unless establishment
+      return false unless establishment
 
       establishment.confirmed_director == self
     end
@@ -44,4 +45,5 @@ module UserAuthorisation
       confirmed_director?
     end
   end
+  # rubocop:enable Metrics/BlockLength
 end
