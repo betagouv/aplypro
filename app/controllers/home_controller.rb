@@ -3,7 +3,7 @@
 class HomeController < ApplicationController
   layout "maintenance", only: :maintenance
 
-  skip_before_action :authenticate_user!, :set_establishment, only: %i[maintenance index login]
+  skip_before_action :authenticate_user!, only: %i[maintenance index login]
 
   before_action :show_welcome_screen, only: :home
 
