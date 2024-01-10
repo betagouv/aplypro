@@ -7,6 +7,15 @@ FactoryBot.define do
     last_name { Faker::Name.last_name }
     birthdate { Faker::Date.birthday(min_age: 16, max_age: 20) }
 
+    trait :with_address_info do
+      with_address
+    end
+
+    trait :with_birthplace_info do
+      birthplace_city_insee_code { Faker::Number.digit }
+      birthplace_country_insee_code { Faker::Number.digit }
+    end
+
     trait :with_address do
       address_line1 { Faker::Address.street_name }
       address_line2 { Faker::Address.street_name }
