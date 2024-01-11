@@ -3,6 +3,7 @@
 class InvitationsController < ApplicationController
   before_action :check_authorised_to_invite
   before_action :set_invitation, only: :destroy
+  before_action :add_new_breadcrumbs, only: %i[new create]
 
   def index
     @invitations = @etab.invitations
@@ -11,11 +12,7 @@ class InvitationsController < ApplicationController
   end
 
   def new
-    add_breadcrumb t("pages.titles.invitations.index"), establishment_invitations_path(@etab)
-
     @invitation = Invitation.new
-
-    infer_page_title
   end
 
   def create
@@ -55,5 +52,10 @@ class InvitationsController < ApplicationController
         status: :forbidden
       )
     end
+  end
+
+  def add_new_breadcrumbs
+    add_breadcrumb t("pages.titles.invitations.index"), establishment_invitations_path(@etab)
+    infer_page_title
   end
 end

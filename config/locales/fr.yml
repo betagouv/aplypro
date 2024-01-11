@@ -86,28 +86,43 @@ fr:
         select: Choix de l'établissement
       invitations:
         index: Gestion des accès
-        new: Autoriser un email à accéder à APLyPro
+        new: &new_invitation_title Autoriser un email à accéder à APLyPro
+        create: *new_invitation_title
       home:
         home: Accueil
         login: Connexion à APLyPro
       classes:
         index: Liste des classes
         show: "%{name}"
-        bulk_pfmp: Ajout d'une PFMP pour toute la classe
-        bulk_pfmp_completion: Compléter des PFMPs
+        bulk_pfmp: &new_bulk_pfmp_title Ajout d'une PFMP pour toute la classe
+        create_bulk_pfmp: *new_bulk_pfmp_title
+        bulk_pfmp_completion: &bulk_pfmp_completion_title Compléter des PFMPs
+        update_bulk_pfmp: *bulk_pfmp_completion_title
       students:
         show: "%{name}"
       pfmps:
-        new: "Ajouter une PFMP"
+        new: &new_pfmp_title
+          title: "Ajouter une PFMP individuelle pour %{name}"
+          breadcrumb: Ajouter une PFMP individuelle
+        create: *new_pfmp_title
         index: "Liste des PFMPs"
         show: "PFMP pour %{name}"
-        edit: "Modifier la PFMP de %{name}"
+        edit: &edit_pfmp_title "Modifier la PFMP de %{name}"
+        update: *edit_pfmp_title
         validate: "Validation"
         validate_all: "Valider des PFMPs à envoyer en paiement en 2024"
         confirm_deletion: "Suppression de la PFMP"
       ribs:
-        new: "Ajout de coordonnées bancaires"
-        missing: Saisir des coordonnées bancaires
+        new: &new_rib_title
+          title: "Ajout de coordonnées bancaires pour %{name}"
+          breadcrumb: "Ajout de coordonnées bancaires"
+        create: *new_rib_title
+        edit: &edit_rib_title
+          title: "Modification de coordonnées bancaires pour %{name}"
+          breadcrumb: "Modification de coordonnés bancaires"
+        update: *edit_rib_title
+        missing: &missing_ribs_title Saisir des coordonnées bancaires
+        bulk_create: *missing_ribs_title
       validations:
         index: Envoyer des PFMPs en paiement
         show: Envoyer en paiement les PFMPs de %{name}

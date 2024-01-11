@@ -38,9 +38,19 @@ class ApplicationController < ActionController::Base
 
     return unless I18n.exists?(key)
 
-    @page_title = I18n.t(key, **attrs)
+    title, breadcrumb = extract_title_data(I18n.t(key, deep_interpolation: true, **attrs))
 
-    add_breadcrumb @page_title
+    @page_title = title
+
+    add_breadcrumb(breadcrumb)
+  end
+
+  def extract_title_data(data)
+    if data.is_a? Hash
+      [data[:title], data[:breadcrumb]]
+    else
+      [data, data]
+    end
   end
 
   def page_title_key
