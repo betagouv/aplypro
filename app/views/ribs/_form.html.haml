@@ -1,7 +1,7 @@
 = form_with model: [@classe, @student, @rib], builder: DsfrFormBuilder do |form|
-  = form.dsfr_radio_buttons(:personal,  [false, true])
-
   = form.dsfr_error_summary
+
+  = form.dsfr_radio_buttons(:personal,  [false, true])
 
   = form.dsfr_text_field(:name, width: 'md-4')
 

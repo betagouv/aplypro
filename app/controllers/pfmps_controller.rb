@@ -5,24 +5,17 @@ class PfmpsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :check_director, only: :validate
-  before_action :set_classe, :set_student, :set_breadcrumbs
+  before_action :set_classe, :set_student
+  before_action :set_pfmp_breadcrumbs, except: :confirm_deletion
   before_action :set_pfmp, only: %i[show edit update validate confirm_deletion destroy]
 
-  def show
-    infer_page_title({ name: @student.full_name })
-  end
+  def show; end
 
   def new
-    infer_page_title
-
-    @inhibit_title = true
-
     @pfmp = Pfmp.new
   end
 
-  def edit
-    infer_page_title(name: @student.full_name)
-  end
+  def edit; end
 
   def create
     @pfmp = Pfmp.new(pfmp_params.merge(schooling: @student.current_schooling))
@@ -30,10 +23,6 @@ class PfmpsController < ApplicationController
     if @pfmp.save
       redirect_to class_student_path(@classe, @student), notice: t("pfmps.new.success")
     else
-      @page_title = t("pages.titles.pfmps.new")
-      @inhibit_title = true
-      add_breadcrumb(t("pages.titles.pfmps.new"))
-
       render :new, status: :unprocessable_entity
     end
   end
@@ -54,14 +43,14 @@ class PfmpsController < ApplicationController
   end
 
   def confirm_deletion
-    redirect_to class_student_path(@classe, @student) and return if @pfmp.nil?
-
+    set_student_breadcrumbs
     add_breadcrumb(
       t("pages.titles.pfmps.show", name: @student.full_name),
       class_student_pfmp_path(@classe, @student, @pfmp)
     )
-
     infer_page_title
+
+    redirect_to class_student_path(@classe, @student) and return if @pfmp.nil?
   end
 
   def destroy
@@ -96,12 +85,17 @@ class PfmpsController < ApplicationController
     redirect_to classes_path, alert: t("errors.classes.not_found") and return
   end
 
-  def set_breadcrumbs
+  def set_student_breadcrumbs
     add_breadcrumb t("pages.titles.classes.index"), classes_path
     add_breadcrumb t("pages.titles.classes.show", name: @classe.label), class_path(@classe)
     add_breadcrumb(
       t("pages.titles.students.show", name: @student.full_name, classe: @classe.label),
       class_student_path(@classe, @student)
     )
+  end
+
+  def set_pfmp_breadcrumbs
+    set_student_breadcrumbs
+    infer_page_title(name: @student.full_name)
   end
 end
