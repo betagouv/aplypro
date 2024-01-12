@@ -11,7 +11,7 @@ module ASP
       attribute :nomusage, :string
       attribute :nomnaissance, :string
       attribute :prenom, :string
-      attribute :datenaissance, :string
+      attribute :datenaissance, :date
       attribute :codeinseepaysnai, :string
       attribute :codeinseecommune, :string
 
@@ -38,10 +38,13 @@ module ASP
       def to_xml(builder = Nokogiri::XML::Builder.new)
         validate!
 
-        builder.personnephysique do |xml|
+        builder.persphysique do |xml|
           xml.titre(titre)
           xml.prenom(prenom)
           xml.nomusage(nomusage)
+          xml.nomnaissance(nomnaissance)
+          xml.datenaissance(I18n.l(datenaissance, format: :asp))
+          xml.codeinseepaysnai(codeinseepaysnai)
         end
 
         builder.to_xml

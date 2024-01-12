@@ -16,7 +16,7 @@ describe ASP::Entities::PersonnePhysique do
       end
 
       specify "prenom" do
-        expect(document.at("personnephysique/prenom")).to have_attributes(text: "Marie")
+        expect(document.at("persphysique/prenom")).to have_attributes(text: "Marie")
       end
     end
   end
