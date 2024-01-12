@@ -1,25 +1,15 @@
 # frozen_string_literal: true
 
 class PfmpsController < ApplicationController
+  include RoleCheck
+
   before_action :authenticate_user!
-  before_action :check_authorised_to_validate, only: %i[validate validate_all]
-  before_action :set_classe, :set_student, :set_breadcrumbs, except: :validate_all
+  before_action :check_director, only: :validate
+  before_action :set_classe, :set_student, :set_breadcrumbs
   before_action :set_pfmp, only: %i[show edit update validate confirm_deletion destroy]
 
   def show
     infer_page_title({ name: @student.full_name })
-  end
-
-  def validate_all
-    infer_page_title
-
-    @pfmps = Pfmp
-             .in_state(:completed)
-             .includes(:student, classe: :mef)
-             .where(classe: { establishment: @etab })
-             .merge(Schooling.current)
-
-    @pfmp = @pfmps.first
   end
 
   def new
@@ -57,12 +47,10 @@ class PfmpsController < ApplicationController
   end
 
   def validate
-    add_breadcrumb t("pages.titles.pfmps.index"), pfmps_path
-    add_breadcrumb t("pages.titles.pfmps.validate")
-
     @pfmp.transition_to!(:validated)
 
-    redirect_back_or_to validate_all_pfmps_path, notice: t("flash.pfmps.validated", name: @student.full_name)
+    redirect_back_or_to class_student_pfmp_path(@classe, @student, @pfmp),
+                        notice: t("flash.pfmps.validated", name: @student.full_name)
   end
 
   def confirm_deletion
@@ -115,15 +103,5 @@ class PfmpsController < ApplicationController
       t("pages.titles.students.show", name: @student.full_name, classe: @classe.label),
       class_student_path(@classe, @student)
     )
-  end
-
-  def check_authorised_to_validate
-    if current_user.cannot_validate? # rubocop:disable Style/GuardClause
-      redirect_back_or_to(
-        root_path,
-        alert: t("flash.pfmps.not_authorised_to_validate"),
-        status: :forbidden
-      )
-    end
   end
 end

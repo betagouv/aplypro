@@ -52,12 +52,6 @@ Rails.application.routes.draw do
 
   resources :validations, only: :index
 
-  resources :pfmps, only: %i[index] do
-    collection do
-      get "validate_all", to: "pfmps#validate_all"
-    end
-  end
-
   devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
 
   devise_scope :user do
