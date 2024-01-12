@@ -1,0 +1,1946 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:fic="http://www.cnasea.fr/fichier"
+    xmlns="http://www.cnasea.fr/fichier"
+    targetNamespace="http://www.cnasea.fr/fichier"
+    version="1.0"
+    attributeFormDefault="unqualified"
+    elementFormDefault="qualified"
+    >
+
+    <xsd:simpleType name="Date">
+      <xsd:restriction base="xsd:token">
+        <xsd:pattern value="[0-9]{2}/[0-9]{2}/[0-9]{4}" />
+      </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="Boolean">
+      <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="1"/>
+            <xsd:enumeration value="O" />
+            <xsd:enumeration value="N" />
+      </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="Civilite">
+      <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="3"/>
+            <xsd:enumeration value="M" />
+            <xsd:enumeration value="MME" />
+            <xsd:enumeration value="MLE" />
+      </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="DEMATAVISPAIE-TYPE">
+      <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="1"/>
+            <xsd:enumeration value="O" />
+            <xsd:enumeration value="N" />
+            <xsd:enumeration value="T" />
+      </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:element name="FICHIER" type="FICHIER-TYPE" />
+
+    <xsd:complexType name="FICHIER-TYPE">
+        <xsd:all>
+            <xsd:element  name="PARAMETRAGE" type="PARAMETRAGE-TYPE" minOccurs="1" maxOccurs="1" />
+            <xsd:element  name="ENREGISTREMENTS" type="ENREGISTREMENTS-TYPE" minOccurs="1" maxOccurs="1">
+                <xsd:unique name="pkEnregistrement">
+                    <xsd:selector xpath="./fic:ENREGISTREMENT"/>
+                    <xsd:field xpath="@idEnregistrement"/>
+                </xsd:unique>
+            </xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="PARAMETRAGE-TYPE">
+        <xsd:all>
+            <xsd:element  name="CODESITEOPE" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODEUTILISATEUR" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="101"/>
+						<xsd:pattern value="[^\tq¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODEDISPO" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="20"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODEPRESTADISPO" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="30"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="ENREGISTREMENTS-TYPE">
+        <xsd:sequence>
+            <xsd:element  name="ENREGISTREMENT" type="ENREGISTREMENT-TYPE" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="ENREGISTREMENT-TYPE">
+        <xsd:all>
+            <xsd:element name="INDIVIDU" type="INDIVIDU-TYPE" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+        <xsd:attribute name="idEnregistrement" type="xsd:long" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="INDIVIDU-TYPE">
+        <xsd:sequence>
+            <xsd:element  name="NATUREINDIVIDU" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="1"/>
+                        <xsd:enumeration value="P" />
+                        <xsd:enumeration value="M" />
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="NUMPACAGE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="9"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="DATEIMMATRICULATION" minOccurs="0" maxOccurs="1" type="Date" />
+            <xsd:element  name="TELEPHONE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="20"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="PORTABLE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="20"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="FAX" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="20"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="COURRIEL" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="100"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="DOMAINE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="PROVENANCEINDIVIDU" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODEAPE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODENAF" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="5"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODESITECREAT" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODESITERESP" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:choice>
+                <xsd:element name="PERSPHYSIQUE" type="PERSPHYSIQUE-TYPE" minOccurs="0" maxOccurs="1" />
+                <xsd:element name="PERSMORALE" type="PERSMORALE-TYPE" minOccurs="0" maxOccurs="1" />
+            </xsd:choice>
+            <xsd:element name="ADRESSESINDIVIDU" type="ADRESSESINDIVIDU-TYPE" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="COORDPAIESINDIVIDU" type="COORDPAIESINDIVIDU-TYPE" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element name="LISTEDOSSIER" type="LISTEDOSSIER-TYPE" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="TIERS" type="INDIVIDU_TIERS-TYPE" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attribute name="idIndividu" type="xsd:long" use="optional"/>
+        <xsd:attribute name="modification" type="Boolean" use="optional"/>
+    </xsd:complexType>
+
+	<xsd:complexType name="INDIVIDU_PRESTADOSS-TYPE">
+        <xsd:sequence>
+            <xsd:element  name="NATUREINDIVIDU" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="1"/>
+                        <xsd:enumeration value="P" />
+                        <xsd:enumeration value="M" />
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="NUMPACAGE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="9"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="DATEIMMATRICULATION" minOccurs="0" maxOccurs="1" type="Date" />
+            <xsd:element  name="TELEPHONE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="20"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="PORTABLE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="20"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="FAX" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="20"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="COURRIEL" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="100"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="DOMAINE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="PROVENANCEINDIVIDU" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODEAPE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODENAF" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="5"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODESITECREAT" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODESITERESP" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:choice>
+                <xsd:element name="PERSPHYSIQUE" type="PERSPHYSIQUE-TYPE" minOccurs="0" maxOccurs="1" />
+                <xsd:element name="PERSMORALE" type="PERSMORALE-TYPE" minOccurs="0" maxOccurs="1" />
+            </xsd:choice>
+
+            <xsd:element name="ADRESSESINDIVIDU" type="ADRESSESINDIVIDU-TYPE" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="COORDPAIESINDIVIDU" type="COORDPAIESINDIVIDU-TYPE" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element name="LISTEDOSSIER" type="LISTEDOSSIER-TYPE" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="TIERS" type="INDIVIDU_TIERS-TYPE" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attribute name="idIndividu" type="xsd:long" use="optional"/>
+        <xsd:attribute name="modification" type="Boolean" use="optional"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="PERSPHYSIQUE-TYPE">
+        <xsd:all>
+            <xsd:element  name="TITRE" minOccurs="1" maxOccurs="1" type="Civilite" />
+            <xsd:element  name="SEXE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="1"/>
+                        <xsd:enumeration value="1" />
+                        <xsd:enumeration value="2" />
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="NUMSIRET" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="14"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODESITUFAM" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="1"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="NOMUSAGE" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="50"/>
+                        <xsd:pattern value="[^\t¨;]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="NOMNAISSANCE" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="50"/>
+                        <xsd:pattern value="[^\t¨;]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="PRENOM" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="20"/>
+                        <xsd:pattern value="[^\t¨;]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="AUTRESPRENOMS" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="40"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="NOMUSAGEPERE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="50"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="NOMUSAGEMERE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="50"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="PRENOMPERE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="20"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="PRENOMMERE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="20"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="NBRENFANTS" minOccurs="0" maxOccurs="1" type="xsd:long" />
+            <xsd:element  name="NUMSS" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="13"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CLEAFFILSS" minOccurs="0" maxOccurs="1" type="xsd:long" />
+            <xsd:element  name="DATENAISSANCE" minOccurs="1" maxOccurs="1" type="Date" />
+            <xsd:element  name="DATEDECES" minOccurs="0" maxOccurs="1" type="Date" />
+            <xsd:element  name="CODEDPT" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="3"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODEINSEEPAYSNAI" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="5"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODEINSEECOMMUNE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="5"/>
+                        <xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODEINSEEPAYSNATIO" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="5"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+
+            <xsd:element  name="JUMEAUCONNU" minOccurs="0" maxOccurs="1" type="Boolean" />
+            <xsd:element  name="CODEGROUPEPAYSNATIO" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="1"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="PERSMORALE-TYPE">
+        <xsd:all>
+            <xsd:element  name="DENOMSOC" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="50"/>
+                        <xsd:pattern value="[^\t¨;]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="NUMSIRET" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="14"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="ENSEIGNE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="50"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODESECTACT" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="2"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="TYPESTE" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="2"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="DATEFINACTIVITE" minOccurs="0" maxOccurs="1" type="Date" />
+            <xsd:element  name="CODETITREREPRES" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CIVILITEREPRESENTANT" minOccurs="0" maxOccurs="1" type="Civilite" />
+            <xsd:element  name="NOMNAIREPRES" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="50"/>
+                        <xsd:pattern value="[^\t¨;]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="NOMUSAGEREPRES" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="50"/>
+                        <xsd:pattern value="[^\t¨;]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="PRENOMREPRES" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="20"/>
+                        <xsd:pattern value="[^\t¨;]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="DATENAISSANCEREPRES" minOccurs="0" maxOccurs="1" type="Date" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="ADRESSESINDIVIDU-TYPE">
+        <xsd:sequence>
+        	<xsd:element name="ADRESSE" type="ADRESSE-TYPE" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="COORDPAIESINDIVIDU-TYPE">
+        <xsd:sequence>
+        	<xsd:element name="COORDPAIE" type="COORDPAIE-TYPE" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+
+
+
+    <!-- ============================================================================ -->
+    <!-- DOSSIER                                                                      -->
+    <!-- ============================================================================ -->
+    <xsd:complexType name="LISTEDOSSIER-TYPE">
+        <xsd:sequence>
+            <xsd:element name="DOSSIER" type="DOSSIER-TYPE" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="DOSSIER-TYPE">
+        <xsd:sequence>
+            <xsd:choice>
+                <xsd:element  name="RACINENUMADM" minOccurs="0" maxOccurs="1">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="1"/>
+                            <xsd:maxLength value="21"/>
+                            <xsd:pattern value="[^\t¨;]*"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element  name="NUMADM" minOccurs="0" maxOccurs="1">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="1"/>
+                            <xsd:maxLength value="21"/>
+                            <xsd:pattern value="[^\t¨;]*"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+            </xsd:choice>
+            <xsd:element  name="CODEDISPOSITIF" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="20"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="DATECOMPLETUDE" minOccurs="0" maxOccurs="1" type="Date" />
+            <xsd:element  name="DATERECEPTIONDOSSIER" minOccurs="0" maxOccurs="1" type="Date" />
+            <xsd:element  name="MONTANTTOTALENGAGE" minOccurs="0" maxOccurs="1" type="xsd:double" />
+            <xsd:element  name="REFDOSSIERINSCRIPTION" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="30"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="CLOTUREDOSS" minOccurs="0" maxOccurs="1" type="CLOTURE-TYPE" />
+            <xsd:element name="CHGTBENEFDOSS" minOccurs="0" maxOccurs="1" type="CHGTBENEF-TYPE" />
+            <xsd:element name="ADRESSESDOSSIER" type="ADRESSESDOSSIER-TYPE" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="COORDPAIESDOSSIER" type="COORDPAIESDOSSIER-TYPE" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="LISTEPRESTADOSS" type="LISTEPRESTADOSS-TYPE" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attribute name="modification" type="Boolean" use="optional"/>
+        <xsd:attribute name="idDoss" type="xsd:long" use="optional"/>
+        <xsd:attribute name="codeDispo" type="xsd:string" use="optional"/>
+        <xsd:attribute name="numadmDoss" type="xsd:string" use="optional"/>
+        <xsd:attribute name="clotureDoss" type="xsd:string" use="optional"/>
+        <xsd:attribute name="chgtBenefDoss" type="Boolean" use="optional"/>
+    </xsd:complexType>
+
+	<xsd:complexType name="ADRESSESDOSSIER-TYPE">
+        <xsd:sequence>
+            <xsd:element name="ADRESSE" type="ADRESSE-TYPE" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="COORDPAIESDOSSIER-TYPE">
+        <xsd:sequence>
+            <xsd:element name="COORDPAIE" type="COORDPAIE-TYPE" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- ============================================================================ -->
+    <!-- PRESTATION DOSSIER                                                           -->
+    <!-- ============================================================================ -->
+    <xsd:complexType name="LISTEPRESTADOSS-TYPE">
+        <xsd:sequence>
+            <xsd:element name="PRESTADOSS" type="PRESTADOSS-TYPE" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="PRESTADOSS-TYPE">
+        <xsd:sequence>
+            <xsd:choice>
+                <xsd:element  name="RACINENUMADM" minOccurs="0" maxOccurs="1">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="1"/>
+                            <xsd:maxLength value="21"/>
+							<xsd:pattern value="[^\t¨]*"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element  name="NUMADM" minOccurs="0" maxOccurs="1">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="1"/>
+                            <xsd:maxLength value="21"/>
+							<xsd:pattern value="[^\t¨]*"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+            </xsd:choice>
+            <xsd:element  name="CODEPRESTADISPO" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="20"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="DATEREFERENCEVRVI" minOccurs="0" maxOccurs="1" type="Date" />
+            <xsd:element  name="DATECOMPLETUDE" minOccurs="1" maxOccurs="1" type="Date" />
+            <xsd:element  name="DATERECEPTIONPRESTADOSS" minOccurs="1" maxOccurs="1" type="Date" />
+            <xsd:element  name="DATEREFERENCE" minOccurs="0" maxOccurs="1" type="Date" />
+            <xsd:element  name="MONTANTTOTALENGAGE" minOccurs="1" maxOccurs="1" type="xsd:double" />
+            <xsd:element  name="CODE" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="1"/>
+                        <xsd:enumeration value="D" />
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="VALEUR" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="100"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="INDICRATTACHUSPRESTADISPO" minOccurs="1" maxOccurs="1" type="Boolean" />
+            <xsd:element  name="INDICRATTACHTIERS" minOccurs="0" maxOccurs="1" type="Boolean" />
+            <xsd:element  name="DATEDEBRATTACHTIERS" minOccurs="0" maxOccurs="1" type="Date" />
+            <xsd:element  name="DATEFINRATTACHTIERS" minOccurs="0" maxOccurs="1" type="Date" />
+            <xsd:element  name="CODETYPETIERS" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="INDICCPLTAVISPAIE" minOccurs="0" maxOccurs="1" type="Boolean" />
+            <xsd:element  name="CODESITECREAT" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODESITERESP" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+			<xsd:element  name="DEMATAVISPAIE"  minOccurs="0" maxOccurs="1" type="DEMATAVISPAIE-TYPE"/>
+            <xsd:element  name="CLOTUREPRESTADOSS" minOccurs="0" maxOccurs="1" type="CLOTURE-TYPE" />
+            <xsd:element  name="CHGTBENEFPRESTADOSS" minOccurs="0" maxOccurs="1" type="CHGTBENEF-TYPE" />
+            <xsd:element  name="INDIVIDUPRESTADOSS" minOccurs="0" maxOccurs="1" type="INDIVIDU_PRESTADOSS-TYPE" />
+            <xsd:element  name="ADRESSESPRESTADOSS" minOccurs="0" maxOccurs="1" type="ADRESSESPRESTADOSS-TYPE" />
+            <xsd:element  name="COORDPAIESPRESTADOSS" minOccurs="0" maxOccurs="1" type="COORDPAIESPRESTADOSS-TYPE" />
+            <xsd:element  name="LISTELIGNECPLT" minOccurs="0" maxOccurs="1" type="LISTE-LIGNECPLT-TYPE" />
+			<xsd:element  name="LISTEDONCOMPL" minOccurs="0" maxOccurs="1" type="LISTE-DONCOMPL-TYPE" />
+            <xsd:element  name="LISTEUNITESUIVI" minOccurs="0" maxOccurs="1" type="LISTE-UNITE_SUIVI-TYPE" />
+            <xsd:element  name="LISTEELEMENTPAIEMENT" minOccurs="0" maxOccurs="1" type="LISTE-ELEMENT_PAIEMENT-TYPE" />
+        </xsd:sequence>
+        <xsd:attribute name="modification" type="Boolean" use="optional"/>
+        <xsd:attribute name="idPrestaDoss" type="xsd:long" use="optional"/>
+        <xsd:attribute name="codePrestaDispo" type="xsd:string" use="optional"/>
+        <xsd:attribute name="numadmPrestadoss" type="xsd:string" use="optional"/>
+        <xsd:attribute name="cloturePrestaDoss" type="xsd:string" use="optional"/>
+        <xsd:attribute name="chgtBenefPrestaDoss" type="Boolean" use="optional"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="ADRESSESPRESTADOSS-TYPE">
+        <xsd:sequence>
+            <xsd:element name="ADRESSE" type="ADRESSE-TYPE" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="COORDPAIESPRESTADOSS-TYPE">
+        <xsd:sequence>
+            <xsd:element name="COORDPAIE" type="COORDPAIE-TYPE" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+
+    <!-- ============================================================================ -->
+    <!-- COMPLEMENT AVIS PAIEMENT                                                     -->
+    <!-- ============================================================================ -->
+    <xsd:complexType name="LISTE-LIGNECPLT-TYPE">
+        <xsd:sequence>
+            <xsd:element  name="LIGNECPLT" minOccurs="0" maxOccurs="unbounded" type="LIGNECPLT-TYPE" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+     <xsd:complexType name="LIGNECPLT-TYPE">
+        <xsd:sequence>
+                <xsd:element  name="NUMORDRE" minOccurs="1" maxOccurs="1" type="xsd:long" />
+                <xsd:element  name="LIBELLE" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="255"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:sequence>
+     </xsd:complexType>
+
+	<!-- ============================================================================ -->
+    <!-- DONNEES COMPLEMENTAIRES													  -->
+    <!-- ============================================================================ -->
+    <xsd:complexType name="LISTE-DONCOMPL-TYPE">
+        <xsd:sequence>
+            <xsd:element  name="DONCOMPL" minOccurs="0" maxOccurs="unbounded" type="DONCOMPL-TYPE" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="DONCOMPL-TYPE">
+        <xsd:sequence>
+            <xsd:element  name="CODEDONCOMPL" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="30"/>
+                        <xsd:pattern value="[^\t]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="VALEURDONCOMPL" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="255"/>
+                        <xsd:pattern value="[^\t]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- ============================================================================ -->
+    <!-- UNITE SUIVI                                                                  -->
+    <!-- ============================================================================ -->
+    <xsd:complexType name="LISTE-UNITE_SUIVI-TYPE">
+        <xsd:sequence>
+            <xsd:element  name="UNITESUIVI" minOccurs="0" maxOccurs="unbounded" type="UNITE_SUIVI-TYPE" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UNITE_SUIVI-TYPE">
+        <xsd:sequence>
+        	<xsd:choice>
+	            <xsd:element  name="IDFINPRINC" minOccurs="0" maxOccurs="1">
+	                <xsd:simpleType>
+	                    <xsd:restriction base="xsd:string">
+	                        <xsd:minLength value="1"/>
+	                        <xsd:maxLength value="5"/>
+							<xsd:pattern value="[^\t¨]*"/>
+	                    </xsd:restriction>
+	                </xsd:simpleType>
+	            </xsd:element>
+	            <xsd:element  name="USPRINC" minOccurs="0" maxOccurs="1">
+	                <xsd:simpleType>
+	                    <xsd:restriction base="xsd:string">
+	                        <xsd:minLength value="1"/>
+	                        <xsd:maxLength value="13"/>
+							<xsd:pattern value="[^\t¨]*"/>
+	                    </xsd:restriction>
+	                </xsd:simpleType>
+	            </xsd:element>
+	        </xsd:choice>
+            <xsd:element  name="POURCENTAGEUSPRINC" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:long">
+                        <xsd:minInclusive value="0" />
+                        <xsd:maxInclusive value="100" />
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:choice>
+	            <xsd:element  name="IDFINCONTRE" minOccurs="0" maxOccurs="1">
+	                <xsd:simpleType>
+	                    <xsd:restriction base="xsd:string">
+	                        <xsd:minLength value="1"/>
+	                        <xsd:maxLength value="5"/>
+							<xsd:pattern value="[^\t¨]*"/>
+	                    </xsd:restriction>
+	                </xsd:simpleType>
+	            </xsd:element>
+	            <xsd:element  name="USCONTRE" minOccurs="0" maxOccurs="1">
+	                <xsd:simpleType>
+	                    <xsd:restriction base="xsd:string">
+	                        <xsd:minLength value="1"/>
+	                        <xsd:maxLength value="13"/>
+							<xsd:pattern value="[^\t¨]*"/>
+	                    </xsd:restriction>
+	                </xsd:simpleType>
+	            </xsd:element>
+	        </xsd:choice>
+            <xsd:element  name="POURCENTAGEUSCONTRE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:long">
+                        <xsd:minInclusive value="0" />
+                        <xsd:maxInclusive value="100" />
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="POURCENTREPARTVERTICALE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:long">
+                        <xsd:minInclusive value="0" />
+                        <xsd:maxInclusive value="100" />
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+
+    <!-- ============================================================================ -->
+    <!-- ELEMENT PAIEMENT                                                             -->
+    <!-- ============================================================================ -->
+    <xsd:complexType name="LISTE-ELEMENT_PAIEMENT-TYPE">
+        <xsd:sequence>
+            <xsd:element  name="ELEMENTPAIEMENT" minOccurs="0" maxOccurs="unbounded" type="ELEMENT_PAIEMENT-TYPE" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="ELEMENT_PAIEMENT-TYPE">
+        <xsd:all>
+            <xsd:element  name="CODEOBJET" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="LISTEVERSEMENT" minOccurs="0" maxOccurs="1" type="LISTE-VERSEMENT-TYPE" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <!-- ============================================================================ -->
+    <!-- VERSEMENT                                                                    -->
+    <!-- ============================================================================ -->
+    <xsd:complexType name="LISTE-VERSEMENT-TYPE">
+        <xsd:sequence>
+            <xsd:element name="VERSEMENT" minOccurs="0" maxOccurs="unbounded" type="VERSEMENT-TYPE" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="VERSEMENT-TYPE">
+        <xsd:all>
+            <xsd:element name="CODETYPEVERSEMENT" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+           	<xsd:element name="DATEDECISION" minOccurs="0" maxOccurs="1" type="Date" />
+           	<xsd:element name="DATEPLANIFICATION" minOccurs="0" maxOccurs="1" type="Date" />
+            <xsd:element name="PAIEURGENT" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="1"/>
+                        <xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="LISTEFINANCEMENT" minOccurs="1" maxOccurs="1" type="LISTE-FINANCEMENT-TYPE" />
+            <xsd:element name="LISTELIGNEJUSTIF" minOccurs="0" maxOccurs="1" type="LISTE-LIGNEJUSTIF-TYPE" />
+            <xsd:element name="LISTELIGNEJUSTIFOR" minOccurs="0" maxOccurs="1" type="LISTE-LIGNEJUSTIFOR-TYPE" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <!-- ============================================================================ -->
+    <!-- FINANCEMENT                                                                  -->
+    <!-- ============================================================================ -->
+    <xsd:complexType name="LISTE-FINANCEMENT-TYPE">
+        <xsd:sequence>
+            <xsd:element  name="FINANCEMENT" minOccurs="0" maxOccurs="unbounded" type="FINANCEMENT-TYPE" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="FINANCEMENT-TYPE">
+        <xsd:all>
+            <xsd:element  name="MTTOTALFINANCEMENT" minOccurs="1" maxOccurs="1" type="xsd:double" />
+            <xsd:element  name="IDFINPRINC" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="5"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="USPRINC" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="13"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="IDFINCONTRE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="5"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="USCONTRE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="13"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+
+    <!-- ============================================================================ -->
+    <!-- ADRESSE                                                                  -->
+    <!-- ============================================================================ -->
+    <xsd:complexType name="ADRESSE-TYPE">
+        <xsd:all>
+            <xsd:element  name="CODETYPEADR" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CPLTPOINTGEO" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="38"/>
+                        <xsd:pattern value="[^\t¨;]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="POINTREMISE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="38"/>
+                        <xsd:pattern value="[^\t¨;]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="NUMEROVOIE" minOccurs="0" maxOccurs="1" type="xsd:long" />
+            <xsd:element  name="LIBELLEVOIE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="28"/>
+						<xsd:pattern value="[^\t¨;]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODEEXTENSIONVOIE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="1"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODETYPEVOIE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="4"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CPLTDISTRIBUTION" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="38"/>
+                        <xsd:pattern value="[^\t¨;]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODECOMINSEE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="5"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODEINSEEPAYS" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="5"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODEPOSTALCEDEX" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="5"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="VOIEPOINTGEOETRANGER" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="38"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="LOCALITEETRANGER" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="38"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="BUREAUDISTRIBETRANGER" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="38"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="DISTRICTETRANGER" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="38"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="REGIONETRANGER" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="38"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+
+    <!-- ============================================================================ -->
+    <!-- COORDONNEE DE PAIEMENT                                                       -->
+    <!-- ============================================================================ -->
+    <xsd:complexType name="COORDPAIE-TYPE">
+        <xsd:sequence>
+            <xsd:element  name="CODETYPECOORDPAIE" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODEMODEREGLEMENT" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="3"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODETYPEDESTINATAIRE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+             <xsd:element  name="INTITDEST" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="32"/>
+                        <xsd:pattern value="[^\t¨;]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="TYPETAXATION" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="1"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                        <xsd:enumeration value="0" />
+                        <xsd:enumeration value="1" />
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODEAFFECTATION" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="LIBELLEAFFECTATION" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="100"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODEMOYENPAIEMENT" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:choice>
+            	<xsd:element name="RIB" type="RIB-TYPE" minOccurs="0" maxOccurs="1" />
+            	<xsd:element name="IBAN" type="IBAN-TYPE" minOccurs="0" maxOccurs="1" />
+            	<xsd:element name="LETTRECHEQUE" type="LETTRE_CHEQUE-TYPE" minOccurs="0" maxOccurs="1" />
+            	<xsd:element name="SUPPORTPAIEMENT" type="SUPPORT_PAIEMENT-TYPE" minOccurs="0" maxOccurs="1" />
+            </xsd:choice>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- ============================================================================ -->
+    <!-- RIB                                                                          -->
+    <!-- ============================================================================ -->
+    <xsd:complexType name="RIB-TYPE">
+        <xsd:all>
+            <xsd:element  name="CODEETABLISSEMENT" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="5"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODEGUICHET" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="5"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="NUMEROCOMPTE" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="11"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CLERIB" minOccurs="0" maxOccurs="1" type="xsd:long" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <!-- ============================================================================ -->
+    <!-- IBAN                                                                         -->
+    <!-- ============================================================================ -->
+    <xsd:complexType name="IBAN-TYPE">
+        <xsd:all>
+            <xsd:element  name="CODEISOPAYS" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="2"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="ZONEBBAN" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="30"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CLECONTROL" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="2"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="BIC" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="11"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+
+    <!-- ============================================================================ -->
+    <!-- LETTRE CHEQUE                                                                -->
+    <!-- ============================================================================ -->
+    <xsd:complexType name="LETTRE_CHEQUE-TYPE">
+        <xsd:all>
+            <xsd:element  name="CPLTPOINTGEO" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="38"/>
+                        <xsd:pattern value="[^\t¨;]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="POINTREMISE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="38"/>
+                        <xsd:pattern value="[^\t¨;]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="NUMEROVOIE" minOccurs="0" maxOccurs="1" type="xsd:long" />
+            <xsd:element  name="CODEEXTENSIONVOIE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="1"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODETYPEVOIE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="4"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="LIBELLEVOIE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="28"/>
+						<xsd:pattern value="[^\t¨;]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CPLTDISTRIBUTION" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="38"/>
+						<xsd:pattern value="[^\t¨;]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODECOMINSEE" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="5"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODEINSEEPAYS" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="5"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODEPOSTALCEDEX" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="5"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+
+
+    <!-- ============================================================================ -->
+    <!-- SUPPORT PAIEMENT                                                                         -->
+    <!-- ============================================================================ -->
+    <xsd:complexType name="SUPPORT_PAIEMENT-TYPE">
+        <xsd:all>
+            <xsd:element name="CLESUPPORT" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="100"/>
+						<xsd:pattern value="[^\t¨;]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="CLECTRLSUPPORT" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="50"/>
+						<xsd:pattern value="[^\t¨;]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="DATEDEBVALSUPPORT" minOccurs="1" maxOccurs="1" type="Date" />
+            <xsd:element name="DATEFINVALSUPPORT" minOccurs="1" maxOccurs="1" type="Date" />
+            <xsd:element name="COMMENTAIRESUPPORT" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="255"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="INDICACTIVATIONSUPPORT" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="1"/>
+                        <xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="CODEMOTIFACTIVSUPPORT" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="15"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="CODEMOTIFINACTIVSUPPORT" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="15"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="COMMENTACTIVINACTIV" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="255"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+
+
+    <!-- ============================================================================ -->
+    <!-- TIERS                                                       					  -->
+    <!-- ============================================================================ -->
+
+    <xsd:complexType name="INDIVIDU_TIERS-TYPE">
+    	<xsd:sequence>
+    		<xsd:element  name="CODETYPETIERS" minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="ENVOICOURRIERPAIE" minOccurs="1" maxOccurs="1" type="Boolean" />
+           	<xsd:element  name="DATEDEBTIERS" minOccurs="1" maxOccurs="1" type="Date" />
+           	<xsd:element  name="DATEFINTIERS" minOccurs="0" maxOccurs="1" type="Date" />
+           	<xsd:element  name="NATUREINDIVIDU" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="1"/>
+                        <xsd:enumeration value="P" />
+                        <xsd:enumeration value="M" />
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="NUMPACAGE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="9"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="DATEIMMATRICULATION" minOccurs="0" maxOccurs="1" type="Date" />
+            <xsd:element  name="TELEPHONE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="20"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="PORTABLE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="20"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="FAX" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="20"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="COURRIEL" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="100"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="DOMAINE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="PROVENANCEINDIVIDU" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODEAPE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODENAF" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="5"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODESITECREAT" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODESITERESP" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:choice>
+                <xsd:element name="PERSPHYSIQUETIERS" type="PERSPHYSIQUE-TYPE" minOccurs="0" maxOccurs="1" />
+                <xsd:element name="PERSMORALETIERS" type="PERSMORALE-TYPE" minOccurs="0" maxOccurs="1" />
+            </xsd:choice>
+            <xsd:element name="ADRESSESTIERS" type="ADRESSESINDIVIDU-TYPE" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="COORDPAIESTIERS" type="COORDPAIESINDIVIDU-TYPE" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attribute name="idIndTiers" type="xsd:long" use="optional"/>
+    </xsd:complexType>
+
+
+    <!-- ============================================================================ -->
+    <!-- LIGNE JUSTIF PAIEMENT                                                        -->
+    <!-- ============================================================================ -->
+
+    <xsd:complexType name="LISTE-LIGNEJUSTIF-TYPE">
+        <xsd:sequence>
+            <xsd:element  name="LIGNEJUSTIF" minOccurs="0" maxOccurs="unbounded" type="LIGNEJUSTIF-TYPE" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="LIGNEJUSTIF-TYPE">
+    <xsd:all>
+		<xsd:element  name="NUMLIGPARAG" minOccurs="1" maxOccurs="1" type="xsd:long" />
+		<xsd:element  name="TYPELIGNE" minOccurs="1" maxOccurs="1">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <xsd:minLength value="2"/>
+                    <xsd:maxLength value="2"/>
+					<xsd:pattern value="[^\t¨]*"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:element>
+        <xsd:element  name="LIBLIGNE" minOccurs="1" maxOccurs="1">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <xsd:minLength value="1"/>
+                    <xsd:maxLength value="100"/>
+					<xsd:pattern value="[^\t¨]*"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:element>
+		</xsd:all>
+	</xsd:complexType>
+
+
+    <!-- ============================================================================ -->
+    <!-- LIGNE JUSTIF OR                                                        -->
+    <!-- ============================================================================ -->
+
+    <xsd:complexType name="LISTE-LIGNEJUSTIFOR-TYPE">
+        <xsd:sequence>
+            <xsd:element  name="LIGNEJUSTIFOR" minOccurs="0" maxOccurs="unbounded" type="LIGNEJUSTIFOR-TYPE" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+	<xsd:complexType name="LIGNEJUSTIFOR-TYPE">
+        <xsd:all>
+            <xsd:element  name="NUMLIGPARAG" minOccurs="1" maxOccurs="1" type="xsd:long" />
+            <xsd:element  name="LIBLIGNE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="78"/>
+                        <xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+		</xsd:all>
+	</xsd:complexType>
+
+
+
+    <!-- ============================================================================ -->
+    <!-- CLOTURE (pour dossier et prestation dossier)                                 -->
+    <!-- ============================================================================ -->
+
+	<xsd:complexType name="CLOTURE-TYPE">
+    	<xsd:all>
+			<xsd:element name="CODEMOTIFCLOTURE" minOccurs="1" maxOccurs="1">
+	            <xsd:simpleType>
+	                <xsd:restriction base="xsd:string">
+	                    <xsd:minLength value="1"/>
+	                    <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+	                </xsd:restriction>
+	            </xsd:simpleType>
+	      </xsd:element>
+	      <xsd:element name="COMMENTAIRE" minOccurs="0" maxOccurs="1">
+	            <xsd:simpleType>
+	                <xsd:restriction base="xsd:string">
+	                    <xsd:minLength value="1"/>
+	                    <xsd:maxLength value="255"/>
+						<xsd:pattern value="[^\t¨]*"/>
+	                </xsd:restriction>
+	            </xsd:simpleType>
+	      </xsd:element>
+		</xsd:all>
+	</xsd:complexType>
+
+
+
+	<!-- ============================================================================ -->
+	<!-- CHANGEMENT BENEFICIAIRE (pour dossier et prestation dossier)                 -->
+	<!-- ============================================================================ -->
+
+	<xsd:complexType name="CHGTBENEF-TYPE">
+    	<xsd:all>
+			<xsd:element name="IDINDIVIDUACTUEL" minOccurs="1" maxOccurs="1" type="xsd:long" />
+			<xsd:element name="IDINDIVIDUNOUVEAU" minOccurs="0" maxOccurs="1" type="xsd:long" />
+			<xsd:element name="INDIVIDUCHGTBENEF" minOccurs="0" maxOccurs="1" type="INDIVIDUCHGTBENEF-TYPE" />
+			<xsd:element name="CODEMOTIFCHGTBENEF" minOccurs="1" maxOccurs="1">
+	            <xsd:simpleType>
+	                <xsd:restriction base="xsd:string">
+	                    <xsd:minLength value="1"/>
+	                    <xsd:maxLength value="10"/>
+						<xsd:pattern value="[^\t¨]*"/>
+	                </xsd:restriction>
+	            </xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="IMPACTDOSSIERSEUL" minOccurs="0" maxOccurs="1">
+	            <xsd:simpleType>
+	                <xsd:restriction base="xsd:string">
+	                    <xsd:minLength value="1"/>
+	                    <xsd:maxLength value="1"/>
+	                </xsd:restriction>
+	            </xsd:simpleType>
+			</xsd:element>
+		</xsd:all>
+	</xsd:complexType>
+
+    <xsd:complexType name="INDIVIDUCHGTBENEF-TYPE">
+        <xsd:sequence>
+            <xsd:element  name="NATUREINDIVIDU" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="1"/>
+                        <xsd:enumeration value="P" />
+                        <xsd:enumeration value="M" />
+                        <xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="NUMPACAGE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="9"/>
+                        <xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="DATEIMMATRICULATION" minOccurs="0" maxOccurs="1" type="Date" />
+            <xsd:element  name="TELEPHONE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="20"/>
+                        <xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="PORTABLE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="20"/>
+                        <xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="FAX" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="20"/>
+                        <xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="COURRIEL" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="100"/>
+                        <xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="DOMAINE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+                        <xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="PROVENANCEINDIVIDU" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+                        <xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODEAPE" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+                        <xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODENAF" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="5"/>
+                        <xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODESITECREAT" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+                        <xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element  name="CODESITERESP" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:minLength value="1"/>
+                        <xsd:maxLength value="10"/>
+                        <xsd:pattern value="[^\t¨]*"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:choice>
+                <xsd:element name="PERSPHYSIQUE" type="PERSPHYSIQUE-TYPE" minOccurs="0" maxOccurs="1" />
+                <xsd:element name="PERSMORALE" type="PERSMORALE-TYPE" minOccurs="0" maxOccurs="1" />
+            </xsd:choice>
+
+            <xsd:element name="ADRESSESINDIVIDU" type="ADRESSESINDIVIDU-TYPE" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="COORDPAIESINDIVIDU" type="COORDPAIESINDIVIDU-TYPE" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+</xsd:schema>
