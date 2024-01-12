@@ -18,7 +18,7 @@ module ASP
       # aware yet that this is wrong, nor do our APIs provide any
       # clues as to what the gender of our students might be.
       GENDER_FOR_SEX = {
-        male: "MR",
+        male: "M",
         female: "MME"
       }.freeze
 
