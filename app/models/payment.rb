@@ -10,6 +10,8 @@ class Payment < ApplicationRecord
 
   belongs_to :pfmp
 
+  has_one :student, through: :pfmp
+
   validates :amount, numericality: { greater_than: 0 }
 
   def state_machine
