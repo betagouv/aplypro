@@ -2,7 +2,6 @@
 
 module RibsHelper
   def rib_badge(student)
-    status = student.rib.present? ? :success : :error
-    success_badge(status, "Coordonnées bancaires")
+    success_badge(student.rib.present?, "Coordonnées bancaires")
   end
 end
