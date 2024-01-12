@@ -35,16 +35,16 @@ module ASP
         end
       end
 
-      def to_xml(document = Nokogiri::XML::Document.new)
+      def to_xml(builder = Nokogiri::XML::Builder.new)
         validate!
 
-        Nokogiri::XML::Builder.with(document) do |xml|
-          xml.personnephysique do
-            xml.titre(titre)
-            xml.prenom(prenom)
-            xml.nomusage(nomusage)
-          end
-        end.to_xml
+        builder.personnephysique do |xml|
+          xml.titre(titre)
+          xml.prenom(prenom)
+          xml.nomusage(nomusage)
+        end
+
+        builder.to_xml
       end
     end
   end
