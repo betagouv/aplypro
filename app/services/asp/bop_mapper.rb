@@ -10,7 +10,7 @@ module ASP
       private
 
       def unite_suivi_key(ministry:, private_establishment: false)
-        template = "APLYPRO_ASP_%s_US"
+        template = "APLYPRO_ASP_%s_UNITE_SUIVI"
 
         key = case ministry
               when "menj"
