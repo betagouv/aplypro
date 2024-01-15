@@ -26,9 +26,7 @@ module ASP
         ASP::Mappers::AddressMapper
       end
 
-      def to_xml(builder = Nokogiri::XML::Builder.new)
-        validate!
-
+      def fragment(builder)
         builder.adresse do |xml|
           xml.codetypeadr(codetypeadr)
           xml.codeinseepays(codeinseepays)
@@ -41,8 +39,6 @@ module ASP
             xml.bureaudistribetranger(bureaudistribetranger)
           end
         end
-
-        builder.to_xml
       end
 
       private
