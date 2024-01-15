@@ -5,7 +5,7 @@ module ASP
     class CoordonneesPaiement < Entity
       extend StudentMapper
 
-      CODE_MODE_REGLEMENT_IBAN = "102"
+      CODE_MODE_REGLEMENT_IBAN = "135"
       CODE_TYPE_COORDONNEE_PAIEMENT_PRINCIPALE = "PRINCIPALE"
 
       attribute :codetypecoordpaie, :string
