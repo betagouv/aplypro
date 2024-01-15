@@ -23,6 +23,9 @@ module ASP
             xml.adressesindividu do
               ASP::Entities::Adresse.from_student(student).to_xml(xml)
             end
+            xml.coordpaiesindividu do
+              ASP::Entities::CoordonneesPaiement.from_student(student).to_xml(xml)
+            end
           end
         end
       end

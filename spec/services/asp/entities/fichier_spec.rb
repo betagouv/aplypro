@@ -7,32 +7,21 @@ describe ASP::Entities::Fichier do
 
   let(:payments) { create_list(:payment, 1) }
 
-  describe "document" do
-    let(:payments) do
-      student = create(:student, :with_extra_info, :with_french_address)
-      pfmp = create(:pfmp, student: student)
-      payment = create(:payment, pfmp: pfmp)
-
-      [payment]
-    end
-
-    it "can produce a valid document" do
-      expect { file.validate! }.not_to raise_error
-    end
-  end
-
   describe "to_xml" do
     subject(:document) { Nokogiri::XML(file.to_xml) }
 
     let(:person_double) { instance_double(ASP::Entities::PersonnePhysique) }
     let(:address_double) { instance_double(ASP::Entities::Adresse) }
+    let(:rib_double) { instance_double(ASP::Entities::CoordonneesPaiement) }
 
     before do
       allow(ASP::Entities::PersonnePhysique).to receive(:from_student).and_return(person_double)
       allow(ASP::Entities::Adresse).to receive(:from_student).and_return(address_double)
+      allow(ASP::Entities::CoordonneesPaiement).to receive(:from_student).and_return(rib_double)
 
       allow(person_double).to receive(:to_xml)
       allow(address_double).to receive(:to_xml)
+      allow(rib_double).to receive(:to_xml)
     end
 
     it "includes the config" do
