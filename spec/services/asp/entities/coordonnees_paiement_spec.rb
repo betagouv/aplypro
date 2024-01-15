@@ -9,6 +9,6 @@ describe ASP::Entities::CoordonneesPaiement, type: :model do
 
   it_behaves_like "an XML-fragment producer" do
     let(:entity) { described_class.from_student(student) }
-    let(:probe) { ["coordpaie/iban/bic", student.rib.bic] }
+    let(:probe) { ["coordpaie/iban/codeisopays", "FR"] }
   end
 end
