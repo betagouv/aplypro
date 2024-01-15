@@ -18,6 +18,18 @@ FactoryBot.define do
       with_address
     end
 
+    trait :with_french_address do
+      with_address
+
+      address_country_code { "99100" }
+    end
+
+    trait :with_foreign_address do
+      with_address
+
+      address_country_code { "12345" }
+    end
+
     trait :with_birthplace_info do
       birthplace_city_insee_code { Faker::Number.digit }
       birthplace_country_insee_code { Faker::Number.digit }
