@@ -20,8 +20,9 @@ module ASP
         prenom
         datenaissance
         codeinseepaysnai
-        codeinseecommune
       ]
+
+      validates_presence_of :codeinseecommune, if: :born_in_france?
 
       def self.student_mapper_class
         ASP::Mappers::StudentMapper
@@ -37,6 +38,12 @@ module ASP
           xml.codeinseepaysnai(codeinseepaysnai)
           xml.codeinseecommune(codeinseecommune)
         end
+      end
+
+      private
+
+      def born_in_france?
+        codeinseepaysnai == Adresse::FRANCE_INSEE_COUNTRY_CODE
       end
     end
   end
