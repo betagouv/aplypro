@@ -20,6 +20,12 @@ module ASP
           xml.individu do
             xml.natureindividu("P")
             ASP::Entities::PersonnePhysique.from_student(student).to_xml(xml)
+            xml.adressesindividu do
+              ASP::Entities::Adresse.from_student(student).to_xml(xml)
+            end
+            xml.coordpaiesindividu do
+              ASP::Entities::CoordonneesPaiement.from_student(student).to_xml(xml)
+            end
           end
         end
       end
@@ -51,6 +57,7 @@ module ASP
           xml.codesiteope(CODE_SITE_OP)
           xml.codeutilisateur(CODE_UTILISATEUR)
           xml.codedispo(CODE_DISPOSITIF)
+          xml.codeprestadispo(CODE_DISPOSITIF)
         end
       end
 

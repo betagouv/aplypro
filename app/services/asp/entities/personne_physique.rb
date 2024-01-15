@@ -2,10 +2,8 @@
 
 module ASP
   module Entities
-    class PersonnePhysique
-      include ActiveModel::API
-      include ActiveModel::Attributes
-      include ActiveModel::AttributeAssignment
+    class PersonnePhysique < Entity
+      extend StudentMapper
 
       attribute :titre, :string
       attribute :nomusage, :string
@@ -22,22 +20,15 @@ module ASP
         prenom
         datenaissance
         codeinseepaysnai
-        codeinseecommune
       ]
 
-      def self.from_student(student)
-        mapper = ASP::Mappers::StudentMapper.new(student)
+      validates_presence_of :codeinseecommune, if: :born_in_france?
 
-        new.tap do |instance|
-          mapped_attributes = attribute_names.index_with { |attr| mapper.send(attr) }
-
-          instance.assign_attributes(mapped_attributes)
-        end
+      def self.student_mapper_class
+        ASP::Mappers::StudentMapper
       end
 
-      def to_xml(builder = Nokogiri::XML::Builder.new)
-        validate!
-
+      def fragment(builder)
         builder.persphysique do |xml|
           xml.titre(titre)
           xml.prenom(prenom)
@@ -45,9 +36,14 @@ module ASP
           xml.nomnaissance(nomnaissance)
           xml.datenaissance(I18n.l(datenaissance, format: :asp))
           xml.codeinseepaysnai(codeinseepaysnai)
+          xml.codeinseecommune(codeinseecommune)
         end
+      end
 
-        builder.to_xml
+      private
+
+      def born_in_france?
+        codeinseepaysnai == Adresse::FRANCE_INSEE_COUNTRY_CODE
       end
     end
   end
