@@ -14,7 +14,7 @@ module ASP
 
       def initialize(student)
         @rib = student.rib
-        @iban = Bank::IBAN.new(rib)
+        @iban = Bank::IBAN.new(rib.iban)
       end
 
       MAPPING.each do |name, attr|
