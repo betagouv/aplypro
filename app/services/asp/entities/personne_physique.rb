@@ -6,7 +6,6 @@ module ASP
       extend StudentMapper
 
       attribute :titre, :string
-      attribute :sexe, :string # FIXME: we might not need this
       attribute :nomusage, :string
       attribute :nomnaissance, :string
       attribute :prenom, :string
@@ -16,7 +15,6 @@ module ASP
 
       validates_presence_of %i[
         titre
-        sexe
         nomusage
         nomnaissance
         prenom
