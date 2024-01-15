@@ -14,6 +14,10 @@ module ASP
 
     # rubocop:disable Style/MissingRespondToMissing
     def method_missing(method, *args, &)
+      args = args.map do |a|
+        a.is_a?(String) ? I18n.transliterate(a) : a
+      end
+
       super(method.to_s.upcase, *args, &)
     end
     # rubocop:enable Style/MissingRespondToMissing
