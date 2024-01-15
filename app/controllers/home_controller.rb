@@ -21,7 +21,7 @@ class HomeController < ApplicationController
 
     @students_count = current_classes.joins(:active_students).count
     @attributive_decisions_count = @etab.schoolings.current.joins(:attributive_decision_attachment).count
-    @ribs_count = current_classes.joins(students: :rib).count
+    @ribs_count = current_classes.joins(active_students: :rib).count
     @pfmps_counts = pfmp_counts
   end
 

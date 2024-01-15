@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
+  skip_before_action :set_establishment, only: :update
+
   def update
     if current_user.update!(user_params)
       redirect_to root_path

@@ -13,6 +13,16 @@ RSpec.describe Student do
   it { is_expected.to validate_presence_of(:ine) }
   it { is_expected.to validate_uniqueness_of(:asp_file_reference) }
 
+  describe "biological_sex" do
+    it "can be unknown" do
+      expect(build(:student, biological_sex: nil)).to be_valid
+    end
+
+    it "cannot be a random value" do
+      expect(build(:student, biological_sex: 3)).not_to be_valid
+    end
+  end
+
   describe "asp_file_reference" do
     subject(:student) { build(:student, asp_file_reference: nil) }
 

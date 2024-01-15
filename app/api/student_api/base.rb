@@ -24,8 +24,8 @@ module StudentApi
       mapper.new(response, uai).parse!
     end
 
-    def address_mapper
-      "Student::AddressMappers::#{identifier}".constantize
+    def info_mapper
+      "Student::InfoMappers::#{identifier}".constantize
     end
 
     def mapper

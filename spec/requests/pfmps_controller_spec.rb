@@ -60,26 +60,4 @@ RSpec.describe "PfmpsController" do
       end
     end
   end
-
-  describe "GET /validate_all" do
-    context "when there's a pending PFMP" do
-      before { pfmp.update!(day_count: 10) }
-
-      it "renders the validation screen" do
-        get validate_all_pfmps_path(pfmp.classe)
-
-        expect(response.body).to include "Valider cette PFMP et passer à la suivante"
-      end
-
-      context "when the schooling is closed" do
-        before { student.close_current_schooling! }
-
-        it "is not included in the list" do
-          get validate_all_pfmps_path(pfmp.classe)
-
-          expect(response.body).to include "Il n'y aucune PFMP à valider"
-        end
-      end
-    end
-  end
 end

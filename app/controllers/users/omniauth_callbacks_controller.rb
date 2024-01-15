@@ -121,7 +121,6 @@ module Users
       fetch_students_for!(establishments)
 
       if establishments.many?
-        clear_previous_establishment!
         @inhibit_nav = true
 
         render action: :select_etab
@@ -138,10 +137,6 @@ module Users
 
     def fetch_establishments!
       @mapper.establishments_in_responsibility_and_delegated.each { |e| FetchEstablishmentJob.perform_now(e) }
-    end
-
-    def clear_previous_establishment!
-      @user.update!(establishment: nil)
     end
 
     def check_limited_access!

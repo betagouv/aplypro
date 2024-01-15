@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module PfmpDecorator
+  delegate :index_name, to: :student, prefix: true
+
   PFMP_STATE_MAPPING = {
     pending: :new,
     completed: :info,
@@ -34,6 +36,13 @@ module PfmpDecorator
     [
       l(start_date, format: :pfmp_listing),
       l(end_date, format: :pfmp_listing)
+    ].uniq.join(" - ")
+  end
+
+  def full_dates
+    [
+      l(start_date),
+      l(end_date)
     ].uniq.join(" - ")
   end
 end

@@ -23,6 +23,8 @@ Rails.application.routes.draw do
       post "create_bulk_pfmp"
       get "bulk_pfmp_completion"
       put "update_bulk_pfmp"
+      get "validation", to: "validations#show"
+      post "validation", to: "validations#validate"
     end
 
     resources :ribs, only: [] do
@@ -48,11 +50,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :pfmps, only: %i[index] do
-    collection do
-      get "validate_all", to: "pfmps#validate_all"
-    end
-  end
+  resources :validations, only: :index
 
   devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
 

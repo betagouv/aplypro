@@ -108,6 +108,9 @@ fr:
       ribs:
         new: "Ajout de coordonnées bancaires"
         missing: Saisir des coordonnées bancaires
+      validations:
+        index: Envoyer des PFMPs en paiement
+        show: Envoyer en paiement les PFMPs de %{name}
 
   global:
     sponsor: "Direction\nInterministérielle\ndu Numérique"
@@ -233,6 +236,9 @@ fr:
     alert:
       fim: "Seuls les emails de comptes académiques seront autorisés à se connecter"
       masa: "Seuls les emails de comptes EDUCAGRI seront autorisés à se connecter"
+  roles:
+    errors:
+      not_director: &not_director_error Vous devez être chef d'établissement
   panels:
     attributive_decisions:
       download:
@@ -245,5 +251,14 @@ fr:
       confirm_director_information: "(Vous remplacerez %{name} en tant que chef d'établissement)"
       not_allowed: Vous n'avez pas le droit d'éditer les décisions d'attribution
       not_director:
-        title: Vous devez être chef d'établissement
+        title: *not_director_error
         content: Si vous êtes adjoint, veuillez contacter votre chef d'établissement pour qu'il édite les décisions d'attributions et que son nom apparaisse dans les documents générés.
+  validations:
+    confirm_director: Je confirme que <strong>je suis le responsable légal de l'établissement</strong>
+    validate: Envoyer en paiement les PFMPs cochées
+    create:
+      success: PFMPs envoyées en paiement pour la classe %{classe_label}
+      empty: Vous devez sélectionner au moins une PFMP pour pouvoir valider
+      not_director:
+        title: *not_director_error
+        content: Si vous êtes adjoint, veuillez contacter votre chef d'établissement pour qu'il valide les PFMPs afin de les envoyer en paiement.

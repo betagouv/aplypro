@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Student
-  module AddressMappers
+  module InfoMappers
     class Base
       attr_reader :payload
 
@@ -9,7 +9,7 @@ class Student
         @payload = payload
       end
 
-      def address_attributes
+      def attributes
         self.class::Mapper.new.call(payload)
       end
     end

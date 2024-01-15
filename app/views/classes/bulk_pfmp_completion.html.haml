@@ -14,7 +14,7 @@
       - @pfmps.each do |pfmp|
         %tr
           %td= dsfr_link_to pfmp.student.index_name, class_student_path(@classe, pfmp.student), title: t("links.students.show", name: pfmp.student), tabindex: "1"
-          %td= dsfr_link_to pfmp.formatted_dates, class_student_pfmp_path(@classe, pfmp.student, pfmp), tabindex: "1"
+          %td= dsfr_link_to pfmp.formatted_dates, class_student_pfmp_path(@classe, pfmp.student, pfmp), tabindex: "1", title: pfmp.full_dates
           %td
             = form.hidden_field "classe[pfmps][][id]", value: pfmp.id
             = form.label "classe[pfmps][][day_count]", "Nombre de jours", class: "hidden"

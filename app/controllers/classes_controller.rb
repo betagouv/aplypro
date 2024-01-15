@@ -13,11 +13,7 @@ class ClassesController < ApplicationController
 
   def show
     add_breadcrumb t("pages.titles.classes.index"), classes_path
-    @nb_students = @classe.active_students.count
-    @nb_pending_pfmp = @classe.pfmps.in_state(:pending).count
-    @nb_pfmps = @classe.active_pfmps.count
-    @nb_ribs = @classe.active_students.joins(:rib).count
-    @nb_missing_ribs = @nb_students - @nb_ribs
+    set_indicators
 
     infer_page_title(name: @classe)
   end
@@ -102,5 +98,14 @@ class ClassesController < ApplicationController
     @schoolings = @classe.active_schoolings
   rescue ActiveRecord::RecordNotFound
     redirect_to classes_path, alert: t("errors.classes.not_found") and return
+  end
+
+  def set_indicators
+    @nb_students = @classe.active_students.count
+    @nb_pending_pfmps = @classe.active_pfmps.in_state(:pending).count
+    @nb_completed_pfmps = @classe.active_pfmps.in_state(:completed).count
+    @nb_pfmps = @classe.active_pfmps.count
+    @nb_ribs = @classe.active_students.joins(:rib).count
+    @nb_missing_ribs = @nb_students - @nb_ribs
   end
 end
