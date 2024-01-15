@@ -2,10 +2,8 @@
 
 module ASP
   module Entities
-    class PersonnePhysique
-      include ActiveModel::API
-      include ActiveModel::Attributes
-      include ActiveModel::AttributeAssignment
+    class PersonnePhysique < Entity
+      extend StudentMapper
 
       attribute :titre, :string
       attribute :sexe, :string # FIXME: we might not need this
@@ -27,14 +25,8 @@ module ASP
         codeinseecommune
       ]
 
-      def self.from_student(student)
-        mapper = ASP::Mappers::StudentMapper.new(student)
-
-        new.tap do |instance|
-          mapped_attributes = attribute_names.index_with { |attr| mapper.send(attr) }
-
-          instance.assign_attributes(mapped_attributes)
-        end
+      def self.student_mapper_class
+        ASP::Mappers::StudentMapper
       end
 
       def to_xml(builder = Nokogiri::XML::Builder.new)
