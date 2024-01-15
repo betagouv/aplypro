@@ -25,7 +25,13 @@ module ASP
         end
       end
 
-      def to_xml
+      def to_xml(builder)
+        validate!
+
+        builder.tap { |xml| fragment(xml) }
+      end
+
+      def fragment(builder)
         raise NotImplementedError
       end
     end

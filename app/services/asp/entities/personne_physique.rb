@@ -27,9 +27,7 @@ module ASP
         ASP::Mappers::StudentMapper
       end
 
-      def to_xml(builder = Nokogiri::XML::Builder.new)
-        validate!
-
+      def fragment(builder)
         builder.persphysique do |xml|
           xml.titre(titre)
           xml.prenom(prenom)
@@ -37,9 +35,8 @@ module ASP
           xml.nomnaissance(nomnaissance)
           xml.datenaissance(I18n.l(datenaissance, format: :asp))
           xml.codeinseepaysnai(codeinseepaysnai)
+          xml.codeinseecommune(codeinseecommune)
         end
-
-        builder.to_xml
       end
     end
   end
