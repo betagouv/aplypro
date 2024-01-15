@@ -28,9 +28,7 @@ module ASP
         ASP::Mappers::RibMapper
       end
 
-      def to_xml(builder = Nokogiri::XML::Builder.new)
-        validate!
-
+      def fragment(builder)
         builder.coordpaie do |xml|
           xml.codetypecoordpaie(codetypecoordpaie)
           xml.codemodereglement(codemodereglement)
@@ -38,8 +36,6 @@ module ASP
 
           iban(xml)
         end
-
-        builder.to_xml
       end
 
       private

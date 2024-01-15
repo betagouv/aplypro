@@ -7,15 +7,8 @@ describe ASP::Entities::PersonnePhysique do
 
   it_behaves_like "an ASP student mapping entity"
 
-  describe "to_xml" do
-    subject(:document) { Nokogiri::XML(described_class.from_student(student).to_xml) }
-
-    it "can generate some XML" do
-      expect(document.to_s).not_to be_empty
-    end
-
-    specify "prenom" do
-      expect(document.at("persphysique/prenom")).to have_attributes(text: "Marie")
-    end
+  it_behaves_like "an XML-fragment producer" do
+    let(:entity) { described_class.from_student(student) }
+    let(:probe) { ["persphysique/prenom", "Marie"] }
   end
 end

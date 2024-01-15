@@ -22,16 +22,9 @@ describe ASP::Entities::Adresse, type: :model do
       end
     end
 
-    describe "to_xml" do
-      subject(:document) { Nokogiri::XML(described_class.from_student(student).to_xml) }
-
-      it "can generate some XML" do
-        expect(document.to_s).not_to be_empty
-      end
-
-      specify "INSEE postal code" do
-        expect(document.at("adresse/codecominsee")).to have_attributes(text: student.address_city_insee_code)
-      end
+    it_behaves_like "an XML-fragment producer" do
+      let(:entity) { described_class.from_student(student) }
+      let(:probe) { ["adresse/codecominsee", student.address_city_insee_code] }
     end
   end
 end
