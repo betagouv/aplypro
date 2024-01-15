@@ -57,6 +57,7 @@ module ASP
           xml.codesiteope(CODE_SITE_OP)
           xml.codeutilisateur(CODE_UTILISATEUR)
           xml.codedispo(CODE_DISPOSITIF)
+          xml.codeprestadispo(CODE_DISPOSITIF)
         end
       end
 

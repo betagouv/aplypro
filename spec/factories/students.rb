@@ -7,6 +7,10 @@ FactoryBot.define do
     last_name { Faker::Name.last_name }
     birthdate { Faker::Date.birthday(min_age: 16, max_age: 20) }
 
+    transient do
+      birth_country_code { Faker::Number.digit }
+    end
+
     trait :with_extra_info do
       with_address
       with_birthplace_info
@@ -32,7 +36,7 @@ FactoryBot.define do
 
     trait :with_birthplace_info do
       birthplace_city_insee_code { Faker::Number.digit }
-      birthplace_country_insee_code { Faker::Number.digit }
+      birthplace_country_insee_code { birth_country_code }
     end
 
     trait :with_address do
@@ -46,6 +50,14 @@ FactoryBot.define do
 
     trait :with_rib do
       rib
+    end
+
+    trait :born_in_france do
+      birth_country_code { "99100" }
+    end
+
+    trait :born_abroad do
+      birth_country_code { "11111" }
     end
   end
 end
