@@ -43,5 +43,9 @@ FactoryBot.define do
       address_city { Faker::Address.city }
       address_country_code { Faker::Number.digit }
     end
+
+    trait :with_rib do
+      rib
+    end
   end
 end
