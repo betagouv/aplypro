@@ -44,8 +44,7 @@ class RibsController < StudentsController
   def missing
     @ribs = @classe
             .active_students
-            .includes(:rib)
-            .where("ribs.id": nil)
+            .without_ribs
             .map { |student| Rib.new(student: student, personal: true, name: student.full_name) }
   end
 

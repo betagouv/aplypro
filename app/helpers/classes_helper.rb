@@ -1,19 +1,23 @@
 # frozen_string_literal: true
 
 module ClassesHelper
-  def avancement_ribs(classe)
-    complete = classe.active_students.filter_map(&:rib).size
-    all = classe.active_students.size
+  def attributive_decision_progress_badge(classe)
+    count = classe.active_schoolings.with_attributive_decisions.count
+    total = classe.active_students.size
 
-    "#{complete}/#{all}"
+    progress_badge(count, total)
   end
 
-  def payment_status(pfmp)
-    case pfmp.payment_state
-    when :blocked
-      :warning
-    else
-      :new
-    end
+  def ribs_progress_badge(classe)
+    count = classe.active_students.joins(:rib).count
+    total = classe.active_students.size
+
+    progress_badge(count, total)
+  end
+
+  def pfmp_progress_badge(classe, state)
+    count = classe.pfmps.merge(Schooling.current).in_state(state).count
+
+    pfmp_badge(state, count)
   end
 end

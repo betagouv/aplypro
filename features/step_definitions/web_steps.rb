@@ -66,6 +66,12 @@ Quand("je clique sur {string} dans la rangée {string}") do |link, row|
   end
 end
 
+Quand("je clique sur {string} dans la dernière rangée") do |link|
+  within(all("tr").last) do
+    click_link(link)
+  end
+end
+
 Quand("je remplis le champ {string} dans la rangée {string} avec {string}") do |locator, row, value|
   within("tr", text: row) do
     fill_in locator, with: value

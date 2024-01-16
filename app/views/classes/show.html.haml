@@ -26,9 +26,10 @@
       %th{scope: "col"}
         Élèves
         = "(#{@nb_students})"
-      %th{scope: "col"} 
-        Coordonnées bancaires
-        = "(#{@nb_ribs}/#{@nb_students})"
+      %th{scope: "col"}
+        .fr-grid-row
+          .fr-mr-1w Coordonnées bancaires
+          = ribs_progress_badge(@classe)
       %th{scope: "col"} 
         PFMPs
         = "(#{@nb_pfmps})"

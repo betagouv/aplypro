@@ -53,7 +53,9 @@ class HomeController < ApplicationController
             .merge(Schooling.current)
             .merge(current_establishment.classes.current)
 
-    PfmpStateMachine.states.index_with { |state| pfmps.in_state(state).count }
+    PfmpStateMachine.states
+                    .map(&:to_sym)
+                    .index_with { |state| pfmps.in_state(state).count }
   end
 
   def show_welcome_screen
