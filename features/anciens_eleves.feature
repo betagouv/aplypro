@@ -21,5 +21,5 @@ Fonctionnalité: Les anciens élèves ne sont pas inclus dans l'interface
   Scénario: Les anciens élèves ne sont pas affichés dans les listings de classe
     Quand je consulte la liste des classes
     Alors le tableau "Liste des classes" contient
-      | Classe | Effectif | Nombre de PFMPs | Coordonnées bancaires |
-      | 1MELEC |        9 |               0 | 0/9                   |
+      | Classe | Décisions d'attribution | Coordonnées bancaires | PFMPs |
+      | 1MELEC |                   0 / 9 |                 0 / 9 |       |

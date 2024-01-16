@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module HomeHelper
-  def indicator_badge(count, total)
-    status = indicator_badge_status(count, total)
+  def progress_badge(count, total)
+    status = progress_badge_status(count, total)
 
     dsfr_badge(status: status, classes: ["fr-badge counter"]) do
       "#{count} / #{total}"
@@ -40,7 +40,7 @@ module HomeHelper
     )
   end
 
-  def indicator_badge_status(count, total)
+  def progress_badge_status(count, total)
     if total.zero?
       :error
     else
@@ -62,13 +62,11 @@ module HomeHelper
     end
   end
 
-  def pfmp_badge(status, pfmps_counts)
-    count_tag = content_tag(:div, class: "fr-mr-1w") do
-      pfmps_counts[status.to_s].to_s
-    end
+  def pfmp_badge(status, count, **args)
+    count_tag = content_tag(:div, count, class: "fr-mr-1w")
 
-    content_tag(:div, class: "fr-badge-group fr-grid-row--right", "aria-label": t("pfmps.states.#{status}")) do
-      count_tag.concat(status_badge(status))
+    content_tag(:div, class: "fr-badge-group no-wrap #{args[:class]}", "aria-label": t("pfmps.states.#{status}")) do
+      safe_join([count_tag, status_badge(status)], " ")
     end
   end
 

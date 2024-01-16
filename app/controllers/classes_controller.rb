@@ -102,8 +102,7 @@ class ClassesController < ApplicationController
     @nb_pending_pfmps = @classe.active_pfmps.in_state(:pending).count
     @nb_completed_pfmps = @classe.active_pfmps.in_state(:completed).count
     @nb_pfmps = @classe.active_pfmps.count
-    @nb_ribs = @classe.active_students.joins(:rib).count
-    @nb_missing_ribs = @nb_students - @nb_ribs
+    @nb_missing_ribs = @classe.active_students.without_ribs.count
   end
 
   def add_bulk_action_breadcrumbs

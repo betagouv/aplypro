@@ -54,7 +54,7 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Sachant que je me déconnecte
     Et que je me connecte en tant que personnel autorisé de l'établissement "DINUM"
     Et que je passe l'écran d'accueil
-    Et que je vais voir le profil de "Marie Curie" dans la classe de "2NDEB"
+    Et que je consulte le profil de "Marie Curie" dans la classe de "2NDEB"
     Et que je renseigne une PFMP de 3 jours
     Quand je clique sur "Voir la PFMP"
     Alors la page ne contient pas "Valider"

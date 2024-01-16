@@ -57,7 +57,7 @@ end
 
 Quand("je renseigne les coordonnées bancaires de l'élève {string} de la classe {string}") do |name, label|
   steps %(
-    Quand je vais voir la classe "#{label}"
+    Quand je consulte la classe "#{label}"
     Et que je clique sur "Voir le profil de #{name}"
     Et que je clique sur "Saisir les coordonnées bancaires"
     Et que je renseigne des coordonnées bancaires
@@ -79,7 +79,7 @@ Quand("je consulte la liste des classes") do
   steps %(Quand je clique sur "Élèves" dans le menu principal)
 end
 
-Quand("je vais voir le profil de {string} dans la classe de {string}") do |name, label|
+Quand("je consulte le profil de {string} dans la classe de {string}") do |name, label|
   steps %(
     Quand je consulte la classe de "#{label}"
     Et que je clique sur "Voir le profil de #{name}"
@@ -96,6 +96,14 @@ Quand("je renseigne une PFMP de {int} jours") do |days|
   )
 end
 
+Quand("je renseigne et valide une PFMP de {int} jours") do |days|
+  steps %(
+    Quand je renseigne une PFMP de #{days} jours
+    Et que je clique sur "Voir la PFMP" dans la dernière rangée
+    Et que je clique sur "Valider"
+  )
+end
+
 Sachantque(
   "mon établissement propose une formation {string} rémunérée à {int} euros par jour et plafonnée à {int} euros par an"
 ) do |mef, rate, cap|
@@ -103,7 +111,7 @@ Sachantque(
   mef.wage.update!(daily_rate: rate, yearly_cap: cap)
 end
 
-Quand("je vais voir la classe {string}") do |label|
+Quand("je consulte la classe {string}") do |label|
   steps %(
     Quand je me rends sur la page d'accueil
     Et que je consulte la liste des classes
@@ -122,9 +130,8 @@ Quand("je valide la dernière PFMP de l'élève") do
   @student.pfmps.last.transition_to!(:validated)
 end
 
-Sachantque("je renseigne une PFMP provisoire pour {string}") do |name|
+Quand("je renseigne une PFMP provisoire") do
   steps %(
-    Quand je consulte le profil de l'élève "#{name}"
     Et que je clique sur "Ajouter une PFMP"
     Et que je remplis "Date de début" avec "17/03/2023"
     Et que je remplis "Date de fin" avec "20/03/2023"
@@ -153,7 +160,7 @@ Quand(
   "je saisis une PFMP pour toute la classe {string} avec les dates {string} et {string}"
 ) do |classe, date_debut, date_fin|
   steps %(
-    Quand je vais voir la classe "#{classe}"
+    Quand je consulte la classe "#{classe}"
     Et que je clique sur "Saisir une PFMP pour toute la classe"
     Et que je remplis "Date de début" avec "#{date_debut}"
     Et que je remplis "Date de fin" avec "#{date_fin}"
@@ -194,4 +201,15 @@ end
 
 Alors("je peux voir l'écran d'accueil") do
   step('la page contient "Bienvenue sur APLyPro"')
+end
+
+Lorsque("je génère les décisions d'attribution de mon établissement") do
+  steps %(
+    Sachant que l'API SYGNE renvoie 1 élèves en "2NDEB" dont l'INE "test" pour l'établissement "DINUM"
+    Et que l'API SYGNE peut fournir les informations complètes des étudiants
+    Et que je me rends sur la page d'accueil
+    Et que toutes les tâches de fond sont terminées
+    Lorsque je suis responsable légal et que je génère les décisions d'attribution manquantes
+    Et que la génération des décisions d'attribution manquantes est complètement finie
+  )
 end
