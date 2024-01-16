@@ -13,15 +13,18 @@ describe ASP::Entities::Fichier do
     let(:person_double) { instance_double(ASP::Entities::PersonnePhysique) }
     let(:address_double) { instance_double(ASP::Entities::Adresse) }
     let(:rib_double) { instance_double(ASP::Entities::CoordonneesPaiement) }
+    let(:dossier_double) { instance_double(ASP::Entities::Dossier) }
 
     before do
       allow(ASP::Entities::PersonnePhysique).to receive(:from_student).and_return(person_double)
       allow(ASP::Entities::Adresse).to receive(:from_student).and_return(address_double)
       allow(ASP::Entities::CoordonneesPaiement).to receive(:from_student).and_return(rib_double)
+      allow(ASP::Entities::Dossier).to receive(:from_student).and_return(dossier_double)
 
       allow(person_double).to receive(:to_xml)
       allow(address_double).to receive(:to_xml)
       allow(rib_double).to receive(:to_xml)
+      allow(dossier_double).to receive(:to_xml)
     end
 
     it "includes the config" do

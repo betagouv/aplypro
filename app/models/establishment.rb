@@ -64,6 +64,10 @@ class Establishment < ApplicationRecord
     [uai, name].compact.join(" - ")
   end
 
+  def region_code
+    postal_code.first(2)
+  end
+
   def address
     [address_line1, address_line2, postal_code, city].join(", ")
   end
