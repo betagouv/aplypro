@@ -20,12 +20,9 @@ module ASP
           xml.individu do
             xml.natureindividu("P")
             ASP::Entities::PersonnePhysique.from_student(student).to_xml(xml)
-            xml.adressesindividu do
-              ASP::Entities::Adresse.from_student(student).to_xml(xml)
-            end
-            xml.coordpaiesindividu do
-              ASP::Entities::CoordonneesPaiement.from_student(student).to_xml(xml)
-            end
+            xml.adressesindividu { ASP::Entities::Adresse.from_student(student).to_xml(xml) }
+            xml.coordpaiesindividu { ASP::Entities::CoordonneesPaiement.from_student(student).to_xml(xml) }
+            xml.listedossier { ASP::Entities::Dossier.from_student(student).to_xml(xml) }
           end
         end
       end
