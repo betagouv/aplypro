@@ -15,14 +15,16 @@ module ASP
         @payments = payments
       end
 
-      def enregistrement(xml, student)
+      def enregistrement(xml, payment)
+        student = payment.student
+
         xml.enregistrement(idEnregistrement: student.id) do
           xml.individu do
             xml.natureindividu("P")
-            ASP::Entities::PersonnePhysique.from_student(student).to_xml(xml)
-            xml.adressesindividu { ASP::Entities::Adresse.from_student(student).to_xml(xml) }
-            xml.coordpaiesindividu { ASP::Entities::CoordonneesPaiement.from_student(student).to_xml(xml) }
-            xml.listedossier { ASP::Entities::Dossier.from_student(student).to_xml(xml) }
+            ASP::Entities::PersonnePhysique.from_payment(payment).to_xml(xml)
+            xml.adressesindividu { ASP::Entities::Adresse.from_payment(payment).to_xml(xml) }
+            xml.coordpaiesindividu { ASP::Entities::CoordonneesPaiement.from_payment(payment).to_xml(xml) }
+            xml.listedossier { ASP::Entities::Dossier.from_payment(payment).to_xml(xml) }
           end
         end
       end
@@ -33,8 +35,8 @@ module ASP
             parametrage(xml)
 
             xml.enregistrements do
-              @payments.map(&:student).uniq.each do |student|
-                enregistrement(xml, student)
+              @payments.each do |payment|
+                enregistrement(xml, payment)
               end
             end
           end

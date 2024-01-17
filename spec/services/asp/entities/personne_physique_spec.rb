@@ -4,9 +4,12 @@ require "rails_helper"
 
 describe ASP::Entities::PersonnePhysique, type: :model do
   let(:student) { create(:student, :female, :with_address_info, :with_birthplace_info, first_name: "Marie") }
+  let(:payment) { create(:payment) }
+
+  before { payment.pfmp.update!(student: student) }
 
   describe "validation" do
-    subject(:model) { described_class.from_student(student) }
+    subject(:model) { described_class.from_payment(payment) }
 
     context "when the student is born in France" do
       let(:student) { create(:student, :with_extra_info, :born_in_france) }
@@ -21,10 +24,10 @@ describe ASP::Entities::PersonnePhysique, type: :model do
     end
   end
 
-  it_behaves_like "an ASP student mapping entity"
+  it_behaves_like "an ASP payment mapping entity"
 
   it_behaves_like "an XML-fragment producer" do
-    let(:entity) { described_class.from_student(student) }
+    let(:entity) { described_class.from_payment(payment) }
     let(:probe) { ["persphysique/prenom", "Marie"] }
   end
 end

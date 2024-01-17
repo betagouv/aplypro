@@ -3,8 +3,6 @@
 module ASP
   module Entities
     class CoordonneesPaiement < Entity
-      extend StudentMapper
-
       CODE_MODE_REGLEMENT_IBAN = "135"
       CODE_TYPE_COORDONNEE_PAIEMENT_PRINCIPALE = "PRINCIPALE"
 
@@ -24,7 +22,7 @@ module ASP
                                clecontrole
                                bic]
 
-      def self.student_mapper_class
+      def self.payment_mapper_class
         ASP::Mappers::RibMapper
       end
 

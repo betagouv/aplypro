@@ -12,8 +12,8 @@ module ASP
 
       attr_reader :rib, :iban
 
-      def initialize(student)
-        @rib = student.rib
+      def initialize(payment)
+        @rib = payment.student.rib
         @iban = Bank::IBAN.new(rib.iban)
       end
 
