@@ -5,8 +5,6 @@ require "asp/constants"
 module ASP
   module Entities
     class Dossier < Entity
-      extend StudentMapper
-
       include ASP::Constants
 
       attribute :numadm, :string
@@ -17,7 +15,7 @@ module ASP
 
       validates_presence_of %i[numadm datecomplete datereceptionprestadoss montanttotalengage valeur]
 
-      def self.student_mapper_class
+      def self.payment_mapper_class
         ASP::Mappers::DossierMapper
       end
 

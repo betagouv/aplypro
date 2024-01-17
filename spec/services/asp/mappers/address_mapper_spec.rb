@@ -3,9 +3,10 @@
 require "rails_helper"
 
 describe ASP::Mappers::AddressMapper do
-  subject(:mapper) { described_class.new(student) }
+  subject(:mapper) { described_class.new(payment) }
 
-  let(:student) { create(:student) }
+  let(:payment) { create(:payment) }
+  let(:student) { payment.student }
 
   described_class::MAPPING.each do |name, mapping|
     it "maps to the student's`#{mapping}'" do

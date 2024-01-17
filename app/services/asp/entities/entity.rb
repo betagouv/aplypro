@@ -7,13 +7,13 @@ module ASP
       include ActiveModel::Attributes
       include ActiveModel::AttributeAssignment
 
-      module StudentMapper
-        def student_mapper_class
+      class << self
+        def payment_mapper_class
           raise NotImplementedError
         end
 
-        def from_student(student)
-          mapper = student_mapper_class.new(student)
+        def from_payment(payment)
+          mapper = payment_mapper_class.new(payment)
 
           new.tap do |instance|
             mapped_attributes = attribute_names.index_with do |attr|

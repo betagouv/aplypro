@@ -9,9 +9,9 @@ module ASP
 
       attr_reader :schooling, :student
 
-      def initialize(student)
-        @student = student
-        @schooling = student.current_schooling
+      def initialize(payment)
+        @student = payment.student
+        @schooling = payment.pfmp.schooling
       end
 
       MAPPING.each do |name, attr|

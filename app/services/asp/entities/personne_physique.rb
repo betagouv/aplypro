@@ -3,8 +3,6 @@
 module ASP
   module Entities
     class PersonnePhysique < Entity
-      extend StudentMapper
-
       attribute :titre, :string
       attribute :nomusage, :string
       attribute :nomnaissance, :string
@@ -24,7 +22,7 @@ module ASP
 
       validates_presence_of :codeinseecommune, if: :born_in_france?
 
-      def self.student_mapper_class
+      def self.payment_mapper_class
         ASP::Mappers::StudentMapper
       end
 

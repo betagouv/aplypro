@@ -3,8 +3,6 @@
 module ASP
   module Entities
     class Adresse < Entity
-      extend StudentMapper
-
       FRANCE_INSEE_COUNTRY_CODE = "99100"
 
       attribute :codetypeadr, :string
@@ -22,7 +20,7 @@ module ASP
       validates :codepostalcedex, :codecominsee, presence: true, if: :french_address?
       validates :bureaudistribetranger, :localiteetranger, presence: true, if: :foreign_address?
 
-      def self.student_mapper_class
+      def self.payment_mapper_class
         ASP::Mappers::AddressMapper
       end
 
