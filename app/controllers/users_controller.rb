@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  skip_before_action :set_establishment, only: :update
+  skip_before_action :check_current_establishment, only: :update
 
   def update
     @user = current_user

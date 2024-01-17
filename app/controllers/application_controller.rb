@@ -1,7 +1,12 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
-  before_action :authenticate_user!, :check_maintenance, :set_establishment, :set_support_banner
+  before_action :authenticate_user!,
+                :check_maintenance,
+                :check_current_establishment,
+                :set_support_banner
+
+  helper_method :current_establishment
 
   def after_sign_in_path_for(_resource)
     classes_path
@@ -10,7 +15,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def set_support_banner
-    @show_support_banner = eligible_for_support?(@etab)
+    @show_support_banner = eligible_for_support?(current_establishment)
   end
 
   def check_maintenance
@@ -23,14 +28,8 @@ class ApplicationController < ActionController::Base
     ENV.fetch("APLYPRO_MAINTENANCE_REASON", nil).present?
   end
 
-  def set_establishment
-    return unless user_signed_in?
-
-    if current_user.selected_establishment.nil?
-      redirect_to user_select_establishment_path(current_user)
-    else
-      @etab = current_user.selected_establishment
-    end
+  def current_establishment
+    @current_establishment ||= current_user&.selected_establishment
   end
 
   def infer_page_title(attrs = {})
@@ -67,5 +66,11 @@ class ApplicationController < ActionController::Base
                      .split(",")
 
     supported_uais.include?(establishment.uai)
+  end
+
+  def check_current_establishment
+    return unless user_signed_in?
+
+    redirect_to user_select_establishment_path(current_user) if current_establishment.nil?
   end
 end

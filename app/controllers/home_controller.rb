@@ -17,10 +17,10 @@ class HomeController < ApplicationController
     infer_page_title
     @inhibit_title = true
 
-    current_classes = @etab.classes.current
+    current_classes = current_establishment.classes.current
 
     @students_count = current_classes.joins(:active_students).count
-    @attributive_decisions_count = @etab.schoolings.current.joins(:attributive_decision_attachment).count
+    @attributive_decisions_count = current_establishment.schoolings.current.with_attributive_decisions.count
     @ribs_count = current_classes.joins(active_students: :rib).count
     @pfmps_counts = pfmp_counts
   end
@@ -51,7 +51,7 @@ class HomeController < ApplicationController
     pfmps = Pfmp
             .joins(:classe)
             .merge(Schooling.current)
-            .merge(@etab.classes.current)
+            .merge(current_establishment.classes.current)
 
     PfmpStateMachine.states.index_with { |state| pfmps.in_state(state).count }
   end

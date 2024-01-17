@@ -1,6 +1,6 @@
 .etab-banner
   .fr-container
     .fr-grid-row.fr-text--sm
-      .fr-col-sm.fr-col-12= @etab
+      .fr-col-sm.fr-col-12= current_establishment
       - if current_user.establishments.many?
         = dsfr_link_to "Changer d'établissement", user_select_establishment_path(current_user), class: "fr-text--sm"

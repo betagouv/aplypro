@@ -80,7 +80,7 @@ class ClassesController < ApplicationController
   end
 
   def set_all_classes
-    @classes = @etab
+    @classes = current_establishment
                .classes
                .current
                .includes(:mef, :active_pfmps, active_students: :rib)
@@ -88,7 +88,7 @@ class ClassesController < ApplicationController
 
   def set_classe
     @classe = Classe
-              .where(establishment: @etab)
+              .where(establishment: current_establishment)
               .includes(active_schoolings: [student: :rib])
               .find(params[:id])
 

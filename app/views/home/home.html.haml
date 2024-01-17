@@ -1,7 +1,7 @@
 .home.fr-container
   .fr-grid-row.fr-grid-row--center
     .fr-col-lg-7
-      - if @etab.fetching_students
+      - if current_establishment.fetching_students
         = dsfr_alert(type: :info, title: "Récupération des élèves en cours") do
           %p Nous sommes en train de récupérer les données de vos élèves, veuillez rafraichir la page dans quelques minutes.
       - else
