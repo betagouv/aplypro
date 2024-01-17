@@ -1,4 +1,4 @@
-DOCKER-RUN = docker-compose run --rm --entrypoint=""
+DOCKER-RUN = docker-compose run -e TERM --rm --entrypoint=""
 BUNDLE-EXEC = bundle exec
 
 build:
