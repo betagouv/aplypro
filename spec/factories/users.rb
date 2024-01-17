@@ -20,6 +20,14 @@ FactoryBot.define do
       establishment { create(:establishment) } # rubocop:disable FactoryBot/FactoryAssociationWithStrategy
     end
 
+    trait :with_selected_establishment do
+      after(:create) do |user|
+        raise "ambiguous trait: user has more than one establishment" if user.establishments.many?
+
+        user.update!(establishment: user.establishments.first)
+      end
+    end
+
     trait :director do
       after(:create) do |user, context|
         EstablishmentUserRole

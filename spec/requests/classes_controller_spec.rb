@@ -5,13 +5,9 @@ require "rails_helper"
 RSpec.describe "ClassesControllers" do
   let(:classe) { create(:classe) }
   let(:establishment) { classe.establishment }
-  let(:user) { create(:user, :director, establishment: establishment) }
+  let(:user) { create(:user, :director, :with_selected_establishment, establishment: establishment) }
 
-  before do
-    sign_in(user)
-
-    user.update!(establishment: establishment)
-  end
+  before { sign_in(user) }
 
   describe "GET /index" do
     it "returns a list of classes" do
