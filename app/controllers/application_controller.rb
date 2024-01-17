@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
     return unless user_signed_in?
 
     if current_user.establishment.nil?
-      redirect_to select_establishments_path
+      redirect_to user_select_establishment_path(current_user)
     else
       @etab = current_user.establishment
     end

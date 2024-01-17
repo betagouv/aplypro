@@ -41,23 +41,12 @@ RSpec.describe User do
     it { is_expected.not_to be_valid }
   end
 
-  describe "confirmed_director?" do
-    subject(:user) { create(:user, :director) }
+  describe "establishment" do
+    let(:user) { create(:user, :director) }
+    let(:other_establishment) { create(:establishment) }
 
-    it { is_expected.not_to be_confirmed_director }
-
-    context "when the user has confirmed_director for its current establishment" do
-      subject(:user) { create(:user, :confirmed_director) }
-
-      it { is_expected.to be_confirmed_director }
-    end
-
-    context "when the user has confirmed_director for another establishment" do
-      subject(:user) { create(:user, :confirmed_director) }
-
-      before { user.update(establishment: create(:establishment)) }
-
-      it { is_expected.not_to be_confirmed_director }
+    it "has to be part of the user's establishments" do
+      expect { user.update!(establishment: other_establishment) }.to raise_error(/no corresponding roles/)
     end
   end
 end

@@ -29,12 +29,6 @@ class EstablishmentsController < ApplicationController
     zipline(documents, attributive_decisions_archive_name)
   end
 
-  def select
-    infer_page_title
-
-    @user = current_user
-  end
-
   private
 
   def check_confirmed_director_for_attributive_decision

@@ -3,4 +3,4 @@
     .fr-grid-row.fr-text--sm
       .fr-col-sm.fr-col-12= @etab
       - if current_user.establishments.many?
-        = dsfr_link_to "Changer d'établissement", select_establishments_path, class: "fr-text--sm"
+        = dsfr_link_to "Changer d'établissement", user_select_establishment_path(current_user), class: "fr-text--sm"

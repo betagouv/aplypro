@@ -4,7 +4,6 @@ require "faker"
 
 FactoryBot.define do
   factory :user do
-    establishment
     uid { Faker::Alphanumeric.alpha }
     name { Faker::Name.name }
     provider { "MyString" }
@@ -17,26 +16,31 @@ FactoryBot.define do
       welcomed { false }
     end
 
+    transient do
+      establishment { create(:establishment) } # rubocop:disable FactoryBot/FactoryAssociationWithStrategy
+    end
+
     trait :director do
-      after(:create) do |user, _|
+      after(:create) do |user, context|
         EstablishmentUserRole
-          .find_or_initialize_by(establishment: user.establishment, user: user)
+          .find_or_initialize_by(establishment: context.establishment, user: user)
           .update!(role: :dir)
       end
     end
 
     trait :authorised do
-      after(:create) do |user, _|
+      after(:create) do |user, context|
         EstablishmentUserRole
-          .find_or_initialize_by(establishment: user.establishment, user: user)
+          .find_or_initialize_by(establishment: context.establishment, user: user)
           .update!(role: :authorised)
       end
     end
 
     trait :confirmed_director do
       director
-      after(:create) do |user, _|
-        user.establishment.update(confirmed_director: user)
+
+      after(:create) do |user, context|
+        context.establishment.update!(confirmed_director: user)
       end
     end
   end

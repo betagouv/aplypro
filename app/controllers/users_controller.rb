@@ -4,11 +4,19 @@ class UsersController < ApplicationController
   skip_before_action :set_establishment, only: :update
 
   def update
-    if current_user.update!(user_params)
+    @user = current_user
+
+    if @user.update(user_params)
       redirect_to root_path
     else
-      render action: :edit, status: :unprocessable_entity
+      render :select_establishment, status: :unprocessable_entity
     end
+  end
+
+  def select_establishment
+    infer_page_title
+
+    @user = current_user
   end
 
   private

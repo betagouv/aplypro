@@ -9,6 +9,8 @@ RSpec.describe "ClassesControllers" do
 
   before do
     sign_in(user)
+
+    user.update!(establishment: establishment)
   end
 
   describe "GET /index" do
