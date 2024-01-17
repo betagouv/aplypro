@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe ASP::Mappers::RibMapper do
+describe ASP::Mappers::CoordonneesPaiementMapper do
   subject(:mapper) { described_class.new(payment) }
 
   let(:payment) { create(:payment) }

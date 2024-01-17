@@ -2,7 +2,7 @@
 
 module ASP
   module Mappers
-    class AddressMapper
+    class AdresseMapper
       PRINCIPAL_ADDRESS_TYPE = "PRINCIPALE"
 
       MAPPING = {

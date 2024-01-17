@@ -15,10 +15,6 @@ module ASP
 
       validates_presence_of %i[numadm datecomplete datereceptionprestadoss montanttotalengage valeur]
 
-      def self.payment_mapper_class
-        ASP::Mappers::DossierMapper
-      end
-
       def fragment(builder)
         builder.dossier do |xml|
           xml.numadm(numadm)

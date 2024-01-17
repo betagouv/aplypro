@@ -20,10 +20,6 @@ module ASP
       validates :codepostalcedex, :codecominsee, presence: true, if: :french_address?
       validates :bureaudistribetranger, :localiteetranger, presence: true, if: :foreign_address?
 
-      def self.payment_mapper_class
-        ASP::Mappers::AddressMapper
-      end
-
       def fragment(builder)
         builder.adresse do |xml|
           xml.codetypeadr(codetypeadr)
