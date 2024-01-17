@@ -2,7 +2,7 @@
 
 module ASP
   module Mappers
-    class RibMapper
+    class CoordonneesPaiementMapper
       PRINCIPAL_ADDRESS_TYPE = "PRINCIPALE"
 
       MAPPING = {

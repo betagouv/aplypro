@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe ASP::Mappers::StudentMapper do
+describe ASP::Mappers::AdresseMapper do
   subject(:mapper) { described_class.new(payment) }
 
   let(:payment) { create(:payment) }

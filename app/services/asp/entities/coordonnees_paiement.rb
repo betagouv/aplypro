@@ -22,10 +22,6 @@ module ASP
                                clecontrole
                                bic]
 
-      def self.payment_mapper_class
-        ASP::Mappers::RibMapper
-      end
-
       def fragment(builder)
         builder.coordpaie do |xml|
           xml.codetypecoordpaie(codetypecoordpaie)
