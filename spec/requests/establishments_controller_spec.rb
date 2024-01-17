@@ -9,12 +9,9 @@ RSpec.describe "EstablishmentsController" do
 
   let(:classe) { create(:classe) }
   let(:establishment) { classe.establishment }
-  let(:user) { create(:user, :director, establishment: establishment) }
+  let(:user) { create(:user, :director, :with_selected_establishment, establishment: establishment) }
 
-  before do
-    sign_in(user)
-    user.update!(establishment: establishment)
-  end
+  before { sign_in(user) }
 
   context "when the user does not have a selected establishment" do
     before { user.update!(establishment: nil) }
@@ -63,10 +60,9 @@ RSpec.describe "EstablishmentsController" do
 
     context "when the user is authorised" do
       before do
-        user = create(:user, :authorised, establishment: establishment)
+        user = create(:user, :authorised, :with_selected_establishment, establishment: establishment)
 
         sign_in(user)
-        user.update!(establishment: establishment)
       end
 
       it "returns forbidden" do
