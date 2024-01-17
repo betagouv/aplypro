@@ -58,7 +58,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_08_140328) do
     t.bigint "user_id", null: false
     t.bigint "granted_by_id"
     t.integer "role", null: false
-    t.boolean "confirmed_director", default: false, null: false
     t.index ["establishment_id", "user_id"], name: "index_establishment_user_roles_on_establishment_id_and_user_id", unique: true
     t.index ["establishment_id"], name: "index_establishment_user_roles_on_establishment_id"
     t.index ["granted_by_id"], name: "index_establishment_user_roles_on_granted_by_id"

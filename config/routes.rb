@@ -4,17 +4,15 @@ require "sidekiq/web"
 
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
-  resources :users, only: :update
+  resources :users, only: :update do
+    get "select_establishment"
+  end
 
   resources :establishments, only: %w[edit update] do
     resources :invitations
 
     post "create_attributive_decisions"
     post "download_attributive_decisions"
-
-    collection do
-      get "select"
-    end
   end
 
   resources :classes, only: %i[show index] do
@@ -66,7 +64,6 @@ Rails.application.routes.draw do
 
   get "/maintenance", to: "home#maintenance"
   get "/login", to: "home#login"
-  get "/select_etab", to: "home#select_etab"
   get "/legal", to: "home#legal"
   get "/faq", to: "home#faq"
 

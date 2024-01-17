@@ -13,6 +13,7 @@ RSpec.describe "EstablishmentsController" do
 
   before do
     sign_in(user)
+    user.update!(establishment: establishment)
   end
 
   context "when the user does not have a selected establishment" do
@@ -21,7 +22,7 @@ RSpec.describe "EstablishmentsController" do
     it "redirects them towards the select page" do
       get "/home"
 
-      expect(response).to redirect_to select_establishments_path
+      expect(response).to redirect_to user_select_establishment_path(user)
     end
   end
 
@@ -65,6 +66,7 @@ RSpec.describe "EstablishmentsController" do
         user = create(:user, :authorised, establishment: establishment)
 
         sign_in(user)
+        user.update!(establishment: establishment)
       end
 
       it "returns forbidden" do

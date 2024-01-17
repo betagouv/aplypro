@@ -9,6 +9,7 @@ RSpec.describe "StudentsControllers" do
 
   before do
     sign_in(user)
+    user.update!(establishment: user.establishments.first)
   end
 
   describe "GET /student" do

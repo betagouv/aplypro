@@ -8,6 +8,7 @@ RSpec.describe "RibsController" do
 
   before do
     sign_in(user)
+    user.update!(establishment: user.establishments.first)
   end
 
   describe "DESTROY /rib" do

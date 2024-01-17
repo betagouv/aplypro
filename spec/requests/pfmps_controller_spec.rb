@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "PfmpsController" do
+RSpec.describe PfmpsController do
   let(:schooling) { create(:schooling) }
   let(:student) { schooling.student }
   let(:user) { create(:user, :director, establishment: student.classe.establishment) }
@@ -10,6 +10,7 @@ RSpec.describe "PfmpsController" do
 
   before do
     sign_in(user)
+    user.update!(establishment: user.establishments.first)
   end
 
   describe "GET /pfmp" do

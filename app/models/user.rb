@@ -20,6 +20,16 @@ class User < ApplicationRecord
 
   belongs_to :establishment, optional: true
 
+  validate :current_establishment_is_legitimate
+
+  def current_establishment_is_legitimate
+    return if establishment.blank?
+
+    legit = establishments.include?(establishment)
+
+    errors.add(:establishment, "no corresponding roles found") unless legit
+  end
+
   class << self
     # ideally all these methods would live in some OIDC-factory but I
     # can't figure out a pattern I like quite yet
