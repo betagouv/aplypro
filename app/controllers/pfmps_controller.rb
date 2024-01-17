@@ -3,7 +3,6 @@
 class PfmpsController < ApplicationController
   include RoleCheck
 
-  before_action :authenticate_user!
   before_action :check_director, only: :validate
   before_action :set_classe, :set_student
   before_action :set_pfmp_breadcrumbs, except: :confirm_deletion
@@ -80,7 +79,7 @@ class PfmpsController < ApplicationController
   end
 
   def set_classe
-    @classe = Classe.where(establishment: @etab).find(params[:class_id])
+    @classe = Classe.where(establishment: current_establishment).find(params[:class_id])
   rescue ActiveRecord::RecordNotFound
     redirect_to classes_path, alert: t("errors.classes.not_found") and return
   end

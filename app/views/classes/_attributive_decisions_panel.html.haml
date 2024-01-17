@@ -6,11 +6,11 @@
 %p La décision d'attribution annuelle rend éligible l'élève à percevoir l'allocation. Ce document doit obligatoirement être transmis à l'élève et conservé toute l'année scolaire et il doit être archivé par l'établissement pendant une durée de 10 ans en cas de contrôle de la chaîne des dépenses publiques.
 
 
-- if @etab.some_attributive_decisions_generating?
+- if current_establishment.some_attributive_decisions_generating?
   = dsfr_alert(type: :info, title: "Édition des décisions d'attribution en cours", classes: 'fr-mt-3w') do
     %p Les décisions d'attribution sont en train d'être éditées, veuillez rafraichir la page dans quelques minutes. Vous pouvez commencer à remplir des coordonnées bancaires ou des PFMPs pendant ce temps.
 - else
   .buttons-group
-    - if @etab.missing_attributive_decisions?
-      = attributive_decisions_generation_form(@etab)
-    = attributive_decisions_download_button(@etab)
+    - if current_establishment.missing_attributive_decisions?
+      = attributive_decisions_generation_form(current_establishment)
+    = attributive_decisions_download_button(current_establishment)

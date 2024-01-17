@@ -6,7 +6,7 @@ class StudentsController < ClassesController
   def show
     add_breadcrumb t("pages.titles.classes.index"), classes_path
     add_breadcrumb @classe.to_s, class_path(@classe)
-    @pfmps = @student.pfmps.joins(:classe).where({ classe: { establishment: @etab } })
+    @pfmps = @student.pfmps.joins(:classe).where({ classe: { establishment: current_establishment } })
 
     infer_page_title(name: @student.full_name, classe: @classe)
   end
@@ -21,7 +21,7 @@ class StudentsController < ClassesController
 
   def set_classe
     @classe = Classe
-              .where(establishment: @etab)
+              .where(establishment: current_establishment)
               .find(params[:class_id])
   rescue ActiveRecord::RecordNotFound
     redirect_to classes_path, alert: t("errors.classes.not_found") and return

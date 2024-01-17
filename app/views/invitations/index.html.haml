@@ -8,7 +8,7 @@
       éditer les décisions d'attribution, valider les PFMPs 
       pour les envoyer en paiement et gérer la liste des accès.
 
-    = link_to "Autoriser un nouvel email", new_establishment_invitation_path(@etab), class: 'fr-btn fr-btn--primary'
+    = link_to "Autoriser un nouvel email", new_establishment_invitation_path(current_establishment), class: 'fr-btn fr-btn--primary'
 
     - if @invitations.any?
       .fr-table
@@ -19,4 +19,4 @@
                 %td= invite.email
                 %td
                   .fr-grid-row.fr-grid-row--right
-                    = button_to "Retirer l'accès", establishment_invitation_path(@etab, invite), method: :delete, class: "fr-btn fr-btn--danger"
+                    = button_to "Retirer l'accès", establishment_invitation_path(current_establishment, invite), method: :delete, class: "fr-btn fr-btn--danger"

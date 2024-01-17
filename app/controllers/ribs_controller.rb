@@ -92,7 +92,7 @@ class RibsController < StudentsController
   end
 
   def set_classe
-    @classe = Classe.where(establishment: @etab).find(params[:class_id])
+    @classe = Classe.where(establishment: current_establishment).find(params[:class_id])
   rescue ActiveRecord::RecordNotFound
     redirect_to classes_path, alert: t("errors.classes.not_found"), status: :forbidden and return
   end

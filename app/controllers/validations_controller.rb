@@ -52,7 +52,7 @@ class ValidationsController < ApplicationController
   end
 
   def set_classe
-    @classe = Classe.where(establishment: @etab).find(params[:id])
+    @classe = Classe.where(establishment: current_establishment).find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to validations_path, alert: t("errors.classes.not_found") and return
   end
@@ -61,7 +61,7 @@ class ValidationsController < ApplicationController
     Pfmp
       .in_state(:completed)
       .joins(classe: :establishment)
-      .where(classe: { establishment: @etab })
+      .where(classe: { establishment: current_establishment })
       .merge(Schooling.current)
   end
 
