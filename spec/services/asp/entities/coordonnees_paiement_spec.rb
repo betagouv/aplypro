@@ -3,12 +3,15 @@
 require "rails_helper"
 
 describe ASP::Entities::CoordonneesPaiement, type: :model do
-  let(:student) { create(:rib).student }
+  let(:student) { create(:student, :with_rib) }
+  let(:payment) { create(:payment) }
 
-  it_behaves_like "an ASP student mapping entity"
+  before { payment.pfmp.update!(student: student) }
+
+  it_behaves_like "an ASP payment mapping entity"
 
   it_behaves_like "an XML-fragment producer" do
-    let(:entity) { described_class.from_student(student) }
+    let(:entity) { described_class.from_payment(payment) }
     let(:probe) { ["coordpaie/iban/codeisopays", "FR"] }
   end
 end

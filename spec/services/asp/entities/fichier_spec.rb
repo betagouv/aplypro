@@ -16,10 +16,10 @@ describe ASP::Entities::Fichier do
     let(:dossier_double) { instance_double(ASP::Entities::Dossier) }
 
     before do
-      allow(ASP::Entities::PersonnePhysique).to receive(:from_student).and_return(person_double)
-      allow(ASP::Entities::Adresse).to receive(:from_student).and_return(address_double)
-      allow(ASP::Entities::CoordonneesPaiement).to receive(:from_student).and_return(rib_double)
-      allow(ASP::Entities::Dossier).to receive(:from_student).and_return(dossier_double)
+      allow(ASP::Entities::PersonnePhysique).to receive(:from_payment).and_return(person_double)
+      allow(ASP::Entities::Adresse).to receive(:from_payment).and_return(address_double)
+      allow(ASP::Entities::CoordonneesPaiement).to receive(:from_payment).and_return(rib_double)
+      allow(ASP::Entities::Dossier).to receive(:from_payment).and_return(dossier_double)
 
       allow(person_double).to receive(:to_xml)
       allow(address_double).to receive(:to_xml)
