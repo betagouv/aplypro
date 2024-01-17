@@ -24,7 +24,7 @@ FactoryBot.define do
       after(:create) do |user|
         raise "ambiguous trait: user has more than one establishment" if user.establishments.many?
 
-        user.update!(establishment: user.establishments.first)
+        user.update!(selected_establishment: user.establishments.first)
       end
     end
 

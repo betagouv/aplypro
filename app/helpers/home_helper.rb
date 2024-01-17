@@ -79,7 +79,7 @@ module HomeHelper
   end
 
   def confirmed_director_information
-    return if current_user.establishment.confirmed_director.blank? || current_user.confirmed_director?
+    return if current_user.selected_establishment.confirmed_director.blank? || current_user.confirmed_director?
 
     I18n.t(
       "panels.attributive_decisions.confirm_director_information",

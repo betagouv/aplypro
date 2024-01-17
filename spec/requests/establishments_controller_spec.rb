@@ -14,7 +14,7 @@ RSpec.describe "EstablishmentsController" do
   before { sign_in(user) }
 
   context "when the user does not have a selected establishment" do
-    before { user.update!(establishment: nil) }
+    before { user.update!(selected_establishment: nil) }
 
     it "redirects them towards the select page" do
       get "/home"

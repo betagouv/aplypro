@@ -5,13 +5,13 @@ module UserAuthorisation
 
   included do
     def current_role
-      return if establishment.blank?
+      return if selected_establishment.blank?
 
-      establishment_user_roles.find_by({ establishment_id: establishment.id })
+      establishment_user_roles.find_by({ establishment_id: selected_establishment.id })
     end
 
     def confirmed_director?
-      establishment.confirmed_director == self
+      selected_establishment.confirmed_director == self
     end
 
     def director?

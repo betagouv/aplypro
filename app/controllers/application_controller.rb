@@ -26,10 +26,10 @@ class ApplicationController < ActionController::Base
   def set_establishment
     return unless user_signed_in?
 
-    if current_user.establishment.nil?
+    if current_user.selected_establishment.nil?
       redirect_to user_select_establishment_path(current_user)
     else
-      @etab = current_user.establishment
+      @etab = current_user.selected_establishment
     end
   end
 
