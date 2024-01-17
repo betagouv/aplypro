@@ -9,7 +9,9 @@ module ASP
 
       class << self
         def payment_mapper_class
-          raise NotImplementedError
+          klass = name.demodulize
+
+          "ASP::Mappers::#{klass}Mapper".constantize
         end
 
         def from_payment(payment)

@@ -22,10 +22,6 @@ module ASP
 
       validates_presence_of :codeinseecommune, if: :born_in_france?
 
-      def self.payment_mapper_class
-        ASP::Mappers::StudentMapper
-      end
-
       def fragment(builder)
         builder.persphysique do |xml|
           xml.titre(titre)

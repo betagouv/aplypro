@@ -2,7 +2,7 @@
 
 module ASP
   module Mappers
-    class StudentMapper
+    class PersonnePhysiqueMapper
       MAPPING = {
         prenom: :first_name,
         nomusage: :last_name,
