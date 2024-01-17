@@ -16,7 +16,7 @@ end
 Sachantque(
   "il y a un(e) élève {string} au sein de la classe {string} pour une formation {string}"
 ) do |name, classe, mef|
-  @etab ||= User.last.establishment
+  @etab ||= User.last.selected_establishment
 
   first, last = name.split # not great
   @mef = Mef.find_by(label: mef) ||
@@ -28,7 +28,7 @@ Sachantque(
 end
 
 Sachantque("il y a un(e) élève avec une scolarité fermée qui a une PFMP") do
-  @etab ||= User.last.establishment
+  @etab ||= User.last.selected_establishment
   classe = @etab.classes.first || FactoryBot.create(:classe, establishment: establishment)
   schooling = FactoryBot.create(:schooling, :closed, classe: classe)
   FactoryBot.create(:pfmp, schooling: schooling)

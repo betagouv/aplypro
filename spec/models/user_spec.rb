@@ -8,7 +8,7 @@ RSpec.describe User do
   end
 
   describe "associations" do
-    it { is_expected.to belong_to(:establishment).class_name("Establishment").optional }
+    it { is_expected.to belong_to(:selected_establishment).class_name("Establishment").optional }
   end
 
   describe "validations" do
@@ -46,7 +46,7 @@ RSpec.describe User do
     let(:other_establishment) { create(:establishment) }
 
     it "has to be part of the user's establishments" do
-      expect { user.update!(establishment: other_establishment) }.to raise_error(/no corresponding roles/)
+      expect { user.update!(selected_establishment: other_establishment) }.to raise_error(/no corresponding roles/)
     end
   end
 end

@@ -12,7 +12,7 @@ RSpec.describe UsersController do
       let(:other_establishment) { create(:establishment) }
 
       it "refuses to update" do
-        patch user_path(user), params: { user: { establishment_id: other_establishment.id } }
+        patch user_path(user), params: { user: { selected_establishment_id: other_establishment.id } }
 
         expect(response).to have_http_status :unprocessable_entity
       end

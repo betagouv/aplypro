@@ -22,6 +22,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:establishment_id)
+    params.require(:user).permit(:selected_establishment_id)
   end
 end

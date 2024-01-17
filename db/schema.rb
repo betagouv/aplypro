@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_08_140328) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_17_162049) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -216,11 +216,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_08_140328) do
     t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
-    t.bigint "establishment_id"
+    t.bigint "selected_establishment_id"
     t.boolean "welcomed", default: false, null: false
     t.jsonb "oidc_attributes"
     t.index ["email", "provider"], name: "index_users_on_email_and_provider", unique: true
-    t.index ["establishment_id"], name: "index_users_on_establishment_id"
+    t.index ["selected_establishment_id"], name: "index_users_on_selected_establishment_id"
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
@@ -250,5 +250,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_08_140328) do
   add_foreign_key "ribs", "students"
   add_foreign_key "schoolings", "classes", column: "classe_id"
   add_foreign_key "schoolings", "students"
-  add_foreign_key "users", "establishments"
+  add_foreign_key "users", "establishments", column: "selected_establishment_id"
 end
