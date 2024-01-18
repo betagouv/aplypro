@@ -1,13 +1,19 @@
 - if @classes.empty?
   Il n'y a aucune PFMP à valider pour l'instant.
 - else
-  .fr-container--fluid
-    - @classes.each do |classe|
-      = link_to validation_class_path(classe) do
-        .gray-panel.fr-p-3w.fr-mb-3w
-          %h2.fr-h3= classe.to_long_s
-          .fr-grid-row.fr-grid-row--middle
-            .fr-mr-2w
-              = @classes_pfmps_counts[classe.id]
-              PFMPs
-            = status_badge(:completed)
+  .fr-table.fr-table--no-caption
+    %table
+      %caption.fr-h1 Liste des classes
+      %thead
+        %th{scope: "col"} Classe
+        %th{scope: "col"} Décisions d'attribution
+        %th{scope: "col"} Coordonnées bancaires
+        %th{scope: "col"} PFMPs à valider
+      %tbody
+        - @classes.each do |classe|
+          %tr
+            %td
+              = dsfr_link_to classe.to_long_s, validation_class_path(classe), title: t("links.classes.show", label: classe.to_long_s)
+            %td= attributive_decision_progress_badge(classe)
+            %td= ribs_progress_badge(classe)
+            %td= pfmp_progress_badge(classe, :completed)
