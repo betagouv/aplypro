@@ -26,7 +26,7 @@ class Classe < ApplicationRecord
            through: :active_schoolings,
            source: :student
 
-  has_many :active_pfmps, through: :active_students, class_name: "Pfmp", source: :pfmps
+  has_many :active_pfmps, through: :active_schoolings, class_name: "Pfmp", source: :pfmps
 
   validates :label, :start_year, presence: true
   validates :start_year, numericality: { only_integer: true, greater_than_or_equal_to: 2023 }

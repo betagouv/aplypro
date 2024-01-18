@@ -2,7 +2,6 @@
 
 class ClassesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_all_classes, only: :index
   before_action :set_classe, except: :index
 
   before_action :add_bulk_action_breadcrumbs, only: %i[
@@ -13,16 +12,18 @@ class ClassesController < ApplicationController
   ]
 
   def index
-    redirect_to welcome_path and return unless current_user.welcomed?
-
     infer_page_title
+
+    @classes = current_establishment.classes.current
+
+    fetch_classes_indicators(@classes)
   end
 
   def show
     add_breadcrumb t("pages.titles.classes.index"), classes_path
-    set_indicators
-
     infer_page_title(name: @classe)
+
+    set_classe_indicators
   end
 
   def create_bulk_pfmp
@@ -79,13 +80,6 @@ class ClassesController < ApplicationController
     )
   end
 
-  def set_all_classes
-    @classes = current_establishment
-               .classes
-               .current
-               .includes(:mef, :active_pfmps, active_students: :rib)
-  end
-
   def set_classe
     @classe = Classe
               .where(establishment: current_establishment)
@@ -97,7 +91,7 @@ class ClassesController < ApplicationController
     redirect_to classes_path, alert: t("errors.classes.not_found") and return
   end
 
-  def set_indicators
+  def set_classe_indicators
     @nb_students = @classe.active_students.count
     @nb_pending_pfmps = @classe.active_pfmps.in_state(:pending).count
     @nb_completed_pfmps = @classe.active_pfmps.in_state(:completed).count
