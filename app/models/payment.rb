@@ -11,6 +11,7 @@ class Payment < ApplicationRecord
   belongs_to :pfmp
 
   has_one :student, through: :pfmp
+  has_one :schooling, through: :pfmp
 
   validates :amount, numericality: { greater_than: 0 }
 
