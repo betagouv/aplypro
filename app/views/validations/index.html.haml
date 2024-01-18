@@ -11,9 +11,11 @@
         %th{scope: "col"} PFMPs à valider
       %tbody
         - @classes.each do |classe|
+          - nb_students = @nb_students_per_class[classe.id]
           %tr
             %td
               = dsfr_link_to classe.to_long_s, validation_class_path(classe), title: t("links.classes.show", label: classe.to_long_s)
-            %td= attributive_decision_progress_badge(classe)
-            %td= ribs_progress_badge(classe)
-            %td= pfmp_progress_badge(classe, :completed)
+            %td= progress_badge @nb_attributive_decisions_per_class[classe.id], nb_students
+            %td= progress_badge @nb_ribs_per_class[classe.id], nb_students
+            %td= pfmp_badge :completed, @nb_pfmp_per_class_and_status[[classe.id, :completed]]
+

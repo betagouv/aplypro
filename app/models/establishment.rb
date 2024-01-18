@@ -19,11 +19,14 @@ class Establishment < ApplicationRecord
 
   belongs_to :confirmed_director, class_name: "User", optional: true
 
-  has_many :classes, -> { order "label" }, class_name: "Classe", dependent: :destroy, inverse_of: :establishment
+  has_many :classes, -> { order "classes.label" }, class_name: "Classe", dependent: :destroy, inverse_of: :establishment
 
   has_many :schoolings, through: :classes
+  has_many :active_schoolings, through: :classes
 
   has_many :students, through: :schoolings
+
+  has_many :active_pfmps, -> { reorder nil }, through: :classes
 
   validate :ensure_confirmed_director_is_director
 
@@ -47,10 +50,6 @@ class Establishment < ApplicationRecord
     public: ["99"],
     private_allowed: %w[30 31 40 41]
   }.freeze
-
-  def current_schoolings
-    schoolings.current
-  end
 
   def to_s
     [uai, name, city, postal_code].compact.join(" – ")
@@ -98,15 +97,15 @@ class Establishment < ApplicationRecord
   end
 
   def some_attributive_decisions?
-    current_schoolings.with_attributive_decisions.any?
+    active_schoolings.with_attributive_decisions.any?
   end
 
   def missing_attributive_decisions?
-    current_schoolings.without_attributive_decisions.any?
+    active_schoolings.without_attributive_decisions.any?
   end
 
   def some_attributive_decisions_generating?
-    current_schoolings.generating_attributive_decision.any?
+    active_schoolings.generating_attributive_decision.any?
   end
 
   def ensure_confirmed_director_is_director

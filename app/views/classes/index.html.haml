@@ -13,15 +13,16 @@
         %th{scope: "col"} PFMPs
       %tbody
         - @classes.each do |classe|
+          - nb_students = @nb_students_per_class[classe.id]
           %tr
             %td
               = dsfr_link_to classe.to_long_s, classe, title: t("links.classes.show", label: classe.to_long_s)
-            %td= attributive_decision_progress_badge(classe)
-            %td= ribs_progress_badge(classe)
+            %td= progress_badge @nb_attributive_decisions_per_class[classe.id], nb_students
+            %td= progress_badge @nb_ribs_per_class[classe.id], nb_students
             %td
               .fr-grid-row
                 %div
-                  = pfmp_progress_badge(classe, :pending)
-                  = pfmp_progress_badge(classe, :completed)
+                  = pfmp_badge :pending, @nb_pfmp_per_class_and_status[[classe.id, :pending]]
+                  = pfmp_badge :completed, @nb_pfmp_per_class_and_status[[classe.id, :completed]]
                 %div
-                  = pfmp_progress_badge(classe, :validated)
+                  = pfmp_badge :validated, @nb_pfmp_per_class_and_status[[classe.id, :validated]]
