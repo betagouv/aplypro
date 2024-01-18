@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
-class RibsController < StudentsController
+# FIXME: we should rightfully tidy up at some point
+
+# rubocop:disable Metrics/ClassLength
+class RibsController < ApplicationController
   before_action :set_classe
   before_action :set_student, :set_rib_breadcrumbs, except: %i[missing bulk_create]
+  before_action :check_classes, only: :bulk_create
   before_action :set_bulk_rib_breadcrumbs, only: %i[missing bulk_create]
   before_action :set_rib, only: %i[edit update destroy confirm_deletion]
 
@@ -76,13 +80,7 @@ class RibsController < StudentsController
       .require(:ribs)
       .values
       .map do |rib_params|
-        rib_params.permit(
-          :iban,
-          :bic,
-          :name,
-          :personal,
-          :student_id
-        )
+        rib_params.permit(%i[iban bic name personal student_id])
       end
   end
 
@@ -118,4 +116,20 @@ class RibsController < StudentsController
     set_classe_breadcrumbs
     infer_page_title
   end
+
+  def check_classes
+    classes = Classe
+              .joins(:students)
+              .where("students.id": bulk_ribs_params.pluck(:student_id))
+              .distinct
+
+    if classes != [@classe] # rubocop:disable Style/GuardClause
+      redirect_to(
+        missing_class_ribs_path(@classe),
+        alert: t("errors.classes.not_found"),
+        status: :forbidden
+      ) and return
+    end
+  end
 end
+# rubocop:enable Metrics/ClassLength
