@@ -26,12 +26,12 @@ describe ASP::BopMapper do
       let(:private?) { true }
 
       it "returns the right code" do
-        expect(mapper).to eq "asp menj private"
+        expect(mapper).to eq "menj private"
       end
     end
 
     context "when the establishment is public" do
-      it { is_expected.to eq "asp menj public" }
+      it { is_expected.to eq "menj public" }
     end
   end
 end

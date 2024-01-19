@@ -10,11 +10,9 @@ describe ASP::Mappers::DossierMapper do
 
   before { payment.pfmp.update!(student: student) }
 
-  describe "#valeur" do
-    before { student.establishment.update!(postal_code: "34000") }
-
-    it "returns the establishment's region code left-padded with a 0" do
-      expect(mapper.valeur).to eq "034"
+  describe "#numadm" do
+    it "returns the schooling's DA number" do
+      expect(mapper.numadm).to eq payment.schooling.attributive_decision_number
     end
   end
 end

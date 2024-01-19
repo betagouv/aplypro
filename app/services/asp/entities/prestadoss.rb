@@ -24,6 +24,8 @@ module ASP
         xml.code("D")
         xml.valeur(valeur)
         xml.indicrattachusprestadispo("O")
+
+        xml.listeelementpaiement { ElementPaiement.from_payment(payment).to_xml(xml) }
       end
     end
   end
