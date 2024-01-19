@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe ASP::Entities::PrestationDossier, type: :model do
+describe ASP::Entities::Prestadoss, type: :model do
   let(:payment) { create(:payment) }
   let(:schooling) { payment.pfmp.schooling }
 

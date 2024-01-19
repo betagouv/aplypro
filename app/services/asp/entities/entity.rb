@@ -33,14 +33,21 @@ module ASP
         end
       end
 
-      def to_xml(builder)
-        validate!
-
-        builder.tap { |xml| fragment(xml) }
+      def xml_root_args
+        {}
       end
 
-      def fragment(builder)
-        raise NotImplementedError
+      def to_xml(builder)
+        root_node = self.class.name.demodulize.downcase
+        args = xml_root_args
+
+        validate!
+
+        builder.tap do |xml|
+          xml.send(root_node, args) do |x|
+            fragment(x)
+          end
+        end
       end
     end
   end

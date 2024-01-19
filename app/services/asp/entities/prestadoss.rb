@@ -4,7 +4,7 @@ require "asp/constants"
 
 module ASP
   module Entities
-    class PrestationDossier < Entity
+    class Prestadoss < Entity
       include ASP::Constants
 
       attribute :numadm, :string
@@ -15,17 +15,15 @@ module ASP
 
       validates_presence_of %i[numadm datecomplete datereceptionprestadoss montanttotalengage valeur]
 
-      def fragment(builder)
-        builder.prestadoss do |xml|
-          xml.numadm(numadm)
-          xml.codeprestadispo(CODE_DISPOSITIF)
-          xml.datecompletude(datecomplete)
-          xml.datereceptionprestadoss(datereceptionprestadoss)
-          xml.montanttotalengage(montanttotalengage)
-          xml.code("D")
-          xml.valeur(valeur)
-          xml.indicrattachusprestadispo("O")
-        end
+      def fragment(xml)
+        xml.numadm(numadm)
+        xml.codeprestadispo(CODE_DISPOSITIF)
+        xml.datecompletude(datecomplete)
+        xml.datereceptionprestadoss(datereceptionprestadoss)
+        xml.montanttotalengage(montanttotalengage)
+        xml.code("D")
+        xml.valeur(valeur)
+        xml.indicrattachusprestadispo("O")
       end
     end
   end

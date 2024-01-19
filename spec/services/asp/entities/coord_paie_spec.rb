@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe ASP::Entities::CoordonneesPaiement, type: :model do
+describe ASP::Entities::CoordPaie, type: :model do
   let(:student) { create(:student, :with_rib) }
   let(:payment) { create(:payment) }
 

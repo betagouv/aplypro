@@ -103,7 +103,7 @@ RSpec.configure do |config|
       klass = "ASP::Entities::#{name}".constantize
       double = instance_double(name)
 
-      allow(double).to receive(:to_xml) { |builder| builder.send(name) }
+      allow(double).to receive(:to_xml) { |builder| builder.send(name.downcase) }
       allow(klass).to receive(:from_payment).and_return(double)
     end
   end
