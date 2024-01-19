@@ -54,10 +54,14 @@ FactoryBot.define do
 
     trait :born_in_france do
       birth_country_code { "99100" }
+
+      with_birthplace_info
     end
 
     trait :born_abroad do
       birth_country_code { "11111" }
+
+      with_birthplace_info
     end
   end
 end

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe ASP::Mappers::DossierMapper do
+describe ASP::Mappers::ElementPaiementMapper do
   subject(:mapper) { described_class.new(payment) }
 
   let(:student) { create(:student) }
@@ -10,9 +10,11 @@ describe ASP::Mappers::DossierMapper do
 
   before { payment.pfmp.update!(student: student) }
 
-  describe "#numadm" do
-    it "returns the schooling's DA number" do
-      expect(mapper.numadm).to eq payment.schooling.attributive_decision_number
+  describe "usprinc" do
+    before { allow(ASP::BopMapper).to receive(:to_unite_suivi).and_return "ustest" }
+
+    it "maps to the BopMapper value" do
+      expect(mapper.usprinc).to eq "ustest"
     end
   end
 end
