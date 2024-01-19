@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe ASP::Mappers::PersonnePhysiqueMapper do
+describe ASP::Mappers::PersPhysiqueMapper do
   subject(:mapper) { described_class.new(payment) }
 
   let(:payment) { create(:payment) }

@@ -2,7 +2,7 @@
 
 module ASP
   module Entities
-    class PersonnePhysique < Entity
+    class PersPhysique < Entity
       attribute :titre, :string
       attribute :nomusage, :string
       attribute :nomnaissance, :string
@@ -22,16 +22,14 @@ module ASP
 
       validates_presence_of :codeinseecommune, if: :born_in_france?
 
-      def fragment(builder)
-        builder.persphysique do |xml|
-          xml.titre(titre)
-          xml.prenom(prenom)
-          xml.nomusage(nomusage)
-          xml.nomnaissance(nomnaissance)
-          xml.datenaissance(I18n.l(datenaissance, format: :asp))
-          xml.codeinseepaysnai(codeinseepaysnai)
-          xml.codeinseecommune(codeinseecommune)
-        end
+      def fragment(xml)
+        xml.titre(titre)
+        xml.prenom(prenom)
+        xml.nomusage(nomusage)
+        xml.nomnaissance(nomnaissance)
+        xml.datenaissance(I18n.l(datenaissance, format: :asp))
+        xml.codeinseepaysnai(codeinseepaysnai)
+        xml.codeinseecommune(codeinseecommune)
       end
 
       private

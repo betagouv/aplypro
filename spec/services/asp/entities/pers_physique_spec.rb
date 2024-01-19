@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe ASP::Entities::PersonnePhysique, type: :model do
+describe ASP::Entities::PersPhysique, type: :model do
   let(:student) { create(:student, :female, :with_address_info, :with_birthplace_info, first_name: "Marie") }
   let(:payment) { create(:payment) }
 

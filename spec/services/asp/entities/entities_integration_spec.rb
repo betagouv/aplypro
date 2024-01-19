@@ -24,6 +24,8 @@ describe "ASP Entities" do # rubocop:disable RSpec/DescribeClass
   end
 
   it "produce valid documents" do
-    expect { file.validate! }.not_to raise_error
+    log_on_failure = -> { file.errors.each { |e| puts "ASP validation error: #{e.message}\n" } }
+
+    expect { file.validate! }.not_to raise_error, log_on_failure
   end
 end

@@ -11,18 +11,16 @@ module ASP
 
       validates_presence_of :id_enregistrement
 
-      def fragment(builder)
-        builder.enregistrement(idEnregistrement: id_enregistrement) do |xml|
-          individu(xml)
-        end
+      def xml_root_args
+        { idEnregistrement: id_enregistrement }
       end
 
-      def individu(xml)
+      def fragment(xml)
         xml.individu do
           xml.natureindividu("P")
-          PersonnePhysique.from_payment(payment).to_xml(xml)
+          PersPhysique.from_payment(payment).to_xml(xml)
           xml.adressesindividu { Adresse.from_payment(payment).to_xml(xml) }
-          xml.coordpaiesindividu { CoordonneesPaiement.from_payment(payment).to_xml(xml) }
+          xml.coordpaiesindividu { CoordPaie.from_payment(payment).to_xml(xml) }
           xml.listedossier { Dossier.from_payment(payment).to_xml(xml) }
         end
       end

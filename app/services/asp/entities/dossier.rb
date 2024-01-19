@@ -11,12 +11,10 @@ module ASP
 
       validates :numadm, presence: true
 
-      def fragment(builder)
-        builder.dossier do |xml|
-          xml.numadm(numadm)
-          xml.listeprestadoss do
-            PrestationDossier.from_payment(payment).to_xml(xml)
-          end
+      def fragment(xml)
+        xml.numadm(numadm)
+        xml.listeprestadoss do
+          Prestadoss.from_payment(payment).to_xml(xml)
         end
       end
     end

@@ -20,18 +20,16 @@ module ASP
       validates :codepostalcedex, :codecominsee, presence: true, if: :french_address?
       validates :bureaudistribetranger, :localiteetranger, presence: true, if: :foreign_address?
 
-      def fragment(builder)
-        builder.adresse do |xml|
-          xml.codetypeadr(codetypeadr)
-          xml.codeinseepays(codeinseepays)
+      def fragment(xml)
+        xml.codetypeadr(codetypeadr)
+        xml.codeinseepays(codeinseepays)
 
-          if french_address?
-            xml.codepostalcedex(codepostalcedex)
-            xml.codecominsee(codecominsee)
-          else
-            xml.localiteetranger(localiteetranger)
-            xml.bureaudistribetranger(bureaudistribetranger)
-          end
+        if french_address?
+          xml.codepostalcedex(codepostalcedex)
+          xml.codecominsee(codecominsee)
+        else
+          xml.localiteetranger(localiteetranger)
+          xml.bureaudistribetranger(bureaudistribetranger)
         end
       end
 
