@@ -7,12 +7,12 @@ module ASP
     class Enregistrement < Entity
       include ASP::Constants
 
-      attribute :idEnregistrement, :string
+      attribute :id_enregistrement, :string
 
-      validates_presence_of :idEnregistrement
+      validates_presence_of :id_enregistrement
 
-      def fragment(xml)
-        xml.enregistrement(idEnregistrement) do
+      def fragment(builder)
+        builder.enregistrement(idEnregistrement: id_enregistrement) do |xml|
           individu(xml)
         end
       end
