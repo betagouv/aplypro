@@ -2,7 +2,7 @@
 
 module ASP
   module Entities
-    class CoordonneesPaiement < Entity
+    class CoordPaie < Entity
       CODE_MODE_REGLEMENT_IBAN = "135"
       CODE_TYPE_COORDONNEE_PAIEMENT_PRINCIPALE = "PRINCIPALE"
 
@@ -22,14 +22,12 @@ module ASP
                                clecontrole
                                bic]
 
-      def fragment(builder)
-        builder.coordpaie do |xml|
-          xml.codetypecoordpaie(codetypecoordpaie)
-          xml.codemodereglement(codemodereglement)
-          xml.intitdest(intitdest)
+      def fragment(xml)
+        xml.codetypecoordpaie(codetypecoordpaie)
+        xml.codemodereglement(codemodereglement)
+        xml.intitdest(intitdest)
 
-          iban(xml)
-        end
+        iban(xml)
       end
 
       private

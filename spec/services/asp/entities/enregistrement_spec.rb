@@ -6,7 +6,7 @@ describe ASP::Entities::Enregistrement, type: :model do
   let(:payment) { create(:payment) }
 
   before do
-    %w[PersonnePhysique Adresse CoordonneesPaiement Dossier].each { |name| mock_entity(name) }
+    %w[PersPhysique Adresse CoordPaie Dossier].each { |name| mock_entity(name) }
   end
 
   it_behaves_like "an ASP payment mapping entity"

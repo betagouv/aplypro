@@ -2,7 +2,7 @@
 
 module ASP
   module Mappers
-    class PrestationDossierMapper
+    class PrestadossMapper
       MAPPING = {
         numadm: :attributive_decision_number
       }.freeze
