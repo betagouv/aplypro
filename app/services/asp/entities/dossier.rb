@@ -8,35 +8,15 @@ module ASP
       include ASP::Constants
 
       attribute :numadm, :string
-      attribute :datecomplete, :asp_date
-      attribute :datereceptionprestadoss, :asp_date
-      attribute :montanttotalengage, :string
-      attribute :valeur, :string
 
-      validates_presence_of %i[numadm datecomplete datereceptionprestadoss montanttotalengage valeur]
+      validates :numadm, presence: true
 
       def fragment(builder)
         builder.dossier do |xml|
           xml.numadm(numadm)
-          xml.codedispositif(CODE_DISPOSITIF)
           xml.listeprestadoss do
-            listeprestadoss(xml)
+            PrestationDossier.from_payment(payment).to_xml(xml)
           end
-        end
-      end
-
-      private
-
-      def listeprestadoss(builder)
-        builder.prestadoss do |xml|
-          xml.numadm(numadm)
-          xml.codeprestadispo(CODE_DISPOSITIF)
-          xml.datecompletude(datecomplete)
-          xml.datereceptionprestadoss(datereceptionprestadoss)
-          xml.montanttotalengage(montanttotalengage)
-          xml.code("D")
-          xml.valeur(valeur)
-          xml.indicrattachusprestadispo("O")
         end
       end
     end

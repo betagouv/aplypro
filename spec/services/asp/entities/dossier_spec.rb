@@ -6,6 +6,10 @@ describe ASP::Entities::Dossier, type: :model do
   let(:payment) { create(:payment) }
   let(:schooling) { payment.pfmp.schooling }
 
+  before do
+    mock_entity("PrestationDossier")
+  end
+
   it_behaves_like "an ASP payment mapping entity"
 
   it_behaves_like "an XML-fragment producer" do

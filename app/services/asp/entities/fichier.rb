@@ -22,7 +22,7 @@ module ASP
 
             xml.enregistrements do
               @payments.each do |payment|
-                enregistrement(xml, payment)
+                Entities::Enregistrement.from_payment(payment).to_xml(xml)
               end
             end
           end

@@ -93,6 +93,20 @@ RSpec.configure do |config|
   config.when_first_matching_example_defined :student_api do
     include WebmockHelpers
   end
+
+  config.define_derived_metadata(file_path: %r{spec/services/asp/entities/}) do |meta|
+    meta[:asp_entity] = true
+  end
+
+  config.when_first_matching_example_defined :asp_entity do
+    def mock_entity(name)
+      klass = "ASP::Entities::#{name}".constantize
+      double = instance_double(name)
+
+      allow(double).to receive(:to_xml) { |builder| builder.send(name) }
+      allow(klass).to receive(:from_payment).and_return(double)
+    end
+  end
 end
 
 Shoulda::Matchers.configure do |config|
