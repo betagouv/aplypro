@@ -3,6 +3,8 @@
 module ASP
   module Mappers
     class DossierMapper
+      include Constants
+
       MAPPING = {
         numadm: :attributive_decision_number
       }.freeze
@@ -15,6 +17,10 @@ module ASP
 
       MAPPING.each do |name, attr|
         define_method(name) { schooling.send(attr) }
+      end
+
+      def codedispositif
+        CODE_DISPOSITIF
       end
     end
   end

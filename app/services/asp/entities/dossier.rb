@@ -8,11 +8,13 @@ module ASP
       include ASP::Constants
 
       attribute :numadm, :string
+      attribute :codedispositif, :string
 
-      validates :numadm, presence: true
+      validates_presence_of %i[numadm codedispositif]
 
       def fragment(xml)
         xml.numadm(numadm)
+        xml.codedispositif(codedispositif)
         xml.listeprestadoss do
           Prestadoss.from_payment(payment).to_xml(xml)
         end
