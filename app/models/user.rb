@@ -18,7 +18,17 @@ class User < ApplicationRecord
   has_many :directed_establishments, class_name: "Establishment", inverse_of: :confirmed_director, dependent: :nullify
   has_many :invitations, dependent: :nullify
 
-  belongs_to :establishment, optional: true
+  belongs_to :selected_establishment, optional: true, class_name: "Establishment"
+
+  validate :current_establishment_is_legitimate
+
+  def current_establishment_is_legitimate
+    return if selected_establishment.blank?
+
+    legit = establishments.include?(selected_establishment)
+
+    errors.add(:selected_establishment, "no corresponding roles found") unless legit
+  end
 
   class << self
     # ideally all these methods would live in some OIDC-factory but I

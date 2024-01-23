@@ -97,4 +97,14 @@ RSpec.describe Student do
       end
     end
   end
+
+  describe "without_ribs" do
+    let(:students) { create_list(:student, 3) }
+
+    before { students.first(2).each { |student| create(:rib, student: student) } }
+
+    it "returns only the students without ribs" do
+      expect(described_class.without_ribs).to contain_exactly students.last
+    end
+  end
 end

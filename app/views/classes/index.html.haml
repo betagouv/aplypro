@@ -8,14 +8,21 @@
       %caption.fr-h1 Liste des classes
       %thead
         %th{scope: "col"} Classe
-        %th{scope: "col"} Effectif
-        %th{scope: "col"} Nombre de PFMPs
+        %th{scope: "col"} Décisions d'attribution
         %th{scope: "col"} Coordonnées bancaires
+        %th{scope: "col"} PFMPs
       %tbody
         - @classes.each do |classe|
+          - nb_students = @nb_students_per_class[classe.id]
           %tr
             %td
               = dsfr_link_to classe.to_long_s, classe, title: t("links.classes.show", label: classe.to_long_s)
-            %td= classe.active_students.size
-            %td= classe.active_pfmps.size
-            %td= avancement_ribs(classe)
+            %td= progress_badge @nb_attributive_decisions_per_class[classe.id], nb_students
+            %td= progress_badge @nb_ribs_per_class[classe.id], nb_students
+            %td
+              .fr-grid-row
+                %div
+                  = pfmp_badge :pending, @nb_pfmp_per_class_and_status[[classe.id, :pending]]
+                  = pfmp_badge :completed, @nb_pfmp_per_class_and_status[[classe.id, :completed]]
+                %div
+                  = pfmp_badge :validated, @nb_pfmp_per_class_and_status[[classe.id, :validated]]

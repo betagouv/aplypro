@@ -13,8 +13,10 @@ class ValidationsController < ApplicationController
   def index
     infer_page_title
 
-    @classes_pfmps_counts = validatable_pfmps.group(:"classe.id").count
+    @classes_pfmps_counts = validatable_pfmps.group(:classe_id).count
     @classes = Classe.where(id: @classes_pfmps_counts.keys)
+
+    fetch_classes_indicators(@classes)
   end
 
   def show
@@ -22,7 +24,7 @@ class ValidationsController < ApplicationController
     infer_page_title(name: @classe.label)
 
     @pfmps = validatable_pfmps
-             .where(classe: @classe)
+             .where(schoolings: { classe: @classe })
              .joins(:mef)
              .merge(Mef.with_wages)
              .joins(:student)
@@ -33,7 +35,7 @@ class ValidationsController < ApplicationController
 
   def validate
     validatable_pfmps
-      .where(classe: @classe)
+      .where(schoolings: { classe: @classe })
       .where(id: validation_params[:pfmp_ids])
       .find_each do |pfmp|
         pfmp.transition_to!(:validated)
@@ -52,17 +54,13 @@ class ValidationsController < ApplicationController
   end
 
   def set_classe
-    @classe = Classe.where(establishment: @etab).find(params[:id])
+    @classe = Classe.where(establishment: current_establishment).find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to validations_path, alert: t("errors.classes.not_found") and return
   end
 
   def validatable_pfmps
-    Pfmp
-      .in_state(:completed)
-      .joins(classe: :establishment)
-      .where(classe: { establishment: @etab })
-      .merge(Schooling.current)
+    current_establishment.active_pfmps.in_state(:completed)
   end
 
   def validation_params

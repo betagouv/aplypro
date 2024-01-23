@@ -125,7 +125,7 @@ module Users
 
         render action: :select_etab
       else
-        @user.update!(establishment: establishments.first)
+        @user.update!(selected_establishment: establishments.first)
 
         redirect_to root_path, notice: t("auth.success")
       end

@@ -30,6 +30,8 @@ class Student < ApplicationRecord
 
   has_one :rib, -> { where(archived_at: nil) }, dependent: :destroy, inverse_of: :student
 
+  scope :without_ribs, -> { where.missing(:rib) }
+
   before_validation :check_asp_file_reference
 
   def to_s

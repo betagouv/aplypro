@@ -9,19 +9,17 @@ RSpec.describe "EstablishmentsController" do
 
   let(:classe) { create(:classe) }
   let(:establishment) { classe.establishment }
-  let(:user) { create(:user, :director, establishment: establishment) }
+  let(:user) { create(:user, :director, :with_selected_establishment, establishment: establishment) }
 
-  before do
-    sign_in(user)
-  end
+  before { sign_in(user) }
 
   context "when the user does not have a selected establishment" do
-    before { user.update!(establishment: nil) }
+    before { user.update!(selected_establishment: nil) }
 
     it "redirects them towards the select page" do
       get "/home"
 
-      expect(response).to redirect_to select_establishments_path
+      expect(response).to redirect_to user_select_establishment_path(user)
     end
   end
 
@@ -62,7 +60,7 @@ RSpec.describe "EstablishmentsController" do
 
     context "when the user is authorised" do
       before do
-        user = create(:user, :authorised, establishment: establishment)
+        user = create(:user, :authorised, :with_selected_establishment, establishment: establishment)
 
         sign_in(user)
       end

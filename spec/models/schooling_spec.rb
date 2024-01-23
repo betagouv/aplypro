@@ -98,4 +98,20 @@ RSpec.describe Schooling do
       expect { schooling.reopen! }.to change(schooling, :open?).from(false).to(true)
     end
   end
+
+  describe "with_attributive_decisions" do
+    subject { described_class.with_attributive_decisions }
+
+    let(:schooling) { create(:schooling) }
+
+    context "when the schooling does not have an attached attributive decision" do
+      it { is_expected.not_to include(schooling) }
+    end
+
+    context "when the schooling has an attached attributive decision" do
+      let(:schooling) { create(:schooling, :with_attributive_decision) }
+
+      it { is_expected.to include(schooling) }
+    end
+  end
 end

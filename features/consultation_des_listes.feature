@@ -18,7 +18,26 @@ Fonctionnalité: Le personnel de direction consulte les listes
   Scénario: Le personnel de direction peut voir la complétion des saisies de coordonnées bancaires
     Quand je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"
     Et que je consulte la liste des classes
-    Alors la page contient "1/"
+    Alors le tableau "Liste des classes" contient
+      | Classe | Décisions d'attribution | Coordonnées bancaires | PFMPs |
+      | 2NDEB  |                   0 / 1 |                 1 / 1 |       |
+
+  Scénario: Le personnel de direction peut voir la complétion des décisions d'attribution
+    Quand je génère les décisions d'attribution de mon établissement
+    Et que je consulte la liste des classes
+    Alors le tableau "Liste des classes" contient
+      | Classe | Décisions d'attribution | Coordonnées bancaires | PFMPs |
+      | 2NDEB  |                   1 / 1 |                 0 / 1 |       |
+
+  Scénario: Le personnel de direction peut voir les PFMPs dans différents états
+    Sachant que je consulte le profil de "Marie Curie" dans la classe de "2NDEB"
+    Et que je renseigne une PFMP provisoire
+    Et que je renseigne une PFMP de 3 jours
+    Et que je renseigne et valide une PFMP de 10 jours
+    Quand je consulte la liste des classes
+    Alors je peux voir 1 PFMP "À compléter" pour la classe "2NDEB"
+    Et je peux voir 1 PFMP "Saisies à valider" pour la classe "2NDEB"
+    Et je peux voir 1 PFMP "Validées" pour la classe "2NDEB"
 
   Scénario: La liste des élèves d'une classe est toujours triée par ordre alphabétique nom-prénom
     Et que il y a un élève "Paul Allègre" au sein de la classe "2NDEB" pour une formation "Développement"

@@ -30,6 +30,7 @@ class Pfmp < ApplicationRecord
            :transition_to!, :transition_to, :in_state?, to: :state_machine
 
   delegate :wage, to: :mef
+
   def state_machine
     @state_machine ||= PfmpStateMachine.new(
       self,

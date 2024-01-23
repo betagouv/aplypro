@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 module HomeHelper
-  def indicator_badge(count, total)
-    status = indicator_badge_status(count, total)
+  def progress_badge(count, total)
+    count ||= 0
+    status = progress_badge_status(count, total)
 
     dsfr_badge(status: status, classes: ["fr-badge counter"]) do
       "#{count} / #{total}"
@@ -10,7 +11,7 @@ module HomeHelper
   end
 
   def attributive_decisions_download_button(establishment)
-    count = establishment.current_schoolings.with_attributive_decisions.count
+    count = establishment.active_schoolings.with_attributive_decisions.count
 
     return if count.zero?
 
@@ -26,7 +27,7 @@ module HomeHelper
   def attributive_decisions_generation_form(establishment)
     return cannot_generate_attributive_decisions_button unless current_user.can_try_to_generate_attributive_decisions?
 
-    count = establishment.current_schoolings.without_attributive_decisions.count
+    count = establishment.active_schoolings.without_attributive_decisions.count
 
     render partial: "home/attributive_decision_form", locals: { establishment: establishment, count: count }
   end
@@ -40,8 +41,8 @@ module HomeHelper
     )
   end
 
-  def indicator_badge_status(count, total)
-    if total.zero?
+  def progress_badge_status(count, total)
+    if total.nil? || total.zero?
       :error
     else
       case count / total
@@ -62,13 +63,11 @@ module HomeHelper
     end
   end
 
-  def pfmp_badge(status, pfmps_counts)
-    count_tag = content_tag(:div, class: "fr-mr-1w") do
-      pfmps_counts[status.to_s].to_s
-    end
+  def pfmp_badge(status, count, **args)
+    count_tag = content_tag(:div, count || 0, class: "fr-mr-1w")
 
-    content_tag(:div, class: "fr-badge-group fr-grid-row--right", "aria-label": t("pfmps.states.#{status}")) do
-      count_tag.concat(status_badge(status))
+    content_tag(:div, class: "fr-badge-group no-wrap #{args[:class]}", "aria-label": t("pfmps.states.#{status}")) do
+      safe_join([count_tag, status_badge(status)], " ")
     end
   end
 
@@ -79,7 +78,7 @@ module HomeHelper
   end
 
   def confirmed_director_information
-    return if current_user.establishment.confirmed_director.blank? || current_user.confirmed_director?
+    return if current_user.selected_establishment.confirmed_director.blank? || current_user.confirmed_director?
 
     I18n.t(
       "panels.attributive_decisions.confirm_director_information",

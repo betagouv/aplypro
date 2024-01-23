@@ -38,10 +38,7 @@ RSpec.describe Establishment do
   end
 
   describe "confirmed_director" do
-    subject { establishment }
-
-    let!(:user) { create(:user, :confirmed_director) }
-    let(:establishment) { user.establishment }
+    let!(:user) { create(:user, :confirmed_director, establishment: establishment) }
 
     it { is_expected.to be_valid }
 

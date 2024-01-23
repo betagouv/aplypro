@@ -2,20 +2,28 @@
 
 class ClassesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_all_classes, only: :index
   before_action :set_classe, except: :index
 
-  def index
-    redirect_to welcome_path and return unless current_user.welcomed?
+  before_action :add_bulk_action_breadcrumbs, only: %i[
+    create_bulk_pfmp
+    bulk_pfmp
+    bulk_pfmp_completion
+    update_bulk_pfmp
+  ]
 
+  def index
     infer_page_title
+
+    @classes = current_establishment.classes.current
+
+    fetch_classes_indicators(@classes)
   end
 
   def show
     add_breadcrumb t("pages.titles.classes.index"), classes_path
-    set_indicators
-
     infer_page_title(name: @classe)
+
+    set_classe_indicators
   end
 
   def create_bulk_pfmp
@@ -33,19 +41,9 @@ class ClassesController < ApplicationController
 
   def bulk_pfmp
     @pfmp = Pfmp.new
-
-    add_breadcrumb t("pages.titles.classes.index"), classes_path
-    add_breadcrumb t("pages.titles.classes.show", name: @classe), class_path(@classe)
-
-    infer_page_title
   end
 
   def bulk_pfmp_completion
-    add_breadcrumb t("pages.titles.classes.index"), classes_path
-    add_breadcrumb t("pages.titles.classes.show", name: @classe), class_path(@classe)
-
-    infer_page_title
-
     @pfmps = @classe
              .pfmps
              .in_state(:pending)
@@ -82,16 +80,9 @@ class ClassesController < ApplicationController
     )
   end
 
-  def set_all_classes
-    @classes = @etab
-               .classes
-               .current
-               .includes(:mef, :active_pfmps, active_students: :rib)
-  end
-
   def set_classe
     @classe = Classe
-              .where(establishment: @etab)
+              .where(establishment: current_establishment)
               .includes(active_schoolings: [student: :rib])
               .find(params[:id])
 
@@ -100,12 +91,17 @@ class ClassesController < ApplicationController
     redirect_to classes_path, alert: t("errors.classes.not_found") and return
   end
 
-  def set_indicators
+  def set_classe_indicators
     @nb_students = @classe.active_students.count
     @nb_pending_pfmps = @classe.active_pfmps.in_state(:pending).count
     @nb_completed_pfmps = @classe.active_pfmps.in_state(:completed).count
     @nb_pfmps = @classe.active_pfmps.count
-    @nb_ribs = @classe.active_students.joins(:rib).count
-    @nb_missing_ribs = @nb_students - @nb_ribs
+    @nb_missing_ribs = @classe.active_students.without_ribs.count
+  end
+
+  def add_bulk_action_breadcrumbs
+    add_breadcrumb t("pages.titles.classes.index"), classes_path
+    add_breadcrumb t("pages.titles.classes.show", name: @classe), class_path(@classe)
+    infer_page_title
   end
 end

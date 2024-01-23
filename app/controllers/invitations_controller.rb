@@ -3,19 +3,16 @@
 class InvitationsController < ApplicationController
   before_action :check_authorised_to_invite
   before_action :set_invitation, only: :destroy
+  before_action :add_new_breadcrumbs, only: %i[new create]
 
   def index
-    @invitations = @etab.invitations
+    @invitations = current_establishment.invitations
 
     infer_page_title
   end
 
   def new
-    add_breadcrumb t("pages.titles.invitations.index"), establishment_invitations_path(@etab)
-
     @invitation = Invitation.new
-
-    infer_page_title
   end
 
   def create
@@ -31,7 +28,10 @@ class InvitationsController < ApplicationController
   def destroy
     @invitation.destroy
 
-    redirect_to establishment_invitations_path(@etab), notice: t("flash.invites.destroyed", email: @invitation.email)
+    redirect_to(
+      establishment_invitations_path(current_establishment),
+      notice: t("flash.invites.destroyed", email: @invitation.email)
+    )
   end
 
   private
@@ -40,11 +40,11 @@ class InvitationsController < ApplicationController
     params
       .require(:invitation)
       .permit(:email)
-      .with_defaults(user: current_user, establishment: @etab)
+      .with_defaults(user: current_user, establishment: current_establishment)
   end
 
   def set_invitation
-    @invitation = @etab.invitations.find(params[:id])
+    @invitation = current_establishment.invitations.find(params[:id])
   end
 
   def check_authorised_to_invite
@@ -55,5 +55,10 @@ class InvitationsController < ApplicationController
         status: :forbidden
       )
     end
+  end
+
+  def add_new_breadcrumbs
+    add_breadcrumb t("pages.titles.invitations.index"), establishment_invitations_path(current_establishment)
+    infer_page_title
   end
 end

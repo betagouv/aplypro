@@ -1,22 +1,16 @@
 # frozen_string_literal: true
 
-class RibsController < StudentsController
+# FIXME: we should rightfully tidy up at some point
+
+# rubocop:disable Metrics/ClassLength
+class RibsController < ApplicationController
   before_action :set_classe
-  before_action :set_student, except: %i[missing bulk_create]
+  before_action :set_student, :set_rib_breadcrumbs, except: %i[missing bulk_create]
+  before_action :check_classes, only: :bulk_create
+  before_action :set_bulk_rib_breadcrumbs, only: %i[missing bulk_create]
   before_action :set_rib, only: %i[edit update destroy confirm_deletion]
 
   def new
-    add_breadcrumb t("pages.titles.classes.index"), classes_path
-    add_breadcrumb t("pages.titles.classes.show", name: @classe.label), class_path(@classe)
-    add_breadcrumb(
-      t("pages.titles.students.show", name: @student.full_name, classe: @classe.label),
-      class_student_path(@classe, @student)
-    )
-
-    infer_page_title
-
-    @inhibit_title = true
-
     @rib = Rib.new
   end
 
@@ -52,15 +46,9 @@ class RibsController < StudentsController
   end
 
   def missing
-    add_breadcrumb t("pages.titles.classes.index"), classes_path
-    add_breadcrumb t("pages.titles.classes.show", name: @classe), class_path(@classe)
-
-    infer_page_title
-
     @ribs = @classe
             .active_students
-            .includes(:rib)
-            .where("ribs.id": nil)
+            .without_ribs
             .map { |student| Rib.new(student: student, personal: true, name: student.full_name) }
   end
 
@@ -92,13 +80,7 @@ class RibsController < StudentsController
       .require(:ribs)
       .values
       .map do |rib_params|
-        rib_params.permit(
-          :iban,
-          :bic,
-          :name,
-          :personal,
-          :student_id
-        )
+        rib_params.permit(%i[iban bic name personal student_id])
       end
   end
 
@@ -107,7 +89,7 @@ class RibsController < StudentsController
   end
 
   def set_classe
-    @classe = Classe.where(establishment: @etab).find(params[:class_id])
+    @classe = Classe.where(establishment: current_establishment).find(params[:class_id])
   rescue ActiveRecord::RecordNotFound
     redirect_to classes_path, alert: t("errors.classes.not_found"), status: :forbidden and return
   end
@@ -115,4 +97,39 @@ class RibsController < StudentsController
   def set_rib
     @rib = @student.ribs.find(params[:id])
   end
+
+  def set_classe_breadcrumbs
+    add_breadcrumb t("pages.titles.classes.index"), classes_path
+    add_breadcrumb t("pages.titles.classes.show", name: @classe.label), class_path(@classe)
+  end
+
+  def set_rib_breadcrumbs
+    set_classe_breadcrumbs
+    add_breadcrumb(
+      t("pages.titles.students.show", name: @student.full_name, classe: @classe.label),
+      class_student_path(@classe, @student)
+    )
+    infer_page_title(name: @student.full_name)
+  end
+
+  def set_bulk_rib_breadcrumbs
+    set_classe_breadcrumbs
+    infer_page_title
+  end
+
+  def check_classes
+    classes = Classe
+              .joins(:students)
+              .where("students.id": bulk_ribs_params.pluck(:student_id))
+              .distinct
+
+    if classes != [@classe] # rubocop:disable Style/GuardClause
+      redirect_to(
+        missing_class_ribs_path(@classe),
+        alert: t("errors.classes.not_found"),
+        status: :forbidden
+      ) and return
+    end
+  end
 end
+# rubocop:enable Metrics/ClassLength

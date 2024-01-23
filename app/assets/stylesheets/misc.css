@@ -75,3 +75,8 @@
 .mef-label {
   word-break: break-all;
 }
+
+.no-wrap {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}

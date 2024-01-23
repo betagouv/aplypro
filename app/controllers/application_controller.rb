@@ -1,7 +1,14 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
-  before_action :authenticate_user!, :check_maintenance, :set_establishment, :set_support_banner
+  include ClassesIndicators
+
+  before_action :authenticate_user!,
+                :check_maintenance,
+                :check_current_establishment,
+                :set_support_banner
+
+  helper_method :current_establishment
 
   def after_sign_in_path_for(_resource)
     classes_path
@@ -10,7 +17,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def set_support_banner
-    @show_support_banner = eligible_for_support?(@etab)
+    @show_support_banner = eligible_for_support?(current_establishment)
   end
 
   def check_maintenance
@@ -23,14 +30,8 @@ class ApplicationController < ActionController::Base
     ENV.fetch("APLYPRO_MAINTENANCE_REASON", nil).present?
   end
 
-  def set_establishment
-    return unless user_signed_in?
-
-    if current_user.establishment.nil?
-      redirect_to select_establishments_path
-    else
-      @etab = current_user.establishment
-    end
+  def current_establishment
+    @current_establishment ||= current_user&.selected_establishment
   end
 
   def infer_page_title(attrs = {})
@@ -38,9 +39,19 @@ class ApplicationController < ActionController::Base
 
     return unless I18n.exists?(key)
 
-    @page_title = I18n.t(key, **attrs)
+    title, breadcrumb = extract_title_data(I18n.t(key, deep_interpolation: true, **attrs))
 
-    add_breadcrumb @page_title
+    @page_title = title
+
+    add_breadcrumb(breadcrumb)
+  end
+
+  def extract_title_data(data)
+    if data.is_a? Hash
+      [data[:title], data[:breadcrumb]]
+    else
+      [data, data]
+    end
   end
 
   def page_title_key
@@ -57,5 +68,18 @@ class ApplicationController < ActionController::Base
                      .split(",")
 
     supported_uais.include?(establishment.uai)
+  end
+
+  def check_current_establishment
+    return unless user_signed_in?
+
+    redirect_to user_select_establishment_path(current_user) if current_establishment.nil?
+  end
+
+  def fetch_classes_indicators(classes)
+    @nb_students_per_class = nb_students_per_class(classes)
+    @nb_attributive_decisions_per_class = nb_attributive_decisions_per_class(classes)
+    @nb_ribs_per_class = nb_ribs_per_class(classes)
+    @nb_pfmp_per_class_and_status = nb_pfmp_per_class_and_status(classes)
   end
 end

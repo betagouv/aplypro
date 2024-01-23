@@ -54,3 +54,4 @@ Fonctionnalité: Saisie des coordonnées banquaires manquantes pour une classe
       | Élèves (2)    | Coordonnées Bancaires (1/2) | PFMPs (0) |
       | Curie Marie   | Saisies                     |           |
       | Langevin Paul | Non saisies                 |           |
+

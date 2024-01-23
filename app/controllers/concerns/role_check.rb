@@ -17,9 +17,9 @@ module RoleCheck
 
   def update_confirmed_director!
     if params[:confirmed_director] == "1"
-      @etab.update(confirmed_director: current_user)
-    elsif @etab.confirmed_director == current_user
-      @etab.update(confirmed_director: nil)
+      current_establishment.update(confirmed_director: current_user)
+    elsif current_establishment.confirmed_director == current_user
+      current_establishment.update(confirmed_director: nil)
     end
   end
 end
