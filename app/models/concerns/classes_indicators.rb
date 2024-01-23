@@ -10,7 +10,7 @@ module ClassesIndicators
 
   def nb_attributive_decisions_per_class(classes)
     classes.joins(:active_schoolings)
-           .with_attributive_decisions
+           .merge(Schooling.with_attributive_decisions)
            .group(:"classes.id")
            .count
   end
