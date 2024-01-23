@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_17_162049) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_23_163436) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -163,6 +163,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_17_162049) do
     t.string "name", null: false
     t.boolean "personal", default: false, null: false
     t.index ["student_id"], name: "index_ribs_on_student_id"
+    t.index ["student_id"], name: "one_active_rib_per_student", unique: true, where: "(archived_at IS NULL)"
   end
 
   create_table "schoolings", force: :cascade do |t|

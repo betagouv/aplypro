@@ -13,5 +13,7 @@ RSpec.describe Rib do
     it { is_expected.to validate_presence_of(:iban) }
     it { is_expected.to validate_presence_of(:bic) }
     it { is_expected.to validate_presence_of(:name) }
+
+    it { is_expected.to validate_uniqueness_of(:student_id).scoped_to(:archived_at) }
   end
 end
