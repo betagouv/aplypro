@@ -5,7 +5,7 @@ module IdentityMappers
     attr_accessor :attributes
 
     # List of establishment types : https://infocentre.pleiade.education.fr/bcn/workspace/viewTable/n/N_TYPE_UAI
-    ACCEPTED_ESTABLISHMENT_TYPES = %w[LYC LP SEP EREA CFPA].freeze
+    ACCEPTED_ESTABLISHMENT_TYPES = %w[LYC LP SEP EREA CFPA EME].freeze
     FREDURNERESP_MAPPING = %i[uai type category activity tna_sym tty_code tna_code].freeze
     FREDURNE_MAPPING     = %i[uai type category function uaj tna_sym tty_code tna_code].freeze
     FREDURESDEL_MAPPING  = %i[name url begin_date end_date user_name responsibilities server_id module].freeze
