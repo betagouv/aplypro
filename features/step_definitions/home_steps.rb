@@ -5,7 +5,7 @@ Alors("le panneau {string} contient {string}") do |title, text|
 end
 
 Alors("le panneau {string} ne contient pas {string}") do |title, text|
-  expect(page.find(".gray-panel", text: title)).not_to have_content(text)
+  expect(page.find(".gray-panel", text: title)).to have_no_content(text)
 end
 
 Quand("l'établissement {string} fait parti des établissments soutenus directement") do |uai|

@@ -71,7 +71,7 @@ end
 
 Quand("je clique sur {string} dans le menu principal") do |item|
   within("nav#main-nav") do
-    click_link(item)
+    click_link_or_button(item)
   end
 end
 
