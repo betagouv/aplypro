@@ -82,7 +82,7 @@ module HomeHelper
 
     I18n.t(
       "panels.attributive_decisions.confirm_director_information",
-      name: current_user.establishment.confirmed_director.name
+      name: current_user.selected_establishment.confirmed_director.name
     )
   end
 end
