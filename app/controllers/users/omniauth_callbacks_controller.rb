@@ -20,11 +20,11 @@ module Users
 
       @user.save!
 
-      add_auth_breadcrumb(data: @user.id, message: "Successfully parsed user")
+      add_auth_breadcrumb(data: { user_id: @user.id }, message: "Successfully parsed user")
 
       check_access!
 
-      add_auth_breadcrumb(data: @mapper.all_indicated_uais, message: "Found establishments")
+      add_auth_breadcrumb(data: { user_uais: @mapper.all_indicated_uais }, message: "Found establishments")
 
       log_user_in!
       save_roles!
