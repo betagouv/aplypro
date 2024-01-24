@@ -47,9 +47,9 @@ Fonctionnalité: Complétion des PFMPs d'une classe
     Lorsque je clique sur "Élèves"
     Et que je clique sur "2NDEB"
     Alors je peux voir dans le tableau "Liste des élèves"
-      | Élèves        | Coordonnées bancaires | PFMPs             |
-      | Curie Marie   |                       | Validée mars 2023 |
-      | Langevin Paul |                       | Validée mars 2023 |
+      | Élèves        | Décisions d'attribution | Coordonnées bancaires | PFMPs             |
+      | Curie Marie   |                         |                       | Validée mars 2023 |
+      | Langevin Paul |                         |                       | Validée mars 2023 |
 
   Scénario: Le personnel peut décocher des PFMPs pour éviter de les valider
     Et que je clique sur "2NDEB - Développement"
@@ -60,9 +60,9 @@ Fonctionnalité: Complétion des PFMPs d'une classe
     Lorsque je clique sur "Élèves"
     Et que je clique sur "2NDEB"
     Alors je peux voir dans le tableau "Liste des élèves"
-      | Élèves        | Coordonnées bancaires | PFMPs                      |
-      | Curie Marie   |                       | Saisie à valider mars 2023 |
-      | Langevin Paul |                       | Validée mars 2023          |
+      | Élèves        | Décisions d'attribution | Coordonnées bancaires | PFMPs                      |
+      | Curie Marie   |                         |                       | Saisie à valider mars 2023 |
+      | Langevin Paul |                         |                       | Validée mars 2023          |
 
   Scénario: Le personnel ne peut pas valider si toutes les PFMPs sont décochées
     Et que je clique sur "2NDEB - Développement"

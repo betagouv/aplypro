@@ -18,14 +18,14 @@ Fonctionnalité: Le personnel de direction consulte les listes
   Scénario: Le personnel de direction peut voir la complétion des saisies de coordonnées bancaires
     Quand je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"
     Et que je consulte la liste des classes
-    Alors le tableau "Liste des classes" contient
+    Alors je peux voir dans le tableau "Liste des classes"
       | Classe | Décisions d'attribution | Coordonnées bancaires | PFMPs |
       | 2NDEB  |                   0 / 1 |                 1 / 1 |       |
 
   Scénario: Le personnel de direction peut voir la complétion des décisions d'attribution
     Quand je génère les décisions d'attribution de mon établissement
     Et que je consulte la liste des classes
-    Alors le tableau "Liste des classes" contient
+    Alors je peux voir dans le tableau "Liste des classes"
       | Classe | Décisions d'attribution | Coordonnées bancaires | PFMPs |
       | 2NDEB  |                   1 / 1 |                 0 / 1 |       |
 

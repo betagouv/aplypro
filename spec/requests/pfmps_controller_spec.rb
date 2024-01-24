@@ -5,14 +5,14 @@ require "rails_helper"
 RSpec.describe PfmpsController do
   let(:schooling) { create(:schooling) }
   let(:student) { schooling.student }
-  let(:user) { create(:user, :director, :with_selected_establishment, establishment: student.classe.establishment) }
+  let(:user) { create(:user, :director, :with_selected_establishment, establishment: schooling.classe.establishment) }
   let(:pfmp) { create(:pfmp, schooling: schooling) }
 
   before { sign_in(user) }
 
   describe "GET /pfmp" do
     before do
-      get class_student_pfmp_path(class_id: student.classe.id, student_id: student.id, id: pfmp.id)
+      get class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id, id: pfmp.id)
     end
 
     it { is_expected.to render_template(:show) }
@@ -20,7 +20,7 @@ RSpec.describe PfmpsController do
     context "when trying to access a PFMP from another establishment" do
       before do
         schooling = create(:schooling)
-        get class_student_pfmp_path(class_id: schooling.classe.id, student_id: schooling.student.id, id: pfmp.id)
+        get class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id, id: pfmp.id)
       end
 
       it { is_expected.to redirect_to classes_path }
@@ -30,7 +30,7 @@ RSpec.describe PfmpsController do
       before do
         pfmp.destroy!
 
-        get class_student_pfmp_path(class_id: schooling.classe.id, student_id: schooling.student.id, id: pfmp.id)
+        get class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id, id: pfmp.id)
       end
 
       it { is_expected.to redirect_to class_student_path(schooling.classe, student) }
@@ -42,7 +42,7 @@ RSpec.describe PfmpsController do
 
     context "when validating as a director" do
       it "returns 200" do
-        post validate_class_student_pfmp_path(class_id: schooling.classe.id, student_id: student.id, id: pfmp.id)
+        post validate_class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id, id: pfmp.id)
 
         expect(response).to have_http_status(:found)
       end
@@ -59,9 +59,30 @@ RSpec.describe PfmpsController do
       end
 
       it "returns 403 (Forbidden)" do
-        post validate_class_student_pfmp_path(class_id: schooling.classe.id, student_id: student.id, id: pfmp.id)
+        post validate_class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id, id: pfmp.id)
 
         expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
+
+  describe "POST /pfmp" do
+    let(:pfmp) { build(:pfmp, schooling: schooling) }
+    let(:pfmp_params) { { pfmp: pfmp.attributes } }
+
+    it "returns 200" do
+      post class_schooling_pfmps_path(class_id: schooling.classe.id, schooling_id: schooling.id), params: pfmp_params
+
+      expect(response).to have_http_status(:found)
+    end
+
+    context "with a closed schooling" do
+      let(:schooling) { create(:schooling, :closed) }
+
+      it "returns 200" do
+        post class_schooling_pfmps_path(class_id: schooling.classe.id, schooling_id: schooling.id), params: pfmp_params
+
+        expect(response).to have_http_status(:found)
       end
     end
   end

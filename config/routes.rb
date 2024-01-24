@@ -32,14 +32,16 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :students, only: %i[show] do
+    resources :schoolings, only: [] do
       resources :pfmps, except: :index do
         member do
           post "validate"
           get "confirm_deletion"
         end
       end
+    end
 
+    resources :students, only: %i[show] do
       resources :ribs do
         member do
           get "confirm_deletion"

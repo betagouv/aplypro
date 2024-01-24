@@ -1,0 +1,43 @@
+
+.fr-table.fr-table--no-caption
+  %table
+    %caption= caption
+    %thead
+      %th{scope: "col"}
+        Élèves
+        = "(#{schoolings.count})"
+      %th{scole: "col"}
+        .fr-grid-row
+          .fr-mr-1w Décisions d'attribution
+          = attributive_decisions_progress_badge(schoolings)
+      %th{scope: "col"}
+        .fr-grid-row
+          .fr-mr-1w Coordonnées bancaires
+          = ribs_progress_badge(schoolings)
+      %th{scope: "col"} 
+        PFMPs
+        = "(#{nb_pfmps(schoolings)})"
+
+    %tbody
+      - schoolings.each do |schooling|
+        - student = schooling.student
+        %tr
+          %td
+            = dsfr_link_to student.index_name, class_student_path(@classe, student), title: t("links.students.show", name: student)
+          %td
+            - if schooling.attributive_decision.present?
+              %p= dsfr_badge(status: :success) { "Éditée" }
+            - else
+              %p= dsfr_badge(status: :error) { "Manquante" }
+          %td
+            - if student.rib.present?
+              %p= dsfr_badge(status: :success) { "Saisies" }
+              = dsfr_link_to "Modifier les coordonnées bancaires", edit_class_student_rib_path(@classe, student, student.rib)
+            - else
+              %p= dsfr_badge(status: :error) { "Non saisies" }
+              = dsfr_link_to "Saisir les coordonnées bancaires", new_class_student_rib_path(@classe, student)
+          %td
+            %ul
+              - schooling.pfmps.each do |pfmp|
+                %li= dsfr_link_to pfmp.listing_to_s, class_schooling_pfmp_path(@classe, schooling, pfmp), title: pfmp.full_dates
+              %li= dsfr_link_to "Ajouter une PFMP individuelle", new_class_schooling_pfmp_path(@classe, schooling)
