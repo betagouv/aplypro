@@ -7,3 +7,24 @@ Quand("l'élève de SYGNE avec l'INE {string} a quitté l'établissement {string
     Et que toutes les tâches de fond sont terminées
     )
 end
+
+Quand("l'élève avec l'INE {string} s'appelle {string} {string}") do |ine, first_name, last_name|
+  Student.find_by(ine:).update(first_name:, last_name:)
+end
+
+Quand(
+  "l'élève avec l'INE {string} a une ancienne scolarité dans la classe {string} dans le même établissement"
+) do |ine, classe_label|
+  establishment = Establishment.last
+  student = Student.find_by(ine: ine)
+  classe = Classe.find_by(label: classe_label, establishment: establishment) ||
+           FactoryBot.create(:classe, label: classe_label, establishment: establishment)
+
+  FactoryBot.create(:schooling, student: student, classe: classe, end_date: Date.yesterday)
+end
+
+Quand("l'élève {string} {string} a une ancienne scolarité dans un autre établissement") do |first_name, last_name|
+  student = Student.find_by(first_name: first_name, last_name: last_name)
+  other_classe = FactoryBot.create(:classe)
+  FactoryBot.create(:schooling, student: student, classe: other_classe, end_date: Date.yesterday)
+end

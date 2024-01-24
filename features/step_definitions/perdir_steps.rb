@@ -96,6 +96,25 @@ Quand("je renseigne une PFMP de {int} jours") do |days|
   )
 end
 
+Quand("je renseigne une PFMP de {int} jours pour {string}") do |days, name|
+  steps %(
+    Quand je clique sur "Ajouter une PFMP" dans la rangée "#{name}"
+    Et que je remplis "Date de début" avec "17/03/2023"
+    Et que je remplis "Date de fin" avec "20/03/2023"
+    Et que je remplis "Nombre de jours effectués" avec "#{days}"
+    Et que je clique sur "Enregistrer"
+  )
+end
+
+Quand("je renseigne une PFMP pour {string}") do |name|
+  steps %(
+    Quand je clique sur "Ajouter une PFMP" dans la rangée "#{name}"
+    Et que je remplis "Date de début" avec "17/03/2023"
+    Et que je remplis "Date de fin" avec "20/03/2023"
+    Et que je clique sur "Enregistrer"
+  )
+end
+
 Quand("je renseigne et valide une PFMP de {int} jours") do |days|
   steps %(
     Quand je renseigne une PFMP de #{days} jours

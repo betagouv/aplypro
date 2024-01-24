@@ -56,7 +56,7 @@ class Pfmp < ApplicationRecord
 
     [
       day_count * wage.daily_rate,
-      student.allowance_left
+      student.allowance_left(mef)
     ].min
   end
 
@@ -70,7 +70,7 @@ class Pfmp < ApplicationRecord
   end
 
   def payment_due?
-    student.allowance_left > 0 # rubocop:disable Style:NumericPredicate
+    student.allowance_left(mef) > 0 # rubocop:disable Style:NumericPredicate
   end
 
   def breakdown

@@ -50,8 +50,8 @@ class Student < ApplicationRecord
     payments.in_state(:successful).map(&:amount).sum
   end
 
-  def allowance_left
-    current_schooling.mef.wage.yearly_cap - used_allowance
+  def allowance_left(mef)
+    mef.wage.yearly_cap - used_allowance
   end
 
   def close_current_schooling!(date = Time.zone.today)

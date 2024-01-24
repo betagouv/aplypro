@@ -33,3 +33,9 @@ Quand("je saisis en masse les coordonées bancaires d'un tiers pour {string}") d
     )
   end
 end
+
+Quand("le panel de saisie de coordonnées bancaires de {string} contient {string}") do |name, content|
+  within_fieldset(name) do
+    expect(page).to have_content(content)
+  end
+end

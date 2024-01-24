@@ -26,6 +26,7 @@ class Establishment < ApplicationRecord
 
   has_many :students, through: :schoolings
 
+  has_many :pfmps, -> { reorder nil }, through: :classes
   has_many :active_pfmps, -> { reorder nil }, through: :classes
 
   validate :ensure_confirmed_director_is_director

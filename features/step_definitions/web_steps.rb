@@ -20,10 +20,6 @@ Alors("la page ne contient pas {string}") do |content|
   expect(page).to have_no_content(content)
 end
 
-Alors("le tableau {string} contient") do |caption, table|
-  expect(page).to have_table(caption, with_rows: table.rows)
-end
-
 Alors("le titre de la page contient {string}") do |text|
   expect(page.title.gsub("  ", " ")).to include text
 end
@@ -63,6 +59,12 @@ end
 Quand("je clique sur {string} dans la rangée {string}") do |link, row|
   within("tr", text: row) do
     click_link_or_button(link)
+  end
+end
+
+Alors("la rangée {string} contient {string}") do |row, content|
+  within("tr", text: row) do
+    expect(page).to have_content(content)
   end
 end
 

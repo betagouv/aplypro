@@ -227,10 +227,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_23_163436) do
 
   create_table "wages", force: :cascade do |t|
     t.integer "daily_rate", null: false
-    t.string "mefstat4", null: false
     t.integer "yearly_cap", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "mefstat4", null: false
     t.integer "ministry", null: false
     t.jsonb "mef_codes"
   end

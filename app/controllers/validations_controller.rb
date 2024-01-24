@@ -7,16 +7,13 @@ class ValidationsController < ApplicationController
   before_action :check_director, only: %i[index show validate]
   before_action :update_confirmed_director!,
                 :check_confirmed_director_for_validation,
-                :check_empty_params,
                 only: :validate
 
   def index
     infer_page_title
 
-    @classes_pfmps_counts = validatable_pfmps.group(:classe_id).count
-    @classes = Classe.where(id: @classes_pfmps_counts.keys)
-
-    fetch_classes_indicators(@classes)
+    @classes = Classe.where(id: validatable_pfmps.distinct.pluck(:"classes.id"))
+    @classes_facade = ClassesFacade.new(@classes)
   end
 
   def show
@@ -24,16 +21,21 @@ class ValidationsController < ApplicationController
     infer_page_title(name: @classe.label)
 
     @pfmps = validatable_pfmps
+             .includes(schooling: :attributive_decision_attachment)
              .where(schoolings: { classe: @classe })
              .joins(:mef)
              .merge(Mef.with_wages)
-             .joins(:student)
+             .includes(student: :rib)
              .order(:"students.last_name", :"pfmps.start_date")
 
     @total_amount = @pfmps.map(&:calculate_amount).sum
   end
 
   def validate
+    if validation_params.empty?
+      redirect_to validation_class_path(@classe), alert: t("validations.create.empty") and return
+    end
+
     validatable_pfmps
       .where(schoolings: { classe: @classe })
       .where(id: validation_params[:pfmp_ids])
@@ -60,16 +62,12 @@ class ValidationsController < ApplicationController
   end
 
   def validatable_pfmps
-    current_establishment.active_pfmps.in_state(:completed)
+    current_establishment.pfmps.in_state(:completed)
   end
 
   def validation_params
     params.require(:validation).permit(pfmp_ids: [])
-  end
-
-  def check_empty_params
-    return if params[:validation].present? && validation_params[:pfmp_ids].present?
-
-    redirect_to validation_class_path(@classe), alert: t("validations.create.empty") and return
+  rescue ActionController::ParameterMissing
+    {}
   end
 end

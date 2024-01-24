@@ -13,8 +13,13 @@
       %tbody
       - @pfmps.each do |pfmp|
         %tr
-          %td= dsfr_link_to pfmp.student.index_name, class_student_path(@classe, pfmp.student), title: t("links.students.show", name: pfmp.student), tabindex: "1"
-          %td= dsfr_link_to pfmp.formatted_dates, class_student_pfmp_path(@classe, pfmp.student, pfmp), tabindex: "1", title: pfmp.full_dates
+          %td
+            - student = pfmp.schooling.student # need to go through schooling to prevent extra requests
+            = dsfr_link_to student.index_name, class_student_path(@classe, student), title: t("links.students.show", name: student), tabindex: "1"
+            .fr-mt-1w= closed_schooling_information_tag(pfmp.schooling)
+
+          %td= dsfr_link_to pfmp.formatted_dates, class_schooling_pfmp_path(@classe, pfmp.schooling, pfmp), tabindex: "1", title: pfmp.full_dates
+
           %td
             = form.hidden_field "classe[pfmps][][id]", value: pfmp.id
             = form.label "classe[pfmps][][day_count]", "Nombre de jours", class: "hidden"

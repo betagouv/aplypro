@@ -12,6 +12,7 @@ class Schooling < ApplicationRecord
   has_one :establishment, through: :classe
 
   scope :current, -> { where(end_date: nil) }
+  scope :former, -> { where.not(end_date: nil) }
 
   scope :with_attributive_decisions, -> { joins(:attributive_decision_attachment) }
   scope :without_attributive_decisions, -> { where.missing(:attributive_decision_attachment) }
