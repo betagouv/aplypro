@@ -9,7 +9,7 @@ Quand("print the page") do
 end
 
 Quand("je clique sur {string}") do |label|
-  click_link_or_button label # rubocop:disable Capybara/ClickLinkOrButtonStyle
+  click_link_or_button label
 end
 
 Alors("la page contient {string}") do |content|
@@ -17,7 +17,7 @@ Alors("la page contient {string}") do |content|
 end
 
 Alors("la page ne contient pas {string}") do |content|
-  expect(page).not_to have_content(content)
+  expect(page).to have_no_content(content)
 end
 
 Alors("le tableau {string} contient") do |caption, table|
@@ -62,13 +62,13 @@ end
 
 Quand("je clique sur {string} dans la rangée {string}") do |link, row|
   within("tr", text: row) do
-    click_link(link)
+    click_link_or_button(link)
   end
 end
 
 Quand("je clique sur {string} dans la dernière rangée") do |link|
   within(all("tr").last) do
-    click_link(link)
+    click_link_or_button(link)
   end
 end
 
