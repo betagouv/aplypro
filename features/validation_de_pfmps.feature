@@ -17,6 +17,11 @@ Fonctionnalité: Complétion des PFMPs d'une classe
   Scénario: Le personnel peut accéder à la page des classes avec PFMPs à valider
     Alors la page contient "2NDEB - Développement"
     Et je peux voir 2 PFMP "Saisies à valider" pour la classe "2NDEB"
+
+  Scénario: Le personnel de direction voit le nom du directeur confirmé existant
+    Sachant que mon établissement a un directeur confirmé nommé "Jean Dupuis"
+    Quand je clique sur "2NDEB - Développement"
+    Alors la page contient "Vous remplacerez Jean Dupuis"
   
   Scénario: Le personnel peut accéder à la page de validation des PFMPs saisies à valider d'une classe
     Lorsque je clique sur "2NDEB - Développement"

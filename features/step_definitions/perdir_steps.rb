@@ -213,3 +213,7 @@ Lorsque("je génère les décisions d'attribution de mon établissement") do
     Et que la génération des décisions d'attribution manquantes est complètement finie
   )
 end
+
+Sachantque("mon établissement a un directeur confirmé nommé {string}") do |name|
+  FactoryBot.create(:user, :confirmed_director, name: name, establishment: Establishment.last)
+end

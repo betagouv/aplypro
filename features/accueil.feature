@@ -35,6 +35,11 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Et le panneau "Périodes de formation en milieu professionnel" contient "0"
     Et le panneau "PFMP validées" contient "0"
 
+  Scénario: Le personnel de direction voit le nom du directeur confirmé existant dans le panel de décision d'attribution
+    Sachant que mon établissement a un directeur confirmé nommé "Jean Dupuis"
+    Et que je me rends sur la page d'accueil
+    Alors le panneau "Décisions d'attribution" contient "Vous remplacerez Jean Dupuis"
+
   Scénario: Le personnel voit un bandeau de support si son établissement est enlicé
     Quand l'établissement "DINUM" fait parti des établissments soutenus directement
     Et que je rafraîchis la page
