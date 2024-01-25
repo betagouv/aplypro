@@ -52,11 +52,26 @@ class Schooling < ApplicationRecord
 
   def attributive_decision_number
     [
-      mef.bop_code(establishment),
+      attributive_decision_bop_indicator,
       student.asp_file_reference,
       ENV.fetch("APLYPRO_SCHOOL_YEAR"),
       attributive_decision_version
     ].join.upcase
+  end
+
+  def bop_code
+    mef.bop(establishment)
+  end
+
+  def attributive_decision_bop_indicator
+    case code = bop_code
+    when :menj_private
+      "enpr"
+    when :menj_public
+      "enpu"
+    else
+      code
+    end
   end
 
   def rattach_attributive_decision!(output)

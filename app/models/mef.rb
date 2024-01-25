@@ -19,15 +19,13 @@ class Mef < ApplicationRecord
     wages.find { |wage| wage.mef_codes.include? code }
   end
 
-  def bop_code(establishment)
-    return ministry if ministry != "menj"
+  def bop(establishment)
+    code = if menj?
+             "menj_#{establishment.contract_type}"
+           else
+             ministry
+           end
 
-    if establishment.private?
-      "enpr"
-    elsif establishment.public?
-      "enpu"
-    else
-      raise IdentityMappers::Errors::UnallowedPrivateEstablishment
-    end
+    code.to_sym
   end
 end

@@ -6,15 +6,30 @@ describe ASP::Mappers::ElementPaiementMapper do
   subject(:mapper) { described_class.new(payment) }
 
   let(:student) { create(:student) }
-  let(:payment) { create(:payment) }
-
-  before { payment.pfmp.update!(student: student) }
+  let(:schooling) { create(:schooling, student: student) }
+  let(:payment) { create(:payment, schooling: schooling) }
 
   describe "usprinc" do
-    before { allow(ASP::BopMapper).to receive(:to_unite_suivi).and_return "ustest" }
+    subject { mapper.usprinc }
 
-    it "maps to the BopMapper value" do
-      expect(mapper.usprinc).to eq "ustest"
+    context "when the MEF is from the MENJ" do
+      context "when the establishment is private" do
+        before { allow(schooling).to receive(:bop_code).and_return :menj_private }
+
+        it { is_expected.to eq "menj private" }
+      end
+
+      context "when the establishment is public" do
+        before { allow(schooling).to receive(:bop_code).and_return :menj_public }
+
+        it { is_expected.to eq "menj public" }
+      end
+    end
+
+    context "when the MEF is from the MASA" do
+      before { allow(schooling).to receive(:bop_code).and_return :masa }
+
+      it { is_expected.to eq "asp masa" }
     end
   end
 
