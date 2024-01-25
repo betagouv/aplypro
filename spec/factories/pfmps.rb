@@ -7,7 +7,7 @@ FactoryBot.define do
     end_date { "2023-05-22" }
 
     transient do
-      student factory: :student
+      student { build(:student) } # rubocop:disable FactoryBot/FactoryAssociationWithStrategy
     end
 
     trait :completed do
@@ -26,7 +26,11 @@ FactoryBot.define do
       validated
 
       after(:create) do |pfmp|
-        create(:payment, :successful, pfmp: pfmp)
+        pfmp.payments.first.tap do |p|
+          p.mark_ready!
+          p.process!
+          p.complete!
+        end
       end
     end
   end

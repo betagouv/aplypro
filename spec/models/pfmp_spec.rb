@@ -100,10 +100,7 @@ RSpec.describe Pfmp do
     end
 
     it "takes into account the previous payments" do
-      max = mef.wage.yearly_cap
-
-      previous = create(:pfmp, :validated, student: pfmp.student)
-      create(:payment, :successful, amount: max - 10, pfmp: previous)
+      create(:pfmp, :paid, schooling: schooling)
 
       expect(pfmp.calculate_amount).to eq(10)
     end
