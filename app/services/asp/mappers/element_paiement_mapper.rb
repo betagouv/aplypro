@@ -29,12 +29,10 @@ module ASP
         payment.amount
       end
 
-      # FIXME: this does a lot
       def usprinc
-        ministry = payment.schooling.mef.ministry
-        private_establishment = payment.schooling.establishment.private?
+        code = payment.schooling.bop_code
 
-        BopMapper.to_unite_suivi(ministry:, private_establishment:)
+        ENV.fetch("APLYPRO_ASP_#{code.upcase}_UNITE_SUIVI")
       end
     end
   end

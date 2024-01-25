@@ -5,6 +5,8 @@ require "rails_helper"
 require "attribute_decision_generator"
 
 RSpec.describe Schooling do
+  subject(:schooling) { create(:schooling) }
+
   describe "associations" do
     it { is_expected.to belong_to(:student).class_name("Student") }
     it { is_expected.to belong_to(:classe).class_name("Classe") }
@@ -35,6 +37,30 @@ RSpec.describe Schooling do
           end
         end
       end
+    end
+  end
+
+  describe "attributive_decision_number" do
+    subject(:number) { schooling.attributive_decision_number }
+
+    context "when the MEF is from the MENJ" do
+      context "when the establishment is private" do
+        before { allow(schooling.mef).to receive(:bop).and_return :menj_private }
+
+        it { is_expected.to start_with "ENPR" }
+      end
+
+      context "when the establishment is public" do
+        before { allow(schooling.mef).to receive(:bop).and_return :menj_public }
+
+        it { is_expected.to start_with "ENPU" }
+      end
+    end
+
+    context "when the MEF is from the MASA" do
+      before { allow(schooling.mef).to receive(:bop).and_return :masa }
+
+      it { is_expected.to start_with "MASA" }
     end
   end
 
