@@ -16,6 +16,16 @@ module ASP
       validates_presence_of %i[numadm datecomplete datereceptionprestadoss montanttotalengage valeur]
 
       def fragment(xml)
+        prestadoss_xml(xml)
+
+        xml.adressesprestadoss { Adresse.from_payment(payment).to_xml(xml) }
+        xml.coordpaiesprestadoss { CoordPaie.from_payment(payment).to_xml(xml) }
+        xml.listeelementpaiement { ElementPaiement.from_payment(payment).to_xml(xml) }
+      end
+
+      private
+
+      def prestadoss_xml(xml)
         xml.numadm(numadm)
         xml.codeprestadispo(CODE_DISPOSITIF)
         xml.datecompletude(datecomplete)
@@ -24,8 +34,6 @@ module ASP
         xml.code("D")
         xml.valeur(valeur)
         xml.indicrattachusprestadispo("O")
-
-        xml.listeelementpaiement { ElementPaiement.from_payment(payment).to_xml(xml) }
       end
     end
   end
