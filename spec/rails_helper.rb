@@ -94,7 +94,7 @@ RSpec.configure do |config|
     include WebmockHelpers
   end
 
-  config.define_derived_metadata(file_path: %r{spec/services/asp/entities/}) do |meta|
+  config.define_derived_metadata(file_path: %r{spec/lib/asp/entities/}) do |meta|
     meta[:asp_entity] = true
   end
 
