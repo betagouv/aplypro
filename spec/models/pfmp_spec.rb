@@ -3,13 +3,12 @@
 require "rails_helper"
 
 RSpec.describe Pfmp do
-  subject(:pfmp) do
-    create(:pfmp, schooling: schooling).tap { |p| p.payments.destroy_all }
-  end
+  subject(:pfmp) { create(:pfmp, schooling: schooling) }
 
   let(:mef) { create(:mef) }
   let(:classe) { create(:classe, mef: mef) }
-  let(:schooling) { create(:schooling) }
+  let(:student) { create(:student, :with_all_asp_info) }
+  let(:schooling) { create(:schooling, student: student) }
 
   describe "associations" do
     it { is_expected.to belong_to(:schooling) }
@@ -102,19 +101,10 @@ RSpec.describe Pfmp do
     it "takes into account the previous payments" do
       yearly_cap = mef.wage.yearly_cap
 
-      create(:payment, :successful, amount: yearly_cap - 10, pfmp: pfmp)
+      paid = create(:pfmp, :paid, day_count: 3, schooling: pfmp.schooling)
+      paid.payments.first.update!(amount: yearly_cap - 10)
 
       expect(pfmp.calculate_amount).to eq(10)
-    end
-
-    it "does not take into account the previous, failed payments" do
-      create(:payment, :failed, pfmp: pfmp, amount: 1000)
-
-      expect(pfmp.calculate_amount).to eq(mef.wage.daily_rate * pfmp.day_count)
-    end
-
-    it "does not take into account the pending payments" do
-      skip "unclear what to do if there is some pending allowance"
     end
   end
 

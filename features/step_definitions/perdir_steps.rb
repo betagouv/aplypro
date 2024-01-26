@@ -115,10 +115,16 @@ Quand("je renseigne une PFMP pour {string}") do |name|
   )
 end
 
+Quand("je consulte la dernière PFMP") do
+  steps %(
+    Et que je clique sur "Voir la PFMP" dans la dernière rangée
+  )
+end
+
 Quand("je renseigne et valide une PFMP de {int} jours") do |days|
   steps %(
     Quand je renseigne une PFMP de #{days} jours
-    Et que je clique sur "Voir la PFMP" dans la dernière rangée
+    Et que je consulte la dernière PFMP
     Et que je clique sur "Valider"
   )
 end

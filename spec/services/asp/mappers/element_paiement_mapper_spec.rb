@@ -5,7 +5,7 @@ require "rails_helper"
 describe ASP::Mappers::ElementPaiementMapper do
   subject(:mapper) { described_class.new(payment) }
 
-  let(:student) { create(:student) }
+  let(:student) { create(:student, :with_all_asp_info) }
   let(:schooling) { create(:schooling, student: student) }
   let(:payment) { create(:payment, schooling: schooling) }
 

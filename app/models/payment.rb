@@ -23,6 +23,10 @@ class Payment < ApplicationRecord
     )
   end
 
+  def block!
+    state_machine.transition_to!(:blocked)
+  end
+
   def mark_ready!
     state_machine.transition_to!(:ready)
   end
