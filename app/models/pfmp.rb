@@ -69,23 +69,7 @@ class Pfmp < ApplicationRecord
     payments.last
   end
 
-  def payable?
-    student.rib.present?
-  end
-
   def payment_due?
     student.allowance_left(mef).positive?
-  end
-
-  def breakdown
-    I18n.t("pfmps.breakdown", days: day_count, rate: wage.daily_rate, total: calculate_amount)
-  end
-
-  def payment_state
-    if payable?
-      latest_payment.state_machine.current_state
-    else
-      :blocked
-    end
   end
 end

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe AllowanceChecker do
-  subject(:student) { create(:student) }
+  subject(:student) { create(:student, :with_all_asp_info) }
 
   let(:wage) { create(:wage, yearly_cap: 100, daily_rate: 10) }
   let(:mef) { create(:mef, code: "123", wage: wage) }

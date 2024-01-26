@@ -18,6 +18,11 @@ FactoryBot.define do
       biological_sex { [1, 2].sample }
     end
 
+    trait :with_all_asp_info do
+      with_rib
+      with_extra_info
+    end
+
     trait :with_address_info do
       with_address
     end

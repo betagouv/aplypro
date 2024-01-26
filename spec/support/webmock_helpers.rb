@@ -4,7 +4,7 @@ require "./mock/factories/api_student"
 
 module WebmockHelpers
   DEFAULT_TOKEN = JSON.generate({ access_token: "foobar", token_type: "Bearer" })
-  def mock_sygne_token_with(payload = DEFAULT_TOKEN)
+  def mock_sygne_token(payload = DEFAULT_TOKEN)
     WebMock.stub_request(:post, ENV.fetch("APLYPRO_SYGNE_TOKEN_URL"))
            .with(
              body: { "grant_type" => "client_credentials" },
@@ -30,7 +30,7 @@ module WebmockHelpers
            .to_return(status: 200, body: payload, headers: { "Content-Type" => "application/json" })
   end
 
-  def mock_sygne_students_endpoint_with(uai, payload)
+  def mock_sygne_students_endpoint(uai, payload)
     url = StudentApi::Sygne.new(Establishment.new(uai: uai)).endpoint
 
     WebMock.stub_request(:get, url)
