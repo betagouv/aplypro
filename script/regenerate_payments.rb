@@ -3,7 +3,7 @@
 # ----------------------------------------
 # check if all PFMPs have only one payment
 pfmps_payments_counts = Pfmp.joins(:payments).group(:"pfmps.id").count
-puts pfmps_payments_counts.values.inject (Hash.new(0)) { |h, e| h[e] += 1 ; h }
+puts pfmps_payments_counts.values.each_with_object(Hash.new(0)) { |e, h| h[e] += 1 }
 # Résultat en prod : {1=>149956, 2=>41}
 # 41 pfmps avec 2 payments, wtf ?
 
