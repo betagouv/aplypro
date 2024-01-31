@@ -1,13 +1,6 @@
 # frozen_string_literal: true
 
 # ----------------------------------------
-# check if all PFMPs have only one payment
-pfmps_payments_counts = Pfmp.joins(:payments).group(:"pfmps.id").count
-puts pfmps_payments_counts.values.each_with_object(Hash.new(0)) { |e, h| h[e] += 1 }
-# Résultat en prod : {1=>149956, 2=>41}
-# 41 pfmps avec 2 payments, wtf ?
-
-# ----------------------------------------
 # rubocop:disable Metrics/AbcSize
 # For a given MEF, this method corrects all payments in a list of pfmps
 # Note : It is possible for a student who went through different MEFs to reach each MEF's yearly_cap independently
