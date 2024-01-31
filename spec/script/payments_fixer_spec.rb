@@ -25,7 +25,8 @@ RSpec.describe PaymentsFixer do
   end
 
   context "when there is a payment with incorrect amount" do
-    let(:pfmp) { create(:pfmp, :validated, day_count: 4) }
+    let(:day_count) { 4 }
+    let(:pfmp) { create(:pfmp, :validated, day_count: day_count) }
     let(:payment) { pfmp.payments.first }
 
     before do
@@ -34,6 +35,14 @@ RSpec.describe PaymentsFixer do
 
     it "corrects the payment amount" do
       expect { fix }.to change { payment.reload.amount }.to 4
+    end
+
+    context "when it goes over the yearly cap" do
+      let(:day_count) { 400 }
+
+      it "corrects the payment amount, limited by the yearly cap" do
+        expect { fix }.to change { payment.reload.amount }.to 100
+      end
     end
   end
 end
