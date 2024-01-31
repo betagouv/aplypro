@@ -45,4 +45,46 @@ RSpec.describe PaymentsFixer do
       end
     end
   end
+
+  # rubocop:disable RSpec/MultipleMemoizedHelpers
+  context "when there is several pfmps for the same student and same mef" do
+    let(:day_count) { 4 }
+    let(:student) { create(:student) }
+    let(:mef) { create(:mef) }
+    let(:classes) { create_list(:classe, 3, mef: mef) }
+
+    # we need to close the schoolings one by one to have them valid
+    let(:schoolings) do
+      classes.map.with_index do |classe, index|
+        schooling = create(:schooling, student: student, classe: classe)
+        schooling.update(end_date: Time.zone.today - index.days) if index < 2
+        schooling
+      end
+    end
+
+    let(:pfmps) do
+      schoolings.map do |schooling|
+        create(:pfmp, :validated, schooling: schooling, day_count: day_count)
+      end
+    end
+
+    let(:payments) { pfmps.map(&:latest_payment) }
+
+    before do
+      payments.each { |payment| payment.update(amount: 27) }
+    end
+
+    it "corrects all the payments amounts" do
+      expect { fix }.to change { payments.map { |payment| payment.reload.amount } }.to [4, 4, 4]
+    end
+
+    context "when the sum of payments goes over the yearly cap" do
+      let(:day_count) { 40 }
+
+      it "corrects all the payments amounts, limited by the yearly cap" do
+        expect { fix }.to change { payments.map { |payment| payment.reload.amount } }.to [40, 40, 20]
+      end
+    end
+  end
+  # rubocop:enable RSpec/MultipleMemoizedHelpers
 end
