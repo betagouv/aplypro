@@ -7,7 +7,7 @@ RSpec.describe PaymentsFixer do
   subject(:fix) { described_class.fix_all! }
 
   before do
-    pfmps = create_list(:pfmp, 10, :validated)
+    create_list(:pfmp, 2, :validated)
   end
 
   it "goes well" do
@@ -21,6 +21,19 @@ RSpec.describe PaymentsFixer do
 
     it "deletes the extra payments" do
       expect { fix }.to change(Payment, :count).by(-1)
+    end
+  end
+
+  context "when there is a payment with incorrect amount" do
+    let(:pfmp) { create(:pfmp, :validated, day_count: 4) }
+    let(:payment) { pfmp.payments.first }
+
+    before do
+      payment.update(amount: 27)
+    end
+
+    it "corrects the payment amount" do
+      expect { fix }.to change { payment.reload.amount }.to 4
     end
   end
 end
