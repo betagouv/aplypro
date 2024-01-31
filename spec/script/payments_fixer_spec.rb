@@ -85,6 +85,14 @@ RSpec.describe PaymentsFixer do
         expect { fix }.to change { payments.map { |payment| payment.reload.amount } }.to [40, 40, 20]
       end
     end
+
+    context "when the sum of payments goes way over the yearly cap" do
+      let(:day_count) { 70 }
+
+      it "corrects all the payments amounts, and deletes the payments over the cap" do
+        expect { fix }.to change { pfmps.map(&:reload).map(&:latest_payment).compact.map(&:amount) }.to [70, 30]
+      end
+    end
   end
   # rubocop:enable RSpec/MultipleMemoizedHelpers
 end

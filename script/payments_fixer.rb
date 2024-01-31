@@ -42,7 +42,13 @@ class PaymentsFixer
       payment = pfmp.payments.first
 
       computed_amount = [pfmp.day_count * daily_rate, allowance_left].min
-      payment.update(amount: computed_amount) if payment.amount != computed_amount
+
+      if computed_amount.zero?
+        payment.destroy
+      elsif payment.amount != computed_amount
+        payment.update(amount: computed_amount)
+      end
+
       checked_amount += computed_amount
     end
   end
