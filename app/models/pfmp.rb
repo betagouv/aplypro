@@ -20,6 +20,8 @@ class Pfmp < ApplicationRecord
 
   validates :day_count, numericality: { only_integer: true, allow_nil: true, greater_than: 0 }
 
+  scope :finished, -> { where("pfmps.end_date <= (?)", Time.zone.today) }
+
   include Statesman::Adapters::ActiveRecordQueries[
     transition_class: PfmpTransition,
     initial_state: PfmpStateMachine.initial_state,
