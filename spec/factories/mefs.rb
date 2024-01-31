@@ -9,7 +9,9 @@ FactoryBot.define do
     ministry { Mef.ministries[:menj] }
 
     transient do
-      wage { create(:wage) } # rubocop:disable FactoryBot/FactoryAssociationWithStrategy
+      daily_rate { 1 }
+      yearly_cap { 100 }
+      wage { create(:wage, daily_rate: daily_rate, yearly_cap: yearly_cap) } # rubocop:disable FactoryBot/FactoryAssociationWithStrategy
     end
 
     after :create do |mef, evaluator|

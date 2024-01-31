@@ -34,6 +34,15 @@ class Student < ApplicationRecord
 
   scope :without_ribs, -> { where.missing(:rib) }
 
+  scope :asp_ready, lambda {
+    where(biological_sex: [1, 2])
+      .where.not(address_postal_code: nil)
+      .where.not(address_country_code: %w[995 990] + [nil])
+      .where.not(birthplace_country_insee_code: %w[995 990] + [nil])
+      .where.not("address_country_code IN (?) AND address_city_insee_code IS NULL", %w[100 99100])
+      .where.not("birthplace_country_insee_code IN (?) AND birthplace_city_insee_code IS NULL", %w[100 99100])
+  }
+
   before_validation :check_asp_file_reference
 
   def to_s
