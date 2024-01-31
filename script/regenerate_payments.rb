@@ -2,27 +2,6 @@
 
 # rubocop:disable Metrics/AbcSize
 class PaymentsFixer
-  # For a given MEF, this method corrects all payments in a list of pfmps
-  # Note : It is possible for a student who went through different MEFs to reach each MEF's yearly_cap independently
-  #        I remember that it is supposed to be like this from a conversation with the Degesco
-  def correct_payments_of_a_student_for_a_mef(pfmps, mef)
-    yearly_cap = mef.wage.yearly_cap
-    daily_rate = mef.wage.daily_rate
-    checked_amount = 0
-
-    pfmps.each do |pfmp|
-      # delete extra payments that should'nt even exist
-      pfmp.payments.drop(1).each(&:destroy) if pfmps.payments.size > 1
-
-      allowance_left = yearly_cap - checked_amount
-      payment = pfmp.payments.first
-
-      computed_amount = [pfmp.day_count * daily_rate, allowance_left].min
-      payment.update(amount: computed_amount) if payment.amount != computed_amount
-      checked_amount += computed_amount
-    end
-  end
-
   def self.fix_all
     # Get pfmps grouped by students
     all_pfmps_per_student = Pfmp
@@ -46,5 +25,25 @@ class PaymentsFixer
     end
   end
 
+  # For a given MEF, this method corrects all payments in a list of pfmps
+  # Note : It is possible for a student who went through different MEFs to reach each MEF's yearly_cap independently
+  #        I remember that it is supposed to be like this from a conversation with the Degesco
+  def correct_payments_of_a_student_for_a_mef(pfmps, mef)
+    yearly_cap = mef.wage.yearly_cap
+    daily_rate = mef.wage.daily_rate
+    checked_amount = 0
+
+    pfmps.each do |pfmp|
+      # delete extra payments that should'nt even exist
+      pfmp.payments.drop(1).each(&:destroy) if pfmps.payments.size > 1
+
+      allowance_left = yearly_cap - checked_amount
+      payment = pfmp.payments.first
+
+      computed_amount = [pfmp.day_count * daily_rate, allowance_left].min
+      payment.update(amount: computed_amount) if payment.amount != computed_amount
+      checked_amount += computed_amount
+    end
+  end
 end
 # rubocop:enable Metrics/AbcSize
