@@ -49,7 +49,7 @@ RSpec.describe PaymentsFixer do
   context "when there is several pfmps for the same student and same mef" do
     let(:day_count) { 4 }
     let(:student) { create(:student) }
-    let(:mef) { create(:mef) }
+    let(:mef) { create(:mef, daily_rate: 1, yearly_cap: 100) }
     let(:classes) { create_list(:classe, 3, mef: mef) }
 
     # we need to close the schoolings one by one to have them valid
