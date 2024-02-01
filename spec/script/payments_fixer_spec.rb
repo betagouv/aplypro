@@ -77,7 +77,7 @@ RSpec.describe PaymentsFixer do
       expect { fix }.to change { payments.map { |payment| payment.reload.amount } }.to [4, 4, 4]
     end
 
-    context "when the sum of payments goes over the yearly cap" do
+    context "when the yearly_cap is 100€ and there is 3 payments of 40€" do
       let(:day_count) { 40 }
 
       it "corrects all the payments amounts, limited by the yearly cap" do
@@ -85,7 +85,7 @@ RSpec.describe PaymentsFixer do
       end
     end
 
-    context "when the sum of payments goes way over the yearly cap" do
+    context "when the yearly_cap is 100€ and there is 3 payments of 70€" do
       let(:day_count) { 70 }
 
       it "corrects all the payments amounts, and deletes the payments over the cap" do
