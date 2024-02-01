@@ -16,7 +16,7 @@ gem "pg"
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
-
+gem "rack", "~> 2.2.8" # pin the rack version to what we had before trying puma v6
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
 
