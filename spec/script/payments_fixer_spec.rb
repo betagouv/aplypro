@@ -15,12 +15,11 @@ RSpec.describe PaymentsFixer do
   end
 
   context "when there is an exta payment for a pfmp" do
-    before do
-      create(:payment, pfmp: Pfmp.last)
-    end
+    let!(:extra_payment) { create(:payment, pfmp: Pfmp.last) }
 
-    it "deletes the extra payments" do
-      expect { fix }.to change(Payment, :count).by(-1)
+    it "deletes the extra payment" do
+      fix
+      expect { extra_payment.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 
