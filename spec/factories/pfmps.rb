@@ -2,9 +2,13 @@
 
 FactoryBot.define do
   factory :pfmp do
-    schooling
+    schooling { association :schooling, student: student }
     start_date { "2023-05-22" }
     end_date { "2023-05-22" }
+
+    transient do
+      student { build(:student) } # rubocop:disable FactoryBot/FactoryAssociationWithStrategy
+    end
 
     trait :completed do
       day_count { rand(1..6) } # lovely roll dice
@@ -15,6 +19,18 @@ FactoryBot.define do
 
       after(:create) do |pfmp|
         pfmp.transition_to!(:validated)
+      end
+    end
+
+    trait :paid do
+      validated
+
+      after(:create) do |pfmp|
+        pfmp.payments.first.tap do |p|
+          p.mark_ready!
+          p.process!
+          p.complete!
+        end
       end
     end
   end

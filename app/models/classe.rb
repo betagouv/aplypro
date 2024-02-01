@@ -20,10 +20,22 @@ class Classe < ApplicationRecord
            class_name: "Schooling",
            inverse_of: :classe
 
+  has_many :inactive_schoolings,
+           -> { former },
+           dependent: :destroy,
+           class_name: "Schooling",
+           inverse_of: :classe
+
   has_many :active_students,
            -> { order("last_name", "first_name") },
            class_name: "Student",
            through: :active_schoolings,
+           source: :student
+
+  has_many :inactive_students,
+           -> { order("last_name", "first_name") },
+           class_name: "Student",
+           through: :inactive_schoolings,
            source: :student
 
   has_many :active_pfmps, through: :active_schoolings, class_name: "Pfmp", source: :pfmps
@@ -52,5 +64,19 @@ class Classe < ApplicationRecord
 
   def to_long_s
     [label, mef.specialty].join(" - ")
+  end
+
+  def schooling_of(student)
+    schoolings.find_by(student: student)
+  end
+
+  def closed_schooling_of(student_id)
+    closed_schoolings_per_student_id[student_id]
+  end
+
+  private
+
+  def closed_schoolings_per_student_id
+    @closed_schoolings_per_student_id ||= inactive_schoolings.index_by(&:student_id)
   end
 end

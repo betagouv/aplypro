@@ -24,7 +24,7 @@ module WebmockHelpers
                "Accept" => "*/*",
                "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
                "Authorization" => "Bearer foobar",
-               "User-Agent" => "Rack::OAuth2::AccessToken::Bearer (2.2.0)"
+               "User-Agent" => "Rack::OAuth2::AccessToken::Bearer (2.2.1)"
              }
            )
            .to_return(status: 200, body: payload, headers: { "Content-Type" => "application/json" })
@@ -40,7 +40,7 @@ module WebmockHelpers
                "Accept" => "*/*",
                "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
                "Authorization" => "Bearer foobar",
-               "User-Agent" => "Rack::OAuth2::AccessToken::Bearer (2.2.0)"
+               "User-Agent" => "Rack::OAuth2::AccessToken::Bearer (2.2.1)"
              }
            )
            .to_return(status: 200, body: payload, headers: { "Content-Type" => "application/json" })

@@ -1,25 +1,119 @@
 # language: fr
 
-
-Fonctionnalité: Les anciens élèves ne sont pas inclus dans l'interface
+Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
   Contexte:
     Sachant que l'API SYGNE renvoie 10 élèves en "1MELEC" dont l'INE "test" pour l'établissement "DINUM"
+    Et que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que je me connecte en tant que personnel MENJ
     Et que je passe l'écran d'accueil
     Et que toutes les tâches de fond sont terminées
     Sachant que l'élève de SYGNE avec l'INE "test" a quitté l'établissement "DINUM"
+    Et que l'élève avec l'INE "test" s'appelle "Jean" "Dupuis"
 
-  Scénario: Les anciens élèves ne sont pas affichés dans le compteur des décisions d'attribution
+  Scénario: Les anciens élèves sont affichés dans le compteur des décisions d'attribution
     Quand je rafraîchis la page
-    Alors le panneau "Décisions d'attribution" contient "0 / 9"
+    Alors le panneau "Décisions d'attribution" contient "0 / 10"
+    Et le panneau "Décisions d'attribution" contient "Éditer 10 décisions d'attribution manquantes"
 
-  Scénario: Les anciens élèves ne sont pas affichés dans le compteur des saisies banciares
+  Scénario: Les anciens élèves sont affichés dans le compteur des saisies bancaires
     Quand je rafraîchis la page
-    Alors le panneau "Coordonnées bancaires" contient "0 / 9"
+    Alors le panneau "Coordonnées bancaires" contient "0 / 10"
 
-  Scénario: Les anciens élèves ne sont pas affichés dans les listings de classe
+  Scénario: Les élèves qui ont changé de classe au sein du même établissement sont correctement comptabilisés dans la page d'accueil
+    Sachant que l'élève avec l'INE "test" a une ancienne scolarité dans la classe "2NDEB" dans le même établissement
+    Quand je rafraîchis la page
+    Alors le panneau "Décisions d'attribution" contient "0 / 11"
+    Et le panneau "Coordonnées bancaires" contient "0 / 10"
+
+  Scénario: Les anciens élèves sont affichés dans les listings de classe
     Quand je consulte la liste des classes
-    Alors le tableau "Liste des classes" contient
+    Alors je peux voir dans le tableau "Liste des classes"
       | Classe | Décisions d'attribution | Coordonnées bancaires | PFMPs |
-      | 1MELEC |                   0 / 9 |                 0 / 9 |       |
+      | 1MELEC |                  0 / 10 |                0 / 10 |       |
+
+  Scénario: Les élèves qui ont changé de classe au sein du même établissement sont correctement comptabilisés dans la liste des classes
+    Sachant que l'élève avec l'INE "test" a une ancienne scolarité dans la classe "2NDEB" dans le même établissement
+    Quand je consulte la liste des classes
+    Alors je peux voir dans le tableau "Liste des classes"
+      | Classe | Décisions d'attribution | Coordonnées bancaires | PFMPs |
+      | 1MELEC |                  0 / 10 |                0 / 10 |       |
+      | 2NDEB  |                  0 / 1  |                0 / 1  |       |
+ 
+  Scénario: Les anciens élèves sont affichés dans une section à part dans la page d'une classe
+    Quand je consulte la classe de "1MELEC"
+    Alors je peux voir dans le tableau "Élèves sortis de la classe"
+      | Élèves (1)  | Décisions d'attribution (0/1) | Coordonnées Bancaires (0/1) | PFMPs (0) |
+      | Dupuis Jean |                               |                             |           |
+
+  Scénario: Le personnel peut générer des décisions d'attribution pour les anciens élèves
+    Lorsque je me rends sur la page d'accueil
+    Et que je suis responsable légal et que je génère les décisions d'attribution manquantes
+    Et que la génération des décisions d'attribution manquantes est complètement finie
+    Quand je me rends sur la page d'accueil
+    Alors la page contient "Télécharger 10 décisions d'attribution"
+    Et le panneau "Décisions d'attribution" contient "10 / 10"
+
+  Scénario: Le personnel peut renseigner des coordonnées bancaires pour des anciens élèves
+    Quand je consulte la classe de "1MELEC"
+    Et que je clique sur "Saisir 10 coordonnées bancaires"
+    Et que le panel de saisie de coordonnées bancaires de "Dupuis Jean" contient "Sorti(e) de la classe"
+    Quand je saisis en masse les coordonées bancaires d'un tiers pour "Dupuis Jean"
+    Et que je clique sur "Enregistrer les coordonnées bancaires saisies"
+    Alors la page contient "Coordonnées bancaires enregistrées avec succès"
+    Et je peux voir dans le tableau "Élèves sortis de la classe"
+      | Élèves (1)  | Décisions d'attribution | Coordonnées Bancaires (1/1) | PFMPs (0) |
+      | Dupuis Jean |                         | Saisies                     |           |
+
+  Scénario: Le personnel peut créer une PFMP pour un ancien élève
+    Quand je consulte la classe de "1MELEC"
+    Et que je renseigne une PFMP de 3 jours pour "Dupuis Jean"
+    Alors la page contient "La PFMP a bien été enregistrée"
+    Et je peux voir dans le tableau "Liste des PFMPs de l'élève"
+      | État             | Nombre de jours | Montant |
+      | Saisie à valider |               3 | 30,00 € |
+  
+  Scénario: Le personnel peut compléter les PFMPs pour les anciens élèves
+    Quand je consulte la classe de "1MELEC"
+    Et que je renseigne une PFMP pour "Dupuis Jean"
+    Et que je consulte la classe de "1MELEC"
+    Et que je clique sur "Compléter 1 PFMP"
+    Et que je peux voir dans le tableau "Liste des pfmps à compléter de la classe 1MELEC"
+      | Élève                               |
+      | Dupuis Jean Sorti(e) de la classe   |
+    Et que je remplis le champ "Nombre de jours" dans la rangée "Dupuis Jean" avec "12"
+    Lorsque je clique sur "Enregistrer 1 PFMP"
+    Alors la page contient "Les PFMPs ont bien été modifiées"
+    Et je peux voir dans le tableau "Élèves sortis de la classe"
+      | Élèves (1)    | Décisions d'attribution | Coordonnées Bancaires | PFMPs (1)                  |
+      | Dupuis Jean   |                         |                       | Saisie à valider mars 2023 |
+
+  Scénario: Le personnel peut voir les PFMPs à valider des anciens élèves
+    Quand je consulte la classe de "1MELEC"
+    Et que je renseigne une PFMP de 3 jours pour "Dupuis Jean"
+    Et que je clique sur "Envoyer en paiement"
+    Alors je peux voir 1 PFMP "Saisies à valider" pour la classe "1MELEC"
+    Quand je clique sur "1MELEC"
+    Alors je peux voir dans le tableau "Liste des pfmps à valider"
+      | Élève       | PFMP      | Nombre de jours | Montant |
+      | Dupuis Jean | mars 2023 | 3 jours         | 30 €    |
+    Et la rangée "Dupuis Jean" contient "Sorti(e) de la classe"
+  
+  Scénario: Le personnel peut valider les PFMPs des anciens élèves
+    Quand je consulte la classe de "1MELEC"
+    Et que je renseigne une PFMP de 3 jours pour "Dupuis Jean"
+    Et que je clique sur "Envoyer en paiement"
+    Et que je clique sur "1MELEC"
+    Et que je coche la case de responsable légal
+    Lorsque je clique sur "Envoyer en paiement les PFMPs cochées"
+    Alors la page contient "PFMPs envoyées en paiement pour la classe 1MELEC"
+    Lorsque je clique sur "Élèves"
+    Et que je clique sur "1MELEC"
+    Alors je peux voir dans le tableau "Élèves sortis de la classe"
+      | Élèves      | Décisions d'attribution | Coordonnées bancaires | PFMPs             |
+      | Dupuis Jean |                         |                       | Validée mars 2023 |
+    
+  Scénario: Le personnel peut consulter le profil des anciens élèves
+    Quand je consulte la classe de "1MELEC"
+    Et que je clique sur "Dupuis Jean"
+    Alors la page contient "Sorti(e) de la classe"

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
-  include ClassesIndicators
-
   before_action :authenticate_user!,
                 :check_maintenance,
                 :check_current_establishment,
@@ -74,12 +72,5 @@ class ApplicationController < ActionController::Base
     return unless user_signed_in?
 
     redirect_to user_select_establishment_path(current_user) if current_establishment.nil?
-  end
-
-  def fetch_classes_indicators(classes)
-    @nb_students_per_class = nb_students_per_class(classes)
-    @nb_attributive_decisions_per_class = nb_attributive_decisions_per_class(classes)
-    @nb_ribs_per_class = nb_ribs_per_class(classes)
-    @nb_pfmp_per_class_and_status = nb_pfmp_per_class_and_status(classes)
   end
 end

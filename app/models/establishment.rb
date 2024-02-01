@@ -26,6 +26,7 @@ class Establishment < ApplicationRecord
 
   has_many :students, through: :schoolings
 
+  has_many :pfmps, -> { reorder nil }, through: :classes
   has_many :active_pfmps, -> { reorder nil }, through: :classes
 
   validate :ensure_confirmed_director_is_director
@@ -63,6 +64,10 @@ class Establishment < ApplicationRecord
     [uai, name].compact.join(" - ")
   end
 
+  def region_code
+    postal_code.first(2)
+  end
+
   def address
     [address_line1, address_line2, postal_code, city].join(", ")
   end
@@ -80,7 +85,7 @@ class Establishment < ApplicationRecord
   def contract_type
     case private_contract_type_code
     when *CONTRACTS_STATUS[:private_allowed]
-      :private_allowed
+      :private
     when *CONTRACTS_STATUS[:public]
       :public
     else
@@ -88,8 +93,8 @@ class Establishment < ApplicationRecord
     end
   end
 
-  def private_allowed?
-    contract_type == :private_allowed
+  def private?
+    contract_type == :private
   end
 
   def public?

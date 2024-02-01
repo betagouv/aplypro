@@ -43,3 +43,16 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Et que je clique sur "Éditer 10 décisions d'attribution manquantes"
     Alors la page contient "Vous devez être chef d'établissement"
     Et le panneau "Décisions d'attribution" contient "0 / 10"
+
+  Scénario: Le personnel peut voir les décisions d'attributions comptées dans la liste des élèves d'une classe
+    Quand je consulte la classe de "1MELEC"
+    Et je peux voir dans le tableau "Liste des élèves"
+      | Élèves (10) | Décisions d'attribution (0/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
+      |             | Manquante                      |                              |           |
+    Et que je me rends sur la page d'accueil
+    Lorsque je suis responsable légal et que je génère les décisions d'attribution manquantes
+    Et que la génération des décisions d'attribution manquantes est complètement finie
+    Et je consulte la classe de "1MELEC"
+    Alors je peux voir dans le tableau "Liste des élèves"
+      | Élèves (10) | Décisions d'attribution (10/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
+      |             | Éditée                          |                              |           |

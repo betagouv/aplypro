@@ -20,7 +20,7 @@ class EstablishmentsController < ApplicationController
 
   def download_attributive_decisions
     documents = current_establishment
-                .active_schoolings
+                .schoolings
                 .with_attached_attributive_decision
                 .map(&:attributive_decision)
                 .filter(&:attached?)

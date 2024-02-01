@@ -15,7 +15,7 @@ gem "sprockets-rails"
 gem "pg"
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem "puma", "~> 5.0"
+gem "puma", "~> 6.0"
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
@@ -77,6 +77,12 @@ gem "sidekiq"
 gem "dry-transformer"
 
 gem "zipline"
+
+# payments: XML mapping
+gem "nokogiri"
+
+# payments: XML exchange
+gem "net-sftp"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

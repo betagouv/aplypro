@@ -15,15 +15,14 @@ class ClassesController < ApplicationController
     infer_page_title
 
     @classes = current_establishment.classes.current
-
-    fetch_classes_indicators(@classes)
+    @classes_facade = ClassesFacade.new(@classes)
   end
 
   def show
     add_breadcrumb t("pages.titles.classes.index"), classes_path
     infer_page_title(name: @classe)
 
-    set_classe_indicators
+    @classe_facade = ClasseFacade.new(@classe)
   end
 
   def create_bulk_pfmp
@@ -46,6 +45,7 @@ class ClassesController < ApplicationController
   def bulk_pfmp_completion
     @pfmps = @classe
              .pfmps
+             .includes(schooling: :student)
              .in_state(:pending)
              .joins(:student)
              .order(:last_name, :first_name, :start_date)
@@ -81,22 +81,9 @@ class ClassesController < ApplicationController
   end
 
   def set_classe
-    @classe = Classe
-              .where(establishment: current_establishment)
-              .includes(active_schoolings: [student: :rib])
-              .find(params[:id])
-
-    @schoolings = @classe.active_schoolings
+    @classe = current_establishment.classes.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to classes_path, alert: t("errors.classes.not_found") and return
-  end
-
-  def set_classe_indicators
-    @nb_students = @classe.active_students.count
-    @nb_pending_pfmps = @classe.active_pfmps.in_state(:pending).count
-    @nb_completed_pfmps = @classe.active_pfmps.in_state(:completed).count
-    @nb_pfmps = @classe.active_pfmps.count
-    @nb_missing_ribs = @classe.active_students.without_ribs.count
   end
 
   def add_bulk_action_breadcrumbs

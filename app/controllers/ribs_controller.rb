@@ -47,7 +47,7 @@ class RibsController < ApplicationController
 
   def missing
     @ribs = @classe
-            .active_students
+            .students
             .without_ribs
             .map { |student| Rib.new(student: student, personal: true, name: student.full_name) }
   end
@@ -118,12 +118,9 @@ class RibsController < ApplicationController
   end
 
   def check_classes
-    classes = Classe
-              .joins(:students)
-              .where("students.id": bulk_ribs_params.pluck(:student_id))
-              .distinct
+    students_not_in_class = bulk_ribs_params.pluck(:student_id).map(&:to_i) - @classe.students.pluck(:id)
 
-    if classes != [@classe] # rubocop:disable Style/GuardClause
+    if students_not_in_class.present? # rubocop:disable Style/GuardClause
       redirect_to(
         missing_class_ribs_path(@classe),
         alert: t("errors.classes.not_found"),

@@ -17,12 +17,7 @@ class HomeController < ApplicationController
     infer_page_title
     @inhibit_title = true
 
-    current_classes = current_establishment.classes.current
-
-    @students_count = current_classes.joins(:active_students).count
-    @attributive_decisions_count = current_establishment.schoolings.current.with_attributive_decisions.count
-    @ribs_count = current_classes.joins(active_students: :rib).count
-    @pfmps_counts = pfmp_counts
+    @establishment_facade = EstablishmentFacade.new(current_establishment)
   end
 
   def welcome
@@ -46,17 +41,6 @@ class HomeController < ApplicationController
   def faq; end
 
   private
-
-  def pfmp_counts
-    pfmps = Pfmp
-            .joins(:classe)
-            .merge(Schooling.current)
-            .merge(current_establishment.classes.current)
-
-    PfmpStateMachine.states
-                    .map(&:to_sym)
-                    .index_with { |state| pfmps.in_state(state).count }
-  end
 
   def show_welcome_screen
     redirect_to welcome_path and return unless current_user.welcomed?

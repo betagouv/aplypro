@@ -45,6 +45,8 @@ fr:
       default: "%d/%m/%Y"
       long: "%-d %B %Y"
       short: "%-d %b"
+      asp: "%d/%m/%Y"
+      asp_filename: "%Y%m%d%H%M%S"
     month_names:
     -
     - janvier

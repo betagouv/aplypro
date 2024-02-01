@@ -56,20 +56,34 @@ RSpec.describe Classe do
     subject(:active_students) { classe.active_students }
 
     let(:classe) { create(:classe, :with_students, students_count: 5) }
-    let(:old_student) { classe.students.last }
+    let(:closed_schooling) { create(:schooling, :closed, classe: classe) }
 
-    before do
-      old_student.close_current_schooling!
-    end
-
-    it { is_expected.not_to include old_student }
+    it { is_expected.to have_attributes(count: 5) }
+    it { is_expected.not_to include closed_schooling.student }
 
     it "orders them by last name" do
       students = %w[Z A B M C].map { |name| create(:student, last_name: name) }
 
       classe.students = students
 
-      expect(classe.active_students.map(&:last_name).join).to eq "ABCMZ"
+      expect(active_students.map(&:last_name).join).to eq "ABCMZ"
+    end
+  end
+
+  describe "inactive_students" do
+    subject(:inactive_students) { classe.inactive_students }
+
+    let(:classe) { create(:classe, :with_former_students, students_count: 5) }
+    let(:current_schooling) { create(:schooling, classe: classe) }
+
+    it { is_expected.to have_attributes(count: 5) }
+    it { is_expected.not_to include current_schooling.student }
+
+    it "orders them by last name" do
+      names = %w[Z A B M C]
+      classe.students.map.with_index { |student, index| student.update(last_name: names[index]) }
+
+      expect(inactive_students.map(&:last_name).join).to eq "ABCMZ"
     end
   end
 

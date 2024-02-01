@@ -25,7 +25,12 @@
       %li= link_to "Supprimer les coordonnées bancaires", confirm_deletion_class_student_rib_path(@classe, @student, @student.rib), class: 'fr-btn fr-btn--secondary'
 
 %section.fr-mt-3w
-  %h2.fr-h4 Liste des PFMPs de l'élève
+  %h2.fr-h4 
+    PFMPs dans la classe
+    = @classe.label
+  
+  = closed_schooling_information_tag(@schooling, class: "fr-mb-2w")
+
   - if @pfmps.none?
     %p Aucune PFMP enregistrée pour le moment.
   - else
@@ -33,6 +38,6 @@
 
 .actions.fr-py-3w
   .fr-btns-group.fr-btns-group--inline
-    = link_to "Ajouter une PFMP", new_class_student_pfmp_path(@classe, @student), class: 'fr-btn'
-    - if @student.current_schooling.attributive_decision.attached?
-      = link_to "Télécharger la décision d'attribution", url_for(@student.current_schooling.attributive_decision), class: 'fr-btn fr-btn--secondary', target: :download
+    = link_to "Ajouter une PFMP", new_class_schooling_pfmp_path(@classe, @schooling), class: 'fr-btn'
+    - if @schooling.attributive_decision.attached?
+      = link_to "Télécharger la décision d'attribution", url_for(@schooling.attributive_decision), class: 'fr-btn fr-btn--secondary', target: :download

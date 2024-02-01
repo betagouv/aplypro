@@ -3,7 +3,7 @@
 class GenerateMissingAttributiveDecisionsJob < ApplicationJob
   def perform(establishment)
     schoolings = establishment
-                 .active_schoolings
+                 .schoolings
                  .without_attributive_decisions
 
     schoolings.update_all(generating_attributive_decision: true) # rubocop:disable Rails/SkipsModelValidations

@@ -22,20 +22,20 @@ Fonctionnalité: Saisie des coordonnées banquaires manquantes pour une classe
     Quand je clique sur "Enregistrer les coordonnées bancaires saisies"
     Alors la page contient "Coordonnées bancaires enregistrées avec succès"
     Et je peux voir dans le tableau "Liste des élèves"
-      | Élèves (2)    | Coordonnées Bancaires (2/2) | PFMPs (0) |
-      | Curie Marie   | Saisies                     |           |
-      | Langevin Paul | Saisies                     |           |
+      | Élèves (2)    | Décisions d'attribution (0/2) | Coordonnées Bancaires (2/2) | PFMPs (0) |
+      | Curie Marie   |                               | Saisies                     |           |
+      | Langevin Paul |                               | Saisies                     |           |
 
-  Scénario: Le personnel peut laisser des coodonnées bancaires vides et quand même sauvegarder le reste
+  Scénario: Le personnel peut laisser des coordonnées bancaires vides et quand même sauvegarder le reste
     Quand je saisis en masse les coordonées bancaires d'un tiers pour "Curie Marie"
     Et que je clique sur "Enregistrer les coordonnées bancaires saisies"
     Alors la page contient "Coordonnées bancaires enregistrées avec succès"
     Et je peux voir dans le tableau "Liste des élèves"
-      | Élèves (2)    | Coordonnées Bancaires (1/2) | PFMPs (0) |
-      | Curie Marie   | Saisies                     |           |
-      | Langevin Paul | Non saisies                 |           |
+      | Élèves (2)    | Décisions d'attribution (0/2) | Coordonnées Bancaires (1/2) | PFMPs (0) |
+      | Curie Marie   |                               | Saisies                     |           |
+      | Langevin Paul |                               | Non saisies                 |           |
 
-  Scénario: Le personnel saisit des coodonnées bancaires invalides et voit ses erreurs
+  Scénario: Le personnel saisit des coordonnées bancaires invalides et voit ses erreurs
     Quand je remplis le champ "IBAN" avec "AAA" dans les champs de "Curie Marie"
     Et que je remplis le champ "Titulaire du compte" avec "" dans les champs de "Curie Marie"
     Et que je clique sur "Enregistrer les coordonnées bancaires saisies"
@@ -44,14 +44,24 @@ Fonctionnalité: Saisie des coordonnées banquaires manquantes pour une classe
     Et la page contient "IBAN n'est pas valide"
     Et la page contient "BIC n'est pas valide"
 
-  Scénario: Le personnel saisit des coodonnées bancaires valides et invalides et enregistre quand même les valides
+  Scénario: Le personnel saisit des coordonnées bancaires valides et invalides et enregistre quand même les valides
     Quand je saisis en masse les coordonées bancaires d'un tiers pour "Curie Marie"
     Et que je remplis le champ "IBAN" avec "AAA" dans les champs de "Langevin Paul"
     Et que je clique sur "Enregistrer les coordonnées bancaires saisies"
     Alors la page contient "IBAN n'est pas valide"
     Et je consulte la classe de "2NDEB"
     Et je peux voir dans le tableau "Liste des élèves"
-      | Élèves (2)    | Coordonnées Bancaires (1/2) | PFMPs (0) |
-      | Curie Marie   | Saisies                     |           |
-      | Langevin Paul | Non saisies                 |           |
+      | Élèves (2)    | Décisions d'attribution (0/2) | Coordonnées Bancaires (1/2) | PFMPs (0) |
+      | Curie Marie   |                               | Saisies                     |           |
+      | Langevin Paul |                               | Non saisies                 |           |
 
+  Scénario: Le personnel peut saisir des coordonnées bancaires pour une classe même si un élève a d'autres scolarités dans d'autres classes
+    Sachant que l'élève "Marie" "Curie" a une ancienne scolarité dans un autre établissement
+    Et que je saisis en masse les coordonées bancaires d'un tiers pour "Curie Marie"
+    Et que je saisis en masse les coordonées bancaires d'un tiers pour "Langevin Paul"
+    Quand je clique sur "Enregistrer les coordonnées bancaires saisies"
+    Alors la page contient "Coordonnées bancaires enregistrées avec succès"
+    Et je peux voir dans le tableau "Liste des élèves"
+      | Élèves (2)    | Décisions d'attribution (0/2) | Coordonnées Bancaires (2/2) | PFMPs (0) |
+      | Curie Marie   |                               | Saisies                     |           |
+      | Langevin Paul |                               | Saisies                     |           |

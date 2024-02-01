@@ -71,7 +71,7 @@ end
 
 Quand("je clique sur {string} dans le menu principal") do |item|
   within("nav#main-nav") do
-    click_link(item)
+    click_link_or_button(item)
   end
 end
 
@@ -92,6 +92,25 @@ Quand("je renseigne une PFMP de {int} jours") do |days|
     Et que je remplis "Date de début" avec "17/03/2023"
     Et que je remplis "Date de fin" avec "20/03/2023"
     Et que je remplis "Nombre de jours effectués" avec "#{days}"
+    Et que je clique sur "Enregistrer"
+  )
+end
+
+Quand("je renseigne une PFMP de {int} jours pour {string}") do |days, name|
+  steps %(
+    Quand je clique sur "Ajouter une PFMP" dans la rangée "#{name}"
+    Et que je remplis "Date de début" avec "17/03/2023"
+    Et que je remplis "Date de fin" avec "20/03/2023"
+    Et que je remplis "Nombre de jours effectués" avec "#{days}"
+    Et que je clique sur "Enregistrer"
+  )
+end
+
+Quand("je renseigne une PFMP pour {string}") do |name|
+  steps %(
+    Quand je clique sur "Ajouter une PFMP" dans la rangée "#{name}"
+    Et que je remplis "Date de début" avec "17/03/2023"
+    Et que je remplis "Date de fin" avec "20/03/2023"
     Et que je clique sur "Enregistrer"
   )
 end

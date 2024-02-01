@@ -49,8 +49,8 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Quand je rafraîchis la page
     Alors la page ne contient pas "faites-nous part de vos retours"
 
-  Scénario: Le personnel ne voit pas les scolarités inactives dans les données de la page d'accueil
+  Scénario: Le personnel voit les scolarités inactives dans les données de la page d'accueil
     Quand il y a un élève avec une scolarité fermée qui a une PFMP
     Et que je me rends sur la page d'accueil
-    Alors l'indicateur de PFMP "À compléter" affiche 0
+    Alors l'indicateur de PFMP "À compléter" affiche 1
 

@@ -5,7 +5,13 @@ FactoryBot.define do
     pfmp
     amount { Faker::Number.positive }
 
+    trait :ready do
+      after(:create, &:mark_ready!)
+    end
+
     trait :processing do
+      ready
+
       after(:create, &:process!)
     end
 

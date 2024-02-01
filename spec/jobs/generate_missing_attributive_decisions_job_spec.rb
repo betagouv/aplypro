@@ -32,8 +32,8 @@ RSpec.describe GenerateMissingAttributiveDecisionsJob do
   context "when a student is inactive" do
     before { schooling.update!(end_date: Time.zone.today) }
 
-    it "does not enqueue a job for it" do
-      expect { job.perform_now }.not_to have_enqueued_job.with(schooling)
+    it "enqueues a job for it anyway" do
+      expect { job.perform_now }.to have_enqueued_job.with(schooling)
     end
   end
 end

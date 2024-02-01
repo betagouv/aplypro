@@ -67,6 +67,9 @@ guard :rspec, cmd: "bin/rspec" do
 
   # shared examples
   watch(%r{^app/models/student/mappers/base.rb}) { "spec/models/student/mappers" }
+
+  # ASP XML
+  watch(%r{^app/services/asp/entities/*}) { "spec/services/asp/entities/entities_integration_spec.rb" }
 end
 
 cucumber_options = {

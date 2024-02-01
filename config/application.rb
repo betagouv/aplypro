@@ -42,5 +42,7 @@ module Aplypro
     config.generators.system_tests = nil
 
     config.active_job.queue_adapter = :sidekiq
+
+    config.autoload_lib(ignore: %w[assets tasks])
   end
 end

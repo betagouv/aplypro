@@ -32,7 +32,7 @@ RSpec.describe "StudentsControllers" do
         get class_student_path(class_id: schooling.classe.id, id: schooling.student.id)
       end
 
-      it { is_expected.to redirect_to class_path(schooling.classe) }
+      it { is_expected.to render_template(:show) }
     end
   end
 end

@@ -11,5 +11,5 @@
       Statut : #{@pfmp.status_badge}
 
   .fr-btns-group.fr-btns-group--inline.fr-mt-3w
-    = link_to "Annuler", class_student_pfmp_path(@classe, @student, @pfmp), class: 'fr-btn fr-btn--secondary'
-    = button_to "Confirmer la suppression", class_student_pfmp_path(@classe, @student, @pfmp), method: :delete, class: 'fr-btn fr-btn--danger fr-btn--secondary'
+    = link_to "Annuler", class_schooling_pfmp_path(@classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
+    = button_to "Confirmer la suppression", class_schooling_pfmp_path(@classe, @schooling, @pfmp), method: :delete, class: 'fr-btn fr-btn--danger fr-btn--secondary'

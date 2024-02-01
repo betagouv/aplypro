@@ -1,17 +1,19 @@
 # frozen_string_literal: true
 
 module HomeHelper
-  def progress_badge(count, total)
+  def progress_badge(count, total, **args)
     count ||= 0
     status = progress_badge_status(count, total)
 
-    dsfr_badge(status: status, classes: ["fr-badge counter"]) do
-      "#{count} / #{total}"
+    content_tag(:div, title: args[:title]) do
+      dsfr_badge(status: status, classes: ["fr-badge counter"]) do
+        "#{count} / #{total}"
+      end
     end
   end
 
   def attributive_decisions_download_button(establishment)
-    count = establishment.active_schoolings.with_attributive_decisions.count
+    count = establishment.schoolings.with_attributive_decisions.count
 
     return if count.zero?
 
@@ -27,7 +29,7 @@ module HomeHelper
   def attributive_decisions_generation_form(establishment)
     return cannot_generate_attributive_decisions_button unless current_user.can_try_to_generate_attributive_decisions?
 
-    count = establishment.active_schoolings.without_attributive_decisions.count
+    count = establishment.schoolings.without_attributive_decisions.count
 
     render partial: "home/attributive_decision_form", locals: { establishment: establishment, count: count }
   end

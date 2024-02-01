@@ -26,7 +26,7 @@ class GenerateAttributiveDecisionJob < ApplicationJob
   end
 
   def perform(schooling)
-    FetchStudentInformationJob.new.perform(schooling.student) if schooling.student.missing_address?
+    FetchStudentInformationJob.new.perform(schooling) if schooling.student.missing_address?
 
     io = StringIO.new
 
