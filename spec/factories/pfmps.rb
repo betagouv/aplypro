@@ -22,6 +22,10 @@ FactoryBot.define do
       end
     end
 
+    trait :with_pending_payment do
+      validated
+    end
+
     trait :paid do
       validated
 
@@ -30,6 +34,18 @@ FactoryBot.define do
           p.mark_ready!
           p.process!
           p.complete!
+        end
+      end
+    end
+
+    trait :with_failed_payment do
+      validated
+
+      after(:create) do |pfmp|
+        pfmp.payments.first.tap do |p|
+          p.mark_ready!
+          p.process!
+          p.fail!
         end
       end
     end

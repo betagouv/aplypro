@@ -47,6 +47,10 @@ class Pfmp < ApplicationRecord
     end
   end
 
+  def validate!
+    transition_to!(:validated)
+  end
+
   def setup_payment!
     payments.create!(amount: calculate_amount) if payment_due?
   end
@@ -70,7 +74,7 @@ class Pfmp < ApplicationRecord
   end
 
   def payment_due?
-    student.allowance_left(mef) > 0 # rubocop:disable Style:NumericPredicate
+    student.allowance_left(mef).positive?
   end
 
   def breakdown

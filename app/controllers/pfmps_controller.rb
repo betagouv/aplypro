@@ -35,7 +35,7 @@ class PfmpsController < ApplicationController
   end
 
   def validate
-    @pfmp.transition_to!(:validated)
+    @pfmp.validate!
 
     redirect_back_or_to class_schooling_pfmp_path(@classe, @schooling, @pfmp),
                         notice: t("flash.pfmps.validated", name: @schooling.student.full_name)
