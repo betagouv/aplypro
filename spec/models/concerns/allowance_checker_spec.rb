@@ -5,13 +5,10 @@ require "rails_helper"
 describe AllowanceChecker do
   subject(:student) { create(:student) }
 
-  let(:mef) { create(:mef, code: "123") }
+  let(:wage) { create(:wage, yearly_cap: 100, daily_rate: 10) }
+  let(:mef) { create(:mef, code: "123", wage: wage) }
   let(:classe) { create(:classe, mef: mef) }
   let(:schooling) { create(:schooling, student: student, classe: classe) }
-
-  before do
-    mef.wage.update!(yearly_cap: 100, daily_rate: 10) # dodgy
-  end
 
   describe "allowance_left" do
     subject(:amount) { student.allowance_left(mef) }
