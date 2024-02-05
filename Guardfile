@@ -26,6 +26,8 @@
 #  * zeus: 'zeus rspec' (requires the server to be started separately)
 #  * 'just' rspec: 'rspec'
 
+notification :off
+
 guard :rspec, cmd: "bin/rspec" do
   require "guard/rspec/dsl"
   dsl = Guard::RSpec::Dsl.new(self)
@@ -80,12 +82,12 @@ cucumber_options = {
 
   # all_after_pass: false,
   all_on_start: false,
+  notification: false
   # keep_failed: false,
   # feature_sets: ['features/frontend', 'features/experimental'],
 
   # run_all: { cmd_additional_args: '--profile guard_all' },
   # focus_on: { 'wip' }, # @wip
-  notification: false
 }
 
 guard "cucumber", cucumber_options do
