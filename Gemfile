@@ -45,7 +45,7 @@ gem "haml-rails"
 gem "bank-contact"
 
 # document generation
-gem "hexapdf"
+gem "hexapdf", require: false
 
 # document storage
 gem "aws-sdk-s3", require: false
@@ -54,7 +54,7 @@ gem "aws-sdk-s3", require: false
 gem "devise"
 gem "devise-i18n"
 gem "omniauth-oauth2"
-gem "omniauth_openid_connect"
+gem "omniauth_openid_connect", require: false
 gem "omniauth-rails_csrf_protection"
 
 # data fetching
