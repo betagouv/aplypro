@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "hexapdf"
+
 # rubocop:disable all
 class AttributeDecisionGenerator
   include ActionView::Helpers::NumberHelper
