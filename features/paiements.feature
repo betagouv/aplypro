@@ -1,5 +1,4 @@
 # language: fr
-
 Fonctionnalité: Gestion des paiements
   Contexte:
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
@@ -37,3 +36,16 @@ Fonctionnalité: Gestion des paiements
     Et que je consulte la dernière PFMP
     Alors je peux voir un paiement "Prêt" de 30 euros
     Et la page contient "Ce paiement est prêt à l'envoi"
+
+  Scénario: Le personnel de direction peut voir un paiement envoyé à l'ASP
+    Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
+    Et que les informations personnelles ont été récupérées pour l'élève avec l'INE "MC"
+    Et que je renseigne et valide une PFMP de 3 jours
+    Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
+    Et que la tâche de préparation des paiements démarre
+    Et que la tâche d'envoi des paiements démarre
+    Et que toutes les tâches de fond sont terminées
+    Quand je consulte le profil de "Marie Curie" dans la classe de "A1"
+    Et que je consulte la dernière PFMP
+    Alors je peux voir un paiement "En cours de traitement" de 30 euros
+    Et la page contient "(ASP) est en train de traiter"

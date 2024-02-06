@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_23_163436) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_06_124845) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_23_163436) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "asp_requests", force: :cascade do |t|
+    t.datetime "sent_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "classes", force: :cascade do |t|
@@ -128,6 +134,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_23_163436) do
     t.float "amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "asp_request_id"
+    t.index ["asp_request_id"], name: "index_payments_on_asp_request_id"
     t.index ["pfmp_id"], name: "index_payments_on_pfmp_id"
   end
 
@@ -227,10 +235,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_23_163436) do
 
   create_table "wages", force: :cascade do |t|
     t.integer "daily_rate", null: false
+    t.string "mefstat4", null: false
     t.integer "yearly_cap", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "mefstat4", null: false
     t.integer "ministry", null: false
     t.jsonb "mef_codes"
   end
@@ -245,6 +253,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_23_163436) do
   add_foreign_key "invitations", "establishments"
   add_foreign_key "invitations", "users"
   add_foreign_key "payment_transitions", "payments"
+  add_foreign_key "payments", "asp_requests"
   add_foreign_key "payments", "pfmps"
   add_foreign_key "pfmp_transitions", "pfmps"
   add_foreign_key "pfmps", "schoolings"
