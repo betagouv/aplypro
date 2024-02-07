@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddAspFileReferenceToStudents < ActiveRecord::Migration[7.1]
+class AddASPFileReferenceToStudents < ActiveRecord::Migration[7.1]
   def change
     add_column :students, :asp_file_reference, :string, null: false # rubocop:disable Rails/NotNullColumn
 
