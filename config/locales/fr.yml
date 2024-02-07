@@ -202,6 +202,7 @@ fr:
         La PFMP a été validée. La demande de paiement sera envoyée à l'ASP à partir de février 2024.
   payments:
     description:
+      failed: La demande de paiement a échouée.
       pending: Cette demande de paiement sera traitée bientôt.
       ready: Ce paiement est prêt à l'envoi
       blocked: Il manque des informations pour envoyer le paiement
@@ -213,6 +214,7 @@ fr:
       pending: "Planifié"
       ready: "Prêt"
       blocked: "Bloqué"
+      failed: "Échoué"
       processing: "En cours de traitement par l'ASP"
   ministries:
     masa: Ministère de l'Agriculture et de la Souveraineté Alimentaire (MASA)

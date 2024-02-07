@@ -4,6 +4,7 @@ module PaymentDecorator
   BADGE_STATE_MAPPING = {
     ready: :success,
     blocked: :error,
+    failed: :error,
     pending: :new,
     processing: :warning
   }.freeze

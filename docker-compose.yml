@@ -47,17 +47,13 @@ services:
     image: redis
     ports:
       - "6379:6379"
-  # keycloak:
-  #   image: quay.io/keycloak/keycloak
-  #   environment:
-  #     KEYCLOAK_ADMIN: admin
-  #     KEYCLOAK_ADMIN_PASSWORD: admin
-  #     KC_HTTP_PORT: 1090
-  #   volumes:
-  #     - .local/keycloak/:/opt/keycloak/data/
-  #   entrypoint: /opt/keycloak/bin/kc.sh start-dev
-  #   ports:
-  #     - "3001:1090"
+  asp-mock:
+    image: atmoz/sftp
+    volumes:
+        - ./mock/asp/:/home/asp/
+    ports:
+        - "2222:22"
+    command: asp:pass:1001
   mock:
     environment:
       PORT: 3002
