@@ -2,11 +2,9 @@
 
 module ASP
   class Request < ApplicationRecord
-    if Rails.env.production?
-      has_one_attached :file, service: :ovh_asp
-    else
-      has_one_attached :file
-    end
+    has_one_attached :file, service: :ovh_asp
+    has_one_attached :rejects_file, service: :ovh_asp
+    has_one_attached :integrations_file, service: :ovh_asp
 
     class << self
       def with_payments(payments, formatter)
