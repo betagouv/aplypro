@@ -11,6 +11,7 @@ def mock_sftp!
 
   allow(asp_server_double).to receive(:drop_file!)
   allow(asp_server_double).to receive(:get_all_files!).and_return(TEMP_ASP_DIR)
+  allow(asp_server_double).to receive(:remove_file!)
 
   stub_const("ASP::Server", asp_server_double)
 end

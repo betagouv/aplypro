@@ -2,12 +2,13 @@
 
 module ASP
   class FileReader
-    attr_reader :filepath
+    attr_reader :filepath, :filename
 
     FILE_TYPES = %i[rejects integrations payments].freeze
 
     def initialize(filepath)
       @filepath = filepath
+      @filename = File.basename(filepath)
     end
 
     FILE_TYPES.each do |type|
@@ -17,7 +18,7 @@ module ASP
     end
 
     def kind
-      case File.basename(filepath)
+      case filename
       when /^rejets_integ_idp/
         :rejects
       when /^identifiants_generes/
@@ -30,10 +31,12 @@ module ASP
     def original_filename
       return if payments_file?
 
+      no_ext = File.basename(filepath, ".*")
+
       name = if rejects_file?
-               File.basename(filepath, ".*").split("integ_idp_").last
+               no_ext.split("integ_idp_").last
              elsif integrations_file?
-               File.basename(filepath, ".*").split("generes_").last
+               no_ext.split("generes_").last
              end
 
       "#{name}.xml"
@@ -51,10 +54,16 @@ module ASP
       ASP::Request.find(attachment.record_id)
     end
 
-    def attach_to_request!
-      slot = request.send "#{kind}_file"
+    def target_attachment
+      request.send "#{kind}_file"
+    end
 
-      slot.attach(io: File.open(filepath), filename: filepath)
+    def attach_to_request!
+      target_attachment
+        .attach(
+          io: File.open(filepath),
+          filename: filepath
+        )
     end
 
     def reader_for(kind)
@@ -65,6 +74,10 @@ module ASP
       attach_to_request! unless payments_file?
 
       reader_for(kind).new(filepath).process!
+    end
+
+    def file_saved?
+      target_attachment.attached?
     end
   end
 end
