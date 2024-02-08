@@ -5,7 +5,8 @@ require "rails_helper"
 describe ASP::FileReader do
   subject(:reader) { described_class.new(filepath) }
 
-  let(:basename) { "some/file.xml" }
+  let(:basename) { "rejets_integ_idp_foobar.csv" }
+
   let!(:request) { create(:asp_request, :sent, filename: "foobar.xml") }
   let(:file) { Tempfile.create(basename) }
   let(:filepath) { file.path }

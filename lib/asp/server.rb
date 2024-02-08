@@ -18,6 +18,10 @@ module ASP
         end
       end
 
+      def remove_file!(path:)
+        instance.connection.remove!(filename: File.join(READ_FOLDER, path))
+      end
+
       def instance
         @instance ||= new
       end

@@ -15,7 +15,7 @@ Sachantqu("la tâche de lecture des paiements démarre") do
 end
 
 Sachantqu("il n'y a pas de fichiers sur le serveur de l'ASP") do
-  FileUtils.rmdir_p(TEMP_ASP_DIR) && FileUtils.mkdir_p(TEMP_ASP_DIR)
+  FileUtils.rm_rf(TEMP_ASP_DIR) && FileUtils.mkdir_p(TEMP_ASP_DIR)
 end
 
 Quand("l'ASP a mis a disposition un fichier {string} contenant :") do |filename, string|
