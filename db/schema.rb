@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_12_162223) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_12_163053) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_12_162223) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "asp_payment_request_transitions", force: :cascade do |t|
+    t.string "to_state", null: false
+    t.text "metadata", default: "{}"
+    t.integer "sort_key", null: false
+    t.integer "asp_payment_request_id", null: false
+    t.boolean "most_recent", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["asp_payment_request_id", "most_recent"], name: "index_asp_payment_request_transitions_parent_most_recent", unique: true, where: "most_recent"
+    t.index ["asp_payment_request_id", "sort_key"], name: "index_asp_payment_request_transitions_parent_sort", unique: true
   end
 
   create_table "asp_payment_requests", force: :cascade do |t|
@@ -252,6 +264,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_12_162223) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "asp_payment_request_transitions", "asp_payment_requests"
   add_foreign_key "asp_payment_requests", "asp_requests"
   add_foreign_key "asp_payment_requests", "payments"
   add_foreign_key "classes", "mefs"
