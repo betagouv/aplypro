@@ -9,4 +9,8 @@ RSpec.describe ASP::PaymentRequest do
     it { is_expected.to belong_to(:payment) }
     it { is_expected.to belong_to(:asp_request) }
   end
+
+  describe "state machine" do
+    it { is_expected.to be_in_state :pending }
+  end
 end
