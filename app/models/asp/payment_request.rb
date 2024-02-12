@@ -22,5 +22,13 @@ module ASP
     delegate :can_transition_to?,
              :current_state, :history, :last_transition, :last_transition_to,
              :transition_to!, :transition_to, :in_state?, to: :state_machine
+
+    def mark_as_sent!
+      transition_to(:sent)
+    end
+
+    def reject!(attrs)
+      transition_to!(:rejected, attrs)
+    end
   end
 end
