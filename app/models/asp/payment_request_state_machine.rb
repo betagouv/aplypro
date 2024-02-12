@@ -5,5 +5,10 @@ module ASP
     include Statesman::Machine
 
     state :pending, initial: true
+    state :sent
+    state :rejected
+
+    transition from: :pending, to: :sent
+    transition from: :sent, to: :rejected
   end
 end
