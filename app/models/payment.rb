@@ -9,7 +9,6 @@ class Payment < ApplicationRecord
   has_many :transitions, class_name: "PaymentTransition", dependent: :destroy
 
   belongs_to :pfmp
-  belongs_to :asp_request, class_name: "ASP::Request", optional: true
 
   has_one :student, through: :pfmp
   has_one :schooling, through: :pfmp
