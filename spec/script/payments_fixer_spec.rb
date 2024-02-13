@@ -6,16 +6,9 @@ require "./script/payments_fixer"
 RSpec.describe PaymentsFixer do
   subject(:fix) { described_class.fix_all! }
 
-  before do
-    create_list(:pfmp, 2, :validated)
-  end
-
-  it "goes well" do
-    expect { fix }.not_to raise_error
-  end
-
   context "when there is an exta payment for a pfmp" do
-    let!(:extra_payment) { create(:payment, pfmp: Pfmp.last) }
+    let(:pfmps) { create_list(:pfmp, 2, :validated) }
+    let!(:extra_payment) { create(:payment, pfmp: pfmps.last) }
 
     it "deletes the extra payment" do
       fix
