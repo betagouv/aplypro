@@ -5,17 +5,19 @@ require "csv"
 module ASP
   module Readers
     class IntegrationsFileReader
-      attr_reader :filepath
+      attr_reader :io
 
-      def initialize(filepath)
-        @filepath = filepath
+      def initialize(io)
+        @io = io.strip
       end
 
       def process!
-        CSV.foreach(filepath, headers: true, col_sep: ";", encoding: "ISO8859-1") do |row|
+        CSV.parse(io, headers: true, col_sep: ";", encoding: "ISO8859-1") do |row|
           id = row["Numero enregistrement"]
 
-          student = Student.find(id)
+          request = ASP::PaymentRequest.find(id)
+
+          request.mark_integrated!(row.to_h)
 
           # student.payments.in_state(:processing).each(&:fail!)
         end
