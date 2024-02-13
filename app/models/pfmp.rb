@@ -10,7 +10,7 @@ class Pfmp < ApplicationRecord
   has_one :establishment, through: :classe
 
   has_many :transitions, class_name: "PfmpTransition", autosave: false, dependent: :destroy
-  has_many :payments, -> { order(updated_at: :asc) }, dependent: :destroy, inverse_of: :pfmp
+  has_many :payments, -> { order(created_at: :asc) }, dependent: :destroy, inverse_of: :pfmp
 
   validates :start_date, :end_date, presence: true
 

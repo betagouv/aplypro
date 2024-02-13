@@ -30,10 +30,11 @@ FactoryBot.define do
       validated
 
       after(:create) do |pfmp|
-        pfmp.payments.first.tap do |p|
+        pfmp.payments.first.payment_requests.last.tap do |p|
           p.mark_ready!
-          p.process!
-          p.complete!
+          p.mark_as_sent!(ASP::Request.create)
+          p.mark_integrated!({})
+          p.mark_paid!
         end
       end
     end
@@ -42,10 +43,10 @@ FactoryBot.define do
       validated
 
       after(:create) do |pfmp|
-        pfmp.payments.first.tap do |p|
+        pfmp.payments.first.payment_requests.last.tap do |p|
           p.mark_ready!
-          p.process!
-          p.fail!
+          p.mark_as_sent!(ASP::Request.create)
+          p.reject!({})
         end
       end
     end
