@@ -29,7 +29,7 @@ describe AllowanceChecker do
 
         it { is_expected.to eq 70 }
 
-        context "when it'from another year" do
+        context "when it's from another year" do
           before { pfmp.schooling.update!(classe: create(:classe, start_year: 2024)) }
 
           it "does not account for it" do
@@ -40,8 +40,8 @@ describe AllowanceChecker do
         context "when it is failed" do
           let(:pfmp) { create(:pfmp, :with_failed_payment, schooling: schooling, day_count: 3) }
 
-          it "does not account for it" do
-            expect(amount).to eq 100
+          it "still accounts for it" do
+            expect(amount).to eq 70
           end
         end
 

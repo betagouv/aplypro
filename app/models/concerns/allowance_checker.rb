@@ -12,7 +12,6 @@ module AllowanceChecker
 
     def paid_amount_for_mef(mef)
       Payment
-        .in_state(:successful, :pending)
         .joins(schooling: :classe)
         .where("classe.mef_id": mef.id, "classe.start_year": ENV.fetch("APLYPRO_SCHOOL_YEAR"))
         .sum(&:amount)

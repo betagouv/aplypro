@@ -76,7 +76,7 @@ RSpec.describe Pfmp do
     it "sorts them chronologically" do
       payments = [5, 0, -2]
                  .map { |n| Time.zone.now + n.days }
-                 .map { |date| create(:payment, pfmp:, updated_at: date) }
+                 .map { |date| create(:payment, pfmp:, created_at: date) }
 
       expect(pfmp.reload.payments).to eq payments.reverse
     end
