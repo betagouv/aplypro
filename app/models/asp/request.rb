@@ -8,13 +8,9 @@ module ASP
 
     class << self
       def with_payments(payments, formatter)
-        instance = create.tap do |obj|
+        create.tap do |obj|
           obj.attach_asp_file(formatter.new(payments))
         end
-
-        # instance.mark_payments!(payments)
-
-        instance
       end
     end
 
@@ -25,12 +21,6 @@ module ASP
       )
 
       update!(sent_at: DateTime.now)
-    end
-
-    def mark_payments!(payments)
-      ids = payments.pluck(:id)
-
-      # Payment.where(id: ids).update(asp_request_id: id)
     end
 
     def attach_asp_file(file)
