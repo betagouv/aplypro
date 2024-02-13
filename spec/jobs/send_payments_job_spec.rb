@@ -9,6 +9,14 @@ RSpec.describe SendPaymentsJob do
   let(:pfmp) { create(:pfmp, student: student) }
   let(:payment) { create(:payment, pfmp: pfmp) }
 
+  let(:server_double) { class_double(ASP::Server) }
+
+  before do
+    stub_const("ASP::Server", server_double)
+
+    allow(server_double).to receive(:drop_file!)
+  end
+
   it "doesn't pickup requests that aren't ready" do
     expect do
       perform_enqueued_jobs do
