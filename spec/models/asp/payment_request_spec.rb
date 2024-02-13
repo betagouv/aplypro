@@ -7,7 +7,7 @@ RSpec.describe ASP::PaymentRequest do
 
   describe "associations" do
     it { is_expected.to belong_to(:payment) }
-    it { is_expected.to belong_to(:asp_request) }
+    it { is_expected.to belong_to(:asp_request).optional }
   end
 
   describe "state machine" do

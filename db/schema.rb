@@ -55,7 +55,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_13_092228) do
   end
 
   create_table "asp_payment_requests", force: :cascade do |t|
-    t.bigint "asp_request_id", null: false
+    t.bigint "asp_request_id"
     t.bigint "payment_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

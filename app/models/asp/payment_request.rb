@@ -2,9 +2,8 @@
 
 module ASP
   class PaymentRequest < ApplicationRecord
-    belongs_to :asp_request, class_name: "ASP::Request"
+    belongs_to :asp_request, class_name: "ASP::Request", optional: true
     belongs_to :payment
-
     has_many :asp_payment_request_transitions,
              class_name: "ASP::PaymentRequestTransition",
              dependent: :destroy,
