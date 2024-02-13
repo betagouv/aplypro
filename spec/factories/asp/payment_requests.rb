@@ -5,9 +5,7 @@ FactoryBot.define do
     payment
 
     trait :ready do
-      after(:create) do |obj|
-        obj.mark_ready!
-      end
+      after(:create, &:mark_ready!)
     end
 
     trait :sent do

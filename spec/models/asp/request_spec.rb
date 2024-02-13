@@ -17,7 +17,7 @@ RSpec.describe ASP::Request do
   describe ".from_payments" do
     subject(:factory) { described_class.with_payments(Payment.all, ASP::Entities::Fichier) }
 
-    let!(:payment) { create(:payment) }
+    before { create(:payment) }
 
     it "creates a new instance" do
       expect { factory }.to change(described_class, :count).by(1)
@@ -27,10 +27,6 @@ RSpec.describe ASP::Request do
       instance = factory
 
       expect(instance.file).to be_attached
-    end
-
-    xit "updates the payment's request reference" do
-      expect { factory }.to(change { payment.reload.asp_request_id })
     end
   end
 
