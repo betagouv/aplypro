@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_13_092228) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_13_184952) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -136,18 +136,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_13_092228) do
     t.integer "ministry", null: false
     t.index ["code"], name: "index_mefs_on_code", unique: true
     t.index ["mefstat11"], name: "index_mefs_on_mefstat11"
-  end
-
-  create_table "payment_transitions", force: :cascade do |t|
-    t.string "to_state", null: false
-    t.text "metadata", default: "{}"
-    t.integer "sort_key", null: false
-    t.integer "payment_id", null: false
-    t.boolean "most_recent", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["payment_id", "most_recent"], name: "index_payment_transitions_parent_most_recent", unique: true, where: "most_recent"
-    t.index ["payment_id", "sort_key"], name: "index_payment_transitions_parent_sort", unique: true
   end
 
   create_table "payments", force: :cascade do |t|
@@ -277,7 +265,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_13_092228) do
   add_foreign_key "establishments", "users", column: "confirmed_director_id"
   add_foreign_key "invitations", "establishments"
   add_foreign_key "invitations", "users"
-  add_foreign_key "payment_transitions", "payments"
   add_foreign_key "payments", "pfmps"
   add_foreign_key "pfmp_transitions", "pfmps"
   add_foreign_key "pfmps", "schoolings"

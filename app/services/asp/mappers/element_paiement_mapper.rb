@@ -12,13 +12,9 @@ module ASP
       end
 
       def codeobjet
-        existing = payment
-                   .student
-                   .payments
-                   .in_state(:successful)
-                   .count
+        index = payment.pfmp.payments.find_index { |p| p == payment }
 
-        "VERSE00#{existing + 1}"
+        "VERSE00#{index + 1}"
       end
 
       def codetypeversement

@@ -34,17 +34,17 @@ describe ASP::Mappers::ElementPaiementMapper do
   end
 
   describe "codeobjet" do
-    context "when the student has no successful payments yet" do
-      it "marks it as the first one" do
-        expect(mapper.codeobjet).to eq "VERSE001"
-      end
+    it "is normally equal to VERSE001" do
+      expect(mapper.codeobjet).to eq "VERSE001"
     end
 
-    context "when the student has previous payments" do
-      before { create_list(:payment, 3, :successful, pfmp: payment.pfmp) }
+    context "when the PFMP has a previous payment" do
+      before do
+        create(:payment, pfmp: payment.pfmp, created_at: Date.yesterday)
+      end
 
-      it "adds the correct index" do
-        expect(mapper.codeobjet).to eq "VERSE004"
+      it "is accounts for it" do
+        expect(mapper.codeobjet).to eq "VERSE002"
       end
     end
   end
