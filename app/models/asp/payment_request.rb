@@ -30,5 +30,9 @@ module ASP
     def reject!(attrs)
       transition_to!(:rejected, attrs)
     end
+
+    def mark_integrated!(attrs)
+      transition_to!(:integrated, attrs)
+    end
   end
 end
