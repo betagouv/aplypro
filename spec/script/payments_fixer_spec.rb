@@ -56,21 +56,21 @@ RSpec.describe PaymentsFixer do
     let(:schoolings) do
       classes.map.with_index do |classe, index|
         schooling = create(:schooling, student: student, classe: classe)
-        schooling.update(end_date: Time.zone.today - index.days) if index < 2
+        schooling.update(end_date: Time.zone.today - index.days) if index < classes.count - 1
         schooling
       end
     end
 
     let(:pfmps) do
       schoolings.map do |schooling|
-        create(:pfmp, :validated, schooling: schooling, day_count: day_count)
+        create(:pfmp, schooling: schooling, day_count: day_count)
       end
     end
 
-    let(:payments) { pfmps.map(&:latest_payment) }
-
-    before do
-      payments.each { |payment| payment.update(amount: 27) }
+    let!(:payments) do
+      pfmps.map do |pfmp|
+        create(:payment, pfmp: pfmp, amount: 27)
+      end
     end
 
     it "corrects all the payments amounts" do
