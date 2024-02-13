@@ -24,7 +24,9 @@ Quand("l'ASP a mis a disposition un fichier {string} contenant :") do |filename,
   File.write(destination, string)
 end
 
-Sachantque("l'ASP a rejetté le dossier de {string} avec un motif de {string} dans un fichier {string}") do |name, reason, filename|
+Sachantque(
+  "l'ASP a rejetté le dossier de {string} avec un motif de {string} dans un fichier {string}"
+) do |name, reason, filename|
   first_name, last_name = name.split
   student = Student.find_by(first_name:, last_name:)
 

@@ -10,7 +10,7 @@ module ASP
         instance.connection.upload!(StringIO.new(io), File.join(DROP_FOLDER, path))
       end
 
-      def get_all_files!
+      def get_all_files! # rubocop:disable Naming/AccessorMethodName
         Dir
           .mktmpdir("aplypro_asp")
           .tap do |dir|

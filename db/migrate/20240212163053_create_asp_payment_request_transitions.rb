@@ -7,7 +7,7 @@ class CreateASPPaymentRequestTransitions < ActiveRecord::Migration[7.1]
       t.text :metadata, default: "{}"
       t.integer :sort_key, null: false
       t.integer :asp_payment_request_id, null: false
-      t.boolean :most_recent, null: false
+      t.boolean :most_recent, null: false # rubocop:disable Rails/ThreeStateBooleanColumn
 
       # If you decide not to include an updated timestamp column in your transition
       # table, you'll need to configure the `updated_timestamp_column` setting in your
