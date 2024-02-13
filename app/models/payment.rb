@@ -7,6 +7,7 @@ class Payment < ApplicationRecord
     ]
 
   has_many :transitions, class_name: "PaymentTransition", dependent: :destroy
+  has_many :payment_requests, class_name: "ASP::PaymentRequest", dependent: :destroy
 
   belongs_to :pfmp
 
@@ -14,6 +15,10 @@ class Payment < ApplicationRecord
   has_one :schooling, through: :pfmp
 
   validates :amount, numericality: { greater_than: 0 }
+
+  after_create do
+    payment_requests.create!
+  end
 
   def state_machine
     @state_machine ||= PaymentStateMachine.new(

@@ -4,13 +4,12 @@ class PreparePaymentsJob < ApplicationJob
   queue_as :default
 
   def perform
-    Payment
-      .includes(:student)
+    ASP::PaymentRequest
       .in_state(:pending)
-      .find_each do |payment|
-      payment.mark_ready!
+      .find_each do |request|
+      request.mark_ready!
     rescue Statesman::GuardFailedError
-      payment.block!
+      request.mark_incomplete!
     end
   end
 end

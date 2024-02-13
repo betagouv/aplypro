@@ -22,7 +22,17 @@ module ASP
              :current_state, :history, :last_transition, :last_transition_to,
              :transition_to!, :transition_to, :in_state?, to: :state_machine
 
-    def mark_as_sent!
+    def mark_ready!
+      transition_to!(:ready)
+    end
+
+    def mark_incomplete!
+      transition_to!(:incomplete)
+    end
+
+    def mark_as_sent!(request)
+      update!(asp_request: request)
+
       transition_to(:sent)
     end
 
@@ -32,6 +42,10 @@ module ASP
 
     def mark_integrated!(attrs)
       transition_to!(:integrated, attrs)
+    end
+
+    def mark_paid!
+      transition_to!(:paid)
     end
   end
 end
