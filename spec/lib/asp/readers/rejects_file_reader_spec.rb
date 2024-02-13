@@ -5,9 +5,9 @@ require "rails_helper"
 describe ASP::Readers::RejectsFileReader do
   subject(:reader) { described_class.new(data) }
 
-  let(:student) { create(:student) }
-
-  let(:asp_payment_request) { create(:asp_payment_request, :sent) }
+  let(:student) { create(:student, :with_all_asp_info) }
+  let(:payment) { create(:pfmp, :validated, student: student).payments.last }
+  let(:asp_payment_request) { create(:asp_payment_request, :sent, payment: payment) }
 
   let(:reason) { "failwhale" }
 

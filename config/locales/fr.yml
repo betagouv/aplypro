@@ -200,12 +200,27 @@ fr:
         d'établissement sans quoi le paiement ne peut pas être déclenché.
       validated: |
         La PFMP a été validée. La demande de paiement sera envoyée à l'ASP à partir de février 2024.
+  payment_requests:
+    state:
+      pending: "Planifié"
+      ready: "Prêt"
+      incomplete: "Bloqué"
+      sent: "En cours de traitement"
+      integrated: "Dossier accepté"
+    status_explanation:
+      sent: |
+        L'Agence de Services et de Paiement (ASP) est en train de
+        traiter la demande de paiement. Nous n'avons pas encore
+        d'informations disponibles sur le retour du paiement.
+      rejected: "L'instruction du dossier a échoué : %{reject_reason}"
+      integrated: "Le dossier de paiement a été intégré"
+      incomplete: Il manque des informations pour envoyer le paiement
+      ready: Ce paiement est prêt à l'envoi
   payments:
     description:
       failed: La demande de paiement a échouée.
       pending: Cette demande de paiement sera traitée bientôt.
       ready: Ce paiement est prêt à l'envoi
-      blocked: Il manque des informations pour envoyer le paiement
       processing: |
         L'Agence de Services et de Paiement (ASP) est en train de
         traiter la demande de paiement. Nous n'avons pas encore

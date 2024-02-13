@@ -16,8 +16,4 @@ class PaymentStateMachine
   transition from: :ready, to: :processing
   transition from: :processing, to: :successful
   transition from: :processing, to: :failed
-
-  guard_transition(to: :ready) do |payment|
-    ASP::StudentFileEligibilityChecker.new(payment.student).ready?
-  end
 end
