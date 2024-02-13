@@ -5,11 +5,11 @@ require "rails_helper"
 RSpec.describe PreparePaymentsJob do
   include ActiveJob::TestHelper
 
-  let(:payment) { instance_double(Payment) }
+  let(:payment) { instance_double(ASP::PaymentRequest) }
   let(:collection) { double }
 
   before do
-    allow(Payment).to receive(:in_state).and_return(collection)
+    allow(ASP::PaymentRequest).to receive(:in_state).and_return(collection)
 
     allow(collection).to receive(:find_each).and_yield(payment)
   end
@@ -33,7 +33,7 @@ RSpec.describe PreparePaymentsJob do
         error = Statesman::GuardFailedError.new(:pending, :ready, binding)
 
         allow(payment).to receive(:mark_ready!).and_raise(error)
-        allow(payment).to receive(:block!)
+        allow(payment).to receive(:mark_incomplete!)
       end
 
       it "blocks the payment" do
@@ -41,7 +41,7 @@ RSpec.describe PreparePaymentsJob do
           described_class.perform_later
         end
 
-        expect(payment).to have_received(:block!)
+        expect(payment).to have_received(:mark_incomplete!)
       end
     end
   end

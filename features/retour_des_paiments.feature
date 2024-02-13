@@ -31,7 +31,8 @@ Fonctionnalité: Gestion des retours de l'ASP
     Quand la tâche de lecture des paiements démarre
     Et que toutes les tâches de fond sont terminées
     Et que je consulte la dernière PFMP
-    Alors je peux voir un paiement "Échoué" de 30 euros
+    Alors la page contient "L'instruction du dossier a échoué"
+    Et la page contient "mauvais code postal"
 
   Scénario: L'individu a été intégré sur le serveur de l'ASP
     Sachant que le dernier paiement de "Marie Curie" a été envoyé avec un fichier "foobar.xml"
@@ -39,4 +40,4 @@ Fonctionnalité: Gestion des retours de l'ASP
     Quand la tâche de lecture des paiements démarre
     Et que toutes les tâches de fond sont terminées
     Et que je consulte la dernière PFMP
-    Alors je peux voir un paiement "En cours de traitement" de 30 euros
+    Alors la page contient "Le dossier de paiement a été intégré"

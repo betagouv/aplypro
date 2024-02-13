@@ -12,7 +12,7 @@ module ASP
           obj.attach_asp_file(formatter.new(payments))
         end
 
-        instance.mark_payments!(payments)
+        # instance.mark_payments!(payments)
 
         instance
       end
@@ -30,7 +30,7 @@ module ASP
     def mark_payments!(payments)
       ids = payments.pluck(:id)
 
-      Payment.where(id: ids).update(asp_request_id: id)
+      # Payment.where(id: ids).update(asp_request_id: id)
     end
 
     def attach_asp_file(file)
