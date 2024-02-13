@@ -35,12 +35,12 @@ class PaymentsFixer
     checked_amount = 0
 
     pfmps.each do |pfmp|
+      payment, *extra_payments = pfmp.payments
+
       # delete extra payments that should'nt even exist
-      pfmp.payments.drop(1).each(&:destroy) if pfmp.payments.size > 1
+      extra_payments.each(&:destroy)
 
       allowance_left = yearly_cap - checked_amount
-      payment = pfmp.payments.first
-
       computed_amount = [pfmp.day_count * daily_rate, allowance_left].min
 
       if computed_amount.zero?
