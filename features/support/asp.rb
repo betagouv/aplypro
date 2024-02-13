@@ -19,3 +19,7 @@ end
 Before do
   mock_sftp!
 end
+
+After do
+  FileUtils.rm_rf(TEMP_ASP_DIR)
+end
