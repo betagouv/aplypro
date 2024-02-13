@@ -73,7 +73,7 @@ module ASP
     def parse!
       attach_to_request! unless payments_file?
 
-      reader_for(kind).new(filepath).process!
+      reader_for(kind).new(File.read(filepath)).process!
     end
 
     def file_saved?
