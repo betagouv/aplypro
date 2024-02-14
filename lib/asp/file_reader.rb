@@ -8,7 +8,7 @@ module ASP
 
     def initialize(filepath)
       @filepath = filepath
-      @filename = File.basename(filepath)
+      @filename = File.basename(filepath, ".*")
     end
 
     FILE_TYPES.each do |type|
@@ -31,12 +31,10 @@ module ASP
     def original_filename
       return if payments_file?
 
-      no_ext = File.basename(filepath, ".*")
-
       name = if rejects_file?
-               no_ext.split("integ_idp_").last
+               filename.split("integ_idp_").last
              elsif integrations_file?
-               no_ext.split("generes_").last
+               filename.split("generes_").last
              end
 
       "#{name}.xml"
