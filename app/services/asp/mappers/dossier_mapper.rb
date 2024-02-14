@@ -11,8 +11,8 @@ module ASP
 
       attr_reader :schooling
 
-      def initialize(payment)
-        @schooling = payment.schooling
+      def initialize(payment_request)
+        @schooling = payment_request.payment.schooling
       end
 
       MAPPING.each do |name, attr|

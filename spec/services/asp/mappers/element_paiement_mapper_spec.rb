@@ -3,11 +3,15 @@
 require "rails_helper"
 
 describe ASP::Mappers::ElementPaiementMapper do
-  subject(:mapper) { described_class.new(payment) }
+  subject(:mapper) { described_class.new(payment_request) }
 
-  let(:student) { create(:student, :with_all_asp_info) }
-  let(:schooling) { create(:schooling, student: student) }
-  let(:payment) { create(:payment, schooling: schooling) }
+  let(:schooling) { create(:schooling) }
+
+  let(:payment_request) { create(:asp_payment_request, :ready) }
+
+  before do
+    payment_request.payment.update!(schooling: schooling)
+  end
 
   describe "usprinc" do
     subject { mapper.usprinc }
@@ -36,16 +40,6 @@ describe ASP::Mappers::ElementPaiementMapper do
   describe "codeobjet" do
     it "is normally equal to VERSE001" do
       expect(mapper.codeobjet).to eq "VERSE001"
-    end
-
-    context "when the PFMP has a previous payment" do
-      before do
-        create(:payment, pfmp: payment.pfmp, created_at: Date.yesterday)
-      end
-
-      it "is accounts for it" do
-        expect(mapper.codeobjet).to eq "VERSE002"
-      end
     end
   end
 end

@@ -24,8 +24,8 @@ module ASP
 
       attr_reader :student
 
-      def initialize(payment)
-        @student = payment.student
+      def initialize(payment_request)
+        @student = payment_request.student
       end
 
       MAPPING.each do |name, attr|

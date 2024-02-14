@@ -3,13 +3,15 @@
 require "rails_helper"
 
 describe ASP::Entities::PersPhysique, type: :model do
-  let(:student) { create(:student, :female, :with_address_info, :with_birthplace_info, first_name: "Marie") }
-  let(:payment) { create(:payment) }
+  let(:payment_request) { create(:asp_payment_request, :ready) }
+  let(:student) { create(:student, :with_all_asp_info, first_name: "Marie") }
 
-  before { payment.pfmp.update!(student: student) }
+  before do
+    payment_request.payment.schooling.update!(student: student)
+  end
 
   describe "validation" do
-    subject(:model) { described_class.from_payment(payment) }
+    subject(:model) { described_class.from_payment_request(payment_request) }
 
     context "when the student is born in France" do
       let(:student) { create(:student, :with_extra_info, :born_in_france) }
@@ -27,7 +29,7 @@ describe ASP::Entities::PersPhysique, type: :model do
   it_behaves_like "an ASP payment mapping entity"
 
   it_behaves_like "an XML-fragment producer" do
-    let(:entity) { described_class.from_payment(payment) }
+    let(:entity) { described_class.from_payment_request(payment_request) }
     let(:probe) { ["persphysique/prenom", "Marie"] }
   end
 end

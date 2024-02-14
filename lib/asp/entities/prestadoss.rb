@@ -18,9 +18,9 @@ module ASP
       def fragment(xml)
         prestadoss_xml(xml)
 
-        xml.adressesprestadoss { Adresse.from_payment(payment).to_xml(xml) }
-        xml.coordpaiesprestadoss { CoordPaie.from_payment(payment).to_xml(xml) }
-        xml.listeelementpaiement { ElementPaiement.from_payment(payment).to_xml(xml) }
+        xml.adressesprestadoss { Adresse.from_payment_request(payment).to_xml(xml) }
+        xml.coordpaiesprestadoss { CoordPaie.from_payment_request(payment).to_xml(xml) }
+        xml.listeelementpaiement { ElementPaiement.from_payment_request(payment).to_xml(xml) }
       end
 
       private
