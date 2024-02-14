@@ -12,6 +12,10 @@ FactoryBot.define do
       end
     end
 
+    trait :incomplete do
+      after(:create, &:mark_incomplete!)
+    end
+
     trait :sent do
       ready
 
