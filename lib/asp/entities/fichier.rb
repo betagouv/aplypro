@@ -32,7 +32,7 @@ module ASP
       def filename
         [
           "nps_ficimport_idp",
-          "aplypro_test_dev",
+          ENV.fetch("APLYPRO_ASP_FILENAME"),
           filename_timestamp
         ].join("_").concat(".xml")
       end
