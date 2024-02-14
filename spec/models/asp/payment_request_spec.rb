@@ -24,11 +24,22 @@ RSpec.describe ASP::PaymentRequest do
     end
 
     describe "mark_as_sent!" do
-      let(:request) { create(:asp_request) }
+      subject(:asp_payment_request) { create(:asp_payment_request, :ready) }
 
-      it "sets the ASP main request" do
-        expect { asp_payment_request.mark_as_sent!(request) }
-          .to change(asp_payment_request, :asp_request).from(nil).to(request)
+      let!(:request) { create(:asp_request, asp_payment_requests: [asp_payment_request]) }
+
+      it "moves to the sent state" do
+        asp_payment_request.mark_as_sent!
+
+        expect(asp_payment_request.reload).to be_in_state :sent
+      end
+
+      context "when the target request is not set" do
+        before { request.destroy! }
+
+        it "fails the transition" do
+          expect { asp_payment_request.reload.mark_as_sent! }.to raise_error(Statesman::GuardFailedError)
+        end
       end
     end
 

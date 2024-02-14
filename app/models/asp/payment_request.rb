@@ -30,10 +30,8 @@ module ASP
       transition_to!(:incomplete)
     end
 
-    def mark_as_sent!(request)
-      update!(asp_request: request)
-
-      transition_to(:sent)
+    def mark_as_sent!
+      transition_to!(:sent)
     end
 
     def reject!(attrs)
