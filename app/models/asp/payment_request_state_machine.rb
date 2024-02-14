@@ -15,6 +15,7 @@ module ASP
 
     transition from: :pending, to: :ready
     transition from: :pending, to: :incomplete
+    transition from: :incomplete, to: :ready
     transition from: :ready, to: :sent
     transition from: :sent, to: :rejected
     transition from: :sent, to: :integrated
@@ -29,7 +30,7 @@ module ASP
       request.payment.pfmp.update!(asp_prestation_dossier_id: attrs["idPretaDoss"])
     end
 
-    guard_transition(from: :pending, to: :ready) do |request|
+    guard_transition(to: :ready) do |request|
       ASP::StudentFileEligibilityChecker.new(request.payment.student).ready?
     end
 

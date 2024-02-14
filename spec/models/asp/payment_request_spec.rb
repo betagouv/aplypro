@@ -14,6 +14,18 @@ RSpec.describe ASP::PaymentRequest do
     it { is_expected.to be_in_state :pending }
 
     describe "mark_ready!" do
+      context "when the request is incomplete" do
+        let(:asp_payment_request) { create(:asp_payment_request, :incomplete) }
+
+        it "allows the transition" do
+          expect { asp_payment_request.mark_ready! }.not_to raise_error Statesman::TransitionFailedError
+        end
+
+        it "fails the guard" do
+          expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
+        end
+      end
+
       context "when the request is missing information" do
         before { asp_payment_request.payment.student.rib&.destroy }
 
