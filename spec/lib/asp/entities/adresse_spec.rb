@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe ASP::Entities::Adresse, type: :model do
-  subject(:model) { described_class.from_payment(payment) }
+  subject(:model) { described_class.from_payment_request(payment) }
 
   let(:payment) { create(:payment) }
   let(:student) { create(:student, :with_french_address) }
@@ -25,7 +25,7 @@ describe ASP::Entities::Adresse, type: :model do
   end
 
   it_behaves_like "an XML-fragment producer" do
-    let(:entity) { described_class.from_payment(payment) }
+    let(:entity) { described_class.from_payment_request(payment) }
     let(:probe) { ["adresse/codecominsee", student.address_city_insee_code] }
   end
 end

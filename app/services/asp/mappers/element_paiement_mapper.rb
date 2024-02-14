@@ -7,8 +7,8 @@ module ASP
 
       attr_reader :payment
 
-      def initialize(payment)
-        @payment = payment
+      def initialize(payment_request)
+        @payment = payment_request.payment
       end
 
       def codeobjet
