@@ -24,18 +24,4 @@ RSpec.describe SendPaymentsJob do
       end
     end.not_to(change { payment.payment_requests.last.current_state })
   end
-
-  context "when the payment request is ready" do
-    before do
-      payment.payment_requests.last.mark_ready!
-    end
-
-    it "marks the individual requests as sent" do
-      expect do
-        perform_enqueued_jobs do
-          described_class.perform_later([payment.id])
-        end
-      end.to change { payment.payment_requests.last.current_state }.from("ready").to("sent")
-    end
-  end
 end

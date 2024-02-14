@@ -32,5 +32,9 @@ module ASP
     guard_transition(from: :pending, to: :ready) do |request|
       ASP::StudentFileEligibilityChecker.new(request.payment.student).ready?
     end
+
+    guard_transition(from: :ready, to: :sent) do |request|
+      request.asp_request.present?
+    end
   end
 end

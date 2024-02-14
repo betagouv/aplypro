@@ -32,7 +32,10 @@ FactoryBot.define do
       after(:create) do |pfmp|
         pfmp.payments.first.payment_requests.last.tap do |p|
           p.mark_ready!
-          p.mark_as_sent!(ASP::Request.create)
+
+          p.asp_request = ASP::Request.create!
+
+          p.mark_as_sent!
           p.mark_integrated!({})
           p.mark_paid!
         end
@@ -45,7 +48,10 @@ FactoryBot.define do
       after(:create) do |pfmp|
         pfmp.payments.first.payment_requests.last.tap do |p|
           p.mark_ready!
-          p.mark_as_sent!(ASP::Request.create)
+
+          p.asp_request = ASP::Request.create!
+
+          p.mark_as_sent!
           p.reject!({})
         end
       end

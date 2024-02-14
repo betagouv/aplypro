@@ -5,16 +5,20 @@ FactoryBot.define do
     payment
 
     trait :ready do
-      after(:create, &:mark_ready!)
+      after(:create) do |req|
+        req.payment.pfmp.student = create(:student, :with_all_asp_info)
+
+        req.mark_ready!
+      end
     end
 
     trait :sent do
       ready
 
       after(:create) do |obj|
-        asp_request = create(:asp_request)
+        create(:asp_request, asp_payment_requests: [obj])
 
-        obj.mark_as_sent!(asp_request)
+        obj.mark_as_sent!
       end
     end
 
