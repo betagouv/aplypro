@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe SendPaymentsJob do
+RSpec.describe SendPaymentRequestsJob do
   include ActiveJob::TestHelper
 
   let(:student) { create(:student, :with_all_asp_info) }
