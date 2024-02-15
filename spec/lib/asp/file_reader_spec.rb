@@ -56,4 +56,16 @@ describe ASP::FileReader do
       it { is_expected.to be_nil }
     end
   end
+
+  describe "find_request!" do
+    subject(:find_request) { described_class.new(filepath).request }
+
+    before do
+      create(:asp_request, filename: "foobar.xml")
+    end
+
+    let(:filepath) { "tmp/identifiants_generes_foobar.csv" }
+
+    it { is_expected.to be_an ASP::Request }
+  end
 end

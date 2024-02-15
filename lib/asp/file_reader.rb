@@ -45,11 +45,9 @@ module ASP
     end
 
     def find_request!
-      blob = ActiveStorage::Blob.find_by!(filename: original_filename)
-
-      attachment = ActiveStorage::Attachment.find_by!(blob: blob)
-
-      ASP::Request.find(attachment.record_id)
+      ASP::Request
+        .with_attached_file
+        .find { |request| request.file.filename.to_s == original_filename }
     end
 
     def target_attachment
