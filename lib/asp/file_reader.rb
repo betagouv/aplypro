@@ -48,9 +48,10 @@ module ASP
 
     def find_request!
       ASP::Request
-        .with_attached_file
-        .find { |request| request.file.filename.to_s == original_filename }
-        .tap { |result| raise UnmatchedResponseFile if result.nil? }
+        .joins(:file_blob)
+        .find_by!("active_storage_blobs.filename": original_filename)
+    rescue ActiveRecord::RecordNotFound
+      raise UnmatchedResponseFile
     end
 
     def target_attachment
