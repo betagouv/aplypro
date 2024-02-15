@@ -7,7 +7,7 @@ Quand("la tâche de préparation des paiements démarre") do
 end
 
 Quand("la tâche d'envoi des paiements démarre") do
-  SendPaymentsJob.perform_later(Payment.all.map(&:id))
+  SendPaymentRequestsJob.perform_later(Payment.all.map(&:id))
 end
 
 Sachantqu("la tâche de lecture des paiements démarre") do

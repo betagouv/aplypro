@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SendPaymentsJob < ApplicationJob
+class SendPaymentRequestsJob < ApplicationJob
   queue_as :default
 
   def perform(payment_ids)
