@@ -43,7 +43,7 @@ module ASP
       %i[host port user password]
         .index_with { |param| ENV.fetch("APLYPRO_ASP_FTP_#{param.upcase}") }
         .tap do |params|
-        params.merge(encryption: "aes256-cbc") if Rails.env.production?
+        params.merge!(encryption: "aes256-cbc") unless Rails.env.development?
       end
     end
   end
