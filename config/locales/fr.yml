@@ -218,21 +218,6 @@ fr:
       integrated: "Le dossier de paiement a été intégré"
       incomplete: Il manque des informations pour envoyer le paiement
       ready: Ce paiement est prêt à l'envoi
-  payments:
-    description:
-      failed: La demande de paiement a échouée.
-      pending: Cette demande de paiement sera traitée bientôt.
-      ready: Ce paiement est prêt à l'envoi
-      processing: |
-        L'Agence de Services et de Paiement (ASP) est en train de
-        traiter la demande de paiement. Nous n'avons pas encore
-        d'informations disponibles sur le retour du paiement.
-    state:
-      pending: "Planifié"
-      ready: "Prêt"
-      blocked: "Bloqué"
-      failed: "Échoué"
-      processing: "En cours de traitement par l'ASP"
   ministries:
     masa: Ministère de l'Agriculture et de la Souveraineté Alimentaire (MASA)
     menj: Ministère de l'Éducation Nationale et de la Jeunesse (MENJ)
