@@ -67,5 +67,13 @@ describe ASP::FileReader do
     let(:filepath) { "tmp/identifiants_generes_foobar.csv" }
 
     it { is_expected.to be_an ASP::Request }
+
+    context "when there is no such request" do
+      let(:filepath) { "tmp/identifiants_generes_123.csv" }
+
+      it "raises a specific error" do
+        expect { find_request }.to raise_error ASP::Errors::UnmatchedResponseFile
+      end
+    end
   end
 end
