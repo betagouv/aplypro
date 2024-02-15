@@ -2,6 +2,8 @@
 
 require "rails_helper"
 
+require "./mock/factories/asp"
+
 describe ASP::Readers::RejectsFileReader do
   subject(:reader) { described_class.new(data) }
 
@@ -11,10 +13,7 @@ describe ASP::Readers::RejectsFileReader do
 
   let(:reason) { "failwhale" }
 
-  let(:data) do
-    "Numéro d'enregistrement;Type d'entité;Numadm;Motif rejet;idIndDoublon
-#{asp_payment_request.id};;;#{reason};"
-  end
+  let(:data) { build(:asp_reject, payment_request: asp_payment_request, reason: "failwhale") }
 
   describe "payment request transition" do
     subject(:request) { asp_payment_request }

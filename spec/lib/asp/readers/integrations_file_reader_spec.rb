@@ -2,6 +2,8 @@
 
 require "rails_helper"
 
+require "./mock/factories/asp"
+
 describe ASP::Readers::IntegrationsFileReader do
   subject(:reader) { described_class.new(data) }
 
@@ -9,12 +11,7 @@ describe ASP::Readers::IntegrationsFileReader do
   let(:payment) { create(:pfmp, :validated, student: student).payments.last }
   let(:asp_payment_request) { create(:asp_payment_request, :sent, payment: payment) }
 
-  let(:data) do
-    "
-Numero enregistrement;idIndDoss;idIndTiers;idDoss;numAdmDoss;idPretaDoss;numAdmPrestaDoss;idIndPrestaDoss
-#{asp_payment_request.id};700056261;;700086362;ENPUPLF1POP31X20230;700085962;ENPUPLF1POP31X20230;700056261
-"""
-  end
+  let(:data) { build(:asp_integration, payment_request: asp_payment_request, idPretaDoss: "foobar") }
 
   describe "payment request transition" do
     it "updates the matching payment request" do
@@ -24,7 +21,7 @@ Numero enregistrement;idIndDoss;idIndTiers;idDoss;numAdmDoss;idPretaDoss;numAdmP
     it "attaches the row as JSON in the transition metadata" do
       reader.process!
 
-      expect(asp_payment_request.last_transition.metadata["idPretaDoss"]).to eq "700085962"
+      expect(asp_payment_request.last_transition.metadata["idPretaDoss"]).to eq "foobar"
     end
   end
 end
