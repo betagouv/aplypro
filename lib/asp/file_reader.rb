@@ -2,6 +2,8 @@
 
 module ASP
   class FileReader
+    include Errors
+
     attr_reader :filepath, :filename
 
     FILE_TYPES = %i[rejects integrations payments].freeze
@@ -48,6 +50,7 @@ module ASP
       ASP::Request
         .with_attached_file
         .find { |request| request.file.filename.to_s == original_filename }
+        .tap { |result| raise UnmatchedResponseFile if result.nil? }
     end
 
     def target_attachment
