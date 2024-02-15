@@ -5,8 +5,10 @@ class SendPaymentRequestsJob < ApplicationJob
 
   def perform(payment_ids)
     requests = ASP::PaymentRequest
-               .in_state(:ready)
+               .joins(ASP::PaymentRequest.most_recent_transition_join)
                .where(payment: payment_ids)
+
+    raise ASP::Errors::SendingPaymentRequestInWrongState if requests.any? { |req| !req.in_state?(:ready) }
 
     ASP::Request
       .create!(asp_payment_requests: requests)
