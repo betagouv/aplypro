@@ -4,21 +4,9 @@ require "csv"
 
 module ASP
   module Readers
-    class IntegrationsFileReader
-      attr_reader :io
-
-      def initialize(io)
-        @io = io.strip
-      end
-
-      def process!
-        CSV.parse(io, headers: true, col_sep: ";", encoding: "ISO8859-1") do |row|
-          id = row["Numero enregistrement"]
-
-          request = ASP::PaymentRequest.find(id)
-
-          request.mark_integrated!(row.to_h)
-        end
+    class IntegrationsFileReader < CSVReader
+      def handle_request(request, row)
+        request.mark_integrated!(row.to_h)
       end
     end
   end
