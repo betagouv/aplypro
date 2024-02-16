@@ -9,6 +9,8 @@ module ASP
 
       attr_reader :payment
 
+      ASP_NO_MODIFICATION = { modification: "N" }.freeze
+
       class << self
         def payment_mapper_class
           klass = name.demodulize

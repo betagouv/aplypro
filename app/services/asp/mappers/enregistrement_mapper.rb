@@ -12,6 +12,10 @@ module ASP
       def id_enregistrement
         payment_request.id
       end
+
+      def id_individu
+        payment_request.payment.student.asp_individu_id
+      end
     end
   end
 end
