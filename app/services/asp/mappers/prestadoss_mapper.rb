@@ -7,10 +7,11 @@ module ASP
         numadm: :attributive_decision_number
       }.freeze
 
-      attr_reader :schooling
+      attr_reader :schooling, :pfmp
 
       def initialize(payment_request)
-        @schooling = payment_request.payment.schooling
+        @pfmp = payment_request.payment.pfmp
+        @schooling = pfmp.schooling
       end
 
       MAPPING.each do |name, attr|
@@ -31,6 +32,10 @@ module ASP
 
       def valeur
         schooling.establishment.region_code.rjust(3, "0")
+      end
+
+      def id_prestation_dossier
+        pfmp.asp_prestation_dossier_id
       end
     end
   end

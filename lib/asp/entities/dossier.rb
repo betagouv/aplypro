@@ -8,9 +8,14 @@ module ASP
       include ASP::Constants
 
       attribute :numadm, :string
+      attribute :id_dossier, :string
       attribute :codedispositif, :string
 
       validates_presence_of %i[numadm codedispositif]
+
+      def xml_root_args
+        { idDoss: id_dossier, **ASP_NO_MODIFICATION } if id_dossier.present?
+      end
 
       def fragment(xml)
         xml.numadm(numadm)

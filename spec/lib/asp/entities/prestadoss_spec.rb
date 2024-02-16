@@ -24,5 +24,23 @@ describe ASP::Entities::Prestadoss, type: :model do
     it "includes a rib" do
       expect(document.at("coordpaiesprestadoss")).not_to be_nil
     end
+
+    describe "idPrestaDoss" do
+      subject(:attributes) { document.at("prestadoss").attributes }
+
+      let(:pfmp) { payment_request.payment.pfmp }
+
+      context "when the PFMP is registered with the ASP" do
+        before { pfmp.update!(asp_prestation_dossier_id: "foobar") }
+
+        it "includes the registered value in the attribute" do
+          expect(attributes["idPrestaDoss"]).to have_attributes value: "foobar"
+        end
+
+        it "includes the modification flag to false" do
+          expect(attributes["modification"]).to have_attributes value: "N"
+        end
+      end
+    end
   end
 end

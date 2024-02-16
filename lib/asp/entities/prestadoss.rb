@@ -8,12 +8,17 @@ module ASP
       include ASP::Constants
 
       attribute :numadm, :string
+      attribute :id_prestation_dossier, :string
       attribute :datecomplete, :asp_date
       attribute :datereceptionprestadoss, :asp_date
       attribute :montanttotalengage, :string
       attribute :valeur, :string
 
       validates_presence_of %i[numadm datecomplete datereceptionprestadoss montanttotalengage valeur]
+
+      def xml_root_args
+        { idPrestaDoss: id_prestation_dossier, **ASP_NO_MODIFICATION } if id_prestation_dossier.present?
+      end
 
       def fragment(xml)
         prestadoss_xml(xml)

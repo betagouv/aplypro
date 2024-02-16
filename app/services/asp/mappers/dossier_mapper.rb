@@ -6,7 +6,8 @@ module ASP
       include Constants
 
       MAPPING = {
-        numadm: :attributive_decision_number
+        numadm: :attributive_decision_number,
+        id_dossier: :asp_dossier_id
       }.freeze
 
       attr_reader :schooling
