@@ -40,8 +40,27 @@ RSpec.describe Schooling do
     end
   end
 
-  describe "attributive_decision_number" do
-    subject(:number) { schooling.attributive_decision_number }
+  describe "administrative_number" do
+    subject!(:number) { schooling.administrative_number }
+
+    context "when there is already a schooling with that reference" do
+      let(:schooling) { build(:schooling) }
+
+      before do
+        create(:schooling, administrative_number: "foobar")
+
+        allow(SecureRandom)
+          .to receive(:alphanumeric).and_return("FOOBAR").and_return "BATMAN"
+      end
+
+      it "creates a new one" do
+        expect { schooling.generate_administrative_number }.to change(schooling, :administrative_number).to("BATMAN")
+      end
+    end
+  end
+
+  describe "attributive_decision_bop_indicator" do
+    subject(:indicator) { schooling.attributive_decision_number }
 
     context "when the MEF is from the MENJ" do
       context "when the establishment is private" do
@@ -62,6 +81,16 @@ RSpec.describe Schooling do
 
       it { is_expected.to start_with "MASA" }
     end
+  end
+
+  describe "attributive_decision_number" do
+    subject(:number) { schooling.attributive_decision_number }
+
+    let(:schooling) { create(:schooling, :with_attributive_decision) }
+
+    it { is_expected.to include schooling.administrative_number }
+    it { is_expected.to include ENV.fetch("APLYPRO_SCHOOL_YEAR") }
+    it { is_expected.to include schooling.attributive_decision_bop_indicator.upcase }
   end
 
   describe "attributive_decision_version" do
