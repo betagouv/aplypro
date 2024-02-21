@@ -54,6 +54,12 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
     Alors la page contient "Télécharger 10 décisions d'attribution"
     Et le panneau "Décisions d'attribution" contient "10 / 10"
 
+  Scénario: Le personnel voit le bouton pour générer des décisions d'attribution même si il n'y a que des anciens élèves qui n'en ont pas
+    Lorsque les anciens élèves sont les seuls à ne pas avoir de décision d'attribution
+    Et que je me rends sur la page d'accueil
+    Alors la page contient "Télécharger 9 décisions d'attribution"
+    Et la page contient "Éditer la décision d'attribution manquante"
+
   Scénario: Le personnel peut renseigner des coordonnées bancaires pour des anciens élèves
     Quand je consulte la classe de "1MELEC"
     Et que je clique sur "Saisir 10 coordonnées bancaires"
