@@ -102,15 +102,15 @@ class Establishment < ApplicationRecord
   end
 
   def some_attributive_decisions?
-    active_schoolings.with_attributive_decisions.any?
+    schoolings.with_attributive_decisions.any?
   end
 
   def missing_attributive_decisions?
-    active_schoolings.without_attributive_decisions.any?
+    schoolings.without_attributive_decisions.any?
   end
 
   def some_attributive_decisions_generating?
-    active_schoolings.generating_attributive_decision.any?
+    schoolings.generating_attributive_decision.any?
   end
 
   def ensure_confirmed_director_is_director
