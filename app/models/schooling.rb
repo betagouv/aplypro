@@ -21,6 +21,18 @@ class Schooling < ApplicationRecord
   validates :student, uniqueness: { scope: :end_date }, if: :open?
   validates :student, uniqueness: { scope: :classe }, if: :closed?
 
+  def generate_administrative_number
+    return if administrative_number.present?
+
+    loop do
+      self.administrative_number = SecureRandom.alphanumeric(10).upcase
+
+      break unless Schooling.exists?(administrative_number: administrative_number)
+    end
+
+    self
+  end
+
   def closed?
     end_date.present?
   end
@@ -54,7 +66,7 @@ class Schooling < ApplicationRecord
   def attributive_decision_number
     [
       attributive_decision_bop_indicator,
-      student.asp_file_reference,
+      administrative_number,
       ENV.fetch("APLYPRO_SCHOOL_YEAR"),
       attributive_decision_version
     ].join.upcase
