@@ -127,4 +127,22 @@ RSpec.describe Pfmp do
       end
     end
   end
+
+  describe "relative_index" do
+    subject(:index) { pfmp.relative_index }
+
+    it { is_expected.to eq 0 }
+
+    context "when there are multiple PFMPs" do
+      before do
+        create(:pfmp, schooling: schooling, created_at: Date.yesterday)
+        create(:pfmp, schooling: schooling, created_at: Date.yesterday)
+        create(:pfmp, schooling: schooling, created_at: Date.tomorrow)
+      end
+
+      it "accounts for them" do
+        expect(index).to eq 2
+      end
+    end
+  end
 end

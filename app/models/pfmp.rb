@@ -72,4 +72,12 @@ class Pfmp < ApplicationRecord
   def payment_due?
     student.allowance_left(mef).positive?
   end
+
+  def relative_index
+    schooling.pfmps.pluck(:id).find_index(id)
+  end
+
+  def relative_human_index
+    relative_index + 1
+  end
 end
