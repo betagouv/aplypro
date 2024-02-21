@@ -6,7 +6,7 @@ class Schooling < ApplicationRecord
   belongs_to :student
   belongs_to :classe
 
-  has_many :pfmps, dependent: :destroy
+  has_many :pfmps, -> { order("pfmps.created_at" => :asc) }, dependent: :destroy, inverse_of: :schooling
 
   has_one :mef, through: :classe
   has_one :establishment, through: :classe
