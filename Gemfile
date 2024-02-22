@@ -76,7 +76,7 @@ gem "sidekiq"
 
 gem "dry-transformer"
 
-gem "zipline", github: "symmetRE-Inc/zipline"
+gem "zipline", "~> 1.6"
 
 # payments: XML mapping
 gem "nokogiri"
