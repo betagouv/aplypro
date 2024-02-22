@@ -10,7 +10,7 @@ Cette application sert de support aux personnels de lycées professionnels pour 
 
 - Docker
 - Ruby on Rails
-- Postgresql
+- PostgreSQL
 - RSpec
 - Cucumber
 - Keycloak : Gestion des utilisateurs
@@ -27,40 +27,16 @@ make up
 
 ## Commandes utiles
 
-### Lancer le serveur
-```sh
-make up
-```
+Les commandes les plus fréquentes sont répertoriées et peuvent être
+lancées à travers le fichier `Makefile`. Ces commandes sont démarrées
+dans Docker.
 
-### Reconstruire l'image docker
+Entre autres :
 
-```sh
-make build
-```
-
-### Lancer une console rails
-
-```sh
-make cl
-```
-
-### Lancer une console bash
-
-```sh
-make sh
-```
-
-## Lancer guard
-
-```sh
-make guard
-```
-
-## Lancer le linter
-
-```sh
-make lint
-```
+- `make cl` : lance une console Rails ;
+- `make guard` : lance [Guard](https://github.com/guard/guard) ;
+- `make sh` : lance un terminal ;
+- `make lint` : lance Rubocop.
 
 # Vocabulaire
 
@@ -77,7 +53,7 @@ Systèmes d'Autentification :
   - Ne passe pas par notre Keycloak (à changer)
 
 Sources de données :
-- SYGNE : Expose les données des élèves du MENJ, provenant de la Base Établissements Élèves (BEE) 
+- SYGNE : Expose les données des élèves du MENJ, provenant de la Base Établissements Élèves (BEE)
 - FREGATA : Expose les données des élèves du MASA, provenant d'Educagri
 - [data.education.gouv.fr](https://data.education.gouv.fr/api/v1/console/records/1.0/search/?dataset=fr-en-annuaire-education) : Données publiques des établissements. Ces données proviennent de RAMSES (appli de l'éducation nationale) et de l'[ONISEP](https://www.onisep.fr/ressources/univers-lycee/lycees/hauts-de-france/oise/lycee-professionnel-arthur-rimbaud).
 
