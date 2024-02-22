@@ -35,7 +35,7 @@ Quand("l'élève {string} {string} a une ancienne scolarité dans un autre étab
   FactoryBot.create(:schooling, student: student, classe: other_classe, end_date: Date.yesterday)
 end
 
-Quand("les anciens élèves sont les seuls à ne pas avoir de décision d'attribution") do
+Quand("les élèves actuels sont les seuls à avoir des décisions d'attribution") do
   establishment = Establishment.last
 
   establishment.schoolings.current.find_each do |schooling|

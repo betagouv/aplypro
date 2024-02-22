@@ -55,7 +55,7 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
     Et le panneau "Décisions d'attribution" contient "10 / 10"
 
   Scénario: Le personnel voit le bouton pour générer des décisions d'attribution même si il n'y a que des anciens élèves qui n'en ont pas
-    Lorsque les anciens élèves sont les seuls à ne pas avoir de décision d'attribution
+    Lorsque les élèves actuels sont les seuls à avoir des décisions d'attribution
     Et que je me rends sur la page d'accueil
     Alors la page contient "Télécharger 9 décisions d'attribution"
     Et la page contient "Éditer la décision d'attribution manquante"
