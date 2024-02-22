@@ -20,7 +20,7 @@ class AddAdministrativeNumberToSchoolings < ActiveRecord::Migration[7.1]
       .with_attributive_decisions
       .where(administrative_number: nil)
       .find_each do |schooling|
-      GenerateAttributiveDecisionJob.perform_later(schooling.id)
+      GenerateAttributiveDecisionJob.perform_later(schooling)
     end
   end
 
