@@ -1,26 +1,35 @@
 # frozen_string_literal: true
 
 class AddAdministrativeNumberToSchoolings < ActiveRecord::Migration[7.1]
+  # rubocop:disable Metrics/AbcSize
   def migrate_single_attributive_decision!
-    Student
-      .joins(:schoolings)
-      .merge(Schooling.with_attributive_decisions)
-      .group(:id)
-      .having("count(schoolings.id) < 2")
-      .find_each do |student|
-      # unclear whether `student.schoolings` is cached and has the
-      # filter applied so reapply the scope to make sure we target the
-      # right schooling
-      student.schoolings.with_attributive_decisions.first.update!(administrative_number: student.asp_file_reference)
+    students = Student
+               .joins(:schoolings)
+               .merge(Schooling.with_attributive_decisions)
+               .group(:id)
+               .having("count(schoolings.id) = 1")
+               .pluck(:id, :asp_file_reference)
+               .to_h
+
+    Schooling
+      .with_attributive_decisions
+      .where(student_id: students.keys)
+      .find_in_batches do |models|
+      models.each { |schooling| schooling.administrative_number = students[schooling.student_id] }
+
+      Schooling.upsert_all(models.map(&:attributes), update_only: [:administrative_number]) # rubocop:disable Rails/SkipsModelValidations
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def migrate_multiple_attributive_decisions!
     Schooling
       .with_attributive_decisions
       .where(administrative_number: nil)
-      .find_each do |schooling|
-      GenerateAttributiveDecisionJob.perform_later(schooling)
+      .find_in_batches do |schoolings|
+      jobs = schoolings.map { |schooling| GenerateAttributiveDecisionJob.perform_later(schooling) }
+
+      ActiveJob.perform_all_later(jobs)
     end
   end
 
