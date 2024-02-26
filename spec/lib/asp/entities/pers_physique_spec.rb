@@ -8,6 +8,8 @@ describe ASP::Entities::PersPhysique, type: :model do
 
   before do
     payment_request.payment.schooling.update!(student: student)
+
+    payment_request.reload
   end
 
   describe "validation" do

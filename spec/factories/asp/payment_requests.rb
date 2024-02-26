@@ -6,7 +6,7 @@ FactoryBot.define do
 
     trait :ready do
       after(:create) do |req|
-        req.payment.pfmp.student = create(:student, :with_all_asp_info)
+        req.payment.pfmp.student = create(:student, :with_all_asp_info, :underage)
 
         req.mark_ready!
       end

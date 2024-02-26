@@ -69,5 +69,13 @@ FactoryBot.define do
 
       with_birthplace_info
     end
+
+    trait :underage do
+      birthdate { Faker::Date.birthday(min_age: 16, max_age: 17) }
+    end
+
+    trait :adult do
+      birthdate { Faker::Date.birthday(min_age: 18, max_age: 20) }
+    end
   end
 end
