@@ -31,7 +31,11 @@ module ASP
     end
 
     guard_transition(to: :ready) do |request|
-      ASP::StudentFileEligibilityChecker.new(request.payment.student).ready?
+      ASP::StudentFileEligibilityChecker.new(request.student).ready?
+    end
+
+    guard_transition(to: :ready) do |request|
+      !request.student.adult_without_personal_rib?
     end
 
     guard_transition(from: :ready, to: :sent) do |request|

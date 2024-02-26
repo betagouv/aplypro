@@ -33,6 +33,19 @@ RSpec.describe ASP::PaymentRequest do
           expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
         end
       end
+
+      context "when the request belongs to a student over 18 with an external rib" do
+        let(:student) { create(:student, :with_all_asp_info, :adult) }
+
+        before do
+          asp_payment_request.payment.pfmp.update!(student: student)
+          student.rib.update!(personal: false)
+        end
+
+        it "blocks the transition" do
+          expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
+        end
+      end
     end
 
     describe "mark_as_sent!" do

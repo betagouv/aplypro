@@ -69,6 +69,18 @@ class Student < ApplicationRecord
     address.blank?
   end
 
+  def underage?
+    birthdate > 18.years.ago
+  end
+
+  def adult?
+    !underage?
+  end
+
+  def adult_without_personal_rib?
+    adult? && !rib.personal?
+  end
+
   private
 
   def check_asp_file_reference
