@@ -28,4 +28,12 @@ describe ASP::Readers::RejectsFileReader do
       expect(request.last_transition.metadata["Motif rejet"]).to eq "failwhale"
     end
   end
+
+  context "when the original ISO-8859-1 encoding is used by the ASP" do
+    let(:data) { File.read("spec/lib/asp/readers/rejets_mock.csv") }
+
+    it "can still process the file" do
+      expect { reader.process! }.not_to raise_error(Encoding::CompatibilityError)
+    end
+  end
 end
