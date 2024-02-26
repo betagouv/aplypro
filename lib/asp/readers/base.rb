@@ -5,8 +5,12 @@ module ASP
     class Base
       attr_reader :io
 
-      def initialize(io)
-        @io = io.strip
+      def initialize(str)
+        @io = handle_input(str)
+      end
+
+      def handle_input(str)
+        str.strip
       end
 
       def process!
