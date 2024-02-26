@@ -1,4 +1,5 @@
 # language: fr
+@wip
 Fonctionnalité: Gestion des paiements
   Contexte:
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
