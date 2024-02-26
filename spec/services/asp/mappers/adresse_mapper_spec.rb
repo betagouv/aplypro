@@ -13,4 +13,16 @@ describe ASP::Mappers::AdresseMapper do
       expect(mapper.send(name)).to eq student[mapping]
     end
   end
+
+  describe "codeinseepays" do
+    subject(:code) { mapper.codeinseepays }
+
+    before do
+      allow(InseeCountryCodeMapper).to receive(:call).and_return :value
+    end
+
+    it "delegates to the INSEE country code mapper" do
+      expect(code).to eq :value
+    end
+  end
 end

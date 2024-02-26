@@ -7,7 +7,6 @@ module ASP
 
       MAPPING = {
         codecominsee: :address_city_insee_code,
-        codeinseepays: :address_country_code,
         codepostalcedex: :address_postal_code,
         bureaudistribetranger: :address_postal_code
       }.freeze
@@ -28,6 +27,10 @@ module ASP
 
       def localiteetranger
         student.address[..37]
+      end
+
+      def codeinseepays
+        InseeCountryCodeMapper.call(student.address_country_code)
       end
     end
   end
