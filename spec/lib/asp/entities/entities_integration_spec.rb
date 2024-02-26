@@ -15,7 +15,14 @@ require "rails_helper"
 describe "ASP Entities" do # rubocop:disable RSpec/DescribeClass
   subject(:file) { ASP::Entities::Fichier.new(payment_requests) }
 
-  let(:payment_requests) { create_list(:asp_payment_request, 3, :ready) }
+  let(:students) { create_list(:student, 3, :with_all_asp_info) }
+  let(:payment_requests) { ASP::PaymentRequest.all }
+
+  before do
+    students.each do |student|
+      create(:pfmp, :validated, student: student)
+    end
+  end
 
   it "produce valid documents" do
     log_on_failure = -> { file.errors.each { |e| puts "ASP validation error: #{e.message}\n" } }
