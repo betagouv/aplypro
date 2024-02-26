@@ -23,16 +23,7 @@
     - if @pfmp.in_state?(:completed)
       anticipé
 
-  - if @pfmp.payments.any?
-    - payment = @pfmp.payments.last
-
-    %strong= number_to_currency(payment.amount)
-
-    - req = payment.payment_requests.last
-
-    - if req.present?
-      = req.badge
-      = req.status_explanation
+  %p= number_to_currency(@pfmp.calculate_amount)
 
   %h2.fr-h5 Actions
   .fr-btns-group.fr-btns-group--inline
