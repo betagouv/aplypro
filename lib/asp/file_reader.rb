@@ -73,7 +73,13 @@ module ASP
     def parse!
       attach_to_request! unless payments_file?
 
-      reader_for(kind).new(File.read(filepath)).process!
+      reader = reader_for(kind).new(File.read(filepath))
+
+      begin
+        reader.process!
+      rescue StandardError => e
+        raise ResponseFileParsingError, "couldn't parse #{filename}: #{e}"
+      end
     end
 
     def file_saved?
