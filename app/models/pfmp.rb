@@ -52,7 +52,9 @@ class Pfmp < ApplicationRecord
   end
 
   def setup_payment!
-    payments.create!(amount: calculate_amount) if payment_due?
+    amount = calculate_amount
+
+    payments.create!(amount: amount) if amount.positive?
   end
 
   def calculate_amount
@@ -67,10 +69,6 @@ class Pfmp < ApplicationRecord
   # FIXME: use has_one instead
   def latest_payment
     payments.last
-  end
-
-  def payment_due?
-    student.allowance_left(mef).positive?
   end
 
   def relative_index
