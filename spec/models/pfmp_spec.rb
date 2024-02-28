@@ -83,28 +83,28 @@ RSpec.describe Pfmp do
   end
 
   describe "calculate_amount" do
-    before do
-      pfmp.day_count = 10
-      pfmp.transition_to!(:completed)
+    let(:amount) { mef.wage.daily_rate * pfmp.day_count }
+
+    before { pfmp.update!(day_count: 10) }
+
+    context "when the amount is over the allowance left" do
+      before do
+        allow(pfmp.student).to receive(:allowance_left).and_return(amount - 1)
+      end
+
+      it "returns the allowance left" do
+        expect(pfmp.calculate_amount).to eq amount - 1
+      end
     end
 
-    it "is equal to the number of days time the daily rate" do
-      expect(pfmp.calculate_amount).to eq(mef.wage.daily_rate * pfmp.day_count)
-    end
+    context "when the amount is under the allowance left" do
+      before do
+        allow(pfmp.student).to receive(:allowance_left).and_return(amount + 1)
+      end
 
-    it "takes into account the yearly cap" do
-      pfmp.day_count = 200
-
-      expect(pfmp.calculate_amount).to eq mef.wage.yearly_cap
-    end
-
-    it "takes into account the previous payments" do
-      yearly_cap = mef.wage.yearly_cap
-
-      paid = create(:pfmp, :paid, day_count: 3, schooling: pfmp.schooling)
-      paid.payments.first.update!(amount: yearly_cap - 10)
-
-      expect(pfmp.calculate_amount).to eq(10)
+      it "returns the amount" do
+        expect(pfmp.calculate_amount).to eq amount
+      end
     end
   end
 

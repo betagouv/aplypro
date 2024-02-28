@@ -44,4 +44,42 @@ RSpec.describe PollPaymentsServerJob do
       expect(server_double).to have_received(:remove_file!).with(path: "foobar")
     end
   end
+
+  context "when the original request can't be found" do
+    before do
+      allow(double).to receive(:parse!).and_raise ASP::Errors::UnmatchedResponseFile
+    end
+
+    it "does not remove the file off the server" do
+      perform_enqueued_jobs { described_class.perform_later }
+
+      expect(server_double).not_to have_received(:remove_file!).with(path: "foobar")
+    end
+  end
+
+  context "when the request can't be processed" do
+    before do
+      allow(double).to receive(:parse!).and_raise ASP::Errors::ResponseFileParsingError
+    end
+
+    context "when the file has been attached" do
+      before { allow(double).to receive(:file_saved?).and_return true }
+
+      it "deletes it on the server" do
+        perform_enqueued_jobs { described_class.perform_later }
+
+        expect(server_double).to have_received(:remove_file!).with(path: "foobar")
+      end
+    end
+
+    context "when the file has not been attached" do
+      before { allow(double).to receive(:file_saved?).and_return false }
+
+      it "doesn't delete it on the server" do
+        perform_enqueued_jobs { described_class.perform_later }
+
+        expect(server_double).not_to have_received(:remove_file!).with(path: "foobar")
+      end
+    end
+  end
 end

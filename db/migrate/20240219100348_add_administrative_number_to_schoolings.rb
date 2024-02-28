@@ -13,8 +13,10 @@ class AddAdministrativeNumberToSchoolings < ActiveRecord::Migration[7.1]
 
     Schooling
       .with_attributive_decisions
-      .where(student_id: students.keys)
-      .find_in_batches do |models|
+      .where(student_id: students.keys, administrative_number: nil)
+      .find_in_batches.with_index do |models, idx|
+      Rails.logger.debug { "processing batch #{idx}..." }
+
       models.each { |schooling| schooling.administrative_number = students[schooling.student_id] }
 
       Schooling.upsert_all(models.map(&:attributes), update_only: [:administrative_number]) # rubocop:disable Rails/SkipsModelValidations
