@@ -6,7 +6,7 @@ describe ASP::Mappers::DossierMapper do
   subject(:mapper) { described_class.new(payment_request) }
 
   let(:payment_request) { create(:asp_payment_request, :ready) }
-  let(:schooling) { payment_request.payment.schooling }
+  let(:schooling) { payment_request.schooling }
 
   describe "#numadm" do
     it "returns the schooling's DA number" do

@@ -7,9 +7,7 @@ require "./mock/factories/asp"
 describe ASP::Readers::RejectsFileReader do
   subject(:reader) { described_class.new(data) }
 
-  let(:student) { create(:student, :with_all_asp_info) }
-  let(:payment) { create(:pfmp, :validated, student: student).payments.last }
-  let(:asp_payment_request) { create(:asp_payment_request, :sent, payment: payment) }
+  let(:asp_payment_request) { create(:asp_payment_request, :sent) }
 
   let(:reason) { "failwhale" }
 

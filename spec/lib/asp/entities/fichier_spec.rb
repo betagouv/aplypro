@@ -3,9 +3,9 @@
 require "rails_helper"
 
 describe ASP::Entities::Fichier do
-  subject(:file) { described_class.new(payments) }
+  subject(:file) { described_class.new(requests) }
 
-  let(:payments) { create_list(:payment, 1) }
+  let(:requests) { create_list(:asp_payment_request, 1, :ready) }
 
   describe "to_xml" do
     subject(:document) { Nokogiri::XML(file.to_xml) }
@@ -17,7 +17,7 @@ describe ASP::Entities::Fichier do
     end
 
     context "when there are multiple students" do
-      let(:payments) { create_list(:payment, 3) }
+      let(:requests) { create_list(:asp_payment_request, 3, :ready) }
 
       it "includes one record per payment" do
         expect(document / "ENREGISTREMENT").to have(3).elements

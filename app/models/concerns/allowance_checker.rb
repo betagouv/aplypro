@@ -11,8 +11,9 @@ module AllowanceChecker
     private
 
     def paid_amount_for_mef(mef)
-      payments
-        .joins(schooling: :classe)
+      pfmps
+        .joins(:classe)
+        .where.not(amount: nil)
         .where("classe.mef_id": mef.id, "classe.start_year": ENV.fetch("APLYPRO_SCHOOL_YEAR"))
         .sum(&:amount)
     end

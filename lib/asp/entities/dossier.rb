@@ -21,7 +21,7 @@ module ASP
         xml.numadm(numadm)
         xml.codedispositif(codedispositif)
         xml.listeprestadoss do
-          Prestadoss.from_payment_request(payment).to_xml(xml)
+          Prestadoss.from_payment_request(payment_request).to_xml(xml)
         end
       end
     end

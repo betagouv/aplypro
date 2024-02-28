@@ -14,7 +14,7 @@ module ASP
       end
 
       def id_individu
-        payment_request.payment.student.asp_individu_id
+        payment_request.student.asp_individu_id
       end
     end
   end

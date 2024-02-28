@@ -7,9 +7,7 @@ require "./mock/factories/asp"
 describe ASP::Readers::IntegrationsFileReader do
   subject(:reader) { described_class.new(data) }
 
-  let(:student) { create(:student, :with_all_asp_info) }
-  let(:payment) { create(:pfmp, :validated, student: student).payments.last }
-  let(:asp_payment_request) { create(:asp_payment_request, :sent, payment: payment) }
+  let(:asp_payment_request) { create(:asp_payment_request, :sent) }
 
   let(:data) { build(:asp_integration, payment_request: asp_payment_request, idPretaDoss: "foobar") }
 

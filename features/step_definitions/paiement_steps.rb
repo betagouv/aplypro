@@ -7,7 +7,7 @@ Quand("la tâche de préparation des paiements démarre") do
 end
 
 Quand("la tâche d'envoi des paiements démarre") do
-  SendPaymentRequestsJob.perform_later(Payment.all.map(&:id))
+  SendPaymentRequestsJob.perform_later(ASP::PaymentRequest.all)
 end
 
 Sachantqu("la tâche de lecture des paiements démarre") do
@@ -30,7 +30,7 @@ Sachantque(
   first_name, last_name = name.split
   student = Student.find_by(first_name:, last_name:)
 
-  request = student.payments.last.payment_requests.last
+  request = student.pfmps.last.payment_requests.last
 
   steps %(
     Sachant que l'ASP a mis a disposition un fichier "#{filename}" contenant :
@@ -45,7 +45,7 @@ Sachantque("l'ASP a accepté le dossier de {string} dans un fichier {string}") d
   first_name, last_name = name.split
   student = Student.find_by(first_name:, last_name:)
 
-  request = student.payments.last.payment_requests.last
+  request = student.pfmps.last.payment_requests.last
 
   steps %(
     Sachant que l'ASP a mis a disposition un fichier "#{filename}" contenant :
@@ -59,12 +59,12 @@ end
 Sachantque("le dernier paiement de {string} a été envoyé avec un fichier {string}") do |name, filename|
   first_name, last_name = name.split
 
-  payment = Student
-            .find_by(first_name:, last_name:)
-            .payments
-            .last
+  pfmp = Student
+         .find_by(first_name:, last_name:)
+         .pfmps
+         .last
 
-  payment.payment_requests.last.asp_request.file.update!(filename: filename)
+  pfmp.payment_requests.last.asp_request.file.update!(filename: filename)
 end
 
 Alors("je peux voir un paiement {string} de {int} euros") do |state, amount|

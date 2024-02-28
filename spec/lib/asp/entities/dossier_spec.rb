@@ -18,7 +18,7 @@ describe ASP::Entities::Dossier, type: :model do
     context "when the schooling has an ASP reference" do
       subject(:attributes) { document.at("dossier").attributes }
 
-      before { payment_request.payment.schooling.update!(asp_dossier_id: "foobar") }
+      before { payment_request.schooling.update!(asp_dossier_id: "foobar") }
 
       it "passes it along in IdDoss" do
         expect(attributes["idDoss"]).to have_attributes value: "foobar"

@@ -26,8 +26,6 @@ class Student < ApplicationRecord
 
   has_one :establishment, through: :classe
 
-  has_many :payments, through: :pfmps
-
   has_many :ribs, dependent: :destroy
 
   has_one :rib, -> { where(archived_at: nil) }, dependent: :destroy, inverse_of: :student
@@ -55,10 +53,6 @@ class Student < ApplicationRecord
 
   def index_name
     [last_name, first_name].join(" ")
-  end
-
-  def used_allowance
-    payments.in_state(:successful).map(&:amount).sum
   end
 
   def close_current_schooling!(date = Time.zone.today)
