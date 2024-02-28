@@ -2,7 +2,6 @@
 
 class Pfmp < ApplicationRecord
   belongs_to :schooling
-
   has_one :classe, through: :schooling
   has_one :student, through: :schooling
 
@@ -10,7 +9,8 @@ class Pfmp < ApplicationRecord
   has_one :establishment, through: :classe
 
   has_many :transitions, class_name: "PfmpTransition", autosave: false, dependent: :destroy
-  has_many :payments, -> { order("payments.created_at" => :asc) }, dependent: :destroy, inverse_of: :pfmp
+
+  has_many :payment_requests, class_name: "ASP::PaymentRequest", dependent: :destroy
 
   validates :start_date, :end_date, presence: true
 
@@ -56,7 +56,9 @@ class Pfmp < ApplicationRecord
   def setup_payment!
     amount = calculate_amount
 
-    payments.create!(amount: amount) if amount.positive?
+    update!(amount: amount)
+
+    payment_requests.create! if amount.positive?
   end
 
   def calculate_amount
@@ -66,11 +68,6 @@ class Pfmp < ApplicationRecord
       day_count * wage.daily_rate,
       student.allowance_left(mef)
     ].min
-  end
-
-  # FIXME: use has_one instead
-  def latest_payment
-    payments.last
   end
 
   def relative_index

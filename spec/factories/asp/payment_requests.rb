@@ -2,11 +2,11 @@
 
 FactoryBot.define do
   factory :asp_payment_request, class: "ASP::PaymentRequest" do
-    payment
+    pfmp
 
     trait :ready do
       after(:create) do |req|
-        req.payment.pfmp.student = create(:student, :with_all_asp_info, :underage)
+        req.pfmp.student = create(:student, :with_all_asp_info, :underage)
 
         req.mark_ready!
       end

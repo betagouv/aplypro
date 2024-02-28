@@ -7,7 +7,7 @@ describe ASP::Entities::PersPhysique, type: :model do
   let(:student) { create(:student, :with_all_asp_info, first_name: "Marie") }
 
   before do
-    payment_request.payment.schooling.update!(student: student)
+    payment_request.schooling.update!(student: student)
 
     payment_request.reload
   end

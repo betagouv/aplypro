@@ -25,9 +25,9 @@ module ASP
     after_transition(from: :sent, to: :integrated) do |request, transition|
       attrs = transition.metadata
 
-      request.payment.student.update!(asp_individu_id: attrs["idIndDoss"])
-      request.payment.schooling.update!(asp_dossier_id: attrs["idDoss"])
-      request.payment.pfmp.update!(asp_prestation_dossier_id: attrs["idPretaDoss"])
+      request.student.update!(asp_individu_id: attrs["idIndDoss"])
+      request.schooling.update!(asp_dossier_id: attrs["idDoss"])
+      request.pfmp.update!(asp_prestation_dossier_id: attrs["idPretaDoss"])
     end
 
     guard_transition(to: :ready) do |request|

@@ -6,7 +6,6 @@ RSpec.describe SendPaymentRequestsJob do
   include ActiveJob::TestHelper
 
   let(:asp_payment_request) { create(:payment_request, :ready) }
-  let(:payment) { payment_request.payment }
 
   let(:server_double) { class_double(ASP::Server) }
 
@@ -20,7 +19,7 @@ RSpec.describe SendPaymentRequestsJob do
     let(:payment_request) { create(:asp_payment_request, :incomplete) }
 
     it "raises an error" do
-      expect { described_class.perform_now([payment.id]) }
+      expect { described_class.perform_now([payment_request.id]) }
         .to raise_error ASP::Errors::SendingPaymentRequestInWrongState
     end
   end

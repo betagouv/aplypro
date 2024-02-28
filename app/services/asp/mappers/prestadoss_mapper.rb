@@ -6,7 +6,7 @@ module ASP
       attr_reader :schooling, :pfmp
 
       def initialize(payment_request)
-        @pfmp = payment_request.payment.pfmp
+        @pfmp = payment_request.pfmp
         @schooling = pfmp.schooling
       end
 
