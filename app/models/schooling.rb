@@ -6,7 +6,7 @@ class Schooling < ApplicationRecord
   belongs_to :student
   belongs_to :classe
 
-  has_many :pfmps, dependent: :destroy
+  has_many :pfmps, -> { order("pfmps.created_at" => :asc) }, dependent: :destroy, inverse_of: :schooling
 
   has_one :mef, through: :classe
   has_one :establishment, through: :classe
@@ -20,6 +20,18 @@ class Schooling < ApplicationRecord
 
   validates :student, uniqueness: { scope: :end_date }, if: :open?
   validates :student, uniqueness: { scope: :classe }, if: :closed?
+
+  def generate_administrative_number
+    return if administrative_number.present?
+
+    loop do
+      self.administrative_number = SecureRandom.alphanumeric(10).upcase
+
+      break unless Schooling.exists?(administrative_number: administrative_number)
+    end
+
+    self
+  end
 
   def closed?
     end_date.present?
@@ -54,7 +66,7 @@ class Schooling < ApplicationRecord
   def attributive_decision_number
     [
       attributive_decision_bop_indicator,
-      student.asp_file_reference,
+      administrative_number,
       ENV.fetch("APLYPRO_SCHOOL_YEAR"),
       attributive_decision_version
     ].join.upcase

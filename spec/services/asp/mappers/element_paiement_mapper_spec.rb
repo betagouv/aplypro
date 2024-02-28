@@ -3,11 +3,15 @@
 require "rails_helper"
 
 describe ASP::Mappers::ElementPaiementMapper do
-  subject(:mapper) { described_class.new(payment) }
+  subject(:mapper) { described_class.new(payment_request) }
 
-  let(:student) { create(:student) }
-  let(:schooling) { create(:schooling, student: student) }
-  let(:payment) { create(:payment, schooling: schooling) }
+  let(:schooling) { create(:schooling) }
+
+  let(:payment_request) { create(:asp_payment_request, :ready) }
+
+  before do
+    payment_request.payment.update!(schooling: schooling)
+  end
 
   describe "usprinc" do
     subject { mapper.usprinc }
@@ -34,18 +38,8 @@ describe ASP::Mappers::ElementPaiementMapper do
   end
 
   describe "codeobjet" do
-    context "when the student has no successful payments yet" do
-      it "marks it as the first one" do
-        expect(mapper.codeobjet).to eq "VERSE001"
-      end
-    end
-
-    context "when the student has previous payments" do
-      before { create_list(:payment, 3, :successful, pfmp: payment.pfmp) }
-
-      it "adds the correct index" do
-        expect(mapper.codeobjet).to eq "VERSE004"
-      end
+    it "is normally equal to VERSE001" do
+      expect(mapper.codeobjet).to eq "VERSE001"
     end
   end
 end

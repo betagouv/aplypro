@@ -11,8 +11,8 @@ describe StudentApi::Sygne do
   let(:student_data) { Rails.root.join("mock/data/sygne-student.json").read }
 
   before do
-    mock_sygne_token_with
-    mock_sygne_students_endpoint_with(establishment.uai, data)
+    mock_sygne_token
+    mock_sygne_students_endpoint(establishment.uai, data)
   end
 
   it "grabs an access token before calling the API" do

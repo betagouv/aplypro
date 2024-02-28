@@ -22,14 +22,37 @@ FactoryBot.define do
       end
     end
 
+    trait :with_pending_payment do
+      validated
+    end
+
     trait :paid do
       validated
 
       after(:create) do |pfmp|
-        pfmp.payments.first.tap do |p|
+        pfmp.payments.first.payment_requests.last.tap do |p|
           p.mark_ready!
-          p.process!
-          p.complete!
+
+          p.asp_request = ASP::Request.create!
+
+          p.mark_as_sent!
+          p.mark_integrated!({})
+          p.mark_paid!
+        end
+      end
+    end
+
+    trait :with_failed_payment do
+      validated
+
+      after(:create) do |pfmp|
+        pfmp.payments.first.payment_requests.last.tap do |p|
+          p.mark_ready!
+
+          p.asp_request = ASP::Request.create!
+
+          p.mark_as_sent!
+          p.reject!({})
         end
       end
     end

@@ -8,8 +8,12 @@ FactoryBot.define do
     mefstat11 { Faker::Number.number(digits: 11) }
     ministry { Mef.ministries[:menj] }
 
-    after :create do |m|
-      create(:wage, mefstat4: m.mefstat4, ministry: m.ministry, mef_codes: [m.code])
+    transient do
+      wage { create(:wage) } # rubocop:disable FactoryBot/FactoryAssociationWithStrategy
+    end
+
+    after :create do |mef, evaluator|
+      evaluator.wage.update!(mefstat4: mef.mefstat4, ministry: mef.ministry, mef_codes: [mef.code])
     end
   end
 end

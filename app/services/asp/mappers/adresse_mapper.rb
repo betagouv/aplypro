@@ -7,14 +7,14 @@ module ASP
 
       MAPPING = {
         codecominsee: :address_city_insee_code,
-        codeinseepays: :address_country_code,
-        codepostalcedex: :address_postal_code
+        codepostalcedex: :address_postal_code,
+        bureaudistribetranger: :address_postal_code
       }.freeze
 
       attr_reader :student
 
-      def initialize(payment)
-        @student = payment.student
+      def initialize(payment_request)
+        @student = payment_request.student
       end
 
       MAPPING.each do |name, attr|
@@ -23,6 +23,14 @@ module ASP
 
       def codetypeadr
         PRINCIPAL_ADDRESS_TYPE
+      end
+
+      def localiteetranger
+        student.address[..37]
+      end
+
+      def codeinseepays
+        InseeCountryCodeMapper.call(student.address_country_code)
       end
     end
   end

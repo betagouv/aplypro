@@ -3,18 +3,17 @@
 module ASP
   module Mappers
     class PrestadossMapper
-      MAPPING = {
-        numadm: :attributive_decision_number
-      }.freeze
+      attr_reader :schooling, :pfmp
 
-      attr_reader :schooling
-
-      def initialize(payment)
-        @schooling = payment.schooling
+      def initialize(payment_request)
+        @pfmp = payment_request.payment.pfmp
+        @schooling = pfmp.schooling
       end
 
-      MAPPING.each do |name, attr|
-        define_method(name) { schooling.send(attr) }
+      def numadm
+        index = pfmp.relative_human_index.to_s.rjust(2, "0")
+
+        schooling.attributive_decision_number + index
       end
 
       def datecomplete
@@ -31,6 +30,10 @@ module ASP
 
       def valeur
         schooling.establishment.region_code.rjust(3, "0")
+      end
+
+      def id_prestation_dossier
+        pfmp.asp_prestation_dossier_id
       end
     end
   end

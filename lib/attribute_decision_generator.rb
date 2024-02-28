@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "hexapdf"
+
 # rubocop:disable all
 class AttributeDecisionGenerator
   include ActionView::Helpers::NumberHelper
@@ -15,6 +17,7 @@ class AttributeDecisionGenerator
 
   def generate!(file_descriptor)
     Schooling.transaction do
+      schooling.generate_administrative_number.tap(&:save!)
       schooling.increment!(:attributive_decision_version)
 
       render
@@ -180,7 +183,7 @@ class AttributeDecisionGenerator
 
     director = establishment.confirmed_director || establishment.users.directors.first
 
-    composer.text("Numéro de dossier administratif : #{student.asp_file_reference}")
+    composer.text("Numéro de dossier administratif : #{schooling.administrative_number}")
     composer.text("Numéro de décision attributive : #{schooling.attributive_decision_number}")
     composer.text("Bénéficiaire : #{student}")
     composer.text("Adresse email de l'établissement : #{establishment.email}")

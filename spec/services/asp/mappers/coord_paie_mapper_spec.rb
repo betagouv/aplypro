@@ -3,12 +3,10 @@
 require "rails_helper"
 
 describe ASP::Mappers::CoordPaieMapper do
-  subject(:mapper) { described_class.new(payment) }
+  subject(:mapper) { described_class.new(payment_request) }
 
-  let(:payment) { create(:payment) }
-  let(:rib) { create(:student, :with_rib).rib }
-
-  before { payment.pfmp.update!(student: rib.student) }
+  let(:payment_request) { create(:asp_payment_request, :ready) }
+  let(:rib) { payment_request.student.rib }
 
   context "when the BIC ends in 'XXX'" do
     before { rib.update!(bic: "ASTPGB2LXXX") }

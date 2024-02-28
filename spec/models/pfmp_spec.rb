@@ -3,13 +3,12 @@
 require "rails_helper"
 
 RSpec.describe Pfmp do
-  subject(:pfmp) do
-    create(:pfmp, schooling: schooling).tap { |p| p.payments.destroy_all }
-  end
+  subject(:pfmp) { create(:pfmp, schooling: schooling) }
 
   let(:mef) { create(:mef) }
   let(:classe) { create(:classe, mef: mef) }
-  let(:schooling) { create(:schooling) }
+  let(:student) { create(:student, :with_all_asp_info) }
+  let(:schooling) { create(:schooling, student: student) }
 
   describe "associations" do
     it { is_expected.to belong_to(:schooling) }
@@ -77,7 +76,7 @@ RSpec.describe Pfmp do
     it "sorts them chronologically" do
       payments = [5, 0, -2]
                  .map { |n| Time.zone.now + n.days }
-                 .map { |date| create(:payment, pfmp:, updated_at: date) }
+                 .map { |date| create(:payment, pfmp:, created_at: date) }
 
       expect(pfmp.reload.payments).to eq payments.reverse
     end
@@ -100,19 +99,12 @@ RSpec.describe Pfmp do
     end
 
     it "takes into account the previous payments" do
-      create(:pfmp, :paid, schooling: schooling)
+      yearly_cap = mef.wage.yearly_cap
+
+      paid = create(:pfmp, :paid, day_count: 3, schooling: pfmp.schooling)
+      paid.payments.first.update!(amount: yearly_cap - 10)
 
       expect(pfmp.calculate_amount).to eq(10)
-    end
-
-    it "does not take into account the previous, failed payments" do
-      create(:payment, :failed, pfmp: pfmp, amount: 1000)
-
-      expect(pfmp.calculate_amount).to eq(mef.wage.daily_rate * pfmp.day_count)
-    end
-
-    it "does not take into account the pending payments" do
-      skip "unclear what to do if there is some pending allowance"
     end
   end
 
@@ -128,24 +120,29 @@ RSpec.describe Pfmp do
     end
 
     context "when the student has already reached the yearly cap" do
-      before do
-        create(:pfmp, :validated, schooling: pfmp.schooling, day_count: 200).tap do |pfmp|
-          pfmp.latest_payment
-              .tap(&:mark_ready!)
-              .tap(&:process!)
-              .tap(&:complete!)
-        end
-      end
+      before { create(:pfmp, :paid, schooling: pfmp.schooling, day_count: 1000) }
 
       it "does not create a payment" do
         expect { pfmp.setup_payment! }.not_to change(Payment, :count)
       end
     end
+  end
 
-    # context "when there is a successful payment" do
-    #   before do
-    #     create(:payment, :successful, pfmp:)
-    #   end
-    # end
+  describe "relative_index" do
+    subject(:index) { pfmp.relative_index }
+
+    it { is_expected.to eq 0 }
+
+    context "when there are multiple PFMPs" do
+      before do
+        create(:pfmp, schooling: schooling, created_at: Date.yesterday)
+        create(:pfmp, schooling: schooling, created_at: Date.yesterday)
+        create(:pfmp, schooling: schooling, created_at: Date.tomorrow)
+      end
+
+      it "accounts for them" do
+        expect(index).to eq 2
+      end
+    end
   end
 end

@@ -9,7 +9,6 @@ module ASP
         nomnaissance: :last_name,
         datenaissance: :birthdate,
         sexe: :biological_sex,
-        codeinseepaysnai: :birthplace_country_insee_code,
         codeinseecommune: :birthplace_city_insee_code
       }.freeze
 
@@ -24,8 +23,8 @@ module ASP
 
       attr_reader :student
 
-      def initialize(payment)
-        @student = payment.student
+      def initialize(payment_request)
+        @student = payment_request.student
       end
 
       MAPPING.each do |name, attr|
@@ -34,6 +33,10 @@ module ASP
 
       def titre
         GENDER_FOR_SEX[student.biological_sex.to_sym]
+      end
+
+      def codeinseepaysnai
+        InseeCountryCodeMapper.call(student.birthplace_country_insee_code)
       end
     end
   end

@@ -13,14 +13,15 @@ require "rails_helper"
 # other specs in it felt wrong, and probably indicates this code will
 # live somewhere else in the future.
 describe "ASP Entities" do # rubocop:disable RSpec/DescribeClass
-  subject(:file) { ASP::Entities::Fichier.new(payments) }
+  subject(:file) { ASP::Entities::Fichier.new(payment_requests) }
 
-  let(:payments) do
-    student = create(:student, :born_in_france, :with_extra_info, :with_rib, :with_french_address)
-    pfmp = create(:pfmp, student: student)
-    payment = create(:payment, pfmp: pfmp)
+  let(:students) { create_list(:student, 3, :with_all_asp_info) }
+  let(:payment_requests) { ASP::PaymentRequest.all }
 
-    [payment]
+  before do
+    students.each do |student|
+      create(:pfmp, :validated, student: student)
+    end
   end
 
   it "produce valid documents" do

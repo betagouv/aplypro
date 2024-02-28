@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# FIXME: avoid stateful steps
 Lorsque("je renseigne des coordonnées bancaires") do
   steps %(
     Quand je remplis les informations bancaires de "#{@student.full_name}"
@@ -13,6 +14,16 @@ Quand("je remplis les informations bancaires de {string}") do |name|
 
   steps %(
     Quand je remplis "Titulaire du compte" avec "#{name}"
+    Et que je remplis "IBAN" avec "#{rib.iban}"
+    Et que je remplis "BIC" avec "#{rib.bic}"
+  )
+end
+
+Quand("je saisis des coordonnées bancaires") do
+  rib = FactoryBot.build(:rib)
+
+  steps %(
+    Quand je remplis "Titulaire du compte" avec "#{rib.name}"
     Et que je remplis "IBAN" avec "#{rib.iban}"
     Et que je remplis "BIC" avec "#{rib.bic}"
   )

@@ -22,7 +22,7 @@ module ASP
 
             xml.enregistrements do
               @payments.each do |payment|
-                Entities::Enregistrement.from_payment(payment).to_xml(xml)
+                Entities::Enregistrement.from_payment_request(payment).to_xml(xml)
               end
             end
           end
@@ -32,7 +32,7 @@ module ASP
       def filename
         [
           "nps_ficimport_idp",
-          "aplypro_test_dev",
+          ENV.fetch("APLYPRO_ASP_FILENAME"),
           filename_timestamp
         ].join("_").concat(".xml")
       end

@@ -25,10 +25,10 @@
       %li= link_to "Supprimer les coordonnées bancaires", confirm_deletion_class_student_rib_path(@classe, @student, @student.rib), class: 'fr-btn fr-btn--secondary'
 
 %section.fr-mt-3w
-  %h2.fr-h4 
+  %h2.fr-h4
     PFMPs dans la classe
     = @classe.label
-  
+
   = closed_schooling_information_tag(@schooling, class: "fr-mb-2w")
 
   - if @pfmps.none?

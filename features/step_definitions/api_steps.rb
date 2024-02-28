@@ -9,7 +9,7 @@ Sachantque(
 ) do |count, classe, ine, uai|
   @sygne_results = []
 
-  mock_sygne_token_with
+  mock_sygne_token
 
   payload = FactoryBot.build_list(:sygne_student, count, classe: classe).tap do |students|
     students.last["ine"] = ine
@@ -17,7 +17,38 @@ Sachantque(
 
   @sygne_results << payload
 
-  mock_sygne_students_endpoint_with(uai, payload)
+  mock_sygne_students_endpoint(uai, payload)
+end
+
+Sachantque(
+  "l'API SYGNE renvoie {int} élèves " \
+  "dans la classe de {string} formation {string} " \
+  "dont {string}, INE {string} pour l'établissement {string}"
+) do |count, classe, mef, name, ine, uai| # rubocop:disable Metrics/ParameterLists
+  mock_sygne_token
+
+  @sygne_results = []
+
+  first_name, last_name = name.split
+
+  mef = Mef.find_by!(label: mef)
+
+  payload = FactoryBot.build_list(:sygne_student, count, classe: classe, mef: mef.code.concat("0")).tap do |students|
+    students.last["ine"] = ine
+    students.last["prenom"] = first_name
+    students.last["nom"] = last_name
+  end
+
+  @sygne_results << payload
+
+  mock_sygne_students_endpoint(uai, payload)
+end
+
+# ce step permet de mocker l'API SYGNE sans inclure la logique des
+# autres steps qui construisent les données passées en paramètre.
+Sachantque("l'API SYGNE peut renvoyer des élèves pour l'établissement {string}") do |uai|
+  mock_sygne_token
+  mock_sygne_students_endpoint(uai, [])
 end
 
 Sachantque("l'API FREGATA renvoie une liste d'élèves pour l'établissement {string}") do |uai|
@@ -35,13 +66,13 @@ end
 Sachantque("l'API SYGNE renvoie un élève avec l'INE {string} qui a quitté l'établissement {string}") do |ine, uai|
   payload_without_student = @sygne_results.last.dup.reject { |student| student["ine"] == ine }
 
-  mock_sygne_token_with
-  mock_sygne_students_endpoint_with(uai, payload_without_student)
+  mock_sygne_token
+  mock_sygne_students_endpoint(uai, payload_without_student)
 end
 
 Sachantque("l'API SYGNE renvoie {int} nouvel/nouveaux élève(s) pour l'établissement {string}") do |count, uai|
   payload = FactoryBot.build_list(:sygne_student, count)
 
-  mock_sygne_token_with
-  mock_sygne_students_endpoint_with(uai, payload)
+  mock_sygne_token
+  mock_sygne_students_endpoint(uai, payload)
 end

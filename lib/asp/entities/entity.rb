@@ -9,6 +9,8 @@ module ASP
 
       attr_reader :payment
 
+      ASP_NO_MODIFICATION = { modification: "N" }.freeze
+
       class << self
         def payment_mapper_class
           klass = name.demodulize
@@ -16,7 +18,7 @@ module ASP
           "ASP::Mappers::#{klass}Mapper".constantize
         end
 
-        def from_payment(payment)
+        def from_payment_request(payment)
           raise ArgumentError, "cannot make a #{name} instance with a nil payment" if payment.nil?
 
           mapper = payment_mapper_class.new(payment)

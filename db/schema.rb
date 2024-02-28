@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_23_163436) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_19_100348) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,33 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_23_163436) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "asp_payment_request_transitions", force: :cascade do |t|
+    t.string "to_state", null: false
+    t.text "metadata", default: "{}"
+    t.integer "sort_key", null: false
+    t.integer "asp_payment_request_id", null: false
+    t.boolean "most_recent", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["asp_payment_request_id", "most_recent"], name: "index_asp_payment_request_transitions_parent_most_recent", unique: true, where: "most_recent"
+    t.index ["asp_payment_request_id", "sort_key"], name: "index_asp_payment_request_transitions_parent_sort", unique: true
+  end
+
+  create_table "asp_payment_requests", force: :cascade do |t|
+    t.bigint "asp_request_id"
+    t.bigint "payment_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["asp_request_id"], name: "index_asp_payment_requests_on_asp_request_id"
+    t.index ["payment_id"], name: "index_asp_payment_requests_on_payment_id"
+  end
+
+  create_table "asp_requests", force: :cascade do |t|
+    t.datetime "sent_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "classes", force: :cascade do |t|
@@ -111,18 +138,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_23_163436) do
     t.index ["mefstat11"], name: "index_mefs_on_mefstat11"
   end
 
-  create_table "payment_transitions", force: :cascade do |t|
-    t.string "to_state", null: false
-    t.text "metadata", default: "{}"
-    t.integer "sort_key", null: false
-    t.integer "payment_id", null: false
-    t.boolean "most_recent", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["payment_id", "most_recent"], name: "index_payment_transitions_parent_most_recent", unique: true, where: "most_recent"
-    t.index ["payment_id", "sort_key"], name: "index_payment_transitions_parent_sort", unique: true
-  end
-
   create_table "payments", force: :cascade do |t|
     t.bigint "pfmp_id", null: false
     t.float "amount"
@@ -150,6 +165,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_23_163436) do
     t.datetime "updated_at", null: false
     t.integer "day_count"
     t.bigint "schooling_id", null: false
+    t.string "asp_prestation_dossier_id"
     t.index ["schooling_id"], name: "index_pfmps_on_schooling_id"
   end
 
@@ -175,6 +191,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_23_163436) do
     t.datetime "updated_at", null: false
     t.integer "attributive_decision_version", default: 0
     t.boolean "generating_attributive_decision", default: false, null: false
+    t.string "asp_dossier_id"
+    t.string "administrative_number"
+    t.index ["administrative_number"], name: "index_schoolings_on_administrative_number", unique: true
     t.index ["classe_id"], name: "index_schoolings_on_classe_id"
     t.index ["student_id", "classe_id"], name: "one_schooling_per_class_student", unique: true
     t.index ["student_id"], name: "index_schoolings_on_student_id"
@@ -198,6 +217,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_23_163436) do
     t.string "birthplace_city_insee_code"
     t.string "birthplace_country_insee_code"
     t.integer "biological_sex", default: 0
+    t.string "asp_individu_id"
     t.index ["asp_file_reference"], name: "index_students_on_asp_file_reference", unique: true
     t.index ["ine"], name: "index_students_on_ine", unique: true
   end
@@ -227,16 +247,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_23_163436) do
 
   create_table "wages", force: :cascade do |t|
     t.integer "daily_rate", null: false
+    t.string "mefstat4", null: false
     t.integer "yearly_cap", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "mefstat4", null: false
     t.integer "ministry", null: false
     t.jsonb "mef_codes"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "asp_payment_request_transitions", "asp_payment_requests"
+  add_foreign_key "asp_payment_requests", "asp_requests"
+  add_foreign_key "asp_payment_requests", "payments"
   add_foreign_key "classes", "mefs"
   add_foreign_key "establishment_user_roles", "establishments"
   add_foreign_key "establishment_user_roles", "users"
@@ -244,7 +267,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_23_163436) do
   add_foreign_key "establishments", "users", column: "confirmed_director_id"
   add_foreign_key "invitations", "establishments"
   add_foreign_key "invitations", "users"
-  add_foreign_key "payment_transitions", "payments"
   add_foreign_key "payments", "pfmps"
   add_foreign_key "pfmp_transitions", "pfmps"
   add_foreign_key "pfmps", "schoolings"

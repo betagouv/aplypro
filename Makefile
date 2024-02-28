@@ -1,4 +1,4 @@
-DOCKER-RUN = docker-compose run -e TERM --rm --entrypoint=""
+DOCKER-RUN = docker-compose run -e TERM -e DISABLE_SPRING_WATCHER_LISTEN=1 --rm --entrypoint=""
 BUNDLE-EXEC = bundle exec
 
 build:

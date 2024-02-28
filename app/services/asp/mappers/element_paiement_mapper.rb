@@ -7,18 +7,14 @@ module ASP
 
       attr_reader :payment
 
-      def initialize(payment)
-        @payment = payment
+      def initialize(payment_request)
+        @payment = payment_request.payment
       end
 
       def codeobjet
-        existing = payment
-                   .student
-                   .payments
-                   .in_state(:successful)
-                   .count
+        index = payment.pfmp.payments.find_index { |p| p == payment }
 
-        "VERSE00#{existing + 1}"
+        "VERSE00#{index + 1}"
       end
 
       def codetypeversement

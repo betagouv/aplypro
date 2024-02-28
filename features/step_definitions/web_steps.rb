@@ -13,7 +13,7 @@ Quand("je clique sur {string}") do |label|
 end
 
 Alors("la page contient {string}") do |content|
-  expect(page).to have_content(content)
+  expect(page).to have_content(content).or(have_button(content))
 end
 
 Alors("la page ne contient pas {string}") do |content|

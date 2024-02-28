@@ -35,7 +35,7 @@ RSpec.describe FetchStudentInformationJob, :student_api do
     let(:sygne_api) { instance_double(StudentApi::Sygne) }
 
     before do
-      WebmockHelpers.mock_sygne_token_with(token)
+      WebmockHelpers.mock_sygne_token(token)
       WebmockHelpers.mock_sygne_student_endpoint_with(student.ine, payload)
     end
 

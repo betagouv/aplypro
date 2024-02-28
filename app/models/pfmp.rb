@@ -10,7 +10,7 @@ class Pfmp < ApplicationRecord
   has_one :establishment, through: :classe
 
   has_many :transitions, class_name: "PfmpTransition", autosave: false, dependent: :destroy
-  has_many :payments, -> { order(updated_at: :asc) }, dependent: :destroy, inverse_of: :pfmp
+  has_many :payments, -> { order("payments.created_at" => :asc) }, dependent: :destroy, inverse_of: :pfmp
 
   validates :start_date, :end_date, presence: true
 
@@ -47,6 +47,10 @@ class Pfmp < ApplicationRecord
     end
   end
 
+  def validate!
+    transition_to!(:validated)
+  end
+
   def setup_payment!
     payments.create!(amount: calculate_amount) if payment_due?
   end
@@ -65,23 +69,15 @@ class Pfmp < ApplicationRecord
     payments.last
   end
 
-  def payable?
-    student.rib.present?
-  end
-
   def payment_due?
-    student.allowance_left(mef) > 0 # rubocop:disable Style:NumericPredicate
+    student.allowance_left(mef).positive?
   end
 
-  def breakdown
-    I18n.t("pfmps.breakdown", days: day_count, rate: wage.daily_rate, total: calculate_amount)
+  def relative_index
+    schooling.pfmps.pluck(:id).find_index(id)
   end
 
-  def payment_state
-    if payable?
-      latest_payment.state_machine.current_state
-    else
-      :blocked
-    end
+  def relative_human_index
+    relative_index + 1
   end
 end

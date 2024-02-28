@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Student < ApplicationRecord
+  include AllowanceChecker
+
   validates :ine,
             :first_name,
             :last_name,
@@ -50,10 +52,6 @@ class Student < ApplicationRecord
     payments.in_state(:successful).map(&:amount).sum
   end
 
-  def allowance_left(mef)
-    mef.wage.yearly_cap - used_allowance
-  end
-
   def close_current_schooling!(date = Time.zone.today)
     current_schooling&.update!(end_date: date)
   end
@@ -69,6 +67,18 @@ class Student < ApplicationRecord
 
   def missing_address?
     address.blank?
+  end
+
+  def underage?
+    birthdate > 18.years.ago
+  end
+
+  def adult?
+    !underage?
+  end
+
+  def adult_without_personal_rib?
+    adult? && !rib.personal?
   end
 
   private

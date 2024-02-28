@@ -1,11 +1,3 @@
-test:
-  service: Disk
-  root: <%= Rails.root.join("tmp/storage") %>
-
-local:
-  service: Disk
-  root: <%= Rails.root.join("storage") %>
-
 # Use bin/rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 ovh:
   service: S3
@@ -14,6 +6,14 @@ ovh:
   endpoint: <%= ENV.fetch("APLYPRO_S3_ENDPOINT") %>
   region: <%= ENV.fetch("APLYPRO_S3_REGION") %>
   bucket: <%= ENV.fetch("APLYPRO_S3_BUCKET") %>
+
+ovh_asp:
+  service: S3
+  access_key_id: <%= ENV.fetch("APLYPRO_S3_ACCESS_KEY_ID") %>
+  secret_access_key: <%= ENV.fetch("APLYPRO_S3_SECRET_KEY_ID") %>
+  endpoint: <%= ENV.fetch("APLYPRO_S3_ENDPOINT") %>
+  region: <%= ENV.fetch("APLYPRO_S3_REGION") %>
+  bucket: <%= ENV.fetch("APLYPRO_S3_PAYMENTS_BUCKET") %>
 
 # Remember not to checkin your GCS keyfile to a repository
 # google:
