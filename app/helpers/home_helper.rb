@@ -66,7 +66,10 @@ module HomeHelper
   end
 
   def pfmp_badge(status, count, **args)
-    count_tag = content_tag(:div, count || 0, class: "fr-mr-1w")
+    count ||= 0
+    return if count.zero? && !args[:display_zero]
+
+    count_tag = content_tag(:div, count, class: "fr-mr-1w")
 
     content_tag(:div, class: "fr-badge-group no-wrap #{args[:class]}", "aria-label": t("pfmps.states.#{status}")) do
       safe_join([count_tag, status_badge(status)], " ")
