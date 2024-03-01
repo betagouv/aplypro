@@ -30,7 +30,9 @@ FactoryBot.define do
       sent
 
       after(:create) do |obj|
-        obj.mark_integrated!({})
+        result = build(:asp_integration, payment_request: obj)
+
+        ASP::Readers::IntegrationsFileReader.new(result).process!
       end
     end
 
