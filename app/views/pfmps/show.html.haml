@@ -23,7 +23,7 @@
     - if @pfmp.in_state?(:completed)
       anticipé
 
-  %p= number_to_currency(@pfmp.calculate_amount)
+  %p= number_to_currency(@pfmp.amount)
 
   %h2.fr-h5 Actions
   .fr-btns-group.fr-btns-group--inline
