@@ -3,7 +3,7 @@
 World(ActionView::Helpers::NumberHelper)
 
 Quand("la tâche de préparation des paiements démarre") do
-  PreparePaymentsJob.perform_later
+  PreparePaymentRequestsJob.perform_later
 end
 
 Quand("la tâche d'envoi des paiements démarre") do
