@@ -78,3 +78,14 @@ Sources de données :
 - MEF : Module élémentaire de formation. Voir [la base de nomenclature](https://infocentre.pleiade.education.fr/bcn/workspace/viewTable/n/N_MEF).
 - Schooling : Scolarité. Relie un élève à sa classe.
 - Classe : Chaque classe est reliée à un code MEF.
+
+
+### Vocabulaire des paiements
+ASP : Agence de Services et de Paiement
+
+Correspondances entre leurs modèles et les notres :
+
+- Individu -> Student
+- Dossier -> Schooling
+- Prestation Dossier (prestadoss) -> Pfmp
+- Liste Element Paiement -> PaymentRequest
