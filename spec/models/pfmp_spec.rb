@@ -109,18 +109,18 @@ RSpec.describe Pfmp do
   end
 
   describe "setup_payment!" do
-    subject(:pfmp) do
-      create(:pfmp, :completed, schooling: schooling).tap { |p| p.payments.destroy_all }
+    before do
+      pfmp.update!(day_count: 10)
     end
 
-    context "when there are no payments" do
-      it "creates a new payment" do
-        expect { pfmp.setup_payment! }.to change(Payment, :count).by(1)
+    it "creates a new payment" do
+      expect { pfmp.setup_payment! }.to change(Payment, :count).by(1)
+    end
+
+    context "when there is no allowance left" do
+      before do
+        create(:pfmp, :validated, schooling: schooling, day_count: 100)
       end
-    end
-
-    context "when the student has already reached the yearly cap" do
-      before { create(:pfmp, :paid, schooling: pfmp.schooling, day_count: 1000) }
 
       it "does not create a payment" do
         expect { pfmp.setup_payment! }.not_to change(Payment, :count)

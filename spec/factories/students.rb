@@ -55,7 +55,9 @@ FactoryBot.define do
     end
 
     trait :with_rib do
-      rib
+      after(:create) do |student|
+        create(:rib, student: student)
+      end
     end
 
     trait :born_in_france do

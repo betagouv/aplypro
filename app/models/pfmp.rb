@@ -20,6 +20,8 @@ class Pfmp < ApplicationRecord
 
   validates :day_count, numericality: { only_integer: true, allow_nil: true, greater_than: 0 }
 
+  scope :finished, -> { where("pfmps.end_date <= (?)", Time.zone.today) }
+
   include Statesman::Adapters::ActiveRecordQueries[
     transition_class: PfmpTransition,
     initial_state: PfmpStateMachine.initial_state,
@@ -52,7 +54,9 @@ class Pfmp < ApplicationRecord
   end
 
   def setup_payment!
-    payments.create!(amount: calculate_amount) if payment_due?
+    amount = calculate_amount
+
+    payments.create!(amount: amount) if amount.positive?
   end
 
   def calculate_amount
@@ -67,10 +71,6 @@ class Pfmp < ApplicationRecord
   # FIXME: use has_one instead
   def latest_payment
     payments.last
-  end
-
-  def payment_due?
-    student.allowance_left(mef).positive?
   end
 
   def relative_index
