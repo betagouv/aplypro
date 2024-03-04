@@ -35,6 +35,26 @@ describe ASP::FileReader do
     end
   end
 
+  context "when the file is a payment returns file" do
+    let(:basename) { "renvoi_paiement_APLYPROTEST_20240129.xml" }
+
+    it "creates a new ASP::PaymentReturn" do
+      expect { reader.parse! }.to change(ASP::PaymentReturn, :count).by(1)
+    end
+
+    it "attaches the file to the record" do
+      reader.parse!
+
+      expect(ASP::PaymentReturn.last.file).to be_attached
+    end
+
+    it "stores the filename on the record too" do
+      reader.parse!
+
+      expect(ASP::PaymentReturn.last.filename).to eq basename
+    end
+  end
+
   describe "#original_filename" do
     subject { described_class.new(filepath).original_filename }
 
