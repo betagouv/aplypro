@@ -19,7 +19,7 @@ RSpec.describe SendPaymentRequestsJob do
     let(:payment_request) { create(:asp_payment_request, :incomplete) }
 
     it "raises an error" do
-      expect { described_class.perform_now([payment_request.id]) }
+      expect { described_class.perform_now([payment_request]) }
         .to raise_error ASP::Errors::SendingPaymentRequestInWrongState
     end
   end
