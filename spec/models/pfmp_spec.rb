@@ -96,12 +96,26 @@ RSpec.describe Pfmp do
         expect(pfmp.calculate_amount).to eq amount
       end
     end
+
+    context "when the amount is updated" do
+      it "updates the amount" do
+        expect { pfmp.update!(day_count: 20) }.to change(pfmp, :amount).from(amount).to(amount * 2)
+      end
+
+      context "with a validated PFMP" do
+        before do
+          pfmp.validate!
+        end
+
+        it "throws an error" do
+          expect { pfmp.update!(day_count: 15) }.to raise_error(/day count changed/)
+        end
+      end
+    end
   end
 
   describe "setup_payment!" do
-    before do
-      pfmp.update!(day_count: 10)
-    end
+    subject(:pfmp) { create(:pfmp, schooling: schooling, day_count: 10) }
 
     it "creates a new payment" do
       expect { pfmp.setup_payment! }.to change(ASP::PaymentRequest, :count).by(1)

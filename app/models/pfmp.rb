@@ -49,15 +49,27 @@ class Pfmp < ApplicationRecord
     end
   end
 
+  after_save :handle_amount_change
+
+  def handle_amount_change
+    changed_day_count = day_count_before_last_save != day_count
+
+    return if !changed_day_count
+
+    raise "A validated PFMP cannot have its day count changed." if in_state?(:validated)
+
+    update_amount!
+  end
+
   def validate!
     transition_to!(:validated)
   end
 
+  def update_amount!
+    update!(amount: calculate_amount)
+  end
+
   def setup_payment!
-    amount = calculate_amount
-
-    update!(amount: amount)
-
     payment_requests.create! if amount.positive?
   end
 
