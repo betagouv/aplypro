@@ -71,7 +71,7 @@ module ASP
     end
 
     def parse!
-      attach_to_request! unless payments_file?
+      persist_file!
 
       reader = reader_for(kind).new(File.read(filepath))
 
@@ -82,8 +82,24 @@ module ASP
       end
     end
 
+    def persist_file!
+      if payments_file?
+        persist_payment_file!
+      else
+        attach_to_request!
+      end
+    end
+
+    def persist_payment_file!
+      ASP::PaymentReturn.create_with_file!(io: File.read(filepath), filename: "#{filename}.xml")
+    end
+
     def file_saved?
-      target_attachment.attached?
+      if payments_file?
+        ASP::PaymentReturn.exists?(filename: filename)
+      else
+        target_attachment.attached?
+      end
     end
   end
 end
