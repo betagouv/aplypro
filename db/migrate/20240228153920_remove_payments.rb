@@ -13,7 +13,7 @@ class RemovePayments < ActiveRecord::Migration[7.1]
 
       pfmps = payments.map do |payment|
         payment.pfmp.tap { |pfmp| pfmp.amount = payment.amount }
-      end
+      end.uniq
 
       Pfmp.upsert_all(pfmps.map(&:attributes), update_only: [:amount]) # rubocop:disable Rails/SkipsModelValidations
     end
