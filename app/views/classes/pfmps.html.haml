@@ -19,5 +19,5 @@
           %td= pfmp.student.classe
           %td= pfmp.student
           %td= pfmp.status_badge
-          %td= number_to_currency(pfmp.calculate_amount)
+          %td= number_to_currency(pfmp.amount)
           %td= dsfr_link_to 'Voir la PFMP', class_schooling_pfmp_path(class_id: pfmp.schooling.classe.id, student_id: pfmp.schooling.id, id: pfmp.id)

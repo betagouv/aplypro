@@ -6,7 +6,6 @@ RSpec.describe ASP::PaymentRequest do
   subject(:asp_payment_request) { create(:asp_payment_request) }
 
   describe "associations" do
-    it { is_expected.to belong_to(:payment) }
     it { is_expected.to belong_to(:asp_request).optional }
   end
 
@@ -27,7 +26,7 @@ RSpec.describe ASP::PaymentRequest do
       end
 
       context "when the request is missing information" do
-        before { asp_payment_request.payment.student.rib&.destroy }
+        before { asp_payment_request.student.rib&.destroy }
 
         it "blocks the transition" do
           expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
@@ -38,7 +37,7 @@ RSpec.describe ASP::PaymentRequest do
         let(:student) { create(:student, :with_all_asp_info, :adult) }
 
         before do
-          asp_payment_request.payment.pfmp.update!(student: student)
+          asp_payment_request.pfmp.update!(student: student)
           student.rib.update!(personal: false)
         end
 
@@ -69,10 +68,7 @@ RSpec.describe ASP::PaymentRequest do
     end
 
     describe "mark_integrated!" do
-      subject(:asp_payment_request) { create(:asp_payment_request, :sent, payment: payment) }
-
-      let(:student) { create(:student, :with_all_asp_info) }
-      let(:payment) { create(:pfmp, :validated, student: student).payments.last }
+      subject(:asp_payment_request) { create(:asp_payment_request, :sent) }
 
       let(:attrs) do
         {
@@ -84,19 +80,19 @@ RSpec.describe ASP::PaymentRequest do
 
       it "sets the student's ASP attribute" do
         expect { asp_payment_request.mark_integrated!(attrs) }
-          .to change(asp_payment_request.payment.student, :asp_individu_id)
+          .to change(asp_payment_request.student, :asp_individu_id)
           .from(nil).to("individu")
       end
 
       it "sets the student's schooling ASP attribute" do
         expect { asp_payment_request.mark_integrated!(attrs) }
-          .to change(asp_payment_request.payment.schooling, :asp_dossier_id)
+          .to change(asp_payment_request.schooling, :asp_dossier_id)
           .from(nil).to("dossier")
       end
 
       it "sets the PFMP's ASP attribute" do
         expect { asp_payment_request.mark_integrated!(attrs) }
-          .to change(asp_payment_request.payment.pfmp, :asp_prestation_dossier_id)
+          .to change(asp_payment_request.pfmp, :asp_prestation_dossier_id)
           .from(nil).to("prestation")
       end
     end

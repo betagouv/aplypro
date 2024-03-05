@@ -21,7 +21,7 @@ fr:
       answer: APLyPro récupère les listes d'élèves et de classes de la BEE (Base Elèves Etablissements du MENJ) ou de Fregata (base d'élèves du MASA). Les mises à jour sont à effectuer dans ces bases et seront répercutées dans APLyPro.
     - title: Quand mes élèves seront-ils payés ?
       answer: Les paiements débuteront en 2024. Mais vous pourrez quand même saisir toutes les informations nécessaires à l'avance.
-    - title: Les apprentis ont-ils concernés par l'allocation ?
+    - title: Les apprentis sont-ils concernés par l'allocation ?
       answer: Si des apprentis apparaissent dans vos classes, ils ne sont pas concernés par l'allocation. Nous allons bientôt les retirer d'APLyPro, vous devez les ignorer lors de vos saisies.
     - title: (MENJ) J'ai des cas d'élèves très particuliers, à qui poser mes questions ?
       answer: Vous pouvez contacter votre référent académique "allocation de stage" pour toutes ces questions.

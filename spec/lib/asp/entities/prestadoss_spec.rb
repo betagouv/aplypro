@@ -4,11 +4,12 @@ require "rails_helper"
 
 describe ASP::Entities::Prestadoss, type: :model do
   let(:payment_request) { create(:asp_payment_request, :ready) }
-  let(:schooling) { payment_request.payment.schooling }
+  let(:schooling) { payment_request.schooling }
 
   before do
     mock_entity("Adresse")
     mock_entity("CoordPaie")
+    mock_entity("ElementPaiement")
   end
 
   it_behaves_like "an ASP payment mapping entity"
@@ -28,7 +29,7 @@ describe ASP::Entities::Prestadoss, type: :model do
     describe "idPrestaDoss" do
       subject(:attributes) { document.at("prestadoss").attributes }
 
-      let(:pfmp) { payment_request.payment.pfmp }
+      let(:pfmp) { payment_request.pfmp }
 
       context "when the PFMP is registered with the ASP" do
         before { pfmp.update!(asp_prestation_dossier_id: "foobar") }

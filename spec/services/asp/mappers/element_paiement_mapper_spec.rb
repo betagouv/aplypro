@@ -10,7 +10,7 @@ describe ASP::Mappers::ElementPaiementMapper do
   let(:payment_request) { create(:asp_payment_request, :ready) }
 
   before do
-    payment_request.payment.update!(schooling: schooling)
+    payment_request.update!(schooling: schooling)
   end
 
   describe "usprinc" do

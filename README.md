@@ -38,6 +38,17 @@ Entre autres :
 - `make sh` : lance un terminal ;
 - `make lint` : lance Rubocop.
 
+# Deploiement
+
+1. Faire un branche `release/v1.8.2` (la nommer `release/*` évite la CI)
+2. Mettre à jour le fichier `config/initializers/version.rb` dans un commit `release 1.8.2`
+3. Faire une PR sur GitHub `release/v1.8.2` -> `main` et la faire approuver et merge par un autre dev
+4. Créer une [nouvelle release](https://github.com/betagouv/aplypro/releases)
+5. Lui créer un tag `v1.8.2`, puis cliquer "Generate release notes" et "Publish"
+6. Faire une PR `main` -> `deploy/prod` nommée `v1.8.2` et la faire approuver et merge par un autre dev
+
+ATTENTION : Ne pas utiliser la stratégie "rebase and merge" sur cette dernière PR : il ne faut pas réécrire les commits de la branche de production pour éviter tout problème de réconciliation.
+
 # Vocabulaire
 
 Ministères :
@@ -67,3 +78,14 @@ Sources de données :
 - MEF : Module élémentaire de formation. Voir [la base de nomenclature](https://infocentre.pleiade.education.fr/bcn/workspace/viewTable/n/N_MEF).
 - Schooling : Scolarité. Relie un élève à sa classe.
 - Classe : Chaque classe est reliée à un code MEF.
+
+
+### Vocabulaire des paiements
+ASP : Agence de Services et de Paiement
+
+Correspondances entre leurs modèles et les notres :
+
+- Individu -> Student
+- Dossier -> Schooling
+- Prestation Dossier (prestadoss) -> Pfmp
+- Liste Element Paiement -> PaymentRequest

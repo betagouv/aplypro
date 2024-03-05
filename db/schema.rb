@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_19_100348) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_28_153920) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -56,11 +56,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_19_100348) do
 
   create_table "asp_payment_requests", force: :cascade do |t|
     t.bigint "asp_request_id"
-    t.bigint "payment_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "pfmp_id"
     t.index ["asp_request_id"], name: "index_asp_payment_requests_on_asp_request_id"
-    t.index ["payment_id"], name: "index_asp_payment_requests_on_payment_id"
+    t.index ["pfmp_id"], name: "index_asp_payment_requests_on_pfmp_id"
   end
 
   create_table "asp_requests", force: :cascade do |t|
@@ -138,14 +138,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_19_100348) do
     t.index ["mefstat11"], name: "index_mefs_on_mefstat11"
   end
 
-  create_table "payments", force: :cascade do |t|
-    t.bigint "pfmp_id", null: false
-    t.float "amount"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["pfmp_id"], name: "index_payments_on_pfmp_id"
-  end
-
   create_table "pfmp_transitions", force: :cascade do |t|
     t.string "to_state", null: false
     t.text "metadata", default: "{}"
@@ -166,6 +158,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_19_100348) do
     t.integer "day_count"
     t.bigint "schooling_id", null: false
     t.string "asp_prestation_dossier_id"
+    t.integer "amount"
     t.index ["schooling_id"], name: "index_pfmps_on_schooling_id"
   end
 
@@ -259,7 +252,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_19_100348) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "asp_payment_request_transitions", "asp_payment_requests"
   add_foreign_key "asp_payment_requests", "asp_requests"
-  add_foreign_key "asp_payment_requests", "payments"
+  add_foreign_key "asp_payment_requests", "pfmps"
   add_foreign_key "classes", "mefs"
   add_foreign_key "establishment_user_roles", "establishments"
   add_foreign_key "establishment_user_roles", "users"
@@ -267,7 +260,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_19_100348) do
   add_foreign_key "establishments", "users", column: "confirmed_director_id"
   add_foreign_key "invitations", "establishments"
   add_foreign_key "invitations", "users"
-  add_foreign_key "payments", "pfmps"
   add_foreign_key "pfmp_transitions", "pfmps"
   add_foreign_key "pfmps", "schoolings"
   add_foreign_key "ribs", "students"

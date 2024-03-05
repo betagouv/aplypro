@@ -5,14 +5,14 @@ module ASP
     class ElementPaiementMapper
       PAYMENT_TYPE_CODE = "PAIEMENT"
 
-      attr_reader :payment
+      attr_reader :payment_request
 
       def initialize(payment_request)
-        @payment = payment_request.payment
+        @payment_request = payment_request
       end
 
       def codeobjet
-        index = payment.pfmp.payments.find_index { |p| p == payment }
+        index = payment_request.pfmp.payment_requests.find_index { |p| p == payment_request }
 
         "VERSE00#{index + 1}"
       end
@@ -22,11 +22,11 @@ module ASP
       end
 
       def mttotalfinancement
-        payment.amount
+        payment_request.pfmp.amount
       end
 
       def usprinc
-        code = payment.schooling.bop_code
+        code = payment_request.schooling.bop_code
 
         ENV.fetch("APLYPRO_ASP_#{code.upcase}_UNITE_SUIVI")
       end

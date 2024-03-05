@@ -18,7 +18,7 @@ describe ASP::Entities::Enregistrement, type: :model do
     describe "idIndividu" do
       subject(:attributes) { document.at("individu").attributes }
 
-      let(:student) { payment_request.payment.student }
+      let(:student) { payment_request.student }
 
       context "when the student is registered with the ASP" do
         before { student.update!(asp_individu_id: "foobar") }

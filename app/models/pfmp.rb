@@ -2,7 +2,6 @@
 
 class Pfmp < ApplicationRecord
   belongs_to :schooling
-
   has_one :classe, through: :schooling
   has_one :student, through: :schooling
 
@@ -10,7 +9,8 @@ class Pfmp < ApplicationRecord
   has_one :establishment, through: :classe
 
   has_many :transitions, class_name: "PfmpTransition", autosave: false, dependent: :destroy
-  has_many :payments, -> { order("payments.created_at" => :asc) }, dependent: :destroy, inverse_of: :pfmp
+
+  has_many :payment_requests, class_name: "ASP::PaymentRequest", dependent: :destroy
 
   validates :start_date, :end_date, presence: true
 
@@ -49,14 +49,28 @@ class Pfmp < ApplicationRecord
     end
   end
 
+  after_save :handle_amount_change
+
+  def handle_amount_change
+    changed_day_count = day_count_before_last_save != day_count
+
+    return if !changed_day_count
+
+    raise "A validated PFMP cannot have its day count changed." if in_state?(:validated)
+
+    update_amount!
+  end
+
   def validate!
     transition_to!(:validated)
   end
 
-  def setup_payment!
-    amount = calculate_amount
+  def update_amount!
+    update!(amount: calculate_amount)
+  end
 
-    payments.create!(amount: amount) if amount.positive?
+  def setup_payment!
+    payment_requests.create! if amount.positive?
   end
 
   def calculate_amount
@@ -66,11 +80,6 @@ class Pfmp < ApplicationRecord
       day_count * wage.daily_rate,
       student.allowance_left(mef)
     ].min
-  end
-
-  # FIXME: use has_one instead
-  def latest_payment
-    payments.last
   end
 
   def relative_index

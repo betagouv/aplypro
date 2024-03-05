@@ -7,7 +7,7 @@ module ASP
       include ActiveModel::Attributes
       include ActiveModel::AttributeAssignment
 
-      attr_reader :payment
+      attr_reader :payment_request
 
       ASP_NO_MODIFICATION = { modification: "N" }.freeze
 
@@ -18,13 +18,13 @@ module ASP
           "ASP::Mappers::#{klass}Mapper".constantize
         end
 
-        def from_payment_request(payment)
-          raise ArgumentError, "cannot make a #{name} instance with a nil payment" if payment.nil?
+        def from_payment_request(payment_request)
+          raise ArgumentError, "cannot make a #{name} instance with a nil payment" if payment_request.nil?
 
-          mapper = payment_mapper_class.new(payment)
+          mapper = payment_mapper_class.new(payment_request)
 
           new.tap do |instance|
-            instance.instance_variable_set(:@payment, payment)
+            instance.instance_variable_set(:@payment_request, payment_request)
 
             mapped_attributes = attribute_names.index_with do |attr|
               mapper.send(attr) if mapper.respond_to?(attr)

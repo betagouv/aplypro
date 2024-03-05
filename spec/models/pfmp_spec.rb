@@ -12,7 +12,7 @@ RSpec.describe Pfmp do
 
   describe "associations" do
     it { is_expected.to belong_to(:schooling) }
-    it { is_expected.to have_many(:payments) }
+    it { is_expected.to have_many(:payment_requests) }
   end
 
   describe "validations" do
@@ -72,16 +72,6 @@ RSpec.describe Pfmp do
     end
   end
 
-  describe "payments" do
-    it "sorts them chronologically" do
-      payments = [5, 0, -2]
-                 .map { |n| Time.zone.now + n.days }
-                 .map { |date| create(:payment, pfmp:, created_at: date) }
-
-      expect(pfmp.reload.payments).to eq payments.reverse
-    end
-  end
-
   describe "calculate_amount" do
     let(:amount) { mef.wage.daily_rate * pfmp.day_count }
 
@@ -106,15 +96,29 @@ RSpec.describe Pfmp do
         expect(pfmp.calculate_amount).to eq amount
       end
     end
+
+    context "when the amount is updated" do
+      it "updates the amount" do
+        expect { pfmp.update!(day_count: 20) }.to change(pfmp, :amount).from(amount).to(amount * 2)
+      end
+
+      context "with a validated PFMP" do
+        before do
+          pfmp.validate!
+        end
+
+        it "throws an error" do
+          expect { pfmp.update!(day_count: 15) }.to raise_error(/day count changed/)
+        end
+      end
+    end
   end
 
   describe "setup_payment!" do
-    before do
-      pfmp.update!(day_count: 10)
-    end
+    subject(:pfmp) { create(:pfmp, schooling: schooling, day_count: 10) }
 
     it "creates a new payment" do
-      expect { pfmp.setup_payment! }.to change(Payment, :count).by(1)
+      expect { pfmp.setup_payment! }.to change(ASP::PaymentRequest, :count).by(1)
     end
 
     context "when there is no allowance left" do
@@ -123,7 +127,7 @@ RSpec.describe Pfmp do
       end
 
       it "does not create a payment" do
-        expect { pfmp.setup_payment! }.not_to change(Payment, :count)
+        expect { pfmp.setup_payment! }.not_to change(ASP::PaymentRequest, :count)
       end
     end
   end
