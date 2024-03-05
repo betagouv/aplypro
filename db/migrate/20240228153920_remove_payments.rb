@@ -8,12 +8,20 @@ class RemovePayments < ActiveRecord::Migration[7.1]
   end
 
   def backport_payment_amounts!
-    Payment.find_each do |payment|
-      pfmp = payment.pfmp
+    Payment.joins(:pfmp).find_in_batches.with_index do |payments, index|
+      Rails.logger.debug { "Processing batch #{index}..." }
 
-      pfmp.update!(amount: payment.amount)
+      pfmps = payments.map do |payment|
+        payment.pfmp.tap { |pfmp| pfmp.amount = payment.amount }
+      end
 
-      payment.payment_requests.update_all(pfmp_id: pfmp) # rubocop:disable Rails/SkipsModelValidations
+      Pfmp.upsert_all(pfmps.map(&:attributes), update_only: [:amount]) # rubocop:disable Rails/SkipsModelValidations
+    end
+  end
+
+  def rewire_payment_requests!
+    Payment.joins(:pfmp, :payment_requests).find_each do |payment|
+      payment.payment_requests.update_all(pfmp_id: payment.pfmp.id) # rubocop:disable Rails/SkipsModelValidations
     end
   end
 
@@ -22,6 +30,7 @@ class RemovePayments < ActiveRecord::Migration[7.1]
     add_reference :asp_payment_requests, :pfmp, foreign_key: true
 
     backport_payment_amounts!
+    rewire_payment_requests!
 
     remove_reference :asp_payment_requests, :payment
     drop_table :payments
