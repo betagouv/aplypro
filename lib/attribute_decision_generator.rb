@@ -17,8 +17,9 @@ class AttributeDecisionGenerator
 
   def generate!(file_descriptor)
     Schooling.transaction do
-      schooling.generate_administrative_number.tap(&:save!)
-      schooling.increment!(:attributive_decision_version)
+      schooling.generate_administrative_number
+      schooling.increment(:attributive_decision_version)
+      schooling.save!
 
       render
 

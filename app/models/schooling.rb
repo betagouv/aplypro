@@ -29,8 +29,6 @@ class Schooling < ApplicationRecord
 
       break unless Schooling.exists?(administrative_number: administrative_number)
     end
-
-    self
   end
 
   def closed?
