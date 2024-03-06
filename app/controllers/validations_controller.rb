@@ -23,12 +23,10 @@ class ValidationsController < ApplicationController
     @pfmps = validatable_pfmps
              .includes(schooling: :attributive_decision_attachment)
              .where(schoolings: { classe: @classe })
-             .joins(:mef)
-             .merge(Mef.with_wages)
              .includes(student: :rib)
              .order(:"students.last_name", :"pfmps.start_date")
 
-    @total_amount = @pfmps.map(&:calculate_amount).sum
+    @total_amount = @pfmps.sum(:amount)
   end
 
   def validate
