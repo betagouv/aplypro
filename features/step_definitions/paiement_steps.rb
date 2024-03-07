@@ -10,6 +10,15 @@ Quand("la tâche d'envoi des paiements démarre pour toutes les requêtes prête
   SendPaymentRequestsJob.perform_later(ASP::PaymentRequest.in_state(:ready).to_a)
 end
 
+Quand("les tâches de préparation et d'envoi des paiements sont passées") do
+  steps %(
+    Quand la tâche de préparation des paiements démarre
+    Et que toutes les tâches de fond sont terminées
+    Et que la tâche d'envoi des paiements démarre pour toutes les requêtes prêtes à l'envoi
+    Et que toutes les tâches de fond sont terminées
+  )
+end
+
 Sachantqu("la tâche de lecture des paiements démarre") do
   PollPaymentsServerJob.perform_later
 end
