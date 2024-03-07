@@ -77,7 +77,7 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
     Alors la page contient "La PFMP a bien été enregistrée"
     Et je peux voir dans le tableau "Liste des PFMPs de l'élève"
       | État             | Nombre de jours | Montant |
-      | Saisie à valider |               3 | 30,00 € |
+      | Saisie à valider |               3 | 30 € |
   
   Scénario: Le personnel peut compléter les PFMPs pour les anciens élèves
     Quand je consulte la classe de "1MELEC"

@@ -6,8 +6,8 @@ Quand("la tâche de préparation des paiements démarre") do
   PreparePaymentRequestsJob.perform_later
 end
 
-Quand("la tâche d'envoi des paiements démarre") do
-  SendPaymentRequestsJob.perform_later(ASP::PaymentRequest.all)
+Quand("la tâche d'envoi des paiements démarre pour toutes les requêtes prêtes à l'envoi") do
+  SendPaymentRequestsJob.perform_later(ASP::PaymentRequest.in_state(:ready).to_a)
 end
 
 Sachantqu("la tâche de lecture des paiements démarre") do
@@ -67,9 +67,13 @@ Sachantque("le dernier paiement de {string} a été envoyé avec un fichier {str
   pfmp.payment_requests.last.asp_request.file.update!(filename: filename)
 end
 
-Alors("je peux voir un paiement {string} de {int} euros") do |state, amount|
+Alors("je peux voir une demande de paiement {string}") do |state|
+  expect(page).to have_css(".fr-badge:not(.disabled)", text: state)
+end
+
+Alors("je peux voir une demande de paiement {string} de {int} euros") do |state, amount|
   steps %(
-    Alors la page contient "#{state}"
+    Alors je peux voir une demande de paiement "#{state}"
     Et la page contient "#{number_to_currency(amount)}"
   )
 end

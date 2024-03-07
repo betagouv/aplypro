@@ -70,6 +70,12 @@ Quand("l'élève {string} a déjà des coordonnées bancaires") do |name|
   FactoryBot.create(:rib, student: student)
 end
 
+Quand("l'élève {string} a une adresse en France et son propre RIB") do |name|
+  student = find_student_by_full_name(name)
+  student.update!(address_country_code: "99100")
+  student.rib.update!(personal: true)
+end
+
 Quand("je clique sur {string} dans le menu principal") do |item|
   within("nav#main-nav") do
     click_link_or_button(item)
@@ -162,13 +168,6 @@ Quand("je renseigne une PFMP provisoire") do
     Et que je remplis "Date de début" avec "17/03/2023"
     Et que je remplis "Date de fin" avec "20/03/2023"
     Et que je clique sur "Enregistrer"
-  )
-end
-
-Quand("je consulte la liste des PFMPs {string}") do |tab|
-  steps %(
-    Quand je clique sur "Liste des PFMPs"
-    Et que je clique sur "#{tab}"
   )
 end
 

@@ -105,7 +105,6 @@ fr:
           title: "Ajouter une PFMP individuelle pour %{name}"
           breadcrumb: Ajouter une PFMP individuelle
         create: *new_pfmp_title
-        index: "Liste des PFMPs"
         show: "PFMP pour %{name}"
         edit: &edit_pfmp_title "Modifier la PFMP de %{name}"
         update: *edit_pfmp_title
@@ -196,28 +195,38 @@ fr:
         n'a pas encore été renseigné.
       completed: |
         Le nombre de jours réalisés par l'élève a été renseigné. La
-        PFMP est maintenant sujet à l'approbation du chef
+        PFMP est maintenant sujette à l'approbation du chef
         d'établissement sans quoi le paiement ne peut pas être déclenché.
       validated: |
-        La PFMP a été validée. La demande de paiement sera envoyée à
-        l'Agence de Services et de Paiment (ASP) dès que les
-        développements nécessaires auront été effectués.
+        La PFMP a été validée. La demande de paiement sera envoyée dès que
+        les développements nécessaires auront été effectués.
   payment_requests:
     state:
-      pending: "Planifié"
-      ready: "Prêt"
-      incomplete: "Bloqué"
-      sent: "En cours de traitement"
-      integrated: "Dossier accepté"
-    status_explanation:
+      pending: "Planifiée"
+      ready: "Prête"
+      incomplete: "Bloquée"
+      sent: "En traitement"
+      integrated: "En traitement"
+      rejected: "Demande rejetée"
+      paid: "Paiement envoyé"
+      unpaid: "Paiement échoué"
+    state_explanations:
+      pending: |
+        La demande de paiement est prête à être traitée.
+        Elle sera intégrée dans le prochain lot journalier.
+      ready: |
+        La demande de paiement a toutes les informations nécessaires.
+        Elle sera intégrée dans le prochain lot journalier.
+      incomplete: Il manque des données pour envoyer le paiement.
       sent: |
-        L'Agence de Services et de Paiement (ASP) est en train de
-        traiter la demande de paiement. Nous n'avons pas encore
-        d'informations disponibles sur le retour du paiement.
-      rejected: "L'instruction du dossier a échoué : %{reject_reason}"
-      integrated: "Le dossier de paiement a été intégré"
-      incomplete: Il manque des informations pour envoyer le paiement
-      ready: Ce paiement est prêt à l'envoi
+        Une première vérification de la demande sera effectuée sous 24h.
+        Puis le traitement du paiement peut prendre une à trois semaines.
+      integrated: |
+        La demande a été intégrée.
+        Le traitement du paiement peut prendre une à trois semaines.
+      rejected: "La demande a été rejetée : %{reject_reason}."
+      paid: Le paiement a été envoyé par l'agence comptable, et sera effectif dans un délai de un à trois jours ouvrables.
+      unpaid: Le paiement a été refusé par l'agence comptable.
   ministries:
     masa: Ministère de l'Agriculture et de la Souveraineté Alimentaire (MASA)
     menj: Ministère de l'Éducation Nationale et de la Jeunesse (MENJ)
