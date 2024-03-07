@@ -89,4 +89,14 @@ class Pfmp < ApplicationRecord
   def relative_human_index
     relative_index + 1
   end
+
+  def previously_paid_amount_for_mef
+    student
+      .pfmps
+      .where("pfmps.created_at < (?)", created_at)
+      .where.not(amount: nil)
+      .joins(schooling: :classe)
+      .where("classe.mef_id": mef.id, "classe.start_year": ENV.fetch("APLYPRO_SCHOOL_YEAR"))
+      .sum(&:amount)
+  end
 end

@@ -32,7 +32,7 @@
   background-color: var(--background-default-grey-hover);
 }
 
-.fr-badge.is_disabled {
+.fr-badge.disabled {
   background-color: var(--background-contrast-grey-active);
   color: white;
 }
@@ -79,4 +79,8 @@
 .no-wrap {
   flex-wrap: nowrap;
   white-space: nowrap;
+}
+
+.gray-text {
+  color: gray;
 }

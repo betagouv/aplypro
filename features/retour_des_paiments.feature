@@ -1,5 +1,4 @@
 # language: fr
-@wip
 Fonctionnalité: Gestion des retours de l'ASP
   Contexte:
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
@@ -11,11 +10,13 @@ Fonctionnalité: Gestion des retours de l'ASP
     Et que les informations personnelles ont été récupérées pour l'élève avec l'INE "MC"
     Et que toutes les tâches de fond sont terminées
     Et que je passe l'écran d'accueil
-    Et que je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "A1"
+    Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
+    Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
     Et que je consulte le profil de "Marie Curie" dans la classe de "A1"
     Et que je renseigne et valide une PFMP de 3 jours
     Et que la tâche de préparation des paiements démarre
-    Et que la tâche d'envoi des paiements démarre
+    Et que toutes les tâches de fond sont terminées
+    Et que la tâche d'envoi des paiements démarre pour toutes les requêtes prêtes à l'envoi
     Et que toutes les tâches de fond sont terminées
     Quand je consulte le profil de "Marie Curie" dans la classe de "A1"
 
@@ -24,7 +25,7 @@ Fonctionnalité: Gestion des retours de l'ASP
     Et que la tâche de lecture des paiements démarre
     Et que toutes les tâches de fond sont terminées
     Quand je consulte la dernière PFMP
-    Alors je peux voir un paiement "En cours de traitement" de 30 euros
+    Alors je peux voir une demande de paiement "En traitement" de 30 euros
 
   Scénario: L'individu n'a pas pu être intégré sur le serveur de l'ASP
     Sachant que le dernier paiement de "Marie Curie" a été envoyé avec un fichier "foobar.xml"
@@ -32,7 +33,7 @@ Fonctionnalité: Gestion des retours de l'ASP
     Quand la tâche de lecture des paiements démarre
     Et que toutes les tâches de fond sont terminées
     Et que je consulte la dernière PFMP
-    Alors la page contient "L'instruction du dossier a échoué"
+    Alors la page contient "Demande rejetée"
     Et la page contient "mauvais code postal"
 
   Scénario: L'individu a été intégré sur le serveur de l'ASP
@@ -41,4 +42,4 @@ Fonctionnalité: Gestion des retours de l'ASP
     Quand la tâche de lecture des paiements démarre
     Et que toutes les tâches de fond sont terminées
     Et que je consulte la dernière PFMP
-    Alors la page contient "Le dossier de paiement a été intégré"
+    Alors la page contient "La demande a été intégrée"
