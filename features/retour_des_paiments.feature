@@ -14,10 +14,7 @@ Fonctionnalité: Gestion des retours de l'ASP
     Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
     Et que je consulte le profil de "Marie Curie" dans la classe de "A1"
     Et que je renseigne et valide une PFMP de 3 jours
-    Et que la tâche de préparation des paiements démarre
-    Et que toutes les tâches de fond sont terminées
-    Et que la tâche d'envoi des paiements démarre pour toutes les requêtes prêtes à l'envoi
-    Et que toutes les tâches de fond sont terminées
+    Et que les tâches de préparation et d'envoi des paiements sont passées
     Quand je consulte le profil de "Marie Curie" dans la classe de "A1"
 
   Scénario: Il n'y a pas de fichiers sur le serveur de l'ASP

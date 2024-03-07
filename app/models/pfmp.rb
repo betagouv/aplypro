@@ -56,7 +56,7 @@ class Pfmp < ApplicationRecord
 
     return if !changed_day_count
 
-    raise "A validated PFMP cannot have its day count changed." if in_state?(:validated)
+    raise "A PFMP paid or in the process of being paid cannot have its day count changed." unless can_be_modified?
 
     update_amount!
   end
@@ -98,5 +98,13 @@ class Pfmp < ApplicationRecord
       .joins(schooling: :classe)
       .where("classe.mef_id": mef.id, "classe.start_year": ENV.fetch("APLYPRO_SCHOOL_YEAR"))
       .sum(&:amount)
+  end
+
+  def can_be_modified?
+    if in_state?(:validated)
+      payment_requests.all?(&:stopped?)
+    else
+      true
+    end
   end
 end

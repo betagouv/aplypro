@@ -49,5 +49,9 @@ module ASP
     def mark_paid!
       transition_to!(:paid)
     end
+
+    def stopped?
+      in_state?(:incomplete, :rejected, :unpaid)
+    end
   end
 end

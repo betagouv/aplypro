@@ -40,12 +40,29 @@ Fonctionnalité: Gestion des paiements
     Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que les informations personnelles ont été récupérées pour l'élève avec l'INE "MC"
     Et que je renseigne et valide une PFMP de 3 jours
-    Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
-    Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
-    Et que la tâche de préparation des paiements démarre
-    Et que toutes les tâches de fond sont terminées
-    Et que la tâche d'envoi des paiements démarre pour toutes les requêtes prêtes à l'envoi
-    Et que toutes les tâches de fond sont terminées
+    Et que l'élève "Marie Curie" a des données correctes pour l'ASP
+    Et que les tâches de préparation et d'envoi des paiements sont passées
     Quand je consulte le profil de "Marie Curie" dans la classe de "A1"
     Et que je consulte la dernière PFMP
     Alors je peux voir une demande de paiement "En traitement" de 30 euros
+
+  Scénario: Le personnel ne peut pas altérer une PFMP avec un paiement en cours
+    Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
+    Et que les informations personnelles ont été récupérées pour l'élève avec l'INE "MC"
+    Et que je renseigne et valide une PFMP de 3 jours
+    Et que l'élève "Marie Curie" a des données correctes pour l'ASP
+    Et que les tâches de préparation et d'envoi des paiements sont passées
+    Quand je consulte le profil de "Marie Curie" dans la classe de "A1"
+    Et que je consulte la dernière PFMP
+    Alors je ne peux pas éditer ni supprimer la PFMP
+
+  Scénario: Le personnel peut altérer une PFMP avec un paiement échoué
+    Sachant que je renseigne et valide une PFMP de 3 jours
+    Et que la tâche de préparation des paiements démarre
+    Et que toutes les tâches de fond sont terminées
+    Quand je consulte le profil de "Marie Curie" dans la classe de "A1"
+    Et que je consulte la dernière PFMP
+    Et que je clique sur "Modifier la PFMP"
+    Et que je remplis "Nombre de jours" avec "10"
+    Et que je clique sur "Modifier la PFMP"
+    Alors la page contient "La PFMP a bien été mise à jour"
