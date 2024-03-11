@@ -279,8 +279,8 @@ fr:
   panels:
     attributive_decisions:
       download:
-        one: Télécharger la décision d'attribution
-        other: Télécharger %{count} décisions d'attribution
+        one: Télécharger la décision d'attribution pour vérification et distribution
+        other: Télécharger %{count} décisions d'attribution pour vérification et distribution
       generate:
         one: Éditer la décision d'attribution manquante
         other: Éditer %{count} décisions d'attribution manquantes
