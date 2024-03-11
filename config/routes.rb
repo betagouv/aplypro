@@ -9,8 +9,8 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    resources :students
-    resources :classes
+    resources :students, only: [:index, :show]
+    resources :classes, only: [:index, :show]
   end
 
   resources :establishments, only: %w[edit update] do

@@ -1,4 +1,5 @@
 require "administrate/base_dashboard"
+require_relative "../fields/da_link_field"
 
 class StudentDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
@@ -15,7 +16,9 @@ class StudentDashboard < Administrate::BaseDashboard
     address_line1: Field::String,
     address_line2: Field::String,
     address_postal_code: Field::String,
-    asp_file_reference: Field::String,
+    asp_file_reference: DaLinkField.with_options(
+      searchable: true,
+    ),
     birthdate: Field::Date,
     classe: Field::HasOne,
     classes: Field::HasMany,
@@ -39,9 +42,9 @@ class StudentDashboard < Administrate::BaseDashboard
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
-    ine
     first_name
     last_name
+    asp_file_reference
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -66,7 +69,7 @@ class StudentDashboard < Administrate::BaseDashboard
     # :payments,
     # :pfmps,
     :rib,
-    :schoolings,
+    #:schoolings,
     :created_at,
     :updated_at,
   ].freeze
