@@ -63,6 +63,7 @@ Rails.application.routes.draw do
 
   get "/welcome", to: "home#welcome"
   get "/home", to: "home#home"
+  get "/accessibility", to: "home#accessibility"
 
   get "/maintenance", to: "home#maintenance"
   get "/login", to: "home#login"

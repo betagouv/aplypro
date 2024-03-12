@@ -40,6 +40,8 @@ class HomeController < ApplicationController
 
   def faq; end
 
+  def accessibility; end
+
   private
 
   def show_welcome_screen
