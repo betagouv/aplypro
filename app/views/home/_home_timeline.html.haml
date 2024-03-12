@@ -30,15 +30,15 @@
   %h2.fr-col 4. Demandes de paiements des PFMPs
 
   .fr-grid-row
-    .fr-mb-2w.fr-mr-1w
+    .centering-container.fr-mb-2w.fr-mr-1w
       = payment_requests_status_count_badge(:pending, 200, display_zero: true)
       = payment_requests_status_count_badge(:incomplete, 2, display_zero: false)
     →
-    .fr-mb-2w.fr-mx-1w
+    .centering-container.fr-mb-2w.fr-mx-1w
       = payment_requests_status_count_badge(:sent, 200, display_zero: true)
       = payment_requests_status_count_badge(:rejected, 1, display_zero: false)
     →
-    .fr-mb-2w.fr-ml-1w
+    .centering-container.fr-mb-2w.fr-ml-1w
       = payment_requests_status_count_badge(:paid, 249, display_zero: true)
       = payment_requests_status_count_badge(:unpaid, 50, display_zero: false)
 
