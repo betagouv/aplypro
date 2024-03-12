@@ -84,3 +84,9 @@
 .gray-text {
   color: gray;
 }
+
+.centering-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

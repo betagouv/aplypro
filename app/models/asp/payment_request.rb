@@ -54,6 +54,10 @@ module ASP
       transition_to!(:paid)
     end
 
+    def mark_unpaid!
+      transition_to!(:unpaid)
+    end
+
     def stopped?
       in_state?(:incomplete, :rejected, :unpaid)
     end
@@ -64,10 +68,6 @@ module ASP
 
     def active?
       !inactive?
-    end
-
-    def mark_unpaid!
-      transition_to(:unpaid)
     end
 
     private
