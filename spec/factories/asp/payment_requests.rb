@@ -10,6 +10,8 @@ FactoryBot.define do
       schooling { association :schooling, :with_attributive_decision, student: student }
     end
 
+    trait :pending
+
     trait :ready do
       after(:create, &:mark_ready!)
     end
@@ -45,6 +47,14 @@ FactoryBot.define do
         result = build(:asp_integration, payment_request: obj)
 
         ASP::Readers::IntegrationsFileReader.new(result).process!
+      end
+    end
+
+    trait :rejected do
+      sent
+
+      after(:create) do |obj|
+        obj.reject!({})
       end
     end
 

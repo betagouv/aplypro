@@ -22,7 +22,7 @@
             %td
               .fr-grid-row
                 %div
-                  = pfmp_badge :pending, @classes_facade.nb_pfmps(classe.id, :pending)
-                  = pfmp_badge :completed, @classes_facade.nb_pfmps(classe.id, :completed)
+                  = pfmps_status_count_badge :pending, @classes_facade.nb_pfmps(classe.id, :pending)
+                  = pfmps_status_count_badge :completed, @classes_facade.nb_pfmps(classe.id, :completed)
                 %div
-                  = pfmp_badge :validated, @classes_facade.nb_pfmps(classe.id, :validated)
+                  = pfmps_status_count_badge :validated, @classes_facade.nb_pfmps(classe.id, :validated)

@@ -29,6 +29,8 @@ class Establishment < ApplicationRecord
   has_many :pfmps, -> { reorder nil }, through: :classes
   has_many :active_pfmps, -> { reorder nil }, through: :classes
 
+  has_many :payment_requests, -> { reorder nil }, through: :pfmps
+
   validate :ensure_confirmed_director_is_director
 
   API_MAPPING = {

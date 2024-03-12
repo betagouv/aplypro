@@ -16,12 +16,11 @@ Fonctionnalité: Gestion des paiements
     Sachant que je renseigne et valide une PFMP de 3 jours
     Quand je consulte le profil de "Marie Curie" dans la classe de "A1"
     Et que je consulte la dernière PFMP
-    Alors je peux voir une demande de paiement "Planifiée" de 30 euros
+    Alors je peux voir une demande de paiement "En attente" de 30 euros
 
   Scénario: Le personnel de direction peut voir un paiement bloqué
     Sachant que je renseigne et valide une PFMP de 3 jours
-    Et que la tâche de préparation des paiements démarre
-    Et que toutes les tâches de fond sont terminées
+    Et que la tâche de préparation des paiements est passée
     Quand je consulte le profil de "Marie Curie" dans la classe de "A1"
     Et que je consulte la dernière PFMP
     Alors je peux voir une demande de paiement "Bloquée" de 30 euros
@@ -31,11 +30,11 @@ Fonctionnalité: Gestion des paiements
     Et que je renseigne et valide une PFMP de 3 jours
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
     Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
-    Et que la tâche de préparation des paiements démarre
-    Et que toutes les tâches de fond sont terminées
+    Et que la tâche de préparation des paiements est passée
     Quand je consulte le profil de "Marie Curie" dans la classe de "A1"
     Et que je consulte la dernière PFMP
-    Alors je peux voir une demande de paiement "Prête" de 30 euros
+    Alors je peux voir une demande de paiement "En attente" de 30 euros
+    Et la page contient "La demande de paiement a toutes les informations nécessaires."
 
   Scénario: Le personnel de direction peut voir un paiement envoyé à l'ASP
     Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
@@ -59,8 +58,7 @@ Fonctionnalité: Gestion des paiements
 
   Scénario: Le personnel peut altérer une PFMP avec un paiement échoué
     Sachant que je renseigne et valide une PFMP de 3 jours
-    Et que la tâche de préparation des paiements démarre
-    Et que toutes les tâches de fond sont terminées
+    Et que la tâche de préparation des paiements est passée
     Quand je consulte le profil de "Marie Curie" dans la classe de "A1"
     Et que je consulte la dernière PFMP
     Et que je clique sur "Modifier la PFMP"
