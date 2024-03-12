@@ -28,7 +28,7 @@ Fonctionnalité: Gestion des accès à l'application
     Lorsque je me connecte en tant que personnel MENJ
     Et que je passe l'écran d'accueil
     Alors le panneau "Décisions d'attribution" ne contient pas "Éditer les décisions d'attribution"
-    Alors le panneau "PFMP validées à envoyer en paiement" ne contient pas "Valider des PFMPs à envoyer en paiement"
+    Alors le panneau "Demandes de paiements des PFMPs" ne contient pas "Valider des PFMPs à envoyer en paiement"
 
   Scénario: Je ne peux plus me connecter à l'application en tant qu'invité si mon accès a été supprimé
     Lorsque je me connecte en tant que personnel MENJ

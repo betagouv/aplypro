@@ -25,7 +25,7 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
   Scénario: Le personnel de direction voit toutes les actions de directeur
     Quand je clique sur "Continuer"
     Alors le panneau "Décisions d'attribution" contient "Éditer la décision d'attribution manquante"
-    Alors le panneau "PFMP validées à envoyer en paiement" contient "Valider des PFMPs à envoyer en paiement"
+    Alors le panneau "Demandes de paiements des PFMPs" contient "Valider des PFMPs à envoyer en paiement"
 
   Scénario: Le personnel voit un aperçu des données sur la page d'accueil
     Quand je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"
@@ -33,7 +33,7 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Alors le panneau "Décisions d'attribution" contient "0 / 1"
     Et le panneau "Coordonnées bancaires" contient "1 / 1"
     Et le panneau "Périodes de formation en milieu professionnel" contient "0"
-    Et le panneau "PFMP validées" contient "0"
+    Et le panneau "Demandes de paiements des PFMPs" contient "0"
 
   Scénario: Le personnel de direction voit le nom du directeur confirmé existant dans le panel de décision d'attribution
     Sachant que mon établissement a un directeur confirmé nommé "Jean Dupuis"

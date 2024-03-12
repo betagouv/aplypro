@@ -16,22 +16,33 @@
   %h2.fr-col 3. Périodes de formation en milieu professionnel
 
   .fr-grid-row
-    = pfmps_status_count_badge(:pending, @establishment_facade.pfmps_counts[:pending], display_zero: true, class: "fr-mr-2w")
-    = pfmps_status_count_badge(:completed, @establishment_facade.pfmps_counts[:completed], display_zero: true, class: "fr-mr-2w")
-    = pfmps_status_count_badge(:validated, @establishment_facade.pfmps_counts[:validated], display_zero: true)
+    = pfmps_status_count_badge(:pending, @establishment_facade.pfmps_counts[:pending], display_zero: true, class: "fr-mr-1w")
+    →
+    = pfmps_status_count_badge(:completed, @establishment_facade.pfmps_counts[:completed], display_zero: true, class: "fr-mx-1w")
+    →
+    = pfmps_status_count_badge(:validated, @establishment_facade.pfmps_counts[:validated], display_zero: true, class: "fr-ml-1w")
 
   %p Pour calculer le montant des allocations à envoyer, APLyPro a besoin de connaître le nombre de jours travaillés des PFMPs de chaque élève.
   %ul.fr-btns-group
     %li= link_to "Choisir une classe ou un élève pour saisir une PFMP", classes_path, class: "fr-btn fr-btn--primary fr-mb-0"
 
 .gray-panel
-  .fr-grid-row.fr-grid-row--top
-    %h2.fr-col 4. PFMP validées à envoyer en paiement en 2024
+  %h2.fr-col 4. Demandes de paiements des PFMPs
 
-    -# .fr-badge-group.fr-ml-2w#validated_count
-    -#   = pfmps_status_count_badge(:validated, @establishment_facade.pfmps_counts[:validated], display_zero: true, class: "fr-grid-row--right")
+  .fr-grid-row
+    .fr-mb-2w.fr-mr-1w
+      = payment_requests_status_count_badge(:pending, 200, display_zero: true)
+      = payment_requests_status_count_badge(:incomplete, 2, display_zero: false)
+    →
+    .fr-mb-2w.fr-mx-1w
+      = payment_requests_status_count_badge(:sent, 200, display_zero: true)
+      = payment_requests_status_count_badge(:rejected, 1, display_zero: false)
+    →
+    .fr-mb-2w.fr-ml-1w
+      = payment_requests_status_count_badge(:paid, 249, display_zero: true)
+      = payment_requests_status_count_badge(:unpaid, 50, display_zero: false)
 
-  %p APLyPro a besoin de la validation du chef d'établissement pour chaque PFMP afin d'envoyer chaque demande de paiement à l'Agence de Services et de Paiement (ASP). Les paiements commenceront début 2024.
+  %p APLyPro a besoin de la validation du chef d'établissement pour chaque PFMP. Une fois la PFMP validée, une demande de paiement partira à l'Agence de Services et de Paiement (ASP).
   %ul.fr-btns-group
     - if current_user.can_validate?
       %li= link_to "Valider des PFMPs à envoyer en paiement", validations_path, class: "fr-btn fr-btn--primary fr-mb-0"

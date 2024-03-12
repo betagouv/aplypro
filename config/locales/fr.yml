@@ -210,6 +210,15 @@ fr:
       rejected: "Demande rejetée"
       paid: "Paiement envoyé"
       unpaid: "Paiement échoué"
+    states:
+      pending: "En attente"
+      ready: "En attente"
+      incomplete: "Bloquées"
+      sent: "En traitement"
+      integrated: "En traitement"
+      rejected: "Demandes rejetées"
+      paid: "Paiements envoyés"
+      unpaid: "Paiements échoués"
     state_explanations:
       pending: |
         La demande de paiement est prête à être traitée.
