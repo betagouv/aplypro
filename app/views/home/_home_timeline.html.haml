@@ -13,14 +13,12 @@
     %li= link_to "Choisir une classe pour saisir des coordonnées bancaires", classes_path, class: "fr-btn fr-btn--primary fr-mb-0"
 
 .gray-panel
-  .fr-grid-row.fr-grid-row--top
-    %h2.fr-col 3. Périodes de formation en milieu professionnel
+  %h2.fr-col 3. Périodes de formation en milieu professionnel
 
-    .fr-ml-2w
-      
-      = pfmp_badge(:pending, @establishment_facade.pfmps_counts[:pending], display_zero: true, class: "fr-grid-row--right")
-    
-      = pfmp_badge(:completed, @establishment_facade.pfmps_counts[:completed], display_zero: true, class: "fr-grid-row--right")
+  .fr-grid-row
+    = pfmp_badge(:pending, @establishment_facade.pfmps_counts[:pending], display_zero: true, class: "fr-mr-2w")
+    = pfmp_badge(:completed, @establishment_facade.pfmps_counts[:completed], display_zero: true, class: "fr-mr-2w")
+    = pfmp_badge(:validated, @establishment_facade.pfmps_counts[:validated], display_zero: true)
 
   %p Pour calculer le montant des allocations à envoyer, APLyPro a besoin de connaître le nombre de jours travaillés des PFMPs de chaque élève.
   %ul.fr-btns-group
@@ -30,8 +28,8 @@
   .fr-grid-row.fr-grid-row--top
     %h2.fr-col 4. PFMP validées à envoyer en paiement en 2024
 
-    .fr-badge-group.fr-ml-2w#validated_count
-      = pfmp_badge(:validated, @establishment_facade.pfmps_counts[:validated], display_zero: true, class: "fr-grid-row--right")
+    -# .fr-badge-group.fr-ml-2w#validated_count
+    -#   = pfmp_badge(:validated, @establishment_facade.pfmps_counts[:validated], display_zero: true, class: "fr-grid-row--right")
 
   %p APLyPro a besoin de la validation du chef d'établissement pour chaque PFMP afin d'envoyer chaque demande de paiement à l'Agence de Services et de Paiement (ASP). Les paiements commenceront début 2024.
   %ul.fr-btns-group
