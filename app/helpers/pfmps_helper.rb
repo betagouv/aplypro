@@ -9,13 +9,12 @@ module PfmpsHelper
   end
 
   def pfmps_status_count_badge(status, count, **args)
-    count ||= 0
-    return if count.zero? && !args[:display_zero]
-
-    count_tag = content_tag(:div, count, class: "fr-mr-1w")
-
-    content_tag(:div, class: "fr-badge-group no-wrap #{args[:class]}", "aria-label": t("pfmps.states.#{status}")) do
-      safe_join([count_tag, pfmp_status_badge(status)], " ")
-    end
+    status_count_badge(
+      badge_method: :pfmp_status_badge,
+      status: status,
+      status_string: t("pfmps.states.#{status}"),
+      count: count,
+      **args
+    )
   end
 end

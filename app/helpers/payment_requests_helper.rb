@@ -7,4 +7,14 @@ module PaymentRequestsHelper
       t("payment_requests.state.#{status}")
     end
   end
+
+  def payment_requests_status_count_badge(status, count, **args)
+    status_count_badge(
+      badge_method: :payment_request_status_badge,
+      status: status,
+      status_string: t("payment_requests.state.#{status}"),
+      count: count,
+      **args
+    )
+  end
 end
