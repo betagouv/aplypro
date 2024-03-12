@@ -14,7 +14,7 @@ Fonctionnalité: Gestion des paiements
     Sachant que je renseigne et valide une PFMP de 3 jours
     Quand je consulte le profil de "Marie Curie" dans la classe de "A1"
     Et que je consulte la dernière PFMP
-    Alors je peux voir une demande de paiement "Planifiée" de 30 euros
+    Alors je peux voir une demande de paiement "En attente" de 30 euros
 
   Scénario: Le personnel de direction peut voir un paiement bloqué
     Sachant que je renseigne et valide une PFMP de 3 jours
@@ -34,7 +34,8 @@ Fonctionnalité: Gestion des paiements
     Et que toutes les tâches de fond sont terminées
     Quand je consulte le profil de "Marie Curie" dans la classe de "A1"
     Et que je consulte la dernière PFMP
-    Alors je peux voir une demande de paiement "Prête" de 30 euros
+    Alors je peux voir une demande de paiement "En attente" de 30 euros
+    Et la page contient "La demande de paiement a toutes les informations nécessaires."
 
   Scénario: Le personnel de direction peut voir un paiement envoyé à l'ASP
     Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
