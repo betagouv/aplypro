@@ -21,7 +21,7 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Alors la page contient "La PFMP a bien été enregistrée"
     Et je peux voir dans le tableau "Liste des PFMPs de l'élève"
       | État             | Nombre de jours | Montant |
-      | Saisie à valider |               3 | 45,00 € |
+      | Saisie à valider |               3 | 45 € |
 
   Scénario: Le personnel de direction peut rajouter une PFMP pour toute la classe
     Quand je saisis une PFMP pour toute la classe "2NDEB" avec les dates "17/03/2023" et "20/03/2023"
@@ -42,7 +42,7 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Alors la page contient "La PFMP a bien été mise à jour"
     Et je peux voir dans le tableau "Liste des PFMPs de l'élève"
       | État             |  Nombre de jours | Montant  |
-      | Saisie à valider |               10 | 150,00 € |
+      | Saisie à valider |               10 | 150 € |
 
   Scénario: Le personnel de direction peut valider une PFMP individuellement
     Quand je renseigne une PFMP de 3 jours

@@ -18,9 +18,9 @@
 
     .fr-ml-2w
       
-      = pfmp_badge(:pending, @establishment_facade.pfmps_counts[:pending], class: "fr-grid-row--right")
+      = pfmp_badge(:pending, @establishment_facade.pfmps_counts[:pending], display_zero: true, class: "fr-grid-row--right")
     
-      = pfmp_badge(:completed, @establishment_facade.pfmps_counts[:completed], class: "fr-grid-row--right")
+      = pfmp_badge(:completed, @establishment_facade.pfmps_counts[:completed], display_zero: true, class: "fr-grid-row--right")
 
   %p Pour calculer le montant des allocations à envoyer, APLyPro a besoin de connaître le nombre de jours travaillés des PFMPs de chaque élève.
   %ul.fr-btns-group
@@ -31,7 +31,7 @@
     %h2.fr-col 4. PFMP validées à envoyer en paiement en 2024
 
     .fr-badge-group.fr-ml-2w#validated_count
-      = pfmp_badge(:validated, @establishment_facade.pfmps_counts[:validated], class: "fr-grid-row--right")
+      = pfmp_badge(:validated, @establishment_facade.pfmps_counts[:validated], display_zero: true, class: "fr-grid-row--right")
 
   %p APLyPro a besoin de la validation du chef d'établissement pour chaque PFMP afin d'envoyer chaque demande de paiement à l'Agence de Services et de Paiement (ASP). Les paiements commenceront début 2024.
   %ul.fr-btns-group

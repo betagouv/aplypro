@@ -54,6 +54,7 @@ ATTENTION : Ne pas utiliser la stratégie "rebase and merge" sur cette dernière
 Ministères :
 
 - MENJ : Ministère de l'Éducation Nationale et de la Jeunesse ;
+  - DNE : Direction du numérique pour l'éducation (la tech du MENJ) ;
 - MASA : Ministère de l'Agriculture et de la Souveraineté Alimentaire ;
 - Mer : Secrétariat d'État Chargé De La Mer ;
 - Armée : L'Armée.
@@ -78,7 +79,8 @@ Sources de données :
 - MEF : Module élémentaire de formation. Voir [la base de nomenclature](https://infocentre.pleiade.education.fr/bcn/workspace/viewTable/n/N_MEF).
 - Schooling : Scolarité. Relie un élève à sa classe.
 - Classe : Chaque classe est reliée à un code MEF.
-
+- UAI : Unité Administrative Immatriculée (Identifiant national d'établissement)
+- INE : Identifiant national d'élève
 
 ### Vocabulaire des paiements
 ASP : Agence de Services et de Paiement
