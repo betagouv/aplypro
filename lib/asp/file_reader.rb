@@ -25,6 +25,14 @@ module ASP
       end
     end
 
+    def file_saved?
+      if payments_file?
+        ASP::PaymentReturn.exists?(filename: filename)
+      else
+        target_attachment.attached?
+      end
+    end
+
     private
 
     FILE_TYPES.each do |type|
@@ -94,14 +102,6 @@ module ASP
 
     def target_attachment
       request.send "#{kind}_file"
-    end
-
-    def file_saved?
-      if payments_file?
-        ASP::PaymentReturn.exists?(filename: filename)
-      else
-        target_attachment.attached?
-      end
     end
   end
 end
