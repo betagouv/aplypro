@@ -12,7 +12,7 @@ module ASP
           state = (payment / "ETATPAIEMENT").text
 
           payment.search("LISTEPRESTADOSS/PRESTADOSS").each do |file|
-            request = find_request!(file)
+            request = find_payment_request!(file)
 
             case state
             when "PAYE"
@@ -26,14 +26,16 @@ module ASP
         end
       end
 
-      def find_request!(node)
+      private
+
+      def find_payment_request!(node)
         id = (node / "IDPRESTADOSS").text
 
         Pfmp
           .find_by!(asp_prestation_dossier_id: id)
           .payment_requests
           .in_state(:integrated)
-          .first
+          .sole
       end
     end
   end
