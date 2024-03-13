@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module PfmpsHelper
-  def pfmp_status_badge(status)
+  def pfmp_status_badge(status, **args)
     status_level = PfmpDecorator::PFMP_STATE_MAPPING[status]
-    dsfr_badge(status: status_level, classes: ["fr-m-0"]) do
+    dsfr_badge(status: status_level, classes: ["fr-m-0"].push(args[:class])) do
       t("pfmps.states.#{status}")
     end
   end

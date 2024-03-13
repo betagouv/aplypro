@@ -12,9 +12,10 @@ module ApplicationHelper
     return if count.zero? && !args[:display_zero]
 
     count_tag = content_tag(:div, count, class: "fr-mr-1w")
+    disabled = count.zero? ? "disabled" : ""
 
     content_tag(:div, class: "fr-badge-group no-wrap #{args[:class]} fr-mb-1w", "aria-label": status_string) do
-      safe_join([count_tag, send(badge_method, status)], " ")
+      safe_join([count_tag, send(badge_method, status, class: disabled)], " ")
     end
   end
 end

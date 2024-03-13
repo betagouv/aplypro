@@ -35,12 +35,12 @@
       = payment_requests_status_count_badge(:incomplete, 2, display_zero: false)
     →
     .centering-container.fr-mb-2w.fr-mx-1w
-      = payment_requests_status_count_badge(:sent, 200, display_zero: true)
-      = payment_requests_status_count_badge(:rejected, 1, display_zero: false)
+      = payment_requests_status_count_badge(:sent, 0, display_zero: true)
+      = payment_requests_status_count_badge(:rejected, 0, display_zero: false)
     →
     .centering-container.fr-mb-2w.fr-ml-1w
-      = payment_requests_status_count_badge(:paid, 249, display_zero: true)
-      = payment_requests_status_count_badge(:unpaid, 50, display_zero: false)
+      = payment_requests_status_count_badge(:paid, 0, display_zero: true)
+      = payment_requests_status_count_badge(:unpaid, 0, display_zero: false)
 
   %p APLyPro a besoin de la validation du chef d'établissement pour chaque PFMP. Une fois la PFMP validée, une demande de paiement partira à l'Agence de Services et de Paiement (ASP).
   %ul.fr-btns-group
