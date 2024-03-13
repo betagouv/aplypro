@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ASP
-  class FileReader
+  class FileHandler
     include Errors
 
     attr_reader :filepath, :filename

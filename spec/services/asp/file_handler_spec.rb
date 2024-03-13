@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe ASP::FileReader do
+describe ASP::FileHandler do
   subject(:reader) { described_class.new(filepath) }
 
   let(:request_identifier) { "foobar" }
@@ -62,3 +62,4 @@ describe ASP::FileReader do
     end
   end
 end
+# frozen_string_literal: true
