@@ -57,6 +57,7 @@ class PaymentFixer
     updates = []
 
     pfmps
+      .not_in_state(:pending)
       .group_by(&:mef)
       .each_value do |grouped_pfmps|
       grouped_pfmps.sort_by(&:created_at).inject(0) do |accumulated, pfmp|
