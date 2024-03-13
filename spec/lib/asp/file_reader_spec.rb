@@ -5,38 +5,45 @@ require "rails_helper"
 describe ASP::FileReader do
   subject(:reader) { described_class.new(filepath) }
 
-  let(:basename) { "rejets_integ_idp_foobar.csv" }
+  let(:request_identifier) { "foobar" }
+  let!(:request) { create(:asp_request, :sent, filename: "#{request_identifier}.xml") }
+  let(:filepath) { Tempfile.create(basename).path }
 
-  let!(:request) { create(:asp_request, :sent, filename: "foobar.xml") }
-  let(:file) { Tempfile.create(basename) }
-  let(:filepath) { file.path }
+  # can't reduce much more
+  # rubocop:disable Rspec/MultipleMemoizedHelpers
+  shared_examples "a reader for the ASP integration process" do |type|
+    let(:basename) { build(:asp_filename, type, identifier: request_identifier) }
+    let(:reader_class) { "ASP::Readers::#{type.capitalize}FileReader".classify }
+    let(:file_reader) { instance_double(reader_class) }
 
-  let(:rejects_reader) { instance_double(ASP::Readers::RejectsFileReader) }
+    before do
+      stub_const(reader_class, class_double(reader_class, new: file_reader))
 
-  before do
-    stub_const("ASP::Readers::RejectsFileReader", class_double(ASP::Readers::RejectsFileReader, new: rejects_reader))
+      allow(file_reader).to receive(:process!)
+    end
 
-    allow(rejects_reader).to receive(:process!)
-  end
-
-  context "when the file is a rejects file" do
-    let(:basename) { "rejets_integ_idp_foobar.csv" }
-
-    it "delegates to the RejectsReader" do
+    it "delegates to the appropriate reader" do
       reader.parse!
 
-      expect(rejects_reader).to have_received(:process!)
+      expect(file_reader).to have_received(:process!)
     end
 
     it "attaches the file" do
       reader.parse!
 
-      expect(request.rejects_file).to be_attached
+      expect(request.send("#{type}_file")).to be_attached
+    end
+  end
+  # rubocop:enable Rspec/MultipleMemoizedHelpers
+
+  %i[rejects integrations].each do |type|
+    context "when the file is #{type} file" do
+      it_behaves_like "a reader for the ASP integration process", type
     end
   end
 
   context "when the file is a payment returns file" do
-    let(:basename) { "renvoi_paiement_APLYPROTEST_20240129.xml" }
+    let(:basename) { build(:asp_filename, :payments) }
 
     it "creates a new ASP::PaymentReturn" do
       expect { reader.parse! }.to change(ASP::PaymentReturn, :count).by(1)
@@ -52,48 +59,6 @@ describe ASP::FileReader do
       reader.parse!
 
       expect(ASP::PaymentReturn.last.filename).to eq basename
-    end
-  end
-
-  describe "#original_filename" do
-    subject { described_class.new(filepath).original_filename }
-
-    context "when the file is a rejects file" do
-      let(:filepath) { "/tmp/rejets_integ_idp_foobar_123_xml.csv" }
-
-      it { is_expected.to eq "foobar_123_xml.xml" }
-    end
-
-    context "when the file is an integration file" do
-      let(:filepath) { "tmp/identifiants_generes_foobar_456_xml.csv" }
-
-      it { is_expected.to eq "foobar_456_xml.xml" }
-    end
-
-    context "when the file is a payment file" do
-      let(:filepath) { "renvoi_paiement_aplypro_20240129.xml" }
-
-      it { is_expected.to be_nil }
-    end
-  end
-
-  describe "find_request!" do
-    subject(:find_request) { described_class.new(filepath).request }
-
-    before do
-      create(:asp_request, filename: "foobar.xml")
-    end
-
-    let(:filepath) { "tmp/identifiants_generes_foobar.csv" }
-
-    it { is_expected.to be_an ASP::Request }
-
-    context "when there is no such request" do
-      let(:filepath) { "tmp/identifiants_generes_123.csv" }
-
-      it "raises a specific error" do
-        expect { find_request }.to raise_error ASP::Errors::UnmatchedResponseFile
-      end
     end
   end
 end

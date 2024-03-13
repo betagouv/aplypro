@@ -13,6 +13,20 @@ module ASP
       @filename = File.basename(filepath, ".*")
     end
 
+    def parse!
+      persist_file!
+
+      reader = reader_for(kind).new(File.read(filepath))
+
+      begin
+        reader.process!
+      rescue StandardError => e
+        raise ResponseFileParsingError, "couldn't parse #{filename}: #{e}"
+      end
+    end
+
+    private
+
     FILE_TYPES.each do |type|
       define_method "#{type}_file?" do
         kind == type
@@ -54,32 +68,8 @@ module ASP
       raise UnmatchedResponseFile
     end
 
-    def target_attachment
-      request.send "#{kind}_file"
-    end
-
-    def attach_to_request!
-      target_attachment
-        .attach(
-          io: File.open(filepath),
-          filename: filepath
-        )
-    end
-
     def reader_for(kind)
       "ASP::Readers::#{kind.capitalize}FileReader".constantize
-    end
-
-    def parse!
-      persist_file!
-
-      reader = reader_for(kind).new(File.read(filepath))
-
-      begin
-        reader.process!
-      rescue StandardError => e
-        raise ResponseFileParsingError, "couldn't parse #{filename}: #{e}"
-      end
     end
 
     def persist_file!
@@ -92,6 +82,18 @@ module ASP
 
     def persist_payment_file!
       ASP::PaymentReturn.create_with_file!(io: File.read(filepath), filename: "#{filename}.xml")
+    end
+
+    def attach_to_request!
+      target_attachment
+        .attach(
+          io: File.open(filepath),
+          filename: filepath
+        )
+    end
+
+    def target_attachment
+      request.send "#{kind}_file"
     end
 
     def file_saved?
