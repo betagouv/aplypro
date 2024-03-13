@@ -22,7 +22,7 @@
       - if @pfmp.can_be_modified?
         = link_to "Modifier la PFMP", edit_class_schooling_pfmp_path(@classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
         = link_to "Supprimer la PFMP", confirm_deletion_class_schooling_pfmp_path(@classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
-      - else 
+      - else
         = button_tag "Modifier la PFMP", disabled: true, class: 'fr-btn fr-btn--secondary', title: "Vous ne pouvez pas modifier une PFMP dont le paiement est en cours de traitement"
         = button_tag "Supprimer la PFMP", disabled: true, class: 'fr-btn fr-btn--secondary', title: "Vous ne pouvez pas supprimer une PFMP dont le paiement est en cours de traitement"
 
@@ -36,7 +36,7 @@
           à payer
       %div
         = @pfmp.day_count
-        jours x 
+        jours x
         = number_to_currency @pfmp.wage.daily_rate
         par jour =
         = number_to_currency(@pfmp.day_count * @pfmp.wage.daily_rate)
@@ -44,7 +44,7 @@
         = number_to_currency @pfmp.wage.yearly_cap
         de plafond maximum par an
       %div.fr-mb-1w
-        = number_to_currency @pfmp.previously_paid_amount_for_mef
+        = number_to_currency @pfmp.previously_locked_amount
         engagés par les PFMPs précédemment déclarées.
 
   - if @pfmp.in_state?(:validated)
@@ -61,5 +61,3 @@
         .fr-mt-2w.gray-text
           Dernière mise à jour le
           = l(payment_request.updated_at, format: :long)
-
-  
