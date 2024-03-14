@@ -13,17 +13,17 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et que je renseigne et valide une PFMP de 3 jours
     Quand je me rends sur la page d'accueil
 
-  Scénario: Le personnel de direction voit un paiement en attente pour une PFMP validée
+  Scénario: Le personnel de direction voit une demande de paiement en attente
     Alors l'indicateur de demandes de paiements "En attente" affiche 1
     Et l'indicateur de demandes de paiements "Bloquée" n'est pas affiché
 
-  Scénario: Le personnel de direction voit un paiement incomplet
+  Scénario: Le personnel de direction voit une demande de paiement incomplet
     Et que la tâche de préparation des paiements est passée
     Et que je rafraîchis la page
     Alors l'indicateur de demandes de paiements "En attente" affiche 0
     Et l'indicateur de demandes de paiements "Bloquées" affiche 1
 
-  Scénario: Le personnel de direction voit un paiement prêt à être envoyé 
+  Scénario: Le personnel de direction voit une demande de paiement prête à être envoyée
     Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que les informations personnelles ont été récupérées pour l'élève avec l'INE "MC3000"
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
@@ -33,7 +33,7 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Alors l'indicateur de demandes de paiements "En attente" affiche 1
     Et l'indicateur de demandes de paiements "Bloquées" n'est pas affiché
 
-  Scénario: Le personnel de direction voit un paiement envoyé
+  Scénario: Le personnel de direction voit une demande de paiement envoyée
     Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que les informations personnelles ont été récupérées pour l'élève avec l'INE "MC3000"
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
@@ -44,7 +44,7 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Alors l'indicateur de demandes de paiements "En traitement" affiche 1
     Et l'indicateur de demandes de paiements "Demande rejetée" n'est pas affiché
 
-  Scénario: Le personnel de direction voit un paiement intégré
+  Scénario: Le personnel de direction voit une demande de paiement intégrée
     Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que les informations personnelles ont été récupérées pour l'élève avec l'INE "MC3000"
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
@@ -58,7 +58,7 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Alors l'indicateur de demandes de paiements "En traitement" affiche 1
     Et l'indicateur de demandes de paiements "Demande rejetée" n'est pas affiché
 
-  Scénario: Le personnel de direction voit un paiement rejeté
+  Scénario: Le personnel de direction voit une demande de paiement rejetée à l'intégration
     Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que les informations personnelles ont été récupérées pour l'élève avec l'INE "MC3000"
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
@@ -71,3 +71,37 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Alors l'indicateur de demandes de paiements "En attente" affiche 0
     Alors l'indicateur de demandes de paiements "En traitement" affiche 0
     Et l'indicateur de demandes de paiements "Demandes rejetées" affiche 1
+
+  Scénario: Le personnel de direction voit une demande de paiement liquidée
+    Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
+    Et que les informations personnelles ont été récupérées pour l'élève avec l'INE "MC3000"
+    Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
+    Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
+    Et que les tâches de préparation et d'envoi des paiements sont passées
+    Et que le dernier paiement de "Marie Curie" a été envoyé avec un fichier "foobar.xml"
+    Et que l'ASP a accepté le dossier de "Marie Curie" dans un fichier "identifiants_generes_foobar.csv"
+    Et que la tâche de lecture des paiements est passée
+    Et que l'ASP a liquidé le paiement de "Marie Curie"
+    Et que la tâche de lecture des paiements est passée
+    Et que je rafraîchis la page
+    Alors l'indicateur de demandes de paiements "En attente" affiche 0
+    Alors l'indicateur de demandes de paiements "En traitement" affiche 0
+    Alors l'indicateur de demandes de paiements "Paiements envoyés" affiche 1
+    Alors l'indicateur de demandes de paiements "Paiements échoués" n'est pas affiché
+
+  Scénario: Le personnel de direction voit une demande de paiement rejetée à la liquidation
+    Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
+    Et que les informations personnelles ont été récupérées pour l'élève avec l'INE "MC3000"
+    Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
+    Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
+    Et que les tâches de préparation et d'envoi des paiements sont passées
+    Et que le dernier paiement de "Marie Curie" a été envoyé avec un fichier "foobar.xml"
+    Et que l'ASP a accepté le dossier de "Marie Curie" dans un fichier "identifiants_generes_foobar.csv"
+    Et que la tâche de lecture des paiements est passée
+    Et que l'ASP n'a pas pu liquider le paiement de "Marie Curie"
+    Et que la tâche de lecture des paiements est passée
+    Et que je rafraîchis la page
+    Alors l'indicateur de demandes de paiements "En attente" affiche 0
+    Alors l'indicateur de demandes de paiements "En traitement" affiche 0
+    Alors l'indicateur de demandes de paiements "Paiements envoyés" affiche 0
+    Alors l'indicateur de demandes de paiements "Paiements échoués" affiche 1

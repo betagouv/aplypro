@@ -38,3 +38,21 @@ Fonctionnalité: Gestion des retours de l'ASP
     Quand la tâche de lecture des paiements est passée
     Et que je consulte la dernière PFMP
     Alors la page contient "La demande a été intégrée"
+
+  Scénario: Le paiement a été liquidé sur le serveur de l'ASP
+    Sachant que le dernier paiement de "Marie Curie" a été envoyé avec un fichier "foobar.xml"
+    Et que l'ASP a accepté le dossier de "Marie Curie" dans un fichier "identifiants_generes_foobar.csv"
+    Quand la tâche de lecture des paiements est passée
+    Et que l'ASP a liquidé le paiement de "Marie Curie"
+    Et que la tâche de lecture des paiements est passée
+    Et que je consulte la dernière PFMP
+    Alors la page contient "Paiement envoyé"
+
+  Scénario: Le paiement n'a pas pu être liquider sur le serveur de l'ASP
+    Sachant que le dernier paiement de "Marie Curie" a été envoyé avec un fichier "foobar.xml"
+    Et que l'ASP a accepté le dossier de "Marie Curie" dans un fichier "identifiants_generes_foobar.csv"
+    Quand la tâche de lecture des paiements est passée
+    Et que l'ASP n'a pas pu liquider le paiement de "Marie Curie"
+    Et que la tâche de lecture des paiements est passée
+    Et que je consulte la dernière PFMP
+    Alors la page contient "Paiement échoué"

@@ -78,6 +78,40 @@ Sachantque("l'ASP a accepté le dossier de {string} dans un fichier {string}") d
   )
 end
 
+Sachantque("l'ASP a répondu {string} pour le paiement de {string}") do |state, name|
+  first_name, last_name = name.split
+  student = Student.find_by(first_name:, last_name:)
+  request = student.pfmps.last.payment_requests.last
+
+  payment_return_file = FactoryBot.build(
+    :asp_payment_return,
+    state.to_sym,
+    builder_class: ASP::Builder,
+    payment_request: request
+  )
+
+  filename = FactoryBot.build(:asp_filename, :payments)
+
+  steps %(
+    Sachant que l'ASP a mis a disposition un fichier "#{filename}" contenant :
+      """
+      #{payment_return_file}
+      """
+  )
+end
+
+Sachantque("l'ASP a liquidé le paiement de {string}") do |name|
+  steps %(
+    Sachant que l'ASP a répondu "success" pour le paiement de "#{name}"
+  )
+end
+
+Sachantque("l'ASP n'a pas pu liquider le paiement de {string}") do |name|
+  steps %(
+    Sachant que l'ASP a répondu "failed" pour le paiement de "#{name}"
+  )
+end
+
 Sachantque("le dernier paiement de {string} a été envoyé avec un fichier {string}") do |name, filename|
   first_name, last_name = name.split
 
