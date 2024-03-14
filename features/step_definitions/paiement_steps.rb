@@ -28,6 +28,14 @@ end
 Sachantqu("la tâche de lecture des paiements démarre") do
   PollPaymentsServerJob.perform_later
 end
+
+Sachantqu("la tâche de lecture des paiements est passée") do
+  steps %(
+    Quand la tâche de lecture des paiements démarre
+    Et que toutes les tâches de fond sont terminées
+  )
+end
+
 Sachantqu("il n'y a pas de fichiers sur le serveur de l'ASP") do
   FileUtils.rm_rf(TEMP_ASP_DIR) && FileUtils.mkdir_p(TEMP_ASP_DIR)
 end

@@ -35,7 +35,6 @@ Fonctionnalité: Gestion des retours de l'ASP
   Scénario: L'individu a été intégré sur le serveur de l'ASP
     Sachant que le dernier paiement de "Marie Curie" a été envoyé avec un fichier "foobar.xml"
     Et que l'ASP a accepté le dossier de "Marie Curie" dans un fichier "identifiants_generes_foobar.csv"
-    Quand la tâche de lecture des paiements démarre
-    Et que toutes les tâches de fond sont terminées
+    Quand la tâche de lecture des paiements est passée
     Et que je consulte la dernière PFMP
     Alors la page contient "La demande a été intégrée"

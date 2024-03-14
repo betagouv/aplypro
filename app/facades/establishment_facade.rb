@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class EstablishmentFacade
+  attr_accessor :establishment
+
   def initialize(establishment)
     @establishment = establishment
   end
@@ -48,11 +50,11 @@ class EstablishmentFacade
   end
 
   def pfmps
-    Pfmp.joins(:classe).where(schooling: { classe: current_classes })
+    establishment.pfmps.merge(Classe.current)
   end
 
   def current_classes
-    @establishment.classes.current
+    establishment.classes.current
   end
 
   def initial_state
@@ -69,6 +71,6 @@ class EstablishmentFacade
   end
 
   def current_payment_requests
-    @establishment.payment_requests.merge(Classe.current)
+    establishment.payment_requests.merge(Classe.current)
   end
 end
