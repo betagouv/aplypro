@@ -24,6 +24,12 @@ Alors("l'indicateur de PFMP {string} affiche {int}") do |status, count|
   end
 end
 
+Alors("l'indicateur de paiement {string} affiche {int}") do |status, count|
+  within("div[aria-label=\"#{status}\"]") do
+    expect(page).to have_content(count)
+  end
+end
+
 Lorsque("je suis responsable légal et que je génère les décisions d'attribution manquantes") do
   steps %(
     Lorsque je coche la case de responsable légal

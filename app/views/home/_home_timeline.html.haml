@@ -31,8 +31,8 @@
 
   .fr-grid-row
     .centering-container.fr-mb-2w.fr-mr-1w
-      = payment_requests_status_count_badge(:pending, 200, display_zero: true)
-      = payment_requests_status_count_badge(:incomplete, 2, display_zero: false)
+      = payment_requests_status_count_badge(:pending, 0, display_zero: true)
+      = payment_requests_status_count_badge(:incomplete, 0, display_zero: false)
     →
     .centering-container.fr-mb-2w.fr-mx-1w
       = payment_requests_status_count_badge(:sent, 0, display_zero: true)

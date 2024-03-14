@@ -32,8 +32,12 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Et que je me rends sur la page d'accueil
     Alors le panneau "Décisions d'attribution" contient "0 / 1"
     Et le panneau "Coordonnées bancaires" contient "1 / 1"
-    Et le panneau "Périodes de formation en milieu professionnel" contient "0"
-    Et le panneau "Demandes de paiements des PFMPs" contient "0"
+    Et l'indicateur de PFMP "À compléter" affiche 0
+    Et l'indicateur de PFMP "Saisies à valider" affiche 0
+    Et l'indicateur de PFMP "Validées" affiche 0
+    Et l'indicateur de paiement "En attente" affiche 0
+    Et l'indicateur de paiement "En traitement" affiche 0
+    Et l'indicateur de paiement "Paiements envoyés" affiche 0
 
   Scénario: Le personnel de direction voit le nom du directeur confirmé existant dans le panel de décision d'attribution
     Sachant que mon établissement a un directeur confirmé nommé "Jean Dupuis"

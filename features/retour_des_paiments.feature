@@ -8,7 +8,6 @@ Fonctionnalité: Gestion des retours de l'ASP
     Et que je me connecte en tant que personnel MENJ
     Et que toutes les tâches de fond sont terminées
     Et que les informations personnelles ont été récupérées pour l'élève avec l'INE "MC"
-    Et que toutes les tâches de fond sont terminées
     Et que je passe l'écran d'accueil
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
     Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
