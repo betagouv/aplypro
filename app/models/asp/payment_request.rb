@@ -35,6 +35,12 @@ module ASP
              :current_state, :history, :last_transition, :last_transition_to,
              :transition_to!, :transition_to, :in_state?, to: :state_machine
 
+    def self.grouped_states
+      PAYMENT_STAGES
+        .map { |stages| [stages[0..-2], [stages.last]] }
+        .reduce(&:concat)
+    end
+
     def mark_ready!
       transition_to!(:ready)
     end
