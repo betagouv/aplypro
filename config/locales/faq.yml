@@ -1,5 +1,12 @@
 fr:
   questions:
+    - title: Quand mes élèves seront-ils payés ?
+      answer: |
+        <p>Le début des versements était prévu à partir de fin janvier 2024.</p>
+        <p>Néanmoins, l'application nécessite encore quelques développements techniques indispensables ainsi qu'une dernière phase de tests pour permettre les envois généralisés de demandes de versements.</p>
+        <p>Ainsi les versements démarrent durant le premier trimestre 2024 de façon progressive pour de petits flux puis se poursuivront pour de plus gros flux, ce qui signifie que tous les élèves ne recevront pas leur allocation au même moment.</p>
+        <p>Il reste garanti que toutes les périodes de formation en milieu professionnel effectuées depuis septembre 2023 feront bien l'objet d'un versement dans les meilleurs délais tenant compte des éléments indiqués ci-dessus.</p>
+
     - title: Qui peut se connecter sur APLyPro ?
       answer: |
         Pour commencer sur APLyPro, le processus est le suivant :
@@ -19,8 +26,6 @@ fr:
       answer: DELEG-CE est désormais implémenté pour APLyPro. Les délégations sont équivalentes aux autorisations d'accès via "Gestion des accès" dans APLyPro. Vous ne pourrez donc pas déléguer les droits pour la génération de décisions d'attribution, ni pour la validation de PFMPs.
     - title: Comment mettre à jour ma liste d'élèves ?
       answer: APLyPro récupère les listes d'élèves et de classes de la BEE (Base Elèves Etablissements du MENJ) ou de Fregata (base d'élèves du MASA). Les mises à jour sont à effectuer dans ces bases et seront répercutées dans APLyPro.
-    - title: Quand mes élèves seront-ils payés ?
-      answer: Les paiements débuteront en 2024. Mais vous pourrez quand même saisir toutes les informations nécessaires à l'avance.
     - title: Les apprentis sont-ils concernés par l'allocation ?
       answer: Si des apprentis apparaissent dans vos classes, ils ne sont pas concernés par l'allocation. Nous allons bientôt les retirer d'APLyPro, vous devez les ignorer lors de vos saisies.
     - title: (MENJ) J'ai des cas d'élèves très particuliers, à qui poser mes questions ?

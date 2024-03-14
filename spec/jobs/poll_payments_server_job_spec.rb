@@ -6,12 +6,12 @@ RSpec.describe PollPaymentsServerJob do
   include ActiveJob::TestHelper
 
   let(:server_double) { class_double(ASP::Server) }
-  let(:reader_double) { class_double(ASP::FileReader) }
-  let(:double) { instance_double(ASP::FileReader) }
+  let(:reader_double) { class_double(ASP::FileHandler) }
+  let(:double) { instance_double(ASP::FileHandler) }
 
   before do
     stub_const("ASP::Server", server_double)
-    stub_const("ASP::FileReader", reader_double)
+    stub_const("ASP::FileHandler", reader_double)
 
     allow(Dir).to receive(:each_child).and_yield("foobar")
 
@@ -29,7 +29,7 @@ RSpec.describe PollPaymentsServerJob do
     expect(server_double).to have_received(:get_all_files!)
   end
 
-  it "feeds each file to an ASP::FileReader" do
+  it "feeds each file to an ASP::FileHandler" do
     perform_enqueued_jobs { described_class.perform_later }
 
     expect(double).to have_received(:parse!)

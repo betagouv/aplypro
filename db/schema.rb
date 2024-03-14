@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_28_153920) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_04_081606) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -61,6 +61,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_28_153920) do
     t.bigint "pfmp_id"
     t.index ["asp_request_id"], name: "index_asp_payment_requests_on_asp_request_id"
     t.index ["pfmp_id"], name: "index_asp_payment_requests_on_pfmp_id"
+  end
+
+  create_table "asp_payment_returns", force: :cascade do |t|
+    t.string "filename", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["filename"], name: "index_asp_payment_returns_on_filename", unique: true
   end
 
   create_table "asp_requests", force: :cascade do |t|

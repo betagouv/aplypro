@@ -9,7 +9,7 @@ class PollPaymentsServerJob < ApplicationJob
     Dir.each_child(dir) do |file|
       next if file == ".keep" # these are the Git-keep files of our local dev
 
-      reader = ASP::FileReader.new(File.join(dir, file))
+      reader = ASP::FileHandler.new(File.join(dir, file))
 
       begin
         reader.parse!

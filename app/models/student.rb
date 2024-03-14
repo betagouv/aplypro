@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Student < ApplicationRecord
-  include AllowanceChecker
-
   validates :ine,
             :first_name,
             :last_name,

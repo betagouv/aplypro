@@ -41,7 +41,7 @@ class Classe < ApplicationRecord
   has_many :active_pfmps, through: :active_schoolings, class_name: "Pfmp", source: :pfmps
 
   validates :label, :start_year, presence: true
-  validates :start_year, numericality: { only_integer: true, greater_than_or_equal_to: 2023 }
+  validates :start_year, numericality: { only_integer: true }
 
   scope :current, -> { where(start_year: ENV.fetch("APLYPRO_SCHOOL_YEAR")) }
   scope :with_attributive_decisions, -> { joins(schoolings: :attributive_decision_attachment) }

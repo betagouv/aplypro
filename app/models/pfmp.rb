@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Pfmp < ApplicationRecord
+  include PfmpAmountCalculator
+
   belongs_to :schooling
   has_one :classe, through: :schooling
   has_one :student, through: :schooling
@@ -73,31 +75,12 @@ class Pfmp < ApplicationRecord
     payment_requests.create! if amount.positive?
   end
 
-  def calculate_amount
-    return if day_count.nil?
-
-    [
-      day_count * wage.daily_rate,
-      student.allowance_left(mef)
-    ].min
-  end
-
   def relative_index
     schooling.pfmps.pluck(:id).find_index(id)
   end
 
   def relative_human_index
     relative_index + 1
-  end
-
-  def previously_paid_amount_for_mef
-    student
-      .pfmps
-      .where("pfmps.created_at < (?)", created_at)
-      .where.not(amount: nil)
-      .joins(schooling: :classe)
-      .where("classe.mef_id": mef.id, "classe.start_year": ENV.fetch("APLYPRO_SCHOOL_YEAR"))
-      .sum(&:amount)
   end
 
   def can_be_modified?

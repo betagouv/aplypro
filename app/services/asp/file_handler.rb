@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ASP
-  class FileReader
+  class FileHandler
     include Errors
 
     attr_reader :filepath, :filename
@@ -12,6 +12,28 @@ module ASP
       @filepath = filepath
       @filename = File.basename(filepath, ".*")
     end
+
+    def parse!
+      persist_file!
+
+      reader = reader_for(kind).new(File.read(filepath))
+
+      begin
+        reader.process!
+      rescue StandardError => e
+        raise ResponseFileParsingError, "couldn't parse #{filename}: #{e}"
+      end
+    end
+
+    def file_saved?
+      if payments_file?
+        ASP::PaymentReturn.exists?(filename: filename)
+      else
+        target_attachment.attached?
+      end
+    end
+
+    private
 
     FILE_TYPES.each do |type|
       define_method "#{type}_file?" do
@@ -54,8 +76,20 @@ module ASP
       raise UnmatchedResponseFile
     end
 
-    def target_attachment
-      request.send "#{kind}_file"
+    def reader_for(kind)
+      "ASP::Readers::#{kind.capitalize}FileReader".constantize
+    end
+
+    def persist_file!
+      if payments_file?
+        persist_payment_file!
+      else
+        attach_to_request!
+      end
+    end
+
+    def persist_payment_file!
+      ASP::PaymentReturn.create_with_file!(io: File.read(filepath), filename: "#{filename}.xml")
     end
 
     def attach_to_request!
@@ -66,24 +100,8 @@ module ASP
         )
     end
 
-    def reader_for(kind)
-      "ASP::Readers::#{kind.capitalize}FileReader".constantize
-    end
-
-    def parse!
-      attach_to_request! unless payments_file?
-
-      reader = reader_for(kind).new(File.read(filepath))
-
-      begin
-        reader.process!
-      rescue StandardError => e
-        raise ResponseFileParsingError, "couldn't parse #{filename}: #{e}"
-      end
-    end
-
-    def file_saved?
-      target_attachment.attached?
+    def target_attachment
+      request.send "#{kind}_file"
     end
   end
 end

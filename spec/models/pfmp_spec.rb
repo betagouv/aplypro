@@ -72,44 +72,15 @@ RSpec.describe Pfmp do
     end
   end
 
-  describe "calculate_amount" do
-    let(:amount) { mef.wage.daily_rate * pfmp.day_count }
-
-    before { pfmp.update!(day_count: 10) }
-
-    context "when the amount is over the allowance left" do
+  context "when the amount is updated" do
+    context "with a validated PFMP" do
       before do
-        allow(pfmp.student).to receive(:allowance_left).and_return(amount - 1)
+        pfmp.update!(day_count: 10)
+        pfmp.validate!
       end
 
-      it "returns the allowance left" do
-        expect(pfmp.calculate_amount).to eq amount - 1
-      end
-    end
-
-    context "when the amount is under the allowance left" do
-      before do
-        allow(pfmp.student).to receive(:allowance_left).and_return(amount + 1)
-      end
-
-      it "returns the amount" do
-        expect(pfmp.calculate_amount).to eq amount
-      end
-    end
-
-    context "when the amount is updated" do
-      it "updates the amount" do
-        expect { pfmp.update!(day_count: 20) }.to change(pfmp, :amount).from(amount).to(amount * 2)
-      end
-
-      context "with a validated PFMP" do
-        before do
-          pfmp.validate!
-        end
-
-        it "throws an error" do
-          expect { pfmp.update!(day_count: 15) }.to raise_error(/day count changed/)
-        end
+      it "throws an error" do
+        expect { pfmp.update!(day_count: 15) }.to raise_error(/day count changed/)
       end
     end
   end
