@@ -19,9 +19,6 @@ module ASP
              dependent: :destroy,
              inverse_of: :asp_payment_request
 
-    scope :pending_or_ready, -> { in_state(:pending, :ready) }
-    scope :sent_or_integrated, -> { in_state(:sent, :integrated) }
-
     include Statesman::Adapters::ActiveRecordQueries[
       transition_class: ASP::PaymentRequestTransition,
       initial_state: ASP::PaymentRequestStateMachine.initial_state,
