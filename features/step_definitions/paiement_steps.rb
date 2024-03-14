@@ -46,34 +46,35 @@ Quand("l'ASP a mis a disposition un fichier {string} contenant :") do |filename,
   File.write(destination, string)
 end
 
-Sachantque(
-  "l'ASP a rejetté le dossier de {string} avec un motif de {string} dans un fichier {string}"
-) do |name, reason, filename|
-  first_name, last_name = name.split
-  student = Student.find_by(first_name:, last_name:)
-
-  request = student.pfmps.last.payment_requests.last
-
+Sachantque("l'ASP a rejetté le dossier de {string} avec un motif de {string}") do |name, reason|
   steps %(
-    Sachant que l'ASP a mis a disposition un fichier "#{filename}" contenant :
-      """
-      Numéro d'enregistrement;Type d'entité;Numadm;Motif rejet;idIndDoublon
-      #{request.id};;;#{reason};
-      """
+    Sachant que l'ASP a répondu "failed" pour le dossier de "#{name}" avec la raison "#{reason}"
   )
 end
 
-Sachantque("l'ASP a accepté le dossier de {string} dans un fichier {string}") do |name, filename|
+Sachantque("l'ASP a accepté le dossier de {string}") do |name|
+  steps %(
+    Sachant que l'ASP a répondu "success" pour le dossier de "#{name}" avec la raison ""
+  )
+end
+
+Sachantque("l'ASP a répondu {string} pour le dossier de {string} avec la raison {string}") do |state, name, reason|
   first_name, last_name = name.split
   student = Student.find_by(first_name:, last_name:)
 
+  file_name_type = state == "success" ? :integrations : :rejects
+  file_type = state == "success" ? :asp_integration : :asp_reject
+
   request = student.pfmps.last.payment_requests.last
 
+  identifier = request.asp_request.file.filename.to_s.split(".xml").first
+  file_name = FactoryBot.build(:asp_filename, file_name_type, identifier: identifier)
+  file_content = FactoryBot.build(file_type, payment_request: request, reason: reason)
+
   steps %(
-    Sachant que l'ASP a mis a disposition un fichier "#{filename}" contenant :
+    Sachant que l'ASP a mis a disposition un fichier "#{file_name}" contenant :
       """
-      Numero enregistrement;idIndDoss;idIndTiers;idDoss;numAdmDoss;idPretaDoss;numAdmPrestaDoss;idIndPrestaDoss
-      #{request.id};700056261;;700086362;ENPUPLF1POP31X20230;700085962;ENPUPLF1POP31X20230;700056261
+      #{file_content}
       """
   )
 end
@@ -110,17 +111,6 @@ Sachantque("l'ASP n'a pas pu liquider le paiement de {string}") do |name|
   steps %(
     Sachant que l'ASP a répondu "failed" pour le paiement de "#{name}"
   )
-end
-
-Sachantque("le dernier paiement de {string} a été envoyé avec un fichier {string}") do |name, filename|
-  first_name, last_name = name.split
-
-  pfmp = Student
-         .find_by(first_name:, last_name:)
-         .pfmps
-         .last
-
-  pfmp.payment_requests.last.asp_request.file.update!(filename: filename)
 end
 
 Alors("je peux voir une demande de paiement {string}") do |state|

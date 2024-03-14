@@ -50,8 +50,7 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
     Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
     Et que les tâches de préparation et d'envoi des paiements sont passées
-    Et que le dernier paiement de "Marie Curie" a été envoyé avec un fichier "foobar.xml"
-    Et que l'ASP a accepté le dossier de "Marie Curie" dans un fichier "identifiants_generes_foobar.csv"
+    Et que l'ASP a accepté le dossier de "Marie Curie"
     Et que la tâche de lecture des paiements est passée
     Et que je rafraîchis la page
     Alors l'indicateur de demandes de paiements "En attente" affiche 0
@@ -64,8 +63,7 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
     Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
     Et que les tâches de préparation et d'envoi des paiements sont passées
-    Sachant que le dernier paiement de "Marie Curie" a été envoyé avec un fichier "foobar.xml"
-    Et que l'ASP a rejetté le dossier de "Marie Curie" avec un motif de "mauvais code postal" dans un fichier "rejets_integ_idp_foobar.csv"
+    Et que l'ASP a rejetté le dossier de "Marie Curie" avec un motif de "mauvais code postal"
     Et que la tâche de lecture des paiements est passée
     Et que je rafraîchis la page
     Alors l'indicateur de demandes de paiements "En attente" affiche 0
@@ -78,8 +76,7 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
     Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
     Et que les tâches de préparation et d'envoi des paiements sont passées
-    Et que le dernier paiement de "Marie Curie" a été envoyé avec un fichier "foobar.xml"
-    Et que l'ASP a accepté le dossier de "Marie Curie" dans un fichier "identifiants_generes_foobar.csv"
+    Et que l'ASP a accepté le dossier de "Marie Curie"
     Et que la tâche de lecture des paiements est passée
     Et que l'ASP a liquidé le paiement de "Marie Curie"
     Et que la tâche de lecture des paiements est passée
@@ -95,8 +92,7 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
     Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
     Et que les tâches de préparation et d'envoi des paiements sont passées
-    Et que le dernier paiement de "Marie Curie" a été envoyé avec un fichier "foobar.xml"
-    Et que l'ASP a accepté le dossier de "Marie Curie" dans un fichier "identifiants_generes_foobar.csv"
+    Et que l'ASP a accepté le dossier de "Marie Curie"
     Et que la tâche de lecture des paiements est passée
     Et que l'ASP n'a pas pu liquider le paiement de "Marie Curie"
     Et que la tâche de lecture des paiements est passée

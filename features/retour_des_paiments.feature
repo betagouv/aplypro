@@ -24,8 +24,7 @@ Fonctionnalité: Gestion des retours de l'ASP
     Alors je peux voir une demande de paiement "En traitement" de 30 euros
 
   Scénario: L'individu n'a pas pu être intégré sur le serveur de l'ASP
-    Sachant que le dernier paiement de "Marie Curie" a été envoyé avec un fichier "foobar.xml"
-    Et que l'ASP a rejetté le dossier de "Marie Curie" avec un motif de "mauvais code postal" dans un fichier "rejets_integ_idp_foobar.csv"
+    Et que l'ASP a rejetté le dossier de "Marie Curie" avec un motif de "mauvais code postal"
     Quand la tâche de lecture des paiements démarre
     Et que toutes les tâches de fond sont terminées
     Et que je consulte la dernière PFMP
@@ -33,15 +32,13 @@ Fonctionnalité: Gestion des retours de l'ASP
     Et la page contient "mauvais code postal"
 
   Scénario: L'individu a été intégré sur le serveur de l'ASP
-    Sachant que le dernier paiement de "Marie Curie" a été envoyé avec un fichier "foobar.xml"
-    Et que l'ASP a accepté le dossier de "Marie Curie" dans un fichier "identifiants_generes_foobar.csv"
+    Et que l'ASP a accepté le dossier de "Marie Curie"
     Quand la tâche de lecture des paiements est passée
     Et que je consulte la dernière PFMP
     Alors la page contient "La demande a été intégrée"
 
   Scénario: Le paiement a été liquidé sur le serveur de l'ASP
-    Sachant que le dernier paiement de "Marie Curie" a été envoyé avec un fichier "foobar.xml"
-    Et que l'ASP a accepté le dossier de "Marie Curie" dans un fichier "identifiants_generes_foobar.csv"
+    Et que l'ASP a accepté le dossier de "Marie Curie"
     Quand la tâche de lecture des paiements est passée
     Et que l'ASP a liquidé le paiement de "Marie Curie"
     Et que la tâche de lecture des paiements est passée
@@ -49,8 +46,7 @@ Fonctionnalité: Gestion des retours de l'ASP
     Alors la page contient "Paiement envoyé"
 
   Scénario: Le paiement n'a pas pu être liquider sur le serveur de l'ASP
-    Sachant que le dernier paiement de "Marie Curie" a été envoyé avec un fichier "foobar.xml"
-    Et que l'ASP a accepté le dossier de "Marie Curie" dans un fichier "identifiants_generes_foobar.csv"
+    Et que l'ASP a accepté le dossier de "Marie Curie"
     Quand la tâche de lecture des paiements est passée
     Et que l'ASP n'a pas pu liquider le paiement de "Marie Curie"
     Et que la tâche de lecture des paiements est passée
