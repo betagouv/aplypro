@@ -6,14 +6,20 @@ Quand("la tâche de préparation des paiements démarre") do
   PreparePaymentRequestsJob.perform_later
 end
 
+Quand("la tâche de préparation des paiements est passée") do
+  steps %(
+    Quand la tâche de préparation des paiements démarre
+    Et que toutes les tâches de fond sont terminées
+  )
+end
+
 Quand("la tâche d'envoi des paiements démarre pour toutes les requêtes prêtes à l'envoi") do
   SendPaymentRequestsJob.perform_later(ASP::PaymentRequest.in_state(:ready).to_a)
 end
 
 Quand("les tâches de préparation et d'envoi des paiements sont passées") do
   steps %(
-    Quand la tâche de préparation des paiements démarre
-    Et que toutes les tâches de fond sont terminées
+    Quand la tâche de préparation des paiements est passée
     Et que la tâche d'envoi des paiements démarre pour toutes les requêtes prêtes à l'envoi
     Et que toutes les tâches de fond sont terminées
   )
@@ -22,7 +28,6 @@ end
 Sachantqu("la tâche de lecture des paiements démarre") do
   PollPaymentsServerJob.perform_later
 end
-
 Sachantqu("il n'y a pas de fichiers sur le serveur de l'ASP") do
   FileUtils.rm_rf(TEMP_ASP_DIR) && FileUtils.mkdir_p(TEMP_ASP_DIR)
 end

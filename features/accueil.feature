@@ -35,9 +35,9 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Et l'indicateur de PFMP "À compléter" affiche 0
     Et l'indicateur de PFMP "Saisies à valider" affiche 0
     Et l'indicateur de PFMP "Validées" affiche 0
-    Et l'indicateur de paiement "En attente" affiche 0
-    Et l'indicateur de paiement "En traitement" affiche 0
-    Et l'indicateur de paiement "Paiements envoyés" affiche 0
+    Et l'indicateur de demandes de paiements "En attente" affiche 0
+    Et l'indicateur de demandes de paiements "En traitement" affiche 0
+    Et l'indicateur de demandes de paiements "Paiements envoyés" affiche 0
 
   Scénario: Le personnel de direction voit le nom du directeur confirmé existant dans le panel de décision d'attribution
     Sachant que mon établissement a un directeur confirmé nommé "Jean Dupuis"

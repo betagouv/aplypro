@@ -24,10 +24,14 @@ Alors("l'indicateur de PFMP {string} affiche {int}") do |status, count|
   end
 end
 
-Alors("l'indicateur de paiement {string} affiche {int}") do |status, count|
+Alors("l'indicateur de demandes de paiements {string} affiche {int}") do |status, count|
   within("div[aria-label=\"#{status}\"]") do
     expect(page).to have_content(count)
   end
+end
+
+Alors("l'indicateur de demandes de paiements {string} n'est pas affiché") do |status|
+  expect(page).to have_no_css("div[aria-label=\"#{status}\"]")
 end
 
 Lorsque("je suis responsable légal et que je génère les décisions d'attribution manquantes") do
