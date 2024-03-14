@@ -4,6 +4,8 @@ FactoryBot.define do
   factory :asp_payment_request, class: "ASP::PaymentRequest" do
     pfmp
 
+    trait :pending
+
     trait :ready do
       after(:create) do |req|
         req.pfmp.student = create(:student, :with_all_asp_info, :underage)
@@ -36,10 +38,24 @@ FactoryBot.define do
       end
     end
 
+    trait :rejected do
+      sent
+
+      after(:create) do |obj|
+        obj.reject!({})
+      end
+    end
+
     trait :paid do
       integrated
 
       after(:create, &:mark_paid!)
+    end
+
+    trait :unpaid do
+      integrated
+
+      after(:create, &:mark_unpaid!)
     end
   end
 end

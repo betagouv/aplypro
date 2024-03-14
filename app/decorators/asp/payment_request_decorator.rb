@@ -13,12 +13,6 @@ module ASP
       unpaid: :error
     }.freeze
 
-    PAYMENT_STAGES = [
-      %i[pending ready incomplete],
-      %i[sent integrated rejected],
-      %i[paid unpaid]
-    ].freeze
-
     def status_badge
       dsfr_badge(status: BADGE_STATE_MAPPING[current_state.to_sym], classes: ["fr-badge--sm"]) do
         status
@@ -36,7 +30,7 @@ module ASP
     end
 
     def current_stages
-      PAYMENT_STAGES.map do |states_group|
+      ASP::PaymentRequest::PAYMENT_STAGES.map do |states_group|
         if states_group.include? current_state_symbol
           current_state_symbol
         else

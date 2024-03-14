@@ -2,6 +2,12 @@
 
 module ASP
   class PaymentRequest < ApplicationRecord
+    PAYMENT_STAGES = [
+      %i[pending ready incomplete],
+      %i[sent integrated rejected],
+      %i[paid unpaid]
+    ].freeze
+
     belongs_to :asp_request, class_name: "ASP::Request", optional: true
     belongs_to :pfmp
 
@@ -12,6 +18,9 @@ module ASP
              class_name: "ASP::PaymentRequestTransition",
              dependent: :destroy,
              inverse_of: :asp_payment_request
+
+    scope :pending_or_ready, -> { in_state(:pending, :ready) }
+    scope :sent_or_integrated, -> { in_state(:sent, :integrated) }
 
     include Statesman::Adapters::ActiveRecordQueries[
       transition_class: ASP::PaymentRequestTransition,
@@ -50,12 +59,12 @@ module ASP
       transition_to!(:paid)
     end
 
-    def stopped?
-      in_state?(:incomplete, :rejected, :unpaid)
+    def mark_unpaid!
+      transition_to!(:unpaid)
     end
 
-    def mark_unpaid!
-      transition_to(:unpaid)
+    def stopped?
+      in_state?(:incomplete, :rejected, :unpaid)
     end
   end
 end
