@@ -90,4 +90,8 @@ class Pfmp < ApplicationRecord
       true
     end
   end
+
+  def payment_due?
+    day_count.present?
+  end
 end
