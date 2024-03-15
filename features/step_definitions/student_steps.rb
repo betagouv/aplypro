@@ -17,9 +17,7 @@ end
 Sachantque("les informations personnelles ont été récupérées pour tous les élèves de l'établissement {string}") do |uai|
   establishment = Establishment.find_by(uai: uai)
 
-  establishment.schoolings.each do |schooling|
-    FetchStudentInformationJob.perform_now(schooling)
-  end
+  ActiveJob.perform_all_later(establishment.schoolings.map { |schooling| FetchStudentInformationJob.new(schooling) })
 end
 
 Quand("l'élève avec l'INE {string} s'appelle {string} {string}") do |ine, first_name, last_name|
