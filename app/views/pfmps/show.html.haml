@@ -27,7 +27,7 @@
         = button_tag "Supprimer la PFMP", disabled: true, class: 'fr-btn fr-btn--secondary', title: "Vous ne pouvez pas supprimer une PFMP dont le paiement est en cours de traitement"
 
 
-  - if @pfmp.amount.present?
+  - if @pfmp.payment_due?
     %h2.fr-h3 Paiement
     .gray-panel.fr-p-3w.fr-mb-3w
       %div
