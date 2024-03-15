@@ -13,13 +13,13 @@ RSpec.describe EstablishmentFacade do
     let(:classe) { create(:classe, establishment: establishment) }
     let(:pfmps) { create_list(:pfmp, 10, classe: classe) }
 
-    context "when there are some no paiement requests" do
+    context "when there are some no payment requests" do
       it "counts all statuses at zero" do
-        expect(payment_requests_counts.values.uniq).to eq [0]
+        expect(payment_requests_counts.values).to all be_zero
       end
     end
 
-    context "when there is 2 payment requests pending and 3 ready" do
+    context "when there are 2 payment requests pending and 3 ready" do
       before do
         pfmps.first(2).each { |pfmp| create(:asp_payment_request, :pending, pfmp: pfmp) }
         pfmps.first(3).each { |pfmp| create(:asp_payment_request, :ready, pfmp: pfmp) }
@@ -30,7 +30,7 @@ RSpec.describe EstablishmentFacade do
       end
     end
 
-    context "when there is 4 payment requests sent and 5 integrated" do
+    context "when there are 4 payment requests sent and 5 integrated" do
       before do
         pfmps.first(4).each { |pfmp| create(:asp_payment_request, :sent, pfmp: pfmp) }
         pfmps.first(5).each { |pfmp| create(:asp_payment_request, :integrated, pfmp: pfmp) }
