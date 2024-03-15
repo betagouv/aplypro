@@ -18,7 +18,7 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et l'indicateur de demandes de paiements "Bloquée" n'est pas affiché
 
   Scénario: Le personnel de direction voit une demande de paiement incomplet
-    Et que la tâche de préparation des paiements est passée
+    Quand la tâche de préparation des paiements est passée
     Et que je rafraîchis la page
     Alors l'indicateur de demandes de paiements "En attente" affiche 0
     Et l'indicateur de demandes de paiements "Bloquées" affiche 1
@@ -28,7 +28,7 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et que les informations personnelles ont été récupérées pour l'élève avec l'INE "MC3000"
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
     Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
-    Et que la tâche de préparation des paiements est passée
+    Quand la tâche de préparation des paiements est passée
     Et que je rafraîchis la page
     Alors l'indicateur de demandes de paiements "En attente" affiche 1
     Et l'indicateur de demandes de paiements "Bloquées" n'est pas affiché
@@ -38,7 +38,7 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et que les informations personnelles ont été récupérées pour l'élève avec l'INE "MC3000"
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
     Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
-    Et que les tâches de préparation et d'envoi des paiements sont passées
+    Quand les tâches de préparation et d'envoi des paiements sont passées
     Et que je rafraîchis la page
     Alors l'indicateur de demandes de paiements "En attente" affiche 0
     Alors l'indicateur de demandes de paiements "En traitement" affiche 1
@@ -50,11 +50,11 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
     Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
     Et que les tâches de préparation et d'envoi des paiements sont passées
-    Et que l'ASP a accepté le dossier de "Marie Curie"
+    Quand l'ASP a accepté le dossier de "Marie Curie"
     Et que la tâche de lecture des paiements est passée
     Et que je rafraîchis la page
     Alors l'indicateur de demandes de paiements "En attente" affiche 0
-    Alors l'indicateur de demandes de paiements "En traitement" affiche 1
+    Et l'indicateur de demandes de paiements "En traitement" affiche 1
     Et l'indicateur de demandes de paiements "Demande rejetée" n'est pas affiché
 
   Scénario: Le personnel de direction voit une demande de paiement rejetée à l'intégration
@@ -63,11 +63,11 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
     Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
     Et que les tâches de préparation et d'envoi des paiements sont passées
-    Et que l'ASP a rejetté le dossier de "Marie Curie" avec un motif de "mauvais code postal"
+    Quand l'ASP a rejetté le dossier de "Marie Curie" avec un motif de "mauvais code postal"
     Et que la tâche de lecture des paiements est passée
     Et que je rafraîchis la page
     Alors l'indicateur de demandes de paiements "En attente" affiche 0
-    Alors l'indicateur de demandes de paiements "En traitement" affiche 0
+    Et l'indicateur de demandes de paiements "En traitement" affiche 0
     Et l'indicateur de demandes de paiements "Demandes rejetées" affiche 1
 
   Scénario: Le personnel de direction voit une demande de paiement liquidée
@@ -78,13 +78,13 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et que les tâches de préparation et d'envoi des paiements sont passées
     Et que l'ASP a accepté le dossier de "Marie Curie"
     Et que la tâche de lecture des paiements est passée
-    Et que l'ASP a liquidé le paiement de "Marie Curie"
+    Quand l'ASP a liquidé le paiement de "Marie Curie"
     Et que la tâche de lecture des paiements est passée
     Et que je rafraîchis la page
     Alors l'indicateur de demandes de paiements "En attente" affiche 0
-    Alors l'indicateur de demandes de paiements "En traitement" affiche 0
-    Alors l'indicateur de demandes de paiements "Paiements envoyés" affiche 1
-    Alors l'indicateur de demandes de paiements "Paiements échoués" n'est pas affiché
+    Et l'indicateur de demandes de paiements "En traitement" affiche 0
+    Et l'indicateur de demandes de paiements "Paiements envoyés" affiche 1
+    Et l'indicateur de demandes de paiements "Paiements échoués" n'est pas affiché
 
   Scénario: Le personnel de direction voit une demande de paiement rejetée à la liquidation
     Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
@@ -94,10 +94,10 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et que les tâches de préparation et d'envoi des paiements sont passées
     Et que l'ASP a accepté le dossier de "Marie Curie"
     Et que la tâche de lecture des paiements est passée
-    Et que l'ASP n'a pas pu liquider le paiement de "Marie Curie"
+    Quand l'ASP n'a pas pu liquider le paiement de "Marie Curie"
     Et que la tâche de lecture des paiements est passée
     Et que je rafraîchis la page
     Alors l'indicateur de demandes de paiements "En attente" affiche 0
-    Alors l'indicateur de demandes de paiements "En traitement" affiche 0
-    Alors l'indicateur de demandes de paiements "Paiements envoyés" affiche 0
-    Alors l'indicateur de demandes de paiements "Paiements échoués" affiche 1
+    Et l'indicateur de demandes de paiements "En traitement" affiche 0
+    Et l'indicateur de demandes de paiements "Paiements envoyés" affiche 0
+    Et l'indicateur de demandes de paiements "Paiements échoués" affiche 1
