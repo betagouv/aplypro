@@ -47,7 +47,7 @@
         = number_to_currency @pfmp.previously_locked_amount
         engagés par les PFMPs précédemment déclarées.
 
-  - if @pfmp.in_state?(:validated)
+  - if @pfmp.payment_requests.any?
     %h3.fr-h5
       = "Demande".pluralize(@pfmp.payment_requests.count)
       de paiement
