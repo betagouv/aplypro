@@ -42,7 +42,7 @@
       = payment_requests_status_count_badge(:paid, @establishment_facade.payment_requests_counts[:paid], display_zero: true)
       = payment_requests_status_count_badge(:unpaid, @establishment_facade.payment_requests_counts[:unpaid], display_zero: false)
 
-  %p APLyPro a besoin de la validation du chef d'établissement pour chaque PFMP. Une fois la PFMP validée, une demande de paiement partira à l'Agence de Services et de Paiement (ASP).
+  %p La validation du chef d'établissement est nécessaire pour chaque PFMP. Une fois la PFMP validée, une demande de paiement partira à l'Agence de Services et de Paiement (ASP).
   %ul.fr-btns-group
     - if current_user.can_validate?
       %li= link_to "Valider des PFMPs à envoyer en paiement", validations_path, class: "fr-btn fr-btn--primary fr-mb-0"
