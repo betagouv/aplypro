@@ -24,7 +24,7 @@
               - PfmpStateMachine.states.each do |state|
                 .fr-mb-2w= pfmps_status_count_badge state.to_sym, @classes_facade.nb_pfmps(classe.id, state.to_sym), display_zero: true
             %td
-              - ASP::PaymentRequest::PAYMENT_STAGES.each_with_index do |states, index|
+              - ASP::PaymentRequestDecorator::PAYMENT_STAGES.each_with_index do |states, index|
                 .fr-mb-2w
                   = payment_requests_status_count_badge(states.first, 0, display_zero: true)
                   = payment_requests_status_count_badge(states.last, 0)
