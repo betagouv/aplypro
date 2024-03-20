@@ -5,13 +5,9 @@ require "rails_helper"
 describe ASP::Mappers::ElementPaiementMapper do
   subject(:mapper) { described_class.new(payment_request) }
 
-  let(:schooling) { create(:schooling) }
+  let(:schooling) { payment_request.schooling }
 
   let(:payment_request) { create(:asp_payment_request, :ready) }
-
-  before do
-    payment_request.update!(schooling: schooling)
-  end
 
   describe "usprinc" do
     subject { mapper.usprinc }
@@ -38,7 +34,7 @@ describe ASP::Mappers::ElementPaiementMapper do
   end
 
   describe "codeobjet" do
-    it "is normally equal to VERSE001" do
+    it "is always VERSE001" do
       expect(mapper.codeobjet).to eq "VERSE001"
     end
   end
