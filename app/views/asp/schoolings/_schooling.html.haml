@@ -1,0 +1,92 @@
+%h1
+  Dossier 
+  = @schooling.asp_dossier_id
+
+.fr-my-3w
+  - if @schooling.attributive_decision.present?
+    = link_to "Télécharger la décision d'attribution", url_for(@schooling.attributive_decision), class: 'fr-btn fr-btn--secondary', target: :download
+  - else
+    Aucune décision d'attribution éditée
+
+.fr-table
+  %table
+    %caption.fr-h2 Élève
+    %tbody
+      %tr
+        %td Nom
+        %td= @schooling.student.last_name
+      %tr
+        %td Prénom
+        %td= @schooling.student.first_name
+      %tr
+        %td Date de naissance 
+        %td= l @schooling.student.birthdate
+      %tr
+        %td Code INSEE de ville de naissance
+        %td
+          - if @schooling.student.birthplace_city_insee_code.present?
+            = InseeCountryCodeMapper.call @schooling.student.birthplace_city_insee_code
+          - else
+            Aucun code renseigné
+      %tr
+        %td Code INSEE de pays de naissance
+        %td
+          - if @schooling.student.birthplace_country_insee_code.present?
+            = InseeCountryCodeMapper.call @schooling.student.birthplace_country_insee_code
+          - else
+            Aucun code renseigné
+
+.fr-table
+  %table
+    %caption.fr-h2 Établissement
+    %tbody
+      %tr
+        %td UAI
+        %td= @schooling.establishment.uai
+      %tr
+        %td Nom
+        %td= @schooling.establishment.name
+      %tr
+        %td Email
+        %td= @schooling.establishment.email
+.fr-table
+  %table
+    %caption.fr-h2 Formation
+    %tbody
+      %tr
+        %td N° de décision d'attribution annuelle
+        %td= @schooling.attributive_decision_number
+      %tr
+        %td Forfait journalier
+        %td= number_to_currency @schooling.mef.wage.daily_rate
+      %tr
+        %td Plafond annuel
+        %td= number_to_currency @schooling.mef.wage.yearly_cap
+
+
+.fr-table
+  %table
+    %caption.fr-h2 Coordonnées bancaires
+    %tbody
+      - if @schooling.student.rib.blank?
+        %tr
+          %td Pas de coordonnées bancaires renseignées
+      - else
+        %tr
+          %td Nom du RIB
+          %td= @schooling.student.rib.name
+        %tr
+          %td IBAN
+          %td= @schooling.student.rib.iban
+        %tr
+          %td BIC
+          %td= @schooling.student.rib.bic
+        %tr
+          %td RIB appartient à l'élève ?
+          %td= @schooling.student.rib.personal ? "Oui" : "Non"
+
+%h2 Demandes de paiements
+- if @pfmps.blank?
+  Aucune demande de paiement envoyée
+- else
+  = render partial: "pfmps"

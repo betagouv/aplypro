@@ -1,0 +1,35 @@
+- @pfmps.each do |pfmp|
+  .fr-h4
+    PFMP du
+    = l pfmp.start_date
+    au
+    = l pfmp.end_date
+  
+  .fr-table.fr-mb-1w
+    %table
+      %tbody
+        %tr
+          %td Numéro de prestation dossier
+          %td= pfmp.asp_prestation_dossier_id
+
+  = render partial: "pfmps/payment_panel", locals: { pfmp: pfmp }
+
+  - pfmp.payment_requests.joins(:asp_request).each do |payment_request|
+    .fr-table.fr-mx-2w
+      %table
+        %caption.fr-h5.fr-grid-row.fr-grid-row--middle
+          .fr-mr-2w
+            Demande de paiement #
+            = payment_request.id
+          = payment_request.status_badge
+        %tbody
+          %tr
+            %td Montant du paiement
+            %td= number_to_currency pfmp.amount
+          %tr
+            %td Date d'envoi du flux
+            %td
+              - if payment_request.asp_request.sent_at
+                = l payment_request.asp_request.sent_at, format: :long
+              - else
+                Pas de date d'envoi renseignée
