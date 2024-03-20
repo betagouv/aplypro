@@ -47,7 +47,7 @@ Quand("l'ASP a mis a disposition un fichier {string} contenant :") do |filename,
 end
 
 # rubocop:disable Metrics/AbcSize
-def asp_answers_for_dossier(name, is_successful, reason="")
+def asp_answers_for_dossier(name, is_successful, reason = "")
   first_name, last_name = name.split
   student = Student.find_by(first_name:, last_name:)
 
