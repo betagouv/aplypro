@@ -11,6 +11,7 @@
         %th{scope: "col"} Décisions d'attribution
         %th{scope: "col"} Coordonnées bancaires
         %th{scope: "col"} PFMPs
+        %th{scope: "col"} Demandes de paiements
       %tbody
         - @classes.each do |classe|
           - nb_students = @classes_facade.nb_students_per_class[classe.id]
@@ -20,9 +21,10 @@
             %td= progress_badge @classes_facade.nb_attributive_decisions_per_class[classe.id], nb_students
             %td= progress_badge @classes_facade.nb_ribs_per_class[classe.id], nb_students
             %td
-              .fr-grid-row
-                %div
-                  = pfmps_status_count_badge :pending, @classes_facade.nb_pfmps(classe.id, :pending)
-                  = pfmps_status_count_badge :completed, @classes_facade.nb_pfmps(classe.id, :completed)
-                %div
-                  = pfmps_status_count_badge :validated, @classes_facade.nb_pfmps(classe.id, :validated)
+              - PfmpStateMachine.states.each do |state|
+                .fr-mb-2w= pfmps_status_count_badge state.to_sym, @classes_facade.nb_pfmps(classe.id, state.to_sym), display_zero: true
+            %td
+              - ASP::PaymentRequest::PAYMENT_STAGES.each_with_index do |states, index|
+                .fr-mb-2w
+                  = payment_requests_status_count_badge(states.first, 0, display_zero: true)
+                  = payment_requests_status_count_badge(states.last, 0)
