@@ -244,9 +244,7 @@ end
 
 Lorsque("je génère les décisions d'attribution de mon établissement") do
   steps %(
-    Sachant que l'API SYGNE renvoie 1 élèves en "2NDEB" dont l'INE "test" pour l'établissement "DINUM"
-    Et que l'API SYGNE peut fournir les informations complètes des étudiants
-    Et que je me rends sur la page d'accueil
+    Sachant que je me rends sur la page d'accueil
     Et que toutes les tâches de fond sont terminées
     Lorsque je suis responsable légal et que je génère les décisions d'attribution manquantes
     Et que la génération des décisions d'attribution manquantes est complètement finie
