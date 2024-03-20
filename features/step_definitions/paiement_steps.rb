@@ -46,27 +46,15 @@ Quand("l'ASP a mis a disposition un fichier {string} contenant :") do |filename,
   File.write(destination, string)
 end
 
-Sachantque("l'ASP a rejetté le dossier de {string} avec un motif de {string}") do |name, reason|
-  steps %(
-    Sachant que l'ASP a répondu "failed" pour le dossier de "#{name}" avec la raison "#{reason}"
-  )
-end
-
-Sachantque("l'ASP a accepté le dossier de {string}") do |name|
-  steps %(
-    Sachant que l'ASP a répondu "success" pour le dossier de "#{name}" avec la raison ""
-  )
-end
-
-Sachantque("l'ASP a répondu {string} pour le dossier de {string} avec la raison {string}") do |state, name, reason|
+# rubocop:disable Metrics/AbcSize
+def asp_answers_for_dossier(name, is_successful, reason="")
   first_name, last_name = name.split
   student = Student.find_by(first_name:, last_name:)
 
-  file_name_type = state == "success" ? :integrations : :rejects
-  file_type = state == "success" ? :asp_integration : :asp_reject
+  file_name_type = is_successful ? :integrations : :rejects
+  file_type = is_successful ? :asp_integration : :asp_reject
 
   request = student.pfmps.last.payment_requests.last
-
   identifier = request.asp_request.file.filename.to_s.split(".xml").first
   file_name = FactoryBot.build(:asp_filename, file_name_type, identifier: identifier)
   file_content = FactoryBot.build(file_type, payment_request: request, reason: reason)
@@ -78,15 +66,25 @@ Sachantque("l'ASP a répondu {string} pour le dossier de {string} avec la raison
       """
   )
 end
+# rubocop:enable Metrics/AbcSize
 
-Sachantque("l'ASP a répondu {string} pour le paiement de {string}") do |state, name|
+Sachantque("l'ASP a rejetté le dossier de {string} avec un motif de {string}") do |name, reason|
+  asp_answers_for_dossier(name, false, reason)
+end
+
+Sachantque("l'ASP a accepté le dossier de {string}") do |name|
+  asp_answers_for_dossier(name, true)
+end
+
+def asp_answers_for_payment(name, is_successful)
   first_name, last_name = name.split
   student = Student.find_by(first_name:, last_name:)
   request = student.pfmps.last.payment_requests.last
+  state = is_successful ? :success : :failed
 
   payment_return_file = FactoryBot.build(
     :asp_payment_return,
-    state.to_sym,
+    state,
     builder_class: ASP::Builder,
     payment_request: request
   )
@@ -102,15 +100,11 @@ Sachantque("l'ASP a répondu {string} pour le paiement de {string}") do |state, 
 end
 
 Sachantque("l'ASP a liquidé le paiement de {string}") do |name|
-  steps %(
-    Sachant que l'ASP a répondu "success" pour le paiement de "#{name}"
-  )
+  asp_answers_for_payment(name, true)
 end
 
 Sachantque("l'ASP n'a pas pu liquider le paiement de {string}") do |name|
-  steps %(
-    Sachant que l'ASP a répondu "failed" pour le paiement de "#{name}"
-  )
+  asp_answers_for_payment(name, false)
 end
 
 Alors("je peux voir une demande de paiement {string}") do |state|
