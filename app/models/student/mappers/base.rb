@@ -11,7 +11,7 @@ class Student
         @payload = payload
         @uai = uai
         @establishment = Establishment.find_by(uai: uai)
-        @year = ENV.fetch("APLYPRO_SCHOOL_YEAR")
+        @year = Aplypro::SCHOOL_YEAR
       end
 
       def parse!

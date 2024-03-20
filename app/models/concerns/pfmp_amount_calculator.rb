@@ -26,6 +26,6 @@ module PfmpAmountCalculator
       .where("pfmps.created_at < (?)", created_at)
       .where.not(amount: nil)
       .joins(schooling: :classe)
-      .where("classe.mef_id": mef.id, "classe.start_year": ENV.fetch("APLYPRO_SCHOOL_YEAR"))
+      .where("classe.mef_id": mef.id, "classe.start_year": Aplypro::SCHOOL_YEAR)
   end
 end
