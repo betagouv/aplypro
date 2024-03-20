@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :asp_payment_request, class: "ASP::PaymentRequest" do
     schooling { association :schooling, :with_attributive_decision, student: student }
-    pfmp { association :pfmp, schooling: schooling }
+    pfmp { association :pfmp, :validated, schooling: schooling }
 
     transient do
       student { association :student, :with_all_asp_info, :underage }

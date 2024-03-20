@@ -39,6 +39,10 @@ module ASP
     end
 
     guard_transition(to: :ready) do |request|
+      request.pfmp.amount.positive?
+    end
+
+    guard_transition(to: :ready) do |request|
       request.pfmp.schooling.attributive_decision.attached?
     end
 

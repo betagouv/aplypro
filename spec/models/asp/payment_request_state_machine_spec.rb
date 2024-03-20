@@ -26,6 +26,14 @@ describe ASP::PaymentRequestStateMachine do
       end
     end
 
+    context "when the PFMP is zero-amount" do
+      before { asp_payment_request.pfmp.update!(amount: 0) }
+
+      it "raises an error" do
+        expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
+      end
+    end
+
     context "when the request belongs to a student over 18 with an external rib" do
       before do
         student.rib.update!(personal: false)
