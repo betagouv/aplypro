@@ -16,11 +16,10 @@
   %h2.fr-col 3. Périodes de formation en milieu professionnel
 
   .fr-grid-row
-    = pfmps_status_count_badge(:pending, @establishment_facade.pfmps_counts[:pending], display_zero: true, class: "fr-mr-1w")
-    →
-    = pfmps_status_count_badge(:completed, @establishment_facade.pfmps_counts[:completed], display_zero: true, class: "fr-mx-1w")
-    →
-    = pfmps_status_count_badge(:validated, @establishment_facade.pfmps_counts[:validated], display_zero: true, class: "fr-ml-1w")
+    - PfmpStateMachine.states.each_with_index do |state, index|
+      - if index > 0
+        .fr-mx-1w →
+      = pfmps_status_count_badge(state.to_sym, @establishment_facade.pfmps_counts[state.to_sym], display_zero: true)
 
   %p Pour calculer le montant des allocations à envoyer, APLyPro a besoin de connaître le nombre de jours travaillés des PFMPs de chaque élève.
   %ul.fr-btns-group
@@ -30,17 +29,12 @@
   %h2.fr-col 4. Demandes de paiements des PFMPs
 
   .fr-grid-row
-    .centering-container.fr-mb-2w.fr-mr-1w
-      = payment_requests_status_count_badge(:pending, @establishment_facade.payment_requests_counts[:pending], display_zero: true)
-      = payment_requests_status_count_badge(:incomplete, @establishment_facade.payment_requests_counts[:incomplete], display_zero: false)
-    →
-    .centering-container.fr-mb-2w.fr-mx-1w
-      = payment_requests_status_count_badge(:sent, @establishment_facade.payment_requests_counts[:sent], display_zero: true)
-      = payment_requests_status_count_badge(:rejected, @establishment_facade.payment_requests_counts[:rejected], display_zero: false)
-    →
-    .centering-container.fr-mb-2w.fr-ml-1w
-      = payment_requests_status_count_badge(:paid, @establishment_facade.payment_requests_counts[:paid], display_zero: true)
-      = payment_requests_status_count_badge(:unpaid, @establishment_facade.payment_requests_counts[:unpaid], display_zero: false)
+    - ASP::PaymentRequest::PAYMENT_STAGES.each_with_index do |states, index|
+      - if index > 0
+        .fr-mx-1w →
+      .centering-container.fr-mb-2w
+        = payment_requests_status_count_badge(states.first, @establishment_facade.payment_requests_counts[states.first], display_zero: true)
+        = payment_requests_status_count_badge(states.last, @establishment_facade.payment_requests_counts[states.last], display_zero: false)
 
   %p La validation du chef d'établissement est nécessaire pour chaque PFMP. Une fois la PFMP validée, une demande de paiement partira à l'Agence de Services et de Paiement (ASP).
   %ul.fr-btns-group
