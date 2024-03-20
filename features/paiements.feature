@@ -27,7 +27,7 @@ Fonctionnalité: Gestion des paiements
     Alors je peux voir une demande de paiement "Bloquée" de 30 euros
 
   Scénario: Le personnel de direction peut voir un paiment prêt pour l'ASP
-    Et que les informations personnelles ont été récupérées pour l'élève avec l'INE "MC"
+    Et que les informations personnelles ont été récupérées pour l'élève "Marie Curie"
     Et que je renseigne et valide une PFMP de 3 jours
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
     Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
@@ -39,7 +39,7 @@ Fonctionnalité: Gestion des paiements
 
   Scénario: Le personnel de direction peut voir un paiement envoyé à l'ASP
     Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
-    Et que les informations personnelles ont été récupérées pour l'élève avec l'INE "MC"
+    Et que les informations personnelles ont été récupérées pour l'élève "Marie Curie"
     Et que je renseigne et valide une PFMP de 3 jours
     Et que l'élève "Marie Curie" a des données correctes pour l'ASP
     Et que les tâches de préparation et d'envoi des paiements sont passées
@@ -49,7 +49,7 @@ Fonctionnalité: Gestion des paiements
 
   Scénario: Le personnel ne peut pas altérer une PFMP avec un paiement en cours
     Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
-    Et que les informations personnelles ont été récupérées pour l'élève avec l'INE "MC"
+    Et que les informations personnelles ont été récupérées pour l'élève "Marie Curie"
     Et que je renseigne et valide une PFMP de 3 jours
     Et que l'élève "Marie Curie" a des données correctes pour l'ASP
     Et que les tâches de préparation et d'envoi des paiements sont passées

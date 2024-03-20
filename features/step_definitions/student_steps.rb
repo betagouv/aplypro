@@ -8,8 +8,10 @@ Quand("l'élève de SYGNE avec l'INE {string} a quitté l'établissement {string
     )
 end
 
-Sachantque("les informations personnelles ont été récupérées pour l'élève avec l'INE {string}") do |ine|
-  student = Student.find_by(ine: ine)
+Sachantque("les informations personnelles ont été récupérées pour l'élève {string}") do |name|
+  first_name, last_name = name.split
+
+  student = Student.find_by(first_name: first_name, last_name: last_name)
 
   FetchStudentInformationJob.perform_now(student.current_schooling)
 end

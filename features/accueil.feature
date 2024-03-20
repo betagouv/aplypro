@@ -53,4 +53,3 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Quand il y a un élève avec une scolarité fermée qui a une PFMP
     Et que je me rends sur la page d'accueil
     Alors l'indicateur de PFMP "À compléter" affiche 1
-
