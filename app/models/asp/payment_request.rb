@@ -8,6 +8,10 @@ module ASP
       %i[paid unpaid]
     ].freeze
 
+    STATES_GROUPS_FOR_COUNTS = [
+      %i[pending ready], [:incomplete], %i[sent integrated], [:rejected], [:paid], [:unpaid]
+    ].freeze
+
     belongs_to :asp_request, class_name: "ASP::Request", optional: true
     belongs_to :pfmp
 
@@ -31,12 +35,6 @@ module ASP
     delegate :can_transition_to?,
              :current_state, :history, :last_transition, :last_transition_to,
              :transition_to!, :transition_to, :in_state?, to: :state_machine
-
-    def self.grouped_states
-      PAYMENT_STAGES
-        .map { |stages| [stages[0..-2], [stages.last]] }
-        .reduce(&:concat)
-    end
 
     def mark_ready!
       transition_to!(:ready)
