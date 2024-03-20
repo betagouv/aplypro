@@ -4,6 +4,10 @@ require "sidekiq/web"
 
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
+  namespace :asp do
+    resources :schoolings, only: :index
+  end
+
   resources :users, only: :update do
     get "select_establishment"
   end
