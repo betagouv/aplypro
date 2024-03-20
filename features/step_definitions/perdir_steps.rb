@@ -103,8 +103,8 @@ end
 Quand("je renseigne une PFMP de {int} jours") do |days|
   steps %(
     Quand je clique sur "Ajouter une PFMP"
-    Et que je remplis "Date de début" avec "17/03/2023"
-    Et que je remplis "Date de fin" avec "20/03/2023"
+    Et que je remplis "Date de début" avec "17/03/2024"
+    Et que je remplis "Date de fin" avec "20/03/2024"
     Et que je remplis "Nombre de jours effectués" avec "#{days}"
     Et que je clique sur "Enregistrer"
   )
@@ -112,20 +112,15 @@ end
 
 Quand("je renseigne une PFMP de {int} jours pour {string}") do |days, name|
   steps %(
-    Quand je clique sur "Ajouter une PFMP" dans la rangée "#{name}"
-    Et que je remplis "Date de début" avec "17/03/2023"
-    Et que je remplis "Date de fin" avec "20/03/2023"
-    Et que je remplis "Nombre de jours effectués" avec "#{days}"
-    Et que je clique sur "Enregistrer"
+    Et que je clique sur "Voir le profil" dans la rangée "#{name}"
+    Et que je renseigne une PFMP de #{days} jours
   )
 end
 
 Quand("je renseigne une PFMP pour {string}") do |name|
   steps %(
-    Quand je clique sur "Ajouter une PFMP" dans la rangée "#{name}"
-    Et que je remplis "Date de début" avec "17/03/2023"
-    Et que je remplis "Date de fin" avec "20/03/2023"
-    Et que je clique sur "Enregistrer"
+    Et que je clique sur "Voir le profil" dans la rangée "#{name}"
+    Et que je renseigne une PFMP provisoire
   )
 end
 
@@ -165,10 +160,6 @@ Quand("je consulte la classe {string}") do |label|
   )
 end
 
-Alors("tous les élèves ont une PFMP du {string} au {string}") do |start_date, end_date|
-  expect(@classe.students.all? { |s| s.pfmps.exists?(start_date:, end_date:) }).to be_truthy
-end
-
 # FIXME: we're relying on global state here via the @student variable
 # but we should keep using a name reference to do it via the user
 # interface instead of prying directly at the model.
@@ -179,8 +170,8 @@ end
 Quand("je renseigne une PFMP provisoire") do
   steps %(
     Et que je clique sur "Ajouter une PFMP"
-    Et que je remplis "Date de début" avec "17/03/2023"
-    Et que je remplis "Date de fin" avec "20/03/2023"
+    Et que je remplis "Date de début" avec "17/03/2024"
+    Et que je remplis "Date de fin" avec "20/03/2024"
     Et que je clique sur "Enregistrer"
   )
 end
