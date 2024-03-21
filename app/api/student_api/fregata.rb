@@ -67,7 +67,7 @@ module StudentApi
     end
 
     def fregata_year
-      ENV.fetch("APLYPRO_SCHOOL_YEAR").to_i - YEAR_OFFSET
+      Aplypro::SCHOOL_YEAR - YEAR_OFFSET
     end
   end
 end

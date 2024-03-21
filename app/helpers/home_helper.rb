@@ -59,7 +59,7 @@ module HomeHelper
   end
 
   def school_year_to_s
-    starting_year = ENV.fetch("APLYPRO_SCHOOL_YEAR").to_i
+    starting_year = Aplypro::SCHOOL_YEAR
 
     t("year", start_year: starting_year, end_year: starting_year + 1)
   end

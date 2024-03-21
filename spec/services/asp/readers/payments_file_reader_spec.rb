@@ -5,9 +5,7 @@ require "rails_helper"
 describe ASP::Readers::PaymentsFileReader do
   subject(:reader) { described_class.new(result) }
 
-  let(:student) { create(:student, :with_all_asp_info) }
-  let(:pfmp) { create(:pfmp, :validated, student: student) }
-  let(:asp_payment_request) { create(:asp_payment_request, :integrated, pfmp: pfmp).reload }
+  let(:asp_payment_request) { create(:asp_payment_request, :integrated) }
 
   let(:result) do
     build(
@@ -38,7 +36,7 @@ describe ASP::Readers::PaymentsFileReader do
     let(:payment_state) { :success }
 
     before do
-      create(:asp_payment_request, :integrated, pfmp: pfmp)
+      create(:asp_payment_request, :integrated, pfmp: asp_payment_request.pfmp)
     end
 
     it "raises an error" do

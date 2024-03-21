@@ -23,7 +23,7 @@ describe StudentApi::Fregata do
   end
 
   it "calculates the proper year" do
-    stub_const("ENV", ENV.to_hash.merge("APLYPRO_SCHOOL_YEAR" => "2040"))
+    stub_const("Aplypro::SCHOOL_YEAR", 2040)
 
     api.fetch!
 

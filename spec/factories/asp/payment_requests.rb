@@ -2,14 +2,15 @@
 
 FactoryBot.define do
   factory :asp_payment_request, class: "ASP::PaymentRequest" do
-    pfmp
+    pfmp { association :pfmp, :validated, schooling: schooling }
+
+    transient do
+      student { association :student, :with_all_asp_info, :underage }
+      schooling { association :schooling, :with_attributive_decision, student: student }
+    end
 
     trait :ready do
-      after(:create) do |req|
-        req.pfmp.student = create(:student, :with_all_asp_info, :underage)
-
-        req.mark_ready!
-      end
+      after(:create, &:mark_ready!)
     end
 
     trait :incomplete do
@@ -23,6 +24,16 @@ FactoryBot.define do
         create(:asp_request, asp_payment_requests: [obj])
 
         obj.mark_as_sent!
+      end
+    end
+
+    trait :rejected do
+      sent
+
+      after(:create) do |obj|
+        result = build(:asp_reject, payment_request: obj)
+
+        ASP::Readers::RejectsFileReader.new(result).process!
       end
     end
 

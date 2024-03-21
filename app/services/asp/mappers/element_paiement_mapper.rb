@@ -12,9 +12,8 @@ module ASP
       end
 
       def codeobjet
-        index = payment_request.pfmp.payment_requests.find_index { |p| p == payment_request }
-
-        "VERSE00#{index + 1}"
+        # we don't support multiple payments per PFMP yet.
+        "VERSE001"
       end
 
       def codetypeversement

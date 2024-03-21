@@ -43,7 +43,7 @@ class Classe < ApplicationRecord
   validates :label, :start_year, presence: true
   validates :start_year, numericality: { only_integer: true }
 
-  scope :current, -> { where(start_year: ENV.fetch("APLYPRO_SCHOOL_YEAR")) }
+  scope :current, -> { where(start_year: Aplypro::SCHOOL_YEAR) }
   scope :with_attributive_decisions, -> { joins(schoolings: :attributive_decision_attachment) }
 
   def create_bulk_pfmp(pfmp_params)

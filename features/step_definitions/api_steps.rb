@@ -21,6 +21,29 @@ Sachantque(
 end
 
 Sachantque(
+  "l'API SYGNE renvoie une classe {string} " \
+  "de {int} élèves en formation {string} " \
+  "dont {string} pour l'établissement {string}"
+) do |classe, count, mef, name, uai|
+  mock_sygne_token
+
+  @sygne_results = []
+
+  first_name, last_name = name.split
+
+  mef = Mef.find_by!(label: mef)
+
+  payload = FactoryBot.build_list(:sygne_student, count, classe: classe, mef: mef.code.concat("0")).tap do |students|
+    students.last["prenom"] = first_name
+    students.last["nom"] = last_name
+  end
+
+  @sygne_results << payload
+
+  mock_sygne_students_endpoint(uai, payload)
+end
+
+Sachantque(
   "l'API SYGNE renvoie {int} élèves " \
   "dans la classe de {string} formation {string} " \
   "dont {string}, INE {string} pour l'établissement {string}"
@@ -52,10 +75,12 @@ Sachantque("l'API SYGNE peut renvoyer des élèves pour l'établissement {string
 end
 
 Sachantque("l'API FREGATA renvoie une liste d'élèves pour l'établissement {string}") do |uai|
+  mock_sygne_token
   mock_fregata_students_with(uai, FactoryBot.build_list(:fregata_student, 10))
 end
 
 Sachantque("l'API SYGNE peut fournir les informations complètes des étudiants") do
+  mock_sygne_token
   mock_sygne_student_endpoint_with("", FactoryBot.build(:sygne_student_info).to_json)
 end
 

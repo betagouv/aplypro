@@ -55,7 +55,7 @@ class Schooling < ApplicationRecord
   def attributive_decision_key
     [
       establishment.uai,
-      ENV.fetch("APLYPRO_SCHOOL_YEAR"),
+      Aplypro::SCHOOL_YEAR,
       classe.label.parameterize,
       attributive_decision_filename
     ].join("/")
@@ -65,7 +65,7 @@ class Schooling < ApplicationRecord
     [
       attributive_decision_bop_indicator,
       administrative_number,
-      ENV.fetch("APLYPRO_SCHOOL_YEAR"),
+      Aplypro::SCHOOL_YEAR,
       attributive_decision_version
     ].join.upcase
   end

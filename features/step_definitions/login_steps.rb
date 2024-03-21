@@ -68,8 +68,16 @@ Sachantque("je me déconnecte") do
   )
 end
 
-Sachantque("je suis un personnel MENJ directeur de l'établissement {string}") do |uai|
-  uais = uai.split(", ")
+Sachantqu("il existe un établissement {string}") do |uai|
+  Establishment.find_or_create_by!(uai: uai)
+end
+
+Sachantque("je suis un personnel MENJ directeur de l'établissement {string}") do |uai_list|
+  uais = uai_list.split(", ")
+
+  uais.each do |uai|
+    step %(il existe un établissement "#{uai}")
+  end
 
   OmniAuth.config.mock_auth[:fim] = make_fim_hash(
     name: Faker::Name.name,
