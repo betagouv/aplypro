@@ -2,16 +2,6 @@
 
 module ASP
   class PaymentRequest < ApplicationRecord
-    PAYMENT_STAGES = [
-      %i[pending ready incomplete],
-      %i[sent integrated rejected],
-      %i[paid unpaid]
-    ].freeze
-
-    STATES_GROUPS_FOR_COUNTS = [
-      %i[pending ready], [:incomplete], %i[sent integrated], [:rejected], [:paid], [:unpaid]
-    ].freeze
-
     belongs_to :asp_request, class_name: "ASP::Request", optional: true
     belongs_to :pfmp
 

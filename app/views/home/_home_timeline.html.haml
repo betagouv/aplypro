@@ -29,7 +29,7 @@
   %h2.fr-col 4. Demandes de paiements des PFMPs
 
   .fr-grid-row
-    - ASP::PaymentRequest::PAYMENT_STAGES.each_with_index do |states, index|
+    - ASP::PaymentRequestDecorator::PAYMENT_STAGES.each_with_index do |states, index|
       - if index > 0
         .fr-mx-1w →
       .centering-container.fr-mb-2w

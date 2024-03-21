@@ -3,6 +3,10 @@
 class EstablishmentFacade
   attr_accessor :establishment
 
+  STATES_GROUPS_FOR_COUNTS = [
+    %i[pending ready], [:incomplete], %i[sent integrated], [:rejected], [:paid], [:unpaid]
+  ].freeze
+
   def initialize(establishment)
     @establishment = establishment
   end
@@ -37,7 +41,7 @@ class EstablishmentFacade
   end
 
   def payment_requests_counts
-    @payment_requests_counts ||= ASP::PaymentRequest::STATES_GROUPS_FOR_COUNTS.to_h do |states|
+    @payment_requests_counts ||= STATES_GROUPS_FOR_COUNTS.to_h do |states|
       count = states.map { |state| payment_requests_all_status_counts[state] }.compact.sum
       [states.first, count]
     end
