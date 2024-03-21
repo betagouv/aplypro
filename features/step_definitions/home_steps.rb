@@ -19,19 +19,19 @@ Alors("le panneau {string} contient un compteur à {int} sur {int}") do |title, 
 end
 
 Alors("l'indicateur de PFMP {string} affiche {int}") do |status, count|
-  within("div[aria-label=\"#{status}\"]") do
+  within("div[aria-label=\"PFMP #{status}\"]") do
     expect(page).to have_content(count)
   end
 end
 
 Alors("l'indicateur de demandes de paiements {string} affiche {int}") do |status, count|
-  within("div[aria-label=\"#{status}\"]") do
+  within("div[aria-label=\"Demande de paiement #{status}\"]") do
     expect(page).to have_content(count)
   end
 end
 
 Alors("l'indicateur de demandes de paiements {string} n'est pas affiché") do |status|
-  expect(page).to have_no_css("div[aria-label=\"#{status}\"]")
+  expect(page).to have_no_css("div[aria-label=\"Demande de paiement #{status}\"]")
 end
 
 Lorsque("je suis responsable légal et que je génère les décisions d'attribution manquantes") do

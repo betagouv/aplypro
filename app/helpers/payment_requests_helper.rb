@@ -10,10 +10,12 @@ module PaymentRequestsHelper
   end
 
   def payment_requests_status_count_badge(status, count, **args)
+    aria_label = "Demande de paiement #{t("payment_requests.states.#{status}")}"
+
     status_count_badge(
       badge_method: :payment_request_status_badge,
       status: status,
-      status_string: t("payment_requests.states.#{status}"),
+      aria_label: aria_label,
       count: count,
       **args
     )
