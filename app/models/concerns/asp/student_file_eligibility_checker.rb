@@ -25,7 +25,11 @@ module ASP
       when :rib
         student.rib.present?
       when :birthplace_information
-        attributes_present? %i[birthplace_city_insee_code birthplace_country_insee_code]
+        required_attributes = [:birthplace_country_insee_code]
+
+        required_attributes.push(:birthplace_city_insee_code) if student.born_in_france?
+
+        attributes_present?(required_attributes)
       when :address_information
         attributes_present? %i[address_postal_code address_city_insee_code address_country_code]
       when :biological_sex

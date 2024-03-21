@@ -88,6 +88,10 @@ class Student < ApplicationRecord
     adult? && !rib.personal?
   end
 
+  def born_in_france?
+    InseeCodes.in_france?(birthplace_country_insee_code)
+  end
+
   private
 
   def check_asp_file_reference
