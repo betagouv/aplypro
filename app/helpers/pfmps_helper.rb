@@ -10,7 +10,7 @@ module PfmpsHelper
   end
 
   def pfmps_status_count_badge(status, count, **args)
-    aria_label = "PFMP #{t("payment_requests.states.#{status}")}"
+    aria_label = "PFMP #{t("pfmps.states.#{status}")}"
 
     status_count_badge(
       badge_method: :pfmp_status_badge,
