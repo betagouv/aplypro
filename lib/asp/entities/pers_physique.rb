@@ -35,7 +35,7 @@ module ASP
       private
 
       def born_in_france?
-        codeinseepaysnai == Adresse::FRANCE_INSEE_COUNTRY_CODE
+        InseeCodes.in_france?(codeinseepaysnai)
       end
     end
   end

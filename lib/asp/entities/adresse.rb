@@ -3,8 +3,6 @@
 module ASP
   module Entities
     class Adresse < Entity
-      FRANCE_INSEE_COUNTRY_CODE = "99100"
-
       attribute :codetypeadr, :string
       attribute :codecominsee, :string
       attribute :codeinseepays, :string
@@ -36,7 +34,7 @@ module ASP
       private
 
       def french_address?
-        codeinseepays == FRANCE_INSEE_COUNTRY_CODE
+        InseeCodes.in_france?(codeinseepays)
       end
 
       def foreign_address?
