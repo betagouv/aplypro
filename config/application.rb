@@ -44,5 +44,7 @@ module Aplypro
     config.active_job.queue_adapter = :sidekiq
 
     config.autoload_lib(ignore: %w[assets tasks])
+
+    config.active_model.i18n_customize_full_message = true
   end
 end

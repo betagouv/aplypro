@@ -10,14 +10,14 @@ module ASP
 
     attr_reader :asp_file
 
-    def send!
+    def send!(rerun: false)
       ActiveRecord::Base.transaction do
         @asp_file = ASP::Entities::Fichier.new(asp_payment_requests)
 
         attach_asp_file!
         drop_file!
         update_sent_timestamp!
-        update_requests!
+        update_requests! unless rerun
       end
     end
 

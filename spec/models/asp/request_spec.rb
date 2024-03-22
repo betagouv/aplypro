@@ -61,5 +61,29 @@ RSpec.describe ASP::Request do
 
       include_examples "does not persist anything"
     end
+
+    context "when the rerun parameter is passed" do
+      subject(:rerun) { request.send!(rerun: true) }
+
+      before { request.send! }
+
+      it "can process already-sent requests" do
+        expect { rerun }.not_to raise_error
+      end
+
+      it "includes all the previous requests" do
+        expect(ASP::Entities::Fichier).to have_received(:new).with(request.asp_payment_requests)
+
+        rerun
+      end
+
+      it "generates a new file" do
+        expect { rerun }.to change(request.file, :filename)
+      end
+
+      it "update the sent timestamp" do
+        expect { rerun }.to change(request, :sent_at)
+      end
+    end
   end
 end
