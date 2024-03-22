@@ -30,7 +30,7 @@ module ASP
       end
 
       def filename
-        [
+        @filename ||= [
           "nps_ficimport_idp",
           ENV.fetch("APLYPRO_ASP_FILENAME"),
           filename_timestamp
