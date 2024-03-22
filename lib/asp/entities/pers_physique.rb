@@ -29,7 +29,7 @@ module ASP
         xml.nomnaissance(nomnaissance)
         xml.datenaissance(I18n.l(datenaissance, format: :asp))
         xml.codeinseepaysnai(codeinseepaysnai)
-        xml.codeinseecommune(codeinseecommune)
+        xml.codeinseecommune(codeinseecommune) if born_in_france?
       end
 
       private
