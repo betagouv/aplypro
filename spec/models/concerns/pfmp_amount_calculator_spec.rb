@@ -63,7 +63,10 @@ describe PfmpAmountCalculator do
       before { previous.update!(schooling: schooling) }
 
       context "with the same MEF" do
-        before { schooling.classe.update!(mef: mef) }
+        before do
+          schooling.classe.update!(mef: mef)
+          PfmpManager.new(previous).recalculate_amounts!
+        end
 
         it_calculates "a limited amount", 2
 
@@ -80,7 +83,10 @@ describe PfmpAmountCalculator do
     end
 
     context "with that schooling" do
-      before { previous.update!(schooling: pfmp.schooling) }
+      before do
+        previous.update!(schooling: pfmp.schooling)
+        PfmpManager.new(previous).recalculate_amounts!
+      end
 
       it_calculates "a limited amount", 2
     end
