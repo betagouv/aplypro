@@ -22,5 +22,12 @@ RSpec.describe SendPaymentRequestsJob do
       expect { described_class.perform_now([payment_request]) }
         .to raise_error ASP::Errors::SendingPaymentRequestInWrongState
     end
+
+    it "does not persist the request" do
+      expect do
+        described_class.perform_now([payment_request])
+      rescue ASP::Errors::SendingPaymentRequestInWrongState # rubocop:disable Lint/SuppressedException
+      end.not_to change(ASP::Request, :count)
+    end
   end
 end
