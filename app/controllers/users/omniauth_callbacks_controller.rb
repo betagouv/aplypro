@@ -9,6 +9,14 @@ module Users
 
     rescue_from IdentityMappers::Errors::Error, ActiveRecord::RecordInvalid, with: :authentication_failure
 
+    def asp
+      @asp_user = ASP::User.from_oidc(auth_hash).tap(&:save!)
+
+      sign_in(:asp_user, @asp_user)
+
+      redirect_to asp_schoolings_path
+    end
+
     def developer
       oidcize_dev_hash(auth_hash)
 

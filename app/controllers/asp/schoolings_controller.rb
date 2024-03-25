@@ -2,6 +2,8 @@
 
 module ASP
   class SchoolingsController < ApplicationController
+    layout "application"
+
     before_action :sanitize_search, :set_schooling_result
 
     def index

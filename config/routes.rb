@@ -6,6 +6,8 @@ require "sidekiq/web"
 Rails.application.routes.draw do
   namespace :asp do
     resources :schoolings, only: :index
+
+    devise_for :users, skip: :all, class_name: "ASP::User"
   end
 
   resources :users, only: :update do
@@ -56,10 +58,15 @@ Rails.application.routes.draw do
 
   resources :validations, only: :index
 
-  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
+  devise_for :users, skip: :all
+
+  devise_scope :asp_user do
+    get "/auth/asp/callback" => "users/omniauth_callbacks#asp", as: :asp_login
+  end
 
   devise_scope :user do
-    # get "/login", to: "devise/sessions#new"
+    post "/auth/:action/callback", controller: "users/omniauth_callbacks", constraints: { action: /fim|masa|developer/ }
+
     delete "sign_out", to: "devise/sessions#destroy", as: :destroy_user_session
   end
 
