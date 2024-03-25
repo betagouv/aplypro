@@ -15,11 +15,12 @@ Fonctionnalité: Le personnel ASP consulte des dossiers
     Quand je remplis "Numéro de décision d'attribution" avec "test"
     Et que je clique sur "Rechercher"
     Alors la page contient "Aucune décision d'attribution trouvée"
+    Et la page est titrée "Rechercher un dossier"
 
   Scénario: Le personnel ASP entre un numéro de décision d'attribution existant
     Sachant que le numéro administratif de "Marie Curie" est "DOSS3000"
-    Quand je remplis "Numéro de décision d'attribution" avec "ENPUDOSS3000"
-    Et que je clique sur "Rechercher"
+    Et que je remplis "Numéro de décision d'attribution" avec "ENPUDOSS3000"
+    Quand je clique sur "Rechercher"
     Alors la page contient "ENPUDOSS3000"
     Et la page contient "3 jours x 10 € par jour = 30 €"
 
@@ -27,7 +28,7 @@ Fonctionnalité: Le personnel ASP consulte des dossiers
     Sachant que le numéro de dossier ASP de "Marie Curie" est "12345"
     Quand je remplis "Numéro de décision d'attribution" avec "12345"
     Et que je clique sur "Rechercher"
-    Alors la page contient "12345"
+    Alors la page est titrée "Dossier 12345"
     Et la page contient "3 jours x 10 € par jour = 30 €"
 
   Scénario: Le personnel ASP entre un numéro de prestation dossier ASP existant
