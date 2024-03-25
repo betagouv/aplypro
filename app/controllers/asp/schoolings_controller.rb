@@ -4,33 +4,53 @@ module ASP
   class SchoolingsController < ApplicationController
     layout "application"
 
-    before_action :sanitize_search, :set_schooling_result
+    before_action :sanitize_search,
+                  :set_schooling_result,
+                  :set_pfmps
 
     def index
       @page_title = "Rechercher un dossier"
 
-      return if @schooling.blank?
+      return if @schooling.nil?
 
-      @inhibit_title = true
       @page_title = "Dossier #{@schooling.asp_dossier_id}"
+    end
+
+    private
+
+    def set_schooling_result
+      return if @search.blank?
+
+      @schooling =
+        find_schooling_by_prestation_dossier_id ||
+        find_schooling_by_asp_dossier_id ||
+        find_schooling_by_attributive_decision_filename
+    end
+
+    def set_pfmps
+      return if @schooling.nil?
+
       @pfmps = @schooling
                .pfmps
                .joins(payment_requests: :asp_request)
                .distinct
     end
 
-    private
+    def find_schooling_by_prestation_dossier_id
+      Schooling
+        .joins(:pfmps)
+        .find_by("pfmps.asp_prestation_dossier_id": @search)
+    end
 
-    def set_schooling_result
-      @schooling = Schooling.joins(:pfmps).find_by("pfmps.asp_prestation_dossier_id": @search)
-      return if @schooling.present?
+    def find_schooling_by_asp_dossier_id
+      Schooling
+        .find_by(asp_dossier_id: @search)
+    end
 
-      @schooling = Schooling.find_by(asp_dossier_id: @search)
-      return if @schooling.present?
-
-      @schooling = Schooling
-                   .joins(:attributive_decision_blob)
-                   .find_by("filename LIKE ?", "%#{@search}%")
+    def find_schooling_by_attributive_decision_filename
+      Schooling
+        .joins(:attributive_decision_blob)
+        .find_by("filename LIKE ?", "%#{@search}%")
     end
 
     def sanitize_search
