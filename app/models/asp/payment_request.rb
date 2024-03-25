@@ -13,6 +13,8 @@ module ASP
              dependent: :destroy,
              inverse_of: :asp_payment_request
 
+    validate :single_active_payment_request_per_pfmp, on: [:create, :update]
+
     include Statesman::Adapters::ActiveRecordQueries[
       transition_class: ASP::PaymentRequestTransition,
       initial_state: ASP::PaymentRequestStateMachine.initial_state,
@@ -54,8 +56,28 @@ module ASP
       in_state?(:incomplete, :rejected, :unpaid)
     end
 
+    def active?
+      !in_state?(:rejected, :unpaid)
+    end
+
     def mark_unpaid!
       transition_to(:unpaid)
+    end
+
+    private
+
+    def single_active_payment_request_per_pfmp
+      existing_payment_requests = ASP::PaymentRequest.includes(:asp_payment_request_transitions)
+                                                      .where(pfmp_id: self.pfmp_id)
+                                                      .where.not(id: self.id)
+
+      active_payment_requests = existing_payment_requests.select do |request|
+        request.active?
+      end
+
+      return unless active_payment_requests.any?
+
+      errors.add(:pfmp_id, "There can only be one active payment request per Pfmp.")
     end
   end
 end
