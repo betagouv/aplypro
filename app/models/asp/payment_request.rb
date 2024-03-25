@@ -13,7 +13,7 @@ module ASP
              dependent: :destroy,
              inverse_of: :asp_payment_request
 
-    validate :single_active_payment_request_per_pfmp, on: [:create, :update]
+    validate :single_active_payment_request_per_pfmp, on: %i[create update]
 
     include Statesman::Adapters::ActiveRecordQueries[
       transition_class: ASP::PaymentRequestTransition,
@@ -68,12 +68,9 @@ module ASP
 
     def single_active_payment_request_per_pfmp
       existing_payment_requests = ASP::PaymentRequest.includes(:asp_payment_request_transitions)
-                                                      .where(pfmp_id: self.pfmp_id)
-                                                      .where.not(id: self.id)
-
-      active_payment_requests = existing_payment_requests.select do |request|
-        request.active?
-      end
+                                                     .where(pfmp_id: pfmp_id)
+                                                     .where.not(id: id)
+      active_payment_requests = existing_payment_requests.select(&:active?)
 
       return unless active_payment_requests.any?
 
