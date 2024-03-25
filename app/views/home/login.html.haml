@@ -1,17 +1,19 @@
 .fr-grid-row.fr-grid-row--gutters#login-page
-  - User.omniauth_providers.each do |provider|
+  - [:fim, :masa, :developer].each do |provider|
     .fr-col-md-6.fr-col-12
       = render 'connection_panel',
         name: t("omniauth.#{provider}.title"),
         description: t("omniauth.#{provider}.description"),
         button: t("omniauth.#{provider}.button"),
-        path: omniauth_authorize_path(User, provider)
+        path: "/auth/#{provider}"
+
   .fr-col-md-6.fr-col-12
     = render 'connection_panel',
-      name: t("omniauth.mer.title"),
-      description: t("omniauth.mer.description"),
-      button: t("omniauth.mer.button"),
-      path: omniauth_authorize_path(User, :fim)
+      name: "Agence de Services et Paiements (ASP)",
+      description: "Vous êtes la banque",
+      button: "Connexion",
+      path: "/auth/asp"
+
 
 %hr.fr-mt-3w
 

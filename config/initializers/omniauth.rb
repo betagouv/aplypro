@@ -2,52 +2,57 @@
 
 OmniAuth.config.logger = Rails.logger
 
-# NOTE: this code allows for multiple-choice fields in the Omniauth
-# dev strategy, rendered as <select> elements. It's not the best code
-# but it will allow the team to try logging in as any establishment
-# with the relevant ministry.
-module OmniAuth
-  class Form
-    def select_field(hash)
-      key, values = hash.first
-
-      label_field(key, key.capitalize)
-
-      @html << "\n<select style='padding: 5px; margin: 5px auto 20px;' name='#{key}'>\n"
-
-      values.each do |value|
-        @html << "\n<option style='padding: 10px auto' value='#{value}'>#{value}</option>"
-      end
-
-      @html << "\n</select>"
-    end
+# rubocop:disable Metrics/BlockLength
+Rails.application.config.middleware.use OmniAuth::Builder do
+  unless Rails.env.production?
+    provider :developer,
+             fields: [
+               :uai,
+               :email,
+               { "Portail de connexion" => ["MENJ (FIM)", "MASA (CAS)"] },
+               { "Role assumé" => ["Personnel de direction", "Personnel autorisé"] }
+             ]
   end
 
-  module Strategies
-    class Developer
-      def request_phase
-        form = OmniAuth::Form.new(title: "User Info", url: callback_path)
-        options.fields.each do |field|
-          if field.is_a? Hash
-            form.select_field(field)
-          else
-            form.text_field field.to_s.capitalize.tr("_", " "), field.to_s
-          end
-        end
-        form.button "Sign In"
-        form.to_response
-      end
+  provider :openid_connect, {
+    name: :fim,
+    scope: ENV.fetch("APLYPRO_FIM_SCOPE"),
+    response_type: :code,
+    issuer: ENV.fetch("APLYPRO_FIM_ISSUER"),
+    discovery: true,
+    client_options: {
+      redirect_uri: ENV.fetch("APLYPRO_FIM_REDIRECT_URI"),
+      host: ENV.fetch("APLYPRO_FIM_HOST"),
+      identifier: ENV.fetch("APLYPRO_FIM_CLIENT_ID"),
+      secret: ENV.fetch("APLYPRO_FIM_CLIENT_SECRET")
+    }
+  }
 
-      info do
-        options.fields.each_with_object({}) do |field, hash|
-          if field.is_a? Hash
-            key = field.keys.first
-            hash[key] = request.params[key]
-          else
-            hash[field] = request.params[field.to_s]
-          end
-        end
-      end
-    end
-  end
+  provider :cas, ENV.fetch("APLYPRO_CAS_CLIENT_ID"), ENV.fetch("APLYPRO_CAS_CLIENT_SECRET"), {
+    name: :masa,
+    token_params: {
+      redirect_uri: ENV.fetch("APLYPRO_CAS_REDIRECT_URI")
+    },
+    client_options: {
+      site: ENV.fetch("APLYPRO_CAS_SITE_ROOT"),
+      authorize_url: "authorize",
+      token_url: "accessToken",
+      auth_scheme: :request_body,
+      redirect_uri: ENV.fetch("APLYPRO_CAS_REDIRECT_URI")
+    }
+  }
+
+  provider :openid_connect, {
+    name: :asp,
+    scope: ENV.fetch("APLYPRO_ASP_OIDC_SCOPE"),
+    discovery: true,
+    issuer: ENV.fetch("APLYPRO_ASP_OIDC_ISSUER"),
+    client_options: {
+      host: ENV.fetch("APLYPRO_ASP_OIDC_HOST"),
+      redirect_uri: ENV.fetch("APLYPRO_ASP_OIDC_REDIRECT_URI"),
+      identifier: ENV.fetch("APLYPRO_ASP_OIDC_CLIENT_ID"),
+      secret: ENV.fetch("APLYPRO_ASP_OIDC_CLIENT_SECRET")
+    }
+  }
 end
+# rubocop:enable Metrics/BlockLength
