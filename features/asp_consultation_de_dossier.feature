@@ -1,10 +1,11 @@
 # language: fr
 
 Fonctionnalité: Le personnel ASP consulte des dossiers
-  
+
   Contexte:
     Sachant qu'une PFMP a été saisie, validée et envoyée en paiement pour l'élève "Marie Curie"
-    # TODO : Ajouter une déconnexion et une connexion ASP 
+    Et que je suis un agent de l'ASP
+    Et que je me connecte au portail ASP
     Et que je me rend sur la page de recherche de dossier
 
   Scénario: Le personnel ASP a accès à la page de recherche de dossier
@@ -28,7 +29,7 @@ Fonctionnalité: Le personnel ASP consulte des dossiers
     Et que je clique sur "Rechercher"
     Alors la page contient "12345"
     Et la page contient "3 jours x 10 € par jour = 30 €"
-    
+
   Scénario: Le personnel ASP entre un numéro de prestation dossier ASP existant
     Sachant que le numéro de prestation dossier ASP de la PFMP de "Marie Curie" est "10004"
     Quand je remplis "Numéro de décision d'attribution" avec "10004"
