@@ -40,6 +40,25 @@ def make_cas_hash(name:, email:, raw_info:)
   )
 end
 
+Sachantque("je suis un agent de l'ASP") do
+  OmniAuth.config.mock_auth[:asp] = OmniAuth::AuthHash.new(
+    {
+      provider: "asp",
+      uid: Faker::Internet.uuid,
+      info: {
+        name: Faker::Name.name,
+        email: Faker::Internet.email
+      }
+    }
+  )
+end
+
+Sachantque("je me connecte au portail ASP") do
+  visit new_asp_user_session_path
+
+  click_link_or_button "Se connecter"
+end
+
 Sachantque("je suis un personnel MENJ de l'établissement {string}") do |uai|
   OmniAuth.config.mock_auth[:fim] = make_fim_hash(
     name: Faker::Name.name,
