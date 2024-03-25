@@ -24,7 +24,7 @@ lint:
 	$(DOCKER-RUN) web $(BUNDLE-EXEC) rubocop
 
 debug:
-	$(DOCKER-RUN) web $(BUNDLE-EXEC) rdbg -A web 12345
+	$(DOCKER-RUN) web $(BUNDLE-EXEC) rdbg -nA web 12345
 
 cl:
 	$(DOCKER-RUN) web bin/rails console
