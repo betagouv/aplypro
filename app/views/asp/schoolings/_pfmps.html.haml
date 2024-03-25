@@ -28,8 +28,4 @@
             %td= number_to_currency pfmp.amount
           %tr
             %td Date d'envoi du flux
-            %td
-              - if payment_request.asp_request.sent_at
-                = l payment_request.asp_request.sent_at, format: :long
-              - else
-                Pas de date d'envoi renseignée
+            %td= l payment_request.asp_request.sent_at, format: :long
