@@ -14,6 +14,15 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  def after_sign_out_path_for(resource_or_scope)
+    case resource_or_scope
+    when :user
+      new_user_session_path
+    when :asp_user
+      new_asp_user_session_path
+    end
+  end
+
   def set_support_banner
     @show_support_banner = eligible_for_support?(current_establishment)
   end
