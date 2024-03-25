@@ -36,7 +36,8 @@ describe ASP::Readers::PaymentsFileReader do
     let(:payment_state) { :success }
 
     before do
-      create(:asp_payment_request, :integrated, pfmp: asp_payment_request.pfmp)
+      create(:asp_payment_request, :integrated)
+        .update!(pfmp: asp_payment_request.pfmp)
     end
 
     it "raises an error" do
