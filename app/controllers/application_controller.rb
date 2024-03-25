@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!,
+                :redirect_asp_users!,
                 :check_maintenance,
                 :check_current_establishment,
                 :set_support_banner
@@ -63,6 +64,10 @@ class ApplicationController < ActionController::Base
 
   def page_title_key
     ["pages", "titles", controller_name, action_name].join(".")
+  end
+
+  def redirect_asp_users!
+    redirect_to asp_schoolings_path and return if asp_user_signed_in?
   end
 
   private
