@@ -7,7 +7,6 @@ module ASP
     before_action :sanitize_search, :set_schooling_result
 
     def index
-      @inhibit_nav = true
       @page_title = "Rechercher un dossier"
 
       return if @schooling.blank?
