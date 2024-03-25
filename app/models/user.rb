@@ -5,6 +5,12 @@ class User < ApplicationRecord
 
   devise :authenticatable
 
+  OMNIAUTH_PROVIDERS = if Rails.env.production?
+                         %i[fim masa]
+                       else
+                         %i[fim masa developer]
+                       end
+
   validates :uid, :provider, :name, :token, :secret, :email, presence: true
   validates :email, uniqueness: { scope: :provider }
   normalizes :email, with: ->(email) { email.strip.downcase }
