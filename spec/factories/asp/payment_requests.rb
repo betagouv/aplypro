@@ -53,5 +53,11 @@ FactoryBot.define do
 
       after(:create, &:mark_paid!)
     end
+
+    trait :unpaid do
+      integrated
+
+      after(:create, &:mark_unpaid!)
+    end
   end
 end
