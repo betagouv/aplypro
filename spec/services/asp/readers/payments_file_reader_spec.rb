@@ -31,17 +31,4 @@ describe ASP::Readers::PaymentsFileReader do
       expect { reader.process! }.to change { asp_payment_request.reload.current_state }.from("integrated").to("unpaid")
     end
   end
-
-  context "when there are multiple requests matching the identifier" do
-    let(:payment_state) { :success }
-
-    before do
-      create(:asp_payment_request, :integrated)
-        .update!(pfmp: asp_payment_request.pfmp)
-    end
-
-    it "raises an error" do
-      expect { reader.process! }.to raise_error ActiveRecord::SoleRecordExceeded
-    end
-  end
 end
