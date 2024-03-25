@@ -10,7 +10,7 @@ class HomeController < ApplicationController
   def index
     redirect_to home_path and return if user_signed_in?
 
-    redirect_to login_url
+    redirect_to new_user_session_path
   end
 
   def home
