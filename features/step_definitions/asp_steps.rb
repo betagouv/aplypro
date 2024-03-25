@@ -28,19 +28,19 @@ end
 
 Sachantque("le numéro administratif de {string} est {string}") do |name, administrative_number|
   student = find_student_by_full_name(name)
-  schooling = student.schoolings.last
+  schooling = student.current_schooling
   schooling.update!(administrative_number: administrative_number)
   schooling.attributive_decision.update!(filename: "blabla_#{schooling.attributive_decision_number}.pdf")
 end
 
 Sachantque("le numéro de dossier ASP de {string} est {string}") do |name, dossier_id|
   student = find_student_by_full_name(name)
-  schooling = student.schoolings.last
+  schooling = student.current_schooling
   schooling.update!(asp_dossier_id: dossier_id)
 end
 
 Sachantque("le numéro de prestation dossier ASP de la PFMP de {string} est {string}") do |name, prestation_dossier_id|
   student = find_student_by_full_name(name)
-  schooling = student.schoolings.last
+  schooling = student.current_schooling
   schooling.pfmps.first.update!(asp_prestation_dossier_id: prestation_dossier_id)
 end
