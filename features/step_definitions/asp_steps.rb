@@ -30,7 +30,7 @@ Sachantque("le numéro administratif de {string} est {string}") do |name, admini
   student = find_student_by_full_name(name)
   schooling = student.current_schooling
   schooling.update!(administrative_number: administrative_number)
-  schooling.attributive_decision.update!(filename: "blabla_#{schooling.attributive_decision_number}.pdf")
+  schooling.attributive_decision.update!(filename: schooling.attributive_decision_filename)
 end
 
 Sachantque("le numéro de dossier ASP de {string} est {string}") do |name, dossier_id|
