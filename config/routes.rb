@@ -75,10 +75,10 @@ Rails.application.routes.draw do
   devise_for :users
 
   devise_scope :user do
-    post "/auth/:action/callback", controller: "users/omniauth_callbacks", constraints: { action: /fim|masa|developer/ }
-
-    # FIXME: the feature tests seem to crash without a GET callback phase, which is strange
-    get "/auth/:action/callback", controller: "users/omniauth_callbacks", constraints: { action: /fim|masa|developer/ }
+    %w[fim masa developer].each do |action|
+      get "/users/auth/#{action}/callback", controller: "users/omniauth_callbacks"
+      post "/users/auth/#{action}/callback", controller: "users/omniauth_callbacks"
+    end
 
     get "login", to: "home#login", as: :new_user_session
     delete "sign_out", to: "devise/sessions#destroy", as: :destroy_user_session
