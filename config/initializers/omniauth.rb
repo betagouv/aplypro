@@ -6,6 +6,7 @@ OmniAuth.config.logger = Rails.logger
 Rails.application.config.middleware.use OmniAuth::Builder do
   unless Rails.env.production?
     provider :developer,
+             path_prefix: "/users/auth",
              fields: [
                :uai,
                :email,
@@ -16,6 +17,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 
   provider :openid_connect, {
     name: :fim,
+    path_prefix: "/users/auth",
     scope: ENV.fetch("APLYPRO_FIM_SCOPE"),
     response_type: :code,
     issuer: ENV.fetch("APLYPRO_FIM_ISSUER"),
@@ -30,6 +32,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 
   provider :cas, ENV.fetch("APLYPRO_CAS_CLIENT_ID"), ENV.fetch("APLYPRO_CAS_CLIENT_SECRET"), {
     name: :masa,
+    path_prefix: "/users/auth",
     token_params: {
       redirect_uri: ENV.fetch("APLYPRO_CAS_REDIRECT_URI")
     },
