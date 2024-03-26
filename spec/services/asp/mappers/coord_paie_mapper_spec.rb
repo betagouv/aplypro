@@ -15,4 +15,12 @@ describe ASP::Mappers::CoordPaieMapper do
       expect(mapper.bic).to eq "ASTPGB2L"
     end
   end
+
+  context "when the nams is over 32 chars" do
+    before { rib.update!(name: Faker::Alphanumeric.alpha(number: 42)) }
+
+    it "truncates it" do
+      expect(mapper.intitdest).to have(32).characters
+    end
+  end
 end

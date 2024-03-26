@@ -14,6 +14,8 @@ module ASP
       ActiveRecord::Base.transaction do
         @asp_file = ASP::Entities::Fichier.new(asp_payment_requests)
 
+        @asp_file.validate!
+
         attach_asp_file!
         drop_file!
         update_sent_timestamp!

@@ -80,7 +80,7 @@ cucumber_options = {
   cmd: "bin/cucumber",
   cmd_additional_args: "--profile default",
 
-  # all_after_pass: false,
+  all_after_pass: false,
   all_on_start: false,
   notification: false
   # keep_failed: false,

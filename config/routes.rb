@@ -4,6 +4,22 @@ require "sidekiq/web"
 
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
+  namespace :asp do
+    resources :schoolings, only: :index
+
+    devise_for :users, skip: :all, class_name: "ASP::User"
+  end
+
+  # this allows overriding the redirect-if-not-logged-in path that
+  # Devise automatically looks for with "new_#{resource}_session_url"
+  # path[1], but we need to get it out of the scoped block above
+  # otherwise it ends up being `asp_new_asp_user_session_path`.
+
+  # [1]: https://github.com/heartcombo/devise/blob/bb18f4d3805be0bf5f45e21be39625c7cfd9c1d6/lib/devise/failure_app.rb#L140
+  get "asp/login", to: "asp/application#login", as: :new_asp_user_session
+
+  delete "asp/logout", to: "asp/application#logout", as: :destroy_asp_user_session
+
   resources :users, only: :update do
     get "select_establishment"
   end
@@ -52,10 +68,18 @@ Rails.application.routes.draw do
 
   resources :validations, only: :index
 
-  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
+  devise_scope :asp_user do
+    get "/auth/asp/callback" => "users/omniauth_callbacks#asp", as: :asp_login
+  end
+
+  devise_for :users
 
   devise_scope :user do
-    # get "/login", to: "devise/sessions#new"
+    %w[fim masa developer].each do |action|
+      match "/users/auth/#{action}/callback", to: "users/omniauth_callbacks##{action}", via: %i[get post]
+    end
+
+    get "login", to: "home#login", as: :new_user_session
     delete "sign_out", to: "devise/sessions#destroy", as: :destroy_user_session
   end
 
@@ -66,7 +90,6 @@ Rails.application.routes.draw do
   get "/accessibility", to: "home#accessibility"
 
   get "/maintenance", to: "home#maintenance"
-  get "/login", to: "home#login"
   get "/legal", to: "home#legal"
   get "/faq", to: "home#faq"
 

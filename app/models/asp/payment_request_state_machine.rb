@@ -13,6 +13,8 @@ module ASP
     state :paid
     state :unpaid
 
+    INACTIVE_STATES = %i[rejected unpaid].freeze
+
     transition from: :pending, to: :ready
     transition from: :pending, to: :incomplete
     transition from: :incomplete, to: :ready

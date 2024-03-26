@@ -36,12 +36,12 @@ Fonctionnalité: Le personnel de direction consulte les listes
     Et je peux voir 1 PFMP "Validées" pour la classe "2NDEB"
 
   Scénario: La liste des élèves d'une classe est toujours triée par ordre alphabétique nom-prénom
-    Sachant qu'il y a un élève "Paul Allègree" au sein de la classe "2NDEB" pour une formation "Art"
-    Et qu'il y a un élève "Paul Allègre" au sein de la classe "2NDEB" pour une formation "Art"
-    Et qu'il y a un élève "André Allègre" au sein de la classe "2NDEB" pour une formation "Art"
+    Sachant qu'il y a un élève "Paul AAA" au sein de la classe "2NDEB" pour une formation "Art"
+    Et qu'il y a un élève "Paul AAB" au sein de la classe "2NDEB" pour une formation "Art"
+    Et qu'il y a un élève "André AAB" au sein de la classe "2NDEB" pour une formation "Art"
     Quand je clique sur "Voir la classe" dans la rangée "2NDEB"
     Alors je peux voir dans le tableau "Liste des élèves" dans cet ordre :
-      | Élève         |
-      | Allègre André |
-      | Allègre Paul  |
-      | Allègree Paul |
+      | Élève     |
+      | AAA Paul  |
+      | AAB André |
+      | AAB Paul  |

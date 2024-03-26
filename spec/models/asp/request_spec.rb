@@ -18,7 +18,7 @@ RSpec.describe ASP::Request do
 
     stub_const("ASP::Entities::Fichier", fichier_double)
 
-    allow(double).to receive_messages(to_xml: "test io", filename: "test filename")
+    allow(double).to receive_messages(to_xml: "test io", filename: "test filename", validate!: "")
 
     allow(fichier_double).to receive(:new).and_return(double)
   end
@@ -52,6 +52,12 @@ RSpec.describe ASP::Request do
 
     context "when something in the XML formatting goes wrong" do
       before { allow(double).to receive(:to_xml).and_raise }
+
+      include_examples "does not persist anything"
+    end
+
+    context "when the XML is not valid" do
+      before { allow(double).to receive(:validate!).and_raise }
 
       include_examples "does not persist anything"
     end

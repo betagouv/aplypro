@@ -18,12 +18,12 @@ Sachantque(
 ) do |name, classe, mef|
   @etab ||= User.last.selected_establishment
 
-  first, last = name.split # not great
+  first_name, last_name = name.split # not great
   @mef = Mef.find_by(label: mef) ||
          FactoryBot.create(:mef, label: mef)
   @classe = Classe.find_by(mef: @mef, establishment: @etab) ||
             FactoryBot.create(:classe, establishment: @etab, label: classe, mef: @mef)
-  @student = FactoryBot.create(:student, first_name: first, last_name: last)
+  @student = FactoryBot.create(:student, first_name:, last_name:)
   @student.schoolings.create!(classe: @classe)
 end
 

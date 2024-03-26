@@ -2,9 +2,10 @@
 
 FactoryBot.define do
   factory :asp_payment_request, class: "ASP::PaymentRequest" do
-    pfmp { association :pfmp, :validated, schooling: schooling }
+    initialize_with { pfmp.payment_requests.last }
 
     transient do
+      pfmp { association :pfmp, :validated, schooling: schooling }
       student { association :student, :with_all_asp_info, :underage }
       schooling { association :schooling, :with_attributive_decision, student: student }
     end
@@ -51,6 +52,12 @@ FactoryBot.define do
       integrated
 
       after(:create, &:mark_paid!)
+    end
+
+    trait :unpaid do
+      integrated
+
+      after(:create, &:mark_unpaid!)
     end
   end
 end

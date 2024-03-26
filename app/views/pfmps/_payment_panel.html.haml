@@ -1,0 +1,17 @@
+.gray-panel.fr-p-3w.fr-mb-3w
+  %div
+    .fr-h4
+      = number_to_currency pfmp.amount
+      à payer
+  %div
+    = pfmp.day_count
+    jours x
+    = number_to_currency pfmp.wage.daily_rate
+    par jour =
+    = number_to_currency(pfmp.day_count * pfmp.wage.daily_rate)
+  %div
+    = number_to_currency pfmp.wage.yearly_cap
+    de plafond maximum par an
+  %div.fr-mb-1w
+    = number_to_currency pfmp.previously_locked_amount
+    engagés par les PFMPs précédemment déclarées.

@@ -23,7 +23,7 @@
                   %div
                     .fr-px-2w.fr-pb-1w
                       = current_user.name
-                    = button_to 'Se déconnecter', destroy_user_session_path, method: :delete, class: "fr-btn fr-icon-lock-line"
+                    = button_to 'Se déconnecter', @logout_path || destroy_user_session_path, method: :delete, class: "fr-btn fr-icon-lock-line"
 
   #modal-476.fr-header__menu.fr-modal{"aria-labelledby" => "button-477"}
     .fr-container

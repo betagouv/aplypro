@@ -36,8 +36,7 @@ end
 Sachantque(
   "l'ASP a rejetté le dossier de {string} avec un motif de {string} dans un fichier {string}"
 ) do |name, reason, filename|
-  first_name, last_name = name.split
-  student = Student.find_by(first_name:, last_name:)
+  student = find_student_by_full_name(name)
 
   request = student.pfmps.last.payment_requests.last
 
@@ -51,8 +50,7 @@ Sachantque(
 end
 
 Sachantque("l'ASP a accepté le dossier de {string} dans un fichier {string}") do |name, filename|
-  first_name, last_name = name.split
-  student = Student.find_by(first_name:, last_name:)
+  student = find_student_by_full_name(name)
 
   request = student.pfmps.last.payment_requests.last
 
@@ -66,10 +64,7 @@ Sachantque("l'ASP a accepté le dossier de {string} dans un fichier {string}") d
 end
 
 Sachantque("le dernier paiement de {string} a été envoyé avec un fichier {string}") do |name, filename|
-  first_name, last_name = name.split
-
-  pfmp = Student
-         .find_by(first_name:, last_name:)
+  pfmp = find_student_by_full_name(name)
          .pfmps
          .last
 
