@@ -304,3 +304,7 @@ fr:
       not_director:
         title: *not_director_error
         content: Si vous êtes adjoint, veuillez contacter votre chef d'établissement pour qu'il valide les PFMPs afin de les envoyer en paiement.
+  asp:
+    schoolings:
+      search:
+        no_results: Aucune décision d'attribution, dossier ou prestation dossier trouvé avec '%{search}'

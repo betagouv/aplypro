@@ -4,34 +4,42 @@ module ASP
   class SchoolingsController < ApplicationController
     layout "application"
 
-    before_action :sanitize_search,
-                  :set_schooling_result,
-                  :set_pfmps
+    before_action :sanitize_search, only: :search
+    before_action :set_schooling, :set_pfmps, only: :show
 
-    def index
+    def search
       @page_title = "Rechercher un dossier"
 
-      return if @schooling.nil?
+      return if @search.blank?
 
-      @inhibit_title = true
+      if (@schooling = find_schooling)
+        redirect_to asp_schooling_path(@schooling)
+      else
+        redirect_to search_asp_schoolings_path, notice: t(".no_results", search: @search)
+      end
+    end
 
+    def show
       @page_title = "Dossier #{@schooling.asp_dossier_id}"
+
+      add_breadcrumb "Recherche d'un dossier", search_asp_schoolings_path
+      add_breadcrumb @page_title
     end
 
     private
 
-    def set_schooling_result
-      return if @search.blank?
-
+    def find_schooling
       @schooling =
         find_schooling_by_prestation_dossier_id ||
         find_schooling_by_asp_dossier_id ||
         find_schooling_by_attributive_decision_filename
     end
 
-    def set_pfmps
-      return if @schooling.nil?
+    def set_schooling
+      @schooling = Schooling.find(params[:id])
+    end
 
+    def set_pfmps
       @pfmps = @schooling
                .pfmps
                .joins(payment_requests: :asp_request)

@@ -1,21 +1,10 @@
 .fr-mb-3w
-  = form_with method: :get, url: asp_schoolings_path do |form|
+  = form_with method: :get, url: search_asp_schoolings_path do |form|
     .fr-search-bar.fr-search-bar--lg.fr-col-md-8#search
       = form.label :search, "Numéro de décision d'attribution, de dossier ou de prestation dossier", class: "fr-label"
       = form.text_field :search, placeholder: "Numéro de décision d'attribution, de dossier ou de prestation dossier", value: @search, class: "fr-input"
-      = form.button "Rechercher", type: "submit", class: "fr-btn"
-
-
+      = form.submit "Rechercher", class: "fr-btn"
 
 - if @search.blank?
   .fr-mb-5w
     Entrez un numéro de décision d'attribution pour lancer une recherche
-
-- elsif @schooling.blank?
-  .fr-mb-5w
-    Aucune décision d'attribution, dossier ou prestation dossier trouvé avec le numéro
-    = @search
-
-- else
-  = render partial: "schooling"
-          

@@ -14,7 +14,7 @@ module Users
 
       sign_in(:asp_user, @asp_user)
 
-      redirect_to asp_schoolings_path
+      redirect_to search_asp_schoolings_path
     end
 
     def developer

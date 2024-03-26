@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_asp_users!
-    redirect_to asp_schoolings_path and return if asp_user_signed_in?
+    redirect_to search_asp_schoolings_path and return if asp_user_signed_in?
   end
 
   private

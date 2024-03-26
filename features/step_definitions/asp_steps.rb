@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Quand("je me rend sur la page de recherche de dossier") do
-  visit "/asp/schoolings"
+  visit search_asp_schoolings_path
 end
 
 # rubocop:disable Layout/LineLength

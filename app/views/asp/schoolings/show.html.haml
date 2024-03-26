@@ -1,7 +1,3 @@
-%h1
-  Dossier
-  = @schooling.asp_dossier_id
-
 .fr-my-3w
   - if @schooling.attributive_decision.present?
     = link_to "Télécharger la décision d'attribution", url_for(@schooling.attributive_decision), class: 'fr-btn fr-btn--secondary', target: :download

@@ -1,15 +1,16 @@
 # language: fr
 
 Fonctionnalité: Le personnel ASP consulte des dossiers
-
   Contexte:
     Sachant qu'une PFMP a été saisie, validée et envoyée en paiement pour l'élève "Marie Curie"
+    Et que le numéro de dossier ASP de "Marie Curie" est "MC"
     Et que je suis un agent de l'ASP
     Et que je me connecte au portail ASP
     Et que je me rend sur la page de recherche de dossier
 
   Scénario: Le personnel ASP a accès à la page de recherche de dossier
     Alors la page contient "Entrez un numéro de décision d'attribution pour lancer une recherche"
+    Et la page est titrée "Rechercher un dossier"
 
   Scénario: Le personnel ASP entre un numéro de décision d'attribution inexistant
     Quand je remplis "Numéro de décision d'attribution" avec "test"
@@ -20,21 +21,20 @@ Fonctionnalité: Le personnel ASP consulte des dossiers
     Sachant que le numéro administratif de "Marie Curie" est "DOSS3000"
     Et que je remplis "Numéro de décision d'attribution" avec "ENPUDOSS3000"
     Quand je clique sur "Rechercher"
-    Alors la page contient "ENPUDOSS3000"
+    Alors la page est titrée "Dossier MC"
     Et la page contient "3 jours x 10 € par jour = 30 €"
 
   Scénario: Le personnel ASP entre un numéro de dossier ASP existant
-    Sachant que le numéro de dossier ASP de "Marie Curie" est "12345"
-    Quand je remplis "Numéro de décision d'attribution" avec "12345"
+    Quand je remplis "Numéro de décision d'attribution" avec "MC"
     Et que je clique sur "Rechercher"
-    Alors la page est titrée "Dossier 12345"
+    Alors la page est titrée "Dossier MC"
     Et la page contient "3 jours x 10 € par jour = 30 €"
 
   Scénario: Le personnel ASP entre un numéro de prestation dossier ASP existant
     Sachant que le numéro de prestation dossier ASP de la PFMP de "Marie Curie" est "10004"
     Quand je remplis "Numéro de décision d'attribution" avec "10004"
     Et que je clique sur "Rechercher"
-    Alors la page contient "10004"
+    Alors la page est titrée "Dossier MC"
     Et la page contient "3 jours x 10 € par jour = 30 €"
 
   Scénario: Le personnel ASP n'a pas accès à l'interface principale
