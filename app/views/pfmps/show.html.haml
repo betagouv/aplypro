@@ -29,35 +29,11 @@
 
   - if @pfmp.payment_due?
     %h2.fr-h3 Paiement
-    .gray-panel.fr-p-3w.fr-mb-3w
-      %div
-        .fr-h4
-          = number_to_currency @pfmp.amount
-          à payer
-      %div
-        = @pfmp.day_count
-        jours x
-        = number_to_currency @pfmp.wage.daily_rate
-        par jour =
-        = number_to_currency(@pfmp.day_count * @pfmp.wage.daily_rate)
-      %div
-        = number_to_currency @pfmp.wage.yearly_cap
-        de plafond maximum par an
-      %div.fr-mb-1w
-        = number_to_currency @pfmp.previously_locked_amount
-        engagés par les PFMPs précédemment déclarées.
+    = render partial: "payment_panel", locals: { pfmp: @pfmp }
 
   - if @pfmp.payment_requests.any?
     %h3.fr-h5
       = "Demande".pluralize(@pfmp.payment_requests.count)
       de paiement
-
-    - @pfmp.payment_requests.order(updated_at: :desc).each do |payment_request|
-      .gray-panel.fr-p-3w.fr-mb-3w
-        = render partial: "payment_requests/badges", locals: { payment_request: payment_request }
-        .fr-mt-1w
-          %em= t("payment_requests.state_explanations.#{payment_request.current_state}", **payment_request.status_explanation_args).html_safe
-
-        .fr-mt-2w.gray-text
-          Dernière mise à jour le
-          = l(payment_request.updated_at, format: :long)
+    
+    = render partial: "payment_requests"

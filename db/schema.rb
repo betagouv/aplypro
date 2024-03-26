@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_04_081606) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_21_161647) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -74,6 +74,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_04_081606) do
     t.datetime "sent_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "asp_users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "name", null: false
+    t.string "provider", null: false
+    t.string "uid", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["uid"], name: "index_asp_users_on_uid", unique: true
   end
 
   create_table "classes", force: :cascade do |t|

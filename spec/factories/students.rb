@@ -41,7 +41,7 @@ FactoryBot.define do
     end
 
     trait :with_birthplace_info do
-      birthplace_city_insee_code { Faker::Number.digit }
+      birthplace_city_insee_code { Faker::Number.number(digits: 5) }
       birthplace_country_insee_code { birth_country_code }
     end
 
@@ -49,7 +49,7 @@ FactoryBot.define do
       address_line1 { Faker::Address.street_name }
       address_line2 { Faker::Address.street_name }
       address_postal_code { Faker::Address.zip_code }
-      address_city_insee_code { Faker::Number.digit }
+      address_city_insee_code { Faker::Number.number(digits: 5) }
       address_city { Faker::Address.city }
       address_country_code { address_country_code_value }
     end
