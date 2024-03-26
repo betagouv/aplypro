@@ -13,6 +13,8 @@ module ASP
 
       return if @schooling.nil?
 
+      @inhibit_title = true
+
       @page_title = "Dossier #{@schooling.asp_dossier_id}"
     end
 
