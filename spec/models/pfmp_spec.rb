@@ -94,7 +94,8 @@ RSpec.describe Pfmp do
       before { pfmps.first.transition_to!(:validated) }
 
       it "can move to validated" do
-        expect { pfmps.last.transition_to!(:validated) }.not_to raise_error Statesman::GuardFailedError
+        pfmps.last.transition_to!(:validated)
+        expect(pfmps.last).to be_in_state(:validated)
       end
     end
 
