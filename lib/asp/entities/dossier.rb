@@ -24,10 +24,8 @@ module ASP
       end
 
       def fragment(xml)
-        if new_record?
-          xml.numadm(numadm)
-          xml.codedispositif(codedispositif)
-        end
+        xml.numadm(numadm)
+        xml.codedispositif(codedispositif)
 
         xml.listeprestadoss do
           Prestadoss.from_payment_request(payment_request).to_xml(xml)
