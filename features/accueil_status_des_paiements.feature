@@ -2,9 +2,8 @@
 
 Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
   Contexte:
-    Sachant que je suis un personnel MENJ directeur de l'établissement "ETAB3000"
-    Et que mon établissement propose une formation "Art" rémunérée à 10 euros par jour et plafonnée à 100 euros par an
-    Et que l'API SYGNE renvoie 10 élèves dans la classe de "A1" formation "Art" dont "Marie Curie", INE "MC3000" pour l'établissement "ETAB3000"
+    Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
+    Et que l'API SYGNE renvoie 10 élèves dans une classe "A1" dont "Marie Curie" pour l'établissement "DINUM"
     Et que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que je me connecte en tant que personnel MENJ
     Et que toutes les tâches de fond sont terminées

@@ -5,14 +5,24 @@
 # peine de les voir disparaître, d'où @sygne_results.
 
 Sachantque(
-  "l'API SYGNE renvoie {int} élèves en {string} dont l'INE {string} pour l'établissement {string}"
-) do |count, classe, ine, uai|
-  @sygne_results = []
+  "l'API SYGNE renvoie {int} élèves en {string} pour l'établissement {string}"
+) do |count, classe, uai|
+  mock_sygne_token
+  mock_sygne_students_endpoint(uai, FactoryBot.build_list(:sygne_student, count, classe: classe))
+end
 
+Sachantque(
+  "l'API SYGNE renvoie {int} élèves dans une classe {string} dont {string} pour l'établissement {string}"
+) do |count, classe, name, uai|
   mock_sygne_token
 
+  @sygne_results = []
+
+  first_name, last_name = name.split
+
   payload = FactoryBot.build_list(:sygne_student, count, classe: classe).tap do |students|
-    students.last["ine"] = ine
+    students.last["prenom"] = first_name
+    students.last["nom"] = last_name
   end
 
   @sygne_results << payload
@@ -43,30 +53,6 @@ Sachantque(
   mock_sygne_students_endpoint(uai, payload)
 end
 
-Sachantque(
-  "l'API SYGNE renvoie {int} élèves " \
-  "dans la classe de {string} formation {string} " \
-  "dont {string}, INE {string} pour l'établissement {string}"
-) do |count, classe, mef, name, ine, uai| # rubocop:disable Metrics/ParameterLists
-  mock_sygne_token
-
-  @sygne_results = []
-
-  first_name, last_name = name.split
-
-  mef = Mef.find_by!(label: mef)
-
-  payload = FactoryBot.build_list(:sygne_student, count, classe: classe, mef: mef.code.concat("0")).tap do |students|
-    students.last["ine"] = ine
-    students.last["prenom"] = first_name
-    students.last["nom"] = last_name
-  end
-
-  @sygne_results << payload
-
-  mock_sygne_students_endpoint(uai, payload)
-end
-
 # ce step permet de mocker l'API SYGNE sans inclure la logique des
 # autres steps qui construisent les données passées en paramètre.
 Sachantque("l'API SYGNE peut renvoyer des élèves pour l'établissement {string}") do |uai|
@@ -77,6 +63,11 @@ end
 Sachantque("l'API FREGATA renvoie une liste d'élèves pour l'établissement {string}") do |uai|
   mock_sygne_token
   mock_fregata_students_with(uai, FactoryBot.build_list(:fregata_student, 10))
+end
+
+Sachantque("l'API SYGNE renvoie une liste d'élèves pour l'établissement {string}") do |uai|
+  mock_sygne_token
+  mock_sygne_students_endpoint(uai, FactoryBot.build_list(:sygne_student, 10))
 end
 
 Sachantque("l'API SYGNE peut fournir les informations complètes des étudiants") do

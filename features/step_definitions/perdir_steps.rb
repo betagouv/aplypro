@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-# hacks
-def find_student_by_full_name(name)
-  Student.all.find { |s| s.full_name == name }
-end
-
 Et("mon établissement n'est pas encore hydraté") do
   @etab.classes.delete_all
 end
@@ -42,12 +37,11 @@ Alors("le fil d'Ariane affiche {string}") do |path|
   expect(breadcrumbs).to eq components
 end
 
-Quand("l'élève n'a réalisé aucune PFMP") do
-  @student.current_schooling.pfmps.delete_all
-end
+Quand("l'élève {string} a une PFMP dans un autre établissement") do |name|
+  student = find_student_by_full_name(name)
 
-Quand("l'élève a une PFMP dans un autre établissement") do
-  schooling = FactoryBot.create(:schooling, :closed, student: @student)
+  schooling = FactoryBot.create(:schooling, :closed, student: student)
+
   FactoryBot.create(:pfmp, schooling: schooling)
 end
 
@@ -95,7 +89,8 @@ end
 
 Quand("je consulte le profil de {string} dans la classe de {string}") do |name, label|
   steps %(
-    Quand je consulte la classe de "#{label}"
+    Quand je consulte la liste des classes
+    Et que je consulte la classe de "#{label}"
     Et que je clique sur "Voir le profil de #{name}"
   )
 end

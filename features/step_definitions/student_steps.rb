@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-Quand("l'élève de SYGNE avec l'INE {string} a quitté l'établissement {string}") do |ine, uai|
+Quand("l'élève {string} a quitté l'établissement {string}") do |name, uai|
+  student = find_student_by_full_name(name)
+
   steps %(
-    Sachant que l'API SYGNE renvoie un élève avec l'INE "#{ine}" qui a quitté l'établissement "#{uai}"
+    Sachant que l'API SYGNE renvoie un élève avec l'INE "#{student.ine}" qui a quitté l'établissement "#{uai}"
     Et que la liste des élèves de l'établissement "#{uai}" est rafraîchie
     Et que toutes les tâches de fond sont terminées
     )
@@ -22,19 +24,15 @@ Sachantque("les informations personnelles ont été récupérées pour tous les 
   ActiveJob.perform_all_later(establishment.schoolings.map { |schooling| FetchStudentInformationJob.new(schooling) })
 end
 
-Quand("l'élève avec l'INE {string} s'appelle {string} {string}") do |ine, first_name, last_name|
-  Student.find_by(ine:).update(first_name:, last_name:)
-end
-
 Quand(
-  "l'élève avec l'INE {string} a une ancienne scolarité dans la classe {string} dans le même établissement"
-) do |ine, classe_label|
+  "l'élève {string} a une ancienne scolarité dans la classe {string} dans le même établissement"
+) do |name, classe_label|
   establishment = Establishment.last
-  student = Student.find_by(ine: ine)
+  student = find_student_by_full_name(name)
   classe = Classe.find_by(label: classe_label, establishment: establishment) ||
            FactoryBot.create(:classe, label: classe_label, establishment: establishment)
 
-  FactoryBot.create(:schooling, student: student, classe: classe, end_date: Date.yesterday)
+  FactoryBot.create(:schooling, :closed, student: student, classe: classe)
 end
 
 Quand("l'élève {string} {string} a une ancienne scolarité dans un autre établissement") do |first_name, last_name|
