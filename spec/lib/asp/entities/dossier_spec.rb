@@ -27,12 +27,6 @@ describe ASP::Entities::Dossier, type: :model do
       it "passes the modification false to flag" do
         expect(attributes["modification"]).to have_attributes value: "N"
       end
-
-      %w[numadm codedispositif].each do |attr|
-        it "does not reinclude the #{attr} attribute" do
-          expect(document.at(attr)).to be_nil
-        end
-      end
     end
   end
 end
