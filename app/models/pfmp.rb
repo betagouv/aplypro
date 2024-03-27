@@ -85,6 +85,12 @@ class Pfmp < ApplicationRecord
     relative_index + 1
   end
 
+  def administrative_number
+    index = relative_human_index.to_s.rjust(2, "0")
+
+    schooling.attributive_decision_number + index
+  end
+
   def can_be_modified?
     if in_state?(:validated)
       payment_requests.all?(&:stopped?)
