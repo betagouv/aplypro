@@ -37,6 +37,7 @@ Entre autres :
 - `make guard` : lance [Guard](https://github.com/guard/guard) ;
 - `make sh` : lance un terminal ;
 - `make lint` : lance Rubocop.
+- `make debug` : connecter le debugger
 
 # Deploiement
 
