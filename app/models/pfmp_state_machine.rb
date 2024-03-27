@@ -15,9 +15,7 @@ class PfmpStateMachine
     pfmp.day_count.present?
   end
 
-  guard_transition(to: :validated) do |pfmp|
-    pfmp.student.pfmps.where.not(id: pfmp.id).where("pfmps.created_at < (?)", pfmp.created_at).all?(:validated?)
-  end
+  guard_transition(to: :validated, &:can_be_validated?)
 
   after_transition(to: :completed) do |pfmp| # rubocop:disable Style/SymbolProc
     pfmp.update_amount!

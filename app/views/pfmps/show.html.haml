@@ -17,7 +17,7 @@
         travaillés
 
     .fr-btns-group.fr-btns-group--inline
-      - if @pfmp.in_state?(:completed) and current_user.can_validate?
+      - if @pfmp.in_state?(:completed) and current_user.can_validate? and @pfmp.can_be_validated?
         = button_to "Valider", validate_class_schooling_pfmp_path(@classe, @schooling, @pfmp), class: 'fr-btn'
       - if @pfmp.can_be_modified?
         = link_to "Modifier la PFMP", edit_class_schooling_pfmp_path(@classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
@@ -35,5 +35,5 @@
     %h3.fr-h5
       = "Demande".pluralize(@pfmp.payment_requests.count)
       de paiement
-    
+
     = render partial: "payment_requests"
