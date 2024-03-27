@@ -160,13 +160,6 @@ Quand("je consulte la classe {string}") do |label|
   )
 end
 
-# FIXME: we're relying on global state here via the @student variable
-# but we should keep using a name reference to do it via the user
-# interface instead of prying directly at the model.
-Quand("je valide la dernière PFMP de l'élève") do
-  @student.pfmps.last.transition_to!(:validated)
-end
-
 Quand("je renseigne une PFMP provisoire") do
   steps %(
     Et que je clique sur "Ajouter une PFMP"
