@@ -1,6 +1,6 @@
 %h1
   Dossier
-  = @schooling.asp_dossier_id
+  = @schooling.attributive_decision_number
 
 .fr-my-3w
   - if @schooling.attributive_decision.present?
@@ -53,9 +53,6 @@
   %table
     %caption.fr-h2 Formation
     %tbody
-      %tr
-        %td N° de décision d'attribution annuelle
-        %td= @schooling.attributive_decision_number
       %tr
         %td Forfait journalier
         %td= number_to_currency @schooling.mef.wage.daily_rate
