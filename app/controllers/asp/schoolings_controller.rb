@@ -38,7 +38,7 @@ module ASP
     def find_schooling_by_attributive_decision_filename
       Schooling
         .joins(:attributive_decision_blob)
-        .find_by("filename LIKE ?", "%#{@search}%")
+        .find_by("filename LIKE ?", "%_#{@search}.pdf")
     end
 
     def sanitize_search

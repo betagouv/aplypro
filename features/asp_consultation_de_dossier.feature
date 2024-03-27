@@ -17,10 +17,10 @@ Fonctionnalité: Le personnel ASP consulte des dossiers
     Alors la page contient "Aucune décision d'attribution trouvée"
 
   Scénario: Le personnel ASP entre un numéro de décision d'attribution existant
-    Sachant que le numéro administratif de "Marie Curie" est "DOSS3000"
-    Et que je remplis "Numéro de décision d'attribution" avec "ENPUDOSS3000"
+    Sachant que le numéro administratif de "Marie Curie" est "THEDOSS"
+    Et que je remplis "Numéro de décision d'attribution" avec "ENPUTHEDOSS20231"
     Quand je clique sur "Rechercher"
-    Alors la page contient "ENPUDOSS3000"
+    Alors la page contient "ENPUTHEDOSS20231"
     Et la page contient "3 jours x 10 € par jour = 30 €"
 
   Scénario: Le personnel ASP n'a pas accès à l'interface principale
