@@ -11,6 +11,8 @@ module ASP
     attr_reader :asp_file
 
     def send!(rerun: false)
+      raise ASP::Errors::RerunningParsedRequest if results_attached?
+
       ActiveRecord::Base.transaction do
         @asp_file = ASP::Entities::Fichier.new(asp_payment_requests)
 
@@ -44,6 +46,12 @@ module ASP
         content_type: "text/xml",
         filename: @asp_file.filename
       )
+    end
+
+    private
+
+    def results_attached?
+      integrations_file.attached? || rejects_file.attached?
     end
   end
 end
