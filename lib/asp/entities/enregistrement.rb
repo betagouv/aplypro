@@ -12,6 +12,8 @@ module ASP
 
       validates_presence_of :id_enregistrement
 
+      known_with :id_individu
+
       def xml_root_args
         { idEnregistrement: id_enregistrement }
       end
@@ -21,17 +23,22 @@ module ASP
       end
 
       def individu(xml)
-        xml.natureindividu("P")
-        PersPhysique.from_payment_request(payment_request).to_xml(xml)
-        xml.adressesindividu { Adresse.from_payment_request(payment_request).to_xml(xml) }
-        xml.coordpaiesindividu { CoordPaie.from_payment_request(payment_request).to_xml(xml) }
+        if new_record?
+          xml.natureindividu("P")
+          PersPhysique.from_payment_request(payment_request).to_xml(xml)
+          xml.adressesindividu { Adresse.from_payment_request(payment_request).to_xml(xml) }
+          xml.coordpaiesindividu { CoordPaie.from_payment_request(payment_request).to_xml(xml) }
+        end
+
         xml.listedossier { Dossier.from_payment_request(payment_request).to_xml(xml) }
       end
 
       def individu_attrs
-        return {} if id_individu.blank?
-
-        { idIndividu: id_individu, **ASP_NO_MODIFICATION }
+        if known_record?
+          { idIndividu: id_individu, **ASP_NO_MODIFICATION }
+        else
+          {}
+        end
       end
     end
   end
