@@ -14,7 +14,7 @@ Fonctionnalité: Le personnel ASP consulte des dossiers
   Scénario: Le personnel ASP entre un numéro de décision d'attribution inexistant
     Quand je remplis "Numéro de décision d'attribution" avec "test"
     Et que je clique sur "Rechercher"
-    Alors la page contient "Aucune décision d'attribution, dossier ou prestation dossier trouvé"
+    Alors la page contient "Aucune décision d'attribution trouvée"
 
   Scénario: Le personnel ASP entre un numéro de décision d'attribution existant
     Sachant que le numéro administratif de "Marie Curie" est "DOSS3000"
