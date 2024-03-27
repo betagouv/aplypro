@@ -42,3 +42,10 @@ Fonctionnalité: Le personnel ASP consulte des dossiers
     Alors le titre de la page contient "Rechercher un dossier"
     Et la page ne contient pas "Élèves"
     Et la page ne contient pas "Envoyer en paiement"
+
+  Scénario: Le personnel ASP est redirigé vers la page de connexion ASP en cas d'erreur de connexion
+    Sachant que je me déconnecte
+    Et que je suis un agent de l'ASP avec l'email "foobar@gmail.com"
+    Quand je me connecte au portail ASP
+    Alors la page contient "Erreur lors du traitement de votre profil"
+    Et la page contient "Vous êtes un agent de l'ASP"

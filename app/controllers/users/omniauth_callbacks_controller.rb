@@ -10,6 +10,7 @@ module Users
     rescue_from IdentityMappers::Errors::Error, ActiveRecord::RecordInvalid, with: :authentication_failure
 
     def asp
+      @asp_login = true
       @asp_user = ASP::User.from_oidc(auth_hash).tap(&:save!)
 
       sign_in(:asp_user, @asp_user)
@@ -57,9 +58,23 @@ module Users
 
       key = error.class.to_s.demodulize.underscore
 
+      flash[:alert] = t("auth.errors.#{key}")
+
+      if defined? @asp_login
+        fail_asp_user
+      else
+        fail_user
+      end
+    end
+
+    def fail_user
       sign_out(current_user) if user_signed_in?
 
-      redirect_to new_user_session_path, alert: t("auth.errors.#{key}")
+      redirect_to new_user_session_path
+    end
+
+    def fail_asp_user
+      redirect_to new_asp_user_session_path
     end
 
     private
