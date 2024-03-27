@@ -14,27 +14,13 @@ Fonctionnalité: Le personnel ASP consulte des dossiers
   Scénario: Le personnel ASP entre un numéro de décision d'attribution inexistant
     Quand je remplis "Numéro de décision d'attribution" avec "test"
     Et que je clique sur "Rechercher"
-    Alors la page contient "Aucune décision d'attribution, dossier ou prestation dossier trouvé"
+    Alors la page contient "Aucune décision d'attribution trouvée"
 
   Scénario: Le personnel ASP entre un numéro de décision d'attribution existant
-    Sachant que le numéro administratif de "Marie Curie" est "DOSS3000"
-    Et que je remplis "Numéro de décision d'attribution" avec "ENPUDOSS3000"
+    Sachant que le numéro administratif de "Marie Curie" est "THEDOSS"
+    Et que je remplis "Numéro de décision d'attribution" avec "ENPUTHEDOSS20231"
     Quand je clique sur "Rechercher"
-    Alors la page contient "ENPUDOSS3000"
-    Et la page contient "3 jours x 10 € par jour = 30 €"
-
-  Scénario: Le personnel ASP entre un numéro de dossier ASP existant
-    Sachant que le numéro de dossier ASP de "Marie Curie" est "12345"
-    Quand je remplis "Numéro de décision d'attribution" avec "12345"
-    Et que je clique sur "Rechercher"
-    Alors la page est titrée "Dossier 12345"
-    Et la page contient "3 jours x 10 € par jour = 30 €"
-
-  Scénario: Le personnel ASP entre un numéro de prestation dossier ASP existant
-    Sachant que le numéro de prestation dossier ASP de la PFMP de "Marie Curie" est "10004"
-    Quand je remplis "Numéro de décision d'attribution" avec "10004"
-    Et que je clique sur "Rechercher"
-    Alors la page contient "10004"
+    Alors la page contient "ENPUTHEDOSS20231"
     Et la page contient "3 jours x 10 € par jour = 30 €"
 
   Scénario: Le personnel ASP n'a pas accès à l'interface principale
@@ -42,3 +28,10 @@ Fonctionnalité: Le personnel ASP consulte des dossiers
     Alors le titre de la page contient "Rechercher un dossier"
     Et la page ne contient pas "Élèves"
     Et la page ne contient pas "Envoyer en paiement"
+
+  Scénario: Le personnel ASP est redirigé vers la page de connexion ASP en cas d'erreur de connexion
+    Sachant que je me déconnecte
+    Et que je suis un agent de l'ASP avec l'email "foobar@gmail.com"
+    Quand je me connecte au portail ASP
+    Alors la page contient "Erreur lors du traitement de votre profil"
+    Et la page contient "Vous êtes un agent de l'ASP"

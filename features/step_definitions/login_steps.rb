@@ -53,6 +53,19 @@ Sachantque("je suis un agent de l'ASP") do
   )
 end
 
+Sachantque("je suis un agent de l'ASP avec l'email {string}") do |email|
+  OmniAuth.config.mock_auth[:asp] = OmniAuth::AuthHash.new(
+    {
+      provider: "asp",
+      uid: Faker::Internet.uuid,
+      info: {
+        name: Faker::Name.name,
+        email: email
+      }
+    }
+  )
+end
+
 Sachantque("je me connecte au portail ASP") do
   visit new_asp_user_session_path
 

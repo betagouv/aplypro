@@ -6,5 +6,6 @@ module ASP
     class ResponseFileParsingError < Error; end
     class UnmatchedResponseFile < Error; end
     class SendingPaymentRequestInWrongState < Error; end
+    class RerunningParsedRequest < Error; end
   end
 end

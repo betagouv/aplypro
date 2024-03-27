@@ -33,6 +33,11 @@ module ASP
             instance.assign_attributes(mapped_attributes)
           end
         end
+
+        def known_with(attr)
+          define_method(:new_record?) { send(attr).blank? }
+          define_method(:known_record?) { !new_record? }
+        end
       end
 
       def xml_root_args

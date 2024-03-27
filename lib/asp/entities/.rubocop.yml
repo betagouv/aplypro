@@ -1,0 +1,11 @@
+inherit_from:
+  - ../../../.rubocop.yml
+
+# in the ASP entities building code (i.e this folder) we make a lot of
+# calls to the same XML builder objet (`xml.tag(content)`), which
+# offends Rubocop because it looks like high ABC complexity. Minimise
+# the drama by allowing repeated attributes which means a bunch of
+# calls to the same `xml` object are not accumulated and greatly
+# reduces the initial offense count.
+Metrics/AbcSize:
+  CountRepeatedAttributes: false

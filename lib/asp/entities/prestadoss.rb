@@ -14,10 +14,16 @@ module ASP
       attribute :montanttotalengage, :string
       attribute :valeur, :string
 
+      known_with :id_prestation_dossier
+
       validates_presence_of %i[numadm datecomplete datereceptionprestadoss montanttotalengage valeur]
 
       def xml_root_args
-        { idPrestaDoss: id_prestation_dossier, **ASP_NO_MODIFICATION } if id_prestation_dossier.present?
+        if known_record?
+          { idPrestaDoss: id_prestation_dossier, **ASP_NO_MODIFICATION }
+        else
+          {}
+        end
       end
 
       def fragment(xml)

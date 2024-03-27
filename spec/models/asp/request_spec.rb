@@ -38,6 +38,22 @@ RSpec.describe ASP::Request do
       expect(payment_requests.map(&:asp_request_id).uniq).to contain_exactly(request.id)
     end
 
+    context "with an existing rejects file" do
+      before { request.rejects_file.attach(io: StringIO.new("rejects"), filename: "rejects") }
+
+      it "refuses to run" do
+        expect { request.send! }.to raise_error ASP::Errors::RerunningParsedRequest
+      end
+    end
+
+    context "with an existing integrations file" do
+      before { request.integrations_file.attach(io: StringIO.new("rejects"), filename: "rejects") }
+
+      it "refuses to run" do
+        expect { request.send! }.to raise_error ASP::Errors::RerunningParsedRequest
+      end
+    end
+
     shared_examples "does not persist anything" do
       it "does not update the sent_at timestamp" do
         expect { request.send! rescue RuntimeError } # rubocop:disable Style/RescueModifier

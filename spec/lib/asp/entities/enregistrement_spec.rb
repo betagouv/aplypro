@@ -30,6 +30,12 @@ describe ASP::Entities::Enregistrement, type: :model do
         it "includes the modification flag to false" do
           expect(attributes["modification"]).to have_attributes value: "N"
         end
+
+        %w[persphysique adressesindividu coordpaiesindividu].each do |entity|
+          it "does not reinclude the #{entity} entity" do
+            expect(document.at(entity)).to be_nil
+          end
+        end
       end
     end
   end
