@@ -55,7 +55,7 @@ module ASP
     end
 
     def stopped?
-      in_state?(:incomplete, :rejected, :unpaid)
+      in_state?(:pending, :incomplete, :rejected, :unpaid)
     end
 
     def inactive?
