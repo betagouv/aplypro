@@ -87,6 +87,26 @@ RSpec.describe Pfmp do
         expect { pfmp.transition_to!(:completed) }.to raise_error Statesman::GuardFailedError
       end
     end
+
+    context "when the previous pfmps are validated" do
+      let(:pfmps) { create_list(:pfmp, 2, :completed, schooling: schooling) }
+
+      before { pfmps.first.transition_to!(:validated) }
+
+      it "can move to validated" do
+        expect { pfmps.last.transition_to!(:validated) }.not_to raise_error Statesman::GuardFailedError
+      end
+    end
+
+    context "when previous pfmps are not all validated" do
+      let(:pfmps) { create_list(:pfmp, 3, :completed, schooling: schooling) }
+
+      before { pfmps.first.transition_to!(:validated) }
+
+      it "cannot move to validated" do
+        expect { pfmps.last.transition_to!(:validated) }.to raise_error Statesman::GuardFailedError
+      end
+    end
   end
 
   context "when the amount is updated" do
