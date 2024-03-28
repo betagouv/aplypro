@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Normalization task that was run directly in production in 15/03/2024
 class PaymentFixer
   def self.call
     new.call
@@ -40,7 +41,7 @@ class PaymentFixer
 
   def handle_single_pfmp(pfmp)
     # count the expected amount manually (no DB roundtrip) since we
-    # don't need the whole multi-PFMP yearly cap calcualtion
+    # don't need the whole multi-PFMP yearly cap calculation
     expected = [
       wages[pfmp.mef.id][:daily_rate] * pfmp.day_count,
       wages[pfmp.mef.id][:yearly_cap]

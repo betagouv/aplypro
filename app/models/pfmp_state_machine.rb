@@ -15,6 +15,10 @@ class PfmpStateMachine
     pfmp.day_count.present?
   end
 
+  guard_transition(to: :validated) do |pfmp| # rubocop:disable Style/SymbolProc
+    pfmp.can_be_validated?
+  end
+
   after_transition(to: :completed) do |pfmp| # rubocop:disable Style/SymbolProc
     pfmp.update_amount!
   end

@@ -53,24 +53,26 @@ class Pfmp < ApplicationRecord
     end
   end
 
-  after_save :handle_amount_change
+  after_save :handle_day_count_change
 
-  def handle_amount_change
+  def handle_day_count_change
     changed_day_count = day_count_before_last_save != day_count
 
     return if !changed_day_count
 
-    raise "A PFMP paid or in the process of being paid cannot have its day count changed." unless can_be_modified?
-
     update_amount!
+  end
+
+  def update_amount!
+    raise "A PFMP paid or in the process of being paid cannot have its amount recalculated" unless can_be_modified?
+
+    update!(amount: calculate_amount)
+
+    following_modifiable_pfmps_for_mef.first&.update_amount!
   end
 
   def validate!
     transition_to!(:validated)
-  end
-
-  def update_amount!
-    update!(amount: calculate_amount)
   end
 
   def setup_payment!
@@ -96,6 +98,12 @@ class Pfmp < ApplicationRecord
       payment_requests.all?(&:stopped?)
     else
       true
+    end
+  end
+
+  def can_be_validated?
+    student.pfmps.where.not(id: id).where("pfmps.created_at < (?)", created_at).all? do |pfmp|
+      pfmp.in_state?(:validated)
     end
   end
 
