@@ -4,7 +4,6 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
   Contexte:
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que l'API SYGNE renvoie 10 élèves dans une classe "A1" dont "Marie Curie" pour l'établissement "DINUM"
-    Et que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que je me connecte en tant que personnel MENJ
     Et que toutes les tâches de fond sont terminées
     Et que je passe l'écran d'accueil
@@ -24,7 +23,6 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et l'indicateur de demandes de paiements "Bloquées" affiche 1
 
   Scénario: Le personnel de direction voit une demande de paiement prête à être envoyée
-    Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que les informations personnelles ont été récupérées pour l'élève "Marie Curie"
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
     Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
@@ -34,7 +32,6 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et l'indicateur de demandes de paiements "Bloquées" n'est pas affiché
 
   Scénario: Le personnel de direction voit une demande de paiement envoyée
-    Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que les informations personnelles ont été récupérées pour l'élève "Marie Curie"
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
     Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
@@ -45,7 +42,6 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et l'indicateur de demandes de paiements "Demande rejetée" n'est pas affiché
 
   Scénario: Le personnel de direction voit une demande de paiement intégrée
-    Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que les informations personnelles ont été récupérées pour l'élève "Marie Curie"
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
     Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
@@ -58,7 +54,6 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et l'indicateur de demandes de paiements "Demande rejetée" n'est pas affiché
 
   Scénario: Le personnel de direction voit une demande de paiement rejetée à l'intégration
-    Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que les informations personnelles ont été récupérées pour l'élève "Marie Curie"
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
     Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
@@ -71,7 +66,6 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et l'indicateur de demandes de paiements "Demandes rejetées" affiche 1
 
   Scénario: Le personnel de direction voit une demande de paiement liquidée
-    Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que les informations personnelles ont été récupérées pour l'élève "Marie Curie"
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
     Et que l'élève "Marie Curie" a une adresse en France et son propre RIB
@@ -87,7 +81,6 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et l'indicateur de demandes de paiements "Paiements échoués" n'est pas affiché
 
   Scénario: Le personnel de direction voit une demande de paiement rejetée à la liquidation
-    Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que les informations personnelles ont été récupérées pour l'élève "Marie Curie"
     Et que l'élève "Marie Curie" a déjà des coordonnées bancaires
     Et que l'élève "Marie Curie" a une adresse en France et son propre RIB

@@ -5,7 +5,6 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que mon établissement propose une formation "Art" rémunérée à 10 euros par jour et plafonnée à 100 euros par an
     Et que l'API SYGNE renvoie une classe "1MELEC" de 10 élèves en formation "Art" dont "Marie Curie" pour l'établissement "DINUM"
-    Et que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que je me connecte en tant que personnel MENJ
     Et que toutes les tâches de fond sont terminées
     Et que je passe l'écran d'accueil

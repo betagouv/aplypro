@@ -4,7 +4,6 @@ Fonctionnalité: Gestion des paiements
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que mon établissement propose une formation "Art" rémunérée à 10 euros par jour et plafonnée à 100 euros par an
     Et que l'API SYGNE renvoie une classe "A1" de 10 élèves en formation "Art" dont "Marie Curie" pour l'établissement "DINUM"
-    Et que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que je me connecte en tant que personnel MENJ
     Et que toutes les tâches de fond sont terminées
     Et que je passe l'écran d'accueil
@@ -37,7 +36,6 @@ Fonctionnalité: Gestion des paiements
     Et la page contient "La demande de paiement a toutes les informations nécessaires."
 
   Scénario: Le personnel de direction peut voir un paiement envoyé à l'ASP
-    Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que les informations personnelles ont été récupérées pour l'élève "Marie Curie"
     Et que je renseigne et valide une PFMP de 3 jours
     Et que l'élève "Marie Curie" a des données correctes pour l'ASP
@@ -47,7 +45,6 @@ Fonctionnalité: Gestion des paiements
     Alors je peux voir une demande de paiement "En traitement" de 30 euros
 
   Scénario: Le personnel ne peut pas altérer une PFMP avec un paiement en cours
-    Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que les informations personnelles ont été récupérées pour l'élève "Marie Curie"
     Et que je renseigne et valide une PFMP de 3 jours
     Et que l'élève "Marie Curie" a des données correctes pour l'ASP

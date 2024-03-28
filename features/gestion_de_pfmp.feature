@@ -4,7 +4,6 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
   Contexte:
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que l'API SYGNE renvoie 10 élèves dans une classe "A1" dont "Marie Curie" pour l'établissement "DINUM"
-    Et que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que je me connecte en tant que personnel MENJ
     Et que je passe l'écran d'accueil
     Et que toutes les tâches de fond sont terminées
