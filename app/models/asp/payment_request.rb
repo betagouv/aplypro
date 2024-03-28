@@ -70,6 +70,10 @@ module ASP
       !inactive?
     end
 
+    def rejection_reason
+      last_transition.metadata["Motif rejet"]
+    end
+
     private
 
     def single_active_payment_request_per_pfmp

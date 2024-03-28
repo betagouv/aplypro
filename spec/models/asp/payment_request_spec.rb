@@ -57,4 +57,12 @@ RSpec.describe ASP::PaymentRequest do
       end
     end
   end
+
+  describe "rejection_reason" do
+    let(:payment_request) { create(:asp_payment_request, :rejected, reason: "failwhale") }
+
+    it "finds the right metadata" do
+      expect(payment_request.rejection_reason).to eq "failwhale"
+    end
+  end
 end
