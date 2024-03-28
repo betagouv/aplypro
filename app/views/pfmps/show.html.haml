@@ -19,6 +19,8 @@
     .fr-btns-group.fr-btns-group--inline
       - if @pfmp.in_state?(:completed) and current_user.can_validate? and @pfmp.can_be_validated?
         = button_to "Valider", validate_class_schooling_pfmp_path(@classe, @schooling, @pfmp), class: 'fr-btn'
+      - else
+        = button_tag "Valider", disabled: true, class: 'fr-btn fr-btn--secondary', title: "Vous ne pouvez pas valider cette PFMP car les PFMPs précédentes ne sont pas validées"
       - if @pfmp.can_be_modified?
         = link_to "Modifier la PFMP", edit_class_schooling_pfmp_path(@classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
         = link_to "Supprimer la PFMP", confirm_deletion_class_schooling_pfmp_path(@classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
