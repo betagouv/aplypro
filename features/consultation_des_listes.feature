@@ -18,7 +18,6 @@ Fonctionnalité: Le personnel de direction consulte les listes
       | 2NDEB  | 0 / 10                  | 1 / 10                |       |
 
   Scénario: Le personnel de direction peut voir la complétion des décisions d'attribution
-    Quand l'API SYGNE peut fournir les informations complètes des étudiants
     Et que je génère les décisions d'attribution de mon établissement
     Et que je consulte la liste des classes
     Alors je peux voir dans le tableau "Liste des classes"

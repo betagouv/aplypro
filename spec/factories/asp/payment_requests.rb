@@ -10,6 +10,8 @@ FactoryBot.define do
       schooling { association :schooling, :with_attributive_decision, student: student }
     end
 
+    trait :pending
+
     trait :ready do
       after(:create, &:mark_ready!)
     end
@@ -31,8 +33,12 @@ FactoryBot.define do
     trait :rejected do
       sent
 
-      after(:create) do |obj|
-        result = build(:asp_reject, payment_request: obj)
+      transient do
+        reason { "fail" }
+      end
+
+      after(:create) do |obj, ctx|
+        result = build(:asp_reject, payment_request: obj, reason: ctx.reason)
 
         ASP::Readers::RejectsFileReader.new(result).process!
       end
@@ -45,6 +51,14 @@ FactoryBot.define do
         result = build(:asp_integration, payment_request: obj)
 
         ASP::Readers::IntegrationsFileReader.new(result).process!
+      end
+    end
+
+    trait :rejected do
+      sent
+
+      after(:create) do |obj|
+        obj.reject!({})
       end
     end
 

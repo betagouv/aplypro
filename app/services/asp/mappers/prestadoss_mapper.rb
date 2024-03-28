@@ -11,9 +11,7 @@ module ASP
       end
 
       def numadm
-        index = pfmp.relative_human_index.to_s.rjust(2, "0")
-
-        schooling.attributive_decision_number + index
+        pfmp.administrative_number
       end
 
       def datecomplete

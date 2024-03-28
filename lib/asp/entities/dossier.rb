@@ -11,15 +11,22 @@ module ASP
       attribute :id_dossier, :string
       attribute :codedispositif, :string
 
+      known_with :id_dossier
+
       validates_presence_of %i[numadm codedispositif]
 
       def xml_root_args
-        { idDoss: id_dossier, **ASP_NO_MODIFICATION } if id_dossier.present?
+        if known_record?
+          { idDoss: id_dossier, **ASP_NO_MODIFICATION }
+        else
+          {}
+        end
       end
 
       def fragment(xml)
         xml.numadm(numadm)
         xml.codedispositif(codedispositif)
+
         xml.listeprestadoss do
           Prestadoss.from_payment_request(payment_request).to_xml(xml)
         end

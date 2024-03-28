@@ -8,7 +8,7 @@
       .fr-mr-2w
         = @pfmps.count
         = "PFMP".pluralize @pfmps.count
-      = status_badge(:completed)
+      = pfmp_status_badge(:completed)
 
   .gray-panel.fr-col-md.fr-mb-3w.fr-p-3w
     %h2.fr-h4.mef-label= @classe.mef.label

@@ -47,7 +47,20 @@ Sachantque("je suis un agent de l'ASP") do
       uid: Faker::Internet.uuid,
       info: {
         name: Faker::Name.name,
-        email: Faker::Internet.email
+        email: Faker::Internet.email(domain: ASP::User::EMAIL_DOMAIN)
+      }
+    }
+  )
+end
+
+Sachantque("je suis un agent de l'ASP avec l'email {string}") do |email|
+  OmniAuth.config.mock_auth[:asp] = OmniAuth::AuthHash.new(
+    {
+      provider: "asp",
+      uid: Faker::Internet.uuid,
+      info: {
+        name: Faker::Name.name,
+        email: email
       }
     }
   )
@@ -190,7 +203,7 @@ Alors("je n'ai pas accès aux actions de chef d'établissement") do
     Quand je me rends sur la page d'accueil
     Alors la page ne contient pas "Gestion des accès"
     Alors le panneau "Décisions d'attribution" ne contient pas "Éditer les décisions d'attribution"
-    Alors le panneau "PFMP validées à envoyer en paiement" ne contient pas "Valider des PFMPs à envoyer en paiement"
+    Alors le panneau "Demandes de paiements des PFMPs" ne contient pas "Valider des PFMPs à envoyer en paiement"
   )
 end
 

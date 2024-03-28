@@ -18,7 +18,6 @@ Quand("une PFMP a été saisie, validée et envoyée en paiement pour l'élève 
     Et que je consulte la liste des classes
     Et que je consulte le profil de "#{name}" dans la classe de "A1"
     Et que je renseigne et valide une PFMP de 3 jours
-    Et que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que les informations personnelles ont été récupérées pour l'élève "#{name}"
     Et que l'élève "#{name}" a des données correctes pour l'ASP
     Et que les tâches de préparation et d'envoi des paiements sont passées

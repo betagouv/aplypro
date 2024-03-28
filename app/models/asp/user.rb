@@ -2,9 +2,13 @@
 
 module ASP
   class User < ApplicationRecord
+    EMAIL_DOMAIN = "asp-public.fr"
+
     devise :authenticatable
 
     validates :uid, :provider, :name, :email, presence: true
+
+    validates :email, format: { with: /@#{EMAIL_DOMAIN}\z/ }
 
     class << self
       def from_oidc(attrs)

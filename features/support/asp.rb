@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "cucumber/rspec/doubles"
+require "./mock/factories/asp"
 
 TEMP_ASP_DIR = "tmp/mock_asp"
 

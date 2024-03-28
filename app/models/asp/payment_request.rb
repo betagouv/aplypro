@@ -54,6 +54,10 @@ module ASP
       transition_to!(:paid)
     end
 
+    def mark_unpaid!
+      transition_to!(:unpaid)
+    end
+
     def stopped?
       in_state?(:incomplete, :rejected, :unpaid)
     end
@@ -66,8 +70,8 @@ module ASP
       !inactive?
     end
 
-    def mark_unpaid!
-      transition_to(:unpaid)
+    def rejection_reason
+      last_transition.metadata["Motif rejet"]
     end
 
     private

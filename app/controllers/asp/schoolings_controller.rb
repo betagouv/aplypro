@@ -23,10 +23,7 @@ module ASP
     def set_schooling_result
       return if @search.blank?
 
-      @schooling =
-        find_schooling_by_prestation_dossier_id ||
-        find_schooling_by_asp_dossier_id ||
-        find_schooling_by_attributive_decision_filename
+      @schooling = find_schooling_by_attributive_decision_filename
     end
 
     def set_pfmps
@@ -38,21 +35,10 @@ module ASP
                .distinct
     end
 
-    def find_schooling_by_prestation_dossier_id
-      Schooling
-        .joins(:pfmps)
-        .find_by("pfmps.asp_prestation_dossier_id": @search)
-    end
-
-    def find_schooling_by_asp_dossier_id
-      Schooling
-        .find_by(asp_dossier_id: @search)
-    end
-
     def find_schooling_by_attributive_decision_filename
       Schooling
         .joins(:attributive_decision_blob)
-        .find_by("filename LIKE ?", "%#{@search}%")
+        .find_by("filename LIKE ?", "%_#{@search}.pdf")
     end
 
     def sanitize_search

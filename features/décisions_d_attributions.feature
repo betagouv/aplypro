@@ -2,9 +2,8 @@
 
 Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribution
   Contexte:
-    Sachant que l'API SYGNE renvoie 10 élèves en "1MELEC" dont l'INE "test" pour l'établissement "DINUM"
-    Et que l'API SYGNE peut fournir les informations complètes des étudiants
-    Et que je suis un personnel MENJ directeur de l'établissement "DINUM"
+    Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
+    Et que l'API SYGNE renvoie 10 élèves dans une classe "1MELEC" dont "Marie Curie" pour l'établissement "DINUM"
     Et que je me connecte en tant que personnel MENJ
     Et que toutes les tâches de fond sont terminées
     Et que je passe l'écran d'accueil

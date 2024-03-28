@@ -6,14 +6,20 @@ Quand("la tâche de préparation des paiements démarre") do
   PreparePaymentRequestsJob.perform_later
 end
 
+Quand("la tâche de préparation des paiements est passée") do
+  steps %(
+    Quand la tâche de préparation des paiements démarre
+    Et que toutes les tâches de fond sont terminées
+  )
+end
+
 Quand("la tâche d'envoi des paiements démarre pour toutes les requêtes prêtes à l'envoi") do
   SendPaymentRequestsJob.perform_later(ASP::PaymentRequest.in_state(:ready).to_a)
 end
 
 Quand("les tâches de préparation et d'envoi des paiements sont passées") do
   steps %(
-    Quand la tâche de préparation des paiements démarre
-    Et que toutes les tâches de fond sont terminées
+    Quand la tâche de préparation des paiements est passée
     Et que la tâche d'envoi des paiements démarre pour toutes les requêtes prêtes à l'envoi
     Et que toutes les tâches de fond sont terminées
   )
@@ -23,52 +29,60 @@ Sachantqu("la tâche de lecture des paiements démarre") do
   PollPaymentsServerJob.perform_later
 end
 
+Sachantqu("la tâche de lecture des paiements est passée") do
+  steps %(
+    Quand la tâche de lecture des paiements démarre
+    Et que toutes les tâches de fond sont terminées
+  )
+end
+
 Sachantqu("il n'y a pas de fichiers sur le serveur de l'ASP") do
   FileUtils.rm_rf(TEMP_ASP_DIR) && FileUtils.mkdir_p(TEMP_ASP_DIR)
 end
 
-Quand("l'ASP a mis a disposition un fichier {string} contenant :") do |filename, string|
-  destination = File.join("tmp/mock_asp", filename)
+Sachantque("l'ASP a rejetté le dossier de {string} avec un motif de {string}") do |name, reason|
+  request = last_payment_request_for_name(name)
 
-  File.write(destination, string)
-end
-
-Sachantque(
-  "l'ASP a rejetté le dossier de {string} avec un motif de {string} dans un fichier {string}"
-) do |name, reason, filename|
-  student = find_student_by_full_name(name)
-
-  request = student.pfmps.last.payment_requests.last
-
-  steps %(
-    Sachant que l'ASP a mis a disposition un fichier "#{filename}" contenant :
-      """
-      Numéro d'enregistrement;Type d'entité;Numadm;Motif rejet;idIndDoublon
-      #{request.id};;;#{reason};
-      """
+  FactoryBot.create(
+    :asp_reject,
+    payment_request: request,
+    reason: reason,
+    destination: TEMP_ASP_DIR
   )
 end
 
-Sachantque("l'ASP a accepté le dossier de {string} dans un fichier {string}") do |name, filename|
-  student = find_student_by_full_name(name)
+Sachantque("l'ASP a accepté le dossier de {string}") do |name|
+  request = last_payment_request_for_name(name)
 
-  request = student.pfmps.last.payment_requests.last
-
-  steps %(
-    Sachant que l'ASP a mis a disposition un fichier "#{filename}" contenant :
-      """
-      Numero enregistrement;idIndDoss;idIndTiers;idDoss;numAdmDoss;idPretaDoss;numAdmPrestaDoss;idIndPrestaDoss
-      #{request.id};700056261;;700086362;ENPUPLF1POP31X20230;700085962;ENPUPLF1POP31X20230;700056261
-      """
+  FactoryBot.create(
+    :asp_integration,
+    payment_request: request,
+    destination: TEMP_ASP_DIR
   )
 end
 
-Sachantque("le dernier paiement de {string} a été envoyé avec un fichier {string}") do |name, filename|
-  pfmp = find_student_by_full_name(name)
-         .pfmps
-         .last
+Sachantque("l'ASP a liquidé le paiement de {string}") do |name|
+  request = last_payment_request_for_name(name)
 
-  pfmp.payment_requests.last.asp_request.file.update!(filename: filename)
+  FactoryBot.create(
+    :asp_payment_return,
+    :success,
+    builder_class: ASP::Builder,
+    payment_request: request,
+    destination: TEMP_ASP_DIR
+  )
+end
+
+Sachantque("l'ASP n'a pas pu liquider le paiement de {string}") do |name|
+  request = last_payment_request_for_name(name)
+
+  FactoryBot.create(
+    :asp_payment_return,
+    :failed,
+    builder_class: ASP::Builder,
+    payment_request: request,
+    destination: TEMP_ASP_DIR
+  )
 end
 
 Alors("je peux voir une demande de paiement {string}") do |state|
