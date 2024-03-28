@@ -118,7 +118,7 @@ RSpec.describe Pfmp do
       end
 
       it "throws an error" do
-        expect { pfmp.update!(day_count: 15) }.to raise_error(/day count changed/)
+        expect { pfmp.update!(day_count: 15) }.to raise_error(/amount recalculated/)
       end
     end
   end

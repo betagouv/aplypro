@@ -63,14 +63,16 @@ class Pfmp < ApplicationRecord
     update_amount!
   end
 
-  def validate!
-    transition_to!(:validated)
-  end
-
   def update_amount!
-    raise "A PFMP paid or in the process of being paid cannot have its day count changed." unless can_be_modified?
+    raise "A PFMP paid or in the process of being paid cannot have its amount recalculated" unless can_be_modified?
 
     update!(amount: calculate_amount)
+
+    following_modifiable_pfmps_for_mef.first&.update_amount!
+  end
+
+  def validate!
+    transition_to!(:validated)
   end
 
   def setup_payment!
