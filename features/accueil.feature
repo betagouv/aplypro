@@ -10,12 +10,8 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Et qu'il y a une élève "Marie Curie" au sein de la classe "2NDEB" pour une formation "Développement"
 
   Scénario: Le personnel de direction voit un écran d'accueil la première fois
-    Quand je n'ai pas encore vu l'écran d'accueil
-    Et que je rafraîchis la page
-    Alors la page contient "Bienvenue sur APLyPro"
-    Et la page ne contient pas "Année scolaire"
-    Quand je clique sur "Continuer"
-    Alors la page contient "Année scolaire"
+    Quand je rafraîchis la page
+    Alors je peux voir l'écran d'accueil
 
   Scénario: Le personnel de direction voit tous les menus
     Quand je clique sur "Continuer"

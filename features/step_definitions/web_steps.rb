@@ -113,3 +113,17 @@ end
 Quand("je rafraîchis la page") do
   visit current_path
 end
+
+Alors("le fil d'Ariane affiche {string}") do |path|
+  components = path.split(" > ")
+
+  breadcrumbs = page.all("nav.fr-breadcrumb li").map(&:text)
+
+  expect(breadcrumbs).to eq components
+end
+
+Quand("je clique sur {string} dans le menu principal") do |item|
+  within("nav#main-nav") do
+    click_link_or_button(item)
+  end
+end
