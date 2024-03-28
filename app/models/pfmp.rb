@@ -53,14 +53,12 @@ class Pfmp < ApplicationRecord
     end
   end
 
-  after_save :handle_amount_change
+  after_save :handle_day_count_change
 
-  def handle_amount_change
+  def handle_day_count_change
     changed_day_count = day_count_before_last_save != day_count
 
     return if !changed_day_count
-
-    raise "A PFMP paid or in the process of being paid cannot have its day count changed." unless can_be_modified?
 
     update_amount!
   end
@@ -70,6 +68,8 @@ class Pfmp < ApplicationRecord
   end
 
   def update_amount!
+    raise "A PFMP paid or in the process of being paid cannot have its day count changed." unless can_be_modified?
+
     update!(amount: calculate_amount)
   end
 
