@@ -9,6 +9,9 @@ class Classe < ApplicationRecord
   has_many :students, -> { order("last_name", "first_name") }, dependent: nil, through: :schoolings
 
   has_many :pfmps, through: :schoolings
+  has_many :active_pfmps, through: :active_schoolings, class_name: "Pfmp", source: :pfmps
+
+  has_many :payment_requests, -> { reorder nil }, through: :pfmps
 
   has_many :attributive_decisions_attachments,
            through: :schoolings,
@@ -37,8 +40,6 @@ class Classe < ApplicationRecord
            class_name: "Student",
            through: :inactive_schoolings,
            source: :student
-
-  has_many :active_pfmps, through: :active_schoolings, class_name: "Pfmp", source: :pfmps
 
   validates :label, :start_year, presence: true
   validates :start_year, numericality: { only_integer: true }

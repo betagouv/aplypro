@@ -1,12 +1,17 @@
 # frozen_string_literal: true
 
 class ClassesFacade
+  attr_accessor :classes
+
+  delegate :payment_requests_counts, to: :@payment_requests_facade
+
   def initialize(classes)
     @classes = classes
+    # @payment_requests_facade = PaymentRequestsFacade.new()
   end
 
   def nb_students_per_class
-    @nb_students_per_class ||= @classes
+    @nb_students_per_class ||= classes
                                .joins(:students)
                                .reorder(nil)
                                .group(:"classes.id")
@@ -14,7 +19,7 @@ class ClassesFacade
   end
 
   def nb_attributive_decisions_per_class
-    @nb_attributive_decisions_per_class ||= @classes
+    @nb_attributive_decisions_per_class ||= classes
                                             .joins(:schoolings)
                                             .merge(Schooling.with_attributive_decisions)
                                             .group(:"classes.id")
@@ -22,7 +27,7 @@ class ClassesFacade
   end
 
   def nb_ribs_per_class
-    @nb_ribs_per_class ||= @classes
+    @nb_ribs_per_class ||= classes
                            .joins(students: :rib)
                            .reorder(nil)
                            .group(:"classes.id")
@@ -35,7 +40,7 @@ class ClassesFacade
 
   def nb_pfmp_per_class_and_status
     @nb_pfmp_per_class_and_status ||= transform_pfmp_status_keys(
-      @classes
+      classes
       .joins(:pfmps)
       .reorder(nil)
       .joins(Pfmp.most_recent_transition_join)

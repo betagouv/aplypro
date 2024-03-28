@@ -3,12 +3,11 @@
 class EstablishmentFacade
   attr_accessor :establishment
 
-  STATES_GROUPS_FOR_COUNTS = [
-    %i[pending ready], [:incomplete], %i[sent integrated], [:rejected], [:paid], [:unpaid]
-  ].freeze
+  delegate :payment_requests_counts, to: :@payment_requests_facade
 
   def initialize(establishment)
     @establishment = establishment
+    @payment_requests_facade = PaymentRequestsFacade.new(current_payment_requests)
   end
 
   def schoolings_count
@@ -40,23 +39,7 @@ class EstablishmentFacade
                       .index_with { |state| pfmps.in_state(state).count }
   end
 
-  def payment_requests_counts
-    @payment_requests_counts ||= STATES_GROUPS_FOR_COUNTS.to_h do |states|
-      count = states.map { |state| payment_requests_all_status_counts[state] }.compact.sum
-      [states.first, count]
-    end
-  end
-
   private
-
-  def payment_requests_all_status_counts
-    @payment_requests_all_status_counts ||=
-      current_payment_requests
-      .joins(ASP::PaymentRequest.most_recent_transition_join)
-      .group(:to_state)
-      .count
-      .transform_keys { |state| state.nil? ? initial_state : state.to_sym }
-  end
 
   def pfmps
     establishment.pfmps.merge(Classe.current)
@@ -68,9 +51,5 @@ class EstablishmentFacade
 
   def current_classes
     establishment.classes.current
-  end
-
-  def initial_state
-    ASP::PaymentRequestStateMachine.initial_state.to_sym
   end
 end
