@@ -2,10 +2,13 @@
 
 module ASP
   class ApplicationController < ActionController::Base
+    include UserLogger
+
     layout "application"
 
     before_action :authenticate_asp_user!, except: :login
-    before_action :set_overrides
+    before_action :log_user,
+                  :set_overrides
 
     helper_method :current_user, :current_establishment
 
