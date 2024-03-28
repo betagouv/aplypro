@@ -23,6 +23,10 @@ RSpec.describe ASP::Request do
     allow(fichier_double).to receive(:new).and_return(double)
   end
 
+  describe "validations" do
+    it { is_expected.to validate_length_of(:asp_payment_requests).is_at_most(7000) }
+  end
+
   describe ".send!" do
     it "moves the payment requests to sent" do
       expect { request.send! }.to change { payment_requests.last.reload.current_state }.from("ready").to("sent")
