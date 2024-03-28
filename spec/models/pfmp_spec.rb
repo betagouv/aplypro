@@ -8,7 +8,7 @@ RSpec.describe Pfmp do
   let(:mef) { create(:mef) }
   let(:classe) { create(:classe, mef: mef) }
   let(:student) { create(:student, :with_all_asp_info) }
-  let(:schooling) { create(:schooling, student: student) }
+  let(:schooling) { create(:schooling, :with_attributive_decision, student: student) }
 
   describe "associations" do
     it { is_expected.to belong_to(:schooling) }
@@ -96,8 +96,25 @@ RSpec.describe Pfmp do
         pfmp.validate!
       end
 
-      it "throws an error" do
-        expect { pfmp.update!(day_count: 15) }.to raise_error(/day count changed/)
+      context "when there is no ongoing payment request" do
+        before do
+          create(:asp_payment_request, :ready, pfmp: pfmp)
+        end
+
+        it "allows modification" do
+          expect { pfmp.update!(day_count: 15) }.not_to raise_error
+        end
+
+      end
+
+      context "when there is an ongoing payment request" do
+        before do
+          create(:asp_payment_request, :sent, pfmp: pfmp)
+        end
+
+        it "throws an error" do
+          expect { pfmp.update!(day_count: 15) }.to raise_error(/day count changed/)
+        end
       end
     end
   end
