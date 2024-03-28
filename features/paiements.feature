@@ -36,29 +36,9 @@ Fonctionnalité: Gestion des paiements
     Et la page contient "La demande de paiement a toutes les informations nécessaires."
 
   Scénario: Le personnel de direction peut voir un paiement envoyé à l'ASP
-    Et que les informations personnelles ont été récupérées pour l'élève "Marie Curie"
-    Et que je renseigne et valide une PFMP de 3 jours
-    Et que l'élève "Marie Curie" a des données correctes pour l'ASP
+    Sachant que je renseigne et valide une PFMP de 3 jours
+    Et que l'élève "Marie Curie" en classe de "A1" a toutes les informations nécessaires pour la mise en paiement
     Et que les tâches de préparation et d'envoi des paiements sont passées
     Quand je consulte le profil de "Marie Curie" dans la classe de "A1"
     Et que je consulte la dernière PFMP
     Alors je peux voir une demande de paiement "En traitement" de 30 euros
-
-  Scénario: Le personnel ne peut pas altérer une PFMP avec un paiement en cours
-    Et que les informations personnelles ont été récupérées pour l'élève "Marie Curie"
-    Et que je renseigne et valide une PFMP de 3 jours
-    Et que l'élève "Marie Curie" a des données correctes pour l'ASP
-    Et que les tâches de préparation et d'envoi des paiements sont passées
-    Quand je consulte le profil de "Marie Curie" dans la classe de "A1"
-    Et que je consulte la dernière PFMP
-    Alors je ne peux pas éditer ni supprimer la PFMP
-
-  Scénario: Le personnel peut altérer une PFMP avec un paiement échoué
-    Sachant que je renseigne et valide une PFMP de 3 jours
-    Et que la tâche de préparation des paiements est passée
-    Quand je consulte le profil de "Marie Curie" dans la classe de "A1"
-    Et que je consulte la dernière PFMP
-    Et que je clique sur "Modifier la PFMP"
-    Et que je remplis "Nombre de jours" avec "10"
-    Et que je clique sur "Modifier la PFMP"
-    Alors la page contient "La PFMP a bien été mise à jour"

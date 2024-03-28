@@ -13,13 +13,10 @@ Quand("une PFMP a été saisie, validée et envoyée en paiement pour l'élève 
     Et que je me connecte en tant que personnel MENJ
     Et que toutes les tâches de fond sont terminées
     Et que je passe l'écran d'accueil
-    Et que je suis responsable légal et que je génère les décisions d'attribution manquantes
-    Et que toutes les tâches de fond sont terminées
+    Et que l'élève "#{name}" en classe de "A1" a toutes les informations nécessaires pour le paiement
     Et que je consulte la liste des classes
     Et que je consulte le profil de "#{name}" dans la classe de "A1"
     Et que je renseigne et valide une PFMP de 3 jours
-    Et que les informations personnelles ont été récupérées pour l'élève "#{name}"
-    Et que l'élève "#{name}" a des données correctes pour l'ASP
     Et que les tâches de préparation et d'envoi des paiements sont passées
   )
 end

@@ -91,12 +91,16 @@ class Pfmp < ApplicationRecord
     schooling.attributive_decision_number + index
   end
 
+  def locked?
+    payment_requests.ongoing.any? || paid?
+  end
+
+  def paid?
+    payment_requests.in_state(:paid).any?
+  end
+
   def can_be_modified?
-    if in_state?(:validated)
-      payment_requests.all?(&:stopped?)
-    else
-      true
-    end
+    !locked?
   end
 
   def payment_due?
