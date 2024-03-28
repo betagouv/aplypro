@@ -17,6 +17,10 @@ module ASP
 
     scope :active, -> { not_in_state(*ASP::PaymentRequestStateMachine::INACTIVE_STATES) }
 
+    scope :ongoing, -> { in_state(:sent, :integrated) }
+
+    scope :most_recent, -> { order(created_at: :desc) }
+
     include Statesman::Adapters::ActiveRecordQueries[
       transition_class: ASP::PaymentRequestTransition,
       initial_state: ASP::PaymentRequestStateMachine.initial_state,
@@ -56,10 +60,6 @@ module ASP
 
     def mark_unpaid!
       transition_to!(:unpaid)
-    end
-
-    def stopped?
-      in_state?(:incomplete, :rejected, :unpaid)
     end
 
     def inactive?

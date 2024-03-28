@@ -64,3 +64,16 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Sachant que l'élève "Marie Curie" a une PFMP dans un autre établissement
     Et que je rafraîchis la page
     Alors la page contient "Aucune PFMP enregistrée pour le moment"
+
+  Scénario: Le personnel peut modifier une PFMP validée avec une requête de paiement en attente
+    Quand je renseigne et valide une PFMP de 3 jours
+    Et que je clique sur "Modifier la PFMP"
+    Et que je remplis "Nombre de jours effectués" avec "5"
+    Et que je clique sur "Modifier la PFMP"
+    Alors la page contient "La PFMP a bien été mise à jour"
+
+  Scénario: Le personnel ne peut modifier une PFMP validée avec une requête de paiement envoyée
+    Sachant que je renseigne et valide une PFMP de 3 jours
+    Et que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement envoyée
+    Quand je consulte la dernière PFMP
+    Alors la page contient un bouton "Modifier la PFMP" désactivé

@@ -9,6 +9,16 @@ RSpec.describe ASP::PaymentRequest do
     it { is_expected.to belong_to(:asp_request).optional }
   end
 
+  describe ".most_recent" do
+    it "grabs the most recent one by created at date" do
+      one = create(:asp_payment_request, created_at: 1.day.ago)
+      two = create(:asp_payment_request, created_at: 5.days.ago)
+      three = create(:asp_payment_request, created_at: 2.days.ago)
+
+      expect(described_class.most_recent).to eq [one, three, two]
+    end
+  end
+
   describe "active?" do
     subject { create(:asp_payment_request, state) }
 

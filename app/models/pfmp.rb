@@ -14,6 +14,12 @@ class Pfmp < ApplicationRecord
 
   has_many :payment_requests, class_name: "ASP::PaymentRequest", dependent: :destroy
 
+  has_one :latest_payment_request,
+          -> { most_recent },
+          class_name: "ASP::PaymentRequest",
+          dependent: :destroy,
+          inverse_of: :pfmp
+
   validates :start_date, :end_date, presence: true
 
   validates :end_date,
@@ -91,12 +97,12 @@ class Pfmp < ApplicationRecord
     schooling.attributive_decision_number + index
   end
 
+  def locked?
+    payment_requests.ongoing.any?
+  end
+
   def can_be_modified?
-    if in_state?(:validated)
-      payment_requests.all?(&:stopped?)
-    else
-      true
-    end
+    !locked?
   end
 
   def payment_due?
