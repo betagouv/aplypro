@@ -4,7 +4,6 @@ Sachantque(
   "la dernière PFMP de {string} en classe de {string} a une requête de paiement prête à l'envoi"
 ) do |name, classe|
   steps %(
-    Sachant que l'API SYGNE peut fournir les informations complètes des étudiants
     Et que l'élève "#{name}" a des données correctes pour l'ASP
     Et que les informations personnelles ont été récupérées pour l'élève "#{name}"
     Et que je génère les décisions d'attribution de mon établissement

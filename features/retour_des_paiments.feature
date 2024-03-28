@@ -2,9 +2,7 @@
 Fonctionnalité: Gestion des retours de l'ASP
   Contexte:
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
-    Et que mon établissement propose une formation "Art" rémunérée à 10 euros par jour et plafonnée à 100 euros par an
-    Et que l'API SYGNE renvoie une classe "A1" de 10 élèves en formation "Art" dont "Marie Curie" pour l'établissement "DINUM"
-    Et que l'API SYGNE peut fournir les informations complètes des étudiants
+    Et que l'API SYGNE renvoie 10 élèves dans une classe "A1" dont "Marie Curie" pour l'établissement "DINUM"
     Et que je me connecte en tant que personnel MENJ
     Et que toutes les tâches de fond sont terminées
     Et que les informations personnelles ont été récupérées pour l'élève "Marie Curie"
@@ -25,7 +23,7 @@ Fonctionnalité: Gestion des retours de l'ASP
     Alors je peux voir une demande de paiement "En traitement" de 30 euros
 
   Scénario: L'individu n'a pas pu être intégré sur le serveur de l'ASP
-    Et que l'ASP a rejetté le dossier de "Marie Curie" avec un motif de "mauvais code postal"
+    Sachant que l'ASP a rejetté le dossier de "Marie Curie" avec un motif de "mauvais code postal"
     Quand la tâche de lecture des paiements démarre
     Et que toutes les tâches de fond sont terminées
     Et que je consulte la dernière PFMP
@@ -33,13 +31,13 @@ Fonctionnalité: Gestion des retours de l'ASP
     Et la page contient "mauvais code postal"
 
   Scénario: L'individu a été intégré sur le serveur de l'ASP
-    Et que l'ASP a accepté le dossier de "Marie Curie"
+    Sachant que l'ASP a accepté le dossier de "Marie Curie"
     Quand la tâche de lecture des paiements est passée
     Et que je consulte la dernière PFMP
     Alors la page contient "La demande a été intégrée"
 
   Scénario: Le paiement a été liquidé sur le serveur de l'ASP
-    Et que l'ASP a accepté le dossier de "Marie Curie"
+    Sachant que l'ASP a accepté le dossier de "Marie Curie"
     Quand la tâche de lecture des paiements est passée
     Et que l'ASP a liquidé le paiement de "Marie Curie"
     Et que la tâche de lecture des paiements est passée
@@ -47,7 +45,7 @@ Fonctionnalité: Gestion des retours de l'ASP
     Alors la page contient "Paiement envoyé"
 
   Scénario: Le paiement n'a pas pu être liquider sur le serveur de l'ASP
-    Et que l'ASP a accepté le dossier de "Marie Curie"
+    Sachant que l'ASP a accepté le dossier de "Marie Curie"
     Quand la tâche de lecture des paiements est passée
     Et que l'ASP n'a pas pu liquider le paiement de "Marie Curie"
     Et que la tâche de lecture des paiements est passée
