@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+  include UserLogger
+
   before_action :authenticate_user!,
+                :log_user,
                 :redirect_asp_users!,
                 :check_maintenance,
                 :check_current_establishment,
