@@ -2,11 +2,18 @@
 
 module ASP
   class Request < ApplicationRecord
+    MAX_ASP_RECORDS = 7000
+
     has_one_attached :file, service: :ovh_asp
     has_one_attached :rejects_file, service: :ovh_asp
     has_one_attached :integrations_file, service: :ovh_asp
 
-    has_many :asp_payment_requests, class_name: "ASP::PaymentRequest", dependent: :nullify, inverse_of: :asp_request
+    has_many :asp_payment_requests,
+             class_name: "ASP::PaymentRequest",
+             dependent: :nullify,
+             inverse_of: :asp_request
+
+    validates :asp_payment_requests, length: { maximum: MAX_ASP_RECORDS }
 
     attr_reader :asp_file
 
