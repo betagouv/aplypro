@@ -39,13 +39,6 @@ Quand("l'élève {string} a une adresse en France et son propre RIB") do |name|
   student.rib.update!(personal: true)
 end
 
-Quand("l'élève {string} a des données correctes pour l'ASP") do |name|
-  steps %(
-    Quand l'élève "#{name}" a déjà des coordonnées bancaires
-    Et que l'élève "#{name}" a une adresse en France et son propre RIB
-  )
-end
-
 Quand("je consulte la liste des classes") do
   steps %(Quand je clique sur "Élèves" dans le menu principal)
 end

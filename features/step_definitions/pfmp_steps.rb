@@ -81,3 +81,14 @@ Quand("je valide la dernière PFMP de {string}") do |name|
 
   student.pfmps.last.transition_to!(:validated)
 end
+
+Alors("je peux modifier le nombre de jours de la PFMP") do
+  days = rand(1..6)
+
+  steps %(
+    Quand je clique sur "Modifier la PFMP"
+    Et que je remplis "Nombre de jours" avec "#{days}"
+    Et que je clique sur "Modifier la PFMP"
+    Alors la page contient "La PFMP a bien été mise à jour"
+  )
+end
