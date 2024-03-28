@@ -27,7 +27,12 @@
       - else
         = button_tag "Modifier la PFMP", disabled: true, class: 'fr-btn fr-btn--secondary', title: "Vous ne pouvez pas modifier une PFMP dont le paiement est en cours de traitement"
         = button_tag "Supprimer la PFMP", disabled: true, class: 'fr-btn fr-btn--secondary', title: "Vous ne pouvez pas supprimer une PFMP dont le paiement est en cours de traitement"
-
+    - if @pfmp.in_state?(:completed) and current_user.can_validate? and @pfmp.can_be_validated?
+      .fr-checkbox-group.fr-mb-2w.fr-mt-md-1w
+        = check_box_tag :confirmed_director, checked: current_user.confirmed_director?
+        = label_tag :confirmed_director, class: "fr-label" do
+          = t("validations.confirm_director").html_safe
+          .fr-text--sm.fr-mt-1w= confirmed_director_information
 
   - if @pfmp.payment_due?
     %h2.fr-h3 Paiement
