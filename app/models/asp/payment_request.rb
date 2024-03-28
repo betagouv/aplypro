@@ -15,7 +15,9 @@ module ASP
 
     validate :single_active_payment_request_per_pfmp, on: %i[create update]
 
-    scope :active, -> { not_in_state(*ASP::PaymentRequestStateMachine::INACTIVE_STATES) }
+    scope :active, -> { not_in_state(*ASP::PaymentRequestStateMachine::TERMINATED_STATES) }
+    scope :terminated, -> { in_state(*ASP::PaymentRequestStateMachine::TERMINATED_STATES) }
+    scope :ongoing, -> { in_state(*ASP::PaymentRequestStateMachine::ONGOING_STATES) }
 
     include Statesman::Adapters::ActiveRecordQueries[
       transition_class: ASP::PaymentRequestTransition,
@@ -58,16 +60,12 @@ module ASP
       transition_to!(:unpaid)
     end
 
-    def stopped?
-      in_state?(:incomplete, :rejected, :unpaid)
-    end
-
-    def inactive?
-      in_state?(*ASP::PaymentRequestStateMachine::INACTIVE_STATES)
+    def terminated?
+      in_state?(*ASP::PaymentRequestStateMachine::TERMINATED_STATES)
     end
 
     def active?
-      !inactive?
+      !terminated?
     end
 
     def rejection_reason

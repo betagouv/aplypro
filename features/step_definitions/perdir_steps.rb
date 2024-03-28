@@ -39,13 +39,6 @@ Quand("l'élève {string} a une adresse en France et son propre RIB") do |name|
   student.rib.update!(personal: true)
 end
 
-Quand("l'élève {string} a des données correctes pour l'ASP") do |name|
-  steps %(
-    Quand l'élève "#{name}" a déjà des coordonnées bancaires
-    Et que l'élève "#{name}" a une adresse en France et son propre RIB
-  )
-end
-
 Quand("je consulte la liste des classes") do
   steps %(Quand je clique sur "Élèves" dans le menu principal)
 end
@@ -107,7 +100,6 @@ end
 Lorsque("je génère les décisions d'attribution de mon établissement") do
   steps %(
     Sachant que je me rends sur la page d'accueil
-    Et que toutes les tâches de fond sont terminées
     Lorsque je suis responsable légal et que je génère les décisions d'attribution manquantes
     Et que la génération des décisions d'attribution manquantes est complètement finie
   )

@@ -36,8 +36,10 @@ describe ASP::PaymentRequestStateMachine do
 
     context "when the request belongs to a student over 18 with an external rib" do
       before do
-        student.rib.update!(personal: false)
-        student.update!(birthdate: 20.years.ago)
+        student.update!(
+          rib: create(:rib, student: student, personal: false),
+          birthdate: 20.years.ago
+        )
       end
 
       it "blocks the transition" do
@@ -57,13 +59,8 @@ describe ASP::PaymentRequestStateMachine do
   end
 
   describe "mark_as_sent!" do
-    let!(:request) { create(:asp_request) }
-
-    before do
-      request.asp_payment_requests << asp_payment_request
-
-      asp_payment_request.mark_ready!
-    end
+    let(:asp_payment_request) { create(:asp_payment_request, :ready) }
+    let!(:request) { create(:asp_request, asp_payment_requests: [asp_payment_request]) }
 
     it "moves to the sent state" do
       asp_payment_request.mark_as_sent!
