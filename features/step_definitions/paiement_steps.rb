@@ -2,15 +2,6 @@
 
 World(ActionView::Helpers::NumberHelper)
 
-# hack
-def last_payment_request_for_name(name)
-  find_student_by_full_name(name)
-    .pfmps
-    .last
-    .payment_requests
-    .last
-end
-
 Quand("la tâche de préparation des paiements démarre") do
   PreparePaymentRequestsJob.perform_later
 end
