@@ -8,7 +8,7 @@ RSpec.describe Pfmp do
   let(:mef) { create(:mef) }
   let(:classe) { create(:classe, mef: mef) }
   let(:student) { create(:student, :with_all_asp_info) }
-  let(:schooling) { create(:schooling, student: student) }
+  let(:schooling) { create(:schooling, student: student, classe: classe) }
 
   describe "associations" do
     it { is_expected.to belong_to(:schooling) }
@@ -119,6 +119,21 @@ RSpec.describe Pfmp do
 
       it "throws an error" do
         expect { pfmp.update!(day_count: 15) }.to raise_error(/amount recalculated/)
+      end
+    end
+
+    context "with existing follow up modifiable pfmps" do
+      let(:existing_pfmp) { create(:pfmp, :completed, schooling: schooling, day_count: 2) }
+      let(:mef) { create(:mef, daily_rate: 20, yearly_cap: 400) }
+
+      before do
+        create(:pfmp, :completed, schooling: schooling, day_count: 6, created_at: existing_pfmp.created_at + 2.days)
+        create(:pfmp, :completed, schooling: schooling, day_count: 4, created_at: existing_pfmp.created_at + 3.days)
+        existing_pfmp.update!(day_count: existing_pfmp.day_count + 10)
+      end
+
+      it "recalculates the follow up modifiable pfmps amounts" do
+        expect(existing_pfmp.following_modifiable_pfmps_for_mef.pluck(:amount)).to eq [120, 40]
       end
     end
   end
