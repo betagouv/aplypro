@@ -60,14 +60,10 @@ module ASP
     def status_explanation_args
       case current_state
       when "rejected"
-        { reject_reason: reject_reason }
+        { rejection_reason: rejection_reason }
       else
         {}
       end
-    end
-
-    def reject_reason
-      last_transition.metadata["Motif rejet"]
     end
   end
 end
