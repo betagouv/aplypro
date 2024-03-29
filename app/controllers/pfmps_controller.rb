@@ -28,7 +28,7 @@ class PfmpsController < ApplicationController
 
   def update
     if @pfmp.update(pfmp_params)
-      redirect_to class_student_path(@classe, @schooling.student), notice: t("pfmps.edit.success")
+      redirect_to class_schooling_pfmp_path(@classe, @schooling, @pfmp), notice: t("pfmps.edit.success")
     else
       render :edit, status: :unprocessable_entity
     end
