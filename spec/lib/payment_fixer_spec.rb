@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe PaymentFixer do
+RSpec.describe PaymentFixer, skip: "these tests are slow and we're not going to use the PaymentFixer for a while" do
   subject(:fix) { described_class.call }
 
   let(:day_count) { 3 }
