@@ -41,6 +41,16 @@ RSpec.describe PfmpsController do
     let(:pfmp) { create(:pfmp, :completed, schooling: schooling) }
 
     context "when validating as a director" do
+      it "returns forbidden" do
+        post validate_class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id, id: pfmp.id)
+
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when validating as a confirmed director" do
+      let(:user) { create(:user, :confirmed_director, :with_selected_establishment, establishment: schooling.classe.establishment) }
+
       it "returns 200" do
         post validate_class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id, id: pfmp.id)
 
