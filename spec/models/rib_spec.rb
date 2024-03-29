@@ -28,14 +28,22 @@ RSpec.describe Rib do
         expect(rib).to be_valid
       end
     end
+
+    context "when it's lowercased" do
+      before { rib.iban = rib.iban.downcase }
+
+      it "validates anyway" do
+        expect(rib).to be_valid
+      end
+    end
   end
 
   describe "normalization" do
-    subject(:spaced) { create(:rib, bic: "   #{rib.bic}  ", iban: "   #{rib.iban}  ") }
+    subject(:spaced) { create(:rib, bic: "   #{rib.bic.downcase}  ", iban: "   #{rib.iban.downcase}  ") }
 
-    %i[rib iban].each do |attr|
+    %i[bic iban].each do |attr|
       it "strips the #{attr}" do
-        expect(spaced[attr]).to eq rib[attr]
+        expect(spaced[attr]).to eq rib[attr].upcase
       end
     end
   end

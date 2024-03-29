@@ -10,8 +10,8 @@ class Rib < ApplicationRecord
   normalizes :iban, with: ->(iban) { iban.strip }
 
   before_validation do
-    self.iban = iban.strip unless iban.nil?
-    self.bic = bic.strip unless bic.nil?
+    self.iban = iban.strip.upcase unless iban.nil?
+    self.bic = bic.strip.upcase unless bic.nil?
   end
 
   # gem 'bank-account' provides the :iban and :rib validation but we
