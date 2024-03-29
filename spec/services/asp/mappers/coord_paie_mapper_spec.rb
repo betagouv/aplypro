@@ -9,7 +9,9 @@ describe ASP::Mappers::CoordPaieMapper do
   let(:rib) { payment_request.student.rib }
 
   context "when the BIC ends in 'XXX'" do
-    before { rib.update!(bic: "ASTPGB2LXXX") }
+    let(:xbic) { "CMCIFR2AXXX" } # https://wise.com/fr/swift-codes/countries/france/credit-mutuel-swift-code
+
+    before { rib.update!(bic: xbic) }
 
     context "when it is from a non-French country" do
       before { rib.update!(iban: Faker::Bank.iban(country_code: "it")) }
@@ -23,7 +25,7 @@ describe ASP::Mappers::CoordPaieMapper do
       before { rib.update!(iban: Faker::Bank.iban(country_code: "mc")) }
 
       it "removes those characters" do
-        expect(mapper.bic).to eq "ASTPGB2L"
+        expect(mapper.bic).to eq "CMCIFR2A"
       end
     end
   end

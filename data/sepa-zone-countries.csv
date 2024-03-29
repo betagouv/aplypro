@@ -1,0 +1,53 @@
+Country/territory,BIC,IBAN,Currency code
+Åland Islands,FI,FI,EUR
+Andorra,AD,AD,EUR
+Austria,AT,AT,EUR
+Azores,PT,PT,EUR
+Belgium,BE,BE,EUR
+Bulgaria,BG,BG,BGN
+Canary Islands,ES,ES,EUR
+Croatia,HR,HR,EUR
+Cyprus,CY,CY,EUR
+Czech Republic,CZ,CZ,CZK
+Denmark,DK,DK,DKK
+Estonia,EE,EE,EUR
+Finland,FI,FI,EUR
+France,FR,FR,EUR
+French Guiana,GF,FR,EUR
+Germany,DE,DE,EUR
+Gibraltar,GI,GI,GIP
+Greece,GR,GR,EUR
+Guadeloupe,GP,FR,EUR
+Guernsey,GG,GB,GBP
+Hungary,HU,HU,HUF
+Iceland,IS,IS,ISK
+Ireland,IE,IE,EUR
+Isle of Man,IM,GB,GBP
+Italy,IT,IT,EUR
+Jersey,JE,GB,GBP
+Latvia,LV,LV,EUR
+Liechtenstein,LI,LI,CHF
+Lithuania,LT,LT,EUR
+Luxembourg,LU,LU,EUR
+Madeira,PT,PT,EUR
+Malta,MT,MT,EUR
+Martinique,MQ,FR,EUR
+Mayotte,YT,FR,EUR
+Monaco,MC,MC,EUR
+Netherlands,NL,NL,EUR
+Norway,NO,NO,NOK
+Poland,PL,PL,PLN
+Portugal,PT,PT,EUR
+Réunion,RE,FR,EUR
+Romania,RO,RO,RON
+Saint Barthélemy,BL,FR,EUR
+Saint Martin (French part),MF,FR,EUR
+Saint Pierre and Miquelon,PM,FR,EUR
+San Marino,SM,SM,EUR
+Slovakia,SK,SK,EUR
+Slovenia,SI,SI,EUR
+Spain,ES,ES,EUR
+Sweden,SE,SE,SEK
+Switzerland,CH,CH,CHF
+United Kingdom,GB,GB,GBP
+Vatican City State,VA,VA,EU

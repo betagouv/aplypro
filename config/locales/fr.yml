@@ -42,6 +42,10 @@ fr:
             email:
               invalid: "n'est pas valide : seuls les emails académiques sont autorisés."
               taken: ": cet email est déjà autorisé."
+        rib:
+          attributes:
+            iban:
+              sepa: "Le code IBAN ne fait pas parti de la zone SEPA"
         pfmp:
           attributes:
             start_date:
