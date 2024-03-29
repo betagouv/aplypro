@@ -14,6 +14,16 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
     Lorsque je renseigne des coordonnées bancaires
     Alors la page contient "Coordonnées bancaires enregistrées avec succès"
 
+  Scénario: Le personnel de direction peut comprendre ses erreurs de saisie
+    Sachant que je clique sur "Saisir les coordonnées bancaires"
+    Et que je saisis des coordonnées bancaires
+    Et que je remplis "IBAN" avec "FRAPPE"
+    Et que je clique sur "Enregistrer"
+    Et que la page contient "IBAN n'est pas valide"
+    Quand je remplis "IBAN" avec "BR8562763198878089681604510X8"
+    Et que je clique sur "Enregistrer"
+    Alors la page contient "Le code IBAN ne fait pas parti de la zone SEPA"
+
   Scénario: Le personnel de direction peut modifier un RIB
     Sachant que je clique sur "Saisir les coordonnées bancaires"
     Et que je renseigne des coordonnées bancaires
