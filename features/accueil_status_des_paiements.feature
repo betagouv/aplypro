@@ -7,9 +7,7 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et que je me connecte en tant que personnel MENJ
     Et que toutes les tâches de fond sont terminées
     Et que je passe l'écran d'accueil
-    Et que je génère les décisions d'attribution de mon établissement
-    Et que les informations personnelles ont été récupérées pour l'élève "Marie Curie"
-    Et que l'élève "Marie Curie" a des données correctes pour l'ASP
+    Et que l'élève "Marie Curie" en classe de "A1" a toutes les informations nécessaires pour le paiement
     Et que je consulte le profil de "Marie Curie" dans la classe de "A1"
     Et que je renseigne et valide une PFMP de 3 jours
     Quand je me rends sur la page d'accueil

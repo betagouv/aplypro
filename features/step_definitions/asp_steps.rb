@@ -5,7 +5,7 @@ Quand("je me rend sur la page de recherche de dossier") do
 end
 
 # rubocop:disable Layout/LineLength
-Quand("une PFMP a été saisie, validée et envoyée en paiement pour l'élève {string}") do |name|
+Quand("une PFMP de 30 euros a été saisie, validée et envoyée en paiement pour l'élève {string}") do |name|
   steps %(
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que mon établissement propose une formation "Art" rémunérée à 10 euros par jour et plafonnée à 100 euros par an
@@ -13,14 +13,9 @@ Quand("une PFMP a été saisie, validée et envoyée en paiement pour l'élève 
     Et que je me connecte en tant que personnel MENJ
     Et que toutes les tâches de fond sont terminées
     Et que je passe l'écran d'accueil
-    Et que je suis responsable légal et que je génère les décisions d'attribution manquantes
-    Et que toutes les tâches de fond sont terminées
-    Et que je consulte la liste des classes
     Et que je consulte le profil de "#{name}" dans la classe de "A1"
     Et que je renseigne et valide une PFMP de 3 jours
-    Et que les informations personnelles ont été récupérées pour l'élève "#{name}"
-    Et que l'élève "#{name}" a des données correctes pour l'ASP
-    Et que les tâches de préparation et d'envoi des paiements sont passées
+    Et que la dernière PFMP de "#{name}" en classe de "A1" a une requête de paiement envoyée
   )
 end
 # rubocop:enable Layout/LineLength

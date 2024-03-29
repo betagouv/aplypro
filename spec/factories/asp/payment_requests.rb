@@ -4,16 +4,19 @@ FactoryBot.define do
   factory :asp_payment_request, class: "ASP::PaymentRequest" do
     initialize_with { pfmp.payment_requests.last }
 
-    transient do
-      pfmp { association :pfmp, :validated, schooling: schooling }
-      student { association :student, :with_all_asp_info, :underage }
-      schooling { association :schooling, :with_attributive_decision, student: student }
-    end
+    pfmp { association :pfmp, :validated }
 
     trait :pending
 
     trait :ready do
-      after(:create, &:mark_ready!)
+      after(:create) do |req|
+        student = create(:student, :with_all_asp_info, :underage)
+        schooling = create(:schooling, :with_attributive_decision, student: student)
+
+        req.pfmp.update!(schooling: schooling)
+
+        req.mark_ready!
+      end
     end
 
     trait :incomplete do
