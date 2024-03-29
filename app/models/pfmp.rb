@@ -53,22 +53,22 @@ class Pfmp < ApplicationRecord
     end
   end
 
-  after_save :handle_day_count_change
+  after_save :recalculate_amounts_if_needed
 
-  def handle_day_count_change
+  # Recalculate amounts for the current PFMP and all follow up PFMPs that are still modifiable
+  def recalculate_amounts_if_needed
     changed_day_count = day_count_before_last_save != day_count
 
     return if !changed_day_count
 
     update_amount!
+    following_modifiable_pfmps_for_mef.first&.update_amount!
   end
 
   def update_amount!
     raise "A PFMP paid or in the process of being paid cannot have its amount recalculated" unless can_be_modified?
 
     update!(amount: calculate_amount)
-
-    following_modifiable_pfmps_for_mef.first&.update_amount!
   end
 
   def validate!
