@@ -15,8 +15,8 @@ RSpec.describe SendPaymentRequestsJob do
     allow(server_double).to receive(:drop_file!)
   end
 
-  context "when there is a request that isn't ready in the batch" do
-    let(:payment_request) { create(:asp_payment_request, :incomplete) }
+  context "when there is a request in the wrong state" do
+    let(:payment_request) { create(:asp_payment_request, :sent) }
 
     it "raises an error" do
       expect { described_class.perform_now([payment_request]) }
@@ -24,10 +24,9 @@ RSpec.describe SendPaymentRequestsJob do
     end
 
     it "does not persist the request" do
-      expect do
-        described_class.perform_now([payment_request])
-      rescue ASP::Errors::SendingPaymentRequestInWrongState # rubocop:disable Lint/SuppressedException
-      end.not_to change(ASP::Request, :count)
+      suppress(ASP::Errors::SendingPaymentRequestInWrongState) do
+        expect { described_class.perform_now([payment_request]) }.not_to change(ASP::Request, :count)
+      end
     end
   end
 end
