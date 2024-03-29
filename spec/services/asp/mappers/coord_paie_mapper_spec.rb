@@ -11,8 +11,40 @@ describe ASP::Mappers::CoordPaieMapper do
   context "when the BIC ends in 'XXX'" do
     before { rib.update!(bic: "ASTPGB2LXXX") }
 
-    it "removes those characters" do
-      expect(mapper.bic).to eq "ASTPGB2L"
+    context "when it is from a non-French country" do
+      before { rib.update!(iban: Faker::Bank.iban(country_code: "it")) }
+
+      it "does not remove any characters" do
+        expect(mapper.bic).to eq rib.bic
+      end
+    end
+
+    context "when it is from a French country (or considered as such)" do
+      before { rib.update!(iban: Faker::Bank.iban(country_code: "mc")) }
+
+      it "removes those characters" do
+        expect(mapper.bic).to eq "ASTPGB2L"
+      end
+    end
+  end
+
+  context "when the BIC is 8 characters long" do
+    before { rib.update!(bic: rib.bic.first(8)) }
+
+    context "when it is from a French country (or considered as such)" do
+      before { rib.update!(iban: Faker::Bank.iban(country_code: "mc")) }
+
+      it "does not touch the bic" do
+        expect(mapper.bic).to eq rib.bic
+      end
+    end
+
+    context "when it is from a non-French country" do
+      before { rib.update!(iban: Faker::Bank.iban(country_code: "it")) }
+
+      it "pads it to 11 characters with X's" do
+        expect(mapper.bic).to eq "#{rib.bic}XXX"
+      end
     end
   end
 
