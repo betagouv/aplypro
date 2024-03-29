@@ -4,6 +4,7 @@ module ASP
   module Mappers
     class CoordPaieMapper
       PRINCIPAL_ADDRESS_TYPE = "PRINCIPALE"
+      ASSIMILATED_FRENCH_COUNTRY_CODES = %w[FR GF GP MC MQ NC PF PM RE WF YT].freeze
 
       MAPPING = {
         bic: :bic
@@ -46,12 +47,27 @@ module ASP
       #   Pour un IBAN France ou assimilé (code ISO pays = FR, GF, GP, MC,
       #   MQ, NC, PF, PM, RE, WF, YT), il faut supprimer les "XXX" en fin
       #   de BIC si existants.
+      #
+      #   => Pour être complet, il faut ajouter "XXX" si [l'IBAN ne
+      #   commence pas par le code pays "FR", "GF", "GP", "MC", "MQ",
+      #   "NC", "PF", "PM", "RE", "WF" ou "YT"} ET [le BIC comporte 8
+      #   caractères]
       def bic
-        if rib.bic.ends_with?("XXX")
-          rib.bic[..-4]
+        bic = rib.bic
+
+        if french_rib?
+          bic.delete_suffix("XXX")
+        elsif bic.length == 8
+          bic.ljust(11, "X")
         else
-          rib.bic
+          bic
         end
+      end
+
+      private
+
+      def french_rib?
+        ASSIMILATED_FRENCH_COUNTRY_CODES.include?(iban.country_code)
       end
     end
   end
