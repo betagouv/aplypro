@@ -22,7 +22,7 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
     Et que la page contient "IBAN n'est pas valide"
     Quand je remplis "IBAN" avec "BR8562763198878089681604510X8"
     Et que je clique sur "Enregistrer"
-    Alors que  la page contient "Le code IBAN ne fait pas parti de la zone SEPA"
+    Alors la page contient "Le code IBAN ne fait pas parti de la zone SEPA"
 
   Scénario: Le personnel de direction peut modifier un RIB
     Sachant que je clique sur "Saisir les coordonnées bancaires"
