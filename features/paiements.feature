@@ -22,11 +22,11 @@ Fonctionnalité: Gestion des paiements
     Alors je peux voir une demande de paiement "Bloquée" de 30 euros
     Et je peux modifier le nombre de jours de la PFMP
 
-  Scénario: une PFMP avec une requête de paiement prête à l'envoi peut être modifiée
+  Scénario: une PFMP avec une requête de paiement prête à l'envoi ne peut pas être modifiée
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement prête à l'envoi
     Quand je consulte la dernière PFMP
     Alors je peux voir une demande de paiement "En attente" de 30 euros
-    Et je peux modifier le nombre de jours de la PFMP
+    Et je ne peux pas éditer ni supprimer la PFMP
 
   Scénario: une PFMP avec une requête de paiement envoyée ne peut pas être modifiée
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement envoyée
