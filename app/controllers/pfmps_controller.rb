@@ -3,7 +3,7 @@
 class PfmpsController < ApplicationController
   include RoleCheck
 
-  before_action :check_director, only: :validate
+  before_action :check_confirmed_director, only: :validate
   before_action :set_classe, :set_schooling
   before_action :set_pfmp_breadcrumbs, except: :confirm_deletion
   before_action :set_pfmp, only: %i[show edit update validate confirm_deletion destroy]
