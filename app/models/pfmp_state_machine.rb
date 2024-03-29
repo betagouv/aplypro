@@ -20,7 +20,7 @@ class PfmpStateMachine
   end
 
   after_transition(to: :completed) do |pfmp| # rubocop:disable Style/SymbolProc
-    pfmp.update_amount!
+    pfmp.update_amounts!
   end
 
   after_transition(to: :validated) do |pfmp| # rubocop:disable Style/SymbolProc

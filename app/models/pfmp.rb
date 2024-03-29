@@ -61,14 +61,14 @@ class Pfmp < ApplicationRecord
 
     return if !changed_day_count
 
-    update_amount!
-    following_modifiable_pfmps_for_mef.first&.update_amount!
+    update_amounts!
   end
 
-  def update_amount!
+  def update_amounts!
     raise "A PFMP paid or in the process of being paid cannot have its amount recalculated" unless can_be_modified?
 
     update!(amount: calculate_amount)
+    following_modifiable_pfmps_for_mef.first&.update_amounts!
   end
 
   def validate!

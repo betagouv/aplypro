@@ -111,12 +111,13 @@ RSpec.describe Pfmp do
   end
 
   context "when the amount is updated" do
-    context "with a validated PFMP" do
+    context "with a 'terminated' PFMP" do
       context "with an active payment request" do
         let(:pfmp) { create(:asp_payment_request, :sent).pfmp }
 
-      it "throws an error" do
-        expect { pfmp.update!(day_count: 15) }.to raise_error(/amount recalculated/)
+        it "throws an error" do
+          expect { pfmp.update!(day_count: 15) }.to raise_error(/amount recalculated/)
+        end
       end
     end
 
