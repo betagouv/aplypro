@@ -11,8 +11,9 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Et que je consulte le profil de "Marie Curie" dans la classe de "A1"
 
   Scénario: Le personnel de direction peut rajouter une PFMP
-    Quand je renseigne une PFMP de 3 jours
-    Alors la page contient "La PFMP a bien été enregistrée"
+    Sachant que je renseigne une PFMP de 3 jours
+    Et que la page contient "La PFMP a bien été enregistrée"
+    Quand je consulte le profil de "Marie Curie" dans la classe de "A1"
     Et je peux voir dans le tableau "Liste des PFMPs de l'élève"
       | État             | Nombre de jours | Montant |
       | Saisie à valider |               3 | 45 € |
@@ -24,16 +25,17 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
   Scénario: Le personnel de direction est informé d'une erreur de saisie pour toute la classe
     Quand je saisis une PFMP pour toute la classe "A1" avec les dates "17/03/2024" et "10/03/2024"
     Alors la page contient "La date de fin doit être ultérieure à la date de début"
-    Alors la page ne contient pas "Compléter 10 PFMP"
+    Et la page ne contient pas "Compléter 10 PFMP"
 
   Scénario: Le personnel de direction peut modifier une PFMP
-    Quand je renseigne une PFMP de 3 jours
+    Sachant que je renseigne une PFMP de 3 jours
     Et que je clique sur "Voir la PFMP"
     Et que je clique sur "Modifier la PFMP"
     Et que je remplis "Nombre de jours" avec "10"
     Et que je clique sur "Modifier la PFMP"
-    Alors la page contient "La PFMP a bien été mise à jour"
-    Et je peux voir dans le tableau "Liste des PFMPs de l'élève"
+    Et la page contient "La PFMP a bien été mise à jour"
+    Quand je consulte le profil de "Marie Curie" dans la classe de "A1"
+    Alors je peux voir dans le tableau "Liste des PFMPs de l'élève"
       | État             |  Nombre de jours | Montant  |
       | Saisie à valider |               10 | 150 € |
 
