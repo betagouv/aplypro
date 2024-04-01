@@ -40,3 +40,6 @@ rs:
 
 wipe:
 	$(DOCKER-RUN) web bin/rails db:reset
+
+seed:
+	$(DOCKER-RUN) -e RAILS_ENV=test web bin/rails db:seed

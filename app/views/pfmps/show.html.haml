@@ -16,17 +16,14 @@
           jours
         travaillés
 
-
     - if @pfmp.in_state?(:completed) and current_user.can_validate?
       -if @pfmp.can_be_validated?
         = form_with scope: :validation, method: :post, url: validate_class_schooling_pfmp_path(@classe, @schooling, @pfmp) do |form|
           = form.submit "Valider", class: "fr-btn fr-btn--primary"
-          .fr-checkbox-group.fr-mb-2w.fr-mt-md-1w
-            %br
-            = check_box_tag :confirmed_director, checked: current_user.confirmed_director?
-            = label_tag :confirmed_director, class: "fr-label" do
-              = t("validations.confirm_director").html_safe
-              .fr-text--sm.fr-mt-1w= confirmed_director_information
+          %br
+          %br
+          = render partial: "shared/confirmed_director"
+
       - else
         = button_tag "Valider", disabled: true, class: 'fr-btn fr-btn--secondary', title: "Vous ne pouvez pas valider cette PFMP car les PFMPs précédentes ne sont pas validées"
 
