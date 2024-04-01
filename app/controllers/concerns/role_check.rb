@@ -12,7 +12,7 @@ module RoleCheck
   def check_confirmed_director(alert_message: t("roles.errors.not_director"), redirect_path: home_path)
     return if current_user.confirmed_director?
 
-    redirect_back fallback_location: redirect_path, status: :forbidden, alert: alert_message and return
+    redirect_back fallback_location: redirect_path, alert: alert_message and return
   end
 
   def update_confirmed_director!

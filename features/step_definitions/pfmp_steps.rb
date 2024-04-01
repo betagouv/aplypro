@@ -41,6 +41,7 @@ Quand("je renseigne et valide une PFMP de {int} jours") do |days|
   steps %(
     Quand je renseigne une PFMP de #{days} jours
     Et que je consulte la dernière PFMP
+    Et que je coche la case de responsable légal
     Et que je clique sur "Valider"
   )
 end

@@ -41,10 +41,10 @@ RSpec.describe PfmpsController do
     let(:pfmp) { create(:pfmp, :completed, schooling: schooling) }
 
     context "when validating as a director" do
-      it "returns forbidden" do
+      it "returns found (but there is an error flash on the page)" do
         post validate_class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id, id: pfmp.id)
 
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to have_http_status(:found)
       end
     end
 

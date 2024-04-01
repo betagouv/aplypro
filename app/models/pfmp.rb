@@ -106,9 +106,11 @@ class Pfmp < ApplicationRecord
   end
 
   def can_be_validated?
-    student.pfmps.where.not(id: id).where("pfmps.created_at < (?)", created_at).all? do |pfmp|
-      pfmp.in_state?(:validated)
-    end
+    student
+      .pfmps
+      .where("pfmps.created_at < (?)", created_at)
+      .joins(schooling: :classe)
+      .where("classe.mef_id": mef.id, "classe.start_year": Aplypro::SCHOOL_YEAR).not_in_state(:validated).empty?
   end
 
   def payment_due?

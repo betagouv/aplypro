@@ -29,13 +29,14 @@
               .fr-text--sm.fr-mt-1w= confirmed_director_information
       - else
         = button_tag "Valider", disabled: true, class: 'fr-btn fr-btn--secondary', title: "Vous ne pouvez pas valider cette PFMP car les PFMPs précédentes ne sont pas validées"
-      .fr-btns-group.fr-btns-group--inline
-        - if @pfmp.can_be_modified?
-          = link_to "Modifier la PFMP", edit_class_schooling_pfmp_path(@classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
-          = link_to "Supprimer la PFMP", confirm_deletion_class_schooling_pfmp_path(@classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
-        - else
-          = button_tag "Modifier la PFMP", disabled: true, class: 'fr-btn fr-btn--secondary', title: "Vous ne pouvez pas modifier une PFMP dont le paiement est en cours de traitement"
-          = button_tag "Supprimer la PFMP", disabled: true, class: 'fr-btn fr-btn--secondary', title: "Vous ne pouvez pas supprimer une PFMP dont le paiement est en cours de traitement"
+
+    .fr-btns-group.fr-btns-group--inline
+      - if @pfmp.can_be_modified?
+        = link_to "Modifier la PFMP", edit_class_schooling_pfmp_path(@classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
+        = link_to "Supprimer la PFMP", confirm_deletion_class_schooling_pfmp_path(@classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
+      - else
+        = button_tag "Modifier la PFMP", disabled: true, class: 'fr-btn fr-btn--secondary', title: "Vous ne pouvez pas modifier une PFMP dont le paiement est en cours de traitement"
+        = button_tag "Supprimer la PFMP", disabled: true, class: 'fr-btn fr-btn--secondary', title: "Vous ne pouvez pas supprimer une PFMP dont le paiement est en cours de traitement"
 
 
   - if @pfmp.payment_due?
