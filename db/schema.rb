@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_21_161647) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_02_090724) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -128,6 +128,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_21_161647) do
     t.string "students_provider"
     t.string "ministry"
     t.bigint "confirmed_director_id"
+    t.string "department_code"
     t.index ["confirmed_director_id"], name: "index_establishments_on_confirmed_director_id"
     t.index ["uai"], name: "index_establishments_on_uai", unique: true
   end

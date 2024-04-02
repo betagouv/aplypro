@@ -45,7 +45,8 @@ class Establishment < ApplicationRecord
     "telephone" => :telephone,
     "mail" => :email,
     "code_type_contrat_prive" => :private_contract_type_code,
-    "ministere_tutelle" => :ministry
+    "ministere_tutelle" => :ministry,
+    "code_departement" => :department_code
   }.freeze
 
   # Find all codes here : https://infocentre.pleiade.education.fr/bcn/workspace/viewTable/n/N_CONTRAT_ETABLISSEMENT
@@ -64,14 +65,6 @@ class Establishment < ApplicationRecord
 
   def select_label
     [uai, name].compact.join(" - ")
-  end
-
-  def department_code
-    if postal_code.start_with?("97")
-      postal_code.first(3)
-    else
-      postal_code.first(2)
-    end
   end
 
   def address
