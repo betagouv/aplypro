@@ -45,7 +45,7 @@ fr:
         rib:
           attributes:
             iban:
-              sepa: "Le code IBAN ne fait pas parti de la zone SEPA"
+              sepa: "Le code IBAN ne fait pas partie de la zone SEPA"
         pfmp:
           attributes:
             start_date:
