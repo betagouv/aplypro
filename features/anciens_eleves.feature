@@ -85,7 +85,7 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
     Et que je peux voir dans le tableau "Liste des pfmps à compléter de la classe 1MELEC"
       | Élève                               |
       | Dupuis Jean Sorti(e) de la classe   |
-    Et que je remplis le champ "Nombre de jours" dans la rangée "Dupuis Jean" avec "12"
+    Et que je remplis le champ "Nombre de jours" dans la rangée "Dupuis Jean" avec "3"
     Lorsque je clique sur "Enregistrer 1 PFMP"
     Alors la page contient "Les PFMPs ont bien été modifiées"
     Et je peux voir dans le tableau "Élèves sortis de la classe"

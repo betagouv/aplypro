@@ -7,7 +7,7 @@ Fonctionnalité: Complétion des PFMPs d'une classe
     Et que je passe l'écran d'accueil
     Et qu'il y a une élève "Marie Curie" au sein de la classe "2NDEB" pour une formation "2NDEPRO Développement"
     Et qu'il y a un élève "Paul Langevin" au sein de la classe "2NDEB" pour une formation "2NDEPRO Développement"
-    Et que je saisis une PFMP pour toute la classe "2NDEB" avec les dates "17/03/2024" et "20/03/2024"
+    Et que je saisis une PFMP pour toute la classe "2NDEB" avec les dates "01/03/2024" et "30/03/2024"
     Et que je clique sur "Compléter 2 PFMPs"
     Et que je remplis le champ "Nombre de jours" dans la rangée "Curie Marie" avec "12"
     Et que je remplis le champ "Nombre de jours" dans la rangée "Langevin Paul" avec "4"

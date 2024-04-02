@@ -22,7 +22,13 @@ class Pfmp < ApplicationRecord
 
   validates :end_date, :start_date, inclusion: Aplypro::SCHOOL_YEAR_RANGE
 
-  validates :day_count, numericality: { only_integer: true, allow_nil: true, greater_than: 0 }
+  validates :day_count,
+            numericality: {
+              only_integer: true,
+              allow_nil: true,
+              greater_than: 0,
+              less_than_or_equal_to: ->(pfmp) { (pfmp.end_date - pfmp.start_date).to_i }
+            }
 
   scope :finished, -> { where("pfmps.end_date <= (?)", Time.zone.today) }
 
