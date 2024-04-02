@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 Quand("je renseigne une PFMP de {int} jours") do |days|
+  start_date = Date.parse("17/03/2024")
+  end_date   = start_date + days.days
+
   steps %(
     Quand je clique sur "Ajouter une PFMP"
-    Et que je remplis "Date de début" avec "17/03/2024"
-    Et que je remplis "Date de fin" avec "20/03/2024"
+    Et que je remplis "Date de début" avec "#{start_date}"
+    Et que je remplis "Date de fin" avec "#{end_date}"
     Et que je remplis "Nombre de jours effectués" avec "#{days}"
     Et que je clique sur "Enregistrer"
   )
@@ -82,9 +85,7 @@ Quand("je valide la dernière PFMP de {string}") do |name|
   student.pfmps.last.transition_to!(:validated)
 end
 
-Alors("je peux modifier le nombre de jours de la PFMP") do
-  days = rand(1..6)
-
+Alors("je peux changer le nombre de jours de la PFMP à {int}") do |days|
   steps %(
     Quand je clique sur "Modifier la PFMP"
     Et que je remplis "Nombre de jours" avec "#{days}"

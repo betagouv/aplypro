@@ -7,7 +7,15 @@ require "rails_helper"
 describe PfmpAmountCalculator do
   subject(:amount) { pfmp.reload.calculate_amount }
 
-  let(:pfmp) { create(:pfmp, day_count: 3) }
+  let(:pfmp) do
+    create(
+      :pfmp,
+      start_date: Aplypro::SCHOOL_YEAR_START,
+      end_date: Aplypro::SCHOOL_YEAR_START >> 10,
+      day_count: 3
+    )
+  end
+
   let(:mef) { create(:mef, daily_rate: 1, yearly_cap: 10) }
 
   RSpec.configure do |config|
@@ -40,7 +48,7 @@ describe PfmpAmountCalculator do
 
   context "when the PFMP goes over the yearly cap" do
     before do
-      pfmp.update!(day_count: 1000)
+      pfmp.update!(day_count: 200)
     end
 
     it_calculates "the yearly-capped amount"
