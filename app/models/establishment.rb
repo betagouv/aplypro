@@ -66,8 +66,12 @@ class Establishment < ApplicationRecord
     [uai, name].compact.join(" - ")
   end
 
-  def region_code
-    postal_code.first(2)
+  def department_code
+    if postal_code.start_with?("97")
+      postal_code.first(3)
+    else
+      postal_code.first(2)
+    end
   end
 
   def address

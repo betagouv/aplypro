@@ -48,4 +48,22 @@ RSpec.describe Establishment do
       it { is_expected.not_to be_valid }
     end
   end
+
+  describe "department_code" do
+    context "when it's from metropolitan France" do
+      before { establishment.update!(postal_code: "34070") }
+
+      it "is the first 2 characters" do
+        expect(establishment.department_code).to eq "34"
+      end
+    end
+
+    context "when it is from overseas France" do
+      before { establishment.update!(postal_code: "97492") }
+
+      it "is the first 3 characters" do
+        expect(establishment.department_code).to eq "974"
+      end
+    end
+  end
 end
