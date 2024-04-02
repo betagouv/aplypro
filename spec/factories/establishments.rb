@@ -18,6 +18,12 @@ FactoryBot.define do
     confirmed_director { nil }
     department_code { "034" }
 
+    trait :dehydrated do
+      Establishment::API_MAPPING.each_value do |field|
+        send(field) { nil }
+      end
+    end
+
     trait :private do
       private_contract_type_code { "31" }
     end
