@@ -17,7 +17,7 @@
         travaillés
 
     - if @pfmp.in_state?(:completed) and current_user.can_validate?
-      -if @pfmp.can_be_validated?
+      -if @pfmp.can_transition_to?(:validated)
         = form_with scope: :validation, method: :post, url: validate_class_schooling_pfmp_path(@classe, @schooling, @pfmp) do |form|
           = form.submit "Valider", class: "fr-btn fr-btn--primary"
           %br

@@ -26,6 +26,8 @@ class Pfmp < ApplicationRecord
 
   scope :finished, -> { where("pfmps.end_date <= (?)", Time.zone.today) }
 
+  scope :before, ->(date) { where("pfmps.created_at < (?)", date) }
+
   include Statesman::Adapters::ActiveRecordQueries[
     transition_class: PfmpTransition,
     initial_state: PfmpStateMachine.initial_state,
@@ -103,14 +105,6 @@ class Pfmp < ApplicationRecord
 
   def can_be_modified?
     !locked?
-  end
-
-  def can_be_validated?
-    student
-      .pfmps
-      .where("pfmps.created_at < (?)", created_at)
-      .joins(schooling: :classe)
-      .where("classe.mef_id": mef.id, "classe.start_year": Aplypro::SCHOOL_YEAR).not_in_state(:validated).empty?
   end
 
   def payment_due?
