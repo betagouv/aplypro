@@ -3,6 +3,8 @@
 class Schooling < ApplicationRecord
   has_one_attached :attributive_decision
 
+  enum :status, { student: 0, apprentice: 1, other: 2 }, validate: { allow_nil: true }
+
   belongs_to :student
   belongs_to :classe
 

@@ -66,6 +66,16 @@ describe Student::Mappers::Fregata do
     end
   end
 
+  context "when the student is an apprentice" do
+    let(:data) { build_list(:fregata_student, 1, :apprentice) }
+
+    it "updates the schooling status" do
+      mapper.new(data, uai).parse!
+
+      expect(Schooling.last).to be_apprentice
+    end
+  end
+
   context "when there are multiple entries for the same student" do
     subject(:student) { create(:student) }
 

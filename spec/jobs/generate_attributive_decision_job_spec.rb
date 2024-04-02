@@ -13,7 +13,10 @@ RSpec.describe GenerateAttributiveDecisionJob, :student_api do
     ActiveJob::Base.queue_adapter = :test
 
     WebmockHelpers.mock_sygne_token
-    WebmockHelpers.mock_sygne_student_endpoint_with(student.ine, build(:sygne_student, ine_value: student.ine).to_json)
+    WebmockHelpers.mock_sygne_student_endpoint_with(
+      student.ine,
+      build(:sygne_student_info, ine_value: student.ine).to_json
+    )
   end
 
   # NOTE: there's the much nicer

@@ -43,7 +43,12 @@ Sachantque(
 
   mef = Mef.find_by!(label: mef)
 
-  payload = FactoryBot.build_list(:sygne_student, count, classe: classe, mef: mef.code.concat("0")).tap do |students|
+  payload = FactoryBot.build_list(
+    :sygne_student,
+    count,
+    classe: classe,
+    mef_value: mef.code.concat("0")
+  ).tap do |students|
     students.last["prenom"] = first_name
     students.last["nom"] = last_name
   end
