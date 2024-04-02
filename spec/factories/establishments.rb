@@ -16,6 +16,7 @@ FactoryBot.define do
     students_provider { nil }
     ministry { "MINISTERE DE L'EDUCATION NATIONALE" }
     confirmed_director { nil }
+    department_code { "034" }
 
     trait :private do
       private_contract_type_code { "31" }

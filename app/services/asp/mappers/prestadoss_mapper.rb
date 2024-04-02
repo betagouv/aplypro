@@ -27,7 +27,7 @@ module ASP
       end
 
       def valeur
-        schooling.establishment.department_code.rjust(3, "0")
+        schooling.establishment.department_code
       end
 
       def id_prestation_dossier
