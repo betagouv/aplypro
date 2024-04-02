@@ -33,8 +33,7 @@ module PfmpAmountCalculator
     student
       .pfmps
       .in_state(:completed, :validated)
-      .where("pfmps.created_at > (?)", created_at)
-      .where.not(amount: nil)
+      .after(created_at)
       .joins(schooling: :classe)
       .where("classe.mef_id": mef.id, "classe.start_year": Aplypro::SCHOOL_YEAR)
       .select(&:can_be_modified?)

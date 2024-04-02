@@ -27,6 +27,7 @@ class Pfmp < ApplicationRecord
   scope :finished, -> { where("pfmps.end_date <= (?)", Time.zone.today) }
 
   scope :before, ->(date) { where("pfmps.created_at < (?)", date) }
+  scope :after, ->(date) { where("pfmps.created_at > (?)", date) }
 
   include Statesman::Adapters::ActiveRecordQueries[
     transition_class: PfmpTransition,
