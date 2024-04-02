@@ -5,7 +5,7 @@ require "rails_helper"
 require "./mock/factories/api_student"
 
 describe Student::InfoMappers::Fregata do
-  subject(:attributes) { described_class.new(data).attributes }
+  subject(:attributes) { described_class.new(data, "001").attributes }
 
   let!(:fixture) { Rails.root.join("mock/data/fregata-students.json").read }
   let(:data) { JSON.parse(fixture).first }
@@ -24,5 +24,13 @@ describe Student::InfoMappers::Fregata do
     it { is_expected.to include({ birthplace_city_insee_code: "34000" }) }
     it { is_expected.to include({ birthplace_country_insee_code: "99100" }) }
     it { is_expected.to include({ biological_sex: 1 }) }
+  end
+
+  describe "schooling attributes" do
+    subject(:attributes) { described_class.new(data, "007").schooling_attributes }
+
+    let(:data) { build(:fregata_student, :apprentice) }
+
+    it { is_expected.to include({ status: :apprentice }) }
   end
 end

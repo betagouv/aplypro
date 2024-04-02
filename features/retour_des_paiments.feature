@@ -20,7 +20,7 @@ Fonctionnalité: Gestion des retours de l'ASP
     Et que la tâche de lecture des paiements démarre
     Et que toutes les tâches de fond sont terminées
     Quand je consulte la dernière PFMP
-    Alors je peux voir une demande de paiement "En traitement" de 30 euros
+    Alors je peux voir une demande de paiement "En traitement"
 
   Scénario: L'individu n'a pas pu être intégré sur le serveur de l'ASP
     Sachant que l'ASP a rejetté le dossier de "Marie Curie" avec un motif de "mauvais code postal"

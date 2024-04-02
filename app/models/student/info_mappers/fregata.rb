@@ -78,6 +78,43 @@ class Student
           ]
         end
       end
+
+      class SchoolingMapper < Dry::Transformer::Pipe
+        import Dry::Transformer::HashTransformations
+        import Dry::Transformer::ArrayTransformations
+
+        define! do
+          deep_symbolize_keys
+
+          unwrap :statutApprenant
+          unwrap :apprenant
+
+          rename_keys(
+            code: :status
+          )
+
+          map_value :status, lambda { |value|
+            case value
+            when "2503"
+              :apprentice
+            when "2501"
+              :student
+            else
+              raise Student::Mappers::Errors::SchoolingParsingError
+            end
+          }
+
+          accept_keys %i[status ine]
+        end
+      end
+
+      # FREGATA uses the same endpoint for listing and extra info so
+      # we can reuse the other mappers
+      def schooling_finder_attributes
+        schooling_attributes
+          .merge(Student::Mappers::Fregata::ClasseMapper.new.call(payload))
+          .merge(uai: uai)
+      end
     end
   end
 end
