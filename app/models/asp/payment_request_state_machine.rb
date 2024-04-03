@@ -42,6 +42,10 @@ module ASP
     end
 
     guard_transition(to: :ready) do |request|
+      !request.student.lost
+    end
+
+    guard_transition(to: :ready) do |request|
       !request.student.adult_without_personal_rib?
     end
 
