@@ -50,6 +50,14 @@ describe ASP::PaymentRequestStateMachine do
       end
     end
 
+    context "when the RIB has been reused somewhere else" do
+      before { create(:rib, iban: asp_payment_request.student.rib.iban) }
+
+      it "blocks the transition" do
+        expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
+      end
+    end
+
     context "when the request is missing information" do
       before { student.rib&.destroy }
 
