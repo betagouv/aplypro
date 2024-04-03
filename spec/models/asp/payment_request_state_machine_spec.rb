@@ -42,6 +42,14 @@ describe ASP::PaymentRequestStateMachine do
       end
     end
 
+    context "when the student is a lost record" do
+      before { asp_payment_request.student.update!(lost: true) }
+
+      it "blocks the transition" do
+        expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
+      end
+    end
+
     context "when the request is missing information" do
       before { student.rib&.destroy }
 
