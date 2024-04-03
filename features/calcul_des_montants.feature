@@ -19,10 +19,10 @@ Fonctionnalité: Le personnel de direction peut constater les montants des PFMPs
       | Saisie à valider |               3 | 30 € |
 
   Scénario: Le personnel de direction peut voir le montant plafonné
-    Quand je renseigne une PFMP de 300 jours
+    Quand je renseigne une PFMP de 11 jours
     Et je peux voir dans le tableau "Liste des PFMPs de l'élève"
       | État             | Nombre de jours | Montant |
-      | Saisie à valider |               3 | 100 € |
+      | Saisie à valider |              11 | 100 €   |
 
   Scénario: Le personnel de direction peut voir un montant plafonné par une autre PFMP
     Quand je renseigne une PFMP de 9 jours

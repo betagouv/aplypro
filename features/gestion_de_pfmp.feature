@@ -28,7 +28,7 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Et la page ne contient pas "Compléter 10 PFMP"
 
   Scénario: Le personnel de direction peut modifier une PFMP
-    Sachant que je renseigne une PFMP de 3 jours
+    Sachant que je renseigne une PFMP de 13 jours
     Et que je clique sur "Voir la PFMP"
     Et que je clique sur "Modifier la PFMP"
     Et que je remplis "Nombre de jours" avec "10"

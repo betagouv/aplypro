@@ -45,6 +45,28 @@ RSpec.describe Pfmp do
 
       it { is_expected.not_to be_valid }
     end
+
+    describe "day count" do
+      subject(:pfmp) { build(:pfmp, start_date: Time.zone.now, end_date: 7.days.from_now) }
+
+      context "when the number of days doesn't fit in the date range" do
+        before { pfmp.day_count = 8 }
+
+        it { is_expected.not_to be_valid }
+
+        it "has the correct error message" do
+          pfmp.validate
+
+          expect(pfmp.errors[:day_count]).to include(/n'est pas cohérent/)
+        end
+      end
+
+      context "when the number fits exactly in the day range" do
+        before { pfmp.day_count = 7 }
+
+        it { is_expected.to be_valid }
+      end
+    end
   end
 
   describe "states" do
@@ -146,7 +168,14 @@ RSpec.describe Pfmp do
 
     context "when there is no allowance left" do
       before do
-        create(:pfmp, :validated, schooling: schooling, day_count: 100)
+        create(
+          :pfmp,
+          :validated,
+          start_date: Aplypro::SCHOOL_YEAR_START,
+          end_date: Aplypro::SCHOOL_YEAR_START >> 4,
+          schooling: schooling,
+          day_count: 100
+        )
       end
 
       it "does not create a payment" do
