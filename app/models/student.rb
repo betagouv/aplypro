@@ -29,6 +29,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_one :rib, -> { where(archived_at: nil) }, dependent: :destroy, inverse_of: :student
 
   scope :without_ribs, -> { where.missing(:rib) }
+
   scope :lives_in_france, -> { where(address_country_code: %w[100 99100]) }
   scope :lives_abroad, -> { where.not(address_country_code: %w[100 99100]) }
   scope :ine_not_found, -> { where(ine_not_found: true) }
