@@ -63,7 +63,7 @@ class ValidationsController < ApplicationController
     validatable_pfmps_ids = current_establishment.pfmps.in_state(:completed).select do |pfmp|
       pfmp.can_transition_to?(:validated)
     end.map(&:id)
-    current_establishment.pfmps.where(id: validatable_pfmps_ids)
+    Pfmp.where(id: validatable_pfmps_ids)
   end
 
   def validation_params
