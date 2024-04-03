@@ -36,4 +36,12 @@ class Rib < ApplicationRecord
   def inactive?
     !active?
   end
+
+  def reused?
+    siblings.any?
+  end
+
+  def siblings
+    Rib.where(iban: iban).excluding(self)
+  end
 end
