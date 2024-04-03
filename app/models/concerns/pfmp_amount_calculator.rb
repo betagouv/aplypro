@@ -19,23 +19,22 @@ module PfmpAmountCalculator
       .sum
   end
 
+  def student_pfmps_with_classe
+    student.pfmps
+           .in_state(:completed, :validated)
+           .joins(schooling: :classe)
+           .where("classe.mef_id": mef.id, "classe.start_year": Aplypro::SCHOOL_YEAR)
+  end
+
   def previous_pfmps_for_mef
-    student
-      .pfmps
-      .in_state(:completed, :validated)
+    student_pfmps_with_classe
       .before(created_at)
       .where.not(amount: nil)
-      .joins(schooling: :classe)
-      .where("classe.mef_id": mef.id, "classe.start_year": Aplypro::SCHOOL_YEAR)
   end
 
   def following_modifiable_pfmps_for_mef
-    student
-      .pfmps
-      .in_state(:completed, :validated)
+    student_pfmps_with_classe
       .after(created_at)
-      .joins(schooling: :classe)
-      .where("classe.mef_id": mef.id, "classe.start_year": Aplypro::SCHOOL_YEAR)
       .select(&:can_be_modified?)
   end
 end
