@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_02_090724) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_03_123520) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -204,6 +204,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_02_090724) do
     t.boolean "generating_attributive_decision", default: false, null: false
     t.string "asp_dossier_id"
     t.string "administrative_number"
+    t.integer "status"
     t.index ["administrative_number"], name: "index_schoolings_on_administrative_number", unique: true
     t.index ["classe_id"], name: "index_schoolings_on_classe_id"
     t.index ["student_id", "classe_id"], name: "one_schooling_per_class_student", unique: true
@@ -229,6 +230,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_02_090724) do
     t.string "birthplace_country_insee_code"
     t.integer "biological_sex", default: 0
     t.string "asp_individu_id"
+    t.boolean "lost", default: false, null: false
     t.index ["asp_file_reference"], name: "index_students_on_asp_file_reference", unique: true
     t.index ["ine"], name: "index_students_on_ine", unique: true
   end

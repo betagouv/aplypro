@@ -44,6 +44,7 @@ Fonctionnalité: Gestion des paiements
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement rejetée
     Quand je consulte la dernière PFMP
     Alors je peux voir une demande de paiement "rejetée" de 90 euros
+    Et la page contient "La demande a été rejetée : mauvais RIB"
     Et je peux changer le nombre de jours de la PFMP à 8
 
   Scénario: une PFMP avec une requête de paiement liquidé ne peut être modifiée

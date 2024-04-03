@@ -19,7 +19,7 @@ describe Student::InfoMappers::Sygne do
   let(:birthplace_country) { data["inseePaysNaissance"] }
 
   describe "mapper" do
-    subject { described_class.new(data).attributes }
+    subject { described_class.new(data, "0").attributes }
 
     it { is_expected.to include(address_line1: line_one) }
     it { is_expected.to include(address_line2: line_two) }

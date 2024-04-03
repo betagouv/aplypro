@@ -38,6 +38,10 @@ module ASP
     end
 
     guard_transition(to: :ready) do |request|
+      request.schooling.student?
+    end
+
+    guard_transition(to: :ready) do |request|
       !request.student.adult_without_personal_rib?
     end
 
@@ -46,7 +50,7 @@ module ASP
     end
 
     guard_transition(to: :ready) do |request|
-      request.pfmp.schooling.attributive_decision.attached?
+      request.schooling.attributive_decision.attached?
     end
 
     guard_transition(from: :ready, to: :sent) do |request|

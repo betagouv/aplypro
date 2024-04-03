@@ -8,14 +8,19 @@ FactoryBot.define do
 
     trait :pending
 
-    trait :ready do
+    trait :sendable do
       after(:create) do |req|
         student = create(:student, :with_all_asp_info, :underage)
         schooling = create(:schooling, :with_attributive_decision, student: student)
 
         req.pfmp.update!(schooling: schooling)
-        req.mark_ready!
       end
+    end
+
+    trait :ready do
+      sendable
+
+      after(:create, &:mark_ready!)
     end
 
     trait :incomplete do
