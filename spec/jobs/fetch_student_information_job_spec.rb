@@ -44,7 +44,7 @@ RSpec.describe FetchStudentInformationJob, :student_api do
 
     it "updates the schooling's status code" do
       expect { described_class.new(schooling).perform_now }
-        .to change { schooling.reload.status }.from(nil).to(status.to_s)
+        .to change { schooling.reload.status }.to(status.to_s)
     end
   end
 

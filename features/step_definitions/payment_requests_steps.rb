@@ -5,6 +5,7 @@ Sachantque(
 ) do |name, classe|
   steps %(
     Quand les informations personnelles ont été récupérées pour l'élève "#{name}"
+    Et que l'élève "#{name}" a bien le statut étudiant
     Et que je renseigne les coordonnées bancaires de l'élève "#{name}" de la classe "#{classe}"
     Et que l'élève "#{name}" a une adresse en France et son propre RIB
     Et que je génère les décisions d'attribution de mon établissement
