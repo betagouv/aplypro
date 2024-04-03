@@ -11,9 +11,7 @@ Quand("l'élève {string} a quitté l'établissement {string}") do |name, uai|
 end
 
 Sachantque("les informations personnelles ont été récupérées pour l'élève {string}") do |name|
-  first_name, last_name = name.split
-
-  student = Student.find_by(first_name: first_name, last_name: last_name)
+  student = find_student_by_full_name(name)
 
   FetchStudentInformationJob.perform_now(student.current_schooling)
 end
@@ -47,4 +45,12 @@ Quand("les élèves actuels sont les seuls à avoir des décisions d'attribution
   establishment.schoolings.current.find_each do |schooling|
     schooling.rattach_attributive_decision!(StringIO.new("hello"))
   end
+end
+
+# FIXME: we should mock the API step instead and have the correct
+# schooling + status returned in the data.
+Quand("l'élève {string} a bien le statut étudiant") do |name|
+  student = find_student_by_full_name(name)
+
+  student.current_schooling.update!(status: :student)
 end
