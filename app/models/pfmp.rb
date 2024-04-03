@@ -77,7 +77,7 @@ class Pfmp < ApplicationRecord
     raise "A PFMP paid or in the process of being paid cannot have its amount recalculated" unless can_be_modified?
 
     update!(amount: calculate_amount)
-    following_modifiable_pfmps_for_mef.first&.update_amounts!
+    following_modifiable_pfmps.first&.update_amounts!
   end
 
   def validate!

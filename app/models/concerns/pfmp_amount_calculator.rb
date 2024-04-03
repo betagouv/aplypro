@@ -13,27 +13,27 @@ module PfmpAmountCalculator
   end
 
   def previously_locked_amount
-    previous_pfmps_for_mef
+    previous_pfmps
       .map(&:amount)
       .compact
       .sum
   end
 
-  def student_pfmps_with_classe
+  def student_pfmps_for_mef_with_classe
     student.pfmps
            .in_state(:completed, :validated)
            .joins(schooling: :classe)
            .where("classe.mef_id": mef.id, "classe.start_year": Aplypro::SCHOOL_YEAR)
   end
 
-  def previous_pfmps_for_mef
-    student_pfmps_with_classe
+  def previous_pfmps
+    student_pfmps_for_mef_with_classe
       .before(created_at)
       .where.not(amount: nil)
   end
 
-  def following_modifiable_pfmps_for_mef
-    student_pfmps_with_classe
+  def following_modifiable_pfmps
+    student_pfmps_for_mef_with_classe
       .after(created_at)
       .select(&:can_be_modified?)
   end

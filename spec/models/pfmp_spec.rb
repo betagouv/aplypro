@@ -154,7 +154,7 @@ RSpec.describe Pfmp do
       end
 
       it "recalculates the follow up modifiable pfmps amounts" do
-        expect(existing_pfmp.following_modifiable_pfmps_for_mef.pluck(:amount)).to eq [120, 40]
+        expect(existing_pfmp.following_modifiable_pfmps.pluck(:amount)).to eq [120, 40]
       end
     end
   end
