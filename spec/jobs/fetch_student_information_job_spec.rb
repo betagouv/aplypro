@@ -65,6 +65,18 @@ RSpec.describe FetchStudentInformationJob, :student_api do
     include_examples "updates the schooling status", "sygne_student_info" do
       let(:payload) { student_data }
     end
+
+    context "when the API responds with a 404" do
+      before do
+        WebMock
+          .stub_request(:get, %r{#{ENV.fetch('APLYPRO_SYGNE_URL')}eleves/#{student.ine}})
+          .to_return status: 404
+      end
+
+      it "stores it on the student" do
+        expect { described_class.perform_now(schooling) }.to change(student, :lost).from(false).to(true)
+      end
+    end
   end
 
   context "when the student is from FREGATA" do
