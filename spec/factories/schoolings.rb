@@ -5,6 +5,7 @@ FactoryBot.define do
     student
     classe
     start_date { "2023-08-26" }
+    status { :student }
 
     trait :with_attributive_decision do
       after(:create) do |schooling|
@@ -12,6 +13,10 @@ FactoryBot.define do
 
         schooling.rattach_attributive_decision!(StringIO.new("hello"))
       end
+    end
+
+    trait :apprentice do
+      status { :apprentice }
     end
 
     trait :closed do

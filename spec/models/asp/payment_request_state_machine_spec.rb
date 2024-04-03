@@ -10,11 +10,35 @@ describe ASP::PaymentRequestStateMachine do
   it { is_expected.to be_in_state :pending }
 
   describe "mark_ready!" do
+    let(:asp_payment_request) { create(:asp_payment_request, :sendable) }
+
+    context "with the default factory" do
+      it "can transition properly" do
+        expect { asp_payment_request.mark_ready! }.not_to raise_error
+      end
+    end
+
     context "when the request is incomplete" do
       let(:asp_payment_request) { create(:asp_payment_request, :incomplete) }
 
       it "allows the transition" do
         expect { asp_payment_request.mark_ready! }.not_to raise_error Statesman::TransitionFailedError
+      end
+    end
+
+    context "when the schooling status is unknown" do
+      before { asp_payment_request.schooling.update!(status: nil) }
+
+      it "blocks the transition" do
+        expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
+      end
+    end
+
+    context "when the schooling is for an apprentice" do
+      before { asp_payment_request.schooling.update!(status: :apprentice) }
+
+      it "blocks the transition" do
+        expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
       end
     end
 
@@ -36,10 +60,8 @@ describe ASP::PaymentRequestStateMachine do
 
     context "when the request belongs to a student over 18 with an external rib" do
       before do
-        student.update!(
-          rib: create(:rib, student: student, personal: false),
-          birthdate: 20.years.ago
-        )
+        student.update!(birthdate: 20.years.ago)
+        student.rib.update!(personal: false)
       end
 
       it "blocks the transition" do
