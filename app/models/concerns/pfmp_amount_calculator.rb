@@ -19,7 +19,7 @@ module PfmpAmountCalculator
       .sum
   end
 
-  def student_pfmps_for_mef_with_classe
+  def pfmps_for_mef
     student.pfmps
            .in_state(:completed, :validated)
            .joins(schooling: :classe)
@@ -27,13 +27,13 @@ module PfmpAmountCalculator
   end
 
   def previous_pfmps
-    student_pfmps_for_mef_with_classe
+    pfmps_for_mef
       .before(created_at)
       .where.not(amount: nil)
   end
 
   def following_modifiable_pfmps
-    student_pfmps_for_mef_with_classe
+    pfmps_for_mef
       .after(created_at)
       .select(&:can_be_modified?)
   end
