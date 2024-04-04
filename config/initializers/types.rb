@@ -8,4 +8,18 @@ class AspDateType < ActiveModel::Type::Date
   end
 end
 
+module ActiveModel
+  module Type
+    class String
+      def cast(value)
+        if @limit
+          super(value.to_s.first(@limit))
+        else
+          super
+        end
+      end
+    end
+  end
+end
+
 ActiveModel::Type.register :asp_date, AspDateType
