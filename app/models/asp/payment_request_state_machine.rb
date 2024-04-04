@@ -38,6 +38,10 @@ module ASP
     end
 
     guard_transition(to: :ready) do |request|
+      request.student.lives_in_france?
+    end
+
+    guard_transition(to: :ready) do |request|
       request.schooling.student?
     end
 

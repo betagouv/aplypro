@@ -10,7 +10,7 @@ FactoryBot.define do
 
     trait :sendable do
       after(:create) do |req|
-        student = create(:student, :with_all_asp_info, :underage)
+        student = create(:student, :with_all_asp_info, :underage, :with_french_address)
         schooling = create(:schooling, :with_attributive_decision, student: student)
 
         req.pfmp.update!(schooling: schooling)
