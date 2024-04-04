@@ -9,6 +9,12 @@ describe ASP::PaymentRequestStateMachine do
 
   it { is_expected.to be_in_state :pending }
 
+  shared_examples "a blocked request" do
+    it "cannot transition to ready" do
+      expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
+    end
+  end
+
   describe "mark_ready!" do
     let(:asp_payment_request) { create(:asp_payment_request, :sendable) }
 
@@ -29,49 +35,51 @@ describe ASP::PaymentRequestStateMachine do
     context "when the schooling status is unknown" do
       before { asp_payment_request.schooling.update!(status: nil) }
 
-      it "blocks the transition" do
-        expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
-      end
+      it_behaves_like "a blocked request"
     end
 
     context "when the schooling is for an apprentice" do
       before { asp_payment_request.schooling.update!(status: :apprentice) }
 
-      it "blocks the transition" do
-        expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
-      end
+      it_behaves_like "a blocked request"
     end
 
     context "when the student is a lost record" do
       before { asp_payment_request.student.update!(lost: true) }
 
-      it "blocks the transition" do
-        expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
-      end
+      it_behaves_like "a blocked request"
     end
 
     context "when the RIB has been reused somewhere else" do
       before { create(:rib, iban: asp_payment_request.student.rib.iban) }
 
-      it "blocks the transition" do
-        expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
-      end
+      it_behaves_like "a blocked request"
     end
+
+    # rubocop:disable Rails/SkipsModelValidations
+    context "when the PFMP is not valid" do
+      before { asp_payment_request.pfmp.update_column(:start_date, Date.new(2002, 1, 1)) }
+
+      it_behaves_like "a blocked request"
+    end
+
+    context "when the rib is not valid" do
+      before { asp_payment_request.student.rib.update_columns(attributes_for(:rib, :outside_sepa)) }
+
+      it_behaves_like "a blocked request"
+    end
+    # rubocop:enable Rails/SkipsModelValidations
 
     context "when the request is missing information" do
       before { student.rib&.destroy }
 
-      it "blocks the transition" do
-        expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
-      end
+      it_behaves_like "a blocked request"
     end
 
     context "when the PFMP is zero-amount" do
       before { asp_payment_request.pfmp.update!(amount: 0) }
 
-      it "raises an error" do
-        expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
-      end
+      it_behaves_like "a blocked request"
     end
 
     context "when the request belongs to a student over 18 with an external rib" do
@@ -80,9 +88,7 @@ describe ASP::PaymentRequestStateMachine do
         student.rib.update!(personal: false)
       end
 
-      it "blocks the transition" do
-        expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
-      end
+      it_behaves_like "a blocked request"
     end
 
     context "when the attributive decision has not been attached" do
@@ -90,9 +96,7 @@ describe ASP::PaymentRequestStateMachine do
         asp_payment_request.pfmp.schooling.attributive_decision.detach
       end
 
-      it "blocks the transition" do
-        expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
-      end
+      it_behaves_like "a blocked request"
     end
   end
 
