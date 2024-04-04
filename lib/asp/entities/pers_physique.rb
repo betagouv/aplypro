@@ -3,11 +3,14 @@
 module ASP
   module Entities
     class PersPhysique < Entity
+      FIRST_NAME_MAX_LENGTH = 20
+      LAST_NAME_MAX_LENGTH  = 50
+
       attribute :titre, :string
-      attribute :nomusage, :string
-      attribute :nomnaissance, :string
-      attribute :prenom, :string
-      attribute :datenaissance, :date
+      attribute :nomusage, :string, limit: LAST_NAME_MAX_LENGTH
+      attribute :nomnaissance, :string, limit: LAST_NAME_MAX_LENGTH
+      attribute :prenom, :string, limit: FIRST_NAME_MAX_LENGTH
+      attribute :datenaissance, :asp_date
       attribute :codeinseepaysnai, :string
       attribute :codeinseecommune, :string
 
@@ -27,7 +30,7 @@ module ASP
         xml.prenom(prenom)
         xml.nomusage(nomusage)
         xml.nomnaissance(nomnaissance)
-        xml.datenaissance(I18n.l(datenaissance, format: :asp))
+        xml.datenaissance(datenaissance)
         xml.codeinseepaysnai(codeinseepaysnai)
         xml.codeinseecommune(codeinseecommune) if born_in_france?
       end
