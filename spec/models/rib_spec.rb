@@ -39,11 +39,25 @@ RSpec.describe Rib do
   end
 
   describe "normalization" do
-    subject(:spaced) { create(:rib, bic: "   #{rib.bic.downcase}  ", iban: "   #{rib.iban.downcase}  ") }
+    subject(:spaced) do
+      create(
+        :rib,
+        bic: "   #{"#{rib.bic.downcase[0..2]}   #{rib.bic[3..]}"}  ",
+        iban: "   #{"#{rib.iban.downcase[0..2]}  #{rib.iban[3..]}"}\t  "
+      )
+    end
 
     %i[bic iban].each do |attr|
       it "strips the #{attr}" do
         expect(spaced[attr]).to eq rib[attr].upcase
+      end
+    end
+
+    describe "name" do
+      it "squishes the name attribute" do
+        rib = create(:rib, name: "     Marie\t\tCurie     Mrs  ")
+
+        expect(rib.name).to eq "Marie Curie Mrs"
       end
     end
   end
@@ -57,7 +71,6 @@ RSpec.describe Rib do
       it "is included in the scope" do
         expect(described_class.not_reused).to include(rib)
       end
-
     end
 
     context "with multiple RIBS with the same IBAN" do
