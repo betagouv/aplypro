@@ -69,6 +69,12 @@ module ASP
       request.schooling.attributive_decision.attached?
     end
 
+    guard_transition(to: :ready) do |request|
+      request.pfmp.duplicates.none? do |pfmp|
+        pfmp.in_state?(:validated)
+      end
+    end
+
     guard_transition(from: :ready, to: :sent) do |request|
       request.asp_request.present?
     end
