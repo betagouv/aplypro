@@ -46,6 +46,17 @@ class Pfmp < ApplicationRecord
 
   delegate :wage, to: :mef
 
+  def self.perfect
+    joins(:schooling, student: :rib)
+      .merge(Schooling.student)
+      .merge(Schooling.with_attributive_decisions)
+      .merge(Student.lost.invert_where)
+      .merge(Student.lives_in_france)
+      .merge(Rib.not_reused)
+      .merge(Pfmp.this_year)
+      .where.not(amount: 0) # FIXME
+  end
+
   def state_machine
     @state_machine ||= PfmpStateMachine.new(
       self,
