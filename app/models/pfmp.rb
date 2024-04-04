@@ -35,6 +35,11 @@ class Pfmp < ApplicationRecord
   scope :before, ->(date) { where("pfmps.created_at < (?)", date) }
   scope :after, ->(date) { where("pfmps.created_at > (?)", date) }
 
+  scope :this_year, lambda {
+    where(start_date: Aplypro::SCHOOL_YEAR_RANGE, end_date: Aplypro::SCHOOL_YEAR_RANGE)
+  }
+
+
   include Statesman::Adapters::ActiveRecordQueries[
     transition_class: PfmpTransition,
     initial_state: PfmpStateMachine.initial_state,
