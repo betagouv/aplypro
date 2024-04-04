@@ -112,4 +112,10 @@ class Pfmp < ApplicationRecord
   def payment_due?
     day_count.present?
   end
+
+  def duplicates
+    student.pfmps.excluding(self).select do |other|
+      other.start_date == start_date && other.end_date == end_date
+    end
+  end
 end

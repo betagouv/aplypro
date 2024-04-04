@@ -92,11 +92,35 @@ describe ASP::PaymentRequestStateMachine do
     end
 
     context "when the attributive decision has not been attached" do
-      before do
-        asp_payment_request.pfmp.schooling.attributive_decision.detach
-      end
+      before { asp_payment_request.pfmp.schooling.attributive_decision.detach }
 
       it_behaves_like "a blocked request"
+    end
+
+    context "when there is another duplicated PFMP" do
+      let(:duplicate) do
+        pfmp = asp_payment_request.pfmp
+
+        create(
+          :pfmp,
+          schooling: pfmp.schooling,
+          start_date: pfmp.start_date,
+          end_date: pfmp.end_date,
+          day_count: pfmp.day_count
+        )
+      end
+
+      context "when it is validated" do
+        before { duplicate.validate! }
+
+        it_behaves_like "a blocked request"
+      end
+
+      context "when it's not validated" do
+        it "allows the transition" do
+          expect { asp_payment_request.mark_ready! }.not_to raise_error
+        end
+      end
     end
   end
 
