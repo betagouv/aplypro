@@ -46,6 +46,14 @@ module ASP
     end
 
     guard_transition(to: :ready) do |request|
+      request.student.rib.valid?
+    end
+
+    guard_transition(to: :ready) do |request|
+      request.pfmp.valid?
+    end
+
+    guard_transition(to: :ready) do |request|
       !request.student.lost
     end
 
