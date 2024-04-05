@@ -14,6 +14,13 @@ describe ASP::Entities::Prestadoss, type: :model do
 
   it_behaves_like "an ASP payment mapping entity"
 
+  describe "formatting" do
+    let(:model) { described_class.from_payment_request(payment_request) }
+
+    include_examples "an ASP-friendly date attribute", attribute: :datecomplete
+    include_examples "an ASP-friendly date attribute", attribute: :datereceptionprestadoss
+  end
+
   it_behaves_like "an XML-fragment producer" do
     let(:entity) { described_class.from_payment_request(payment_request) }
     let(:probe) { ["prestadoss/code", "D"] }
