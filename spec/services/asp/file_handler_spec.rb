@@ -33,10 +33,14 @@ describe ASP::FileHandler do
 
       expect(request.send("#{type}_file")).to be_attached
     end
+
+    it "can tell the file was attached correctly" do
+      expect { reader.parse! }.to change(reader, :file_saved?).from(false).to(true)
+    end
   end
   # rubocop:enable Rspec/MultipleMemoizedHelpers
 
-  %i[rejects integrations].each do |type|
+  %i[integrations rejects].each do |type|
     context "when the file is #{type} file" do
       it_behaves_like "a reader for the ASP integration process", type
     end
@@ -60,6 +64,9 @@ describe ASP::FileHandler do
 
       expect(ASP::PaymentReturn.last.filename).to eq basename
     end
+
+    it "knows whether the file was saved" do
+      expect { reader.parse! }.to change(reader, :file_saved?).from(false).to(true)
+    end
   end
 end
-# frozen_string_literal: true
