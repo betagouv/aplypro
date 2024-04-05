@@ -16,11 +16,7 @@ class PfmpStateMachine
   end
 
   guard_transition(to: :validated) do |pfmp|
-    pfmp.student
-        .pfmps
-        .before(pfmp.created_at)
-        .joins(schooling: :classe)
-        .where("classe.mef_id": pfmp.mef.id, "classe.start_year": Aplypro::SCHOOL_YEAR).not_in_state(:validated).empty?
+    pfmp.previous_pfmps.not_in_state(:validated).empty?
   end
 
   after_transition(to: :completed) do |pfmp| # rubocop:disable Style/SymbolProc
