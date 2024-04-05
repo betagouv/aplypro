@@ -58,13 +58,17 @@ Quand("je renseigne une PFMP provisoire") do
   )
 end
 
-Quand("je renseigne {int} jours pour la dernière PFMP de {string}") do |days, name|
+Quand("je renseigne {int} jours pour la dernière PFMP de {string} dans la classe de {string}") do |days, name, classe|
+  new_end_date = Date.parse("17/03/2024") + days.days
+
   steps %(
-    Quand je consulte le profil de l'élève "#{name}"
-    Et que je clique sur "Voir la PFMP"
+    Quand je consulte le profil de "#{name}" dans la classe de "#{classe}"
+    Et que je consulte la dernière PFMP
     Et que je clique sur "Modifier la PFMP"
     Et que je remplis "Nombre de jours" avec "#{days}"
+    Et que je remplis "Date de fin" avec "#{new_end_date}"
     Et que je clique sur "Modifier la PFMP"
+    Alors la page contient "La PFMP a bien été mise à jour"
   )
 end
 
