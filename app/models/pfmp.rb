@@ -27,7 +27,7 @@ class Pfmp < ApplicationRecord
               only_integer: true,
               allow_nil: true,
               greater_than: 0,
-              less_than_or_equal_to: ->(pfmp) { (pfmp.end_date - pfmp.start_date).to_i }
+              less_than_or_equal_to: ->(pfmp) { (pfmp.end_date - pfmp.start_date).to_i + 1 }
             }
 
   scope :finished, -> { where("pfmps.end_date <= (?)", Time.zone.today) }

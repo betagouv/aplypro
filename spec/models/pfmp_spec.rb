@@ -47,7 +47,13 @@ RSpec.describe Pfmp do
     end
 
     describe "day count" do
-      subject(:pfmp) { build(:pfmp, start_date: Time.zone.now, end_date: 7.days.from_now) }
+      subject(:pfmp) do
+        build(
+          :pfmp,
+          start_date: Time.zone.now.next_week(:monday),
+          end_date: Time.zone.now.next_week(:friday)
+        )
+      end
 
       context "when the number of days doesn't fit in the date range" do
         before { pfmp.day_count = 8 }
@@ -62,7 +68,7 @@ RSpec.describe Pfmp do
       end
 
       context "when the number fits exactly in the day range" do
-        before { pfmp.day_count = 7 }
+        before { pfmp.day_count = 5 }
 
         it { is_expected.to be_valid }
       end
