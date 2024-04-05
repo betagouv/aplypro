@@ -33,6 +33,7 @@ class Student < ApplicationRecord
   scope :asp_ready, lambda {
     where(biological_sex: [1, 2])
       .where.not(address_postal_code: nil)
+      .where.not(lost: true)
       .where.not(address_country_code: %w[995 990] + [nil])
       .where.not(birthplace_country_insee_code: %w[995 990] + [nil])
       .where.not(

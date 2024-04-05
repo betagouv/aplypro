@@ -42,6 +42,22 @@ module ASP
     end
 
     guard_transition(to: :ready) do |request|
+      !request.student.rib.reused?
+    end
+
+    guard_transition(to: :ready) do |request|
+      request.student.rib.valid?
+    end
+
+    guard_transition(to: :ready) do |request|
+      request.pfmp.valid?
+    end
+
+    guard_transition(to: :ready) do |request|
+      !request.student.lost
+    end
+
+    guard_transition(to: :ready) do |request|
       !request.student.adult_without_personal_rib?
     end
 
@@ -51,6 +67,12 @@ module ASP
 
     guard_transition(to: :ready) do |request|
       request.schooling.attributive_decision.attached?
+    end
+
+    guard_transition(to: :ready) do |request|
+      request.pfmp.duplicates.none? do |pfmp|
+        pfmp.in_state?(:validated)
+      end
     end
 
     guard_transition(from: :ready, to: :sent) do |request|
