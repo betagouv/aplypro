@@ -4,13 +4,13 @@ module ASP
   class FileHandler
     include Errors
 
-    attr_reader :filepath, :filename
+    attr_reader :filepath, :filename_noext
 
     FILE_TYPES = %i[rejects integrations payments].freeze
 
     def initialize(filepath)
       @filepath = filepath
-      @filename = File.basename(filepath, ".*")
+      @filename_noext = File.basename(filepath, ".*")
     end
 
     def parse!
@@ -21,13 +21,13 @@ module ASP
       begin
         reader.process!
       rescue StandardError => e
-        raise ResponseFileParsingError, "couldn't parse #{filename}: #{e}"
+        raise ResponseFileParsingError, "couldn't parse #{filename_noext}: #{e}"
       end
     end
 
     def file_saved?
       if payments_file?
-        ASP::PaymentReturn.exists?(filename: filename)
+        ASP::PaymentReturn.exists?(filename: "#{filename_noext}.xml")
       else
         target_attachment.attached?
       end
@@ -42,7 +42,7 @@ module ASP
     end
 
     def kind
-      case filename
+      case filename_noext
       when /^rejets_integ_idp/
         :rejects
       when /^identifiants_generes/
@@ -56,9 +56,9 @@ module ASP
       return if payments_file?
 
       name = if rejects_file?
-               filename.split("integ_idp_").last
+               filename_noext.split("integ_idp_").last
              elsif integrations_file?
-               filename.split("generes_").last
+               filename_noext.split("generes_").last
              end
 
       "#{name}.xml"
@@ -89,7 +89,7 @@ module ASP
     end
 
     def persist_payment_file!
-      ASP::PaymentReturn.create_with_file!(io: File.read(filepath), filename: "#{filename}.xml")
+      ASP::PaymentReturn.create_with_file!(io: File.read(filepath), filename: "#{filename_noext}.xml")
     end
 
     def attach_to_request!
