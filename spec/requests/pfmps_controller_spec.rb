@@ -41,6 +41,18 @@ RSpec.describe PfmpsController do
     let(:pfmp) { create(:pfmp, :completed, schooling: schooling) }
 
     context "when validating as a director" do
+      it "returns found (but there is an error flash on the page)" do
+        post validate_class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id, id: pfmp.id)
+
+        expect(response).to have_http_status(:found)
+      end
+    end
+
+    context "when validating as a confirmed director" do
+      let(:user) do
+        create(:user, :confirmed_director, :with_selected_establishment, establishment: schooling.classe.establishment)
+      end
+
       it "returns 200" do
         post validate_class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id, id: pfmp.id)
 

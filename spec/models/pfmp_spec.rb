@@ -8,7 +8,7 @@ RSpec.describe Pfmp do
   let(:mef) { create(:mef) }
   let(:classe) { create(:classe, mef: mef) }
   let(:student) { create(:student, :with_all_asp_info) }
-  let(:schooling) { create(:schooling, student: student) }
+  let(:schooling) { create(:schooling, student: student, classe: classe) }
 
   describe "associations" do
     it { is_expected.to belong_to(:schooling) }
@@ -115,16 +115,52 @@ RSpec.describe Pfmp do
         expect { pfmp.transition_to!(:completed) }.to raise_error Statesman::GuardFailedError
       end
     end
+
+    context "when the previous pfmps are validated" do
+      let(:pfmps) { create_list(:pfmp, 2, :completed, schooling: schooling) }
+
+      before { pfmps.first.transition_to!(:validated) }
+
+      it "can move to validated" do
+        pfmps.last.transition_to!(:validated)
+        expect(pfmps.last).to be_in_state(:validated)
+      end
+    end
+
+    context "when previous pfmps are not all validated" do
+      let(:pfmps) { create_list(:pfmp, 3, :completed, schooling: schooling) }
+
+      before { pfmps.first.transition_to!(:validated) }
+
+      it "cannot move to validated" do
+        expect { pfmps.last.transition_to!(:validated) }.to raise_error Statesman::GuardFailedError
+      end
+    end
   end
 
   context "when the amount is updated" do
-    context "with a validated PFMP" do
+    context "with a 'terminated' PFMP" do
       context "with an active payment request" do
         let(:pfmp) { create(:asp_payment_request, :sent).pfmp }
 
         it "throws an error" do
-          expect { pfmp.update!(day_count: 15) }.to raise_error(/day count changed/)
+          expect { pfmp.update!(day_count: 15) }.to raise_error(/amount recalculated/)
         end
+      end
+    end
+
+    context "with existing follow up modifiable pfmps" do
+      let(:existing_pfmp) { create(:pfmp, :completed, schooling: schooling, day_count: 2) }
+      let(:mef) { create(:mef, daily_rate: 20, yearly_cap: 400) }
+
+      before do
+        create(:pfmp, :completed, schooling: schooling, day_count: 6, created_at: existing_pfmp.created_at + 2.days)
+        create(:pfmp, :completed, schooling: schooling, day_count: 4, created_at: existing_pfmp.created_at + 3.days)
+        existing_pfmp.update!(day_count: existing_pfmp.day_count + 10)
+      end
+
+      it "recalculates the follow up modifiable pfmps amounts" do
+        expect(existing_pfmp.following_modifiable_pfmps.pluck(:amount)).to eq [120, 40]
       end
     end
   end

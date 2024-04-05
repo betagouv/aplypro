@@ -64,9 +64,5 @@
   .fr-grid-row.fr-grid-row--top
     .fr-mb-2w.fr-mr-md-2w
       = form.submit t("validations.validate"), class: "fr-btn fr-btn--primary"
-    .fr-checkbox-group.fr-mb-2w.fr-mt-md-1w
-      = check_box_tag :confirmed_director, checked: current_user.confirmed_director?
-      = label_tag :confirmed_director, class: "fr-label" do
-        = t("validations.confirm_director").html_safe
-        .fr-text--sm.fr-mt-1w= confirmed_director_information
+      = render partial: "shared/confirmed_director"
 

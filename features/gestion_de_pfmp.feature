@@ -42,6 +42,7 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
   Scénario: Le personnel de direction peut valider une PFMP individuellement
     Quand je renseigne une PFMP de 3 jours
     Et que je clique sur "Voir la PFMP"
+    Et que je coche la case de responsable légal
     Et que je clique sur "Valider"
     Alors la page contient "La PFMP de Marie Curie a bien été validée"
 

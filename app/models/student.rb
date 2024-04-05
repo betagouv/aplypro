@@ -16,7 +16,7 @@ class Student < ApplicationRecord
 
   has_many :classes, through: :schoolings, source: "classe"
 
-  has_many :pfmps, -> { order "pfmps.start_date" }, through: :schoolings
+  has_many :pfmps, -> { order "pfmps.created_at" }, through: :schoolings
 
   has_one :current_schooling, -> { current }, class_name: "Schooling", dependent: :destroy, inverse_of: :student
 

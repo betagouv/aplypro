@@ -24,7 +24,13 @@ FactoryBot.define do
     end
 
     trait :incomplete do
-      after(:create, &:mark_incomplete!)
+      after(:create) do |req|
+        student = create(:student, :with_all_asp_info, :underage)
+        schooling = create(:schooling, :with_attributive_decision, student: student)
+        req.pfmp.update!(schooling: schooling)
+
+        req.mark_incomplete!
+      end
     end
 
     trait :sent do

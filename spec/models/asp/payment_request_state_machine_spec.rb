@@ -28,7 +28,9 @@ describe ASP::PaymentRequestStateMachine do
       let(:asp_payment_request) { create(:asp_payment_request, :incomplete) }
 
       it "allows the transition" do
-        expect { asp_payment_request.mark_ready! }.not_to raise_error Statesman::TransitionFailedError
+        asp_payment_request.mark_ready!
+
+        expect(asp_payment_request).to be_in_state(:ready)
       end
     end
 

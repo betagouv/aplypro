@@ -26,9 +26,10 @@ Fonctionnalité: Le personnel de direction consulte les listes
 
   Scénario: Le personnel de direction peut voir les PFMPs dans différents états
     Sachant que je consulte le profil de "Marie Curie" dans la classe de "2NDEB"
+    Et que je renseigne et valide une PFMP de 10 jours
+    Et que je consulte le profil de "Marie Curie" dans la classe de "2NDEB"
     Et que je renseigne une PFMP provisoire
     Et que je renseigne une PFMP de 3 jours
-    Et que je renseigne et valide une PFMP de 10 jours
     Quand je consulte la liste des classes
     Alors je peux voir 1 PFMP "À compléter" pour la classe "2NDEB"
     Et je peux voir 1 PFMP "Saisies à valider" pour la classe "2NDEB"

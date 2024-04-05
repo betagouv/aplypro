@@ -32,6 +32,9 @@ class Pfmp < ApplicationRecord
 
   scope :finished, -> { where("pfmps.end_date <= (?)", Time.zone.today) }
 
+  scope :before, ->(date) { where("pfmps.created_at < (?)", date) }
+  scope :after, ->(date) { where("pfmps.created_at > (?)", date) }
+
   include Statesman::Adapters::ActiveRecordQueries[
     transition_class: PfmpTransition,
     initial_state: PfmpStateMachine.initial_state,
@@ -59,24 +62,26 @@ class Pfmp < ApplicationRecord
     end
   end
 
-  after_save :handle_amount_change
+  after_save :recalculate_amounts_if_needed
 
-  def handle_amount_change
+  # Recalculate amounts for the current PFMP and all follow up PFMPs that are still modifiable
+  def recalculate_amounts_if_needed
     changed_day_count = day_count_before_last_save != day_count
 
     return if !changed_day_count
 
-    raise "A PFMP paid or in the process of being paid cannot have its day count changed." unless can_be_modified?
+    update_amounts!
+  end
 
-    update_amount!
+  def update_amounts!
+    raise "A PFMP paid or in the process of being paid cannot have its amount recalculated" unless can_be_modified?
+
+    update!(amount: calculate_amount)
+    following_modifiable_pfmps.first&.update_amounts!
   end
 
   def validate!
     transition_to!(:validated)
-  end
-
-  def update_amount!
-    update!(amount: calculate_amount)
   end
 
   def setup_payment!
