@@ -18,7 +18,7 @@ class FetchStudentInformationJob < ApplicationJob
       update_schooling!(mapper)
     end
   rescue Faraday::ResourceNotFound
-    schooling.student.update!(lost: true)
+    schooling.student.update!(ine_not_found: true)
   end
 
   def update_student!(schooling, mapper)

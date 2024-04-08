@@ -31,12 +31,13 @@ class Student < ApplicationRecord
   scope :without_ribs, -> { where.missing(:rib) }
 
   scope :lives_in_france, -> { where(address_country_code: %w[100 99100]) }
-  scope :lost, -> { where(lost: true) }
+
+  scope :ine_not_found, -> { where(ine_not_found: true) }
 
   scope :asp_ready, lambda {
     where(biological_sex: [1, 2])
       .where.not(address_postal_code: nil)
-      .where.not(lost: true)
+      .merge(Student.ine_not_found.invert_where)
       .where.not(address_country_code: %w[995 990] + [nil])
       .where.not(birthplace_country_insee_code: %w[995 990] + [nil])
       .where.not(

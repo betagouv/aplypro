@@ -58,7 +58,7 @@ module ASP
     end
 
     guard_transition(to: :ready) do |request|
-      !request.student.lost
+      !request.student.ine_not_found
     end
 
     guard_transition(to: :ready) do |request|

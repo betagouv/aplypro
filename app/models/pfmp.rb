@@ -55,7 +55,7 @@ class Pfmp < ApplicationRecord
     joins(:schooling, student: :rib)
       .merge(Schooling.student)
       .merge(Schooling.with_attributive_decisions)
-      .merge(Student.lost.invert_where)
+      .merge(Student.ine_not_found.invert_where)
       .merge(Student.lives_in_france)
       .merge(Rib.not_reused)
       .merge(Pfmp.this_year)
