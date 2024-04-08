@@ -12,6 +12,11 @@ FactoryBot.define do
       address_country_code_value { Faker::Number.number(digits: 5) }
     end
 
+    trait :asp_ready do
+      with_all_asp_info
+      with_french_address
+    end
+
     trait :with_extra_info do
       with_address
       with_birthplace_info
