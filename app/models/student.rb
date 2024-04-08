@@ -29,26 +29,24 @@ class Student < ApplicationRecord
   has_one :rib, -> { where(archived_at: nil) }, dependent: :destroy, inverse_of: :student
 
   scope :without_ribs, -> { where.missing(:rib) }
-
   scope :lives_in_france, -> { where(address_country_code: %w[100 99100]) }
-
   scope :ine_not_found, -> { where(ine_not_found: true) }
-
-  scope :asp_ready, lambda {
-    where(biological_sex: [1, 2])
-      .where.not(address_postal_code: nil)
-      .merge(Student.ine_not_found.invert_where)
-      .where.not(address_country_code: %w[995 990] + [nil])
-      .where.not(birthplace_country_insee_code: %w[995 990] + [nil])
-      .where.not(
-        "students.address_country_code IN (?) AND students.address_city_insee_code IS NULL",
-        %w[100 99100]
-      )
-      .where.not(
-        "students.birthplace_country_insee_code IN (?) AND students.birthplace_city_insee_code IS NULL",
-        %w[100 99100]
-      )
+  scope :with_ine, -> { where(ine_not_found: false) }
+  scope :with_biological_sex, -> { where(biological_sex: %i[male female]) }
+  scope :with_known_birthplace, -> { where.not(birthplace_country_insee_code: nil) }
+  scope :with_valid_birthplace, lambda {
+    with_known_birthplace
+      .where.not(birthplace_country_insee_code: InseeCountryCodeMapper::REJECTED_CODES.keys)
   }
+
+  def self.asp_ready
+    joins(:rib)
+      .merge(Rib.not_reused)
+      .lives_in_france
+      .with_ine
+      .with_biological_sex
+      .with_valid_birthplace
+  end
 
   before_validation :check_asp_file_reference
 

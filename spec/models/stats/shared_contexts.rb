@@ -11,9 +11,8 @@ RSpec.shared_context "when there is data for global stats" do
       create(:pfmp, schooling: schooling, day_count: 5)
     end
 
-    create_list(:student, 2, :with_extra_info) do |student|
-      schooling = create(:schooling, :with_attributive_decision, classe: classe, student: student)
-      create(:rib, student: student)
+    create_list(:student, 2, :asp_ready) do |student|
+      schooling = create(:schooling, :with_attributive_decision, :student, classe: classe, student: student)
       create(:pfmp, :validated, schooling: schooling, day_count: 5)
     end
   end
@@ -29,9 +28,8 @@ RSpec.shared_context "when there is data for stats per bops" do
         create(:pfmp, schooling: schooling, day_count: 5)
       end
 
-      create_list(:student, index + 1, :with_extra_info) do |student|
+      create_list(:student, index + 1, :asp_ready) do |student|
         schooling = create(:schooling, :with_attributive_decision, classe: classe, student: student)
-        create(:rib, student: student)
         create(:pfmp, :validated, schooling: schooling, day_count: 5)
       end
     end
@@ -44,9 +42,8 @@ RSpec.shared_context "when there is data for stats per bops" do
       create(:pfmp, schooling: schooling, day_count: 5)
     end
 
-    create_list(:student, 4, :with_extra_info) do |student|
+    create_list(:student, 4, :asp_ready) do |student|
       schooling = create(:schooling, :with_attributive_decision, classe: private_classe, student: student)
-      create(:rib, student: student)
       create(:pfmp, :validated, schooling: schooling, day_count: 5)
     end
   end
@@ -64,9 +61,8 @@ RSpec.shared_context "when there is data for stats per MENJ academies" do
         create(:pfmp, schooling: schooling, day_count: 5)
       end
 
-      create_list(:student, index + 1, :with_extra_info) do |student|
+      create_list(:student, index + 1, :asp_ready) do |student|
         schooling = create(:schooling, :with_attributive_decision, classe: classe, student: student)
-        create(:rib, student: student)
         create(:pfmp, :validated, schooling: schooling, day_count: 5)
       end
     end
@@ -94,9 +90,8 @@ RSpec.shared_context "when there is data for stats per establishments" do
         create(:pfmp, schooling: schooling, day_count: 5)
       end
 
-      create_list(:student, index + 1, :with_extra_info) do |student|
+      create_list(:student, index + 1, :asp_ready) do |student|
         schooling = create(:schooling, :with_attributive_decision, classe: classe, student: student)
-        create(:rib, student: student)
         create(:pfmp, :validated, schooling: schooling, day_count: 5)
       end
     end
