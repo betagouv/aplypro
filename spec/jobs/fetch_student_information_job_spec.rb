@@ -74,7 +74,7 @@ RSpec.describe FetchStudentInformationJob, :student_api do
       end
 
       it "stores it on the student" do
-        expect { described_class.perform_now(schooling) }.to change(student, :lost).from(false).to(true)
+        expect { described_class.perform_now(schooling) }.to change(student, :ine_not_found).from(false).to(true)
       end
     end
   end

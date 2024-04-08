@@ -26,7 +26,6 @@ describe ASP::PaymentRequestStateMachine do
 
     context "with the default factory" do
       it "can transition properly" do
-
         expect { asp_payment_request.mark_ready! }.not_to raise_error
       end
     end
@@ -44,7 +43,7 @@ describe ASP::PaymentRequestStateMachine do
     end
 
     context "when the student is a lost record" do
-      before { asp_payment_request.student.update!(lost: true) }
+      before { asp_payment_request.student.update!(ine_not_found: true) }
 
       it_behaves_like "a blocked request"
     end
