@@ -6,12 +6,16 @@ class Rib < ApplicationRecord
   validates :iban, :bic, :name, presence: true
   validates :student_id, uniqueness: { scope: :archived_at }, if: :active?
 
-  normalizes :bic, with: ->(bic) { bic.strip }
-  normalizes :iban, with: ->(iban) { iban.strip }
+  scope :not_reused, -> { Rib.where.not(iban: Rib.multiple_ibans) }
+  scope :reused, -> { Rib.where(iban: Rib.multiple_ibans) }
+  scope :multiple_ibans, -> { Rib.select(:iban).group(:iban).having("count(iban) > 1") }
+
+  normalizes :bic, :iban, with: ->(value) { value.gsub(/\s+/, "").upcase }
+  normalizes :name, with: ->(name) { name.squish }
 
   before_validation do
-    self.iban = iban.strip.upcase unless iban.nil?
-    self.bic = bic.strip.upcase unless bic.nil?
+    self.iban = Rib.normalize_value_for(:iban, iban) unless iban.nil?
+    self.bic = Rib.normalize_value_for(:bic, bic) unless bic.nil?
   end
 
   # gem 'bank-account' provides the :iban and :rib validation but we

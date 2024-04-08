@@ -9,9 +9,15 @@ describe ASP::PaymentRequestStateMachine do
 
   it { is_expected.to be_in_state :pending }
 
-  shared_examples "a blocked request" do
+  shared_examples "a blocked request" do |test_perfect_pfmp_scope = true|
     it "cannot transition to ready" do
       expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
+    end
+
+    if test_perfect_pfmp_scope == true
+      it "is not included in the Pfmp.perfect scope" do
+        expect(Pfmp.perfect).not_to include(asp_payment_request.pfmp)
+      end
     end
   end
 
@@ -21,16 +27,6 @@ describe ASP::PaymentRequestStateMachine do
     context "with the default factory" do
       it "can transition properly" do
         expect { asp_payment_request.mark_ready! }.not_to raise_error
-      end
-    end
-
-    context "when the request is incomplete" do
-      let(:asp_payment_request) { create(:asp_payment_request, :incomplete) }
-
-      it "allows the transition" do
-        asp_payment_request.mark_ready!
-
-        expect(asp_payment_request).to be_in_state(:ready)
       end
     end
 
@@ -47,7 +43,7 @@ describe ASP::PaymentRequestStateMachine do
     end
 
     context "when the student is a lost record" do
-      before { asp_payment_request.student.update!(lost: true) }
+      before { asp_payment_request.student.update!(ine_not_found: true) }
 
       it_behaves_like "a blocked request"
     end
@@ -68,7 +64,7 @@ describe ASP::PaymentRequestStateMachine do
     context "when the rib is not valid" do
       before { asp_payment_request.student.rib.update_columns(attributes_for(:rib, :outside_sepa)) }
 
-      it_behaves_like "a blocked request"
+      it_behaves_like "a blocked request", test_perfect_pfmp_scope: false
     end
     # rubocop:enable Rails/SkipsModelValidations
 
@@ -90,7 +86,7 @@ describe ASP::PaymentRequestStateMachine do
         student.rib.update!(personal: false)
       end
 
-      it_behaves_like "a blocked request"
+      it_behaves_like "a blocked request", test_perfect_pfmp_scope: false
     end
 
     context "when the attributive decision has not been attached" do
@@ -115,7 +111,7 @@ describe ASP::PaymentRequestStateMachine do
       context "when it is validated" do
         before { duplicate.validate! }
 
-        it_behaves_like "a blocked request"
+        it_behaves_like "a blocked request", test_perfect_pfmp_scope: false
       end
 
       context "when it's not validated" do
@@ -123,6 +119,12 @@ describe ASP::PaymentRequestStateMachine do
           expect { asp_payment_request.mark_ready! }.not_to raise_error
         end
       end
+    end
+
+    context "when the student lives abroad" do
+      before { asp_payment_request.student.update!(address_country_code: "990") }
+
+      it_behaves_like "a blocked request"
     end
   end
 

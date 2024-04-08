@@ -53,7 +53,6 @@ RSpec.describe FetchStudentInformationJob, :student_api do
 
     let(:token) { JSON.generate({ access_token: "foobar", token_type: "Bearer" }) }
     let(:payload) { Rails.root.join("mock/data/sygne-student.json").read }
-    let(:sygne_api) { instance_double(StudentApi::Sygne) }
 
     before do
       WebmockHelpers.mock_sygne_token(token)
@@ -66,6 +65,18 @@ RSpec.describe FetchStudentInformationJob, :student_api do
       let(:payload) { student_data }
     end
 
+    context "when the student was not found before" do
+      before { student.update!(ine_not_found: true) }
+
+      it "does not make a request the API" do
+        endpoint = StudentApi::Sygne.new(establishment.uai).student_endpoint(student.ine)
+
+        described_class.perform_now(schooling)
+
+        expect(WebMock).not_to have_requested(:get, endpoint)
+      end
+    end
+
     context "when the API responds with a 404" do
       before do
         WebMock
@@ -74,7 +85,7 @@ RSpec.describe FetchStudentInformationJob, :student_api do
       end
 
       it "stores it on the student" do
-        expect { described_class.perform_now(schooling) }.to change(student, :lost).from(false).to(true)
+        expect { described_class.perform_now(schooling) }.to change(student, :ine_not_found).from(false).to(true)
       end
     end
   end

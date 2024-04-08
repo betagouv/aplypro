@@ -7,6 +7,8 @@ class FetchStudentInformationJob < ApplicationJob
     establishment = schooling.establishment
     student = schooling.student
 
+    return if student.ine_not_found
+
     api = StudentApi.api_for(establishment.students_provider, establishment.uai)
 
     api
@@ -18,7 +20,7 @@ class FetchStudentInformationJob < ApplicationJob
       update_schooling!(mapper)
     end
   rescue Faraday::ResourceNotFound
-    schooling.student.update!(lost: true)
+    schooling.student.update!(ine_not_found: true)
   end
 
   def update_student!(schooling, mapper)

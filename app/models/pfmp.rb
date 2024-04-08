@@ -6,12 +6,9 @@ class Pfmp < ApplicationRecord
   belongs_to :schooling
   has_one :classe, through: :schooling
   has_one :student, through: :schooling
-
   has_one :mef, through: :classe
   has_one :establishment, through: :classe
-
   has_many :transitions, class_name: "PfmpTransition", autosave: false, dependent: :destroy
-
   has_many :payment_requests, class_name: "ASP::PaymentRequest", dependent: :destroy
 
   validates :start_date, :end_date, presence: true
@@ -31,9 +28,10 @@ class Pfmp < ApplicationRecord
             }
 
   scope :finished, -> { where("pfmps.end_date <= (?)", Time.zone.today) }
-
   scope :before, ->(date) { where("pfmps.created_at < (?)", date) }
   scope :after, ->(date) { where("pfmps.created_at > (?)", date) }
+
+  scope :this_year, -> { where(start_date: Aplypro::SCHOOL_YEAR_RANGE, end_date: Aplypro::SCHOOL_YEAR_RANGE) }
 
   include Statesman::Adapters::ActiveRecordQueries[
     transition_class: PfmpTransition,
@@ -45,6 +43,17 @@ class Pfmp < ApplicationRecord
            :transition_to!, :transition_to, :in_state?, to: :state_machine
 
   delegate :wage, to: :mef
+
+  def self.perfect
+    joins(:schooling, student: :rib)
+      .merge(Schooling.student)
+      .merge(Schooling.with_attributive_decisions)
+      .merge(Student.ine_not_found.invert_where)
+      .merge(Student.lives_in_france)
+      .merge(Rib.not_reused)
+      .merge(Pfmp.this_year)
+      .where.not(amount: 0) # FIXME
+  end
 
   def state_machine
     @state_machine ||= PfmpStateMachine.new(

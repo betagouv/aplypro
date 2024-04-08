@@ -15,6 +15,11 @@ describe ASP::Entities::PersPhysique, type: :model do
   describe "validation" do
     subject(:model) { described_class.from_payment_request(payment_request) }
 
+    include_examples "a limited string attribute", attribute: :prenom, length: 20
+    include_examples "a limited string attribute", attribute: :nomnaissance, length: 50
+    include_examples "a limited string attribute", attribute: :nomusage, length: 50
+    include_examples "an ASP-friendly date attribute", attribute: :datenaissance
+
     context "when the student is born in France" do
       let(:student) { create(:student, :with_extra_info, :born_in_france) }
 
