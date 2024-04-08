@@ -3,7 +3,7 @@
 - else
   .actions.fr-py-3w
     .fr-btns-group.fr-btns-group--inline
-      = link_to "Suivre les paiements échoués", status_validations_path(payment_request_states: [:rejected, :unpaid]), class: 'fr-btn'
+      = link_to "Suivre les paiements échoués", status_validations_path(payment_request_states: ASP::PaymentRequestStateMachine::FAILED_STATES), class: 'fr-btn'
 
   .fr-table.fr-table--no-caption
     %table

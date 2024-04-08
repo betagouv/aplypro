@@ -14,7 +14,8 @@ module ASP
     state :unpaid
 
     ONGOING_STATES = %i[ready sent integrated].freeze
-    TERMINATED_STATES = %i[rejected unpaid paid].freeze
+    FAILED_STATES = %i[rejected unpaid].freeze
+    TERMINATED_STATES = FAILED_STATES + ["paid"].freeze
 
     transition from: :pending, to: :ready
     transition from: :pending, to: :incomplete
