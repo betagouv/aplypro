@@ -16,6 +16,7 @@
         %th
           Etat
         %th
+          Motif
 
       %tbody
         - @pfmps.each do |pfmp|
@@ -30,5 +31,7 @@
             %td
               = pfmp.amount
               €
+            %td
+              = pfmp.payment_requests.last.status_badge
             %td
               = pfmp.payment_requests.last.status_explanation
