@@ -6,12 +6,9 @@ class Pfmp < ApplicationRecord
   belongs_to :schooling
   has_one :classe, through: :schooling
   has_one :student, through: :schooling
-
   has_one :mef, through: :classe
   has_one :establishment, through: :classe
-
   has_many :transitions, class_name: "PfmpTransition", autosave: false, dependent: :destroy
-
   has_many :payment_requests, class_name: "ASP::PaymentRequest", dependent: :destroy
 
   validates :start_date, :end_date, presence: true
@@ -31,14 +28,10 @@ class Pfmp < ApplicationRecord
             }
 
   scope :finished, -> { where("pfmps.end_date <= (?)", Time.zone.today) }
-
   scope :before, ->(date) { where("pfmps.created_at < (?)", date) }
   scope :after, ->(date) { where("pfmps.created_at > (?)", date) }
 
-  scope :this_year, lambda {
-    where(start_date: Aplypro::SCHOOL_YEAR_RANGE, end_date: Aplypro::SCHOOL_YEAR_RANGE)
-  }
-
+  scope :this_year, -> { where(start_date: Aplypro::SCHOOL_YEAR_RANGE, end_date: Aplypro::SCHOOL_YEAR_RANGE) }
 
   include Statesman::Adapters::ActiveRecordQueries[
     transition_class: PfmpTransition,
