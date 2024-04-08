@@ -5,16 +5,17 @@
     %table
       %caption Suivi des PFMPs
       %thead
-        %th{scope: "col"}
+        %th
           Élève
-        %th{scope: "col"}
+        %th
           PFMP
-        %th{scope: "col"}
+        %th
           Nombre de jours
-        %th{scope: "col"}
+        %th
           Montant
-        %th{scope: "col"}
+        %th
           Etat
+        %th
 
       %tbody
         - @pfmps.each do |pfmp|
@@ -30,4 +31,4 @@
               = pfmp.amount
               €
             %td
-              = pfmp.payment_requests.last.current_state
+              = pfmp.payment_requests.last.status_explanation
