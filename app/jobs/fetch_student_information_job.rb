@@ -7,6 +7,8 @@ class FetchStudentInformationJob < ApplicationJob
     establishment = schooling.establishment
     student = schooling.student
 
+    return if student.ine_not_found
+
     api = StudentApi.api_for(establishment.students_provider, establishment.uai)
 
     api
