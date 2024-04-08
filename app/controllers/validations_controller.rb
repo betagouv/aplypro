@@ -9,11 +9,24 @@ class ValidationsController < ApplicationController
                 :check_confirmed_director_for_validation,
                 only: :validate
 
+  # Display classes that require validation
   def index
     infer_page_title
 
     @classes = Classe.where(id: validatable_pfmps.distinct.pluck(:"classes.id"))
     @classes_facade = ClassesFacade.new(@classes)
+  end
+
+  # Display a list of Pfmps based on the associated payment_requests states
+  # Ex: give me a list of all PFMPs with rejected payment requests
+  def status
+    @pfmps = current_establishment
+             .pfmps
+             .in_state(:validated)
+             .joins(:payment_requests)
+             .joins("INNER JOIN asp_payment_request_transitions ON asp_payment_requests.id = asp_payment_request_transitions.asp_payment_request_id")
+             .where(asp_payment_request_transitions: { to_state: params.require(:payment_request_states),
+                                                       most_recent: true })
   end
 
   def show
@@ -29,6 +42,7 @@ class ValidationsController < ApplicationController
     @total_amount = @pfmps.sum(:amount)
   end
 
+  # Validate all Pfmps for a given classe
   def validate
     if validation_params.empty?
       redirect_to validation_class_path(@classe), alert: t("validations.create.empty") and return

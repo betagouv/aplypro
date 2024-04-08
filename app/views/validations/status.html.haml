@@ -1,0 +1,33 @@
+- if @pfmps.empty?
+  Il n'y a aucune PFMP à suivre.
+- else
+  .fr-table.fr-table--no-caption.fr-mb-3w
+    %table
+      %caption Suivi des PFMPs
+      %thead
+        %th{scope: "col"}
+          Élève
+        %th{scope: "col"}
+          PFMP
+        %th{scope: "col"}
+          Nombre de jours
+        %th{scope: "col"}
+          Montant
+        %th{scope: "col"}
+          Etat
+
+      %tbody
+        - @pfmps.each do |pfmp|
+          %tr
+            %td
+              = pfmp.student.full_name
+            %td
+              = link_to pfmp.formatted_dates, edit_class_schooling_pfmp_path(pfmp.schooling.class, pfmp.schooling, pfmp), class: "fr-link", title: pfmp.full_dates
+            %td
+              = pfmp.day_count
+              jours
+            %td
+              = pfmp.amount
+              €
+            %td
+              = pfmp.payment_requests.last.current_state

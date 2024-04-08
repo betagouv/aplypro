@@ -1,6 +1,10 @@
 - if @classes.empty?
   Il n'y a aucune PFMP à valider pour l'instant.
 - else
+  .actions.fr-py-3w
+    .fr-btns-group.fr-btns-group--inline
+      = link_to "Suivre les paiements échoués", status_validations_path(payment_request_states: [:rejected, :unpaid]), class: 'fr-btn'
+
   .fr-table.fr-table--no-caption
     %table
       %caption.fr-h1 Liste des classes
@@ -18,4 +22,3 @@
             %td= progress_badge @classes_facade.nb_attributive_decisions_per_class[classe.id], nb_students
             %td= progress_badge @classes_facade.nb_ribs_per_class[classe.id], nb_students
             %td= pfmps_status_count_badge :completed, @classes_facade.nb_pfmps(classe.id, :completed)
-
