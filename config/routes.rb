@@ -66,11 +66,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :validations, only: [:index] do
-    collection do
-      get :status
-    end
-  end
+  resources :validations, only: :index
 
   devise_scope :asp_user do
     get "/auth/asp/callback" => "users/omniauth_callbacks#asp", as: :asp_login
