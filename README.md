@@ -83,6 +83,12 @@ Sources de données :
 - UAI : Unité Administrative Immatriculée (Identifiant national d'établissement)
 - INE : Identifiant national d'élève
 
+### Pour les établissements FIM qui n'ont pas un niveau d'accès de directeur au sens de l'éducation nationale
+C'est à dire les établissements maritimes, quelques collèges, ou autres cas particuliers
+
+Pour donner un rôle de chef d'établissement à un FIM user dans le vecteur d'identitié sur KeyCloak: `AplyproResp`
+Il est utilisé [ici](https://github.com/betagouv/aplypro/blob/main/app/models/concerns/identity_mappers/fim.rb/#L18) et doit contenir un UAI.
+
 ### Vocabulaire des paiements
 ASP : Agence de Services et de Paiement
 

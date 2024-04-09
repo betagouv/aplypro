@@ -45,12 +45,10 @@ class Pfmp < ApplicationRecord
   delegate :wage, to: :mef
 
   def self.perfect
-    joins(:schooling, student: :rib)
+    joins(:student)
       .merge(Schooling.student)
       .merge(Schooling.with_attributive_decisions)
-      .merge(Student.ine_not_found.invert_where)
-      .merge(Student.lives_in_france)
-      .merge(Rib.not_reused)
+      .merge(Student.asp_ready)
       .merge(Pfmp.this_year)
       .where.not(amount: 0) # FIXME
   end
