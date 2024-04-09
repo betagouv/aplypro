@@ -9,23 +9,23 @@ class ValidationsController < ApplicationController
                 :check_confirmed_director_for_validation,
                 only: :validate
 
-  # Display classes that require validation
-  # rubocop:disable Layout/LineLength
+  # Display classes that require validation and potential rejections
   def index
     infer_page_title
 
     @rejected_pfmps = current_establishment
-      .pfmps
-      .in_state(:validated)
-      .joins(:payment_requests)
-      .joins("INNER JOIN asp_payment_request_transitions ON asp_payment_requests.id = asp_payment_request_transitions.asp_payment_request_id")
-      .where(asp_payment_request_transitions: { to_state: ASP::PaymentRequestStateMachine::FAILED_STATES,
-                                                most_recent: true })
+                      .pfmps
+                      .in_state(:validated)
+                      .joins(:payment_requests)
+                      .joins("INNER JOIN asp_payment_request_transitions ON \
+      asp_payment_requests.id = asp_payment_request_transitions.asp_payment_request_id")
+                      .where(asp_payment_request_transitions:
+                      { to_state: ASP::PaymentRequestStateMachine::FAILED_STATES,
+                        most_recent: true })
 
     @classes = Classe.where(id: validatable_pfmps.distinct.pluck(:"classes.id"))
     @classes_facade = ClassesFacade.new(@classes)
   end
-  # rubocop:enable Layout/LineLength
 
   def show
     add_breadcrumb t("pages.titles.validations.index"), validations_path
