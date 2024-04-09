@@ -1,11 +1,43 @@
+- if @rejected_pfmps.any?
+  .fr-table.fr-table.fr-mb-3w
+    %table
+      %caption Paiements échoués
+      %thead
+        %th
+          Élève
+        %th
+          PFMP
+        %th
+          Nombre de jours
+        %th
+          Montant
+        %th
+          Etat
+        %th
+          Motif
+
+      %tbody
+        - @rejected_pfmps.each do |pfmp|
+          %tr
+            %td
+              = pfmp.student.full_name
+            %td
+              = link_to pfmp.formatted_dates, edit_class_schooling_pfmp_path(pfmp.schooling.class, pfmp.schooling, pfmp), class: "fr-link", title: pfmp.full_dates
+            %td
+              = pfmp.day_count
+              jours
+            %td
+              = pfmp.amount
+              €
+            %td
+              = pfmp.payment_requests.last.status_badge
+            %td
+              = pfmp.payment_requests.last.status_explanation
+
 - if @classes.empty?
   Il n'y a aucune PFMP à valider pour l'instant.
 - else
-  .actions.fr-py-3w
-    .fr-btns-group.fr-btns-group--inline
-      = link_to "Suivre les paiements échoués", status_validations_path(payment_request_states: ASP::PaymentRequestStateMachine::FAILED_STATES), class: 'fr-btn'
-
-  .fr-table.fr-table--no-caption
+  .fr-table.fr-table
     %table
       %caption.fr-h1 Liste des classes
       %thead
