@@ -51,12 +51,9 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
       .where.not(address_country_code: InseeCountryCodeMapper::REJECTED_CODES.keys)
   }
 
-  scope :with_valid_address_city, lambda {
-    where.not(
-      "students.address_country_code IN (?) AND students.address_city_insee_code IS NULL",
-      %w[100 99100]
-    )
-  }
+  scope :with_city_code, -> { where.not(address_city_insee_code: nil) }
+  scope :lives_abroad, -> { lives_in_france.invert_where }
+  scope :with_valid_address_city, -> { lives_in_france.with_city_code.or(lives_abroad) }
 
   scope :with_valid_birthplace_city, lambda {
     where.not(
