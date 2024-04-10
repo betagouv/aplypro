@@ -22,6 +22,7 @@ class ValidationsController < ApplicationController
                     .where(asp_payment_request_transitions:
                       { to_state: ASP::PaymentRequestStateMachine::FAILED_STATES,
                         most_recent: true })
+                    .includes(:student, payment_requests: :asp_payment_request_transitions)
 
     @classes = Classe.where(id: validatable_pfmps.distinct.pluck(:"classes.id"))
     @classes_facade = ClassesFacade.new(@classes)
