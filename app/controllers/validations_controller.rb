@@ -9,17 +9,17 @@ class ValidationsController < ApplicationController
                 :check_confirmed_director_for_validation,
                 only: :validate
 
-  # Display classes that require validation and potential rejections
+  # Display overview of classes that require validation and failed payments that require attention
   def index
     infer_page_title
 
     @failed_pfmps = current_establishment
-                      .pfmps
-                      .in_state(:validated)
-                      .joins(:payment_requests)
-                      .joins("INNER JOIN asp_payment_request_transitions ON \
+                    .pfmps
+                    .in_state(:validated)
+                    .joins(:payment_requests)
+                    .joins("INNER JOIN asp_payment_request_transitions ON \
       asp_payment_requests.id = asp_payment_request_transitions.asp_payment_request_id")
-                      .where(asp_payment_request_transitions:
+                    .where(asp_payment_request_transitions:
                       { to_state: ASP::PaymentRequestStateMachine::FAILED_STATES,
                         most_recent: true })
 
