@@ -112,6 +112,13 @@ class Establishment < ApplicationRecord
     schoolings.generating_attributive_decision.any?
   end
 
+  def validatable_pfmps
+    validatable_pfmps_ids = pfmps.in_state(:completed).select do |pfmp|
+      pfmp.can_transition_to?(:validated)
+    end.map(&:id)
+    pfmps.where(id: validatable_pfmps_ids)
+  end
+
   def ensure_confirmed_director_is_director
     return if !confirmed_director || establishment_user_roles.find_by({ user: confirmed_director }).dir?
 

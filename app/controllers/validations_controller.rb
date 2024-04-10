@@ -13,49 +13,40 @@ class ValidationsController < ApplicationController
   def index
     infer_page_title
 
-    @failed_pfmps = current_establishment
-                    .pfmps
-                    .in_state(:validated)
-                    .joins(:payment_requests)
-                    .joins("INNER JOIN asp_payment_request_transitions ON \
-      asp_payment_requests.id = asp_payment_request_transitions.asp_payment_request_id")
-                    .where(asp_payment_request_transitions:
-                      { to_state: ASP::PaymentRequestStateMachine::FAILED_STATES,
-                        most_recent: true })
-                    .includes(:student, payment_requests: :asp_payment_request_transitions)
+    @validations_facade = ValidationsFacade.new(current_establishment)
 
-    @classes = Classe.where(id: validatable_pfmps.distinct.pluck(:"classes.id"))
-    @classes_facade = ClassesFacade.new(@classes)
+    @classes = @validations_facade.classes
+    @classes_facade = @validations_facade.classes_facade
   end
 
   def show
     add_breadcrumb t("pages.titles.validations.index"), validations_path
     infer_page_title(name: @classe.label)
 
-    @pfmps = validatable_pfmps
-             .includes(schooling: :attributive_decision_attachment)
-             .where(schoolings: { classe: @classe })
-             .includes(student: :rib)
-             .order(:"students.last_name", :"pfmps.start_date")
+    @pfmps = current_establishment.validatable_pfmps
+                                  .includes(schooling: :attributive_decision_attachment)
+                                  .where(schoolings: { classe: @classe })
+                                  .includes(student: :rib)
+                                  .order(:"students.last_name", :"pfmps.start_date")
 
     @total_amount = @pfmps.sum(:amount)
   end
 
   # Validate all Pfmps for a given classe
+  # rubocop:disable Metrics/AbcSize
   def validate
     if validation_params.empty?
       redirect_to validation_class_path(@classe), alert: t("validations.create.empty") and return
     end
 
-    validatable_pfmps
-      .where(schoolings: { classe: @classe })
-      .where(id: validation_params[:pfmp_ids])
-      .find_each do |pfmp|
-        pfmp.transition_to!(:validated)
-      end
+    current_establishment.validatable_pfmps
+                         .where(schoolings: { classe: @classe })
+                         .where(id: validation_params[:pfmp_ids])
+                         .find_each { |pfmp| pfmp.transition_to!(:validated) }
 
     redirect_to validations_path, notice: t("validations.create.success", classe_label: @classe.label)
   end
+  # rubocop:enable Metrics/AbcSize
 
   private
 
@@ -70,13 +61,6 @@ class ValidationsController < ApplicationController
     @classe = Classe.where(establishment: current_establishment).find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to validations_path, alert: t("errors.classes.not_found") and return
-  end
-
-  def validatable_pfmps
-    validatable_pfmps_ids = current_establishment.pfmps.in_state(:completed).select do |pfmp|
-      pfmp.can_transition_to?(:validated)
-    end.map(&:id)
-    current_establishment.pfmps.where(id: validatable_pfmps_ids)
   end
 
   def validation_params

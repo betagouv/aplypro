@@ -19,4 +19,4 @@
             %td= progress_badge @classes_facade.nb_ribs_per_class[classe.id], nb_students
             %td= pfmps_status_count_badge :completed, @classes_facade.nb_pfmps(classe.id, :completed)
 
-= render 'pfmps/failed_pfmps', pfmps: @failed_pfmps
+= render partial: 'pfmps/failed_pfmps', locals: { failed_pfmps: @validations_facade.failed_pfmps }
