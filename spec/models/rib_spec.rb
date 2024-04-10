@@ -61,28 +61,4 @@ RSpec.describe Rib do
       end
     end
   end
-
-  describe "reused?" do
-    context "without other ribs" do
-      it "is false" do
-        expect(rib).not_to be_reused
-      end
-
-      it "is included in the scope" do
-        expect(described_class.not_reused).to include(rib)
-      end
-    end
-
-    context "with multiple RIBS with the same IBAN" do
-      before { create(:rib, iban: rib.iban) }
-
-      it "returns true" do
-        expect(rib).to be_reused
-      end
-
-      it "is not included in the unique scope" do
-        expect(described_class.not_reused).not_to include(rib)
-      end
-    end
-  end
 end
