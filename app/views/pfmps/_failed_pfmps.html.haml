@@ -8,8 +8,6 @@
         %th
           PFMP
         %th
-          Montant
-        %th
           Etat
         %th
           Motif
@@ -21,8 +19,6 @@
               = pfmp.student.full_name
             %td
               = link_to pfmp.formatted_dates, edit_class_schooling_pfmp_path(pfmp.schooling.class, pfmp.schooling, pfmp), class: "fr-link", title: pfmp.full_dates
-            %td
-              = number_to_currency(pfmp.amount)
             %td
               = pfmp.payment_requests.last.status_badge
             %td
