@@ -12,16 +12,16 @@ Fonctionnalité: Suivi des demandes de paiement
     Et que je renseigne et valide une PFMP de 9 jours
 
   Scénario: le personnel peut ne pas voir de paiements en échecs
-    Et que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement intégrée
+    Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement intégrée
     Et que je clique sur "Envoyer en paiement"
     Alors la page ne contient pas "Liste des paiements échoués"
 
   Scénario: Le personnel peut voir les paiements qui ont échoués
-    Et que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement échouée
+    Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement échouée
     Et que je clique sur "Envoyer en paiement"
     Alors la page contient "Liste des paiements échoués"
 
   Scénario: Le personnel peut voir les paiements qui ont été rejetés
-    Et que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement rejetée
+    Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement rejetée
     Et que je clique sur "Envoyer en paiement"
     Alors la page contient "Liste des paiements échoués"
