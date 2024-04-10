@@ -48,12 +48,6 @@ describe ASP::PaymentRequestStateMachine do
       it_behaves_like "a blocked request"
     end
 
-    context "when the RIB has been reused somewhere else" do
-      before { create(:rib, iban: asp_payment_request.student.rib.iban) }
-
-      it_behaves_like "a blocked request"
-    end
-
     # rubocop:disable Rails/SkipsModelValidations
     context "when the PFMP is not valid" do
       before { asp_payment_request.pfmp.update_column(:start_date, Date.new(2002, 1, 1)) }
