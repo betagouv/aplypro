@@ -48,7 +48,7 @@ class Pfmp < ApplicationRecord
     joins(:student)
       .merge(Schooling.student)
       .merge(Schooling.with_attributive_decisions)
-      .merge(Student.asp_ready)
+      .merge(Student.asp_ready.with_rib.lives_in_france)
       .merge(Pfmp.this_year)
       .where.not(amount: 0) # FIXME
   end
