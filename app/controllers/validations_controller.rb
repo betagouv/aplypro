@@ -13,7 +13,7 @@ class ValidationsController < ApplicationController
   def index
     infer_page_title
 
-    @rejected_pfmps = current_establishment
+    @failed_pfmps = current_establishment
                       .pfmps
                       .in_state(:validated)
                       .joins(:payment_requests)

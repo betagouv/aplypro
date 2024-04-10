@@ -19,7 +19,7 @@
             %td= progress_badge @classes_facade.nb_ribs_per_class[classe.id], nb_students
             %td= pfmps_status_count_badge :completed, @classes_facade.nb_pfmps(classe.id, :completed)
 
-- if @rejected_pfmps.any?
+- if @failed_pfmps.any?
   .fr-table.fr-table.fr-mb-3w
     %table
       %caption.fr-h2 Liste des paiements échoués
@@ -38,7 +38,7 @@
           Motif
 
       %tbody
-        - @rejected_pfmps.each do |pfmp|
+        - @failed_pfmps.each do |pfmp|
           %tr
             %td
               = pfmp.student.full_name
@@ -48,8 +48,7 @@
               = pfmp.day_count
               jours
             %td
-              = pfmp.amount
-              €
+              = number_to_currency(pfmp.amount)
             %td
               = pfmp.payment_requests.last.status_badge
             %td
