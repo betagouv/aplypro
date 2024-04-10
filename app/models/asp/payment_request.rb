@@ -3,6 +3,8 @@
 module ASP
   class PaymentRequest < ApplicationRecord
     belongs_to :asp_request, class_name: "ASP::Request", optional: true
+    belongs_to :asp_payment_return, class_name: "ASP::PaymentReturn", optional: true
+
     belongs_to :pfmp
 
     has_one :student, through: :pfmp
