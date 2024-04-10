@@ -34,9 +34,9 @@ RSpec.describe ValidationsController do
   describe "POST #validate" do
     context "with valid attributes" do
       it "validates selected pfmps" do
-        post validation_class_path(classe), params: { validation: { pfmp_ids: [pfmp.id] }, confirmed_director: "1" }
-
-        expect(pfmp.reload.current_state).to eq("validated")
+        expect do
+          post validation_class_path(classe), params: { validation: { pfmp_ids: [pfmp.id] }, confirmed_director: "1" }
+        end.to change { pfmp.reload.current_state }.from("completed").to("validated")
       end
     end
 
