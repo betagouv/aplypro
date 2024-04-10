@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Student < ApplicationRecord
+class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validates :ine,
             :first_name,
             :last_name,
@@ -33,18 +33,43 @@ class Student < ApplicationRecord
   scope :ine_not_found, -> { where(ine_not_found: true) }
   scope :with_ine, -> { where(ine_not_found: false) }
   scope :with_biological_sex, -> { where(biological_sex: %i[male female]) }
+  scope :with_known_postal_code, -> { where.not(address_postal_code: nil) }
+  scope :with_rib, -> { joins(:rib) }
+
   scope :with_known_birthplace, -> { where.not(birthplace_country_insee_code: nil) }
   scope :with_valid_birthplace, lambda {
     with_known_birthplace
+      .with_valid_birthplace_city
       .where.not(birthplace_country_insee_code: InseeCountryCodeMapper::REJECTED_CODES.keys)
   }
 
+  scope :with_known_address, -> { where.not(address_country_code: nil) }
+  scope :with_valid_address, lambda {
+    with_known_address
+      .with_known_postal_code
+      .with_valid_address_city
+      .where.not(address_country_code: InseeCountryCodeMapper::REJECTED_CODES.keys)
+  }
+
+  scope :with_valid_address_city, lambda {
+    where.not(
+      "students.address_country_code IN (?) AND students.address_city_insee_code IS NULL",
+      %w[100 99100]
+    )
+  }
+
+  scope :with_valid_birthplace_city, lambda {
+    where.not(
+      "students.birthplace_country_insee_code IN (?) AND students.birthplace_city_insee_code IS NULL",
+      %w[100 99100]
+    )
+  }
+
   def self.asp_ready
-    joins(:rib)
-      .lives_in_france
-      .with_ine
+    with_ine
       .with_biological_sex
       .with_valid_birthplace
+      .with_valid_address
   end
 
   before_validation :check_asp_file_reference
