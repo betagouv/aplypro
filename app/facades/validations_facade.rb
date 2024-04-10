@@ -20,11 +20,11 @@ asp_payment_requests.id = asp_payment_request_transitions.asp_payment_request_id
                  .includes(:student, payment_requests: :asp_payment_request_transitions)
   end
 
-  def classes
+  def validatable_classes
     Classe.where(id: establishment.validatable_pfmps.distinct.pluck(:"classes.id"))
   end
 
   def classes_facade
-    ClassesFacade.new(classes)
+    ClassesFacade.new(validatable_classes)
   end
 end

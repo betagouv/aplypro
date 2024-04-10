@@ -15,7 +15,7 @@ class ValidationsController < ApplicationController
 
     @validations_facade = ValidationsFacade.new(current_establishment)
 
-    @classes = @validations_facade.classes
+    @validatable_classes = @validations_facade.validatable_classes
     @classes_facade = @validations_facade.classes_facade
   end
 
@@ -33,20 +33,17 @@ class ValidationsController < ApplicationController
   end
 
   # Validate all Pfmps for a given classe
-  # rubocop:disable Metrics/AbcSize
   def validate
     if validation_params.empty?
       redirect_to validation_class_path(@classe), alert: t("validations.create.empty") and return
     end
 
     current_establishment.validatable_pfmps
-                         .where(schoolings: { classe: @classe })
-                         .where(id: validation_params[:pfmp_ids])
+                         .where(id: validation_params[:pfmp_ids], schoolings: { classe: @classe })
                          .find_each { |pfmp| pfmp.transition_to!(:validated) }
 
     redirect_to validations_path, notice: t("validations.create.success", classe_label: @classe.label)
   end
-  # rubocop:enable Metrics/AbcSize
 
   private
 
