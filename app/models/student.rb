@@ -41,7 +41,6 @@ class Student < ApplicationRecord
 
   def self.asp_ready
     joins(:rib)
-      .merge(Rib.not_reused)
       .lives_in_france
       .with_ine
       .with_biological_sex

@@ -46,10 +46,6 @@ module ASP
     end
 
     guard_transition(to: :ready) do |request|
-      !request.student.rib.reused?
-    end
-
-    guard_transition(to: :ready) do |request|
       request.student.rib.valid?
     end
 

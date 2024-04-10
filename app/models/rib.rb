@@ -6,8 +6,6 @@ class Rib < ApplicationRecord
   validates :iban, :bic, :name, presence: true
   validates :student_id, uniqueness: { scope: :archived_at }, if: :active?
 
-  scope :not_reused, -> { Rib.where.not(iban: Rib.multiple_ibans) }
-  scope :reused, -> { Rib.where(iban: Rib.multiple_ibans) }
   scope :multiple_ibans, -> { Rib.select(:iban).group(:iban).having("count(iban) > 1") }
 
   normalizes :bic, :iban, with: ->(value) { value.gsub(/\s+/, "").upcase }
@@ -39,13 +37,5 @@ class Rib < ApplicationRecord
 
   def inactive?
     !active?
-  end
-
-  def reused?
-    siblings.any?
-  end
-
-  def siblings
-    Rib.where(iban: iban).excluding(self)
   end
 end
