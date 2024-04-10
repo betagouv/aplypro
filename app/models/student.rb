@@ -30,6 +30,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   scope :without_ribs, -> { where.missing(:rib) }
   scope :lives_in_france, -> { where(address_country_code: %w[100 99100]) }
+  scope :lives_abroad, -> { where.not(address_country_code: %w[100 99100]) }
   scope :ine_not_found, -> { where(ine_not_found: true) }
   scope :with_ine, -> { where(ine_not_found: false) }
   scope :with_biological_sex, -> { where(biological_sex: %i[male female]) }
@@ -52,7 +53,6 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   }
 
   scope :with_city_code, -> { where.not(address_city_insee_code: nil) }
-  scope :lives_abroad, -> { lives_in_france.invert_where }
   scope :with_valid_address_city, -> { lives_in_france.with_city_code.or(lives_abroad) }
 
   scope :with_valid_birthplace_city, lambda {
