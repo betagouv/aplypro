@@ -5,7 +5,7 @@ module Stats
     class StudentsData < Ratio
       def initialize
         super(
-          subset: Student.asp_ready,
+          subset: Student.with_biological_sex.with_valid_birthplace,
           all: Student.all
         )
       end
