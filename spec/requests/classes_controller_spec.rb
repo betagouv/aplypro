@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "ClassesControllers" do
+RSpec.describe ClassesController do
   let(:classe) { create(:classe) }
   let(:establishment) { classe.establishment }
   let(:user) { create(:user, :director, :with_selected_establishment, establishment: establishment) }

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "EstablishmentsController" do
+RSpec.describe EstablishmentsController do
   subject(:create_attributive_decisions) do
     post establishment_create_attributive_decisions_path(establishment), params: { confirmed_director: "1" }
   end

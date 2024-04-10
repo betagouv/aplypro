@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "StudentsControllers" do
+RSpec.describe StudentsController do
   let(:schooling) { create(:schooling) }
   let(:student) { schooling.student }
   let(:user) { create(:user, :director, :with_selected_establishment, establishment: student.classe.establishment) }
