@@ -47,7 +47,7 @@ FactoryBot.define do
       sent
 
       transient do
-        reason { "fail" }
+        reason { Faker::Lorem.sentence(word_count: 20) }
       end
 
       after(:create) do |obj, ctx|
