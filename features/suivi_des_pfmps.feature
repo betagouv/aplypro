@@ -1,6 +1,6 @@
 # language: fr
 
-Fonctionnalité: Suivi des PFMPs
+Fonctionnalité: Suivi des demandes de paiement
   Contexte:
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que mon établissement propose une formation "Art" rémunérée à 10 euros par jour et plafonnée à 100 euros par an
