@@ -70,7 +70,14 @@ end
 ## Pour envoyer 7k PFMPS ready en paiement ###
 
 p ASP::PaymentRequest.in_state(:ready).count
+p ASP::PaymentRequest.in_state(:sent).count
+
 prs = ASP::PaymentRequest.in_state(:ready).joins(:pfmp).order(:end_date).limit 7000
 SendPaymentRequestsJob.perform_later(prs.to_a); p "Job started !"
 
-p ASP::PaymentRequest.in_state(:sent).count
+
+
+#####################################################################
+## Pour récupérer les status du serveur ASP (1x par jour le matin) ##
+
+PollPaymentsServerJob.perform_later
