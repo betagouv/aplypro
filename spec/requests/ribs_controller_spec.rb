@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "RibsController" do
+RSpec.describe RibsController do
   let(:student) { create(:schooling).student }
   let(:user) { create(:user, :director, :with_selected_establishment, establishment: student.classe.establishment) }
 

@@ -54,7 +54,7 @@ module ASP
     end
 
     def status_explanation
-      tag.span(t("payment_requests.status_explanation.#{current_state}", **status_explanation_args))
+      tag.span(t("payment_requests.state_explanations.#{current_state}", **status_explanation_args))
     end
 
     def status_explanation_args
