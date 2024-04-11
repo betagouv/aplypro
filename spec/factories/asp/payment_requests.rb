@@ -78,13 +78,21 @@ FactoryBot.define do
     trait :paid do
       integrated
 
-      after(:create, &:mark_paid!)
+      after(:create) do |req|
+        payment_return = create(:asp_payment_return)
+
+        req.mark_paid!(payment_return)
+      end
     end
 
     trait :unpaid do
       integrated
 
-      after(:create, &:mark_unpaid!)
+      after(:create) do |req|
+        payment_return = create(:asp_payment_return)
+
+        req.mark_unpaid!(payment_return)
+      end
     end
   end
 end

@@ -3,10 +3,11 @@
 module ASP
   module Readers
     class Base
-      attr_reader :io
+      attr_reader :io, :record
 
-      def initialize(str)
+      def initialize(str, record = nil)
         @io = handle_input(str)
+        @record = record
       end
 
       def handle_input(str)
