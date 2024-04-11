@@ -40,13 +40,14 @@ end
 def select_7000_payment_requests
   ASP::PaymentRequest
     .in_state(:pending)
-    .joins(:pfmp)
+    .joins(pfmp: :establishment)
     .merge(Pfmp.in_state(:validated))
     .merge(Pfmp.perfect)
     .where.not("ribs.id": BAD_RIB_IDS)
     .where("students.ine_not_found": false)
     .where("schoolings.attributive_decision_version < 10") # one_character_attributive_decision_version?
-    .where.not("ribs.name LIKE '%¨%' OR ribs.name LIKE '%;%'")
+    .where.not("ribs.name LIKE '%¨%' OR ribs.name LIKE '%;%'") # remove after fix
+    .where.not("establishments.department_code": nil) # remove after adding a fallback on postal code
     .order("pfmps.end_date")
     .limit(10_000)
     .each_with_index
