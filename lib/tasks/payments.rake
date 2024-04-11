@@ -37,7 +37,7 @@ def needs_abrogated_da?(pfmp)
     pfmp.student.schoolings.joins(:classe).select(:"establishment_id").distinct.count > 1
 end
 
-def check_10_000_payment_requests
+def check_10_000_payment_requests(size: 10_000)
   ASP::PaymentRequest
     .in_state(:pending)
     .joins(pfmp: :establishment)
@@ -49,7 +49,7 @@ def check_10_000_payment_requests
     .where.not("ribs.name LIKE '%¨%' OR ribs.name LIKE '%;%'") # remove after fix
     .where.not("establishments.department_code": nil) # remove after adding a fallback on postal code
     .order("pfmps.end_date")
-    .limit(10_000)
+    .limit(size)
     .each_with_index do |request, index|
     puts "dealing with #{request.id} [#{index}/10k]..."
     pfmp = request.pfmp
