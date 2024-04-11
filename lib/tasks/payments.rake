@@ -50,17 +50,20 @@ def check_10_000_payment_requests
     .where.not("establishments.department_code": nil) # remove after adding a fallback on postal code
     .order("pfmps.end_date")
     .limit(10_000)
-    .each_with_index
-    .filter do |request, index|
+    .each_with_index do |request, index|
     puts "dealing with #{request.id} [#{index}/10k]..."
     pfmp = request.pfmp
 
     if pfmp.valid? &&
         !outside_contract?(pfmp) &&
         !needs_abrogated_da?(pfmp)
-      request.transition_to(:ready)
+      begin
+        request.mark_ready!
+      rescue Statesman::GuardFailedError
+        request.mark_incomplete!
+      end
     else
-      request.transition_to(:incomplete)
+      request.mark_incomplete!
     end
   end
 end
