@@ -46,6 +46,7 @@ def select_7000_payment_requests
     .where.not("ribs.id": BAD_RIB_IDS)
     .where("students.ine_not_found": false)
     .where("schoolings.attributive_decision_version < 10") # one_character_attributive_decision_version?
+    .where.not("ribs.name LIKE '%¨%' OR ribs.name LIKE '%;%'")
     .order("pfmps.end_date")
     .limit(10_000)
     .each_with_index
