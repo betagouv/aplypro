@@ -55,11 +55,15 @@ module ASP
       transition_to!(:integrated, attrs)
     end
 
-    def mark_paid!
+    def mark_paid!(record)
+      update!(asp_payment_return: record)
+
       transition_to!(:paid)
     end
 
-    def mark_unpaid!
+    def mark_unpaid!(record)
+      update!(asp_payment_return: record)
+
       transition_to!(:unpaid)
     end
 

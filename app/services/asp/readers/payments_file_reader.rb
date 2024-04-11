@@ -16,9 +16,9 @@ module ASP
 
             case state
             when "PAYE"
-              request.mark_paid!
+              request.mark_paid!(record)
             when "INVALIDE"
-              request.mark_unpaid!
+              request.mark_unpaid!(record)
             else
               raise "unsure how to handle reason: #{state}"
             end
