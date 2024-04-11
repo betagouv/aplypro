@@ -18,6 +18,7 @@ module ASP
     scope :active, -> { not_in_state(*ASP::PaymentRequestStateMachine::TERMINATED_STATES) }
     scope :terminated, -> { in_state(*ASP::PaymentRequestStateMachine::TERMINATED_STATES) }
     scope :ongoing, -> { in_state(*ASP::PaymentRequestStateMachine::ONGOING_STATES) }
+    scope :failed, -> { in_state(*ASP::PaymentRequestStateMachine::FAILED_STATES) }
 
     include Statesman::Adapters::ActiveRecordQueries[
       transition_class: ASP::PaymentRequestTransition,

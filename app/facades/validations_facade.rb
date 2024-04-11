@@ -11,7 +11,7 @@ class ValidationsFacade
     Pfmp.joins(schooling: { classe: :establishment })
         .where(establishments: { id: establishment.id })
         .joins(:payment_requests)
-        .merge(ASP::PaymentRequest.in_state(ASP::PaymentRequestStateMachine::FAILED_STATES))
+        .merge(ASP::PaymentRequest.failed)
         .includes(:student, payment_requests: :asp_payment_request_transitions)
   end
 
