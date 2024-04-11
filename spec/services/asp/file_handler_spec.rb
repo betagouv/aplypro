@@ -7,7 +7,7 @@ describe ASP::FileHandler do
 
   let(:request_identifier) { "foobar" }
   let!(:request) { create(:asp_request, :sent, filename: "#{request_identifier}.xml") }
-  let(:filepath) { Tempfile.create(basename).path }
+  let(:filepath) { File.new(File.join(Dir.mktmpdir, basename), "w+").path }
 
   # can't reduce much more
   # rubocop:disable Rspec/MultipleMemoizedHelpers

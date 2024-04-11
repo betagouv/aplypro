@@ -4,13 +4,13 @@ module ASP
   class FileHandler
     include Errors
 
-    attr_reader :filepath, :filename_noext
+    attr_reader :filepath, :basename
 
     FILE_TYPES = %i[rejects integrations payments].freeze
 
     def initialize(filepath)
       @filepath = filepath
-      @filename_noext = File.basename(filepath, ".*")
+      @basename = File.basename(filepath)
     end
 
     def parse!
@@ -21,16 +21,12 @@ module ASP
       begin
         reader.process!
       rescue StandardError => e
-        raise ResponseFileParsingError, "couldn't parse #{filename_noext}: #{e}"
+        raise ResponseFileParsingError, "couldn't parse #{basename}: #{e}"
       end
     end
 
     def file_saved?
-      if payments_file?
-        ASP::PaymentReturn.exists?(filename: "#{filename_noext}.xml")
-      else
-        target_attachment.attached?
-      end
+      target_attachment.attached?
     end
 
     private
@@ -42,7 +38,7 @@ module ASP
     end
 
     def kind
-      case filename_noext
+      case basename
       when /^rejets_integ_idp/
         :rejects
       when /^identifiants_generes/
@@ -52,8 +48,14 @@ module ASP
       end
     end
 
+    def reader_for(kind)
+      "ASP::Readers::#{kind.capitalize}FileReader".constantize
+    end
+
     def original_filename
       return if payments_file?
+
+      filename_noext = File.basename(basename, ".*")
 
       name = if rejects_file?
                filename_noext.split("integ_idp_").last
@@ -64,44 +66,36 @@ module ASP
       "#{name}.xml"
     end
 
-    def request
-      @request ||= find_request!
+    def persist_file!
+      target_attachment
+        .attach(
+          io: StringIO.new(File.read(filepath)),
+          filename: basename
+        )
     end
 
-    def find_request!
-      ASP::Request
-        .joins(:file_blob)
-        .find_by!("active_storage_blobs.filename": original_filename)
+    def record
+      @record ||= find_record!
+    end
+
+    def find_record!
+      if payments_file?
+        ASP::PaymentReturn.find_or_create_by!(filename: basename)
+      else
+        ASP::Request
+          .joins(:file_blob)
+          .find_by!("active_storage_blobs.filename": original_filename)
+      end
     rescue ActiveRecord::RecordNotFound
       raise UnmatchedResponseFile
     end
 
-    def reader_for(kind)
-      "ASP::Readers::#{kind.capitalize}FileReader".constantize
-    end
-
-    def persist_file!
-      if payments_file?
-        persist_payment_file!
-      else
-        attach_to_request!
-      end
-    end
-
-    def persist_payment_file!
-      ASP::PaymentReturn.create_with_file!(io: File.read(filepath), filename: "#{filename_noext}.xml")
-    end
-
-    def attach_to_request!
-      target_attachment
-        .attach(
-          io: File.open(filepath),
-          filename: filepath
-        )
-    end
-
     def target_attachment
-      request.send "#{kind}_file"
+      if payments_file?
+        record.file
+      else
+        record.send "#{kind}_file"
+      end
     end
   end
 end
