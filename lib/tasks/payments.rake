@@ -64,12 +64,18 @@ def select_7000_payment_requests
     .first(7000)
 end
 
+# The command
+select_7000_payment_requests; p "done"
+
 ##############################################
 ## Pour envoyer 7k PFMPS ready en paiement ###
 
 ASP::PaymentRequest.joins(ASP::PaymentRequest.most_recent_transition_join).group(:to_state).count
 
+# Check si y'a moins de 100k en cours cette semaine
+ASP::PaymentRequest.in_state(%i[sent integrated rejected]).where("most_recent_asp_payment_request_transition.created_at >= ?", Date.today.beginning_of_week).count
 
+# Select 7k and send them
 prs = ASP::PaymentRequest.in_state(:ready).joins(:pfmp).order(:end_date).limit 7000
 SendPaymentRequestsJob.perform_later(prs.to_a); p "Job started !"
 
@@ -79,3 +85,4 @@ SendPaymentRequestsJob.perform_later(prs.to_a); p "Job started !"
 ## Pour récupérer les status du serveur ASP (1x par jour le matin) ##
 
 PollPaymentsServerJob.perform_later
+
