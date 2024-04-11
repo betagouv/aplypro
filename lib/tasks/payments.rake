@@ -37,7 +37,7 @@ def needs_abrogated_da?(pfmp)
     pfmp.student.schoolings.joins(:classe).select(:"establishment_id").distinct.count > 1
 end
 
-def select_7000_payment_requests
+def check_10_000_payment_requests
   ASP::PaymentRequest
     .in_state(:pending)
     .joins(pfmp: :establishment)
@@ -63,11 +63,10 @@ def select_7000_payment_requests
       request.transition_to(:incomplete)
     end
   end
-    .first(7000)
 end
 
-# The command
-select_7000_payment_requests; p "done"
+# The command which doesn't print the whole universe on your console
+check_10_000_payment_requests; p "done"
 
 ##############################################
 ## Pour envoyer 7k PFMPS ready en paiement ###
