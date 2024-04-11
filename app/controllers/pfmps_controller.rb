@@ -7,7 +7,7 @@ class PfmpsController < ApplicationController
 
   before_action :set_classe, :set_schooling
   before_action :set_pfmp_breadcrumbs, except: :confirm_deletion
-  before_action :set_pfmp, only: %i[show edit update validate confirm_deletion destroy]
+  before_action :set_pfmp, only: %i[show edit update validate confirm_deletion destroy reset_payment_request]
 
   def show; end
 
@@ -40,6 +40,13 @@ class PfmpsController < ApplicationController
 
     redirect_back_or_to class_schooling_pfmp_path(@classe, @schooling, @pfmp),
                         notice: t("flash.pfmps.validated", name: @schooling.student.full_name)
+  end
+
+  def reset_payment_request
+    @pfmp.payment_requests.create!
+
+    redirect_back_or_to class_schooling_pfmp_path(@classe, @schooling, @pfmp),
+                        notice: t("flash.pfmps.reset_payment_request", name: @schooling.student.full_name)
   end
 
   def confirm_deletion

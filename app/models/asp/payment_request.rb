@@ -65,6 +65,10 @@ module ASP
       in_state?(*ASP::PaymentRequestStateMachine::TERMINATED_STATES)
     end
 
+    def failed?
+      in_state?(*ASP::PaymentRequestStateMachine::FAILED_STATES)
+    end
+
     def active?
       !terminated?
     end

@@ -4,6 +4,12 @@
     .fr-mt-1w
       %em= t("payment_requests.state_explanations.#{payment_request.current_state}", **payment_request.status_explanation_args).html_safe
 
+    - if payment_request.failed? && !@pfmp.payment_requests.active.any?
+      .fr-mt-1w
+        = link_to "Relancer une demande de paiement", reset_payment_request_class_schooling_pfmp_path(@classe, @schooling, @pfmp), class: 'fr-btn fr-btn--primary'
+        .fr-mt-1w
+        %em J'ai corrigé le problème et je veux redemander un envoi en paiement
+
     .fr-mt-2w.gray-text
       Dernière mise à jour le
       = l(payment_request.updated_at, format: :long)
