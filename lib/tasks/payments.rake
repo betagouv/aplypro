@@ -56,12 +56,14 @@ def select_7000_payment_requests
     puts "dealing with #{request.id} [#{index}/10k]..."
     pfmp = request.pfmp
 
-    pfmp.valid? &&
-     one_character_attributive_decision_version?(pfmp) &&
-      !outside_contract?(pfmp) &&
-      !needs_abrogated_da?(pfmp) &&
-
+    if pfmp.valid? &&
+        one_character_attributive_decision_version?(pfmp) &&
+        !outside_contract?(pfmp) &&
+        !needs_abrogated_da?(pfmp)
       request.transition_to(:ready)
+    else
+      request.transition_to(:incomplete)
+    end
   end
     .first(7000)
 end
@@ -69,8 +71,8 @@ end
 ##############################################
 ## Pour envoyer 7k PFMPS ready en paiement ###
 
-p ASP::PaymentRequest.in_state(:ready).count
-p ASP::PaymentRequest.in_state(:sent).count
+ASP::PaymentRequest.joins(ASP::PaymentRequest.most_recent_transition_join).group(:to_state).count
+
 
 prs = ASP::PaymentRequest.in_state(:ready).joins(:pfmp).order(:end_date).limit 7000
 SendPaymentRequestsJob.perform_later(prs.to_a); p "Job started !"
