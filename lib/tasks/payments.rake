@@ -28,10 +28,6 @@ BAD_RIB_IDS = %w[944 299343 457877 2353 3583 6437 7105 9108 10032 14813 18395 18
 
 PRIVATE_HEALTH_ESTABLISHMENTS = %w[0541769E 0010212A 0930075B].freeze
 
-def one_character_attributive_decision_version?(pfmp)
-  pfmp.schooling.attributive_decision_version < 10
-end
-
 def outside_contract?(pfmp)
   OUTSIDE_CONTRACT.any? { |uai, mef| pfmp.establishment.uai == uai && pfmp.mef.code == mef }
 end
@@ -49,6 +45,7 @@ def select_7000_payment_requests
     .merge(Pfmp.perfect)
     .where.not("ribs.id": BAD_RIB_IDS)
     .where("students.ine_not_found": false)
+    .where("schoolings.attributive_decision_version < 10") # one_character_attributive_decision_version?
     .order("pfmps.end_date")
     .limit(10_000)
     .each_with_index
@@ -57,7 +54,6 @@ def select_7000_payment_requests
     pfmp = request.pfmp
 
     if pfmp.valid? &&
-        one_character_attributive_decision_version?(pfmp) &&
         !outside_contract?(pfmp) &&
         !needs_abrogated_da?(pfmp)
       request.transition_to(:ready)
