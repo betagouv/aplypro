@@ -9,7 +9,7 @@ class Rib < ApplicationRecord
   scope :multiple_ibans, -> { Rib.select(:iban).group(:iban).having("count(iban) > 1") }
 
   normalizes :bic, :iban, with: ->(value) { value.gsub(/\s+/, "").upcase }
-  normalizes :name, with: ->(name) { I18n.transliterate(name.squish.gsub(";", " ")) }
+  normalizes :name, with: ->(name) { name.squish.gsub(";", " ") }
 
   before_validation do
     self.iban = Rib.normalize_value_for(:iban, iban) unless iban.nil?
