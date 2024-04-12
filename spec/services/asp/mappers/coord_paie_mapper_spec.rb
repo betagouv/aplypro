@@ -50,14 +50,6 @@ describe ASP::Mappers::CoordPaieMapper do
     end
   end
 
-  context "when the nams is over 32 chars" do
-    before { rib.update!(name: Faker::Alphanumeric.alpha(number: 42)) }
-
-    it "truncates it" do
-      expect(mapper.intitdest).to have(32).characters
-    end
-  end
-
   context "when the name has weird characters in it" do
     before { rib.update!(name: "Éléonore Ïïaö") }
 

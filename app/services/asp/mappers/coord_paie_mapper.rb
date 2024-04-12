@@ -28,7 +28,7 @@ module ASP
       #   minime (pas de traitement/contrôle automatisé sur ce champ à
       #   l'ASP).
       def intitdest
-        I18n.transliterate(rib.name).first(32)
+        I18n.transliterate(rib.name)
       end
 
       def codeisopays
