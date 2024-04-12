@@ -43,7 +43,7 @@ RSpec.describe PollPaymentsServerJob do
     it "deletes it on the server" do
       perform_enqueued_jobs { described_class.perform_later }
 
-      expect(server_double).to have_received(:remove_file!).with(path: basename)
+      expect(server_double).to have_received(:remove_file!).with(filename: basename)
     end
   end
 
@@ -55,7 +55,7 @@ RSpec.describe PollPaymentsServerJob do
     it "does not remove the file off the server" do
       perform_enqueued_jobs { described_class.perform_later }
 
-      expect(server_double).not_to have_received(:remove_file!).with(path: basename)
+      expect(server_double).not_to have_received(:remove_file!).with(filename: basename)
     end
   end
 
@@ -70,7 +70,7 @@ RSpec.describe PollPaymentsServerJob do
       it "deletes it on the server" do
         perform_enqueued_jobs { described_class.perform_later }
 
-        expect(server_double).to have_received(:remove_file!).with(path: basename)
+        expect(server_double).to have_received(:remove_file!).with(filename: basename)
       end
     end
 
@@ -80,7 +80,7 @@ RSpec.describe PollPaymentsServerJob do
       it "doesn't delete it on the server" do
         perform_enqueued_jobs { described_class.perform_later }
 
-        expect(server_double).not_to have_received(:remove_file!).with(path: basename)
+        expect(server_double).not_to have_received(:remove_file!).with(filename: basename)
       end
     end
   end
