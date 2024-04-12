@@ -4,27 +4,25 @@ module ASP
   class FileHandler
     include Errors
 
-    attr_reader :filepath, :basename
+    attr_reader :file
 
     FILE_TYPES = %i[rejects integrations payments].freeze
 
-    def initialize(filepath)
-      @filepath = filepath
-      @basename = File.basename(filepath)
+    def initialize(file)
+      @file = file
     end
 
     def parse!
       persist_file!
 
-      reader = reader_for(kind).new(
-        io: File.read(filepath),
-        record: record
-      )
+      file.rewind
+
+      reader = reader_for(kind).new(io: file.read, record: record)
 
       begin
         reader.process!
       rescue StandardError => e
-        raise ResponseFileParsingError, "couldn't parse #{basename}: #{e}"
+        raise ResponseFileParsingError, "couldn't parse #{File.basename(file)}: #{e}"
       end
     end
 
@@ -41,7 +39,7 @@ module ASP
     end
 
     def kind
-      case basename
+      case File.basename(file)
       when /^rejets_integ_idp/
         :rejects
       when /^identifiants_generes/
@@ -58,7 +56,7 @@ module ASP
     def original_filename
       return if payments_file?
 
-      filename_noext = File.basename(basename, ".*")
+      filename_noext = File.basename(file, ".*")
 
       name = if rejects_file?
                filename_noext.split("integ_idp_").last
@@ -72,8 +70,8 @@ module ASP
     def persist_file!
       target_attachment
         .attach(
-          io: StringIO.new(File.read(filepath)),
-          filename: basename
+          io: StringIO.new(file.read),
+          filename: File.basename(file)
         )
     end
 
@@ -83,7 +81,7 @@ module ASP
 
     def find_record!
       if payments_file?
-        ASP::PaymentReturn.find_or_create_by!(filename: basename)
+        ASP::PaymentReturn.find_or_create_by!(filename: File.basename(file))
       else
         ASP::Request
           .joins(:file_blob)
