@@ -18,7 +18,7 @@ class PollPaymentsServerJob < ApplicationJob
       rescue ASP::Errors::ResponseFileParsingError, ASP::Errors::UnmatchedResponseFile => e
         Sentry.capture_exception(e)
       ensure
-        ASP::Server.remove_file!(path: filename) if handler.file_saved?
+        ASP::Server.remove_file!(filename: filename) if handler.file_saved?
       end
     end
   end
