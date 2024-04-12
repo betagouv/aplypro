@@ -106,6 +106,7 @@ group :test do
   gem "rubocop-rails"
   gem "rubocop-rspec"
   gem "shoulda-matchers"
+  gem "timecop"
   gem "webmock"
 end
 
