@@ -48,8 +48,8 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
 
   Scénario: Le personnel de direction voit une demande de paiement rejetée à l'intégration
     Sachant que les tâches de préparation et d'envoi des paiements sont passées
-    Et que l'ASP a rejetté le dossier de "Marie Curie" avec un motif de "mauvais code postal"
-    Et que la tâche de lecture des paiements est passée
+    Et que l'ASP a rejetté le dossier de "Marie Curie" avec un motif de "bic erronné"
+    Quand la tâche de lecture des paiements est passée
     Et que je rafraîchis la page
     Alors l'indicateur de demandes de paiements "En attente" affiche 0
     Et l'indicateur de demandes de paiements "En traitement" affiche 0
