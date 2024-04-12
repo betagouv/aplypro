@@ -5,8 +5,8 @@ module ASP
     class Base
       attr_reader :io, :record
 
-      def initialize(str, record = nil)
-        @io = handle_input(str)
+      def initialize(io:, record: nil)
+        @io = handle_input(io)
         @record = record
       end
 

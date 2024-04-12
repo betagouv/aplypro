@@ -16,7 +16,10 @@ module ASP
     def parse!
       persist_file!
 
-      reader = reader_for(kind).new(File.read(filepath), record)
+      reader = reader_for(kind).new(
+        io: File.read(filepath),
+        record: record
+      )
 
       begin
         reader.process!

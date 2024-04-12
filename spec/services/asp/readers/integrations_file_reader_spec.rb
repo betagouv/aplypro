@@ -5,7 +5,7 @@ require "rails_helper"
 require "./mock/factories/asp"
 
 describe ASP::Readers::IntegrationsFileReader do
-  subject(:reader) { described_class.new(data) }
+  subject(:reader) { described_class.new(io: data) }
 
   let(:asp_payment_request) { create(:asp_payment_request, :sent) }
 

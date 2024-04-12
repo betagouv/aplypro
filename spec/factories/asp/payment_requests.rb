@@ -53,7 +53,7 @@ FactoryBot.define do
       after(:create) do |obj, ctx|
         result = build(:asp_reject, payment_request: obj, reason: ctx.reason)
 
-        ASP::Readers::RejectsFileReader.new(result).process!
+        ASP::Readers::RejectsFileReader.new(io: result).process!
       end
     end
 
@@ -63,7 +63,7 @@ FactoryBot.define do
       after(:create) do |obj|
         result = build(:asp_integration, payment_request: obj)
 
-        ASP::Readers::IntegrationsFileReader.new(result).process!
+        ASP::Readers::IntegrationsFileReader.new(io: result).process!
       end
     end
 
@@ -88,7 +88,7 @@ FactoryBot.define do
 
         payment_return = create(:asp_payment_return)
 
-        ASP::Readers::PaymentsFileReader.new(result, payment_return).process!
+        ASP::Readers::PaymentsFileReader.new(io: result, record: payment_return).process!
 
         req.reload
       end
@@ -111,7 +111,7 @@ FactoryBot.define do
         )
         payment_return = create(:asp_payment_return)
 
-        ASP::Readers::PaymentsFileReader.new(result, payment_return).process!
+        ASP::Readers::PaymentsFileReader.new(io: result, record: payment_return).process!
 
         req.reload
       end
