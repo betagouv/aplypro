@@ -71,7 +71,7 @@ Sachantque("l'ASP a liquidé le paiement de {string}") do |name|
   request = last_payment_request_for_name(name)
 
   FactoryBot.create(
-    :asp_payment_return,
+    :asp_payment_file,
     :success,
     builder_class: ASP::Builder,
     payment_request: request,
@@ -83,7 +83,7 @@ Sachantque("l'ASP n'a pas pu liquider le paiement de {string}") do |name|
   request = last_payment_request_for_name(name)
 
   FactoryBot.create(
-    :asp_payment_return,
+    :asp_payment_file,
     :failed,
     builder_class: ASP::Builder,
     payment_request: request,

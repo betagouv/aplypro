@@ -9,14 +9,14 @@ class PollPaymentsServerJob < ApplicationJob
     Dir.each_child(dir) do |file|
       next if file == ".keep" # these are the Git-keep files of our local dev
 
-      reader = ASP::FileHandler.new(File.join(dir, file))
+      handler = ASP::FileHandler.new(File.join(dir, file))
 
       begin
-        reader.parse!
+        handler.parse!
       rescue ASP::Errors::ResponseFileParsingError, ASP::Errors::UnmatchedResponseFile => e
         Sentry.capture_exception(e)
       ensure
-        ASP::Server.remove_file!(path: file) if reader.file_saved?
+        ASP::Server.remove_file!(path: file) if handler.file_saved?
       end
     end
   end

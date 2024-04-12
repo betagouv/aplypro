@@ -53,7 +53,7 @@ FactoryBot.define do
       after(:create) do |obj, ctx|
         result = build(:asp_reject, payment_request: obj, reason: ctx.reason)
 
-        ASP::Readers::RejectsFileReader.new(result).process!
+        ASP::Readers::RejectsFileReader.new(io: result).process!
       end
     end
 
@@ -63,7 +63,7 @@ FactoryBot.define do
       after(:create) do |obj|
         result = build(:asp_integration, payment_request: obj)
 
-        ASP::Readers::IntegrationsFileReader.new(result).process!
+        ASP::Readers::IntegrationsFileReader.new(io: result).process!
       end
     end
 
@@ -78,13 +78,43 @@ FactoryBot.define do
     trait :paid do
       integrated
 
-      after(:create, &:mark_paid!)
+      after(:create) do |req|
+        result = build(
+          :asp_payment_file,
+          :success,
+          builder_class: ASP::Builder,
+          payment_request: req
+        )
+
+        payment_return = create(:asp_payment_return)
+
+        ASP::Readers::PaymentsFileReader.new(io: result, record: payment_return).process!
+
+        req.reload
+      end
     end
 
     trait :unpaid do
       integrated
 
-      after(:create, &:mark_unpaid!)
+      transient do
+        reason { Faker::Lorem.sentence(word_count: 20) }
+      end
+
+      after(:create) do |req, ctx|
+        result = build(
+          :asp_payment_file,
+          :failed,
+          builder_class: ASP::Builder,
+          payment_request: req,
+          reason: ctx.reason
+        )
+        payment_return = create(:asp_payment_return)
+
+        ASP::Readers::PaymentsFileReader.new(io: result, record: payment_return).process!
+
+        req.reload
+      end
     end
   end
 end

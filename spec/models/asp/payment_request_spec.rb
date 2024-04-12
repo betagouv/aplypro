@@ -7,6 +7,7 @@ RSpec.describe ASP::PaymentRequest do
 
   describe "associations" do
     it { is_expected.to belong_to(:asp_request).optional }
+    it { is_expected.to belong_to(:asp_payment_return).optional }
   end
 
   describe "active?" do
@@ -63,6 +64,14 @@ RSpec.describe ASP::PaymentRequest do
 
     it "finds the right metadata" do
       expect(payment_request.rejection_reason).to eq "failwhale"
+    end
+  end
+
+  describe "unpaid reason" do
+    let(:payment_request) { create(:asp_payment_request, :unpaid, reason: "failwhale") }
+
+    it "finds the right metadata" do
+      expect(payment_request.unpaid_reason).to eq "failwhale"
     end
   end
 end

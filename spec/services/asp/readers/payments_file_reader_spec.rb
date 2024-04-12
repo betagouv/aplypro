@@ -3,32 +3,45 @@
 require "rails_helper"
 
 describe ASP::Readers::PaymentsFileReader do
-  subject(:reader) { described_class.new(result) }
+  subject(:reader) { described_class.new(io: result, record: record) }
 
+  let(:record) { create(:asp_payment_return) }
   let(:asp_payment_request) { create(:asp_payment_request, :integrated) }
 
   let(:result) do
     build(
-      :asp_payment_return,
+      :asp_payment_file,
       payment_state,
       builder_class: ASP::Builder,
       payment_request: asp_payment_request
     )
   end
 
+  shared_examples "a payment request changing to" do |to_state|
+    it "marks the associated payment request as #{to_state}" do
+      expect { reader.process! }.to change { asp_payment_request.reload.current_state }.from("integrated").to(to_state)
+    end
+
+    it "associates the payment request to the payment return" do
+      expect { reader.process! }.to change { asp_payment_request.reload.asp_payment_return }.from(nil).to(record)
+    end
+
+    it "stores the payment metadata" do
+      reader.process!
+
+      expect(asp_payment_request.reload.last_transition.metadata).to have_key "PAIEMENT"
+    end
+  end
+
   context "when the payment has been successful" do
     let(:payment_state) { :success }
 
-    it "marks the associated payment request as paid" do
-      expect { reader.process! }.to change { asp_payment_request.reload.current_state }.from("integrated").to("paid")
-    end
+    include_examples "a payment request changing to", "paid"
   end
 
   context "when the payment failed" do
     let(:payment_state) { :failed }
 
-    it "marks the associated payment request as unpaid" do
-      expect { reader.process! }.to change { asp_payment_request.reload.current_state }.from("integrated").to("unpaid")
-    end
+    include_examples "a payment request changing to", "unpaid"
   end
 end

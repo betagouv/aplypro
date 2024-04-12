@@ -3,6 +3,8 @@
 module ASP
   class PaymentRequest < ApplicationRecord
     belongs_to :asp_request, class_name: "ASP::Request", optional: true
+    belongs_to :asp_payment_return, class_name: "ASP::PaymentReturn", optional: true
+
     belongs_to :pfmp
 
     has_one :student, through: :pfmp
@@ -53,12 +55,16 @@ module ASP
       transition_to!(:integrated, attrs)
     end
 
-    def mark_paid!
-      transition_to!(:paid)
+    def mark_paid!(attrs, record)
+      update!(asp_payment_return: record)
+
+      transition_to!(:paid, attrs)
     end
 
-    def mark_unpaid!
-      transition_to!(:unpaid)
+    def mark_unpaid!(attrs, record)
+      update!(asp_payment_return: record)
+
+      transition_to!(:unpaid, attrs)
     end
 
     def terminated?
@@ -75,6 +81,10 @@ module ASP
 
     def rejection_reason
       last_transition.metadata["Motif rejet"]
+    end
+
+    def unpaid_reason
+      last_transition.metadata["PAIEMENT"]["LIBELLEMOTIFINVAL"]
     end
 
     private
