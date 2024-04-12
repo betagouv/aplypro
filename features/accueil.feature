@@ -16,7 +16,7 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
 
   Scénario: Le personnel de direction voit tous les menus
     Quand je clique sur "Continuer"
-    Alors la page contient "Envoyer en paiement"
+    Alors la page contient "Paiements"
     Et la page contient "Gestion des accès"
 
   Scénario: Le personnel de direction voit toutes les actions de directeur
