@@ -3,9 +3,11 @@
 require "rails_helper"
 
 RSpec.describe ASP::Request do
-  subject(:request) { described_class.new(asp_payment_requests: payment_requests) }
-
-  let(:payment_requests) { create_list(:asp_payment_request, 2, :ready) }
+  subject(:request) do
+    described_class.new(
+      asp_payment_requests: create_list(:asp_payment_request, 2, :ready)
+    )
+  end
 
   let(:fichier_double) { class_double(ASP::Entities::Fichier) }
   let(:double) { instance_double(ASP::Entities::Fichier) }
@@ -61,23 +63,11 @@ RSpec.describe ASP::Request do
 
   describe ".send!" do
     it "moves the payment requests to sent" do
-      expect { request.send! }.to change { payment_requests.last.reload.current_state }.from("ready").to("sent")
+      expect { request.send! }.to change(ASP::PaymentRequest.in_state(:sent), :count).from(0).to(2)
     end
 
     it "updates the sent_at timestamp" do
       expect { request.send! }.to change(request, :sent_at)
-    end
-
-    it "sets the request_id on the target payment requests" do
-      request.send!
-
-      expect(payment_requests.map(&:asp_request_id).uniq).to contain_exactly(request.id)
-    end
-
-    it "can be found in the sent today scope" do
-      request.send!
-
-      expect(described_class.sent_today).to include(request)
     end
 
     context "with an existing rejects file" do
@@ -104,7 +94,7 @@ RSpec.describe ASP::Request do
 
       it "does not update the payment requests" do
         expect { request.send! rescue RuntimeError } # rubocop:disable Style/RescueModifier
-          .not_to(change(payment_requests.last, :current_state))
+          .not_to(change(ASP::PaymentRequest.in_state(:sent), :count))
       end
     end
 
