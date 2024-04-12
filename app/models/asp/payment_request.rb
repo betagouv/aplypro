@@ -55,16 +55,16 @@ module ASP
       transition_to!(:integrated, attrs)
     end
 
-    def mark_paid!(record)
+    def mark_paid!(attrs, record)
       update!(asp_payment_return: record)
 
-      transition_to!(:paid)
+      transition_to!(:paid, attrs)
     end
 
-    def mark_unpaid!(record)
+    def mark_unpaid!(attrs, record)
       update!(asp_payment_return: record)
 
-      transition_to!(:unpaid)
+      transition_to!(:unpaid, attrs)
     end
 
     def terminated?
@@ -77,6 +77,10 @@ module ASP
 
     def rejection_reason
       last_transition.metadata["Motif rejet"]
+    end
+
+    def unpaid_reason
+      last_transition.metadata["PAIEMENT"]["LIBELLEMOTIFINVAL"]
     end
 
     private
