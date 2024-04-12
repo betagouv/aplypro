@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe ASP::Readers::PaymentsFileReader do
-  subject(:reader) { described_class.new(result, record) }
+  subject(:reader) { described_class.new(io: result, record: record) }
 
   let(:record) { create(:asp_payment_return) }
   let(:asp_payment_request) { create(:asp_payment_request, :integrated) }
