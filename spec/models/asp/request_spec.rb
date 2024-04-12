@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe ASP::Request do
   subject(:request) { described_class.new(asp_payment_requests: payment_requests) }
 
-  let(:payment_requests) { create_list(:asp_payment_request, 3, :ready) }
+  let(:payment_requests) { create_list(:asp_payment_request, 2, :ready) }
 
   let(:fichier_double) { class_double(ASP::Entities::Fichier) }
   let(:double) { instance_double(ASP::Entities::Fichier) }
@@ -27,6 +27,38 @@ RSpec.describe ASP::Request do
     it { is_expected.to validate_length_of(:asp_payment_requests).is_at_most(7000) }
   end
 
+  describe "scopes" do
+    let(:request) { create(:asp_request, :sent, sent_at: sent_at) }
+
+    describe "sent_today" do
+      subject { described_class.sent_today }
+
+      context "when there's a request today" do
+        let(:sent_at) { Date.current }
+
+        it { is_expected.to include(request) }
+      end
+
+      context "when the request is from yesterday" do
+        let(:sent_at) { Date.yesterday }
+
+        it { is_expected.not_to include(request) }
+      end
+    end
+
+    describe "sent_this_week" do
+      subject { described_class.sent_this_week }
+
+      before do
+        create_list(:asp_request, 2, :sent, sent_at: 1.week.ago)
+        create_list(:asp_request, 3, :sent, sent_at: Date.current)
+        create_list(:asp_request, 4, :sent, sent_at: 2.weeks.from_now)
+      end
+
+      it { is_expected.to have(3).requests }
+    end
+  end
+
   describe ".send!" do
     it "moves the payment requests to sent" do
       expect { request.send! }.to change { payment_requests.last.reload.current_state }.from("ready").to("sent")
@@ -40,6 +72,12 @@ RSpec.describe ASP::Request do
       request.send!
 
       expect(payment_requests.map(&:asp_request_id).uniq).to contain_exactly(request.id)
+    end
+
+    it "can be found in the sent today scope" do
+      request.send!
+
+      expect(described_class.sent_today).to include(request)
     end
 
     context "with an existing rejects file" do
@@ -109,6 +147,22 @@ RSpec.describe ASP::Request do
 
       it "update the sent timestamp" do
         expect { rerun }.to change(request, :sent_at)
+      end
+    end
+
+    describe ".total_requests_left" do
+      subject(:allowance) { described_class.total_requests_left }
+
+      before do
+        Timecop.travel(2.weeks.ago) do
+          create_list(:asp_payment_request, 3, :sent)
+        end
+
+        create_list(:asp_payment_request, 1, :sent)
+      end
+
+      it "accounts all requests sent this week" do
+        expect(allowance).to eq 99_999
       end
     end
   end

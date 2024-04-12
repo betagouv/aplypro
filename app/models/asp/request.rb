@@ -2,7 +2,9 @@
 
 module ASP
   class Request < ApplicationRecord
-    MAX_ASP_RECORDS = 7000
+    MAX_FILES_PER_DAY = 10
+    MAX_RECORDS_PER_FILE = 7000
+    MAX_RECORDS_PER_WEEK = 100_000
 
     has_one_attached :file, service: :ovh_asp
     has_one_attached :rejects_file, service: :ovh_asp
@@ -13,9 +15,35 @@ module ASP
              dependent: :nullify,
              inverse_of: :asp_request
 
-    validates :asp_payment_requests, length: { maximum: MAX_ASP_RECORDS }
+    validates :asp_payment_requests, length: { maximum: MAX_RECORDS_PER_FILE }
+
+    scope :sent_at, ->(range) { where(sent_at: range) }
+    scope :sent_today, -> { sent_at(Date.current.all_day) }
+    scope :sent_this_week, -> { sent_at(Date.current.all_week) } # thank you Active Support <3
 
     attr_reader :asp_file
+
+    class << self
+      def total_requests_sent_today
+        sent_today.sum { |request| request.asp_payment_requests.count }
+      end
+
+      def total_requests_sent_this_week
+        sent_this_week.sum { |request| request.asp_payment_requests.count }
+      end
+
+      def total_files_sent_today
+        sent_today.count
+      end
+
+      def total_requests_left
+        MAX_RECORDS_PER_WEEK - total_requests_sent_this_week
+      end
+
+      def daily_requests_limit_reached?
+        total_files_sent_today >= MAX_FILES_PER_DAY
+      end
+    end
 
     def send!(rerun: false)
       raise ASP::Errors::RerunningParsedRequest if results_attached?

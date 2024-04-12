@@ -7,5 +7,7 @@ module ASP
     class UnmatchedResponseFile < Error; end
     class SendingPaymentRequestInWrongState < Error; end
     class RerunningParsedRequest < Error; end
+    class MaxRecordsPerWeekLimitReached < Error; end
+    class MaxRequestsPerDayLimitReached < Error; end
   end
 end

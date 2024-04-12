@@ -23,4 +23,8 @@ end
 
 After do
   FileUtils.rm_rf(TEMP_ASP_DIR)
+
+  # remove the requests to avoid hitting the 10-per-day limit we have
+  # in our production environment
+  ASP::Request.destroy_all
 end
