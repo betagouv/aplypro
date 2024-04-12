@@ -165,11 +165,11 @@ RSpec.describe Pfmp do
     end
   end
 
-  describe "setup_payment!" do
+  describe "reset_payment_request!" do
     subject(:pfmp) { create(:pfmp, schooling: schooling, day_count: 10) }
 
     it "creates a new payment" do
-      expect { pfmp.setup_payment! }.to change(ASP::PaymentRequest, :count).by(1)
+      expect { PfmpManager.new(pfmp).reset_payment_request! }.to change(ASP::PaymentRequest, :count).by(1)
     end
 
     context "when there is no allowance left" do
@@ -185,7 +185,7 @@ RSpec.describe Pfmp do
       end
 
       it "does not create a payment" do
-        expect { pfmp.setup_payment! }.not_to change(ASP::PaymentRequest, :count)
+        expect { PfmpManager.new(pfmp).reset_payment_request! }.not_to change(ASP::PaymentRequest, :count)
       end
     end
   end

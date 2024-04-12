@@ -43,7 +43,7 @@ class PfmpsController < ApplicationController
   end
 
   def reset_payment_request
-    @pfmp.payment_requests.create!
+    PfmpManager.new(@pfmp).reset_payment_request!
 
     redirect_back_or_to class_schooling_pfmp_path(@classe, @schooling, @pfmp),
                         notice: t("flash.pfmps.reset_payment_request", name: @schooling.student.full_name)
