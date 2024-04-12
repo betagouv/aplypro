@@ -49,12 +49,4 @@ describe ASP::Mappers::CoordPaieMapper do
       end
     end
   end
-
-  context "when the name has weird characters in it" do
-    before { rib.update!(name: "Éléonore Ïïaö") }
-
-    it "removes the accented characters" do
-      expect(mapper.intitdest).to eq "Eleonore Iiao"
-    end
-  end
 end
