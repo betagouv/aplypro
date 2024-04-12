@@ -19,11 +19,11 @@ class PfmpStateMachine
     pfmp.previous_pfmps.not_in_state(:validated).empty?
   end
 
-  after_transition(to: :completed) do |pfmp| # rubocop:disable Style/SymbolProc
+  after_transition(to: :completed) do |pfmp|
     PfmpManager.new(pfmp).recalculate_amounts!
   end
 
-  after_transition(to: :validated) do |pfmp| # rubocop:disable Style/SymbolProc
+  after_transition(to: :validated) do |pfmp|
     PfmpManager.new(pfmp).reset_payment_request!
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Handle complex actions on PFMPs
 
 class PfmpManager
