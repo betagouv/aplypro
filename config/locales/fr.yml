@@ -90,7 +90,7 @@ fr:
     classes: Élèves
     new_rib: Saisir des coord. bancaires
     new_pfmp: Saisir une PFMP
-    validate_all_pfmps: Envoyer en paiement
+    validate_all_pfmps: Paiements
     invitations: Gestion des accès
     faq: F.A.Q.
   pages:
@@ -122,7 +122,6 @@ fr:
         edit: &edit_pfmp_title "Modifier la PFMP de %{name}"
         update: *edit_pfmp_title
         validate: "Validation"
-        validate_all: "Valider des PFMPs à envoyer en paiement en 2024"
         confirm_deletion: "Suppression de la PFMP"
       ribs:
         new: &new_rib_title
