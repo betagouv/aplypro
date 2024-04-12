@@ -17,27 +17,31 @@ describe ASP::Readers::PaymentsFileReader do
     )
   end
 
+  shared_examples "a payment request changing to" do |to_state|
+    it "marks the associated payment request as #{to_state}" do
+      expect { reader.process! }.to change { asp_payment_request.reload.current_state }.from("integrated").to(to_state)
+    end
+
+    it "associates the payment request to the payment return" do
+      expect { reader.process! }.to change { asp_payment_request.reload.asp_payment_return }.from(nil).to(record)
+    end
+
+    it "stores the payment metadata" do
+      reader.process!
+
+      expect(asp_payment_request.reload.last_transition.metadata).to have_key "PAIEMENT"
+    end
+  end
+
   context "when the payment has been successful" do
     let(:payment_state) { :success }
 
-    it "marks the associated payment request as paid" do
-      expect { reader.process! }.to change { asp_payment_request.reload.current_state }.from("integrated").to("paid")
-    end
-
-    it "associates the payment request with the file" do
-      expect { reader.process! }.to change { asp_payment_request.reload.asp_payment_return }.from(nil).to(record)
-    end
+    include_examples "a payment request changing to", "paid"
   end
 
   context "when the payment failed" do
     let(:payment_state) { :failed }
 
-    it "marks the associated payment request as unpaid" do
-      expect { reader.process! }.to change { asp_payment_request.reload.current_state }.from("integrated").to("unpaid")
-    end
-
-    it "associates the payment request with the file" do
-      expect { reader.process! }.to change { asp_payment_request.reload.asp_payment_return }.from(nil).to(record)
-    end
+    include_examples "a payment request changing to", "unpaid"
   end
 end

@@ -66,4 +66,12 @@ RSpec.describe ASP::PaymentRequest do
       expect(payment_request.rejection_reason).to eq "failwhale"
     end
   end
+
+  describe "unpaid reason" do
+    let(:payment_request) { create(:asp_payment_request, :unpaid, reason: "failwhale") }
+
+    it "finds the right metadata" do
+      expect(payment_request.unpaid_reason).to eq "failwhale"
+    end
+  end
 end

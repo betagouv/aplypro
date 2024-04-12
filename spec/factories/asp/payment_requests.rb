@@ -79,19 +79,41 @@ FactoryBot.define do
       integrated
 
       after(:create) do |req|
+        result = build(
+          :asp_payment_file,
+          :success,
+          builder_class: ASP::Builder,
+          payment_request: req
+        )
+
         payment_return = create(:asp_payment_return)
 
-        req.mark_paid!(payment_return)
+        ASP::Readers::PaymentsFileReader.new(result, payment_return).process!
+
+        req.reload
       end
     end
 
     trait :unpaid do
       integrated
 
-      after(:create) do |req|
+      transient do
+        reason { Faker::Lorem.sentence(word_count: 20) }
+      end
+
+      after(:create) do |req, ctx|
+        result = build(
+          :asp_payment_file,
+          :failed,
+          builder_class: ASP::Builder,
+          payment_request: req,
+          reason: ctx.reason
+        )
         payment_return = create(:asp_payment_return)
 
-        req.mark_unpaid!(payment_return)
+        ASP::Readers::PaymentsFileReader.new(result, payment_return).process!
+
+        req.reload
       end
     end
   end
