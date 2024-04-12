@@ -59,6 +59,12 @@ RSpec.describe Rib do
 
         expect(rib.name).to eq "Marie Curie Mrs"
       end
+
+      it "also removes offending characters" do
+        rib = create(:rib, name: "Marie;Curïe")
+
+        expect(rib.name).to eq "Marie Curie"
+      end
     end
   end
 end
