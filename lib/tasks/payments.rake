@@ -43,6 +43,7 @@ def check_10_000_payment_requests(size: 10_000)
     .joins(pfmp: :establishment)
     .merge(Pfmp.in_state(:validated))
     .merge(Pfmp.perfect)
+    .where("pfmps.end_date <= ?", Date.today)
     .where.not("ribs.id": BAD_RIB_IDS)
     .where("students.ine_not_found": false)
     .where("schoolings.attributive_decision_version < 10") # one_character_attributive_decision_version?
@@ -89,4 +90,3 @@ SendPaymentRequestsJob.perform_later(prs.to_a); p "Job started !"
 ## Pour récupérer les status du serveur ASP (1x par jour le matin) ##
 
 PollPaymentsServerJob.perform_later
-
