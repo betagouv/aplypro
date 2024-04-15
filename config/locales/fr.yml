@@ -251,6 +251,7 @@ fr:
   ministries:
     masa: Ministère de l'Agriculture et de la Souveraineté Alimentaire (MASA)
     menj: Ministère de l'Éducation Nationale et de la Jeunesse (MENJ)
+    mer: Secrétariat d'État chargé de la Mer
   mefs:
     labels:
       1BT: 1ère bac technologique
@@ -283,7 +284,7 @@ fr:
       description: "Je me connecte via le portail de l'éducation nationale."
       button: Se connecter (MENJ)
     mer:
-      title: "Secrétariat d'état\n chargé de la mer"
+      title: "Secrétariat d'État\n chargé de la Mer"
       description: "Je me connecte via le portail de l'éducation nationale."
       button: Se connecter (Mer)
     developer:
