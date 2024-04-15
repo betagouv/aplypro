@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-# Handle complex actions on PFMPs
+# Simple Ruby service to Handle complex actions on PFMPs
+# TODO: refactor PfmpAmountCalculator to be part of this class (requires a lot of spec changes)
 
 class PfmpManager
   attr_reader :pfmp
