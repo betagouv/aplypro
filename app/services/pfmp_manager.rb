@@ -6,6 +6,7 @@
 class PfmpManager
   class PreviousActivePaymentRequestError < StandardError
   end
+
   class PfmpNotModifiableError < StandardError
   end
 
