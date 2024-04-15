@@ -4,6 +4,9 @@
 # TODO: refactor PfmpAmountCalculator to be part of this class (requires a lot of spec changes)
 
 class PfmpManager
+  class PreviousActivePaymentRequestError < StandardError
+  end
+
   attr_reader :pfmp
 
   def initialize(pfmp)
@@ -20,6 +23,8 @@ class PfmpManager
   end
 
   def reset_payment_request!
+    raise PfmpManager::PreviousActivePaymentRequestError if pfmp.payment_requests.active.any?
+
     pfmp.payment_requests.create! if pfmp.amount.positive?
   end
 
