@@ -144,7 +144,7 @@ RSpec.describe Pfmp do
         let(:pfmp) { create(:asp_payment_request, :sent).pfmp }
 
         it "throws an error" do
-          expect { pfmp.update!(day_count: 15) }.to raise_error(/amount recalculated/)
+          expect { pfmp.update!(day_count: 15) }.to raise_error(PfmpManager::PfmpNotModifiableError)
         end
       end
     end

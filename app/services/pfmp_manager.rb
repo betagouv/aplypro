@@ -6,6 +6,8 @@
 class PfmpManager
   class PreviousActivePaymentRequestError < StandardError
   end
+  class PfmpNotModifiableError < StandardError
+  end
 
   attr_reader :pfmp
 
@@ -14,7 +16,7 @@ class PfmpManager
   end
 
   def recalculate_amounts!
-    raise "A PFMP paid or in the process of being paid cannot have its amount recalculated" unless pfmp.can_be_modified?
+    raise PfmpNotModifiableError unless pfmp.can_be_modified?
 
     ApplicationRecord.transaction do
       pfmp.update!(amount: pfmp.calculate_amount)
