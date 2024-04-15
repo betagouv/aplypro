@@ -5,7 +5,7 @@ require "rails_helper"
 describe PfmpManager do
   subject(:manager) { described_class.new(pfmp) }
 
-  let(:pfmp) { create(:pfmp, schooling: schooling)}
+  let(:pfmp) { create(:pfmp, schooling: schooling) }
   let(:mef) { create(:mef) }
   let(:classe) { create(:classe, mef: mef) }
   let(:student) { create(:student, :with_all_asp_info) }
@@ -43,7 +43,7 @@ describe PfmpManager do
       end
 
       it "does not create a payment" do
-        expect { PfmpManager.new(pfmp).reset_payment_request! }.not_to change(pfmp.payment_requests, :count)
+        expect { described_class.new(pfmp).reset_payment_request! }.not_to change(pfmp.payment_requests, :count)
       end
     end
   end
@@ -60,6 +60,7 @@ describe PfmpManager do
         end
       end
 
+      # rubocop:disable RSpec/MultipleMemoizedHelpers
       context "with existing follow up modifiable pfmps" do
         let(:existing_pfmp) { create(:pfmp, :completed, schooling: schooling, day_count: 2) }
         let(:mef) { create(:mef, daily_rate: 20, yearly_cap: 400) }
@@ -74,6 +75,7 @@ describe PfmpManager do
           expect(existing_pfmp.following_modifiable_pfmps.pluck(:amount)).to eq [120, 40]
         end
       end
+      # rubocop:enable RSpec/MultipleMemoizedHelpers
     end
   end
 end
