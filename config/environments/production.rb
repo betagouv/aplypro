@@ -92,7 +92,4 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-
-  # Raises error for missing translations.
-  config.i18n.raise_on_missing_translations = true
 end
