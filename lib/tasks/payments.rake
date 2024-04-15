@@ -90,3 +90,35 @@ SendPaymentRequestsJob.perform_later(prs.to_a); p "Job started !"
 ## Pour récupérer les status du serveur ASP (1x par jour le matin) ##
 
 PollPaymentsServerJob.perform_later
+
+
+### Stats de paiement ###
+
+end_date_group_string = "concat(date_part('year',pfmps.end_date), '-', lpad(date_part('month',pfmps.end_date)::text, 2, '0'))"
+nb_treated = ASP::PaymentRequest.not_in_state(:pending).count; p "nb_treated : #{nb_treated}"
+
+grouped_data = ASP::PaymentRequest.joins(:pfmp)
+  .joins(ASP::PaymentRequest.most_recent_transition_join)
+  .merge(Pfmp.this_year)
+  .where("pfmps.end_date < ?", Date.parse("2024-01-01"))
+  .group(end_date_group_string)
+  .group(:"most_recent_asp_payment_request_transition.to_state")
+  .count
+
+data = grouped_data.reduce({}) do |h, (keys, count)|
+  month, state = keys
+  state = "pending" if state.nil?
+
+  h[month] = {} if h[month].blank?
+  h[month][state] = count
+  h
+end
+
+def row(data_row)
+  ["pending", "paid"]
+end
+
+puts [
+  ["Status", *data.keys],
+  *ASP::PaymentRequestStateMachine.states.map { |state| [state, data.values.map{|h| h[state]}] }
+].map{|r| r.join(";")}
