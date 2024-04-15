@@ -216,7 +216,7 @@ fr:
     actions:
       reset:
         cta: "Relancer une demande de paiement"
-        warning: "J'ai corrigé le problème mentionné et je souhaite redemander un envoi en paiement."
+        warning: "J'ai corrigé le problème mentionné dans liste des erreurs et je souhaite redemander un envoi en paiement."
     state:
       pending: "En attente"
       ready: "En attente"
