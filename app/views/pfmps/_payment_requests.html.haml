@@ -6,9 +6,9 @@
 
     - if payment_request.failed? && !@pfmp.payment_requests.active.any?
       .fr-mt-1w
-        = link_to "Relancer une demande de paiement", reset_payment_request_class_schooling_pfmp_path(@classe, @schooling, @pfmp), class: 'fr-btn fr-btn--primary'
+        = link_to t("payment_requests.actions.reset.cta"), reset_payment_request_class_schooling_pfmp_path(@classe, @schooling, @pfmp), class: 'fr-btn fr-btn--primary'
         .fr-mt-1w
-        %em J'ai corrigé le problème et je veux redemander un envoi en paiement
+        %em= t("payment_requests.actions.reset.warning")
 
     .fr-mt-2w.gray-text
       Dernière mise à jour le

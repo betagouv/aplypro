@@ -213,6 +213,10 @@ fr:
         La PFMP a été validée. La demande de paiement sera envoyée dès que
         les développements nécessaires auront été effectués.
   payment_requests:
+    actions:
+      reset:
+        cta: "Relancer une demande de paiement"
+        warning: "J'ai corrigé le problème mentionné et je souhaite redemander un envoi en paiement."
     state:
       pending: "En attente"
       ready: "En attente"
