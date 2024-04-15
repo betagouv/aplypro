@@ -46,5 +46,6 @@ module Aplypro
     config.autoload_lib(ignore: %w[assets tasks])
 
     config.active_model.i18n_customize_full_message = true
+    config.i18n.raise_on_missing_translations = true
   end
 end

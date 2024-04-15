@@ -107,4 +107,38 @@ RSpec.describe Student do
       expect(described_class.without_ribs).to contain_exactly students.last
     end
   end
+
+  describe "with_valid_address_city" do
+    subject { described_class.with_valid_address_city }
+
+    context "when the student is born in France" do
+      let(:student) { create(:student, :with_french_address) }
+
+      context "when their address city code is nil" do
+        before { student.update!(address_city_insee_code: nil) }
+
+        it { is_expected.not_to include student }
+      end
+
+      context "when their address city code is not nil" do
+        it { is_expected.to include student }
+      end
+    end
+
+    context "when the student is foreign" do
+      let(:student) { create(:student, :with_foreign_address) }
+
+      context "when they have no city code" do
+        before { student.update!(address_city_insee_code: nil) }
+
+        it { is_expected.to include student }
+      end
+
+      context "when they have a city code" do
+        before { student.update!(address_city_insee_code: "34000") }
+
+        it { is_expected.to include student }
+      end
+    end
+  end
 end

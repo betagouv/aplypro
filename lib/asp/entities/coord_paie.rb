@@ -8,7 +8,7 @@ module ASP
 
       attribute :codetypecoordpaie, :string
       attribute :codemodereglement, :string
-      attribute :intitdest, :string
+      attribute :intitdest, :string, limit: 32
       attribute :codeisopays, :string
       attribute :zonebban, :string
       attribute :clecontrole, :string

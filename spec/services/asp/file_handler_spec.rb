@@ -3,11 +3,11 @@
 require "rails_helper"
 
 describe ASP::FileHandler do
-  subject(:reader) { described_class.new(filepath) }
+  subject(:reader) { described_class.new(file) }
 
   let(:request_identifier) { "foobar" }
   let!(:request) { create(:asp_request, :sent, filename: "#{request_identifier}.xml") }
-  let(:filepath) { File.new(File.join(Dir.mktmpdir, basename), "w+").path }
+  let(:file) { File.new(File.join(Dir.mktmpdir, basename), "w+") }
 
   # can't reduce much more
   # rubocop:disable Rspec/MultipleMemoizedHelpers

@@ -117,3 +117,5 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+
+Timecop.safe_mode = true

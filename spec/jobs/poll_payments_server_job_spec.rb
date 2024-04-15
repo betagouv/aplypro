@@ -8,14 +8,16 @@ RSpec.describe PollPaymentsServerJob do
   let(:server_double) { class_double(ASP::Server) }
   let(:reader_double) { class_double(ASP::FileHandler) }
   let(:double) { instance_double(ASP::FileHandler) }
+  let(:mock_file) { Tempfile.create }
+  let(:basename) { File.basename(mock_file) }
 
   before do
     stub_const("ASP::Server", server_double)
     stub_const("ASP::FileHandler", reader_double)
 
-    allow(Dir).to receive(:each_child).and_yield("foobar")
+    allow(Dir).to receive(:each_child).and_yield(basename)
 
-    allow(server_double).to receive(:get_all_files!).and_return("some/folder")
+    allow(server_double).to receive(:get_all_files!).and_return(File.dirname(mock_file))
     allow(server_double).to receive(:remove_file!)
 
     allow(reader_double).to receive(:new).and_return double
@@ -41,7 +43,7 @@ RSpec.describe PollPaymentsServerJob do
     it "deletes it on the server" do
       perform_enqueued_jobs { described_class.perform_later }
 
-      expect(server_double).to have_received(:remove_file!).with(path: "foobar")
+      expect(server_double).to have_received(:remove_file!).with(filename: basename)
     end
   end
 
@@ -53,7 +55,7 @@ RSpec.describe PollPaymentsServerJob do
     it "does not remove the file off the server" do
       perform_enqueued_jobs { described_class.perform_later }
 
-      expect(server_double).not_to have_received(:remove_file!).with(path: "foobar")
+      expect(server_double).not_to have_received(:remove_file!).with(filename: basename)
     end
   end
 
@@ -68,7 +70,7 @@ RSpec.describe PollPaymentsServerJob do
       it "deletes it on the server" do
         perform_enqueued_jobs { described_class.perform_later }
 
-        expect(server_double).to have_received(:remove_file!).with(path: "foobar")
+        expect(server_double).to have_received(:remove_file!).with(filename: basename)
       end
     end
 
@@ -78,7 +80,7 @@ RSpec.describe PollPaymentsServerJob do
       it "doesn't delete it on the server" do
         perform_enqueued_jobs { described_class.perform_later }
 
-        expect(server_double).not_to have_received(:remove_file!).with(path: "foobar")
+        expect(server_double).not_to have_received(:remove_file!).with(filename: basename)
       end
     end
   end

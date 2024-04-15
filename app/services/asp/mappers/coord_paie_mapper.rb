@@ -7,7 +7,8 @@ module ASP
       ASSIMILATED_FRENCH_COUNTRY_CODES = %w[FR GF GP MC MQ NC PF PM RE WF YT].freeze
 
       MAPPING = {
-        bic: :bic
+        bic: :bic,
+        intitdest: :name
       }.freeze
 
       attr_reader :rib, :iban
@@ -19,16 +20,6 @@ module ASP
 
       MAPPING.each do |name, attr|
         define_method(name) { rib[attr] }
-      end
-
-      # @emaildoc
-      #   Le troncage à 32 caractères est la solution la plus simple à
-      #   mettre en œuvre pour tout le monde, c'est ce que nous
-      #   préconisons. Le risque de rendre la donnée inutilisable est
-      #   minime (pas de traitement/contrôle automatisé sur ce champ à
-      #   l'ASP).
-      def intitdest
-        rib.name.first(32)
       end
 
       def codeisopays
