@@ -3,6 +3,8 @@
 class SendPaymentRequestsJob < ApplicationJob
   queue_as :default
 
+  discard_on ASP::Errors::XMLValidationFailed
+
   def perform(payment_requests)
     ActiveRecord::Base.transaction do
       ASP::Request

@@ -7,5 +7,6 @@ module ASP
     class UnmatchedResponseFile < Error; end
     class SendingPaymentRequestInWrongState < Error; end
     class RerunningParsedRequest < Error; end
+    class XMLValidationFailed < Error; end
   end
 end

@@ -16,7 +16,11 @@ module ASP
       ActiveRecord::Base.transaction do
         @asp_file = ASP::Entities::Fichier.new(asp_payment_requests)
 
-        @asp_file.validate!
+        begin
+          @asp_file.validate!
+        rescue ActiveRecord::RecordInvalid
+          raise ASP::Errors::XMLValidationFailed
+        end
 
         attach_asp_file!
         drop_file!

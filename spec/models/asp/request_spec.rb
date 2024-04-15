@@ -73,9 +73,13 @@ RSpec.describe ASP::Request do
     end
 
     context "when the XML is not valid" do
-      before { allow(double).to receive(:validate!).and_raise }
+      before { allow(double).to receive(:validate!).and_raise ActiveRecord::RecordInvalid }
 
       include_examples "does not persist anything"
+
+      it "raises a specific error" do
+        expect { request.send! }.to raise_error ASP::Errors::XMLValidationFailed
+      end
     end
 
     context "when the server can't upload the file" do
