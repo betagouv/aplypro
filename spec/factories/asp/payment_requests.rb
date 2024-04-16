@@ -67,14 +67,6 @@ FactoryBot.define do
       end
     end
 
-    trait :rejected do
-      sent
-
-      after(:create) do |obj|
-        obj.reject!({})
-      end
-    end
-
     trait :paid do
       integrated
 
@@ -101,19 +93,19 @@ FactoryBot.define do
         reason { Faker::Lorem.sentence(word_count: 20) }
       end
 
-      after(:create) do |req, ctx|
+      after(:create) do |payment_request, ctx|
         result = build(
           :asp_payment_file,
           :failed,
           builder_class: ASP::Builder,
-          payment_request: req,
+          payment_request: payment_request,
           reason: ctx.reason
         )
         payment_return = create(:asp_payment_return)
 
         ASP::Readers::PaymentsFileReader.new(io: result, record: payment_return).process!
 
-        req.reload
+        payment_request.reload
       end
     end
   end

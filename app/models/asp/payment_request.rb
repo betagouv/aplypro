@@ -92,7 +92,7 @@ module ASP
     def single_active_payment_request_per_pfmp
       return if pfmp.nil?
 
-      return unless pfmp.payment_requests.where.not(id: id).active.any?
+      return unless pfmp.payment_requests.excluding(self).active.any?
 
       errors.add(:base, "There can only be one active payment request per Pfmp.")
     end

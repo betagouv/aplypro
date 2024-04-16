@@ -61,6 +61,8 @@ module ASP
       case current_state
       when "rejected"
         { rejection_reason: rejection_reason }
+      when "unpaid"
+        { unpaid_reason: unpaid_reason }
       else
         {}
       end
