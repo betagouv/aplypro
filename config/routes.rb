@@ -53,7 +53,7 @@ Rails.application.routes.draw do
         member do
           post "validate"
           get "confirm_deletion"
-          get "reset_payment_request"
+          post "reset_payment_request"
         end
       end
     end

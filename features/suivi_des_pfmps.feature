@@ -20,8 +20,9 @@ Fonctionnalité: Suivi des demandes de paiement
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement échouée
     Et que je clique sur "Paiements"
     Alors la page contient "Liste des paiements échoués"
-    Alors la page contient "Le paiement a été refusé par l'agence comptable."
+    Alors la page contient "Le paiement a été refusé par l'agence comptable :"
     Quand je clique sur "mars 2024"
+    Et que je coche la case de responsable légal
     Et que je clique sur "Relancer une demande de paiement"
     Alors la page contient "Une nouvelle demande de paiement est en cours"
 
@@ -31,5 +32,6 @@ Fonctionnalité: Suivi des demandes de paiement
     Alors la page contient "Liste des paiements échoués"
     Alors la page contient "La demande a été rejetée :"
     Quand je clique sur "mars 2024"
+    Et que je coche la case de responsable légal
     Et que je clique sur "Relancer une demande de paiement"
     Alors la page contient "Une nouvelle demande de paiement est en cours"
