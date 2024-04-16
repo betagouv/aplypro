@@ -3,6 +3,8 @@
 class SendPaymentRequestsJob < ApplicationJob
   queue_as :default
 
+  sidekiq_options retry: 0
+
   def perform(payment_requests)
     limit = [ASP::Request.total_requests_left, payment_requests.count].min
 
