@@ -25,7 +25,7 @@ class PfmpManager
     end
   end
 
-  def reset_payment_request!
+  def start_new_payment_request!
     raise PfmpManager::PreviousActivePaymentRequestError if pfmp.payment_requests.active.any?
 
     pfmp.payment_requests.create! if pfmp.amount.positive?

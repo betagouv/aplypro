@@ -104,13 +104,13 @@ RSpec.describe PfmpsController do
 
     before do
       allow(PfmpManager).to receive(:new).and_return(pfmp_manager)
-      allow(pfmp_manager).to receive(:reset_payment_request!)
+      allow(pfmp_manager).to receive(:start_new_payment_request!)
     end
 
     it "calls the PfmpManager" do
       get reset_payment_request_class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id,
                                                           id: pfmp.id)
-      expect(pfmp_manager).to have_received(:reset_payment_request!)
+      expect(pfmp_manager).to have_received(:start_new_payment_request!)
     end
   end
 end

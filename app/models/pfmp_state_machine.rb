@@ -24,6 +24,6 @@ class PfmpStateMachine
   end
 
   after_transition(to: :validated) do |pfmp|
-    PfmpManager.new(pfmp).reset_payment_request!
+    PfmpManager.new(pfmp).start_new_payment_request!
   end
 end
