@@ -5,8 +5,8 @@ require "rails_helper"
 describe PfmpManager do
   subject(:manager) { described_class.new(pfmp) }
 
-  let(:pfmp) { create(:pfmp, schooling: schooling) }
-  let(:mef) { create(:mef) }
+  let(:pfmp) { create(:pfmp, schooling: schooling, day_count: 2) }
+  let(:mef) { create(:mef, daily_rate: 20, yearly_cap: 400) }
   let(:classe) { create(:classe, mef: mef) }
   let(:student) { create(:student, :with_all_asp_info) }
   let(:schooling) { create(:schooling, student: student, classe: classe) }
@@ -60,22 +60,20 @@ describe PfmpManager do
         end
       end
 
-      # rubocop:disable RSpec/MultipleMemoizedHelpers
       context "with existing follow up modifiable pfmps" do
-        let(:existing_pfmp) { create(:pfmp, :completed, schooling: schooling, day_count: 2) }
-        let(:mef) { create(:mef, daily_rate: 20, yearly_cap: 400) }
-
         before do
-          create(:pfmp, :completed, schooling: schooling, day_count: 6, created_at: existing_pfmp.created_at + 2.days)
-          create(:pfmp, :completed, schooling: schooling, day_count: 4, created_at: existing_pfmp.created_at + 3.days)
-          existing_pfmp.update!(day_count: existing_pfmp.day_count + 10)
+          create(:pfmp, :completed, schooling: schooling, day_count: 6, created_at: pfmp.created_at + 2.days)
+          create(:pfmp, :completed, schooling: schooling, day_count: 4, created_at: pfmp.created_at + 3.days)
         end
 
-        it "recalculates the follow up modifiable pfmps amounts" do
-          expect(existing_pfmp.following_modifiable_pfmps.pluck(:amount)).to eq [120, 40]
+        it "recalculates the follow up modifiable pfmps amounts and caps the last one" do
+          expect do
+            pfmp.update!(day_count: pfmp.day_count + 11)
+          end.to change {
+                   [pfmp.amount] + pfmp.following_modifiable_pfmps.pluck(:amount)
+                 }.from([40, 120, 80]).to([260, 120, 20])
         end
       end
-      # rubocop:enable RSpec/MultipleMemoizedHelpers
     end
   end
 end
