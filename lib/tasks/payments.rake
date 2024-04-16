@@ -52,7 +52,7 @@ def check_10_000_payment_requests(size: 10_000)
     .order("pfmps.end_date")
     .limit(size)
     .each_with_index do |request, index|
-    puts "dealing with #{request.id} [#{index}/10k]..."
+    puts "dealing with #{request.id} [#{index}/#{size}k]..."
     pfmp = request.pfmp
 
     if pfmp.valid? &&
