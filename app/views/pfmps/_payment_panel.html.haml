@@ -15,3 +15,10 @@
   %div.fr-mb-1w
     = number_to_currency pfmp.previously_locked_amount
     engagés par les PFMPs précédemment déclarées.
+
+  - if @pfmp.payment_requests.last.failed? && !@pfmp.payment_requests.active.any?
+    .fr-mt-3w
+      = link_to t("payment_requests.actions.reset.cta"), reset_payment_request_class_schooling_pfmp_path(@classe, @schooling, @pfmp), class: 'fr-btn fr-btn--primary'
+    .fr-mt-2w
+      .fr-alert.fr-alert--info.fr-alert--sm
+        = t("payment_requests.actions.reset.warning")
