@@ -33,6 +33,12 @@ RSpec.describe ASP::PaymentRequest do
   end
 
   describe "factory" do
+    ASP::PaymentRequestStateMachine.states.each do |state|
+      it "has a valid '#{state}' factory" do
+        expect(create(:asp_payment_request, state)).to be_valid
+      end
+    end
+
     it "does not create extra payment requests" do
       expect { create(:asp_payment_request) }.to change(described_class, :count).by(1)
     end

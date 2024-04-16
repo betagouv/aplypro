@@ -55,11 +55,11 @@ RSpec.describe SendPaymentRequestsJob do
 
     it "raises an error" do
       expect { described_class.perform_now([payment_request]) }
-        .to raise_error ASP::Errors::SendingPaymentRequestInWrongState
+        .to raise_error ActiveRecord::RecordInvalid
     end
 
     it "does not persist the request" do
-      suppress(ASP::Errors::SendingPaymentRequestInWrongState) do
+      suppress(ActiveRecord::RecordInvalid) do
         expect { described_class.perform_now([payment_request]) }.not_to change(ASP::Request, :count)
       end
     end

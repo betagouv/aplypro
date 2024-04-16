@@ -30,6 +30,10 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  global:
-    service_name: "Your service"
-    service_description: "Your service's description"
+  activerecord:
+    errors:
+      models:
+        asp/request:
+          attributes:
+            base:
+              requests_in_wrong_state: some of the ASP::PaymentRequest are not in the ready state
