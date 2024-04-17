@@ -215,7 +215,7 @@ fr:
   payment_requests:
     actions:
       reset:
-        title: "Action disponible"
+        title: "Action possible sur le paiement"
         cta: "Relancer une demande de paiement"
         warning: "Vous avez corrigé le problème mentionné dans la liste des erreurs et vous souhaitez redemander un envoi en paiement."
     state:

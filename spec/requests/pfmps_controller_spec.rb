@@ -107,7 +107,7 @@ RSpec.describe PfmpsController do
       allow(pfmp_manager).to receive(:start_new_payment_request!)
     end
 
-    context "when confirmed director" do
+    context "when the director is confirmed" do
       it "calls the PfmpManager" do
         post reset_payment_request_class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id,
                                                              id: pfmp.id), params: { confirmed_director: "1" }
@@ -115,8 +115,8 @@ RSpec.describe PfmpsController do
       end
     end
 
-    context "when not confirmed director" do
-      it "doesnt call the PfmpManager" do
+    context "when the director is not confirmed" do
+      it "does not call the PfmpManager" do
         post reset_payment_request_class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id,
                                                              id: pfmp.id), params: { confirmed_director: "0" }
         expect(pfmp_manager).not_to have_received(:start_new_payment_request!)
