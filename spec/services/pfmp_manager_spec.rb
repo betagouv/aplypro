@@ -11,12 +11,12 @@ describe PfmpManager do
   let(:student) { create(:student, :with_all_asp_info) }
   let(:schooling) { create(:schooling, student: student, classe: classe) }
 
-  describe "#start_new_payment_request!" do
+  describe "#create_new_payment_request!" do
     context "when previous payment requests are inactive" do
       let(:pfmp) { create(:asp_payment_request, :rejected).pfmp }
 
       it "creates a new payment request on the pfmp" do
-        expect { manager.start_new_payment_request! }.to change(pfmp.payment_requests, :count).by(1)
+        expect { manager.create_new_payment_request! }.to change(pfmp.payment_requests, :count).by(1)
       end
     end
 
@@ -24,7 +24,7 @@ describe PfmpManager do
       let(:pfmp) { create(:asp_payment_request, :integrated).pfmp }
 
       it "raises an error" do
-        expect { manager.start_new_payment_request! }.to raise_error(PfmpManager::PreviousActivePaymentRequestError)
+        expect { manager.create_new_payment_request! }.to raise_error(PfmpManager::PreviousActivePaymentRequestError)
       end
     end
 
@@ -43,7 +43,7 @@ describe PfmpManager do
       end
 
       it "does not create a payment" do
-        expect { described_class.new(pfmp).start_new_payment_request! }.not_to change(pfmp.payment_requests, :count)
+        expect { described_class.new(pfmp).create_new_payment_request! }.not_to change(pfmp.payment_requests, :count)
       end
     end
   end

@@ -21,17 +21,25 @@ Fonctionnalité: Suivi des demandes de paiement
     Et que je clique sur "Paiements"
     Alors la page contient "Liste des paiements échoués"
     Alors la page contient "Le paiement a été refusé par l'agence comptable :"
-    Quand je clique sur "mars 2024"
-    Et que je coche la case de responsable légal
-    Et que je clique sur "Relancer une demande de paiement"
-    Alors la page contient "Une nouvelle demande de paiement est en cours"
 
   Scénario: Le personnel peut voir les paiements qui ont été rejetés
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement rejetée
     Et que je clique sur "Paiements"
     Alors la page contient "Liste des paiements échoués"
     Alors la page contient "La demande a été rejetée :"
-    Quand je clique sur "mars 2024"
+
+  Scénario: Le personnel peut relancer une demande de paiement dans les cas de paiements préalables rejetés
+    Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement échouée
+    Et que je consulte le profil de "Marie Curie" dans la classe de "A1"
+    Quand je consulte la dernière PFMP
     Et que je coche la case de responsable légal
     Et que je clique sur "Relancer une demande de paiement"
-    Alors la page contient "Une nouvelle demande de paiement est en cours"
+    Alors la page contient "Une nouvelle demande de paiement a été créée"
+
+  Scénario: Le personnel peut relancer une demande de paiement dans les cas de paiement préalables rejetés
+    Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement rejetée
+    Et que je consulte le profil de "Marie Curie" dans la classe de "A1"
+    Quand je consulte la dernière PFMP
+    Et que je coche la case de responsable légal
+    Et que je clique sur "Relancer une demande de paiement"
+    Alors la page contient "Une nouvelle demande de paiement a été créée"

@@ -98,29 +98,4 @@ RSpec.describe PfmpsController do
       end
     end
   end
-
-  describe "POST /reset_payment_request" do
-    let(:pfmp_manager) { instance_double(PfmpManager) }
-
-    before do
-      allow(PfmpManager).to receive(:new).and_return(pfmp_manager)
-      allow(pfmp_manager).to receive(:start_new_payment_request!)
-    end
-
-    context "when the director is confirmed" do
-      it "calls the PfmpManager" do
-        post reset_payment_request_class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id,
-                                                             id: pfmp.id), params: { confirmed_director: "1" }
-        expect(pfmp_manager).to have_received(:start_new_payment_request!)
-      end
-    end
-
-    context "when the director is not confirmed" do
-      it "does not call the PfmpManager" do
-        post reset_payment_request_class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id,
-                                                             id: pfmp.id), params: { confirmed_director: "0" }
-        expect(pfmp_manager).not_to have_received(:start_new_payment_request!)
-      end
-    end
-  end
 end

@@ -10,7 +10,7 @@ fr:
       not_authorised_to_invite: Seuls les personnels de direction peuvent gérer les accès
       destroyed: La PFMP de %{name} a bien été supprimée
       validated: La PFMP de %{name} a bien été validée
-      reset_payment_request: Une nouvelle demande de paiement a été créée
+      create_payment_request: Une nouvelle demande de paiement a été créée
     ribs:
       destroyed: Les coordonnées bancaires de %{name} ont bien été supprimées
 
