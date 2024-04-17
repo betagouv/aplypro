@@ -21,6 +21,10 @@ module ASP
     scope :sent_today, -> { sent_at(Date.current.all_day) }
     scope :sent_this_week, -> { sent_at(Date.current.all_week) } # thank you Active Support <3
 
+    validate :all_requests_ready?, on: :create
+
+    validates :asp_payment_requests, presence: true
+
     attr_reader :asp_file
 
     class << self
@@ -87,6 +91,24 @@ module ASP
 
     def results_attached?
       integrations_file.attached? || rejects_file.attached?
+    end
+
+    # NOTE: this validation is tricky because the request might not be
+    # persisted yet, which means it has no ID, which means asking for
+    # `asp_payment_requests` on its own might trigger the actual query
+    # with a NULL asp_payment_requests.request_id (as `.to_sql` will
+    # demonstrate). I'm not sure what's the best way to avoid the SQL
+    # path so just map the ID here which uses the value of the actual
+    # variable in the function.
+    def all_requests_ready?
+      return false if asp_payment_requests.none?
+
+      total = ASP::PaymentRequest
+              .in_state(:ready)
+              .where(id: asp_payment_requests.map(&:id))
+              .length
+
+      errors.add(:base, :requests_in_wrong_state) unless total == asp_payment_requests.length
     end
   end
 end

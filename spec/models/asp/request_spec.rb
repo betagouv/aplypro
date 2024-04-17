@@ -29,8 +29,18 @@ RSpec.describe ASP::Request do
     it { is_expected.to validate_length_of(:asp_payment_requests).is_at_most(7000) }
   end
 
+  describe "when a payment request is not in the right state" do
+    let(:payment_request) { create(:asp_payment_request, :sent) }
+
+    it "fails creation" do
+      expect do
+        described_class.create!(asp_payment_requests: [payment_request])
+      end.to raise_error(/not in the ready state/)
+    end
+  end
+
   describe "scopes" do
-    let(:request) { create(:asp_request, :sent, sent_at: sent_at) }
+    let(:request) { create(:asp_request, :sent, :with_request, sent_at: sent_at) }
 
     describe "sent_today" do
       subject { described_class.sent_today }

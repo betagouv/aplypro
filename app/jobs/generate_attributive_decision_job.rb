@@ -5,7 +5,7 @@ require "attribute_decision_generator"
 class GenerateAttributiveDecisionJob < ApplicationJob
   queue_as :documents
 
-  sidekiq_options retry: 0
+  sidekiq_options retry: false
 
   after_discard do |job|
     schooling = job.arguments.first
