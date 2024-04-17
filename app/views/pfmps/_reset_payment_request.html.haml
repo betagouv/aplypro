@@ -1,4 +1,4 @@
-- if payment_requests.last.failed? && !payment_requests.active.any?
+- if pfmp.stalled_payment_request?
   .fr-callout.fr-icon-information-line
     %h3.fr-callout__title=t("payment_requests.actions.reset.title")
     .fr-callout__text

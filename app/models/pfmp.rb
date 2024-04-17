@@ -110,6 +110,10 @@ class Pfmp < ApplicationRecord
     !locked?
   end
 
+  def stalled_payment_request?
+    payment_requests.last.failed? && payment_requests.active.none?
+  end
+
   def payment_due?
     day_count.present?
   end

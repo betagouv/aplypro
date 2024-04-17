@@ -42,5 +42,5 @@
     %h3.fr-h5
       = "Demande".pluralize(@pfmp.payment_requests.count)
       de paiement
-    = render partial: "reset_payment_request", locals: { payment_requests: @pfmp.payment_requests }
+    = render partial: "reset_payment_request", locals: { pfmp: @pfmp }
     = render partial: "payment_requests"
