@@ -63,7 +63,7 @@ class Classe < ApplicationRecord
   end
 
   def to_long_s
-    [label, mef.specialty].join(" - ")
+    [label, mef.label].join(" - ")
   end
 
   def schooling_of(student)

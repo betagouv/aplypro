@@ -104,7 +104,7 @@ fr:
         home: Accueil
         login: Connexion à APLyPro
       classes:
-        index: Liste des classes
+        index: Liste des classes et formations
         show: "%{name}"
         bulk_pfmp: &new_bulk_pfmp_title Ajout d'une PFMP pour toute la classe
         create_bulk_pfmp: *new_bulk_pfmp_title
