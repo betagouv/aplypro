@@ -18,6 +18,8 @@ module ASP
 
       validates_presence_of %i[numadm datecomplete datereceptionprestadoss montanttotalengage valeur]
 
+      validates_length_of :numadm, is: 21
+
       def xml_root_args
         if known_record?
           { idPrestaDoss: id_prestation_dossier, **ASP_NO_MODIFICATION }
