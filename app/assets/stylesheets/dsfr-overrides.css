@@ -57,6 +57,9 @@ code {
   Background: var(--artwork-background-beige-gris-galet);
 }
 
+/* NOTE: this override is because of a bug in the DSFR:
+Issue: https://github.com/GouvernementFR/dsfr/issues/852 */
+
 .fr-checkbox-group input[type=checkbox]+label {
   display: inline;
 }

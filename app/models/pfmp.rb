@@ -77,22 +77,11 @@ class Pfmp < ApplicationRecord
 
     return if !changed_day_count
 
-    update_amounts!
-  end
-
-  def update_amounts!
-    raise "A PFMP paid or in the process of being paid cannot have its amount recalculated" unless can_be_modified?
-
-    update!(amount: calculate_amount)
-    following_modifiable_pfmps.first&.update_amounts!
+    PfmpManager.new(self).recalculate_amounts!
   end
 
   def validate!
     transition_to!(:validated)
-  end
-
-  def setup_payment!
-    payment_requests.create! if amount.positive?
   end
 
   def relative_index
@@ -119,6 +108,10 @@ class Pfmp < ApplicationRecord
 
   def can_be_modified?
     !locked?
+  end
+
+  def stalled_payment_request?
+    payment_requests.last.failed? && payment_requests.active.none?
   end
 
   def payment_due?

@@ -39,6 +39,6 @@
   %p La validation du chef d'établissement est nécessaire pour chaque PFMP. Une fois la PFMP validée, une demande de paiement sera envoyée à l'Agence de Services et de Paiement (ASP).
   %ul.fr-btns-group
     - if current_user.can_validate?
-      %li= link_to "Valider des PFMPs à envoyer en paiement", validations_path, class: "fr-btn fr-btn--primary fr-mb-0"
+      %li= link_to "Consulter et gérer les envois en paiement", validations_path, class: "fr-btn fr-btn--primary fr-mb-0"
     - else
       %li= button_to "Vous n'avez pas le droit de valider des PFMPs", "#", class: 'fr-btn fr-btn--primary fr-mb-0', disabled: true
