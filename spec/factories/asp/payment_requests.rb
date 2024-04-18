@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :asp_payment_request, class: "ASP::PaymentRequest" do
-    initialize_with { pfmp.payment_requests.last }
+    initialize_with { pfmp.payment_requests.last } # FIXME
 
     pfmp { association :pfmp, :validated }
 

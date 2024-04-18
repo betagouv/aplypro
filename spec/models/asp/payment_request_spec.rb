@@ -58,6 +58,8 @@ RSpec.describe ASP::PaymentRequest do
 
     # NOTE: a previous version of the factory was creating 2 records on each call
     # The problem was solved using initialize_with which has different side-effects
+    # ex: you cant create additional payment_requests on a Pfmp using factories
+    #     create(:asp_payment_request, pfmp: target_pfmp) will not create a new payment request
     it "does not create extra payment requests" do
       expect { create(:asp_payment_request) }.to change(described_class, :count).by(1)
     end
