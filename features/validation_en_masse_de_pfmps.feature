@@ -15,16 +15,16 @@ Fonctionnalité: Complétion des PFMPs d'une classe
     Et que je clique sur "Envoyer en paiement"
 
   Scénario: Le personnel peut accéder à la page des classes avec PFMPs à valider
-    Alors la page contient "2NDEB - Développement"
+    Alors la page contient "2NDEB - 2NDEPRO Développement"
     Et je peux voir 2 PFMP "Saisies à valider" pour la classe "2NDEB"
 
   Scénario: Le personnel de direction voit le nom du directeur confirmé existant
     Sachant que mon établissement a un directeur confirmé nommé "Jean Dupuis"
-    Quand je clique sur "2NDEB - Développement"
+    Quand je clique sur "2NDEB - 2NDEPRO Développement"
     Alors la page contient "Vous remplacerez Jean Dupuis"
 
   Scénario: Le personnel peut accéder à la page de validation des PFMPs saisies à valider d'une classe
-    Lorsque je clique sur "2NDEB - Développement"
+    Lorsque je clique sur "2NDEB - 2NDEPRO Développement"
     Alors la page contient "Envoyer en paiement les PFMPs de 2NDEB"
     Et la page contient "1 € par jour travaillé"
     Et la page contient "100 € de plafond annuel"
@@ -34,13 +34,13 @@ Fonctionnalité: Complétion des PFMPs d'une classe
       | Langevin Paul | mars 2024 | 4 jours         | 4 €     |
 
   Scénario: Le personnel ne peut pas valider les PFMPs sans cocher la case de responsable légal
-    Et que je clique sur "2NDEB - Développement"
+    Et que je clique sur "2NDEB - 2NDEPRO Développement"
     Et que je décoche la case de responsable légal
     Lorsque je clique sur "Envoyer en paiement les PFMPs cochées"
     Alors la page contient "Vous devez être chef d'établissement"
 
   Scénario: Le personnel peut valider les PFMPs d'une classe
-    Et que je clique sur "2NDEB - Développement"
+    Et que je clique sur "2NDEB - 2NDEPRO Développement"
     Et que je coche la case de responsable légal
     Lorsque je clique sur "Envoyer en paiement les PFMPs cochées"
     Alors la page contient "PFMPs envoyées en paiement pour la classe 2NDEB"
@@ -52,7 +52,7 @@ Fonctionnalité: Complétion des PFMPs d'une classe
       | Langevin Paul |                         |                       | Validée mars 2024 |
 
   Scénario: Le personnel peut décocher des PFMPs pour éviter de les valider
-    Et que je clique sur "2NDEB - Développement"
+    Et que je clique sur "2NDEB - 2NDEPRO Développement"
     Et que je décoche "Curie Marie"
     Et que je coche la case de responsable légal
     Lorsque je clique sur "Envoyer en paiement les PFMPs cochées"
@@ -65,7 +65,7 @@ Fonctionnalité: Complétion des PFMPs d'une classe
       | Langevin Paul |                         |                       | Validée mars 2024          |
 
   Scénario: Le personnel ne peut pas valider si toutes les PFMPs sont décochées
-    Et que je clique sur "2NDEB - Développement"
+    Et que je clique sur "2NDEB - 2NDEPRO Développement"
     Et que je décoche "Curie Marie"
     Et que je décoche "Langevin Paul"
     Et que je coche la case de responsable légal
