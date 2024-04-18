@@ -32,13 +32,15 @@ RSpec.describe ASP::PaymentRequest do
     end
   end
 
-  describe "factory" do
+  describe "factories" do
     ASP::PaymentRequestStateMachine.states.each do |state|
       it "has a valid '#{state}' factory" do
         expect(create(:asp_payment_request, state)).to be_valid
       end
     end
 
+    # NOTE: a previous version of the factory was creating 2 records on each call
+    # The problem was solved using initialize_with which has different side-effects
     it "does not create extra payment requests" do
       expect { create(:asp_payment_request) }.to change(described_class, :count).by(1)
     end
