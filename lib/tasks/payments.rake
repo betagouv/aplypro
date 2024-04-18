@@ -86,9 +86,8 @@ ASP::PaymentRequest.joins(ASP::PaymentRequest.most_recent_transition_join).group
 ASP::PaymentRequest.in_state(%i[sent integrated rejected]).where("most_recent_asp_payment_request_transition.created_at >= ?", Date.today.beginning_of_week).count
 
 # Select 7k and send them
-prs = ASP::PaymentRequest.in_state(:ready).joins(:pfmp).order(:end_date).limit 7000
+prs = ASP::PaymentRequest.in_state(:ready).joins(:pfmp).order(:"pfmps.end_date").joins(schooling: { classe: :mef }).where.not("mefs.ministry": :mer).limit 7000 # IGNORE LA MER, ILS SONT INVALIDES CES TARBA
 SendPaymentRequestsJob.perform_later(prs.to_a); p "Job started !"
-
 
 
 #####################################################################
