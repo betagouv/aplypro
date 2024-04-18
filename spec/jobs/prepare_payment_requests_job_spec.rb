@@ -40,7 +40,6 @@ RSpec.describe PreparePaymentRequestsJob do
         perform_enqueued_jobs do
           described_class.perform_later
         end
-
         expect(payment_request).to have_received(:mark_incomplete!)
       end
     end

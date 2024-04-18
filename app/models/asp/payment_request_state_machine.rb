@@ -35,49 +35,16 @@ module ASP
     end
 
     guard_transition(to: :ready) do |request|
-      ASP::StudentFileEligibilityChecker.new(request.student).ready?
-    end
-
-    guard_transition(to: :ready) do |request|
-      request.student.lives_in_france?
-    end
-
-    guard_transition(to: :ready) do |request|
-      request.schooling.student?
-    end
-
-    guard_transition(to: :ready) do |request|
-      request.student.rib.valid?
-    end
-
-    guard_transition(to: :ready) do |request|
-      request.pfmp.valid?
-    end
-
-    guard_transition(to: :ready) do |request|
-      !request.student.ine_not_found
-    end
-
-    guard_transition(to: :ready) do |request|
-      !request.student.adult_without_personal_rib?
-    end
-
-    guard_transition(to: :ready) do |request|
-      request.pfmp.amount.positive?
-    end
-
-    guard_transition(to: :ready) do |request|
-      request.schooling.attributive_decision.attached?
-    end
-
-    guard_transition(to: :ready) do |request|
-      request.pfmp.duplicates.none? do |pfmp|
-        pfmp.in_state?(:validated)
-      end
+      request.completion_status.values.all?(true)
     end
 
     guard_transition(from: :ready, to: :sent) do |request|
       request.asp_request.present?
+    end
+
+    after_guard_failure(from: :pending, to: :ready) do |request, exception|
+      # raise something better than guard at line whatever
+      raise "Could not transition to ready, here are the checks that failed:#{request.completion_status}"
     end
   end
 end

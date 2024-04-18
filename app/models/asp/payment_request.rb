@@ -40,31 +40,31 @@ module ASP
     end
 
     def mark_incomplete!
-      transition_to!(:incomplete)
+      transition_to!(:incomplete, completion_status)
     end
 
     def mark_as_sent!
       transition_to!(:sent)
     end
 
-    def reject!(attrs)
-      transition_to!(:rejected, attrs)
+    def reject!(metadata)
+      transition_to!(:rejected, metadata)
     end
 
-    def mark_integrated!(attrs)
-      transition_to!(:integrated, attrs)
+    def mark_integrated!(metadata)
+      transition_to!(:integrated, metadata)
     end
 
-    def mark_paid!(attrs, record)
+    def mark_paid!(metadata, record)
       update!(asp_payment_return: record)
 
-      transition_to!(:paid, attrs)
+      transition_to!(:paid, metadata)
     end
 
-    def mark_unpaid!(attrs, record)
+    def mark_unpaid!(metadata, record)
       update!(asp_payment_return: record)
 
-      transition_to!(:unpaid, attrs)
+      transition_to!(:unpaid, metadata)
     end
 
     def terminated?
@@ -81,6 +81,21 @@ module ASP
 
     def unpaid_reason
       last_transition.metadata["PAIEMENT"]["LIBELLEMOTIFINVAL"]
+    end
+
+    def completion_status
+      {
+          "student_eligibilty": ASP::StudentFileEligibilityChecker.new(request.student).ready?,
+          "student_lives_in_france": student.lives_in_france?,
+          "student_enrolled": schooling.student?,
+          "valid_rib": student.rib.valid?,
+          "valid_pfmp": pfmp.valid?,
+          "ine_found": !student.ine_not_found,
+          "has_rib": !student.adult_without_personal_rib?,
+          "positive_amount": pfmp.amount.positive?,
+          "attached_attribute_decision": schooling.attributive_decision.attached?,
+          "no_validated_duplicates": pfmp.duplicates.none? { |pfmp| pfmp.in_state?(:validated) }
+      }
     end
 
     private

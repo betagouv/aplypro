@@ -7,9 +7,11 @@ class PreparePaymentRequestsJob < ApplicationJob
     ASP::PaymentRequest
       .in_state(:pending)
       .find_each do |request|
-      request.mark_ready!
-    rescue Statesman::GuardFailedError
-      request.mark_incomplete!
+      if request.can_transition_to?(:ready)
+        request.mark_ready!
+      else
+        request.mark_incomplete!
+      end
     end
   end
 end
