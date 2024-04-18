@@ -10,6 +10,23 @@ RSpec.describe ASP::PaymentRequest do
     it { is_expected.to belong_to(:asp_payment_return).optional }
   end
 
+  describe "scopes" do
+    describe "latest_per_pfmp" do
+      let(:pfmp) { create(:pfmp) }
+      let(:payment_requests) { create_list(:asp_payment_request, 3, :rejected) }
+
+      before do
+        payment_requests.each_with_index do |request, i|
+          request.update!(pfmp: pfmp, created_at: request.created_at + (i * 10.minutes))
+        end
+      end
+
+      it "only returns the last payment requests for a given pfmp based on created_at" do
+        expect(pfmp.payment_requests.latest_per_pfmp.to_a).to eq [payment_requests.last]
+      end
+    end
+  end
+
   describe "active?" do
     subject { create(:asp_payment_request, state) }
 
