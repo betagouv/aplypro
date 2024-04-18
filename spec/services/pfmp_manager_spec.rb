@@ -24,7 +24,7 @@ describe PfmpManager do
       let(:pfmp) { create(:asp_payment_request, :integrated).pfmp }
 
       it "raises an error" do
-        expect { manager.create_new_payment_request! }.to raise_error(PfmpManager::PreviousActivePaymentRequestError)
+        expect { manager.create_new_payment_request! }.to raise_error(PfmpManager::ExistingActivePaymentRequestError)
       end
     end
 
