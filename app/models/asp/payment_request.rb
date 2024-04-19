@@ -22,6 +22,14 @@ module ASP
     scope :ongoing, -> { in_state(*ASP::PaymentRequestStateMachine::ONGOING_STATES) }
     scope :failed, -> { in_state(*ASP::PaymentRequestStateMachine::FAILED_STATES) }
 
+    scope :latest_per_pfmp, lambda {
+      subquery = ASP::PaymentRequest
+                 .select("DISTINCT ON (pfmp_id) *")
+                 .order("pfmp_id", "created_at DESC")
+                 .to_sql
+      from("(#{subquery}) as asp_payment_requests")
+    }
+
     include Statesman::Adapters::ActiveRecordQueries[
       transition_class: ASP::PaymentRequestTransition,
       initial_state: ASP::PaymentRequestStateMachine.initial_state,

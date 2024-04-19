@@ -10,6 +10,31 @@ RSpec.describe ASP::PaymentRequest do
     it { is_expected.to belong_to(:asp_payment_return).optional }
   end
 
+  describe "scopes" do
+    describe "latest_per_pfmp" do
+      let(:pfmp) { create(:pfmp) }
+      let(:rejected_payment_requests) { create_list(:asp_payment_request, 3, :rejected) }
+      let(:paid_payment_requests) { create_list(:asp_payment_request, 3, :paid) }
+
+      before do
+        rejected_payment_requests.each_with_index do |request, i|
+          request.update!(pfmp: pfmp, created_at: request.created_at + (i * 10.minutes))
+        end
+        paid_payment_requests.each_with_index do |request, i|
+          request.update!(pfmp: pfmp, created_at: request.created_at + (i * 100.minutes))
+        end
+      end
+
+      it "takes precedence as a subquery to for filtering records" do
+        expect(pfmp.payment_requests.failed.latest_per_pfmp.to_a).to eq []
+      end
+
+      it "only returns the last payment requests for a given pfmp based on created_at" do
+        expect(pfmp.payment_requests.latest_per_pfmp.to_a).to eq [paid_payment_requests.last]
+      end
+    end
+  end
+
   describe "active?" do
     subject { create(:asp_payment_request, state) }
 
@@ -32,13 +57,17 @@ RSpec.describe ASP::PaymentRequest do
     end
   end
 
-  describe "factory" do
+  describe "factories" do
     ASP::PaymentRequestStateMachine.states.each do |state|
       it "has a valid '#{state}' factory" do
         expect(create(:asp_payment_request, state)).to be_valid
       end
     end
 
+    # NOTE: a previous version of the factory was creating 2 records on each call
+    # The problem was solved using initialize_with which has different side-effects
+    # ex: you cant create additional payment_requests on a Pfmp using factories
+    #     create(:asp_payment_request, pfmp: target_pfmp) will not create a new payment request
     it "does not create extra payment requests" do
       expect { create(:asp_payment_request) }.to change(described_class, :count).by(1)
     end
