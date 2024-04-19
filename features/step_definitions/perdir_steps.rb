@@ -33,12 +33,6 @@ Alors("l'élève a {int} PFMP") do |count|
   expect(@student.pfmps.count).to eq count
 end
 
-Quand("l'élève {string} a une adresse en France et son propre RIB") do |name|
-  student = find_student_by_full_name(name)
-  student.update!(address_country_code: "99100")
-  student.rib.update!(personal: true)
-end
-
 Quand("je consulte la liste des classes") do
   steps %(Quand je clique sur "Élèves" dans le menu principal)
 end

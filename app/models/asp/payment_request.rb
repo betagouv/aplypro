@@ -30,6 +30,16 @@ module ASP
       from("(#{subquery}) as asp_payment_requests")
     }
 
+    class << self
+      def to_consider(max_date)
+        in_state(:pending)
+          .joins(:schooling, :pfmp, :student)
+          .merge(Schooling.with_attributive_decisions)
+          .merge(Student.with_rib)
+          .where("pfmps.end_date <= ?", max_date)
+      end
+    end
+
     include Statesman::Adapters::ActiveRecordQueries[
       transition_class: ASP::PaymentRequestTransition,
       initial_state: ASP::PaymentRequestStateMachine.initial_state,
