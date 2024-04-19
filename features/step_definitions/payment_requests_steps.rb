@@ -4,10 +4,10 @@ Sachantque(
   "l'élève {string} en classe de {string} a toutes les informations nécessaires pour le paiement"
 ) do |name, classe|
   steps %(
+    Sachant que l'API SYGNE renvoie une adresse en France pour l'élève "#{name}"
     Quand les informations personnelles ont été récupérées pour l'élève "#{name}"
     Et que l'élève "#{name}" a bien le statut étudiant
     Et que je renseigne les coordonnées bancaires de l'élève "#{name}" de la classe "#{classe}"
-    Et que l'élève "#{name}" a une adresse en France et son propre RIB
     Et que je génère les décisions d'attribution de mon établissement
     Et que toutes les tâches de fond sont terminées
     Et que je consulte le profil de "#{name}" dans la classe de "#{classe}"
@@ -19,7 +19,7 @@ Sachantque(
 ) do |name, classe|
   steps %(
     Quand l'élève "#{name}" en classe de "#{classe}" a toutes les informations nécessaires pour le paiement
-    Mais qu'il manque des coordonnées bancaires à "#{name}"
+    Mais que l'API SYGNE renvoie une adresse à l'étranger pour l'élève "#{name}"
     Et que les tâches de préparation et d'envoi des paiements sont passées
   )
 end

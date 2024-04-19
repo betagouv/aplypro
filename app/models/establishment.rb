@@ -71,6 +71,10 @@ class Establishment < ApplicationRecord
     [address_line1, address_line2, postal_code, city].join(", ")
   end
 
+  def students_api
+    StudentApi.api_for(students_provider, uai)
+  end
+
   def rattach_attributive_decisions_zip!(content, filename)
     attributive_decisions_zip.purge if attributive_decisions_zip.present?
 
@@ -90,14 +94,6 @@ class Establishment < ApplicationRecord
     else
       :other
     end
-  end
-
-  def private?
-    contract_type == :private
-  end
-
-  def public?
-    contract_type == :public
   end
 
   def some_attributive_decisions?

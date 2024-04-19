@@ -24,6 +24,7 @@ Quand("je saisis des coordonnées bancaires") do
 
   steps %(
     Quand je remplis "Titulaire du compte" avec "#{rib.name}"
+    Et que je choisis "Les coordonnées bancaires appartiennent à l'élève"
     Et que je remplis "IBAN" avec "#{rib.iban}"
     Et que je remplis "BIC" avec "#{rib.bic}"
   )
@@ -32,7 +33,7 @@ end
 Quand("je saisis les coordonées bancaires d'un tiers pour {string}") do |name|
   steps %(
     Quand je remplis les informations bancaires de "#{name}"
-    Et que je décoche "Les coordonnées bancaires appartiennent à l'élève"
+    Et que je choisis "Les coordonnées bancaires appartiennent à un représentant légal ou à un tiers"
   )
 end
 
