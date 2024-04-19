@@ -11,6 +11,14 @@ describe ASP::Entities::Dossier, type: :model do
 
   it_behaves_like "an ASP payment mapping entity"
 
+  context "when the mef's ministry is MER" do
+    let(:mef) { create(:mef, ministry: Mef.ministries[:mer]) }
+
+    before { payment_request.pfmp.schooling.classe.update(mef: mef) }
+
+    it_behaves_like "an ASP payment mapping entity"
+  end
+
   it_behaves_like "an XML-fragment producer" do
     let(:entity) { described_class.from_payment_request(payment_request) }
     let(:probe) { ["dossier/numadm", payment_request.schooling.attributive_decision_number] }
