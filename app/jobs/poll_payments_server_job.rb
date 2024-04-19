@@ -3,6 +3,8 @@
 class PollPaymentsServerJob < ApplicationJob
   queue_as :payments
 
+  sidekiq_options retry: false
+
   def perform
     dir = ASP::Server.get_all_files!
 
