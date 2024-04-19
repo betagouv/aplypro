@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PollPaymentsServerJob < ApplicationJob
-  queue_as :default
+  queue_as :payments
 
   def perform
     dir = ASP::Server.get_all_files!
