@@ -1,22 +1,23 @@
-- if @validatable_classes.empty?
-  Il n'y a aucune PFMP à valider pour l'instant.
-- else
-  .fr-table.fr-table--no-caption
-    %table
-      %caption.fr-h1 Liste des classes
-      %thead
-        %th{scope: "col"} Classe
-        %th{scope: "col"} Décisions d'attribution
-        %th{scope: "col"} Coordonnées bancaires
-        %th{scope: "col"} PFMPs à valider
-      %tbody
-        - @validatable_classes.each do |classe|
-          - nb_students = @classes_facade.nb_students_per_class[classe.id]
-          %tr
-            %td
-              = dsfr_link_to classe.to_long_s, validation_class_path(classe), title: t("links.classes.show", label: classe.to_long_s)
-            %td= progress_badge @classes_facade.nb_attributive_decisions_per_class[classe.id], nb_students
-            %td= progress_badge @classes_facade.nb_ribs_per_class[classe.id], nb_students
-            %td= pfmps_status_count_badge :completed, @classes_facade.nb_pfmps(classe.id, :completed)
+-if current_user.can_validate?
+  - if @validatable_classes.empty?
+    Il n'y a aucune PFMP à valider pour l'instant.
+  - else
+    .fr-table.fr-table--no-caption
+      %table
+        %caption.fr-h1 Liste des classes
+        %thead
+          %th{scope: "col"} Classe
+          %th{scope: "col"} Décisions d'attribution
+          %th{scope: "col"} Coordonnées bancaires
+          %th{scope: "col"} PFMPs à valider
+        %tbody
+          - @validatable_classes.each do |classe|
+            - nb_students = @classes_facade.nb_students_per_class[classe.id]
+            %tr
+              %td
+                = dsfr_link_to classe.to_long_s, validation_class_path(classe), title: t("links.classes.show", label: classe.to_long_s)
+              %td= progress_badge @classes_facade.nb_attributive_decisions_per_class[classe.id], nb_students
+              %td= progress_badge @classes_facade.nb_ribs_per_class[classe.id], nb_students
+              %td= pfmps_status_count_badge :completed, @classes_facade.nb_pfmps(classe.id, :completed)
 
 = render partial: 'pfmps/failed_pfmps', locals: { failed_pfmps: @validations_facade.failed_pfmps }

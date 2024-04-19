@@ -4,7 +4,7 @@ class ValidationsController < ApplicationController
   include RoleCheck
 
   before_action :set_classe, only: %i[show validate]
-  before_action :check_director, only: %i[index show validate]
+  before_action :check_director, only: %i[show validate]
   before_action :update_confirmed_director!,
                 :check_confirmed_director_for_validation,
                 only: :validate
