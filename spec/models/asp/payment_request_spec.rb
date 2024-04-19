@@ -13,16 +13,24 @@ RSpec.describe ASP::PaymentRequest do
   describe "scopes" do
     describe "latest_per_pfmp" do
       let(:pfmp) { create(:pfmp) }
-      let(:payment_requests) { create_list(:asp_payment_request, 3, :rejected) }
+      let(:rejected_payment_requests) { create_list(:asp_payment_request, 3, :rejected) }
+      let(:paid_payment_requests) { create_list(:asp_payment_request, 3, :paid) }
 
       before do
-        payment_requests.each_with_index do |request, i|
+        rejected_payment_requests.each_with_index do |request, i|
           request.update!(pfmp: pfmp, created_at: request.created_at + (i * 10.minutes))
+        end
+        paid_payment_requests.each_with_index do |request, i|
+          request.update!(pfmp: pfmp, created_at: request.created_at + (i * 100.minutes))
         end
       end
 
+      it "takes precedence as a subquery to for filtering records" do
+        expect(pfmp.payment_requests.failed.latest_per_pfmp.to_a).to eq []
+      end
+
       it "only returns the last payment requests for a given pfmp based on created_at" do
-        expect(pfmp.payment_requests.latest_per_pfmp.to_a).to eq [payment_requests.last]
+        expect(pfmp.payment_requests.latest_per_pfmp.to_a).to eq [paid_payment_requests.last]
       end
     end
   end
