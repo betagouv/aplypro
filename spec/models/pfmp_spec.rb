@@ -75,6 +75,16 @@ RSpec.describe Pfmp do
     end
   end
 
+  describe "deletion" do
+    context "when there is an ongoing payment request" do
+      let(:pfmp) { create(:asp_payment_request, :sent).pfmp }
+
+      it "cannot be deleted" do
+        expect { pfmp.destroy! }.to raise_error ActiveRecord::RecordNotDestroyed
+      end
+    end
+  end
+
   describe "states" do
     it "is initially pending" do
       expect(pfmp).to be_in_state :pending
