@@ -15,6 +15,12 @@ module Stats
         Indicator::Schoolings,
         Indicator::Pfmps
       ].map(&:new)
+
+      %i[sent integrated paid].each do |state|
+        @indicators.push Indicator::PaymentRequestStates.new(state)
+      end
+
+      @indicators.push Indicator::PaymentRequestStateAmounts.new(:paid)
     end
 
     def indicators_titles

@@ -13,7 +13,8 @@ RSpec.shared_context "when there is data for global stats" do
 
     create_list(:student, 2, :asp_ready) do |student|
       schooling = create(:schooling, :with_attributive_decision, :student, classe: classe, student: student)
-      create(:pfmp, :validated, schooling: schooling, day_count: 5)
+      pfmp = create(:pfmp, :validated, schooling: schooling, day_count: 5)
+      create(:asp_payment_request, :sent, pfmp: pfmp)
     end
   end
 end
@@ -30,7 +31,8 @@ RSpec.shared_context "when there is data for stats per bops" do
 
       create_list(:student, index + 1, :asp_ready) do |student|
         schooling = create(:schooling, :with_attributive_decision, classe: classe, student: student)
-        create(:pfmp, :validated, schooling: schooling, day_count: 5)
+        pfmp = create(:pfmp, :validated, schooling: schooling, day_count: 5)
+        create(:asp_payment_request, :integrated, pfmp: pfmp)
       end
     end
 
@@ -44,7 +46,8 @@ RSpec.shared_context "when there is data for stats per bops" do
 
     create_list(:student, 4, :asp_ready) do |student|
       schooling = create(:schooling, :with_attributive_decision, classe: private_classe, student: student)
-      create(:pfmp, :validated, schooling: schooling, day_count: 5)
+      pfmp = create(:pfmp, :validated, schooling: schooling, day_count: 5)
+      create(:asp_payment_request, :integrated, pfmp: pfmp)
     end
   end
 end
@@ -63,7 +66,8 @@ RSpec.shared_context "when there is data for stats per MENJ academies" do
 
       create_list(:student, index + 1, :asp_ready) do |student|
         schooling = create(:schooling, :with_attributive_decision, classe: classe, student: student)
-        create(:pfmp, :validated, schooling: schooling, day_count: 5)
+        pfmp = create(:pfmp, :validated, schooling: schooling, day_count: 5)
+        create(:asp_payment_request, :paid, pfmp: pfmp)
       end
     end
   end
@@ -92,7 +96,8 @@ RSpec.shared_context "when there is data for stats per establishments" do
 
       create_list(:student, index + 1, :asp_ready) do |student|
         schooling = create(:schooling, :with_attributive_decision, classe: classe, student: student)
-        create(:pfmp, :validated, schooling: schooling, day_count: 5)
+        pfmp = create(:pfmp, :validated, schooling: schooling, day_count: 5)
+        create(:asp_payment_request, :paid, pfmp: pfmp)
       end
     end
   end
