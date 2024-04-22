@@ -2,9 +2,10 @@
   - if @validatable_classes.empty?
     Il n'y a aucune PFMP à valider pour l'instant.
   - else
-    .fr-table.fr-table--no-caption
+    .fr-table.fr-table
       %table
-        %caption.fr-h1 Liste des classes
+        %caption.fr-h1
+          = t("pages.titles.validations.index")
         %thead
           %th{scope: "col"} Classe
           %th{scope: "col"} Décisions d'attribution
