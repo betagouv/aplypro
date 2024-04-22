@@ -16,7 +16,7 @@ Fonctionnalité: Suivi des demandes de paiement par le personnel
   Scénario: Le personnel peut voir les paiements qui ont échoués et relancer une demande de paiement
     Sachant que je me connecte en tant que personnel autorisé de l'établissement "DINUM"
     Et que je passe l'écran d'accueil
-    Et que je clique sur "Paiements"
+    Lorsque je clique sur "Paiements"
     Alors la page ne contient pas "Classes à envoyer en paiement"
     Alors la page contient "Liste des paiements échoués"
     Alors la page contient "Le paiement a été refusé par l'agence comptable :"
