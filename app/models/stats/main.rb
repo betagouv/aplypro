@@ -10,7 +10,7 @@ module Stats
         Indicator::Ribs,
         Indicator::ValidatedPfmps,
         Indicator::StudentsData,
-        Indicator::Payments,
+        Indicator::SendableAmounts,
         Indicator::YearlyAmounts,
         Indicator::Schoolings,
         Indicator::Pfmps

@@ -3,7 +3,7 @@
 require "rails_helper"
 require "./spec/models/stats/shared_contexts"
 
-describe Stats::Indicator::Payments do
+describe Stats::Indicator::SendableAmounts do
   describe "#global_data" do
     subject { described_class.new.global_data }
 
