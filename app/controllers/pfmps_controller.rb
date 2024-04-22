@@ -56,10 +56,13 @@ class PfmpsController < ApplicationController
   end
 
   def destroy
-    @pfmp.destroy
-
-    redirect_to class_student_path(@classe, @schooling.student),
-                notice: t("flash.pfmps.destroyed", name: @schooling.student.full_name)
+    if @pfmp.destroy
+      redirect_to class_student_path(@classe, @schooling.student),
+                  notice: t("flash.pfmps.destroyed", name: @schooling.student.full_name)
+    else
+      redirect_to class_student_path(@classe, @schooling.student),
+                  alert: t("flash.pfmps.not_destroyed")
+    end
   end
 
   private

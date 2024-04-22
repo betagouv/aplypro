@@ -44,6 +44,8 @@ class Pfmp < ApplicationRecord
 
   delegate :wage, to: :mef
 
+  before_destroy :ensure_unlocked?, prepend: true
+
   def self.perfect
     joins(:student)
       .merge(Schooling.student)
@@ -121,6 +123,15 @@ class Pfmp < ApplicationRecord
   def duplicates
     student.pfmps.excluding(self).select do |other|
       other.start_date == start_date && other.end_date == end_date
+    end
+  end
+
+  def ensure_unlocked?
+    # using `return unless locked?` is awkward
+    if locked? # rubocop:disable Style/GuardClause
+      errors.add(:base, :locked)
+
+      throw :abort
     end
   end
 end
