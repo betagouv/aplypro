@@ -6,7 +6,11 @@ class SendPaymentRequestsJob < ApplicationJob
   sidekiq_options retry: false
 
   def perform(payment_requests)
-    limit = [ASP::Request.total_requests_left, payment_requests.count].min
+    limit = [
+      payment_requests.count,
+      ASP::Request.total_requests_left,
+      ASP::Request::MAX_RECORDS_PER_FILE
+    ].min
 
     raise ASP::Errors::MaxRecordsPerWeekLimitReached if limit.zero?
 
@@ -14,7 +18,7 @@ class SendPaymentRequestsJob < ApplicationJob
 
     ActiveRecord::Base.transaction do
       ASP::Request
-        .create!(asp_payment_requests: payment_requests.first(limit))
+        .create!(asp_payment_requests: payment_requests.take(limit))
         .send!
     rescue Statesman::TransitionFailedError
       raise ASP::Errors::SendingPaymentRequestInWrongState

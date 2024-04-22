@@ -5,8 +5,7 @@ require "rails_helper"
 RSpec.describe SendPaymentRequestsJob do
   include ActiveJob::TestHelper
 
-  let(:asp_payment_request) { create(:asp_payment_request, :ready) }
-
+  let(:payment_requests) { create_list(:asp_payment_request, 5, :ready) }
   let(:server_double) { class_double(ASP::Server) }
 
   before do
@@ -15,9 +14,17 @@ RSpec.describe SendPaymentRequestsJob do
     allow(server_double).to receive(:drop_file!)
   end
 
-  context "when there are already some payment requests sent" do
-    let(:payment_requests) { create_list(:asp_payment_request, 10, :ready) }
+  context "when asked to send more than the allowed amount per request" do
+    before { stub_const("ASP::Request::MAX_RECORDS_PER_FILE", 3) }
 
+    it "automatically limits it" do
+      described_class.perform_now(payment_requests)
+
+      expect(ASP::Request.last.asp_payment_requests.count).to eq 3
+    end
+  end
+
+  context "when there are already some payment requests sent" do
     before do
       allow(ASP::Request).to receive(:total_requests_left).and_return 3
     end
@@ -45,7 +52,7 @@ RSpec.describe SendPaymentRequestsJob do
     end
 
     it "raises an error" do
-      expect { described_class.perform_now([asp_payment_request]) }
+      expect { described_class.perform_now(payment_requests) }
         .to raise_error ASP::Errors::MaxRequestsPerDayLimitReached
     end
   end
