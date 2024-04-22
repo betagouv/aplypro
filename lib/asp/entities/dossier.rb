@@ -14,7 +14,7 @@ module ASP
       known_with :id_dossier
 
       validates_presence_of %i[numadm codedispositif]
-      validates_length_of :numadm, is: 19
+      validates_length_of :numadm, within: 18..19
 
       def xml_root_args
         if known_record?
