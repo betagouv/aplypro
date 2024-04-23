@@ -87,6 +87,24 @@ module ASP
       )
     end
 
+    def inspect_file(type)
+      attachment = send "#{type}_file"
+
+      raise ArgumentError, "there is no #{type} file on this request" unless attachment.attached?
+
+      klass = "ASP::Readers::#{type.capitalize}FileReader".constantize
+
+      klass
+        .new(io: attachment.download)
+        .tap do |reader|
+        reader.instance_eval do |obj|
+          def obj.process!
+            raise ASP::Readers::Errors::ReadOnlyMode
+          end
+        end
+      end
+    end
+
     private
 
     def results_attached?
