@@ -3,6 +3,8 @@
 module ASP
   module Readers
     class Base
+      include Enumerable
+
       attr_reader :io, :record
 
       def initialize(io:, record: nil)
