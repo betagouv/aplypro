@@ -105,6 +105,12 @@ module ASP
       end
     end
 
+    def sent_ids
+      Nokogiri::XML(file.download)
+              .search("ENREGISTREMENT")
+              .pluck("idEnregistrement")
+    end
+
     private
 
     def results_attached?
