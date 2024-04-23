@@ -35,7 +35,7 @@ module ASP
     end
 
     guard_transition(to: :ready) do |request|
-      request.completion_status.values.all?(true)
+      request.completion_status.values.all?(&:true?)
     end
 
     guard_transition(from: :ready, to: :sent) do |request|

@@ -85,7 +85,7 @@ module ASP
 
     def completion_status
       {
-          "student_eligibilty": ASP::StudentFileEligibilityChecker.new(request.student).ready?,
+          "student_eligibilty": ASP::StudentFileEligibilityChecker.new(student).ready?,
           "student_lives_in_france": student.lives_in_france?,
           "student_enrolled": schooling.student?,
           "valid_rib": student.rib.valid?,
