@@ -82,7 +82,15 @@ check_10_000_payment_requests; p "done"
 ASP::PaymentRequest.joins(ASP::PaymentRequest.most_recent_transition_join).group(:to_state).count
 
 # Check si y'a moins de 100k en cours cette semaine
-ASP::PaymentRequest.in_state(%i[sent integrated rejected]).where("most_recent_asp_payment_request_transition.created_at >= ?", Date.today.beginning_of_week).count
+# ASP::PaymentRequest.in_state(%i[sent integrated rejected]).where("most_recent_asp_payment_request_transition.created_at >= ?", Date.today.beginning_of_week).count
+
+# Better method to check the number of sent this week !
+ASP::PaymentRequest.joins(:pfmp)
+  .joins(:asp_payment_request_transitions)
+  .where("asp_payment_request_transitions.to_state": :sent)
+  .where("asp_payment_request_transitions.created_at >= ?", Date.today.beginning_of_week)
+  .count
+
 
 # Select 7k and send them
 prs = ASP::PaymentRequest.in_state(:ready).joins(:pfmp).order(:"pfmps.end_date").joins(schooling: { classe: :mef }).where.not("mefs.ministry": :mer).limit 7000 # IGNORE LA MER, ILS SONT INVALIDES CES TARBA
