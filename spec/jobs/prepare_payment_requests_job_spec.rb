@@ -31,7 +31,7 @@ RSpec.describe PreparePaymentRequestsJob do
     context "when the payment_request is not ready" do
       before do
         # FIXME: this isn't great but we can't really mimick the error otherwise
-        error = Statesman::GuardFailedError.new(:pending, :ready, binding)
+        Statesman::GuardFailedError.new(:pending, :ready, binding)
 
         allow(payment_request).to receive(:can_transition_to?).with(:ready).and_return(false)
         allow(payment_request).to receive(:mark_incomplete!)

@@ -83,6 +83,7 @@ module ASP
       last_transition.metadata["PAIEMENT"]["LIBELLEMOTIFINVAL"]
     end
 
+    # rubocop:disable Metrics/AbcSize
     def completion_status
       {
         student_eligibilty: ASP::StudentFileEligibilityChecker.new(student).ready?,
@@ -97,6 +98,7 @@ module ASP
         no_validated_duplicates: pfmp.duplicates.none? { |pfmp| pfmp.in_state?(:validated) }
       }
     end
+    # rubocop:enable Metrics/AbcSize
 
     private
 
