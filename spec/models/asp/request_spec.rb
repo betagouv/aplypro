@@ -166,4 +166,28 @@ RSpec.describe ASP::Request do
       end
     end
   end
+
+  describe "inspecting files" do
+    subject(:request) { create(:asp_request, :with_request) }
+
+    %w[rejects integrations].each do |file_type|
+      before do
+        file = build("asp_#{file_type.singularize}", payment_request: request.asp_payment_requests.first)
+
+        request.send("#{file_type}_file").attach(io: StringIO.new(file), filename: "foobar")
+      end
+
+      it "allows inspecting the #{file_type} file" do
+        expect(request.inspect_file(file_type)).to be_a ASP::Readers::Base
+      end
+
+      it "does not allow processing by default" do
+        expect { request.inspect_file(file_type).process! }.to raise_error ASP::Readers::Errors::ReadOnlyMode
+      end
+
+      it "can use all the other methods of the reader" do
+        expect(request.inspect_file(file_type).count).to eq 1
+      end
+    end
+  end
 end
