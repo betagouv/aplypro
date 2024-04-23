@@ -51,7 +51,6 @@ def check_10_000_payment_requests(size: 10_000)
     .where("students.ine_not_found": false)
     .where.not("students.id": DUPLICATED_STUDENTS_IDS)
     .where("schoolings.attributive_decision_version < 10") # one_character_attributive_decision_version?
-    .where.not("ribs.name LIKE '%¨%' OR ribs.name LIKE '%;%'") # remove after fix
     .where.not("establishments.department_code": nil) # remove after adding a fallback on postal code
     .where.not("schoolings.administrative_number": nil) # remove after fixing schooling which still have the adm number in the student
     .order("pfmps.end_date")
