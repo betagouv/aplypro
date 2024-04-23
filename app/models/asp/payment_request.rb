@@ -22,6 +22,14 @@ module ASP
     scope :ongoing, -> { in_state(*ASP::PaymentRequestStateMachine::ONGOING_STATES) }
     scope :failed, -> { in_state(*ASP::PaymentRequestStateMachine::FAILED_STATES) }
 
+    scope :latest_per_pfmp, lambda {
+      subquery = ASP::PaymentRequest
+                 .select("DISTINCT ON (pfmp_id) *")
+                 .order("pfmp_id", "created_at DESC")
+                 .to_sql
+      from("(#{subquery}) as asp_payment_requests")
+    }
+
     include Statesman::Adapters::ActiveRecordQueries[
       transition_class: ASP::PaymentRequestTransition,
       initial_state: ASP::PaymentRequestStateMachine.initial_state,
@@ -71,6 +79,10 @@ module ASP
       in_state?(*ASP::PaymentRequestStateMachine::TERMINATED_STATES)
     end
 
+    def failed?
+      in_state?(*ASP::PaymentRequestStateMachine::FAILED_STATES)
+    end
+
     def active?
       !terminated?
     end
@@ -89,10 +101,10 @@ module ASP
         student_eligibilty: ASP::StudentFileEligibilityChecker.new(student).ready?,
         student_lives_in_france: student.lives_in_france?,
         student_enrolled: schooling.student?,
+        has_rib: student.rib.present? && !student.adult_without_personal_rib?,
         valid_rib: student.rib.present? && student.rib.valid?,
-        valid_pfmp: pfmp.valid?,
         ine_found: !student.ine_not_found,
-        has_rib: !student.adult_without_personal_rib?,
+        valid_pfmp: pfmp.valid?,
         positive_amount: pfmp.amount.positive?,
         attached_attribute_decision: schooling.attributive_decision.attached?,
         no_validated_duplicates: pfmp.duplicates.none? { |pfmp| pfmp.in_state?(:validated) }
@@ -105,7 +117,7 @@ module ASP
     def single_active_payment_request_per_pfmp
       return if pfmp.nil?
 
-      return unless pfmp.payment_requests.where.not(id: id).active.any?
+      return unless pfmp.payment_requests.excluding(self).active.any?
 
       errors.add(:base, "There can only be one active payment request per Pfmp.")
     end

@@ -75,6 +75,16 @@ RSpec.describe Pfmp do
     end
   end
 
+  describe "deletion" do
+    context "when there is an ongoing payment request" do
+      let(:pfmp) { create(:asp_payment_request, :sent).pfmp }
+
+      it "cannot be deleted" do
+        expect { pfmp.destroy! }.to raise_error ActiveRecord::RecordNotDestroyed
+      end
+    end
+  end
+
   describe "states" do
     it "is initially pending" do
       expect(pfmp).to be_in_state :pending
@@ -134,58 +144,6 @@ RSpec.describe Pfmp do
 
       it "cannot move to validated" do
         expect { pfmps.last.transition_to!(:validated) }.to raise_error Statesman::GuardFailedError
-      end
-    end
-  end
-
-  context "when the amount is updated" do
-    context "with a 'terminated' PFMP" do
-      context "with an active payment request" do
-        let(:pfmp) { create(:asp_payment_request, :sent).pfmp }
-
-        it "throws an error" do
-          expect { pfmp.update!(day_count: 15) }.to raise_error(/amount recalculated/)
-        end
-      end
-    end
-
-    context "with existing follow up modifiable pfmps" do
-      let(:existing_pfmp) { create(:pfmp, :completed, schooling: schooling, day_count: 2) }
-      let(:mef) { create(:mef, daily_rate: 20, yearly_cap: 400) }
-
-      before do
-        create(:pfmp, :completed, schooling: schooling, day_count: 6, created_at: existing_pfmp.created_at + 2.days)
-        create(:pfmp, :completed, schooling: schooling, day_count: 4, created_at: existing_pfmp.created_at + 3.days)
-        existing_pfmp.update!(day_count: existing_pfmp.day_count + 10)
-      end
-
-      it "recalculates the follow up modifiable pfmps amounts" do
-        expect(existing_pfmp.following_modifiable_pfmps.pluck(:amount)).to eq [120, 40]
-      end
-    end
-  end
-
-  describe "setup_payment!" do
-    subject(:pfmp) { create(:pfmp, schooling: schooling, day_count: 10) }
-
-    it "creates a new payment" do
-      expect { pfmp.setup_payment! }.to change(ASP::PaymentRequest, :count).by(1)
-    end
-
-    context "when there is no allowance left" do
-      before do
-        create(
-          :pfmp,
-          :validated,
-          start_date: Aplypro::SCHOOL_YEAR_START,
-          end_date: Aplypro::SCHOOL_YEAR_START >> 4,
-          schooling: schooling,
-          day_count: 100
-        )
-      end
-
-      it "does not create a payment" do
-        expect { pfmp.setup_payment! }.not_to change(ASP::PaymentRequest, :count)
       end
     end
   end

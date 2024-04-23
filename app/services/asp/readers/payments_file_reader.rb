@@ -5,39 +5,59 @@ require "csv"
 module ASP
   module Readers
     class PaymentsFileReader < Base
-      def process!
-        xml = Nokogiri::XML(io)
+      attr_reader :xml, :records
 
-        xml
-          .search("LISTEPAIEMENT/PAIEMENT")
-          .each { |node| handle_payment_node(node) }
+      class Node
+        attr_reader :node
+
+        def initialize(node)
+          @node = node
+        end
+
+        def state
+          node.search("ETATPAIEMENT").text
+        end
+
+        def to_h
+          Hash.from_xml(node.to_s)
+        end
+
+        def asp_prestation_dossier_id
+          node.search("LISTEPRESTADOSS/PRESTADOSS/IDPRESTADOSS").first.text
+        end
       end
 
-      private
+      def initialize(io:, record:)
+        super
 
-      def handle_payment_node(node)
-        state = (node / "ETATPAIEMENT").text
-        row = Hash.from_xml(node.to_s)
+        @xml = Nokogiri::XML(io)
+        @records = xml.search("LISTEPAIEMENT/PAIEMENT")
+      end
 
-        node.search("LISTEPRESTADOSS/PRESTADOSS").each do |file|
-          request = find_payment_request!(file)
+      def each
+        records.each do |record|
+          yield Node.new(record)
+        end
+      end
 
-          case state
+      def process!
+        each do |node|
+          request = find_payment_request!(node.asp_prestation_dossier_id)
+
+          case node.state
           when "PAYE"
-            request.mark_paid!(row, record)
+            request.mark_paid!(node.to_h, record)
           when "INVALIDE"
-            request.mark_unpaid!(row, record)
+            request.mark_unpaid!(node.to_h, record)
           else
             raise "unknown payment state: #{state}"
           end
         end
       end
 
-      def find_payment_request!(node)
-        id = (node / "IDPRESTADOSS").text
-
+      def find_payment_request!(asp_prestation_dossier_id)
         Pfmp
-          .find_by!(asp_prestation_dossier_id: id)
+          .find_by!(asp_prestation_dossier_id: asp_prestation_dossier_id)
           .payment_requests
           .in_state(:integrated)
           .sole

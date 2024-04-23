@@ -2,12 +2,14 @@
 
 class PfmpsController < ApplicationController
   include RoleCheck
+  include PfmpResource
 
-  before_action :check_director, :update_confirmed_director!, :check_confirmed_director, only: :validate
+  before_action :check_director, :update_confirmed_director!, :check_confirmed_director,
+                only: %i[validate]
 
   before_action :set_classe, :set_schooling
   before_action :set_pfmp_breadcrumbs, except: :confirm_deletion
-  before_action :set_pfmp, only: %i[show edit update validate confirm_deletion destroy]
+  before_action :set_pfmp, except: %i[new create]
 
   def show; end
 
@@ -54,10 +56,13 @@ class PfmpsController < ApplicationController
   end
 
   def destroy
-    @pfmp.destroy
-
-    redirect_to class_student_path(@classe, @schooling.student),
-                notice: t("flash.pfmps.destroyed", name: @schooling.student.full_name)
+    if @pfmp.destroy
+      redirect_to class_student_path(@classe, @schooling.student),
+                  notice: t("flash.pfmps.destroyed", name: @schooling.student.full_name)
+    else
+      redirect_to class_student_path(@classe, @schooling.student),
+                  alert: t("flash.pfmps.not_destroyed")
+    end
   end
 
   private
@@ -68,35 +73,5 @@ class PfmpsController < ApplicationController
       :end_date,
       :day_count
     )
-  end
-
-  def set_pfmp
-    @pfmp = @schooling.student.pfmps.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to class_student_path(@classe, @schooling.student), alert: t("errors.pfmps.not_found") and return
-  end
-
-  def set_schooling
-    @schooling = @classe.schoolings.find(params[:schooling_id])
-  end
-
-  def set_classe
-    @classe = Classe.where(establishment: current_establishment).find(params[:class_id])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to classes_path, alert: t("errors.classes.not_found") and return
-  end
-
-  def set_student_breadcrumbs
-    add_breadcrumb t("pages.titles.classes.index"), classes_path
-    add_breadcrumb t("pages.titles.classes.show", name: @classe.label), class_path(@classe)
-    add_breadcrumb(
-      t("pages.titles.students.show", name: @schooling.student.full_name, classe: @classe.label),
-      class_student_path(@classe, @schooling.student)
-    )
-  end
-
-  def set_pfmp_breadcrumbs
-    set_student_breadcrumbs
-    infer_page_title(name: @schooling.student.full_name)
   end
 end

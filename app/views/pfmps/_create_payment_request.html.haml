@@ -1,0 +1,8 @@
+- if pfmp.stalled_payment_request?
+  .fr-callout.fr-icon-information-line
+    %h3.fr-callout__title=t("payment_requests.actions.reset.title")
+    .fr-callout__text
+    = form_with method: :post, url: class_schooling_payment_requests_path(@classe, @schooling, @pfmp) do |form|
+      = t("payment_requests.actions.reset.warning")
+      = render partial: "shared/confirmed_director"
+      = form.submit t("payment_requests.actions.reset.cta"), class: "fr-btn"

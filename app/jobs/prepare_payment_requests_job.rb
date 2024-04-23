@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PreparePaymentRequestsJob < ApplicationJob
-  queue_as :default
+  queue_as :payments
 
   def perform
     ASP::PaymentRequest

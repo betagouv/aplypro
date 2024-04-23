@@ -16,13 +16,13 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
 
   Scénario: Le personnel de direction voit tous les menus
     Quand je clique sur "Continuer"
-    Alors la page contient "Envoyer en paiement"
+    Alors la page contient "Paiements"
     Et la page contient "Gestion des accès"
 
   Scénario: Le personnel de direction voit toutes les actions de directeur
     Quand je clique sur "Continuer"
     Alors le panneau "Décisions d'attribution" contient "Éditer la décision d'attribution manquante"
-    Alors le panneau "Demandes de paiements des PFMPs" contient "Valider des PFMPs à envoyer en paiement"
+    Alors le panneau "Demandes de paiements des PFMPs" contient "Consulter et gérer les envois en paiement"
 
   Scénario: Le personnel voit un aperçu des données sur la page d'accueil
     Quand je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"

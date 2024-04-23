@@ -63,7 +63,7 @@ class EstablishmentFacade
   end
 
   def current_payment_requests
-    establishment.payment_requests.merge(Classe.current)
+    establishment.payment_requests.latest_per_pfmp.merge(Classe.current)
   end
 
   def current_classes

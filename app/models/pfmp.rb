@@ -44,6 +44,8 @@ class Pfmp < ApplicationRecord
 
   delegate :wage, to: :mef
 
+  before_destroy :ensure_unlocked?, prepend: true
+
   def self.perfect
     joins(:student)
       .merge(Schooling.student)
@@ -77,22 +79,11 @@ class Pfmp < ApplicationRecord
 
     return if !changed_day_count
 
-    update_amounts!
-  end
-
-  def update_amounts!
-    raise "A PFMP paid or in the process of being paid cannot have its amount recalculated" unless can_be_modified?
-
-    update!(amount: calculate_amount)
-    following_modifiable_pfmps.first&.update_amounts!
+    PfmpManager.new(self).recalculate_amounts!
   end
 
   def validate!
     transition_to!(:validated)
-  end
-
-  def setup_payment!
-    payment_requests.create! if amount.positive?
   end
 
   def relative_index
@@ -121,6 +112,10 @@ class Pfmp < ApplicationRecord
     !locked?
   end
 
+  def stalled_payment_request?
+    payment_requests.last.failed? && payment_requests.active.none?
+  end
+
   def payment_due?
     day_count.present?
   end
@@ -128,6 +123,15 @@ class Pfmp < ApplicationRecord
   def duplicates
     student.pfmps.excluding(self).select do |other|
       other.start_date == start_date && other.end_date == end_date
+    end
+  end
+
+  def ensure_unlocked?
+    # using `return unless locked?` is awkward
+    if locked? # rubocop:disable Style/GuardClause
+      errors.add(:base, :locked)
+
+      throw :abort
     end
   end
 end

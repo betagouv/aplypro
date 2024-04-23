@@ -9,7 +9,9 @@ fr:
       not_authorised_to_validate: Seuls les personnels de direction peuvent valider les PFMPs
       not_authorised_to_invite: Seuls les personnels de direction peuvent gérer les accès
       destroyed: La PFMP de %{name} a bien été supprimée
+      not_destroyed: La PFMP ne peut pas être supprimée car son paiement est en cours de traitement
       validated: La PFMP de %{name} a bien été validée
+      create_payment_request: Une nouvelle demande de paiement a été créée
     ribs:
       destroyed: Les coordonnées bancaires de %{name} ont bien été supprimées
 
@@ -89,7 +91,7 @@ fr:
     classes: Élèves
     new_rib: Saisir des coord. bancaires
     new_pfmp: Saisir une PFMP
-    validate_all_pfmps: Envoyer en paiement
+    validate_all_pfmps: Paiements
     invitations: Gestion des accès
     faq: F.A.Q.
   pages:
@@ -121,7 +123,6 @@ fr:
         edit: &edit_pfmp_title "Modifier la PFMP de %{name}"
         update: *edit_pfmp_title
         validate: "Validation"
-        validate_all: "Valider des PFMPs à envoyer en paiement en 2024"
         confirm_deletion: "Suppression de la PFMP"
       ribs:
         new: &new_rib_title
@@ -213,6 +214,11 @@ fr:
         La PFMP a été validée. La demande de paiement sera envoyée dès que
         les développements nécessaires auront été effectués.
   payment_requests:
+    actions:
+      reset:
+        title: "Action possible sur le paiement"
+        cta: "Relancer une demande de paiement"
+        warning: "Vous avez corrigé le problème mentionné dans la liste des erreurs et vous souhaitez redemander un envoi en paiement."
     state:
       pending: "En attente"
       ready: "En attente"
@@ -247,7 +253,7 @@ fr:
         Le traitement du paiement peut prendre une à trois semaines.
       rejected: "La demande a été rejetée : %{rejection_reason}."
       paid: Le paiement a été envoyé par l'agence comptable, et sera effectif dans un délai de un à trois jours ouvrables.
-      unpaid: Le paiement a été refusé par l'agence comptable.
+      unpaid: "Le paiement a été refusé par l'agence comptable : %{unpaid_reason}."
   ministries:
     masa: Ministère de l'Agriculture et de la Souveraineté Alimentaire (MASA)
     menj: Ministère de l'Éducation Nationale et de la Jeunesse (MENJ)

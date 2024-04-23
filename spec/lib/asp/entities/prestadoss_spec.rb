@@ -14,6 +14,9 @@ describe ASP::Entities::Prestadoss, type: :model do
 
   it_behaves_like "an ASP payment mapping entity"
 
+  # When the mef's ministry is MER, we have one less charater than for ENPU, ENPR or ARMEE
+  it { is_expected.to validate_length_of(:numadm).is_at_least(20).is_at_most(21) }
+
   describe "formatting" do
     let(:model) { described_class.from_payment_request(payment_request) }
 

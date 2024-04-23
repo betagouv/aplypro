@@ -28,6 +28,8 @@ module ASP
 
     def file_saved?
       target_attachment.attached?
+    rescue UnmatchedResponseFile
+      false
     end
 
     private
