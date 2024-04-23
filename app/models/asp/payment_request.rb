@@ -40,7 +40,7 @@ module ASP
     end
 
     def mark_incomplete!
-      transition_to!(:incomplete, completion_status)
+      transition_to!(:incomplete, { incomplete_reason: completion_status })
     end
 
     def mark_as_sent!
@@ -85,16 +85,16 @@ module ASP
 
     def completion_status
       {
-          "student_eligibilty": ASP::StudentFileEligibilityChecker.new(student).ready?,
-          "student_lives_in_france": student.lives_in_france?,
-          "student_enrolled": schooling.student?,
-          "valid_rib": student.rib.valid?,
-          "valid_pfmp": pfmp.valid?,
-          "ine_found": !student.ine_not_found,
-          "has_rib": !student.adult_without_personal_rib?,
-          "positive_amount": pfmp.amount.positive?,
-          "attached_attribute_decision": schooling.attributive_decision.attached?,
-          "no_validated_duplicates": pfmp.duplicates.none? { |pfmp| pfmp.in_state?(:validated) }
+        student_eligibilty: ASP::StudentFileEligibilityChecker.new(student).ready?,
+        student_lives_in_france: student.lives_in_france?,
+        student_enrolled: schooling.student?,
+        valid_rib: student.rib.present? && student.rib.valid?,
+        valid_pfmp: pfmp.valid?,
+        ine_found: !student.ine_not_found,
+        has_rib: !student.adult_without_personal_rib?,
+        positive_amount: pfmp.amount.positive?,
+        attached_attribute_decision: schooling.attributive_decision.attached?,
+        no_validated_duplicates: pfmp.duplicates.none? { |pfmp| pfmp.in_state?(:validated) }
       }
     end
 

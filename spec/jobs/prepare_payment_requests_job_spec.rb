@@ -16,6 +16,7 @@ RSpec.describe PreparePaymentRequestsJob do
 
   context "when the payment_request is ready" do
     before do
+      allow(payment_request).to receive(:can_transition_to?).with(:ready).and_return(true)
       allow(payment_request).to receive(:mark_ready!)
     end
 
@@ -32,7 +33,7 @@ RSpec.describe PreparePaymentRequestsJob do
         # FIXME: this isn't great but we can't really mimick the error otherwise
         error = Statesman::GuardFailedError.new(:pending, :ready, binding)
 
-        allow(payment_request).to receive(:mark_ready!).and_raise(error)
+        allow(payment_request).to receive(:can_transition_to?).with(:ready).and_return(false)
         allow(payment_request).to receive(:mark_incomplete!)
       end
 

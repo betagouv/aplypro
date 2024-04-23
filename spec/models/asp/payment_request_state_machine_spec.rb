@@ -172,10 +172,10 @@ describe ASP::PaymentRequestStateMachine do
   end
 
   describe "mark_incomplete!" do
-    let(:asp_payment_request) { create(:asp_payment_request, :ready) }
+    let(:asp_payment_request) { create(:asp_payment_request, :incomplete) }
 
     it "sets the incomplete reason on the last transition metadata" do
-      expect(asp_payment_request.last_transition.metadata["incomplete_reason"]).to eq ""
+      expect(asp_payment_request.last_transition.metadata["incomplete_reason"]["student_lives_in_france"]).to be false
     end
   end
 end

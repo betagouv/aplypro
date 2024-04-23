@@ -35,16 +35,25 @@ module ASP
     end
 
     guard_transition(to: :ready) do |request|
-      request.completion_status.values.all?(&:true?)
+      request.completion_status.values.all?(true)
     end
 
     guard_transition(from: :ready, to: :sent) do |request|
       request.asp_request.present?
     end
 
-    after_guard_failure(from: :pending, to: :ready) do |request, exception|
-      # raise something better than guard at line whatever
-      raise "Could not transition to ready, here are the checks that failed:#{request.completion_status}"
+    after_guard_failure(from: :pending, to: :ready) do |request, _exception|
+      raise(
+        Statesman::GuardFailedError.new(
+          :pending,
+          :ready,
+          lambda {
+            "Some checks are missing to transition from pending to ready: #{request.completion_status.select do |_k, v|
+                                                                              v == false
+                                                                            end}"
+          }
+        )
+      )
     end
   end
 end
