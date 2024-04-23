@@ -56,7 +56,7 @@ def check_10_000_payment_requests(size: 10_000)
     .order("pfmps.end_date")
     .limit(size)
     .each_with_index do |request, index|
-    puts "dealing with #{request.id} [#{index}/#{size}k]..."
+    puts "dealing with #{request.id} [#{index}/#{size}]..."
     pfmp = request.pfmp
 
     if pfmp.valid? &&
@@ -85,7 +85,7 @@ ASP::PaymentRequest.joins(ASP::PaymentRequest.most_recent_transition_join).group
 # ASP::PaymentRequest.in_state(%i[sent integrated rejected]).where("most_recent_asp_payment_request_transition.created_at >= ?", Date.today.beginning_of_week).count
 
 # Better method to check the number of sent this week !
-ASP::PaymentRequest.joins(:pfmp)
+ASP::PaymentRequest
   .joins(:asp_payment_request_transitions)
   .where("asp_payment_request_transitions.to_state": :sent)
   .where("asp_payment_request_transitions.created_at >= ?", Date.today.beginning_of_week)
@@ -93,7 +93,7 @@ ASP::PaymentRequest.joins(:pfmp)
 
 
 # Select 7k and send them
-prs = ASP::PaymentRequest.in_state(:ready).joins(:pfmp).order(:"pfmps.end_date").joins(schooling: { classe: :mef }).where.not("mefs.ministry": :mer).limit 7000 # IGNORE LA MER, ILS SONT INVALIDES CES TARBA
+prs = ASP::PaymentRequest.in_state(:ready).joins(:pfmp).order(:"pfmps.end_date").limit 7000
 SendPaymentRequestsJob.perform_later(prs.to_a); p "Job started !"
 
 
