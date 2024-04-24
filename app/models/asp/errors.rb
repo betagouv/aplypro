@@ -9,5 +9,6 @@ module ASP
     class RerunningParsedRequest < Error; end
     class MaxRecordsPerWeekLimitReached < Error; end
     class MaxRequestsPerDayLimitReached < Error; end
+    class IncompletePaymentRequestError < Error; end
   end
 end

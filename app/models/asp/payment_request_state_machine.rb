@@ -37,23 +37,17 @@ module ASP
     guard_transition(to: :ready) do |request|
       ASP::PaymentRequestValidator.new.validate(request)
 
-      request.errors.none?
+      request.errors.empty?
     end
 
     guard_transition(from: :ready, to: :sent) do |request|
       request.asp_request.present?
     end
 
-    after_guard_failure(from: :pending, to: :ready) do |request, exception|
-      # NOTE: Reraise a guard failure error to preserve guard behavior but make it explicit
+    after_guard_failure(to: :ready) do |request, _exception|
       raise(
-        exception.class.new(
-          :pending,
-          :ready,
-          lambda {
-            "Some checks are missing to transition from pending to ready: #{request.errors}"
-          }
-        )
+        ASP::Errors::IncompletePaymentRequestError,
+        "Some conditions are missing to mark the payment request as ready: #{request.errors.full_messages.join('\n')}"
       )
     end
   end

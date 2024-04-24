@@ -11,7 +11,7 @@ describe ASP::PaymentRequestStateMachine do
 
   shared_examples "a blocked request" do |test_perfect_pfmp_scope = true|
     it "cannot transition to ready" do
-      expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
+      expect { asp_payment_request.mark_ready! }.to raise_error ASP::Errors::IncompletePaymentRequestError
     end
 
     if test_perfect_pfmp_scope == true
@@ -174,13 +174,12 @@ describe ASP::PaymentRequestStateMachine do
   describe "maybe_mark_incomplete" do
     let(:asp_payment_request) { create(:asp_payment_request, :pending_with_issues) }
     let(:expected_metadata) do
-      { "incomplete_reasons" =>
-        { "ready_state_validation" =>
-          ["L'étudiant doit résider en France pour permettre le paiement par l'agence comptable"] } }
+      { "incomplete_reasons" => { "ready_state_validation" => ["Le RIB doit être valide"] } }
     end
 
     it "sets the incomplete reason on the last transition metadata" do
       asp_payment_request.attempt_to_transition_to_ready!
+
       expect(asp_payment_request.last_transition.metadata).to eq expected_metadata
     end
   end

@@ -1,45 +1,58 @@
 # frozen_string_literal: true
 
-# by Stephane
-
 module ASP
   class PaymentRequestValidator < ActiveModel::Validator
-    def validate(request)
-      check_student(request)
-      check_rib(request)
-      check_other(request)
+    attr_reader :payment_request
+
+    def validate(payment_request)
+      @payment_request = payment_request
+
+      check_student(payment_request)
+      check_rib(payment_request)
+      check_pfmp(payment_request)
     end
 
-    def check_other(request)
-      unless request.schooling.attributive_decision.attached?
-        request.errors.add(:ready_state_validation,
-                           :attributive_decision)
+    private
+
+    def check_student(payment_request)
+      unless ASP::StudentFileEligibilityChecker.new(student).ready?
+        payment_request.errors.add(:ready_state_validation,
+                                   :eligibility)
       end
-      request.errors.add(:ready_state_validation, :duplicates) if request.pfmp.duplicates.any? do |p|
-                                                                    p.in_state?(:validated)
-                                                                  end
+
+      payment_request.errors.add(:ready_state_validation, :lives_in_france) unless student.lives_in_france?
+
+      payment_request.errors.add(:ready_state_validation, :ine_not_found) if student.ine_not_found
+
+      return if payment_request.schooling.attributive_decision.attached?
+
+      payment_request.errors.add(:ready_state_validation,
+                                 :attributive_decision)
     end
 
-    def check_pfmp(request)
-      request.errors.add(:ready_state_validation, :pfmp) unless request.pfmp.valid?
-      request.errors.add(:ready_state_validation, :pfmp_amount) unless request.pfmp.amount.positive?
+    def check_rib(payment_request)
+      payment_request.errors.add(:ready_state_validation, :rib) unless student&.rib&.valid?
+
+      return if student.adult_without_personal_rib?
+
+      payment_request.errors.add(:ready_state_validation,
+                                 :adult_without_personal_rib)
     end
 
-    def check_student(request)
-      request.errors.add(:ready_state_validation, :ine_not_found) if request.student.ine_not_found
-
-      return if ASP::StudentFileEligibilityChecker.new(request.student).ready?
-
-      request.errors.add(:ready_state_validation,
-                         :eligibility)
+    def check_pfmp(payment_request)
+      payment_request.errors.add(:ready_state_validation, :pfmp) unless pfmp.valid?
+      payment_request.errors.add(:ready_state_validation, :pfmp_amount) unless pfmp.amount.positive?
+      payment_request.errors.add(:ready_state_validation, :duplicates) if pfmp.duplicates.any? do |p|
+        p.in_state?(:validated)
+      end
     end
 
-    def check_rib(request)
-      request.errors.add(:ready_state_validation, :rib) unless request.student&.rib&.valid?
-      return unless request.student.adult_without_personal_rib?
+    def student
+      @student ||= payment_request.student
+    end
 
-      request.errors.add(:ready_state_validation,
-                         :adult_without_personal_rib)
+    def pfmp
+      @pfmp ||= payment_request.pfmp
     end
   end
 end
