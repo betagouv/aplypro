@@ -43,6 +43,8 @@ module ASP
              :current_state, :history, :last_transition, :last_transition_to,
              :transition_to!, :transition_to, :in_state?, to: :state_machine
 
+    attr_reader :validation
+
     def mark_ready!
       transition_to!(:ready)
     end

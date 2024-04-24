@@ -35,45 +35,9 @@ module ASP
     end
 
     guard_transition(to: :ready) do |request|
-      ASP::StudentFileEligibilityChecker.new(request.student).ready?
-    end
+      ASP::PaymentRequestValidator.new.validate(request)
 
-    guard_transition(to: :ready) do |request|
-      request.student.lives_in_france?
-    end
-
-    guard_transition(to: :ready) do |request|
-      request.schooling.student?
-    end
-
-    guard_transition(to: :ready) do |request|
-      request.student.rib.valid?
-    end
-
-    guard_transition(to: :ready) do |request|
-      request.pfmp.valid?
-    end
-
-    guard_transition(to: :ready) do |request|
-      !request.student.ine_not_found
-    end
-
-    guard_transition(to: :ready) do |request|
-      !request.student.adult_without_personal_rib?
-    end
-
-    guard_transition(to: :ready) do |request|
-      request.pfmp.amount.positive?
-    end
-
-    guard_transition(to: :ready) do |request|
-      request.schooling.attributive_decision.attached?
-    end
-
-    guard_transition(to: :ready) do |request|
-      request.pfmp.duplicates.none? do |pfmp|
-        pfmp.in_state?(:validated)
-      end
+      request.errors.none?
     end
 
     guard_transition(from: :ready, to: :sent) do |request|

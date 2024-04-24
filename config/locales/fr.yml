@@ -60,6 +60,11 @@ fr:
             day_count:
               format: "Le %{attribute} %{message}"
               less_than_or_equal_to: "n'est pas cohérent avec les dates de début et de fin"
+        asp/payment_request:
+          attributes:
+            validation:
+              eligibility: "les informations de l'étudiant ne sont pas complètes/valides'"
+              lives_in_france: "l'étudiant doit résider en France pour permettre le paiement par l'agence comptable"
     hints:
       rib:
         name: "Noms et prénoms du titulaire du compte"
