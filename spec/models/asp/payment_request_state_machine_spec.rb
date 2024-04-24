@@ -120,6 +120,12 @@ describe ASP::PaymentRequestStateMachine do
 
       it_behaves_like "a blocked request"
     end
+
+    context "when the schooling is excluded" do
+      before { create(:exclusion, :whole_establishment, uai: asp_payment_request.schooling.establishment.uai) }
+
+      it_behaves_like "a blocked request", test_perfect_pfmp_scope: false
+    end
   end
 
   describe "mark_as_sent!" do

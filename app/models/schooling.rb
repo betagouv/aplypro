@@ -50,6 +50,14 @@ class Schooling < ApplicationRecord
     !closed?
   end
 
+  def excluded?
+    establishment.excluded? || outside_contract?
+  end
+
+  def outside_contract?
+    Exclusion.exists?(uai: establishment.uai, mef_code: mef.code)
+  end
+
   def attributive_decision_filename
     [
       student.last_name,

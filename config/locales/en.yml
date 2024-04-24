@@ -33,6 +33,10 @@ en:
   activerecord:
     errors:
       models:
+        exclusion:
+          attributes:
+            base:
+              specific_or_whole: you cannot exclude a certain MEF code in an establishment that is already completely excluded (regardless of the MEF)
         asp/request:
           attributes:
             base:

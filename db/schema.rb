@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_15_110650) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_24_154841) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -133,6 +133,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_15_110650) do
     t.string "department_code"
     t.index ["confirmed_director_id"], name: "index_establishments_on_confirmed_director_id"
     t.index ["uai"], name: "index_establishments_on_uai", unique: true
+  end
+
+  create_table "exclusions", force: :cascade do |t|
+    t.string "uai"
+    t.string "mef_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["uai", "mef_code"], name: "index_exclusions_on_uai_and_mef_code", unique: true
   end
 
   create_table "invitations", force: :cascade do |t|

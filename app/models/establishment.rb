@@ -85,6 +85,10 @@ class Establishment < ApplicationRecord
     )
   end
 
+  def excluded?
+    Exclusion.whole_establishment.exists?(uai: uai)
+  end
+
   def contract_type
     case private_contract_type_code
     when *CONTRACTS_STATUS[:private_allowed]
