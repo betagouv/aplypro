@@ -60,6 +60,20 @@ fr:
             day_count:
               format: "Le %{attribute} %{message}"
               less_than_or_equal_to: "n'est pas cohérent avec les dates de début et de fin"
+        asp/payment_request:
+          attributes:
+            ready_state_validation:
+              eligibility: "Les informations de l'étudiant ne sont pas complètes/valides"
+              lives_in_france: "L'étudiant doit résider en France pour permettre le paiement par l'agence comptable"
+              student_type: "L'étudiant doit avoir une scolarité"
+              rib: "Le RIB doit être valide"
+              pfmp: "La PFMP associé n'est pas valide"
+              ine_not_found: "Le numéro INE n'est pas trouvé"
+              adult_with_personal_rib: "Le RIB doit être personnel"
+              pfmp_amount: "La PFMP associé doit avoir un montant positif"
+              attributive_decision: "Il manque une décision attributive"
+              duplicates: "Il y a déjà un duplicat de la PFMP associé qui est validé"
+
     hints:
       rib:
         name: "Noms et prénoms du titulaire du compte"

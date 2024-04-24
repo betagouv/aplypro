@@ -2,6 +2,7 @@
 
 class Pfmp < ApplicationRecord
   include PfmpAmountCalculator
+  # include StateMachinable
 
   belongs_to :schooling
   has_one :classe, through: :schooling

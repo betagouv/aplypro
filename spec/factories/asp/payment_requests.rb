@@ -23,13 +23,21 @@ FactoryBot.define do
       after(:create, &:mark_ready!)
     end
 
+    trait :pending_with_issues do
+      after(:create) do |req|
+        student = create(:student, :with_all_asp_info, :underage)
+        schooling = create(:schooling, :with_attributive_decision, student: student)
+        req.pfmp.update!(schooling: schooling)
+      end
+    end
+
     trait :incomplete do
       after(:create) do |req|
         student = create(:student, :with_all_asp_info, :underage)
         schooling = create(:schooling, :with_attributive_decision, student: student)
         req.pfmp.update!(schooling: schooling)
 
-        req.mark_incomplete!
+        req.attempt_to_transition_to_ready!
       end
     end
 

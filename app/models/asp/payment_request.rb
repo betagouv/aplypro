@@ -2,6 +2,10 @@
 
 module ASP
   class PaymentRequest < ApplicationRecord
+    include ::StateMachinable
+
+    attr_accessor :ready_state_validation
+
     belongs_to :asp_request, class_name: "ASP::Request", optional: true
     belongs_to :asp_payment_return, class_name: "ASP::PaymentReturn", optional: true
 
@@ -9,11 +13,6 @@ module ASP
 
     has_one :student, through: :pfmp
     has_one :schooling, through: :pfmp
-
-    has_many :asp_payment_request_transitions,
-             class_name: "ASP::PaymentRequestTransition",
-             dependent: :destroy,
-             inverse_of: :asp_payment_request
 
     validate :single_active_payment_request_per_pfmp, on: %i[create update]
 
@@ -30,25 +29,16 @@ module ASP
       from("(#{subquery}) as asp_payment_requests")
     }
 
-    include Statesman::Adapters::ActiveRecordQueries[
-      transition_class: ASP::PaymentRequestTransition,
-      initial_state: ASP::PaymentRequestStateMachine.initial_state,
-    ]
-
-    def state_machine
-      @state_machine ||= ASP::PaymentRequestStateMachine.new(self, transition_class: ASP::PaymentRequestTransition)
-    end
-
-    delegate :can_transition_to?,
-             :current_state, :history, :last_transition, :last_transition_to,
-             :transition_to!, :transition_to, :in_state?, to: :state_machine
-
     def mark_ready!
       transition_to!(:ready)
     end
 
-    def mark_incomplete!
-      transition_to!(:incomplete, { incomplete_reason: completion_status })
+    def attempt_to_transition_to_ready!
+      if can_transition_to?(:ready) # Triggers guards that trigger validator
+        transition_to!(:ready)
+      else
+        transition_to!(:incomplete, { incomplete_reasons: errors })
+      end
     end
 
     def mark_as_sent!
@@ -94,23 +84,6 @@ module ASP
     def unpaid_reason
       last_transition.metadata["PAIEMENT"]["LIBELLEMOTIFINVAL"]
     end
-
-    # rubocop:disable Metrics/AbcSize
-    def completion_status
-      {
-        student_eligibilty: ASP::StudentFileEligibilityChecker.new(student).ready?,
-        student_lives_in_france: student.lives_in_france?,
-        student_enrolled: schooling.student?,
-        has_rib: student.rib.present? && !student.adult_without_personal_rib?,
-        valid_rib: student.rib.present? && student.rib.valid?,
-        ine_found: !student.ine_not_found,
-        valid_pfmp: pfmp.valid?,
-        positive_amount: pfmp.amount.positive?,
-        attached_attribute_decision: schooling.attributive_decision.attached?,
-        no_validated_duplicates: pfmp.duplicates.none? { |pfmp| pfmp.in_state?(:validated) }
-      }
-    end
-    # rubocop:enable Metrics/AbcSize
 
     private
 
