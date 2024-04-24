@@ -76,6 +76,10 @@ module ASP
       end
     end
 
+    guard_transition(to: :ready) do |request|
+      !request.schooling.excluded?
+    end
+
     guard_transition(from: :ready, to: :sent) do |request|
       request.asp_request.present?
     end
