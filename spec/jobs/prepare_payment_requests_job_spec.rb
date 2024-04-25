@@ -25,7 +25,7 @@ RSpec.describe PreparePaymentRequestsJob do
         described_class.perform_later
       end
 
-      expect(payment_request).to have_received(:attempt_to_transition_to_ready!)
+      expect(payment_request).to have_received(:mark_ready!)
     end
 
     context "when the payment_request is not ready" do

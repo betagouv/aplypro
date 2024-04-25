@@ -19,18 +19,20 @@ FactoryBot.define do
       end
     end
 
+    trait :sendable_with_issues do
+      after(:build) do |req|
+        pfmp = build(:pfmp, :validated)
+        student = build(:student, :with_all_asp_info, :underage)
+        schooling = build(:schooling, :with_attributive_decision, student: student)
+        pfmp.schooling = schooling
+        req.pfmp = pfmp
+      end
+    end
+
     trait :ready do
       sendable
 
       after(:create, &:mark_ready!)
-    end
-
-    trait :pending_with_issues do
-      after(:create) do |req|
-        student = create(:student, :with_all_asp_info, :underage)
-        schooling = create(:schooling, :with_attributive_decision, student: student)
-        req.pfmp.update!(schooling: schooling)
-      end
     end
 
     trait :incomplete do

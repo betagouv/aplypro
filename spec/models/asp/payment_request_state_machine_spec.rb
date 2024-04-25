@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe ASP::PaymentRequestStateMachine do
-  subject(:asp_payment_request) { create(:asp_payment_request, :pending_with_issues) }
+  subject(:asp_payment_request) { create(:asp_payment_request, :sendable_with_issues) }
 
   let(:student) { asp_payment_request.pfmp.student }
 
@@ -172,7 +172,7 @@ describe ASP::PaymentRequestStateMachine do
   end
 
   describe "attempt_transition_to_ready!" do
-    let(:asp_payment_request) { create(:asp_payment_request, :pending_with_issues) }
+    let(:asp_payment_request) { create(:asp_payment_request, :sendable_with_issues) }
     let(:expected_metadata) do
       { "incomplete_reasons" => { "ready_state_validation" => [
         "L'étudiant doit résider en France pour permettre le paiement par l'agence comptable"

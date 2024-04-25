@@ -4,7 +4,8 @@ module ASP
   class PaymentRequest < ApplicationRecord
     include ::StateMachinable
 
-    attr_accessor :ready_state_validation # Virtual attributes used for validations
+    # Virtual attribute declared solely in the context of ready transition validation
+    attr_accessor :ready_state_validation
 
     belongs_to :asp_request, class_name: "ASP::Request", optional: true
     belongs_to :asp_payment_return, class_name: "ASP::PaymentReturn", optional: true
@@ -22,22 +23,28 @@ module ASP
     scope :failed, -> { in_state(*ASP::PaymentRequestStateMachine::FAILED_STATES) }
 
     scope :latest_per_pfmp, lambda {
-      subquery = ASP::PaymentRequest
+      subquery = ASP::PxaymentRequest
                  .select("DISTINCT ON (pfmp_id) *")
                  .order("pfmp_id", "created_at DESC")
                  .to_sql
       from("(#{subquery}) as asp_payment_requests")
     }
 
+    # Use this method if moving the object to another state in case of failure
+    # is irrelevant and/or if you dont care about storing the errors in metadata
     def mark_ready!
       transition_to!(:ready)
     end
 
+    # This method has the following advantages:
+    # - avoid raising guard error
+    # - move to state incomplete
+    # - store the reasons of incompletion in metadata
     def attempt_to_transition_to_ready!
       if can_transition_to?(:ready) # Triggers guards that trigger validator
-        transition_to!(:ready)
+        mark_ready!(:ready)
       else
-        transition_to!(:incomplete, { incomplete_reasons: errors })
+        mark_incomplete!({ incomplete_reasons: errors })
       end
     end
 
@@ -47,6 +54,10 @@ module ASP
 
     def reject!(metadata)
       transition_to!(:rejected, metadata)
+    end
+
+    def mark_incomplete!(metadata)
+      transition_to!(:incomplete, metadata)
     end
 
     def mark_integrated!(metadata)
