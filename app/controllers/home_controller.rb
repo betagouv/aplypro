@@ -37,11 +37,18 @@ class HomeController < ApplicationController
     infer_page_title
   end
 
-  def legal; end
+  def legal
+    infer_page_title
+  end
 
-  def faq; end
+  def faq
+    infer_page_title
+    @inhibit_title = true
+  end
 
-  def accessibility; end
+  def accessibility
+    infer_page_title
+  end
 
   private
 

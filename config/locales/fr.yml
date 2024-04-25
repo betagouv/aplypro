@@ -106,6 +106,9 @@ fr:
         home: Accueil
         login: Connexion à APLyPro
         welcome: Bienvenue sur APLyPro
+        faq: Foire aux questions
+        legal: Mentions informatives des personnels
+        accessibility: Déclaration d'accessibilité
       classes:
         index: Liste des classes et formations
         show: "%{name}"
@@ -137,7 +140,8 @@ fr:
         missing: &missing_ribs_title Saisir des coordonnées bancaires
         bulk_create: *missing_ribs_title
       validations:
-        index: Classes à envoyer en paiement
+        index: Paiements
+        #index: Classes à envoyer en paiement
         show: Envoyer en paiement les PFMPs de %{name}
 
   global:
