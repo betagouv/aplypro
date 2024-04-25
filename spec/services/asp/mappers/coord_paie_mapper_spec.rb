@@ -57,4 +57,12 @@ describe ASP::Mappers::CoordPaieMapper do
       expect(mapper.intitdest).to eq "Bonnie Clyde"
     end
   end
+
+  context "when the name has an underscore in it" do
+    before { rib.update!(name: "Bonnie_Clyde") }
+
+    it "removes it" do
+      expect(mapper.intitdest).to eq "Bonnie Clyde"
+    end
+  end
 end
