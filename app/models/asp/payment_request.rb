@@ -31,10 +31,18 @@ module ASP
     }
 
     class << self
+      # NOTE: to_consider is a temporary scope to do some basic
+      # pre-filtering on the payment requests we're trying to mark
+      # ready. It's a safety net for the coming weeks and should be
+      # removed soon. It also holds some filtering logic which we
+      # needs further thinking from us like some schoolings without
+      # administrative_number.
       def to_consider(max_date)
         in_state(:pending)
           .joins(:schooling, :pfmp, :student)
           .merge(Schooling.with_attributive_decisions)
+          .merge(Schooling.with_administrative_number)
+          .merge(Schooling.with_one_character_attributive_decision_version)
           .merge(Student.with_rib)
           .where("pfmps.end_date <= ?", max_date)
       end
