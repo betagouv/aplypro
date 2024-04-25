@@ -71,6 +71,21 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   before_validation :check_asp_file_reference
 
+  # FIXME: this is used to filter the payment requests but at some
+  # point we should stop doing it, once we've done the work to offer
+  # abrogated attributive decisions.
+  def needs_abrogated_da?
+    multiple_mefs? || multiple_establishments?
+  end
+
+  def multiple_mefs?
+    classes.joins(:mef).select(:"mefs.id").distinct.count > 1
+  end
+
+  def multiple_establishments?
+    classes.select(:establishment_id).distinct.count > 1
+  end
+
   def to_s
     full_name
   end

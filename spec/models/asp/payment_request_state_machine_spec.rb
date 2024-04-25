@@ -126,6 +126,16 @@ describe ASP::PaymentRequestStateMachine do
 
       it_behaves_like "a blocked request", test_perfect_pfmp_scope: false
     end
+
+    context "when the student needs abrogated attributive decisions" do
+      before do
+        schooling = create(:schooling, :closed, student: asp_payment_request.student)
+
+        create(:pfmp, schooling: schooling)
+      end
+
+      it_behaves_like "a blocked request", test_perfect_pfmp_scope: false
+    end
   end
 
   describe "mark_as_sent!" do
