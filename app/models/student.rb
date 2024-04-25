@@ -109,7 +109,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def adult_without_personal_rib?
-    adult? && !rib.personal?
+    adult? && !rib&.personal?
   end
 
   def born_in_france?

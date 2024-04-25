@@ -17,7 +17,7 @@ RSpec.describe PreparePaymentRequestsJob do
   context "when the payment_request is ready" do
     before do
       allow(payment_request).to receive(:can_transition_to?).with(:ready).and_return(true)
-      allow(payment_request).to receive(:mark_ready!)
+      allow(payment_request).to receive(:attempt_to_transition_to_ready!)
     end
 
     it "successfully moves it" do
@@ -25,7 +25,7 @@ RSpec.describe PreparePaymentRequestsJob do
         described_class.perform_later
       end
 
-      expect(payment_request).to have_received(:mark_ready!)
+      expect(payment_request).to have_received(:attempt_to_transition_to_ready!)
     end
 
     context "when the payment_request is not ready" do

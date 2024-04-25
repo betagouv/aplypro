@@ -6,6 +6,6 @@ class PreparePaymentRequestsJob < ApplicationJob
   def perform
     ASP::PaymentRequest
       .in_state(:pending)
-      .find_each(&:attempt_transition_to_ready)
+      .find_each(&:attempt_transition_to_ready!)
   end
 end

@@ -26,28 +26,28 @@ module ASP
     transition from: :integrated, to: :paid
     transition from: :integrated, to: :unpaid
 
-    after_transition(from: :sent, to: :integrated) do |request, transition|
+    after_transition(from: :sent, to: :integrated) do |payment_request, transition|
       attrs = transition.metadata
 
-      request.student.update!(asp_individu_id: attrs["idIndDoss"])
-      request.schooling.update!(asp_dossier_id: attrs["idDoss"])
-      request.pfmp.update!(asp_prestation_dossier_id: attrs["idPretaDoss"])
+      payment_request.student.update!(asp_individu_id: attrs["idIndDoss"])
+      payment_request.schooling.update!(asp_dossier_id: attrs["idDoss"])
+      payment_request.pfmp.update!(asp_prestation_dossier_id: attrs["idPretaDoss"])
     end
 
-    guard_transition(to: :ready) do |request|
-      ASP::PaymentRequestValidator.new.validate(request)
+    guard_transition(to: :ready) do |payment_request|
+      ASP::PaymentRequestValidator.new.validate(payment_request)
 
-      request.errors.empty?
+      payment_request.errors.none?
     end
 
-    guard_transition(from: :ready, to: :sent) do |request|
-      request.asp_request.present?
+    guard_transition(from: :ready, to: :sent) do |payment_request|
+      payment_request.asp_request.present?
     end
 
-    after_guard_failure(to: :ready) do |request, _exception|
+    after_guard_failure(to: :ready) do |payment_request, _exception|
       raise(
         ASP::Errors::IncompletePaymentRequestError,
-        "Some conditions are missing to mark the payment request as ready: #{request.errors.full_messages.join('\n')}"
+        "Some conditions are missing to mark the payment request as ready: #{payment_request.errors.full_messages.join('\n')}"
       )
     end
   end
