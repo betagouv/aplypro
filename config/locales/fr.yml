@@ -69,7 +69,7 @@ fr:
               rib: "Le RIB doit être valide"
               pfmp: "La PFMP associé n'est pas valide"
               ine_not_found: "Le numéro INE n'est pas trouvé"
-              adult_with_personal_rib: "Le RIB doit être personnel"
+              adult_without_personal_rib: "Le RIB doit être personnel"
               pfmp_amount: "La PFMP associé doit avoir un montant positif"
               attributive_decision: "Il manque une décision attributive"
               duplicates: "Il y a déjà un duplicat de la PFMP associé qui est validé"

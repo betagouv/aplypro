@@ -4,7 +4,7 @@ module ASP
   class PaymentRequest < ApplicationRecord
     include ::StateMachinable
 
-    attr_accessor :ready_state_validation
+    attr_accessor :ready_state_validation # Virtual attributes used for validations
 
     belongs_to :asp_request, class_name: "ASP::Request", optional: true
     belongs_to :asp_payment_return, class_name: "ASP::PaymentReturn", optional: true
