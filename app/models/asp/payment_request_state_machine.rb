@@ -83,5 +83,10 @@ module ASP
     guard_transition(from: :ready, to: :sent) do |request|
       request.asp_request.present?
     end
+
+    # NOTE: this should eventually be removed
+    guard_transition(to: :ready) do |request|
+      !request.student.needs_abrogated_da?
+    end
   end
 end
