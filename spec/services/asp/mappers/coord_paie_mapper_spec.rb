@@ -51,10 +51,10 @@ describe ASP::Mappers::CoordPaieMapper do
   end
 
   context "when the name has special characters in it" do
-    before { rib.update!(name: "Bonnie & _Clyde;retraités") }
+    before { rib.update!(name: "Bonnie & _Clyde;retraités-end") }
 
     it "removes them" do
-      expect(mapper.intitdest).to eq "Bonnie Clyde retraités"
+      expect(mapper.intitdest).to eq "Bonnie Clyde retraités end"
     end
   end
 end
