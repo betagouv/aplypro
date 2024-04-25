@@ -78,6 +78,8 @@ gem "dry-transformer"
 
 gem "zipline", "~> 1.6"
 
+gem "csv"
+
 # payments: XML mapping
 gem "nokogiri"
 
