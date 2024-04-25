@@ -6,8 +6,11 @@ module ASP
       PRINCIPAL_ADDRESS_TYPE = "PRINCIPALE"
       ASSIMILATED_FRENCH_COUNTRY_CODES = %w[FR GF GP MC MQ NC PF PM RE WF YT].freeze
 
+      ALLOWED_CHARACTERS = %w[/ - ? : ( ) . , '].freeze
+      RIB_NAME_MASK = /\A[\s[[:alnum:]]#{ALLOWED_CHARACTERS.join}]+\z/
+
       MAPPING = {
-        bic: :bic,
+        bic: :bic
       }.freeze
 
       attr_reader :rib, :iban
@@ -34,7 +37,15 @@ module ASP
       end
 
       def intitdest
-        rib.name.delete("&").squish
+        rib.name
+           .delete("&")
+           .squish
+           .gsub("_", " ")
+           .tap do |value|
+          if !RIB_NAME_MASK.match?(value)
+            raise ArgumentError, "the RIB ##{rib.id} name is still invalid after sanitisation"
+          end
+        end
       end
 
       # @emaildoc
