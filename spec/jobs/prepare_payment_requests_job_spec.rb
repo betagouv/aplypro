@@ -3,19 +3,20 @@
 require "rails_helper"
 
 RSpec.describe PreparePaymentRequestsJob do
-  include ActiveJob::TestHelper
-
-  describe '#perform' do
-    let(:payment_request1) { create(:asp_payment_request, :pending) }
-    let(:payment_request2) { create(:asp_payment_request, :sendable_with_issues) }
+  describe "#perform" do
+    let!(:sendable_request) { create(:asp_payment_request, :sendable) }
+    let!(:pending_request) { create(:asp_payment_request, :pending) }
 
     before do
-      PreparePaymentRequestsJob.perform_now
+      described_class.perform_now
     end
 
-    it 'transitions each pending payment request to ready' do
-      expect(payment_request1.reload.current_state).to eq('ready')
-      expect(payment_request2.reload.current_state).to eq('incomplete')
+    it "transitions a payment request to ready" do
+      expect(sendable_request).to be_in_state(:ready)
+    end
+
+    it "transitions a payment request to incomplete" do
+      expect(pending_request).to be_in_state(:incomplete)
     end
   end
 end

@@ -34,11 +34,9 @@ module ASP
       payment_request.pfmp.update!(asp_prestation_dossier_id: attrs["idPretaDoss"])
     end
 
-    before_transition(to: :ready) do |payment_request|
-      ASP::PaymentRequestValidator.new(payment_request).validate
-    end
-
     guard_transition(to: :ready) do |payment_request|
+      ASP::PaymentRequestValidator.new(payment_request).validate
+
       payment_request.errors.none?
     end
 

@@ -5,6 +5,7 @@ module ASP
     attr_reader :payment_request
 
     def initialize(payment_request)
+      super()
       @payment_request = payment_request
     end
 
@@ -35,7 +36,7 @@ module ASP
 
       return unless student.adult_without_personal_rib?
 
-      add_error(:adult_without_personal_rib )
+      add_error(:adult_without_personal_rib)
     end
 
     def check_pfmp

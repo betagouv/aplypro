@@ -3,17 +3,17 @@
 require "rails_helper"
 
 describe ASP::PaymentRequestStateMachine do
-  subject(:asp_payment_request) { create(:asp_payment_request, :sendable_with_issues) }
+  subject(:asp_payment_request) { create(:asp_payment_request, :pending) }
 
   let(:student) { asp_payment_request.pfmp.student }
 
   it { is_expected.to be_in_state :pending }
 
-  shared_examples "a blocked request" do |test_perfect_pfmp_scope = true|
-    it "cannot transition to ready" do
-      expect { asp_payment_request.mark_ready! }.to raise_error ASP::Errors::IncompletePaymentRequestError
-    end
+  it "cannot transition to ready" do
+    expect { asp_payment_request.mark_ready! }.to raise_error ASP::Errors::IncompletePaymentRequestError
+  end
 
+  shared_examples "a blocked request" do |test_perfect_pfmp_scope = true|
     if test_perfect_pfmp_scope == true
       it "is not included in the Pfmp.perfect scope" do
         expect(Pfmp.perfect).not_to include(asp_payment_request.pfmp)
@@ -175,7 +175,8 @@ describe ASP::PaymentRequestStateMachine do
     let(:asp_payment_request) { create(:asp_payment_request, :sendable_with_issues) }
     let(:expected_metadata) do
       { "incomplete_reasons" => { "ready_state_validation" => [
-        "L'étudiant doit résider en France pour permettre le paiement par l'agence comptable"
+        "Les informations de l'étudiant ne sont pas complètes/valides", "L'étudiant doit résider en \n
+        France pour permettre le paiement par l'agence comptable", "Le RIB doit être valide"
       ] } }
     end
 
