@@ -175,8 +175,9 @@ describe ASP::PaymentRequestStateMachine do
     let(:asp_payment_request) { create(:asp_payment_request, :sendable_with_issues) }
     let(:expected_metadata) do
       { "incomplete_reasons" => { "ready_state_validation" => [
-        "Les informations de l'étudiant ne sont pas complètes/valides", "L'étudiant doit résider en \n
-        France pour permettre le paiement par l'agence comptable", "Le RIB doit être valide"
+        I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.eligibility"),
+        I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.lives_in_france"),
+        I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.rib")
       ] } }
     end
 
