@@ -39,9 +39,9 @@ module ASP
       def intitdest
         rib.name
            .delete("&")
-           .squish
            .gsub("_", "")
-           .gsub(";", " ")
+           .gsub(/[;\-]/, " ")
+           .squish
            .tap do |value|
           if !RIB_NAME_MASK.match?(value)
             raise ArgumentError, "the RIB ##{rib.id} name is still invalid after sanitisation"
