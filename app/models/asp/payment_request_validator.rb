@@ -18,40 +18,45 @@ module ASP
 
     def check_student
       unless ASP::StudentFileEligibilityChecker.new(student).ready?
-        payment_request.errors.add(:ready_state_validation,
-                                   :eligibility)
+        add_error(
+          :eligibility
+        )
       end
 
-      payment_request.errors.add(:ready_state_validation, :lives_in_france) unless student.lives_in_france?
+      add_error(:lives_in_france) unless student.lives_in_france?
 
-      payment_request.errors.add(:ready_state_validation, :ine_not_found) if student.ine_not_found
+      add_error(:ine_not_found) if student.ine_not_found
     end
 
     def check_rib
-      payment_request.errors.add(:ready_state_validation, :rib) unless student&.rib&.valid?
+      add_error(:rib) unless student&.rib&.valid?
 
       return unless student.adult_without_personal_rib?
 
-      payment_request.errors.add(:ready_state_validation,
-                                 :adult_without_personal_rib)
+      add_error(
+        :adult_without_personal_rib
+      )
     end
 
     def check_pfmp
-      payment_request.errors.add(:ready_state_validation, :pfmp) unless pfmp.valid?
-      payment_request.errors.add(:ready_state_validation, :pfmp_amount) unless pfmp.amount.positive?
+      add_error(:pfmp) unless pfmp.valid?
+      add_error(:pfmp_amount) unless pfmp.amount.positive?
     end
 
     def check_attributive_decision
       return if payment_request.schooling.attributive_decision.attached?
 
-      payment_request.errors.add(:ready_state_validation,
-                                 :attributive_decision)
+      add_error(:attributive_decision)
     end
 
     def check_duplicates
-      payment_request.errors.add(:ready_state_validation, :duplicates) if pfmp.duplicates.any? do |p|
+      add_error(:duplicates) if pfmp.duplicates.any? do |p|
         p.in_state?(:validated)
       end
+    end
+
+    def add_error(attr)
+      payment_request.errors.add(:ready_state_validation, attr)
     end
 
     def student
