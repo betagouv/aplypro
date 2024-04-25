@@ -12,6 +12,8 @@ class Exclusion < ApplicationRecord
   def specific_mef_or_whole_establishment
     return if mef_code.blank?
 
-    errors.add(:base, :specific_or_whole) if Exclusion.whole_establishment.excluding(self).where(uai: uai).any?
+    if Exclusion.whole_establishment.excluding(self).where(uai: uai).any? # rubocop:disable Style/GuardClause
+      errors.add(:base, :specific_mef_or_whole_establishment)
+    end
   end
 end

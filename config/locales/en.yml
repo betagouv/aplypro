@@ -36,7 +36,7 @@ en:
         exclusion:
           attributes:
             base:
-              specific_or_whole: you cannot exclude a certain MEF code in an establishment that is already completely excluded (regardless of the MEF)
+              specific_mef_or_whole_establishment: you cannot exclude a certain MEF code in an establishment that is already completely excluded (regardless of the MEF)
         asp/request:
           attributes:
             base:
