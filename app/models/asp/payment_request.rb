@@ -40,8 +40,8 @@ module ASP
     # - avoid raising guard error
     # - move to state incomplete
     # - store the reasons of incompletion in metadata
-    def attempt_to_transition_to_ready!
-      if can_transition_to?(:ready) # Triggers guards that trigger validator
+    def attempt_transition_to_ready!
+      if can_transition_to?(:ready) # Triggers guards that use a validator
         mark_ready!
       else
         mark_incomplete!({ incomplete_reasons: errors })

@@ -5,41 +5,17 @@ require "rails_helper"
 RSpec.describe PreparePaymentRequestsJob do
   include ActiveJob::TestHelper
 
-  let(:payment_request) { instance_double(ASP::PaymentRequest) }
-  let(:collection) { double }
+  describe '#perform' do
+    let(:payment_request1) { create(:asp_payment_request, :pending) }
+    let(:payment_request2) { create(:asp_payment_request, :sendable_with_issues) }
 
-  before do
-    allow(ASP::PaymentRequest).to receive(:in_state).and_return(collection)
-
-    allow(collection).to receive(:find_each).and_yield(payment_request)
-  end
-
-  context "when the payment_request is ready" do
     before do
-      allow(payment_request).to receive(:can_transition_to?).with(:ready).and_return(true)
-      allow(payment_request).to receive(:attempt_to_transition_to_ready!)
+      PreparePaymentRequestsJob.perform_now
     end
 
-    it "successfully moves it" do
-      perform_enqueued_jobs do
-        described_class.perform_later
-      end
-
-      expect(payment_request).to have_received(:mark_ready!)
-    end
-
-    context "when the payment_request is not ready" do
-      before do
-        allow(payment_request).to receive(:can_transition_to?).with(:ready).and_return(false)
-        allow(payment_request).to receive(:mark_incomplete!)
-      end
-
-      it "blocks the payment_request" do
-        perform_enqueued_jobs do
-          described_class.perform_later
-        end
-        expect(payment_request).to have_received(:mark_incomplete!)
-      end
+    it 'transitions each pending payment request to ready' do
+      expect(payment_request1.reload.current_state).to eq('ready')
+      expect(payment_request2.reload.current_state).to eq('incomplete')
     end
   end
 end

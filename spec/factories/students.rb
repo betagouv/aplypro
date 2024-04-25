@@ -59,6 +59,12 @@ FactoryBot.define do
       address_country_code { address_country_code_value }
     end
 
+    trait :with_rib do
+      after(:create) do |student|
+        create(:rib, student: student)
+      end
+    end
+
     trait :with_personal_rib do
       after(:create) do |student|
         create(:rib, student: student, personal: true)

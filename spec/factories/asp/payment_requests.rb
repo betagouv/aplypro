@@ -21,11 +21,10 @@ FactoryBot.define do
 
     trait :sendable_with_issues do
       after(:create) do |req|
-        pfmp = build(:pfmp, :validated)
-        student = create(:student, :with_all_asp_info, :underage)
-        schooling = build(:schooling, :with_attributive_decision, student: student)
-        pfmp.schooling = schooling
-        req.pfmp = pfmp
+        student = create(:student, :underage, :with_foreign_address)
+        schooling = create(:schooling, :with_attributive_decision, student: student)
+
+        req.pfmp.update!(schooling: schooling)
       end
     end
 
@@ -41,7 +40,7 @@ FactoryBot.define do
         schooling = create(:schooling, :with_attributive_decision, student: student)
         req.pfmp.update!(schooling: schooling)
 
-        req.attempt_to_transition_to_ready!
+        req.attempt_transition_to_ready! # NOTE: here we might want the metadata
       end
     end
 

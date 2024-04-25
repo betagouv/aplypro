@@ -180,7 +180,7 @@ describe ASP::PaymentRequestStateMachine do
     end
 
     it "sets the incomplete reason on the last transition metadata" do
-      asp_payment_request.attempt_to_transition_to_ready!
+      asp_payment_request.attempt_transition_to_ready!
 
       expect(asp_payment_request.last_transition.metadata).to eq expected_metadata
     end

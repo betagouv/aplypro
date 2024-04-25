@@ -35,7 +35,7 @@ module ASP
     end
 
     before_transition(to: :ready) do |payment_request|
-      ASP::PaymentRequestValidator.new.validate(payment_request)
+      ASP::PaymentRequestValidator.new(payment_request).validate
     end
 
     guard_transition(to: :ready) do |payment_request|

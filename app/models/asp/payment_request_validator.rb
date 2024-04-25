@@ -4,9 +4,11 @@ module ASP
   class PaymentRequestValidator < ActiveModel::Validator
     attr_reader :payment_request
 
-    def validate(payment_request)
+    def initialize(payment_request)
       @payment_request = payment_request
+    end
 
+    def validate
       check_student
       check_attributive_decision
       check_rib
@@ -29,13 +31,11 @@ module ASP
     end
 
     def check_rib
-      add_error(:rib) unless student&.rib&.valid?
+      add_error(:rib) unless student.rib.present? && student.rib.valid?
 
       return unless student.adult_without_personal_rib?
 
-      add_error(
-        :adult_without_personal_rib
-      )
+      add_error(:adult_without_personal_rib )
     end
 
     def check_pfmp
@@ -55,8 +55,8 @@ module ASP
       end
     end
 
-    def add_error(attr)
-      payment_request.errors.add(:ready_state_validation, attr)
+    def add_error(description)
+      payment_request.errors.add(:ready_state_validation, description)
     end
 
     def student
