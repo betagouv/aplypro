@@ -8,7 +8,6 @@ module ASP
 
       MAPPING = {
         bic: :bic,
-        intitdest: :name
       }.freeze
 
       attr_reader :rib, :iban
@@ -32,6 +31,10 @@ module ASP
 
       def clecontrole
         iban.check_digits
+      end
+
+      def intitdest
+        rib.name.delete("&").squish
       end
 
       # @emaildoc

@@ -49,4 +49,12 @@ describe ASP::Mappers::CoordPaieMapper do
       end
     end
   end
+
+  context "when the name has an ampersand in it" do
+    before { rib.update!(name: "Bonnie & Clyde") }
+
+    it "removes it" do
+      expect(mapper.intitdest).to eq "Bonnie Clyde"
+    end
+  end
 end
