@@ -127,6 +127,7 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
+    csv (3.2.8)
     cucumber (9.2.0)
       builder (~> 3.2)
       cucumber-ci-environment (> 9, < 11)
@@ -585,6 +586,7 @@ DEPENDENCIES
   bootsnap
   breadcrumbs_on_rails
   capybara
+  csv
   cucumber-rails
   database_cleaner-active_record
   debug
