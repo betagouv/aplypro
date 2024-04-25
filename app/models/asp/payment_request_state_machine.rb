@@ -34,10 +34,16 @@ module ASP
       payment_request.pfmp.update!(asp_prestation_dossier_id: attrs["idPretaDoss"])
     end
 
-    guard_transition(to: :ready) do |payment_request|
+    before_transition(to: :ready) do |payment_request|
       ASP::PaymentRequestValidator.new.validate(payment_request)
+    end
 
+    guard_transition(to: :ready) do |payment_request|
       payment_request.errors.none?
+    end
+
+    guard_transition(to: :incomplete) do |payment_request|
+      payment_request.errors.any?
     end
 
     guard_transition(from: :ready, to: :sent) do |payment_request|
@@ -47,7 +53,7 @@ module ASP
     after_guard_failure(to: :ready) do |payment_request, _exception|
       raise(
         ASP::Errors::IncompletePaymentRequestError,
-        "Some conditions are missing to mark the payment request as ready: #{payment_request.errors.full_messages.join('\n')}"
+        "Conditions missing to mark the payment request as ready: #{payment_request.errors.full_messages.join('\n')}"
       )
     end
   end
