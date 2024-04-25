@@ -23,7 +23,7 @@ module ASP
     scope :failed, -> { in_state(*ASP::PaymentRequestStateMachine::FAILED_STATES) }
 
     scope :latest_per_pfmp, lambda {
-      subquery = ASP::PxaymentRequest
+      subquery = ASP::PaymentRequest
                  .select("DISTINCT ON (pfmp_id) *")
                  .order("pfmp_id", "created_at DESC")
                  .to_sql
@@ -42,7 +42,7 @@ module ASP
     # - store the reasons of incompletion in metadata
     def attempt_to_transition_to_ready!
       if can_transition_to?(:ready) # Triggers guards that trigger validator
-        mark_ready!(:ready)
+        mark_ready!
       else
         mark_incomplete!({ incomplete_reasons: errors })
       end

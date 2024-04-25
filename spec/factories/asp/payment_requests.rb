@@ -20,9 +20,9 @@ FactoryBot.define do
     end
 
     trait :sendable_with_issues do
-      after(:build) do |req|
+      after(:create) do |req|
         pfmp = build(:pfmp, :validated)
-        student = build(:student, :with_all_asp_info, :underage)
+        student = create(:student, :with_all_asp_info, :underage)
         schooling = build(:schooling, :with_attributive_decision, student: student)
         pfmp.schooling = schooling
         req.pfmp = pfmp
