@@ -38,6 +38,8 @@ module ASP
       ASP::StudentFileEligibilityChecker.new(request.student).ready?
     end
 
+    # NOTE: this should eventually be removed when we have the
+    # solution for students living abroad.
     guard_transition(to: :ready) do |request|
       request.student.lives_in_france?
     end
