@@ -174,7 +174,9 @@ describe ASP::PaymentRequestStateMachine do
   describe "attempt_transition_to_ready!" do
     let(:asp_payment_request) { create(:asp_payment_request, :pending_with_issues) }
     let(:expected_metadata) do
-      { "incomplete_reasons" => {"ready_state_validation"=>["L'étudiant doit résider en France pour permettre le paiement par l'agence comptable", "Le RIB doit être personnel"]} }
+      { "incomplete_reasons" => { "ready_state_validation" => [
+        "L'étudiant doit résider en France pour permettre le paiement par l'agence comptable", "Le RIB doit être personnel"
+      ] } }
     end
 
     it "sets the incomplete reason on the last transition metadata" do

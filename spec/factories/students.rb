@@ -25,7 +25,7 @@ FactoryBot.define do
     end
 
     trait :with_all_asp_info do
-      with_rib
+      with_personal_rib
       with_extra_info
     end
 
@@ -59,9 +59,9 @@ FactoryBot.define do
       address_country_code { address_country_code_value }
     end
 
-    trait :with_rib do
+    trait :with_personal_rib do
       after(:create) do |student|
-        create(:rib, student: student)
+        create(:rib, student: student, personal: true)
       end
     end
 

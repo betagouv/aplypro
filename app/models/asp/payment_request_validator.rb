@@ -33,7 +33,7 @@ module ASP
     def check_rib(payment_request)
       payment_request.errors.add(:ready_state_validation, :rib) unless student&.rib&.valid?
 
-      return if student.adult_without_personal_rib?
+      return unless student.adult_without_personal_rib?
 
       payment_request.errors.add(:ready_state_validation,
                                  :adult_without_personal_rib)
