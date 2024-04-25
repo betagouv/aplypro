@@ -105,6 +105,7 @@ fr:
       home:
         home: Accueil
         login: Connexion à APLyPro
+        welcome: Bienvenue sur APLyPro
       classes:
         index: Liste des classes et formations
         show: "%{name}"

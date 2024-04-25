@@ -21,6 +21,7 @@ class HomeController < ApplicationController
   end
 
   def welcome
+    infer_page_title
     @inhibit_nav = true
 
     current_user.update!(welcomed: true)
