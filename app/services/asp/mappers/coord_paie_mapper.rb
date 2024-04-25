@@ -40,7 +40,8 @@ module ASP
         rib.name
            .delete("&")
            .squish
-           .gsub("_", " ")
+           .gsub("_", "")
+           .gsub(";", " ")
            .tap do |value|
           if !RIB_NAME_MASK.match?(value)
             raise ArgumentError, "the RIB ##{rib.id} name is still invalid after sanitisation"

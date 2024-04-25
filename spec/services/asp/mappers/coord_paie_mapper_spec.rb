@@ -50,19 +50,11 @@ describe ASP::Mappers::CoordPaieMapper do
     end
   end
 
-  context "when the name has an ampersand in it" do
-    before { rib.update!(name: "Bonnie & Clyde") }
+  context "when the name has special characters in it" do
+    before { rib.update!(name: "Bonnie & _Clyde;retraités") }
 
-    it "removes it" do
-      expect(mapper.intitdest).to eq "Bonnie Clyde"
-    end
-  end
-
-  context "when the name has an underscore in it" do
-    before { rib.update!(name: "Bonnie_Clyde") }
-
-    it "removes it" do
-      expect(mapper.intitdest).to eq "Bonnie Clyde"
+    it "removes them" do
+      expect(mapper.intitdest).to eq "Bonnie Clyde retraités"
     end
   end
 end
