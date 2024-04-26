@@ -109,8 +109,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def adult_without_personal_rib?
-    return false if underage?
-    return false if rib.blank?
+    return false if underage? || rib.blank?
 
     !rib.personal?
   end
