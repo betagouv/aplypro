@@ -2,11 +2,14 @@
 
 class Pfmp < ApplicationRecord
   include PfmpAmountCalculator
-  include StateMachinable
 
-  TRANSITION_CLASS = PfmpTransition
-  STATE_MACHINE_CLASS = PfmpStateMachine
-  has_many :transitions, class_name: "TRANSITION_CLASS", autosave: false, dependent: :destroy
+  TRANSITION_KLASS = PfmpTransition
+  STATE_MACHINE_KLASS = PfmpStateMachine
+  TRANSITION_RELATION_NAME = :transitions
+
+  include ::StateMachinable
+
+  has_many :transitions, class_name: "PfmpTransition", autosave: false, dependent: :destroy
 
   belongs_to :schooling
   has_one :classe, through: :schooling

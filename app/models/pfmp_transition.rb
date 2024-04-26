@@ -3,7 +3,7 @@
 class PfmpTransition < ApplicationRecord
   include Statesman::Adapters::ActiveRecordTransition
 
-  belongs_to :pfmp
+  belongs_to :pfmp, inverse_of: :transitions
 
   after_destroy :update_most_recent, if: :most_recent?
 

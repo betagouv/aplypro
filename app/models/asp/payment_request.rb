@@ -2,11 +2,13 @@
 
 module ASP
   class PaymentRequest < ApplicationRecord
+    TRANSITION_KLASS = ASP::PaymentRequestTransition
+    STATE_MACHINE_KLASS = ASP::PaymentRequestStateMachine
+    TRANSITION_RELATION_NAME = :asp_payment_request_transitions
+
     include ::StateMachinable
 
-    TRANSITION_CLASS = ASP::PaymentRequestTransition
-    STATE_MACHINE_CLASS = ASP::PaymentRequestStateMachine
-    has_many :asp_payment_request_transitions, class_name: "TRANSITION_CLASS", dependent: :destroy,
+    has_many :asp_payment_request_transitions, class_name: "ASP::PaymentRequestTransition", dependent: :destroy,
                                                inverse_of: :asp_payment_request
 
     # Virtual attribute declared solely in the context of ready transition validation
