@@ -5,12 +5,12 @@ module StateMachinable
 
   included do
     include Statesman::Adapters::ActiveRecordQueries[
-      transition_class: ASP::PaymentRequestTransition,
-      initial_state: ASP::PaymentRequestStateMachine.initial_state,
+      transition_class: TRANSITION_CLASS,
+      initial_state: STATE_MACHINE_CLASS.initial_state,
     ]
 
     def state_machine
-      @state_machine ||= ASP::PaymentRequestStateMachine.new(self, transition_class: ASP::PaymentRequestTransition)
+      @state_machine ||= STATE_MACHINE_CLASS.new(self, transition_class: TRANSITION_CLASS)
     end
 
     delegate :can_transition_to?,
@@ -21,8 +21,5 @@ module StateMachinable
              :transition_to!,
              :transition_to,
              :in_state?, to: :state_machine
-
-    has_many :asp_payment_request_transitions, class_name: "ASP::PaymentRequestTransition", dependent: :destroy,
-                                               inverse_of: :asp_payment_request
   end
 end
