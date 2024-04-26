@@ -171,20 +171,32 @@ describe ASP::PaymentRequestStateMachine do
     end
   end
 
-  describe "attempt_transition_to_ready!" do
-    let(:asp_payment_request) { create(:asp_payment_request, :sendable_with_issues) }
-    let(:expected_metadata) do
-      { "incomplete_reasons" => { "ready_state_validation" => [
-        I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.eligibility"),
-        I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.lives_in_france"),
-        I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.rib")
-      ] } }
+  describe "#attempt_transition_to_ready!" do
+    context "when there are no issues with the payment request" do
+      let(:asp_payment_request) { create(:asp_payment_request, :sendable) }
+
+      it "sets the state to ready" do
+        asp_payment_request.attempt_transition_to_ready!
+
+        expect(asp_payment_request).to be_in_state(:ready)
+      end
     end
 
-    it "sets the incomplete reason on the last transition metadata" do
-      asp_payment_request.attempt_transition_to_ready!
+    context "when there are issues with the payment request" do
+      let(:asp_payment_request) { create(:asp_payment_request, :sendable_with_issues) }
+      let(:expected_metadata) do
+        { "incomplete_reasons" => { "ready_state_validation" => [
+          I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.eligibility"),
+          I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.lives_in_france"),
+          I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.rib")
+        ] } }
+      end
 
-      expect(asp_payment_request.last_transition.metadata).to eq expected_metadata
+      it "sets the incomplete reason for the issues on the last transition's metadata" do
+        asp_payment_request.attempt_transition_to_ready!
+
+        expect(asp_payment_request.last_transition.metadata).to eq expected_metadata
+      end
     end
   end
 end
