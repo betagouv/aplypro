@@ -7,7 +7,7 @@ module ASP
       ASSIMILATED_FRENCH_COUNTRY_CODES = %w[FR GF GP MC MQ NC PF PM RE WF YT].freeze
 
       ALLOWED_CHARACTERS = %w[/ - ? : ( ) . , '].freeze
-      RIB_NAME_MASK = /\A[\s[[:alnum:]]#{ALLOWED_CHARACTERS.join}]+\z/
+      RIB_NAME_MASK = /\A[\s[[:alnum:]]#{ALLOWED_CHARACTERS.map { |c| Regexp.escape(c) }.join}]+\z/
 
       MAPPING = {
         bic: :bic
