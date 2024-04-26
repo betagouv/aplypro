@@ -54,5 +54,10 @@ module ASP
         "Conditions missing to mark the payment request as ready: #{payment_request.errors.full_messages.join('\n')}"
       )
     end
+
+    # NOTE: this should eventually be removed
+    guard_transition(to: :ready) do |request|
+      !request.student.needs_abrogated_da?
+    end
   end
 end

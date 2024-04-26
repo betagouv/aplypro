@@ -141,4 +141,61 @@ RSpec.describe Student do
       end
     end
   end
+
+  describe "needs_abrogated_da?" do
+    subject { student.needs_abrogated_da? }
+
+    let(:establishment) { create(:establishment) }
+    let(:mef) { create(:mef) }
+
+    before { create(:schooling, student: student) }
+
+    context "when the student has two classes" do
+      before { create(:schooling, :closed, student: student) }
+
+      context "with different MEFs" do
+        before do
+          student.classes.each { |classe| classe.update!(mef: create(:mef)) }
+        end
+
+        context "with the same establishment" do
+          before do
+            student.classes.each { |classe| classe.update!(establishment: establishment) }
+          end
+
+          it { is_expected.to be true }
+        end
+
+        context "with different establishments" do
+          before do
+            student.classes.each { |classe| classe.update!(establishment: create(:establishment)) }
+          end
+
+          it { is_expected.to be true }
+        end
+      end
+
+      context "with the same MEFs" do
+        before do
+          student.classes.each { |classe| classe.update!(mef: mef) }
+        end
+
+        context "with the same establishment" do
+          before do
+            student.classes.each { |classe| classe.update!(establishment: establishment) }
+          end
+
+          it { is_expected.to be false }
+        end
+
+        context "with different establishments" do
+          before do
+            student.classes.each { |classe| classe.update!(establishment: create(:establishment)) }
+          end
+
+          it { is_expected.to be true }
+        end
+      end
+    end
+  end
 end

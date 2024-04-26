@@ -20,6 +20,10 @@ class Schooling < ApplicationRecord
   scope :with_attributive_decisions, -> { joins(:attributive_decision_attachment) }
   scope :without_attributive_decisions, -> { where.missing(:attributive_decision_attachment) }
   scope :generating_attributive_decision, -> { where(generating_attributive_decision: true) }
+  scope :with_administrative_number, -> { where.not(administrative_number: nil) }
+
+  # https://github.com/betagouv/aplypro/issues/792
+  scope :with_one_character_attributive_decision_version, -> { where("schoolings.attributive_decision_version < 10") }
 
   validates :student, uniqueness: { scope: :end_date }, if: :open?
   validates :student, uniqueness: { scope: :classe }, if: :closed?
@@ -44,6 +48,14 @@ class Schooling < ApplicationRecord
 
   def open?
     !closed?
+  end
+
+  def excluded?
+    establishment.excluded? || outside_contract?
+  end
+
+  def outside_contract?
+    Exclusion.exists?(uai: establishment.uai, mef_code: mef.code)
   end
 
   def attributive_decision_filename

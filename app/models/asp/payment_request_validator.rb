@@ -19,6 +19,7 @@ module ASP
 
     private
 
+    # TODO: check that !request.student.needs_abrogated_da?
     def check_student
       unless ASP::StudentFileEligibilityChecker.new(student).ready?
         add_error(
@@ -44,6 +45,7 @@ module ASP
       add_error(:pfmp_amount) unless pfmp.amount.positive?
     end
 
+    # TODO: also check that !request.schooling.excluded?
     def check_attributive_decision
       return if payment_request.schooling.attributive_decision.attached?
 

@@ -3,12 +3,18 @@
 World(ActionView::Helpers::NumberHelper)
 
 Quand("la tâche de préparation des paiements démarre") do
-  PreparePaymentRequestsJob.perform_later
+  ConsiderPaymentRequestsJob.perform_later(1.year.from_now)
 end
 
+# NOTE: comme pour la génération des décisision d'attributions, il
+# faut lancer les tâches deux fois parce que
+# ConsiderPaymentRequestsJob déclenche à son tour des
+# PreparePaymentRequestJob qu'il faut écouler avec un deuxième "toutes
+# les tâches de fond sont terminées"
 Quand("la tâche de préparation des paiements est passée") do
   steps %(
     Quand la tâche de préparation des paiements démarre
+    Et que toutes les tâches de fond sont terminées
     Et que toutes les tâches de fond sont terminées
   )
 end

@@ -75,6 +75,18 @@ Sachantque("l'API SYGNE renvoie une liste d'élèves pour l'établissement {stri
   mock_sygne_students_endpoint(uai, FactoryBot.build_list(:sygne_student, 10))
 end
 
+Sachantque("l'API SYGNE renvoie une adresse en France pour l'élève {string}") do |name|
+  student = find_student_by_full_name(name)
+
+  mock_sygne_student_endpoint_with(student.ine, FactoryBot.build(:sygne_student_info, :french_address).to_json)
+end
+
+Sachantque("l'API SYGNE renvoie une adresse à l'étranger pour l'élève {string}") do |name|
+  student = find_student_by_full_name(name)
+
+  mock_sygne_student_endpoint_with(student.ine, FactoryBot.build(:sygne_student_info, :foreign_address).to_json)
+end
+
 Sachantque("l'API SYGNE peut fournir les informations complètes des étudiants") do
   mock_sygne_token
   mock_sygne_student_endpoint_with("", FactoryBot.build(:sygne_student_info).to_json)

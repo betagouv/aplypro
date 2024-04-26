@@ -17,9 +17,8 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et l'indicateur de demandes de paiements "Bloquée" n'est pas affiché
 
   Scénario: Le personnel de direction voit une demande de paiement incomplet
-    Sachant que je consulte le profil de "Marie Curie" dans la classe de "A1"
-    Et que je supprime les coordonnées bancaires
-    Quand la tâche de préparation des paiements est passée
+    Sachant que l'API SYGNE renvoie une adresse à l'étranger pour l'élève "Marie Curie"
+    Et que la tâche de préparation des paiements est passée
     Et que je me rends sur la page d'accueil
     Alors l'indicateur de demandes de paiements "En attente" affiche 0
     Et l'indicateur de demandes de paiements "Bloquées" affiche 1
