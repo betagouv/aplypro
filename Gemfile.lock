@@ -586,7 +586,6 @@ DEPENDENCIES
   bootsnap
   breadcrumbs_on_rails
   capybara
-  csv
   cucumber-rails
   database_cleaner-active_record
   debug
@@ -640,7 +639,7 @@ DEPENDENCIES
   zipline (~> 1.6)
 
 RUBY VERSION
-   ruby 3.3.1p55
+   ruby 3.3.0p0
 
 BUNDLED WITH
-   2.5.9
+   2.5.3
