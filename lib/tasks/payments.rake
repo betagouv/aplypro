@@ -15,10 +15,10 @@
 
 # requests.count # ensure we have 7K+ requests post-bad-rib-filter
 
-# SendPaymentRequestsJob.perform_later(requests)
+# SendPaymentRequestsJob.perform_later(requests.limit(2000).to_a)
 
 # ASP::PaymentRequest.joins(ASP::PaymentRequest.most_recent_transition_join).group(:to_state).count
 
 # Check si y'a moins de 100k en cours cette semaine
-# ASP::PaymentRequest.total_requests_sent_this_week
+# ASP::Request.total_requests_sent_this_week
 # rubocop:enable Layout/LineLength
