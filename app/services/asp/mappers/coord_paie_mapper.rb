@@ -9,6 +9,8 @@ module ASP
       ALLOWED_CHARACTERS = %w[/ - ? : ( ) . , '].freeze
       RIB_NAME_MASK = /\A[\s[[:alnum:]]#{ALLOWED_CHARACTERS.map { |c| Regexp.escape(c) }.join}]+\z/
 
+      SOFT_HYPHEN = "­" # this invisible thing is not a space
+
       MAPPING = {
         bic: :bic
       }.freeze
@@ -40,7 +42,7 @@ module ASP
         rib.name
            .delete("&")
            .gsub("_", "")
-           .gsub(/[;\-]/, " ")
+           .gsub(/[;\-#{SOFT_HYPHEN}]/, " ")
            .squish
            .tap do |value|
           if !RIB_NAME_MASK.match?(value)
