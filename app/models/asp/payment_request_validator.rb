@@ -15,11 +15,11 @@ module ASP
       check_rib
       check_pfmp
       check_duplicates
+      check_schooling
     end
 
     private
 
-    # TODO: check that !request.student.needs_abrogated_da?
     def check_student
       unless ASP::StudentFileEligibilityChecker.new(student).ready?
         add_error(
@@ -45,11 +45,16 @@ module ASP
       add_error(:pfmp_amount) unless pfmp.amount.positive?
     end
 
-    # TODO: also check that !request.schooling.excluded?
+    def check_schooling
+      add_error(:excluded_schooling) if payment_request.schooling.excluded?
+    end
+
     def check_attributive_decision
       return if payment_request.schooling.attributive_decision.attached?
 
-      add_error(:attributive_decision)
+      add_error(:missing_attributive_decision)
+
+      add_error(:needs_abrogated_attributive_decision) if student.needs_abrogated_attributive_decision?
     end
 
     def check_duplicates
