@@ -13,15 +13,11 @@ class PollPaymentsServerJob < ApplicationJob
 
       file = File.open(File.join(dir, filename))
 
-      handler = ASP::FileHandler.new(file)
+      ASP::FileSaver.new(file).persist_file!
 
-      begin
-        handler.parse!
-      rescue ASP::Errors::ResponseFileParsingError, ASP::Errors::UnmatchedResponseFile => e
-        Sentry.capture_exception(e)
-      ensure
-        ASP::Server.remove_file!(filename: filename) if handler.file_saved?
-      end
+      ProcessASPResponseFileJob.perform_later(filename)
+
+      ASP::Server.remove_file!(filename: filename)
     end
   end
 end
