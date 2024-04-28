@@ -88,9 +88,9 @@ module ASP
     end
 
     def sent_ids
-      Nokogiri::XML(file.download)
-              .search("ENREGISTREMENT")
-              .pluck("idEnregistrement")
+      @sent_ids ||= Nokogiri::XML(file.download)
+                            .search("ENREGISTREMENT")
+                            .pluck("idEnregistrement")
     end
 
     def parse_response_file!(type)
