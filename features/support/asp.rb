@@ -5,16 +5,24 @@ require "./mock/factories/asp"
 
 TEMP_ASP_DIR = "tmp/mock_asp"
 
+class FakeServer
+  class << self
+    def drop_file!(io:, path:); end
+
+    def get_all_files! # rubocop:disable Naming/AccessorMethodName
+      TEMP_ASP_DIR
+    end
+
+    def remove_file!(filename:)
+      File.delete(File.join(TEMP_ASP_DIR, filename))
+    end
+  end
+end
+
 def mock_sftp!
   FileUtils.mkdir_p(TEMP_ASP_DIR)
 
-  asp_server_double = class_double(ASP::Server)
-
-  allow(asp_server_double).to receive(:drop_file!)
-  allow(asp_server_double).to receive(:get_all_files!).and_return(TEMP_ASP_DIR)
-  allow(asp_server_double).to receive(:remove_file!)
-
-  stub_const("ASP::Server", asp_server_double)
+  stub_const("ASP::Server", FakeServer)
 end
 
 Before do
