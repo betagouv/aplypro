@@ -87,21 +87,6 @@ module ASP
       )
     end
 
-    def inspect_file(type)
-      attachment = attachment_for(type)
-
-      raise ArgumentError, "there is no #{type} file on this request" unless attachment.attached?
-
-      reader_for(type)
-        .tap do |reader|
-        reader.instance_eval do |obj|
-          def obj.process!
-            raise ASP::Readers::Errors::ReadOnlyMode
-          end
-        end
-      end
-    end
-
     def sent_ids
       Nokogiri::XML(file.download)
               .search("ENREGISTREMENT")
