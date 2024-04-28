@@ -18,8 +18,8 @@ module ASP
     validates :asp_payment_requests, length: { maximum: MAX_RECORDS_PER_FILE }
 
     scope :sent_at, ->(range) { where(sent_at: range) }
-    scope :sent_today, -> { sent_at(Date.current.all_day) }
-    scope :sent_this_week, -> { sent_at(Date.current.all_week) } # thank you Active Support <3
+    scope :sent_today, -> { sent_at(Time.current.all_day) }
+    scope :sent_this_week, -> { sent_at(Time.current.all_week) } # thank you Active Support <3
 
     validate :all_requests_ready?, on: :create
 
