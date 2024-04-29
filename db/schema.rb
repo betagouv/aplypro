@@ -136,7 +136,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_24_154841) do
   end
 
   create_table "exclusions", force: :cascade do |t|
-    t.string "uai"
+    t.string "uai", null: false
     t.string "mef_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
