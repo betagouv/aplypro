@@ -141,7 +141,6 @@ fr:
         bulk_create: *missing_ribs_title
       validations:
         index: Paiements
-        #index: Classes à envoyer en paiement
         show: Envoyer en paiement les PFMPs de %{name}
 
   global:

@@ -6,6 +6,7 @@ class HomeController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[maintenance index login legal]
 
   before_action :show_welcome_screen, only: :home
+  before_action :infer_page_title, except: %i[index maintenance]
 
   def index
     redirect_to home_path and return if user_signed_in?
@@ -14,14 +15,12 @@ class HomeController < ApplicationController
   end
 
   def home
-    infer_page_title
     @inhibit_title = true
 
     @establishment_facade = EstablishmentFacade.new(current_establishment)
   end
 
   def welcome
-    infer_page_title
     @inhibit_nav = true
 
     current_user.update!(welcomed: true)
@@ -33,22 +32,15 @@ class HomeController < ApplicationController
     @msg = ENV.fetch("APLYPRO_MAINTENANCE_REASON")
   end
 
-  def login
-    infer_page_title
-  end
+  def login; end
 
-  def legal
-    infer_page_title
-  end
+  def legal; end
 
   def faq
-    infer_page_title
     @inhibit_title = true
   end
 
-  def accessibility
-    infer_page_title
-  end
+  def accessibility; end
 
   private
 
