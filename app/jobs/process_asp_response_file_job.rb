@@ -12,6 +12,8 @@ class ProcessASPResponseFileJob < ApplicationJob
              .first
              .record
 
-    record.parse_response_file!(filename.kind)
+    ActiveRecord::Base.transaction do
+      record.parse_response_file!(filename.kind)
+    end
   end
 end
