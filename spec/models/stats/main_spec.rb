@@ -86,7 +86,7 @@ RSpec.describe Stats::Main do
     end
 
     it "formats the data into a csv string" do
-      expect(csv_string).to eq("title1;title2;title3\n0,999999;0;0,1\n0,5714285714285714;0;Infini")
+      expect(csv_string).to eq("title1\ttitle2\ttitle3\n0,999999\t0\t0,1\n0,5714285714285714\t0\tInfini")
     end
   end
 end

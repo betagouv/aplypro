@@ -49,7 +49,7 @@ module Stats
           else
             cell
           end
-        end.join(";")
+        end.join("\t")
       end.join("\n")
     end
 
