@@ -63,17 +63,17 @@ fr:
         asp/payment_request:
           attributes:
             ready_state_validation:
-              eligibility: "Les informations de l'étudiant ne sont pas complètes/valides"
-              lives_in_france: "L'étudiant doit résider en France pour permettre le paiement par l'agence comptable"
-              student_type: "L'étudiant doit avoir une scolarité"
+              eligibility: "Les informations de l'élève ne sont pas complètes/valides"
+              lives_in_france: "L'élève doit résider en France pour permettre le paiement par l'agence comptable"
+              student_type: "L'élève doit avoir une scolarité"
               excluded_schooling: "La scolarité mentionnée est malheureusement exclue de la procédure."
               rib: "Le RIB doit être valide"
-              pfmp: "La PFMP associé n'est pas valide"
+              pfmp: "La PFMP associée n'est pas valide"
               ine_not_found: "Le numéro INE n'est pas trouvé"
               adult_without_personal_rib: "Le RIB doit être personnel pour les adultes"
-              pfmp_amount: "La PFMP associé doit avoir un montant positif"
+              pfmp_amount: "La PFMP associée doit avoir un montant positif"
               missing_attributive_decision: "Il manque une décision attributive"
-              needs_abrogated_attributive_decision: "L'étudiant doit avoir une décision d'attribution abrogée"
+              needs_abrogated_attributive_decision: "L'élève doit avoir une décision d'attribution abrogée"
               duplicates: "Il existe un duplicat validé de la PFMP associée"
 
     hints:
