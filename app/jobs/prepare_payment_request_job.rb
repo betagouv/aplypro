@@ -10,14 +10,6 @@ class PreparePaymentRequestJob < ApplicationJob
   def perform(payment_request)
     FetchStudentInformationJob.perform_now(payment_request.schooling)
 
-    begin
-      payment_request.mark_ready!
-    rescue Statesman::GuardFailedError
-      # FIXME: arguably this could leverage the
-      # after_transition_failure API from statesman but we need to
-      # understand whether mark_ready! should *always* make a request
-      # incomplete if it couldn't be readied.
-      payment_request.mark_incomplete!
-    end
+    payment_request.mark_ready!
   end
 end

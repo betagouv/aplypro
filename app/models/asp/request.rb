@@ -76,7 +76,7 @@ module ASP
     end
 
     def update_requests!
-      asp_payment_requests.each(&:mark_as_sent!)
+      asp_payment_requests.each(&:mark_sent!)
     end
 
     def attach_asp_file!

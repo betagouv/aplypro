@@ -26,69 +26,33 @@ module ASP
     transition from: :integrated, to: :paid
     transition from: :integrated, to: :unpaid
 
-    after_transition(from: :sent, to: :integrated) do |request, transition|
+    after_transition(from: :sent, to: :integrated) do |payment_request, transition|
       attrs = transition.metadata
 
-      request.student.update!(asp_individu_id: attrs["idIndDoss"])
-      request.schooling.update!(asp_dossier_id: attrs["idDoss"])
-      request.pfmp.update!(asp_prestation_dossier_id: attrs["idPretaDoss"])
+      payment_request.student.update!(asp_individu_id: attrs["idIndDoss"])
+      payment_request.schooling.update!(asp_dossier_id: attrs["idDoss"])
+      payment_request.pfmp.update!(asp_prestation_dossier_id: attrs["idPretaDoss"])
     end
 
-    guard_transition(to: :ready) do |request|
-      ASP::StudentFileEligibilityChecker.new(request.student).ready?
+    guard_transition(to: :ready) do |payment_request|
+      ASP::PaymentRequestValidator.new(payment_request).validate
+
+      payment_request.errors.none?
     end
 
-    # NOTE: this should eventually be removed when we have the
-    # solution for students living abroad.
-    guard_transition(to: :ready) do |request|
-      request.student.lives_in_france?
+    guard_transition(to: :incomplete) do |payment_request|
+      payment_request.errors.any?
     end
 
-    guard_transition(to: :ready) do |request|
-      request.schooling.student?
+    guard_transition(from: :ready, to: :sent) do |payment_request|
+      payment_request.asp_request.present?
     end
 
-    guard_transition(to: :ready) do |request|
-      request.student.rib.valid?
-    end
-
-    guard_transition(to: :ready) do |request|
-      request.pfmp.valid?
-    end
-
-    guard_transition(to: :ready) do |request|
-      !request.student.ine_not_found
-    end
-
-    guard_transition(to: :ready) do |request|
-      !request.student.adult_without_personal_rib?
-    end
-
-    guard_transition(to: :ready) do |request|
-      request.pfmp.amount.positive?
-    end
-
-    guard_transition(to: :ready) do |request|
-      request.schooling.attributive_decision.attached?
-    end
-
-    guard_transition(to: :ready) do |request|
-      request.pfmp.duplicates.none? do |pfmp|
-        pfmp.in_state?(:validated)
-      end
-    end
-
-    guard_transition(to: :ready) do |request|
-      !request.schooling.excluded?
-    end
-
-    guard_transition(from: :ready, to: :sent) do |request|
-      request.asp_request.present?
-    end
-
-    # NOTE: this should eventually be removed
-    guard_transition(to: :ready) do |request|
-      !request.student.needs_abrogated_da?
+    after_guard_failure(to: :ready) do |payment_request, _exception|
+      raise(
+        ASP::Errors::IncompletePaymentRequestError,
+        "Conditions missing to mark the payment request as ready: #{payment_request.errors.full_messages.join('\n')}"
+      )
     end
   end
 end

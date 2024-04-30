@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "./mock/factories/asp"
+
 FactoryBot.define do
   factory :asp_payment_request, class: "ASP::PaymentRequest" do
     initialize_with { pfmp.payment_requests.last } # FIXME
@@ -10,7 +12,16 @@ FactoryBot.define do
 
     trait :sendable do
       after(:create) do |req|
-        student = create(:student, :with_all_asp_info, :underage, :with_french_address)
+        student = create(:student, :with_all_asp_info, :adult, :with_french_address)
+        schooling = create(:schooling, :with_attributive_decision, student: student)
+
+        req.pfmp.update!(schooling: schooling)
+      end
+    end
+
+    trait :sendable_with_issues do
+      after(:create) do |req|
+        student = create(:student, :underage, :with_foreign_address)
         schooling = create(:schooling, :with_attributive_decision, student: student)
 
         req.pfmp.update!(schooling: schooling)
@@ -29,7 +40,7 @@ FactoryBot.define do
         schooling = create(:schooling, :with_attributive_decision, student: student)
         req.pfmp.update!(schooling: schooling)
 
-        req.mark_incomplete!
+        req.mark_ready! # NOTE: here we might want the metadata
       end
     end
 
@@ -39,7 +50,7 @@ FactoryBot.define do
       after(:create) do |obj|
         create(:asp_request, asp_payment_requests: [obj])
 
-        obj.mark_as_sent!
+        obj.mark_sent!
       end
     end
 

@@ -142,8 +142,8 @@ RSpec.describe Student do
     end
   end
 
-  describe "needs_abrogated_da?" do
-    subject { student.needs_abrogated_da? }
+  describe "needs_abrogated_attributive_decision?" do
+    subject { student.needs_abrogated_attributive_decision? }
 
     let(:establishment) { create(:establishment) }
     let(:mef) { create(:mef) }

@@ -16,7 +16,7 @@ module ASP
       end
 
       def handle_request(request, row)
-        request.reject!(row.to_h)
+        request.mark_rejected!(row.to_h)
       end
     end
   end

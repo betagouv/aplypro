@@ -3,17 +3,19 @@
 require "rails_helper"
 
 describe ASP::PaymentRequestStateMachine do
-  subject(:asp_payment_request) { create(:asp_payment_request) }
+  subject(:asp_payment_request) { create(:asp_payment_request, :pending) }
 
   let(:student) { asp_payment_request.pfmp.student }
 
   it { is_expected.to be_in_state :pending }
 
-  shared_examples "a blocked request" do |test_perfect_pfmp_scope = true|
-    it "cannot transition to ready" do
-      expect { asp_payment_request.mark_ready! }.to raise_error Statesman::GuardFailedError
-    end
+  it "cannot transition to ready" do
+    expect { asp_payment_request.mark_ready! }.to change(asp_payment_request, :current_state)
+      .from("pending")
+      .to("incomplete")
+  end
 
+  shared_examples "a blocked request" do |test_perfect_pfmp_scope = true|
     if test_perfect_pfmp_scope == true
       it "is not included in the Pfmp.perfect scope" do
         expect(Pfmp.perfect).not_to include(asp_payment_request.pfmp)
@@ -138,12 +140,12 @@ describe ASP::PaymentRequestStateMachine do
     end
   end
 
-  describe "mark_as_sent!" do
+  describe "mark_sent!" do
     let(:asp_payment_request) { create(:asp_payment_request, :ready) }
     let!(:request) { create(:asp_request, asp_payment_requests: [asp_payment_request]) }
 
     it "moves to the sent state" do
-      asp_payment_request.mark_as_sent!
+      asp_payment_request.mark_sent!
 
       expect(asp_payment_request.reload).to be_in_state :sent
     end
@@ -152,7 +154,7 @@ describe ASP::PaymentRequestStateMachine do
       before { request.destroy! }
 
       it "fails the transition" do
-        expect { asp_payment_request.reload.mark_as_sent! }.to raise_error(Statesman::GuardFailedError)
+        expect { asp_payment_request.reload.mark_sent! }.to raise_error(Statesman::GuardFailedError)
       end
     end
   end
@@ -184,6 +186,35 @@ describe ASP::PaymentRequestStateMachine do
       expect { asp_payment_request.mark_integrated!(attrs) }
         .to change(asp_payment_request.pfmp, :asp_prestation_dossier_id)
         .from(nil).to("prestation")
+    end
+  end
+
+  describe "#mark_ready!" do
+    context "when there are no issues with the payment request" do
+      let(:asp_payment_request) { create(:asp_payment_request, :sendable) }
+
+      it "sets the state to ready" do
+        asp_payment_request.mark_ready!
+
+        expect(asp_payment_request).to be_in_state(:ready)
+      end
+    end
+
+    context "when there are issues with the payment request" do
+      let(:asp_payment_request) { create(:asp_payment_request, :sendable_with_issues) }
+      let(:expected_metadata) do
+        { "incomplete_reasons" => { "ready_state_validation" => [
+          I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.eligibility"),
+          I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.lives_in_france"),
+          I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.rib")
+        ] } }
+      end
+
+      it "sets the incomplete reason for the issues on the last transition's metadata" do
+        asp_payment_request.mark_ready!
+
+        expect(asp_payment_request.last_transition.metadata).to eq expected_metadata
+      end
     end
   end
 end

@@ -25,7 +25,7 @@ FactoryBot.define do
     end
 
     trait :with_all_asp_info do
-      with_rib
+      with_personal_rib
       with_extra_info
     end
 
@@ -62,6 +62,12 @@ FactoryBot.define do
     trait :with_rib do
       after(:create) do |student|
         create(:rib, student: student)
+      end
+    end
+
+    trait :with_personal_rib do
+      after(:create) do |student|
+        create(:rib, student: student, personal: true)
       end
     end
 

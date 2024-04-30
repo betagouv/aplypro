@@ -2,6 +2,19 @@
 
 module ASP
   class PaymentRequest < ApplicationRecord
+    TRANSITION_CLASS = ASP::PaymentRequestTransition
+    STATE_MACHINE_CLASS = ASP::PaymentRequestStateMachine
+
+    TRANSITION_RELATION_NAME = :asp_payment_request_transitions
+
+    include ::StateMachinable
+
+    has_many :asp_payment_request_transitions, class_name: "ASP::PaymentRequestTransition", dependent: :destroy,
+                                               inverse_of: :asp_payment_request
+
+    # Virtual attribute declared solely in the context of ready transition validation
+    attr_accessor :ready_state_validation
+
     belongs_to :asp_request, class_name: "ASP::Request", optional: true
     belongs_to :asp_payment_return, class_name: "ASP::PaymentReturn", optional: true
 
@@ -9,11 +22,6 @@ module ASP
 
     has_one :student, through: :pfmp
     has_one :schooling, through: :pfmp
-
-    has_many :asp_payment_request_transitions,
-             class_name: "ASP::PaymentRequestTransition",
-             dependent: :destroy,
-             inverse_of: :asp_payment_request
 
     validate :single_active_payment_request_per_pfmp, on: %i[create update]
 
@@ -49,49 +57,38 @@ module ASP
       end
     end
 
-    include Statesman::Adapters::ActiveRecordQueries[
-      transition_class: ASP::PaymentRequestTransition,
-      initial_state: ASP::PaymentRequestStateMachine.initial_state,
-    ]
-
-    def state_machine
-      @state_machine ||= ASP::PaymentRequestStateMachine.new(self, transition_class: ASP::PaymentRequestTransition)
-    end
-
-    delegate :can_transition_to?,
-             :current_state, :history, :last_transition, :last_transition_to,
-             :transition_to!, :transition_to, :in_state?, to: :state_machine
-
     def mark_ready!
       transition_to!(:ready)
+    rescue ASP::Errors::IncompletePaymentRequestError
+      mark_incomplete!({ incomplete_reasons: errors })
     end
 
-    def mark_incomplete!
-      transition_to!(:incomplete)
-    end
-
-    def mark_as_sent!
+    def mark_sent!
       transition_to!(:sent)
     end
 
-    def reject!(attrs)
-      transition_to!(:rejected, attrs)
+    def mark_rejected!(metadata)
+      transition_to!(:rejected, metadata)
     end
 
-    def mark_integrated!(attrs)
-      transition_to!(:integrated, attrs)
+    def mark_incomplete!(metadata)
+      transition_to!(:incomplete, metadata)
     end
 
-    def mark_paid!(attrs, record)
+    def mark_integrated!(metadata)
+      transition_to!(:integrated, metadata)
+    end
+
+    def mark_paid!(metadata, record)
       update!(asp_payment_return: record)
 
-      transition_to!(:paid, attrs)
+      transition_to!(:paid, metadata)
     end
 
-    def mark_unpaid!(attrs, record)
+    def mark_unpaid!(metadata, record)
       update!(asp_payment_return: record)
 
-      transition_to!(:unpaid, attrs)
+      transition_to!(:unpaid, metadata)
     end
 
     def terminated?

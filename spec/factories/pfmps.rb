@@ -35,7 +35,7 @@ FactoryBot.define do
 
           p.asp_request = ASP::Request.create!
 
-          p.mark_as_sent!
+          p.mark_sent!
           p.mark_integrated!({})
           p.mark_paid!
         end
@@ -51,8 +51,8 @@ FactoryBot.define do
 
           p.asp_request = ASP::Request.create!
 
-          p.mark_as_sent!
-          p.reject!({})
+          p.mark_sent!
+          p.mark_rejected!({})
         end
       end
     end
