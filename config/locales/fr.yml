@@ -64,17 +64,17 @@ fr:
           attributes:
             ready_state_validation:
               eligibility: "Les informations de l'élève ne sont pas complètes/valides"
-              lives_in_france: "L'élève doit résider en France pour permettre le paiement par l'agence comptable"
-              student_type: "L'élève doit avoir une scolarité"
+              lives_in_france: "Pour les élèves résidant à l'étranger, des développements sont encore nécessaires avant de pour voir être envoyés à l'Agence de Services et Paiements (ASP). Veuillez patienter le temps que ces dévellopements soient effectués."
+              student_type: "L'élève doit avoir un statut d'étudiant. Les apprentis ne sont pas concernés par l'allocation"
               excluded_schooling: "La scolarité mentionnée est exclue de la procédure."
-              rib: "Le RIB doit être valide"
+              rib: "Les coordonnées bancaires saisies sont invalides"
               pfmp: "La PFMP associée n'est pas valide"
-              ine_not_found: "Le numéro INE n'est pas trouvé"
-              adult_without_personal_rib: "Les coordonnées bancaires d'un élève majeur doivent être à son propre nom"
+              ine_not_found: "L'INE de l'étudiant est introuvable. Il a certainement été supprimé lors d'une réconciliation d'INE, vous devriez retrouver cet étudiant en double dans APLyPro. Veuillez utiliser l'autre instance de cet étudiant pour saisir ses PFMPs"
+              adult_without_personal_rib: "Les étudiants majeurs doivent avoir être payés sur leurs propres coordonnées bancaires"
               pfmp_amount: "La PFMP associée doit avoir un montant positif"
               missing_attributive_decision: "Il manque une décision attributive"
-              needs_abrogated_attributive_decision: "L'élève doit avoir une décision d'attribution abrogée"
-              duplicates: "Il existe un duplicat validé de la PFMP associée"
+              needs_abrogated_attributive_decision: "Les élèves ayant changé de formation ou d'établissement doivent avoir une abrogation de leur décision d'attribution passée. Ce document n'étant pas encore disponible, veuillez patienter le temps que ces développements soient effectués"
+              duplicates: "Une autre PFMP existe avec les mêmes dates de début et de fin. Veuillez supprimer l'une des deux."
 
     hints:
       rib:
