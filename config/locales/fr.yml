@@ -70,7 +70,7 @@ fr:
               rib: "Le RIB doit être valide"
               pfmp: "La PFMP associée n'est pas valide"
               ine_not_found: "Le numéro INE n'est pas trouvé"
-              adult_without_personal_rib: "Le RIB doit être personnel pour les adultes"
+              adult_without_personal_rib: "Les coordonnées bancaires d'un élève majeur doivent être à son propre nom"
               pfmp_amount: "La PFMP associée doit avoir un montant positif"
               missing_attributive_decision: "Il manque une décision attributive"
               needs_abrogated_attributive_decision: "L'élève doit avoir une décision d'attribution abrogée"
