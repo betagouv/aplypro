@@ -10,6 +10,6 @@ class PreparePaymentRequestJob < ApplicationJob
   def perform(payment_request)
     FetchStudentInformationJob.perform_now(payment_request.schooling)
 
-    payment_request.attempt_transition_to_ready!
+    payment_request.mark_ready!
   end
 end

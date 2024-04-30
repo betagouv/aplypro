@@ -5,7 +5,7 @@ module StateMachinable
 
   included do
     class_eval do
-      %w[transition_klass state_machine_klass transition_relation_name].each do |method_name|
+      %w[transition_class state_machine_class transition_relation_name].each do |method_name|
         define_singleton_method(method_name) do
           const_get(method_name.upcase)
         end
@@ -13,12 +13,12 @@ module StateMachinable
     end
 
     include Statesman::Adapters::ActiveRecordQueries[
-      transition_class: transition_klass,
-      initial_state: state_machine_klass.initial_state
+      transition_class: transition_class,
+      initial_state: state_machine_class.initial_state
     ]
 
     def state_machine
-      @state_machine ||= self.class.state_machine_klass.new(self, transition_class: self.class.transition_klass,
+      @state_machine ||= self.class.state_machine_class.new(self, transition_class: self.class.transition_class,
                                                                   association_name: self.class.transition_relation_name)
     end
 

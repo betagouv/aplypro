@@ -2,8 +2,9 @@
 
 module ASP
   class PaymentRequest < ApplicationRecord
-    TRANSITION_KLASS = ASP::PaymentRequestTransition
-    STATE_MACHINE_KLASS = ASP::PaymentRequestStateMachine
+    TRANSITION_CLASS = ASP::PaymentRequestTransition
+    STATE_MACHINE_CLASS = ASP::PaymentRequestStateMachine
+
     TRANSITION_RELATION_NAME = :asp_payment_request_transitions
 
     include ::StateMachinable
@@ -56,29 +57,23 @@ module ASP
       end
     end
 
-    # Use this method if moving the object to another state in case of failure
-    # is irrelevant and/or if you dont care about storing the errors in metadata
-    def mark_ready!
-      transition_to!(:ready)
-    end
-
-    # This method has the following advantages:
+    # This method does the following:
     # - avoid raising guard error
     # - move to state incomplete
     # - store the reasons of incompletion in metadata
-    def attempt_transition_to_ready!
+    def mark_ready!
       if can_transition_to?(:ready) # Triggers guards that use a validator
-        mark_ready!
+        transition_to!(:ready)
       else
         mark_incomplete!({ incomplete_reasons: errors })
       end
     end
 
-    def mark_as_sent!
+    def mark_sent!
       transition_to!(:sent)
     end
 
-    def reject!(metadata)
+    def mark_rejected!(metadata)
       transition_to!(:rejected, metadata)
     end
 

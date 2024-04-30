@@ -3,8 +3,8 @@
 class Pfmp < ApplicationRecord
   include PfmpAmountCalculator
 
-  TRANSITION_KLASS = PfmpTransition
-  STATE_MACHINE_KLASS = PfmpStateMachine
+  TRANSITION_CLASS = PfmpTransition
+  STATE_MACHINE_CLASS = PfmpStateMachine
   TRANSITION_RELATION_NAME = :transitions
 
   include ::StateMachinable

@@ -40,7 +40,7 @@ FactoryBot.define do
         schooling = create(:schooling, :with_attributive_decision, student: student)
         req.pfmp.update!(schooling: schooling)
 
-        req.attempt_transition_to_ready! # NOTE: here we might want the metadata
+        req.mark_ready! # NOTE: here we might want the metadata
       end
     end
 
@@ -50,7 +50,7 @@ FactoryBot.define do
       after(:create) do |obj|
         create(:asp_request, asp_payment_requests: [obj])
 
-        obj.mark_as_sent!
+        obj.mark_sent!
       end
     end
 

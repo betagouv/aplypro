@@ -10,7 +10,9 @@ describe ASP::PaymentRequestStateMachine do
   it { is_expected.to be_in_state :pending }
 
   it "cannot transition to ready" do
-    expect { asp_payment_request.mark_ready! }.to raise_error ASP::Errors::IncompletePaymentRequestError
+    expect { asp_payment_request.mark_ready! }.to change(asp_payment_request, :current_state)
+      .from("pending")
+      .to("incomplete")
   end
 
   shared_examples "a blocked request" do |test_perfect_pfmp_scope = true|
@@ -138,12 +140,12 @@ describe ASP::PaymentRequestStateMachine do
     end
   end
 
-  describe "mark_as_sent!" do
+  describe "mark_sent!" do
     let(:asp_payment_request) { create(:asp_payment_request, :ready) }
     let!(:request) { create(:asp_request, asp_payment_requests: [asp_payment_request]) }
 
     it "moves to the sent state" do
-      asp_payment_request.mark_as_sent!
+      asp_payment_request.mark_sent!
 
       expect(asp_payment_request.reload).to be_in_state :sent
     end
@@ -152,7 +154,7 @@ describe ASP::PaymentRequestStateMachine do
       before { request.destroy! }
 
       it "fails the transition" do
-        expect { asp_payment_request.reload.mark_as_sent! }.to raise_error(Statesman::GuardFailedError)
+        expect { asp_payment_request.reload.mark_sent! }.to raise_error(Statesman::GuardFailedError)
       end
     end
   end
@@ -187,12 +189,12 @@ describe ASP::PaymentRequestStateMachine do
     end
   end
 
-  describe "#attempt_transition_to_ready!" do
+  describe "#mark_ready!" do
     context "when there are no issues with the payment request" do
       let(:asp_payment_request) { create(:asp_payment_request, :sendable) }
 
       it "sets the state to ready" do
-        asp_payment_request.attempt_transition_to_ready!
+        asp_payment_request.mark_ready!
 
         expect(asp_payment_request).to be_in_state(:ready)
       end
@@ -209,7 +211,7 @@ describe ASP::PaymentRequestStateMachine do
       end
 
       it "sets the incomplete reason for the issues on the last transition's metadata" do
-        asp_payment_request.attempt_transition_to_ready!
+        asp_payment_request.mark_ready!
 
         expect(asp_payment_request.last_transition.metadata).to eq expected_metadata
       end
