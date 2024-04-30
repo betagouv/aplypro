@@ -57,14 +57,10 @@ module ASP
       end
     end
 
-    # This method does the following:
-    # - avoid raising guard error
-    # - move to state incomplete
-    # - store the reasons of incompletion in metadata
     def mark_ready!
-      if can_transition_to?(:ready) # Triggers guards that use a validator
+      begin
         transition_to!(:ready)
-      else
+      rescue ASP::Errors::IncompletePaymentRequestError
         mark_incomplete!({ incomplete_reasons: errors })
       end
     end
