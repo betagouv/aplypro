@@ -58,11 +58,9 @@ module ASP
     end
 
     def mark_ready!
-      begin
-        transition_to!(:ready)
-      rescue ASP::Errors::IncompletePaymentRequestError
-        mark_incomplete!({ incomplete_reasons: errors })
-      end
+      transition_to!(:ready)
+    rescue ASP::Errors::IncompletePaymentRequestError
+      mark_incomplete!({ incomplete_reasons: errors })
     end
 
     def mark_sent!
