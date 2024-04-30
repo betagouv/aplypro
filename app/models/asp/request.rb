@@ -18,8 +18,8 @@ module ASP
     validates :asp_payment_requests, length: { maximum: MAX_RECORDS_PER_FILE }
 
     scope :sent_at, ->(range) { where(sent_at: range) }
-    scope :sent_today, -> { sent_at(Date.current.all_day) }
-    scope :sent_this_week, -> { sent_at(Date.current.all_week) } # thank you Active Support <3
+    scope :sent_today, -> { sent_at(Time.current.all_day) }
+    scope :sent_this_week, -> { sent_at(Time.current.all_week) } # thank you Active Support <3
 
     validate :all_requests_ready?, on: :create
 
@@ -87,31 +87,27 @@ module ASP
       )
     end
 
-    def inspect_file(type)
-      attachment = send "#{type}_file"
-
-      raise ArgumentError, "there is no #{type} file on this request" unless attachment.attached?
-
-      klass = "ASP::Readers::#{type.capitalize}FileReader".constantize
-
-      klass
-        .new(io: attachment.download)
-        .tap do |reader|
-        reader.instance_eval do |obj|
-          def obj.process!
-            raise ASP::Readers::Errors::ReadOnlyMode
-          end
-        end
-      end
+    def sent_ids
+      @sent_ids ||= Nokogiri::XML(file.download)
+                            .search("ENREGISTREMENT")
+                            .pluck("idEnregistrement")
     end
 
-    def sent_ids
-      Nokogiri::XML(file.download)
-              .search("ENREGISTREMENT")
-              .pluck("idEnregistrement")
+    def parse_response_file!(type)
+      reader_for(type).process!
+    end
+
+    def attachment_for(type)
+      send "#{type}_file"
     end
 
     private
+
+    def reader_for(type)
+      klass = "ASP::Readers::#{type.capitalize}FileReader".constantize
+
+      klass.new(io: attachment_for(type).download)
+    end
 
     def results_attached?
       integrations_file.attached? || rejects_file.attached?

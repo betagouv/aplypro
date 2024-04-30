@@ -45,3 +45,4 @@ node_modules
 .rspec-local
 
 .vscode
+.idea

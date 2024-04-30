@@ -7,7 +7,12 @@ module ASP
       ASSIMILATED_FRENCH_COUNTRY_CODES = %w[FR GF GP MC MQ NC PF PM RE WF YT].freeze
 
       ALLOWED_CHARACTERS = %w[/ - ? : ( ) . , '].freeze
-      RIB_NAME_MASK = /\A[\s[[:alnum:]]#{ALLOWED_CHARACTERS.join}]+\z/
+      RIB_NAME_MASK = /\A[\s[[:alnum:]]#{ALLOWED_CHARACTERS.map { |c| Regexp.escape(c) }.join}]+\z/
+
+      SOFT_HYPHEN = "­" # this invisible thing is not a space and deserves its own variable, see git blame
+
+      SUBSTITUTE_WITH_SPACE_CHARACTERS = %w[; - ´].push(SOFT_HYPHEN).freeze
+      SUBSTITUTE_NOSPACE_CHARACTERS    = %w[& _ ^].freeze
 
       MAPPING = {
         bic: :bic
@@ -38,9 +43,10 @@ module ASP
 
       def intitdest
         rib.name
-           .delete("&")
-           .gsub("_", "")
-           .gsub(/[;\-]/, " ")
+           .chars
+           .map { |c| c.in?(SUBSTITUTE_WITH_SPACE_CHARACTERS) ? " " : c }
+           .reject { |c| c.in?(SUBSTITUTE_NOSPACE_CHARACTERS) }
+           .join
            .squish
            .tap do |value|
           if !RIB_NAME_MASK.match?(value)

@@ -19,5 +19,9 @@ module ASP
           content_type: "text/xml"
         )
     end
+
+    def parse_response_file!(_type)
+      ASP::Readers::PaymentsFileReader.new(io: file.download, record: self).process!
+    end
   end
 end
