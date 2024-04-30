@@ -66,7 +66,7 @@ fr:
               eligibility: "Les informations de l'élève ne sont pas complètes/valides"
               lives_in_france: "L'élève doit résider en France pour permettre le paiement par l'agence comptable"
               student_type: "L'élève doit avoir une scolarité"
-              excluded_schooling: "La scolarité mentionnée est malheureusement exclue de la procédure."
+              excluded_schooling: "La scolarité mentionnée est exclue de la procédure."
               rib: "Le RIB doit être valide"
               pfmp: "La PFMP associée n'est pas valide"
               ine_not_found: "Le numéro INE n'est pas trouvé"
