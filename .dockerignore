@@ -7,5 +7,5 @@ docker-compose.yml
 tmp/**
 log/**
 .DS_STORE
-storage
+storage/**
 .local
