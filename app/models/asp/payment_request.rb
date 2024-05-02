@@ -103,10 +103,6 @@ module ASP
       !terminated?
     end
 
-    def rejection_reason
-      last_transition.metadata["Motif rejet"]
-    end
-
     def unpaid_reason
       last_transition.metadata["PAIEMENT"]["LIBELLEMOTIFINVAL"]
     end

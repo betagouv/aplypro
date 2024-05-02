@@ -57,6 +57,16 @@ module ASP
       tag.span(t("payment_requests.state_explanations.#{current_state}", **status_explanation_args))
     end
 
+    def rejection_reason
+      msg = last_transition.metadata["Motif rejet"]
+
+      if (error = ASP::ErrorsDictionary.definition(msg))
+        I18n.t("asp.errors.#{error[:key]}")
+      else
+        msg
+      end
+    end
+
     def status_explanation_args
       case current_state
       when "rejected"
