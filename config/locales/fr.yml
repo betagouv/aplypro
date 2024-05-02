@@ -266,7 +266,7 @@ fr:
       ready: |
         La demande de paiement a toutes les informations nécessaires.
         Elle sera intégrée dans le prochain lot journalier.
-      incomplete: Il manque des données pour envoyer le paiement.
+      incomplete: "Il manque des données pour envoyer le paiement : %{incomplete_reason}"
       sent: |
         Une première vérification de la demande sera effectuée sous 24h.
         Puis le traitement du paiement peut prendre une à trois semaines.

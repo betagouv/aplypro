@@ -13,6 +13,7 @@ class ValidationsFacade
         .joins(:payment_requests)
         .merge(ASP::PaymentRequest.latest_per_pfmp.failed)
         .includes(:student, payment_requests: :asp_payment_request_transitions)
+        .select { |pfmp| pfmp.payment_requests.last.failed? }
   end
 
   def validatable_classes

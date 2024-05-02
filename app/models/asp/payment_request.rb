@@ -107,6 +107,10 @@ module ASP
       last_transition.metadata["PAIEMENT"]["LIBELLEMOTIFINVAL"]
     end
 
+    def incomplete_reason
+      last_transition.metadata["incomplete_reasons"]["ready_state_validation"]
+    end
+
     private
 
     def single_active_payment_request_per_pfmp

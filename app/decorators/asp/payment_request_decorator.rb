@@ -54,7 +54,25 @@ module ASP
     end
 
     def status_explanation
-      tag.span(t("payment_requests.state_explanations.#{current_state}", **status_explanation_args))
+      return {} unless status_explanation_args
+
+      args = status_explanation_args.values.first
+      return {} if args.nil?
+
+      reason = if args.is_a?(Array)
+                 if args.size > 1
+                   tag.ul do
+                     args.map { |reason| tag.li(reason) }.join.html_safe
+                   end
+                 else
+                   args.first
+                 end
+               else
+                 args
+               end
+
+      t("payment_requests.state_explanations.#{current_state}",
+        **{ status_explanation_args.keys.first => reason }).html_safe
     end
 
     def rejection_reason
@@ -68,14 +86,15 @@ module ASP
     end
 
     def status_explanation_args
-      case current_state
-      when "rejected"
-        { rejection_reason: rejection_reason }
-      when "unpaid"
-        { unpaid_reason: unpaid_reason }
-      else
-        {}
-      end
+      state_method_map = {
+        "rejected" => method(:rejection_reason),
+        "unpaid" => method(:unpaid_reason),
+        "incomplete" => method(:incomplete_reason)
+      }
+      reason_method = state_method_map[current_state]
+      return {} unless reason_method
+
+      { reason_method.name => reason_method.call }
     end
   end
 end
