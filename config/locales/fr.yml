@@ -46,6 +46,8 @@ fr:
               taken: ": cet email est déjà autorisé."
         rib:
           attributes:
+            base:
+              locked: "Le RIB ne peut pas être modifié avec une PFMP en cours."
             iban:
               sepa: "Le code IBAN ne fait pas partie de la zone SEPA"
         pfmp:

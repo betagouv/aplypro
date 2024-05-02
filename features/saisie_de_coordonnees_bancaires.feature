@@ -40,3 +40,8 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
     Quand je clique sur "Confirmer la suppression"
     Alors la page contient "Les coordonnées bancaires de Marie Curie ont bien été supprimées"
     Et la page contient "Aucune coordonnée bancaire enregistrée pour le moment."
+
+  Scénario: Quand il y a une requête de paiement en cours le personnel ne peut pas modifier un RIB
+    Sachant que la dernière PFMP de "Marie Curie" en classe de "2NDEB" a une requête de paiement envoyée
+    Et que je rafraîchis la page
+    Alors la page contient un bouton "Modifier les coordonnées bancaires" désactivé
