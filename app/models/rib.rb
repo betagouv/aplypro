@@ -42,11 +42,11 @@ class Rib < ApplicationRecord
     !active?
   end
 
-  private
-
   def locked?
     student.pfmps.any?(&:locked?)
   end
+
+  private
 
   def can_be_updated?
     return false if student.nil?

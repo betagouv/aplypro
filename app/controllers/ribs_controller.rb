@@ -40,9 +40,11 @@ class RibsController < ApplicationController
   end
 
   def destroy
-    @rib.destroy
-
-    redirect_to class_student_path(@classe, @student), notice: t("flash.ribs.destroyed", name: @student.full_name)
+    if @rib.destroy
+      redirect_to class_student_path(@classe, @student), notice: t("flash.ribs.destroyed", name: @student.full_name)
+    else
+      redirect_to class_student_path(@classe, @student), alert: t("flash.ribs.not_destroyed", name: @student.full_name)
+    end
   end
 
   def missing
