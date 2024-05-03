@@ -33,15 +33,14 @@ module ASP
     end
 
     def check_rib
-      add_error(:rib) unless student.rib.present? && student.rib.valid?
+      add_error(:rib) if student.rib.nil? || student.rib.invalid?
 
-      return unless student.adult_without_personal_rib?
-
-      add_error(:adult_without_personal_rib)
+      add_error(:adult_without_personal_rib) if student.adult_without_personal_rib?
     end
 
     def check_pfmp
       add_error(:pfmp) unless pfmp.valid?
+
       add_error(:pfmp_amount) unless pfmp.amount.positive?
     end
 
