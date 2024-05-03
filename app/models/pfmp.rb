@@ -16,7 +16,17 @@ class Pfmp < ApplicationRecord
   has_one :student, through: :schooling
   has_one :mef, through: :classe
   has_one :establishment, through: :classe
-  has_many :payment_requests, class_name: "ASP::PaymentRequest", dependent: :destroy
+
+  has_many :payment_requests,
+           class_name: "ASP::PaymentRequest",
+           inverse_of: :pfmp,
+           dependent: :destroy
+
+  has_one :latest_payment_request,
+          -> { order "asp_payment_requests.created_at" => :desc },
+          class_name: "ASP::PaymentRequest",
+          inverse_of: :pfmp,
+          dependent: :destroy
 
   validates :start_date, :end_date, presence: true
 
@@ -82,7 +92,7 @@ class Pfmp < ApplicationRecord
   end
 
   def locked?
-    payment_requests.ongoing.any? || paid?
+    latest_payment_request&.ongoing? || paid?
   end
 
   def paid?
@@ -94,7 +104,7 @@ class Pfmp < ApplicationRecord
   end
 
   def stalled_payment_request?
-    payment_requests.last.failed? && payment_requests.active.none?
+    latest_payment_request&.failed?
   end
 
   def payment_due?

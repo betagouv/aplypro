@@ -80,8 +80,11 @@ RSpec.describe ASP::PaymentRequest do
       let(:existing_payment_request) { create(:asp_payment_request, :sent) }
 
       it "prevents creating the new request" do
+        existing_payment_request.pfmp.reload
+
         new_payment_request.validate
-        expect(new_payment_request.errors[:base]).to eq(["There can only be one active payment request per Pfmp."])
+
+        expect(new_payment_request.errors).to be_of_kind(:pfmp, :taken)
       end
     end
 

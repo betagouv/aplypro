@@ -2,9 +2,9 @@
 
 FactoryBot.define do
   factory :asp_payment_request, class: "ASP::PaymentRequest" do
-    initialize_with { pfmp.payment_requests.last } # FIXME
-
-    pfmp { association :pfmp, :validated }
+    pfmp do
+      association(:pfmp, :validated).tap { |p| p.payment_requests.destroy_all }
+    end
 
     trait :pending
 

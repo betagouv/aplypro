@@ -65,6 +65,8 @@ fr:
               less_than_or_equal_to: "n'est pas cohérent avec les dates de début et de fin"
         asp/payment_request:
           attributes:
+            pfmp:
+              taken: "Une requête de paiement est déjà active pour cette PFMP"
             ready_state_validation:
               eligibility: "Les informations de l'élève ne sont pas complètes/valides. Sont requises dans la BEE ou COLENTAGRI : civilité, lieu de naissance et lieu de résidence. Et vérifiez que vous avez saisi des coordonnées bancaires dans APLyPro."
               doesnt_live_in_france: "Pour les élèves résidant à l'étranger, des développements sont encore nécessaires avant de pour voir être envoyés à l'Agence de Services et Paiements (ASP). Veuillez patienter le temps que ces développements soient effectués."

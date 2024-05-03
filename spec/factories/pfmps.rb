@@ -17,9 +17,7 @@ FactoryBot.define do
     trait :validated do
       completed
 
-      after(:create) do |pfmp|
-        pfmp.transition_to!(:validated)
-      end
+      after(:create, &:validate!)
     end
 
     trait :with_pending_payment do
