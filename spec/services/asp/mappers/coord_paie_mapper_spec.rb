@@ -8,6 +8,13 @@ describe ASP::Mappers::CoordPaieMapper do
   let(:payment_request) { create(:asp_payment_request, :ready) }
   let(:rib) { payment_request.student.rib }
 
+  before do
+    # the RIB is rightfylly locked once the payment request is ready
+    def rib.readonly?
+      false
+    end
+  end
+
   context "when the BIC ends in 'XXX'" do
     let(:xbic) { "CMCIFR2AXXX" } # https://wise.com/fr/swift-codes/countries/france/credit-mutuel-swift-code
 

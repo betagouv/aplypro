@@ -5,7 +5,6 @@ class Rib < ApplicationRecord
 
   validates :iban, :bic, :name, presence: true
   validates :student_id, uniqueness: { scope: :archived_at }, if: :active?
-  validate :can_be_updated?, on: :update
 
   scope :multiple_ibans, -> { Rib.select(:iban).group(:iban).having("count(iban) > 1") }
 
@@ -16,8 +15,6 @@ class Rib < ApplicationRecord
     self.iban = Rib.normalize_value_for(:iban, iban) unless iban.nil?
     self.bic = Rib.normalize_value_for(:bic, bic) unless bic.nil?
   end
-
-  before_destroy :can_be_deleted?, prepend: true
 
   # gem 'bank-account' provides the :iban and :rib validation but we
   # have to override the message because they both (the gem and our
@@ -42,24 +39,7 @@ class Rib < ApplicationRecord
     !active?
   end
 
-  def locked?
+  def readonly?
     student.pfmps.any?(&:locked?)
-  end
-
-  private
-
-  def can_be_updated?
-    return false if student.nil?
-
-    errors.add(:base, :locked) if locked?
-  end
-
-  def can_be_deleted?
-    # using `return unless locked?` is awkward
-    if locked? # rubocop:disable Style/GuardClause
-      errors.add(:base, :locked)
-
-      throw :abort
-    end
   end
 end

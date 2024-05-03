@@ -65,12 +65,8 @@ RSpec.describe Rib do
   context "when there is an ongoing payment request" do
     let(:rib) { create(:asp_payment_request, :sent).student.rib }
 
-    it "cannot be deleted" do
-      expect { rib.destroy! }.to raise_error ActiveRecord::RecordNotDestroyed
-    end
-
-    it "cannot be updated" do
-      expect { rib.update!(name: "test") }.to raise_error(/ne peut pas être modifié/)
+    it "is marked as readonly" do
+      expect(rib).to be_readonly
     end
   end
 end

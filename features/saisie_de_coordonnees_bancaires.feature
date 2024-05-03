@@ -12,7 +12,8 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
   Scénario: Le personnel de direction saisit un RIB pour la première fois
     Sachant que la page contient "Aucune coordonnée bancaire enregistrée"
     Et que je clique sur "Saisir les coordonnées bancaires"
-    Lorsque je renseigne des coordonnées bancaires
+    Et que je saisis des coordonnées bancaires
+    Et que je clique sur "Enregistrer les coordonnées bancaires"
     Alors la page contient "Coordonnées bancaires enregistrées avec succès"
 
   Scénario: Le personnel de direction peut comprendre ses erreurs de saisie

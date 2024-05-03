@@ -4,6 +4,8 @@
 
 # rubocop:disable Metrics/ClassLength
 class RibsController < ApplicationController
+  rescue_from ActiveRecord::ReadOnlyRecord, with: :rib_is_readonly
+
   before_action :set_classe
   before_action :set_student, :set_rib_breadcrumbs, except: %i[missing bulk_create]
   before_action :check_classes, only: :bulk_create
@@ -40,11 +42,9 @@ class RibsController < ApplicationController
   end
 
   def destroy
-    if @rib.destroy
-      redirect_to class_student_path(@classe, @student), notice: t("flash.ribs.destroyed", name: @student.full_name)
-    else
-      redirect_to class_student_path(@classe, @student), alert: t("flash.ribs.not_destroyed", name: @student.full_name)
-    end
+    @rib.destroy
+
+    redirect_to class_student_path(@classe, @student), notice: t("flash.ribs.destroyed", name: @student.full_name)
   end
 
   def missing
@@ -129,6 +129,10 @@ class RibsController < ApplicationController
         status: :forbidden
       ) and return
     end
+  end
+
+  def rib_is_readonly
+    redirect_to class_student_path(@classe, @student), alert: t("flash.ribs.readonly", name: @student.full_name)
   end
 end
 # rubocop:enable Metrics/ClassLength
