@@ -59,6 +59,8 @@ class Student
 
         return if label.nil? || mef.nil?
 
+        return if Exclusion.excluded?(uai, mef_code)
+
         Classe.find_or_create_by!(
           label:,
           mef:,

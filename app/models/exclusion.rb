@@ -16,4 +16,18 @@ class Exclusion < ApplicationRecord
       errors.add(:base, :specific_mef_or_whole_establishment)
     end
   end
+
+
+
+  def outside_contract?(uai, mef_code)
+    Exclusion.exists?(uai: uai, mef_code: mef_code)
+  end
+
+  def establishment_excluded?(uai)
+    Exclusion.whole_establishment.exists?(uai: uai)
+  end
+
+  def excluded?(uai, mef_code)
+    establishment_excluded?(uai) || outside_contract?(uai, mef_code)
+  end
 end
