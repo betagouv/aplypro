@@ -54,10 +54,8 @@ module ASP
     end
 
     def status_explanation
-      return {} unless status_explanation_args
-
       args = status_explanation_args.values.first
-      return {} if args.nil?
+      return t("payment_requests.state_explanations.#{current_state}") if args.nil?
 
       reason = prepare_reason(args)
       t("payment_requests.state_explanations.#{current_state}",
@@ -103,7 +101,7 @@ module ASP
         "incomplete" => method(:incomplete_reason)
       }
       reason_method = state_method_map[current_state]
-      return {} unless reason_method
+      return { current_state => nil } unless reason_method
 
       { reason_method.name => reason_method.call }
     end

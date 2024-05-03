@@ -19,6 +19,7 @@ module ASP
 
     transition from: :pending, to: :ready
     transition from: :pending, to: :incomplete
+    transition from: :incomplete, to: :incomplete
     transition from: :incomplete, to: :ready
     transition from: :ready, to: :sent
     transition from: :sent, to: :rejected

@@ -10,7 +10,11 @@ fr:
       destroyed: La PFMP de %{name} a bien été supprimée
       not_destroyed: La PFMP ne peut pas être supprimée car son paiement est en cours de traitement
       validated: La PFMP de %{name} a bien été validée
-      create_payment_request: Une nouvelle demande de paiement a été créée
+    payment_requests:
+      create: Une nouvelle demande de paiement a été créée pour %{name}
+      mark_ready:
+        success: Le paiement a été relancé avec succès pour %{name}
+        failure: La demande de paiement est toujours incomplète pour %{name}, veuillez vous référer à la liste des informations manquantes ci-dessous
     ribs:
       destroyed: Les coordonnées bancaires de %{name} ont bien été supprimées
       readonly: Les coordonnées bancaires de %{name} ne peuvent pas être supprimées
