@@ -46,6 +46,8 @@ module ASP
     end
 
     def check_schooling
+      add_error(:student_type) if !payment_request.schooling.student?
+
       add_error(:excluded_schooling) if payment_request.schooling.excluded?
     end
 

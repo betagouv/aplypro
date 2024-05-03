@@ -15,11 +15,12 @@ describe ASP::PaymentRequestStateMachine do
       .to("incomplete")
   end
 
-  shared_examples "a blocked request" do |test_perfect_pfmp_scope = true|
-    if test_perfect_pfmp_scope == true
-      it "is not included in the Pfmp.perfect scope" do
-        expect(Pfmp.perfect).not_to include(asp_payment_request.pfmp)
-      end
+  shared_examples "a blocked request" do
+    it "cannot transition to ready" do
+      expect { asp_payment_request.mark_ready! }
+        .to change(asp_payment_request, :current_state)
+        .from("pending")
+        .to("incomplete")
     end
   end
 
@@ -60,7 +61,7 @@ describe ASP::PaymentRequestStateMachine do
     context "when the rib is not valid" do
       before { asp_payment_request.student.rib.update_columns(attributes_for(:rib, :outside_sepa)) }
 
-      it_behaves_like "a blocked request", test_perfect_pfmp_scope: false
+      it_behaves_like "a blocked request"
     end
     # rubocop:enable Rails/SkipsModelValidations
 
@@ -82,7 +83,7 @@ describe ASP::PaymentRequestStateMachine do
         student.rib.update!(personal: false)
       end
 
-      it_behaves_like "a blocked request", test_perfect_pfmp_scope: false
+      it_behaves_like "a blocked request"
     end
 
     context "when the attributive decision has not been attached" do
@@ -107,7 +108,7 @@ describe ASP::PaymentRequestStateMachine do
       context "when it is validated" do
         before { duplicate.validate! }
 
-        it_behaves_like "a blocked request", test_perfect_pfmp_scope: false
+        it_behaves_like "a blocked request"
       end
 
       context "when it's not validated" do
@@ -126,7 +127,7 @@ describe ASP::PaymentRequestStateMachine do
     context "when the schooling is excluded" do
       before { create(:exclusion, :whole_establishment, uai: asp_payment_request.schooling.establishment.uai) }
 
-      it_behaves_like "a blocked request", test_perfect_pfmp_scope: false
+      it_behaves_like "a blocked request"
     end
 
     context "when the student needs abrogated attributive decisions" do
@@ -136,7 +137,7 @@ describe ASP::PaymentRequestStateMachine do
         create(:pfmp, schooling: schooling)
       end
 
-      it_behaves_like "a blocked request", test_perfect_pfmp_scope: false
+      it_behaves_like "a blocked request"
     end
   end
 
