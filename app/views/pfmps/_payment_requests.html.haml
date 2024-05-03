@@ -2,7 +2,7 @@
   .gray-panel.fr-p-3w.fr-mb-3w
     = render partial: "payment_requests/badges", locals: { payment_request: payment_request }
     .fr-mt-1w
-      %em= t("payment_requests.state_explanations.#{payment_request.current_state}", **payment_request.status_explanation_args).html_safe
+      %em= payment_request.status_explanation
     .fr-mt-2w.gray-text
       Dernière mise à jour le
       = l(payment_request.updated_at, format: :long)
