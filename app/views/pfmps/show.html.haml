@@ -42,6 +42,7 @@
     %h3.fr-h5
       = "Demande".pluralize(@pfmp.payment_requests.count)
       de paiement
+
     - if @pfmp.stalled_payment_request?
-      = render partial: "create_payment_request", locals: { payment_request: @pfmp.payment_requests.last }
-    = render partial: "payment_requests"
+      = render partial: (@pfmp.payment_requests.last.in_state?(:incomplete) ? "retry_incomplete_payment_request" : "create_payment_request"), locals: { pfmp: @pfmp }
+    = render partial: "payment_requests_history"

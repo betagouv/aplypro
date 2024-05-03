@@ -18,13 +18,11 @@ class PaymentRequestsController < ApplicationController
                         notice: t("flash.payment_requests.create", name: @schooling.student.full_name)
   end
 
-  def mark_ready
-    request = ASP::PaymentRequest.find(params.require(:payment_request_id))
-    request.mark_ready!
-
-    result = request.in_state?(:incomplete) ? "failure" : "success"
+  def update
+    result = PfmpManager.new(@pfmp).retry_incomplete_payment_request!
 
     redirect_back_or_to class_schooling_pfmp_path(@classe, @schooling, @pfmp),
-                        notice: t("flash.payment_requests.mark_ready.#{result}", name: @schooling.student.full_name)
+                        notice: t("flash.payment_requests.mark_ready.#{result ? 'success' : 'failure'}",
+                                  name: @schooling.student.full_name)
   end
 end

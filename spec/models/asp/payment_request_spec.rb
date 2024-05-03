@@ -94,14 +94,6 @@ RSpec.describe ASP::PaymentRequest do
     end
   end
 
-  describe "unpaid reason" do
-    let(:payment_request) { create(:asp_payment_request, :unpaid, reason: "failwhale") }
-
-    it "finds the right metadata" do
-      expect(payment_request.unpaid_reason).to eq "failwhale"
-    end
-  end
-
   describe "mark_ready!" do
     context "when the request is not valid" do
       let(:asp_payment_request) { create(:asp_payment_request, :sendable_with_issues) }

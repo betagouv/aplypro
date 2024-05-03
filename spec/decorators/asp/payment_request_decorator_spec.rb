@@ -7,6 +7,16 @@ describe ASP::PaymentRequestDecorator do
 
   let(:payment_request) { create(:asp_payment_request) }
 
+  describe "unpaid reason" do
+    subject(:reason) { decorator.unpaid_reason }
+
+    let(:payment_request) { create(:asp_payment_request, :unpaid, reason: "failwhale") }
+
+    it "finds the right metadata" do
+      expect(reason).to eq "failwhale"
+    end
+  end
+
   describe ".rejection_reason" do
     subject(:reason) { decorator.rejection_reason }
 
