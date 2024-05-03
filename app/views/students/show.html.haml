@@ -19,10 +19,14 @@
         BIC :
         %code= @student.rib.bic
 
-    .fr-btns-group.fr-btns-group--inline
-      %li= link_to "Modifier les coordonnées bancaires", edit_class_student_rib_path(@classe.id, @student.id, @student.rib.id), class: 'fr-btn fr-btn--secondary'
+    .fr-col-md-7
+      - if @student.rib.readonly?
+        = dsfr_alert(type: :warning, size: :sm, classes: 'fr-my-3w') do
+          %p Ces coordonnées bancaires ne sont pas modifiables car elles sont actuellement utilisées dans une ou plusieurs requêtes de paiement.
 
-      %li= link_to "Supprimer les coordonnées bancaires", confirm_deletion_class_student_rib_path(@classe, @student, @student.rib), class: 'fr-btn fr-btn--secondary'
+      .fr-btns-group.fr-btns-group--inline
+        %li= button_to "Modifier les coordonnées bancaires", edit_class_student_rib_path(@classe.id, @student.id, @student.rib.id), class: 'fr-btn fr-btn--secondary', disabled: @student.rib.readonly?, method: :get
+        %li= button_to "Supprimer les coordonnées bancaires", confirm_deletion_class_student_rib_path(@classe, @student, @student.rib), class: 'fr-btn fr-btn--secondary', disabled: @student.rib.readonly?, method: :get
 
 %section.fr-mt-3w
   %h2.fr-h4

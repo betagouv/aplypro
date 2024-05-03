@@ -25,7 +25,8 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Alors le panneau "Demandes de paiements des PFMPs" contient "Consulter et gérer les envois en paiement"
 
   Scénario: Le personnel voit un aperçu des données sur la page d'accueil
-    Quand je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"
+    Quand je clique sur "Continuer"
+    Et que je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"
     Et que je me rends sur la page d'accueil
     Alors le panneau "Décisions d'attribution" contient "0 / 1"
     Et le panneau "Coordonnées bancaires" contient "1 / 1"

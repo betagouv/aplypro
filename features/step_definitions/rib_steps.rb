@@ -1,15 +1,6 @@
 # frozen_string_literal: true
 
-# FIXME: avoid stateful steps
-Lorsque("je renseigne des coordonnées bancaires") do
-  steps %(
-    Quand je remplis les informations bancaires de "#{@student.full_name}"
-    Et que je choisis "Les coordonnées bancaires appartiennent à l'élève"
-    Et que je clique sur "Enregistrer"
-  )
-end
-
-Quand("je remplis les informations bancaires de {string}") do |name|
+Quand("je remplis des coordonnées bancaires") do
   rib = FactoryBot.build(:rib)
 
   steps %(
@@ -19,20 +10,16 @@ Quand("je remplis les informations bancaires de {string}") do |name|
   )
 end
 
-Quand("je saisis des coordonnées bancaires") do
-  rib = FactoryBot.build(:rib)
-
+Quand("je saisis les coordonnées bancaires de l'élève") do
   steps %(
-    Quand je remplis "Titulaire du compte" avec "#{rib.name}"
+    Quand je remplis des coordonnées bancaires
     Et que je choisis "Les coordonnées bancaires appartiennent à l'élève"
-    Et que je remplis "IBAN" avec "#{rib.iban}"
-    Et que je remplis "BIC" avec "#{rib.bic}"
   )
 end
 
-Quand("je saisis les coordonées bancaires d'un tiers pour {string}") do |name|
+Quand("je saisis les coordonnées bancaires d'un tiers") do
   steps %(
-    Quand je remplis les informations bancaires de "#{name}"
+    Quand je remplis des coordonnées bancaires
     Et que je choisis "Les coordonnées bancaires appartiennent à un représentant légal ou à un tiers"
   )
 end
@@ -47,7 +34,7 @@ end
 Quand("je saisis en masse les coordonées bancaires d'un tiers pour {string}") do |name|
   within_fieldset(name) do
     steps %(
-      Quand je remplis les informations bancaires de "#{name}"
+      Quand je remplis des coordonnées bancaires
       Et que je décoche "Les coordonnées bancaires appartiennent à l'élève"
     )
   end
@@ -61,10 +48,9 @@ end
 
 Quand("je renseigne les coordonnées bancaires de l'élève {string} de la classe {string}") do |name, label|
   steps %(
-    Quand je consulte la classe "#{label}"
-    Et que je clique sur "Voir le profil de #{name}"
+    Quand je consulte le profil de "#{name}" dans la classe de "#{label}"
     Et que je clique sur "Saisir les coordonnées bancaires"
-    Et que je saisis des coordonnées bancaires
+    Et que je saisis les coordonnées bancaires de l'élève
     Et que je clique sur "Enregistrer"
   )
 end

@@ -59,13 +59,9 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
     Et la page contient "Éditer la décision d'attribution manquante"
 
   Scénario: Le personnel peut renseigner des coordonnées bancaires pour des anciens élèves
-    Quand je consulte la classe de "1MELEC"
-    Et que je clique sur "Saisir 10 coordonnées bancaires"
-    Et que le panel de saisie de coordonnées bancaires de "Dupuis Jean" contient "Sorti(e) de la classe"
-    Quand je saisis en masse les coordonées bancaires d'un tiers pour "Dupuis Jean"
-    Et que je clique sur "Enregistrer les coordonnées bancaires saisies"
-    Alors la page contient "Coordonnées bancaires enregistrées avec succès"
-    Et je peux voir dans le tableau "Élèves sortis de la classe"
+    Quand je renseigne les coordonnées bancaires de l'élève "Jean Dupuis" de la classe "1MELEC"
+    Et que je consulte la classe de "1MELEC"
+    Alors je peux voir dans le tableau "Élèves sortis de la classe"
       | Élèves (1)  | Décisions d'attribution | Coordonnées Bancaires (1/1) | PFMPs (0) |
       | Dupuis Jean |                         | Saisies                     |           |
 

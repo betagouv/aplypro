@@ -14,6 +14,7 @@ fr:
       create_payment_request: Une nouvelle demande de paiement a été créée
     ribs:
       destroyed: Les coordonnées bancaires de %{name} ont bien été supprimées
+      readonly: Les coordonnées bancaires de %{name} ne peuvent pas être supprimées
 
   helpers:
     submit:
