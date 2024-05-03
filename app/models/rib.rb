@@ -3,6 +3,8 @@
 class Rib < ApplicationRecord
   belongs_to :student
 
+  enum :owner_type, { personal: 0, other_person: 1, moral_person: 2 }
+
   validates :iban, :bic, :name, presence: true
   validates :student_id, uniqueness: { scope: :archived_at }, if: :active?
 

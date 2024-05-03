@@ -92,9 +92,10 @@ fr:
         name: "Titulaire du compte"
         iban: "IBAN"
         bic: "BIC"
-        personal: "Propriété des coordonnées bancaires"
-        personal_true: "Les coordonnées bancaires appartiennent à l'élève"
-        personal_false: "Les coordonnées bancaires appartiennent à un représentant légal ou à un tiers"
+        owner_type: "Propriété des coordonnées bancaires"
+        owner_type_personal: "Les coordonnées bancaires appartiennent à l'élève"
+        owner_type_other_person: "Les coordonnées bancaires appartiennent à un représentant légal ou à un tiers"
+        owner_type_moral_person: "Les coordonnées bancaires appartiennent à une personne morale (ex : association)"
       establishment:
         uai: "UAI"
         name: "Nom"

@@ -1,7 +1,6 @@
 # language: fr
 
 Fonctionnalité: Le personnel ASP consulte des dossiers
-
   Contexte:
     Sachant qu'une PFMP de 30 euros a été saisie, validée et envoyée en paiement pour l'élève "Marie Curie"
     Et que je suis un agent de l'ASP
