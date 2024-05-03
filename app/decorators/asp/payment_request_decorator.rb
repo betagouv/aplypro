@@ -59,18 +59,7 @@ module ASP
       args = status_explanation_args.values.first
       return {} if args.nil?
 
-      reason = if args.is_a?(Array)
-                 if args.size > 1
-                   tag.ul do
-                     args.map { |reason| tag.li(reason) }.join.html_safe
-                   end
-                 else
-                   args.first
-                 end
-               else
-                 args
-               end
-
+      reason = prepare_reason(args)
       t("payment_requests.state_explanations.#{current_state}",
         **{ status_explanation_args.keys.first => reason }).html_safe
     end
@@ -82,6 +71,20 @@ module ASP
         I18n.t("asp.errors.#{error[:key]}")
       else
         msg
+      end
+    end
+
+    def prepare_reason(args)
+      if args.is_a?(Array)
+        args.size > 1 ? build_ul_from(args) : args.first
+      else
+        args
+      end
+    end
+
+    def build_ul_from(args)
+      tag.ul do
+        args.map { |reason| tag.li(reason) }.join.html_safe # rubocop:disable Rails/OutputSafety
       end
     end
 
