@@ -33,26 +33,25 @@ module ASP
     end
 
     def check_rib
-      add_error(:rib) unless student.rib.present? && student.rib.valid?
+      add_error(:rib) if student.rib.nil? || student.rib.invalid?
 
-      return unless student.adult_without_personal_rib?
-
-      add_error(:adult_without_personal_rib)
+      add_error(:adult_without_personal_rib) if student.adult_without_personal_rib?
     end
 
     def check_pfmp
       add_error(:pfmp) unless pfmp.valid?
+
       add_error(:pfmp_amount) unless pfmp.amount.positive?
     end
 
     def check_schooling
+      add_error(:student_type) if !payment_request.schooling.student?
+
       add_error(:excluded_schooling) if payment_request.schooling.excluded?
     end
 
     def check_attributive_decision
-      return if payment_request.schooling.attributive_decision.attached?
-
-      add_error(:missing_attributive_decision)
+      add_error(:missing_attributive_decision) if !payment_request.schooling.attributive_decision.attached?
 
       add_error(:needs_abrogated_attributive_decision) if student.needs_abrogated_attributive_decision?
     end

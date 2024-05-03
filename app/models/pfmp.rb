@@ -44,15 +44,6 @@ class Pfmp < ApplicationRecord
 
   before_destroy :ensure_unlocked?, prepend: true
 
-  def self.perfect
-    joins(:student)
-      .merge(Schooling.student)
-      .merge(Schooling.with_attributive_decisions)
-      .merge(Student.asp_ready.with_rib.lives_in_france)
-      .merge(Pfmp.this_year)
-      .where.not(amount: 0) # FIXME
-  end
-
   after_save do
     if day_count.present?
       transition_to!(:completed) if in_state?(:pending)
