@@ -74,6 +74,14 @@ module ASP
       end
     end
 
+    def unpaid_reason
+      last_transition.metadata["PAIEMENT"]["LIBELLEMOTIFINVAL"]
+    end
+
+    def incomplete_reason
+      last_transition.metadata["incomplete_reasons"]["ready_state_validation"]
+    end
+
     def prepare_reason(args)
       if args.is_a?(Array)
         args.size > 1 ? build_ul_from(args) : args.first
