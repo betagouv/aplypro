@@ -187,24 +187,18 @@ RSpec.describe Schooling do
   end
 
   describe "excluded?" do
-    subject { schooling.excluded? }
-
-    context "when the whole establishment is excluded" do
-      before { create(:exclusion, :whole_establishment, uai: schooling.establishment.uai) }
-
-      it { is_expected.to be true }
+    before do
+      allow(Exclusion).to receive(:excluded?).and_return "a fake result"
     end
 
-    context "when the establishment and that specific MEF is excluded" do
-      before { create(:exclusion, uai: schooling.establishment.uai, mef_code: schooling.mef.code) }
+    it "forwards its UAI and MEF code to Exclusion.excluded?" do
+      schooling.excluded?
 
-      it { is_expected.to be true }
+      expect(Exclusion).to have_received(:excluded?).with(schooling.establishment.uai, schooling.mef.code)
     end
 
-    context "when the establishment and another MEF are excluded" do
-      before { create(:exclusion, uai: schooling.establishment.uai, mef_code: "FOOBAR") }
-
-      it { is_expected.to be false }
+    it "returns the result" do
+      expect(schooling.excluded?).to eq "a fake result"
     end
   end
 end
