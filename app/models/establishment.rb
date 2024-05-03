@@ -86,7 +86,7 @@ class Establishment < ApplicationRecord
   end
 
   def excluded?
-    Exclusion.establishment_excluded?(uai:)
+    Exclusion.establishment_excluded?(uai)
   end
 
   def contract_type

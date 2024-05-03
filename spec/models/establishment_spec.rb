@@ -48,4 +48,20 @@ RSpec.describe Establishment do
       it { is_expected.not_to be_valid }
     end
   end
+
+  describe "excluded?" do
+    before do
+      allow(Exclusion).to receive(:establishment_excluded?).and_return "a fake result"
+    end
+
+    it "forwards its UAI" do
+      establishment.excluded?
+
+      expect(Exclusion).to have_received(:establishment_excluded?).with(establishment.uai)
+    end
+
+    it "returns the result" do
+      expect(establishment.excluded?).to eq "a fake result"
+    end
+  end
 end
