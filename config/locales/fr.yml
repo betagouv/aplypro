@@ -347,3 +347,7 @@ fr:
       not_director:
         title: *not_director_error
         content: Si vous êtes adjoint, veuillez contacter votre chef d'établissement pour qu'il valide les PFMPs afin de les envoyer en paiement.
+  asp:
+    errors:
+      bank_coordinates_not_found: Les coordonnées bancaires ne correspondent à aucune agence connue, veuillez vérifier l'IBAN et le BIC saisis
+      administrative_number_already_taken: Une erreur technique interne à APLyPro est survenue, merci de patientez le temps que l'équipe identifie et corrige le problème

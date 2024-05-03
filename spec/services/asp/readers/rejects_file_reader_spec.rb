@@ -23,7 +23,7 @@ describe ASP::Readers::RejectsFileReader do
     it "attaches the row as JSON in the transition metadata" do
       reader.process!
 
-      expect(request.rejection_reason).to eq "failwhale"
+      expect(request.last_transition.metadata.to_s).to include "failwhale"
     end
   end
 
