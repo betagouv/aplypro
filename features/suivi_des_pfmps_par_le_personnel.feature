@@ -11,7 +11,6 @@ Fonctionnalité: Suivi des demandes de paiement par le personnel
     Et que je consulte le profil de "Marie Curie" dans la classe de "A1"
     Et que je renseigne et valide une PFMP de 9 jours
     Et que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement échouée
-    Et que la dernière PFMP de "Louis Pasteur" en classe de "A1" a une requête de paiement incomplète
     Et que je me déconnecte
 
   Scénario: Le personnel peut voir les paiements qui ont échoués et relancer une demande de paiement
@@ -21,5 +20,4 @@ Fonctionnalité: Suivi des demandes de paiement par le personnel
     Alors la page ne contient pas "Classes à envoyer en paiement"
     Alors la page contient "Liste des paiements échoués"
     Alors la page contient "Le paiement a été refusé par l'agence comptable :"
-    Alors la page contient "Il manque des données pour envoyer le paiement :"
 

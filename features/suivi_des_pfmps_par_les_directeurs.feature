@@ -14,7 +14,7 @@ Fonctionnalité: Suivi des demandes de paiement
   Scénario: le personnel peut ne pas voir de paiements en échecs
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement intégrée
     Et que je clique sur "Paiements"
-    Alors la page ne contient pas "Liste des paiements échoués"
+    Alors la page ne contient pas "Liste des paiements échoués"`
 
   Scénario: Le personnel peut voir les paiements qui ont échoués et relancer une demande de paiement
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement échouée
@@ -43,3 +43,11 @@ Fonctionnalité: Suivi des demandes de paiement
     Et que je coche la case de responsable légal
     Et que je clique sur "Relancer une demande de paiement"
     Alors la page contient "Une nouvelle demande de paiement a été créée"
+
+  Scénario: Le personnel peut relancer une demande de paiement dans les cas de paiement préalables rejetés
+    Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement incomplète
+    Et que je consulte le profil de "Marie Curie" dans la classe de "A1"
+    Quand je consulte la dernière PFMP
+    Et que je coche la case de responsable légal
+    Et que je clique sur "Débloquer la demande de paiement"
+    Alors la page contient "Le paiement a été relancé avec succès pour Marie Curie"
