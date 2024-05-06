@@ -46,7 +46,7 @@ RSpec.describe PaymentRequestsController do
     context "when the director is confirmed" do
       it "calls the PfmpManager" do
         put class_schooling_payment_request_path(class_id: schooling.classe.id, schooling_id: schooling.id,
-                                                   id: pfmp.id), params: { confirmed_director: "1" }
+                                                 id: pfmp.id), params: { confirmed_director: "1" }
         expect(pfmp_manager).to have_received(:retry_incomplete_payment_request!)
       end
     end
@@ -54,7 +54,7 @@ RSpec.describe PaymentRequestsController do
     context "when the director is not confirmed" do
       it "does not call the PfmpManager" do
         put class_schooling_payment_request_path(class_id: schooling.classe.id, schooling_id: schooling.id,
-                                                   id: pfmp.id), params: { confirmed_director: "0" }
+                                                 id: pfmp.id), params: { confirmed_director: "0" }
         expect(pfmp_manager).not_to have_received(:retry_incomplete_payment_request!)
       end
     end

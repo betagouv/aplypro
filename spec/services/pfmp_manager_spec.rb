@@ -48,25 +48,26 @@ describe PfmpManager do
     end
   end
 
-  describe '#retry_incomplete_payment_request!' do
+  describe "#retry_incomplete_payment_request!" do
+    subject(:manager) { described_class.new(payment_request.pfmp) }
+
     let(:payment_request) { create(:asp_payment_request, :incomplete) }
-    let(:pfmp) { payment_request.pfmp }
 
-    context 'when last payment request is not incomplete' do
-      let(:payment_request) { create(:asp_payment_request, :unpaid)}
+    context "when last payment request is not incomplete" do
+      let(:payment_request) { create(:asp_payment_request, :unpaid) }
 
-      it 'raises an error' do
+      it "raises an error" do
         expect { manager.retry_incomplete_payment_request! }
           .to raise_error(PfmpManager::PaymentRequestNotIncompleteError)
       end
     end
 
-    context 'when last payment request is incomplete' do
-      it 'returns false if the payment_request stays in incomplete state' do
+    context "when last payment request is incomplete" do
+      it "returns false if the payment_request stays in incomplete state" do
         expect(manager.retry_incomplete_payment_request!).to be false
       end
 
-      it 'returns true if the payment_request moves out of incomplete state' do
+      it "returns true if the payment_request moves out of incomplete state" do
         payment_request.student.update!(address_country_code: "99100")
 
         expect(manager.retry_incomplete_payment_request!).to be true
