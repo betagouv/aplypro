@@ -136,7 +136,7 @@ describe ASP::PaymentRequestValidator do
   context "when the student lives abroad" do
     before { asp_payment_request.student.update!(address_country_code: "990") }
 
-    include_examples "invalidation", :lives_in_france
+    include_examples "invalidation", :doesnt_live_in_france
   end
 
   context "when the schooling is excluded" do
