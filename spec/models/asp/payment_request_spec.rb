@@ -101,4 +101,33 @@ RSpec.describe ASP::PaymentRequest do
       expect(payment_request.unpaid_reason).to eq "failwhale"
     end
   end
+
+  describe "mark_ready!" do
+    context "when the request is not valid" do
+      let(:asp_payment_request) { create(:asp_payment_request, :sendable_with_issues) }
+
+      let(:errors) { %w[eligibility lives_in_france missing_rib] }
+      let(:expected_metadata) do
+        {
+          "incomplete_reasons" => {
+            "ready_state_validation" => errors.map do |e|
+              I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.#{e}")
+            end
+          }
+        }
+      end
+
+      it "moves to incomplete" do
+        expect { asp_payment_request.mark_ready! }
+          .to change(asp_payment_request, :current_state)
+          .from("pending").to("incomplete")
+      end
+
+      it "sets the metadata on the request" do
+        asp_payment_request.mark_ready!
+
+        expect(asp_payment_request.last_transition.metadata).to eq(expected_metadata)
+      end
+    end
+  end
 end

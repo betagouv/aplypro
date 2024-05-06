@@ -4,7 +4,7 @@ module ASP
   class StudentFileEligibilityChecker
     attr_reader :student
 
-    DATA_REQUIREMENTS = %i[rib birthplace_information address_information biological_sex].freeze
+    DATA_REQUIREMENTS = %i[birthplace_information address_information biological_sex].freeze
 
     def initialize(student)
       @student = student
@@ -22,8 +22,6 @@ module ASP
 
     def can_provide?(requirement)
       case requirement
-      when :rib
-        student.rib.present?
       when :birthplace_information
         required_attributes = [:birthplace_country_insee_code]
 
