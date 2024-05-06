@@ -9,12 +9,7 @@ describe ASP::Mappers::CoordPaieMapper do
   let(:rib) { payment_request.student.rib }
 
   before do
-    # the RIB is rightfully locked once the payment request is ready
-    # so override the `readonly?` method to allow updating it anyway
-    # for the purpose of our specs
-    def rib.readonly?
-      false
-    end
+    with_readonly_bypass(rib)
   end
 
   context "when the BIC ends in 'XXX'" do
