@@ -51,22 +51,28 @@ describe ASP::PaymentRequestValidator do
   end
   # rubocop:enable Rails/SkipsModelValidations
 
-  context "when the request is missing information" do
-    before do
-      with_readonly_bypass(asp_payment_request.student.rib) do |rib|
-        rib.destroy
+  context "when the request is missing student information" do
+    before { asp_payment_request.student.update!(birthplace_country_insee_code: nil) }
 
-        asp_payment_request.student.reload
-      end
-    end
-
-    include_examples "invalidation", :rib
+    include_examples "invalidation", :eligibility
   end
 
   context "when the PFMP is zero-amount" do
     before { asp_payment_request.pfmp.update!(amount: 0) }
 
     include_examples "invalidation", :pfmp_amount
+  end
+
+  context "when the RIB is missing" do
+    before do
+      with_readonly_bypass(asp_payment_request.student.rib) do |rib|
+        rib.destroy
+
+        rib.student.reload
+      end
+    end
+
+    include_examples "invalidation", :missing_rib
   end
 
   context "when the request belongs to a student over 18 with an external rib" do

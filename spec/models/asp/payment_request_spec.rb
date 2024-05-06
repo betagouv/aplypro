@@ -106,7 +106,7 @@ RSpec.describe ASP::PaymentRequest do
     context "when the request is not valid" do
       let(:asp_payment_request) { create(:asp_payment_request, :sendable_with_issues) }
 
-      let(:errors) { %w[eligibility lives_in_france rib] }
+      let(:errors) { %w[eligibility lives_in_france missing_rib] }
       let(:expected_metadata) do
         {
           "incomplete_reasons" => {

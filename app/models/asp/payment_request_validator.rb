@@ -33,11 +33,13 @@ module ASP
     end
 
     def check_rib
-      add_error(:rib) if student.rib.nil? || student.rib.invalid?
+      add_error(:missing_rib) and return if rib.blank?
+
+      add_error(:rib) if rib.invalid?
 
       add_error(:adult_without_personal_rib) if student.adult_without_personal_rib?
 
-      add_error(:rib_owner_moral) if student.rib&.moral_person?
+      add_error(:rib_owner_moral) if rib.moral_person?
     end
 
     def check_pfmp
@@ -70,6 +72,10 @@ module ASP
 
     def student
       @student ||= payment_request.student
+    end
+
+    def rib
+      @rib ||= student.rib
     end
 
     def pfmp
