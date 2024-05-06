@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_03_100542) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_06_155825) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -187,6 +187,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_03_100542) do
     t.bigint "schooling_id", null: false
     t.string "asp_prestation_dossier_id"
     t.integer "amount"
+    t.index ["asp_prestation_dossier_id"], name: "index_pfmps_on_asp_prestation_dossier_id", unique: true
     t.index ["schooling_id"], name: "index_pfmps_on_schooling_id"
   end
 
@@ -216,6 +217,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_03_100542) do
     t.string "administrative_number"
     t.integer "status"
     t.index ["administrative_number"], name: "index_schoolings_on_administrative_number", unique: true
+    t.index ["asp_dossier_id"], name: "index_schoolings_on_asp_dossier_id", unique: true
     t.index ["classe_id"], name: "index_schoolings_on_classe_id"
     t.index ["student_id", "classe_id"], name: "one_schooling_per_class_student", unique: true
     t.index ["student_id"], name: "index_schoolings_on_student_id"
@@ -242,6 +244,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_03_100542) do
     t.string "asp_individu_id"
     t.boolean "ine_not_found", default: false, null: false
     t.index ["asp_file_reference"], name: "index_students_on_asp_file_reference", unique: true
+    t.index ["asp_individu_id"], name: "index_students_on_asp_individu_id", unique: true
     t.index ["ine"], name: "index_students_on_ine", unique: true
   end
 
