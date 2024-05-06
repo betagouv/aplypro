@@ -45,4 +45,6 @@ node_modules
 .rspec-local
 
 .vscode
+
+# IntelliJ
 .idea

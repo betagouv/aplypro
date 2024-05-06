@@ -6,7 +6,6 @@ fr:
       created: L'email %{email} est maintenant autorisé à accéder à APLyPro
       destroyed: L'email %{email} n'est plus autorisé à accéder à APLyPro
     pfmps:
-      not_authorised_to_validate: Seuls les personnels de direction peuvent valider les PFMPs
       not_authorised_to_invite: Seuls les personnels de direction peuvent gérer les accès
       destroyed: La PFMP de %{name} a bien été supprimée
       not_destroyed: La PFMP ne peut pas être supprimée car son paiement est en cours de traitement
@@ -24,7 +23,6 @@ fr:
       pfmp:
         create: Enregistrer la PFMP
         update: Modifier la PFMP
-  format: "L'attribut %{attribute} %{message}"
   links:
     classes:
       show: "Voir la classe de %{label}"
