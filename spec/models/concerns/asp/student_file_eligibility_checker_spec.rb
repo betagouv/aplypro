@@ -11,12 +11,6 @@ describe ASP::StudentFileEligibilityChecker do
     it { is_expected.to be_ready }
   end
 
-  context "when the student is missing a rib" do
-    before { student.rib.destroy }
-
-    it { is_expected.not_to be_ready }
-  end
-
   context "when the student is born in France" do
     let(:student) { create(:student, :with_all_asp_info, :born_in_france) }
 

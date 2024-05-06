@@ -51,22 +51,28 @@ describe ASP::PaymentRequestValidator do
   end
   # rubocop:enable Rails/SkipsModelValidations
 
-  context "when the request is missing information" do
-    before do
-      with_readonly_bypass(asp_payment_request.student.rib) do |rib|
-        rib.destroy
+  context "when the request is missing student information" do
+    before { asp_payment_request.student.update!(birthplace_country_insee_code: nil) }
 
-        asp_payment_request.student.reload
-      end
-    end
-
-    include_examples "invalidation", :rib
+    include_examples "invalidation", :eligibility
   end
 
   context "when the PFMP is zero-amount" do
     before { asp_payment_request.pfmp.update!(amount: 0) }
 
     include_examples "invalidation", :pfmp_amount
+  end
+
+  context "when the RIB is missing" do
+    before do
+      with_readonly_bypass(asp_payment_request.student.rib) do |rib|
+        rib.destroy
+
+        rib.student.reload
+      end
+    end
+
+    include_examples "invalidation", :missing_rib
   end
 
   context "when the request belongs to a student over 18 with an external rib" do
@@ -77,6 +83,19 @@ describe ASP::PaymentRequestValidator do
     end
 
     include_examples "invalidation", :adult_without_personal_rib
+  end
+
+  context "when the RIB belongs to a moral person" do
+    before do
+      with_readonly_bypass(asp_payment_request.student.rib) do |rib|
+        # this makes sure we don't get caught by adult_without_personal_rib
+        rib.student.update!(birthdate: 15.years.ago)
+
+        rib.update!(owner_type: :moral_person)
+      end
+    end
+
+    include_examples "invalidation", :rib_owner_moral
   end
 
   context "when the attributive decision has not been attached" do
