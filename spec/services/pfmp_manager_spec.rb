@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 require "rails_helper"
 
 describe PfmpManager do
@@ -104,3 +105,4 @@ describe PfmpManager do
     end
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers
