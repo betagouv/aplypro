@@ -9,7 +9,7 @@ class AddTypeOnRib < ActiveRecord::Migration[7.1]
     # `other_person`. See commit.
     add_column :ribs, :owner_type, :integer, default: 1
 
-    Rib.where(personal: true).update(owner_type: :personal)
+    Rib.where(personal: true).update_all(owner_type: :personal) # rubocop:disable Rails/SkipsModelValidations
 
     change_column_null :ribs, :owner_type, false
 
