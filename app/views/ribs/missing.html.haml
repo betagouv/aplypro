@@ -15,8 +15,8 @@
                   = form.hidden_field :student_id
 
                 .fr-checkbox-group
-                  = form.check_box :personal
-                  = form.label :personal, t("activerecord.attributes.rib.personal_true"), classe: "fr-label"
+                  = form.check_box :owner_type, {}, "personal", "other_person"
+                  = form.label :owner_type, t("activerecord.attributes.rib.owner_type_personal"), classe: "fr-label"
 
             .fr-col-md-7.fr-col-12
               .fr-mb-2w

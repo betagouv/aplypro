@@ -51,7 +51,7 @@ class RibsController < ApplicationController
     @ribs = @classe
             .students
             .without_ribs
-            .map { |student| Rib.new(student: student, personal: true, name: student.full_name) }
+            .map { |student| Rib.new(student: student, owner_type: :personal, name: student.full_name) }
   end
 
   def bulk_create
@@ -73,7 +73,7 @@ class RibsController < ApplicationController
       :iban,
       :bic,
       :name,
-      :personal
+      :owner_type
     ).with_defaults(student: @student)
   end
 
@@ -82,7 +82,7 @@ class RibsController < ApplicationController
       .require(:ribs)
       .values
       .map do |rib_params|
-        rib_params.permit(%i[iban bic name personal student_id])
+        rib_params.permit(%i[iban bic name owner_type student_id])
       end
   end
 

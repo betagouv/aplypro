@@ -67,7 +67,7 @@ FactoryBot.define do
 
     trait :with_personal_rib do
       after(:create) do |student|
-        create(:rib, student: student, personal: true)
+        create(:rib, :personal, student: student)
       end
     end
 

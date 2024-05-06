@@ -80,7 +80,7 @@ describe ASP::PaymentRequestStateMachine do
     context "when the request belongs to a student over 18 with an external rib" do
       before do
         student.update!(birthdate: 20.years.ago)
-        student.rib.update!(personal: false)
+        student.rib.update!(owner_type: :other_person)
       end
 
       it_behaves_like "a blocked request"
