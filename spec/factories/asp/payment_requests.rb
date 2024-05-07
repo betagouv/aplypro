@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "./mock/factories/asp"
-
 FactoryBot.define do
   factory :asp_payment_request, class: "ASP::PaymentRequest" do
     initialize_with { pfmp.payment_requests.last } # FIXME
