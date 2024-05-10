@@ -69,6 +69,8 @@ describe PfmpManager do
       end
 
       it "returns true if the payment_request moves out of incomplete state" do
+        # Here we change the address of the student for the payment request
+        # to go through the validator without errors
         payment_request.student.update!(address_country_code: "99100")
 
         expect(manager.retry_incomplete_payment_request!).to be true

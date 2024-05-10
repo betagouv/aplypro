@@ -37,7 +37,7 @@ class PfmpManager
 
     last_payment_request.mark_ready!
 
-    !last_payment_request.reload.in_state?(:incomplete)
+    !last_payment_request.in_state?(:incomplete)
   end
 
   private
