@@ -17,8 +17,8 @@ describe ASP::PaymentRequestDecorator do
     end
   end
 
-  describe ".rejection_reason" do
-    subject(:reason) { decorator.rejection_reason }
+  describe ".rejected_reason" do
+    subject(:reason) { decorator.rejected_reason }
 
     context "when the ASP rejection reason is a cryptic one" do
       let(:payment_request) { create(:asp_payment_request, :rejected, reason: "foo") }

@@ -62,7 +62,14 @@ module ASP
         **{ status_explanation_args.keys.first => reason }).html_safe
     end
 
-    def rejection_reason
+    def failure_reasons
+      %i[incomplete rejected unpaid].each do |state|
+        return public_send("#{state}_reason") if in_state?(state)
+      end
+      nil
+    end
+
+    def rejected_reason
       msg = last_transition.metadata["Motif rejet"]
 
       if (error = ASP::ErrorsDictionary.definition(msg))
@@ -94,16 +101,9 @@ module ASP
       end
     end
 
+    # Argument passed to the locale for interpolation
     def status_explanation_args
-      state_method_map = {
-        "rejected" => method(:rejection_reason),
-        "unpaid" => method(:unpaid_reason),
-        "incomplete" => method(:incomplete_reason)
-      }
-      reason_method = state_method_map[current_state]
-      return { current_state => nil } unless reason_method
-
-      { reason_method.name => reason_method.call }
+      { "#{current_state}_reason": failure_reasons }
     end
   end
 end

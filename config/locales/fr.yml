@@ -280,7 +280,7 @@ fr:
       integrated: |
         La demande a été intégrée.
         Le traitement du paiement peut prendre une à trois semaines.
-      rejected: "La demande a été rejetée : %{rejection_reason}."
+      rejected: "La demande a été rejetée : %{rejected_reason}."
       paid: Le paiement a été envoyé par l'agence comptable, et sera effectif dans un délai de un à trois jours ouvrables.
       unpaid: "Le paiement a été refusé par l'agence comptable : %{unpaid_reason}."
   ministries:
