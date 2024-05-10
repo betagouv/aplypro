@@ -17,7 +17,17 @@ describe ASP::PaymentRequestDecorator do
     end
   end
 
-  describe ".rejected_reason" do
+  describe "incomplete_reason" do
+    subject(:reason) { decorator.incomplete_reason }
+
+    let(:payment_request) { create(:asp_payment_request, :incomplete) }
+
+    it "finds the right metadata and returns an array of reasons" do
+      expect(reason).to eq [I18n.t('activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.doesnt_live_in_france')]
+    end
+  end
+
+  describe "rejected_reason" do
     subject(:reason) { decorator.rejected_reason }
 
     context "when the ASP rejection reason is a cryptic one" do
