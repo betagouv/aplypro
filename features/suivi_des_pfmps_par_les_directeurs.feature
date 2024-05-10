@@ -55,7 +55,7 @@ Fonctionnalité: Suivi des demandes de paiement
     Et que je consulte le profil de "Marie Curie" dans la classe de "A1"
     Quand je consulte la dernière PFMP
     Et que je coche la case de responsable légal
-    Lorsque je clique sur "Débloquer la demande de paiement"
+    Lorsque je clique sur "Retenter la demande de paiement"
     Alors la page contient "La demande de paiement est toujours incomplète pour Marie Curie, veuillez vous référer à la liste des informations manquantes ci-dessous"
 
   Scénario: Le personnel peut réussir à débloquer une demande de paiement si les raisons de bloquage sont addressées
@@ -65,5 +65,5 @@ Fonctionnalité: Suivi des demandes de paiement
     Et que les informations personnelles ont été récupérées pour l'élève "Marie Curie"
     Quand je consulte la dernière PFMP
     Et que je coche la case de responsable légal
-    Lorsque je clique sur "Débloquer la demande de paiement"
+    Lorsque je clique sur "Retenter la demande de paiement"
     Alors la page contient "La demande de paiement a été relancée avec succès pour Marie Curie"
