@@ -23,7 +23,9 @@ describe ASP::PaymentRequestDecorator do
     let(:payment_request) { create(:asp_payment_request, :incomplete) }
 
     it "finds the right metadata and returns an array of reasons" do
-      expect(reason).to eq [I18n.t('activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.doesnt_live_in_france')]
+      expect(reason).to eq [
+        I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.doesnt_live_in_france")
+      ]
     end
   end
 
