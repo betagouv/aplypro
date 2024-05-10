@@ -13,7 +13,7 @@ fr:
     payment_requests:
       create: Une nouvelle demande de paiement a été créée pour %{name}
       mark_ready:
-        success: Le paiement a été relancé avec succès pour %{name}
+        success: La demande de paiement a été relancée avec succès pour %{name}
         failure: La demande de paiement est toujours incomplète pour %{name}, veuillez vous référer à la liste des informations manquantes ci-dessous
     ribs:
       destroyed: Les coordonnées bancaires de %{name} ont bien été supprimées
