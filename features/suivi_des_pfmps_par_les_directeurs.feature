@@ -66,4 +66,4 @@ Fonctionnalité: Suivi des demandes de paiement
     Quand je consulte la dernière PFMP
     Et que je coche la case de responsable légal
     Lorsque je clique sur "Débloquer la demande de paiement"
-    Alors la page contient "Le paiement a été relancé avec succès pour Marie Curie"
+    Alors la page contient "La demande de paiement a été relancée avec succès pour Marie Curie"
