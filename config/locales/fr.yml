@@ -62,7 +62,11 @@ fr:
         asp/payment_request:
           attributes:
             ready_state_validation:
-              eligibility: "Les informations de l'élève ne sont pas complètes/valides. Sont requises dans la BEE ou COLENTAGRI : civilité, lieu de naissance et lieu de résidence. Et vérifiez que vous avez saisi des coordonnées bancaires dans APLyPro."
+              missing_address_postal_code:
+              missing_address_city_insee_code:
+              missing_biological_sex:
+              missing_birthplace_city_insee_code:
+              missing_birthplace_insee_code:
               lives_in_france: "Pour les élèves résidant à l'étranger, des développements sont encore nécessaires avant de pour voir être envoyés à l'Agence de Services et Paiements (ASP). Veuillez patienter le temps que ces développements soient effectués."
               student_type: "L'élève doit avoir un statut d'étudiant. Les apprentis ne sont pas concernés par l'allocation"
               excluded_schooling: "La scolarité mentionnée est exclue de la procédure"

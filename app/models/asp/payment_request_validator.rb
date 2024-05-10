@@ -11,6 +11,7 @@ module ASP
 
     def validate
       check_student
+      check_address
       check_attributive_decision
       check_rib
       check_pfmp
@@ -21,11 +22,13 @@ module ASP
     private
 
     def check_student
-      unless ASP::StudentFileEligibilityChecker.new(student).ready?
-        add_error(
-          :eligibility
-        )
+      add_error(:missing_birthplace_insee_code) if student.birthplace_country_insee_code.blank?
+
+      if student.born_in_france? && student.birthplace_city_insee_code.blank?
+        add_error(:missing_birthplace_city_insee_code)
       end
+
+      add_error(:missing_biological_sex) if student.biological_sex.blank?
 
       add_error(:lives_in_france) unless student.lives_in_france?
 
@@ -63,6 +66,12 @@ module ASP
     def check_duplicates
       add_error(:duplicates) if pfmp.duplicates.any? do |p|
         p.in_state?(:validated)
+      end
+    end
+
+    def check_address
+      %i[address_postal_code address_city_insee_code address_country_code].each do |info|
+        add_error("missing_#{info}") if student.public_send(info).blank?
       end
     end
 
