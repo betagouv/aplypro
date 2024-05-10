@@ -162,7 +162,8 @@ fr:
         missing: &missing_ribs_title Saisir des coordonnées bancaires
         bulk_create: *missing_ribs_title
       validations:
-        index: Paiements
+        index: "Paiements"
+        classes: "Classes avec PFMPs à valider pour envoi en paiement"
         show: Envoyer en paiement les PFMPs de %{name}
 
   global:
