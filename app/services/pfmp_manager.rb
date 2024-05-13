@@ -31,7 +31,7 @@ class PfmpManager
   end
 
   def retry_incomplete_payment_request!
-    last_payment_request = pfmp.payment_requests.last
+    last_payment_request = pfmp.latest_payment_request
 
     raise PaymentRequestNotIncompleteError unless last_payment_request.in_state?(:incomplete)
 
