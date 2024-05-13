@@ -28,11 +28,11 @@ module ASP
     attr_reader :asp_file
 
     class << self
-      def total_requests_sent_today
+      def total_payment_requests_sent_today
         sent_today.sum { |request| request.asp_payment_requests.count }
       end
 
-      def total_requests_sent_this_week
+      def total_payment_requests_sent_this_week
         sent_this_week.sum { |request| request.asp_payment_requests.count }
       end
 
@@ -40,8 +40,8 @@ module ASP
         sent_today.count
       end
 
-      def total_requests_left
-        MAX_RECORDS_PER_WEEK - total_requests_sent_this_week
+      def total_payment_requests_left
+        MAX_RECORDS_PER_WEEK - total_payment_requests_sent_this_week
       end
 
       def daily_requests_limit_reached?

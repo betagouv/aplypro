@@ -5,12 +5,12 @@ class SendPaymentRequestsJob < ApplicationJob
 
   sidekiq_options retry: false
 
-  def perform(payment_requests)
-    payment_requests ||= ASP::PaymentRequest.in_state(:ready).to_a
+  def perform
+    payment_requests = ASP::PaymentRequest.in_state(:ready)
 
     limit = [
       payment_requests.count,
-      ASP::Request.total_requests_left,
+      ASP::Request.total_payment_requests_left,
       ASP::Request::MAX_RECORDS_PER_FILE
     ].min
 
