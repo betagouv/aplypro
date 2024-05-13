@@ -125,4 +125,6 @@ group :development do
   gem "spring-commands-rspec"
   gem "spring-commands-rubocop"
   gem "spring-watcher-listen"
+
+  gem "whenever", require: false
 end
