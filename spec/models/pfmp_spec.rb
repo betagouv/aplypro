@@ -77,7 +77,7 @@ RSpec.describe Pfmp do
 
   describe "deletion" do
     context "when there is an ongoing payment request" do
-      let(:pfmp) { create(:asp_payment_request, :sent).pfmp }
+      let(:pfmp) { create(:asp_payment_request, :sent).pfmp.reload }
 
       it "cannot be deleted" do
         expect { pfmp.destroy! }.to raise_error ActiveRecord::RecordNotDestroyed
@@ -106,6 +106,24 @@ RSpec.describe Pfmp do
           .to change(pfmp, :current_state)
           .from("pending")
           .to("completed")
+      end
+    end
+
+    describe "completed" do
+      let(:pfmp) { create(:pfmp, :completed) }
+
+      context "when the PFMP is validated" do
+        it "creates a new payment request" do
+          expect { pfmp.validate! }.to change(pfmp.payment_requests, :count).by(1)
+        end
+      end
+    end
+
+    describe "validated" do
+      let(:pfmp) { create(:asp_payment_request, :ready).pfmp }
+
+      it "cannot create a new payment request" do
+        expect { pfmp.payment_requests.create! }.to raise_error ActiveRecord::RecordInvalid
       end
     end
 
@@ -163,6 +181,14 @@ RSpec.describe Pfmp do
       it "accounts for them" do
         expect(index).to eq 2
       end
+    end
+  end
+
+  describe "latest_payment_request" do
+    it "always picks the latest one" do
+      requests = [4, 15, 1].map { |n| create(:asp_payment_request, pfmp: pfmp, created_at: n.days.ago) }
+
+      expect(pfmp.reload.latest_payment_request).to eq requests.last
     end
   end
 end
