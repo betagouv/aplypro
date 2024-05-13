@@ -34,7 +34,7 @@ Fonctionnalité: Suivi des demandes de paiement
     Alors la page contient "Liste des paiements échoués"
     Alors la page contient "Il manque des données pour envoyer le paiement : "
 
-  Scénario: Le personnel peut relancer une demande de paiement dans les cas de paiements préalables échoués
+  Scénario: Le personnel ne peut pas relancer une demande de paiement dans les cas de paiements préalables échoués
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement échouée
     Et que je consulte le profil de "Marie Curie" dans la classe de "A1"
     Quand je consulte la dernière PFMP
