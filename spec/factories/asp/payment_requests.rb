@@ -38,7 +38,7 @@ FactoryBot.define do
         schooling = create(:schooling, :with_attributive_decision, student: student)
         req.pfmp.update!(schooling: schooling)
 
-        req.mark_ready! # NOTE: here we might want the metadata
+        req.mark_ready!
       end
     end
 

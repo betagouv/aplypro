@@ -8,10 +8,12 @@ class ValidationsFacade
   end
 
   def failed_pfmps
+    subquery = ASP::PaymentRequest.latest_per_pfmp.failed.to_sql
+
     Pfmp.joins(schooling: { classe: :establishment })
         .where(establishments: { id: establishment.id })
         .joins(:payment_requests)
-        .merge(ASP::PaymentRequest.latest_per_pfmp.failed)
+        .joins("INNER JOIN (#{subquery}) as latest_payment_requests ON latest_payment_requests.pfmp_id = pfmps.id")
         .includes(:student, payment_requests: :asp_payment_request_transitions)
   end
 

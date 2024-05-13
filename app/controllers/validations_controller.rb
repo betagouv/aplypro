@@ -12,6 +12,7 @@ class ValidationsController < ApplicationController
   # Display overview of classes that require validation and failed payments that require attention
   def index
     infer_page_title
+
     @validations_facade = ValidationsFacade.new(current_establishment)
 
     @validatable_classes = @validations_facade.validatable_classes

@@ -28,12 +28,18 @@ Fonctionnalité: Suivi des demandes de paiement
     Alors la page contient "Liste des paiements échoués"
     Alors la page contient "La demande a été rejetée :"
 
+  Scénario: Le personnel peut identifier les paiements qui sont actuellement bloqués
+    Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement incomplète
+    Et que je clique sur "Paiements"
+    Alors la page contient "Liste des paiements échoués"
+    Alors la page contient "Il manque des données pour envoyer le paiement : "
+
   Scénario: Le personnel peut relancer une demande de paiement dans les cas de paiements préalables rejetés
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement échouée
     Et que je consulte le profil de "Marie Curie" dans la classe de "A1"
     Quand je consulte la dernière PFMP
     Et que je coche la case de responsable légal
-    Et que je clique sur "Relancer une demande de paiement"
+    Lorsque je clique sur "Relancer une demande de paiement"
     Alors la page contient "Une nouvelle demande de paiement a été créée"
 
   Scénario: Le personnel peut relancer une demande de paiement dans les cas de paiement préalables rejetés
@@ -41,5 +47,23 @@ Fonctionnalité: Suivi des demandes de paiement
     Et que je consulte le profil de "Marie Curie" dans la classe de "A1"
     Quand je consulte la dernière PFMP
     Et que je coche la case de responsable légal
-    Et que je clique sur "Relancer une demande de paiement"
+    Lorsque je clique sur "Relancer une demande de paiement"
     Alors la page contient "Une nouvelle demande de paiement a été créée"
+
+  Scénario: Le personnel peut tenter de débloquer une demande de paiement et échouer si aucune des raisons de bloquage n'est addressée
+    Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement incomplète
+    Et que je consulte le profil de "Marie Curie" dans la classe de "A1"
+    Quand je consulte la dernière PFMP
+    Et que je coche la case de responsable légal
+    Lorsque je clique sur "Retenter la demande de paiement"
+    Alors la page contient "La demande de paiement est toujours incomplète pour Marie Curie, veuillez vous référer à la liste des informations manquantes ci-dessous"
+
+  Scénario: Le personnel peut réussir à débloquer une demande de paiement si les raisons de bloquage sont addressées
+    Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement incomplète
+    Et que je consulte le profil de "Marie Curie" dans la classe de "A1"
+    Et que l'API SYGNE renvoie une adresse en France pour l'élève "Marie Curie"
+    Et que les informations personnelles ont été récupérées pour l'élève "Marie Curie"
+    Quand je consulte la dernière PFMP
+    Et que je coche la case de responsable légal
+    Lorsque je clique sur "Retenter la demande de paiement"
+    Alors la page contient "La demande de paiement a été relancée avec succès pour Marie Curie"

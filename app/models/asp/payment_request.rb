@@ -103,10 +103,6 @@ module ASP
       !terminated?
     end
 
-    def unpaid_reason
-      last_transition.metadata["PAIEMENT"]["LIBELLEMOTIFINVAL"]
-    end
-
     private
 
     def single_active_payment_request_per_pfmp

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 require "rails_helper"
 
 describe PfmpManager do
@@ -48,6 +49,35 @@ describe PfmpManager do
     end
   end
 
+  describe "#retry_incomplete_payment_request!" do
+    subject(:manager) { described_class.new(payment_request.pfmp) }
+
+    let(:payment_request) { create(:asp_payment_request, :incomplete) }
+
+    context "when last payment request is not incomplete" do
+      let(:payment_request) { create(:asp_payment_request, :unpaid) }
+
+      it "raises an error" do
+        expect { manager.retry_incomplete_payment_request! }
+          .to raise_error(PfmpManager::PaymentRequestNotIncompleteError)
+      end
+    end
+
+    context "when last payment request is incomplete" do
+      it "returns false if the payment_request stays in incomplete state" do
+        expect(manager.retry_incomplete_payment_request!).to be false
+      end
+
+      it "returns true if the payment_request moves out of incomplete state" do
+        # Here we change the address of the student for the payment request
+        # to go through the validator without errors
+        payment_request.student.update!(address_country_code: "99100")
+
+        expect(manager.retry_incomplete_payment_request!).to be true
+      end
+    end
+  end
+
   describe "recalculate_amounts" do
     context "when the amount is updated" do
       context "with a 'terminated' PFMP" do
@@ -77,3 +107,4 @@ describe PfmpManager do
     end
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers

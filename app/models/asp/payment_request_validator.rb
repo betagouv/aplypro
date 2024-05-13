@@ -27,7 +27,7 @@ module ASP
         )
       end
 
-      add_error(:lives_in_france) unless student.lives_in_france?
+      add_error(:doesnt_live_in_france) unless student.lives_in_france?
 
       add_error(:ine_not_found) if student.ine_not_found
     end
