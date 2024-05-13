@@ -6,6 +6,7 @@ module ASP
       PRINCIPAL_ADDRESS_TYPE = "PRINCIPALE"
       ASSIMILATED_FRENCH_COUNTRY_CODES = %w[FR GF GP MC MQ NC PF PM RE WF YT].freeze
       PARTICULAR_BICS = %w[CMBRFR2BARK].freeze
+      CREDIT_MUTUEL_ARKEA_BIC = "CMBRFR2BARK"
 
       ALLOWED_CHARACTERS = %w[/ - ? : ( ) . , '].freeze
       RIB_NAME_MASK = /\A[\s[[:alnum:]]#{ALLOWED_CHARACTERS.map { |c| Regexp.escape(c) }.join}]+\z/
@@ -95,7 +96,7 @@ module ASP
 
       def particular_rib_treatment(bic)
         case bic
-        when "CMBRFR2BARK"
+        when CREDIT_MUTUEL_ARKEA_BIC
           bic[-3..-1] = "XXX"
         end
         bic
