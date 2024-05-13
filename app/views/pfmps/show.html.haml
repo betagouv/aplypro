@@ -44,5 +44,5 @@
       de paiement
 
     - if @pfmp.stalled_payment_request?
-      = render partial: (@pfmp.payment_requests.last.in_state?(:incomplete) ? "retry_incomplete_payment_request" : "create_payment_request"), locals: { pfmp: @pfmp }
+      = render partial: (@pfmp.latest_payment_request.in_state?(:incomplete) ? "retry_incomplete_payment_request" : "create_payment_request"), locals: { pfmp: @pfmp }
     = render partial: "payment_requests_history"
