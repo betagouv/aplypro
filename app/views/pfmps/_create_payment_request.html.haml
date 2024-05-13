@@ -1,4 +1,5 @@
-- if pfmp.stalled_payment_request?
+- # NOTE: this check is there until the process with the ASP is cleared out -> https://github.com/betagouv/aplypro/issues/858
+- unless @pfmp.payment_requests.last.in_state?(:unpaid)
   .fr-callout.fr-icon-information-line
     %h3.fr-callout__title=t("payment_requests.actions.reset.title")
     .fr-callout__text
