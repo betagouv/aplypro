@@ -8,6 +8,7 @@ class Exclusion < ApplicationRecord
   validate :specific_mef_or_whole_establishment
 
   scope :whole_establishment, -> { where(mef_code: nil) }
+  scope :outside_contract, -> { where.not(mef_code: nil) }
 
   class << self
     def outside_contract?(uai, mef_code)
