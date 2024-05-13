@@ -16,7 +16,7 @@ end
 Quand("la tâche d'envoi des paiements démarre pour toutes les requêtes prêtes à l'envoi") do
   requests = ASP::PaymentRequest.in_state(:ready)
 
-  SendPaymentRequestsJob.perform_later(requests.to_a) if requests.any?
+  SendPaymentRequestsJob.perform_later if requests.any?
 end
 
 Quand("la tâche d'envoi des paiements est passée") do
