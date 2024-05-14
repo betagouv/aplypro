@@ -40,6 +40,20 @@ RSpec.describe IdentityMappers::Base do
 
       it { is_expected.to be_empty }
     end
+
+    context "when some establishments are not included in the perimeter" do
+      before do
+        %w[A B C].each { |uai| create(:exclusion, :whole_establishment, uai: uai) }
+      end
+
+      let(:fredurne) { build(:fredurne, uai: "A") }
+      let(:fredurneresp) { build(:fredurneresp, uai: "B") }
+      let(:freduresdel) { build(:freduresdel, uai: "C") }
+
+      it "filters them out" do
+        expect(result).to be_empty
+      end
+    end
   end
 
   describe "#establishments_authorised_for" do
