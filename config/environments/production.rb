@@ -94,5 +94,5 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # make all production consoles rollback by default
-  config.sandbox_by_default
+  config.sandbox_by_default = true
 end
