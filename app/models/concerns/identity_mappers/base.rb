@@ -45,7 +45,15 @@ module IdentityMappers
     end
 
     def relevant?(attrs)
-      ACCEPTED_ESTABLISHMENT_TYPES.include?(attrs[:tty_code])
+      accepted_establishment_type?(attrs[:tty_code]) && !excluded_uai?(attrs[:uai])
+    end
+
+    def accepted_establishment_type?(type)
+      ACCEPTED_ESTABLISHMENT_TYPES.include?(type)
+    end
+
+    def excluded_uai?(uai)
+      Exclusion.whole_establishment.exists?(uai: uai)
     end
 
     def no_responsibilities?
