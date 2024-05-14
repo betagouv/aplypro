@@ -61,4 +61,14 @@ describe ASP::Mappers::CoordPaieMapper do
       expect(mapper.intitdest).to eq "Bonnie Clyde retraités end"
     end
   end
+
+  context "when the bic need a particular treatment to be accepted by the ASP" do
+    context "when the rib is from the Credit Mutuel Arkea bank" do
+      before { rib.update!(bic: "CMBRFR2BARK") }
+
+      it "modify the rib as expected by the ASP" do
+        expect(mapper.bic).to eq "CMBRFR2BXXX"
+      end
+    end
+  end
 end
