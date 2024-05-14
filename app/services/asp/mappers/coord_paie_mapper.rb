@@ -5,8 +5,10 @@ module ASP
     class CoordPaieMapper
       PRINCIPAL_ADDRESS_TYPE = "PRINCIPALE"
       ASSIMILATED_FRENCH_COUNTRY_CODES = %w[FR GF GP MC MQ NC PF PM RE WF YT].freeze
-      PARTICULAR_BICS = %w[CMBRFR2BARK].freeze
-      CREDIT_MUTUEL_ARKEA_BIC = "CMBRFR2BARK"
+
+      PARTICULAR_BICS = {
+        CREDIT_MUTUEL_ARKEA: "CMBRFR2BARK"
+      }.freeze
 
       ALLOWED_CHARACTERS = %w[/ - ? : ( ) . , '].freeze
       RIB_NAME_MASK = /\A[\s[[:alnum:]]#{ALLOWED_CHARACTERS.map { |c| Regexp.escape(c) }.join}]+\z/
@@ -91,16 +93,16 @@ module ASP
       end
 
       def particular_bic?
-        PARTICULAR_BICS.include?(rib.bic)
+        PARTICULAR_BICS.values.include?(rib.bic)
       end
 
       def particular_rib_treatment(bic)
-        case bic
-        when CREDIT_MUTUEL_ARKEA_BIC
-          bic[-3..-1] = "XXX"
+        case PARTICULAR_BICS.key(bic)
+        when :CREDIT_MUTUEL_ARKEA
+          bic.gsub("ARK", "XXX")
         end
-        bic
       end
+
     end
   end
 end
