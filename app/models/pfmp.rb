@@ -125,4 +125,8 @@ class Pfmp < ApplicationRecord
       throw :abort
     end
   end
+
+  def can_retrigger_payment?
+    latest_payment_request.retryable?
+  end
 end
