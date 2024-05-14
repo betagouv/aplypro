@@ -69,7 +69,7 @@ fr:
               taken: "Une requête de paiement est déjà active pour cette PFMP"
             ready_state_validation:
               eligibility: "Les informations de l'élève ne sont pas complètes/valides. Sont requises dans la BEE ou COLENTAGRI : civilité, lieu de naissance et lieu de résidence. Et vérifiez que vous avez saisi des coordonnées bancaires dans APLyPro."
-              doesnt_live_in_france: "Pour les élèves résidant à l'étranger, des développements sont encore nécessaires avant de pour pouvoir être envoyés à l'Agence de Services et Paiements (ASP). Veuillez patienter le temps que ces développements soient effectués."
+              doesnt_live_in_france: "Pour les élèves résidant à l'étranger, des développements sont encore nécessaires avant de pouvoir être envoyés à l'Agence de Services et Paiements (ASP). Veuillez patienter le temps que ces développements soient effectués."
               student_type: "L'élève doit avoir un statut de lycéen professionnel d'étudiant. Les apprentis ne sont pas concernés par l'allocation."
               excluded_schooling: "La scolarité mentionnée est exclue de la procédure"
               missing_rib: "Les coordonnées bancaires sont manquantes"
