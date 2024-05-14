@@ -102,7 +102,6 @@ module ASP
           bic.gsub("ARK", "XXX")
         end
       end
-
     end
   end
 end
