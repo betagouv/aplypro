@@ -191,4 +191,16 @@ RSpec.describe Pfmp do
       expect(pfmp.reload.latest_payment_request).to eq requests.last
     end
   end
+
+  describe "can_retrigger_payment?" do
+    let(:pfmp) { create(:pfmp, :validated).reload }
+
+    before do
+      allow(pfmp.latest_payment_request).to receive(:retryable?).and_return :result
+    end
+
+    it "delegates to the latest payment request" do
+      expect(pfmp.can_retrigger_payment?).to eq :result
+    end
+  end
 end

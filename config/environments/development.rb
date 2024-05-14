@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "active_support/core_ext/integer/time"
-require "debug/open_nonstop" # rubocop:disable Lint/Debugger
+require "debug/open_nonstop"
 
 Rails.application.configure do
   # Configure 'rails notes' to inspect Cucumber files

@@ -62,6 +62,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     )
   }
 
+  # NOTE: used in stats for column "Données d'élèves nécessaires présentes"
   def self.asp_ready
     with_ine
       .with_biological_sex

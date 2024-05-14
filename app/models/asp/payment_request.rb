@@ -103,6 +103,10 @@ module ASP
       in_state?(*ASP::PaymentRequestStateMachine::FAILED_STATES)
     end
 
+    def retryable?
+      in_state?(*ASP::PaymentRequestStateMachine::RETRYABLE_STATES)
+    end
+
     def active?
       !terminated?
     end

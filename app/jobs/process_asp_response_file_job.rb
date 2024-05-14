@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ProcessASPResponseFileJob < ApplicationJob
-  queue_as :payments
+  queue_as :payments_serial
 
   def perform(raw_filename)
     filename = ASP::Filename.new(raw_filename)

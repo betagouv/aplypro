@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe ASP::PaymentRequest do
-  subject { create(:asp_payment_request) }
+  subject(:payment_request) { create(:asp_payment_request) }
 
   describe "associations" do
     it { is_expected.to belong_to(:asp_request).optional }
@@ -123,6 +123,18 @@ RSpec.describe ASP::PaymentRequest do
 
         expect(asp_payment_request.last_transition.metadata).to eq(expected_metadata)
       end
+    end
+  end
+
+  describe "retryable?" do
+    before do
+      allow(payment_request.state_machine)
+        .to receive(:in_state?).with(*ASP::PaymentRequestStateMachine::RETRYABLE_STATES)
+        .and_return :result
+    end
+
+    it "delegates to the state machine?" do
+      expect(payment_request.retryable?).to eq :result
     end
   end
 end
