@@ -8,6 +8,8 @@ class SendPaymentRequestsJob < ApplicationJob
   def perform
     payment_requests = ASP::PaymentRequest.in_state(:ready)
 
+    return if payment_requests.none?
+
     limit = [
       payment_requests.count,
       ASP::Request.total_payment_requests_left,

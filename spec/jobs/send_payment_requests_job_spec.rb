@@ -15,6 +15,14 @@ RSpec.describe SendPaymentRequestsJob do
     create_list(:asp_payment_request, 5, :ready)
   end
 
+  context "when there are no payment requests ready" do
+    before { ASP::PaymentRequest.destroy_all }
+
+    it "does not run" do
+      expect { described_class.perform_now }.not_to raise_error ASP::Errors::MaxRecordsPerWeekLimitReached
+    end
+  end
+
   context "when asked to send more than the allowed amount per request" do
     before { stub_const("ASP::Request::MAX_RECORDS_PER_FILE", 3) }
 
