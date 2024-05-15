@@ -74,7 +74,7 @@ module ASP
 
     def check_address
       %i[address_postal_code address_city_insee_code address_country_code].each do |info|
-        add_error("missing_#{info}") if student.public_send(info).blank?
+        add_error(:"missing_#{info}") if student.public_send(info).blank?
       end
     end
 

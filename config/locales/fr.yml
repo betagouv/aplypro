@@ -68,6 +68,7 @@ fr:
             pfmp:
               taken: "Une requête de paiement est déjà active pour cette PFMP"
             ready_state_validation:
+              missing_address_country_code: "Le code pays de l'adresses est manquant"
               missing_address_postal_code: "Le code postal de l'adresse est manquant"
               missing_address_city_insee_code: "Le code INSEE de la ville est manquant"
               missing_biological_sex: "La civilité est manquante"
