@@ -11,6 +11,7 @@ module ASP
 
     def validate
       check_student
+      check_insee_code
       check_address
       check_attributive_decision
       check_rib
@@ -22,12 +23,6 @@ module ASP
     private
 
     def check_student
-      add_error(:missing_birthplace_insee_code) if student.birthplace_country_insee_code.blank?
-
-      if student.born_in_france? && student.birthplace_city_insee_code.blank?
-        add_error(:missing_birthplace_city_insee_code)
-      end
-
       add_error(:missing_biological_sex) if student.biological_sex.blank?
 
       add_error(:lives_in_france) unless student.lives_in_france?
@@ -61,6 +56,14 @@ module ASP
       add_error(:missing_attributive_decision) if !payment_request.schooling.attributive_decision.attached?
 
       add_error(:needs_abrogated_attributive_decision) if student.needs_abrogated_attributive_decision?
+    end
+
+    def check_insee_code
+      add_error(:missing_birthplace_insee_code) if student.birthplace_country_insee_code.blank?
+
+      return unless student.born_in_france? && student.birthplace_city_insee_code.blank?
+
+      add_error(:missing_birthplace_city_insee_code)
     end
 
     def check_duplicates
