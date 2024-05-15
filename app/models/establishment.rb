@@ -33,6 +33,9 @@ class Establishment < ApplicationRecord
 
   validate :ensure_confirmed_director_is_director
 
+  # List of establishment types : https://infocentre.pleiade.education.fr/bcn/workspace/viewTable/n/N_TYPE_UAI
+  ACCEPTED_ESTABLISHMENT_TYPES = %w[LYC LP SEP EREA CFPA EME IMP].freeze
+
   API_MAPPING = {
     "nom_etablissement" => :name,
     "libelle_nature" => :denomination,
@@ -54,6 +57,12 @@ class Establishment < ApplicationRecord
     public: ["99"],
     private_allowed: %w[30 31 40 41]
   }.freeze
+
+  class << self
+    def accepted_type?(type)
+      ACCEPTED_ESTABLISHMENT_TYPES.include?(type)
+    end
+  end
 
   def to_s
     [uai, name, city, postal_code].compact.join(" – ")
@@ -86,7 +95,7 @@ class Establishment < ApplicationRecord
   end
 
   def excluded?
-    Exclusion.whole_establishment.exists?(uai: uai)
+    Exclusion.establishment_excluded?(uai)
   end
 
   def contract_type

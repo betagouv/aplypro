@@ -8,6 +8,21 @@ class Exclusion < ApplicationRecord
   validate :specific_mef_or_whole_establishment
 
   scope :whole_establishment, -> { where(mef_code: nil) }
+  scope :outside_contract, -> { where.not(mef_code: nil) }
+
+  class << self
+    def outside_contract?(uai, mef_code)
+      exists?(uai: uai, mef_code: mef_code)
+    end
+
+    def establishment_excluded?(uai)
+      whole_establishment.exists?(uai: uai)
+    end
+
+    def excluded?(uai, mef_code)
+      establishment_excluded?(uai) || outside_contract?(uai, mef_code)
+    end
+  end
 
   def specific_mef_or_whole_establishment
     return if mef_code.blank?

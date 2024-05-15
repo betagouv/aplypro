@@ -10,7 +10,11 @@ fr:
       destroyed: La PFMP de %{name} a bien été supprimée
       not_destroyed: La PFMP ne peut pas être supprimée car son paiement est en cours de traitement
       validated: La PFMP de %{name} a bien été validée
-      create_payment_request: Une nouvelle demande de paiement a été créée
+    payment_requests:
+      create: Une nouvelle demande de paiement a été créée pour %{name}
+      mark_ready:
+        success: La demande de paiement a été relancée avec succès pour %{name}
+        failure: La demande de paiement est toujours incomplète pour %{name}, veuillez vous référer à la liste des informations manquantes ci-dessous
     ribs:
       destroyed: Les coordonnées bancaires de %{name} ont bien été supprimées
       readonly: Les coordonnées bancaires de %{name} ne peuvent pas être supprimées
@@ -61,24 +65,26 @@ fr:
               less_than_or_equal_to: "n'est pas cohérent avec les dates de début et de fin"
         asp/payment_request:
           attributes:
+            pfmp:
+              taken: "Une requête de paiement est déjà active pour cette PFMP"
             ready_state_validation:
-              missing_address_postal_code:
-              missing_address_city_insee_code:
-              missing_biological_sex:
-              missing_birthplace_city_insee_code:
-              missing_birthplace_insee_code:
-              lives_in_france: "Pour les élèves résidant à l'étranger, des développements sont encore nécessaires avant de pour voir être envoyés à l'Agence de Services et Paiements (ASP). Veuillez patienter le temps que ces développements soient effectués."
-              student_type: "L'élève doit avoir un statut d'étudiant. Les apprentis ne sont pas concernés par l'allocation"
+              missing_address_postal_code: "Le code postal de l'adresse est manquant"
+              missing_address_city_insee_code: "Le code INSEE de la ville est manquant"
+              missing_biological_sex: "La civilité est manquante"
+              missing_birthplace_city_insee_code: "Le code INSEE de la ville de naissance est manquant"
+              missing_birthplace_insee_code: "Le code INSEE du pays de naissance est manquant"
+              doesnt_live_in_france: "Pour les élèves résidant à l'étranger, des développements sont encore nécessaires avant de pouvoir être envoyés à l'Agence de Services et Paiements (ASP). Veuillez patienter le temps que ces développements soient effectués."
+              student_type: "L'élève doit avoir un statut de lycéen professionnel d'étudiant. Les apprentis ne sont pas concernés par l'allocation."
               excluded_schooling: "La scolarité mentionnée est exclue de la procédure"
               missing_rib: "Les coordonnées bancaires sont manquantes"
-              rib: "Les coordonnées bancaires saisies sont invalides"
+              rib: "Les coordonnées bancaires saisies sont invalides ou incorrectes"
               pfmp: "La PFMP associée n'est pas valide"
-              ine_not_found: "L'INE de l'étudiant est introuvable. Il a certainement été supprimé lors d'une réconciliation d'INE, vous devriez retrouver cet étudiant en double dans APLyPro. Veuillez utiliser l'autre instance de cet étudiant pour saisir ses PFMPs"
+              ine_not_found: "L'INE de l'étudiant est introuvable. Il a certainement été supprimé lors d'une réconciliation d'INE, vous devriez retrouver cet étudiant en double dans APLyPro. Veuillez utiliser l'autre occurrence de cet étudiant pour saisir ses PFMPs"
               adult_without_personal_rib: "Les étudiants majeurs doivent avoir être payés sur leurs propres coordonnées bancaires"
               rib_owner_moral: "Les RIBs appartenant à des personnes morales (ex : associations) seront pris en compte dans quelques semaines"
               pfmp_amount: "La PFMP associée doit avoir un montant positif"
               missing_attributive_decision: "Il manque une décision attributive"
-              needs_abrogated_attributive_decision: "Les élèves ayant changé de formation ou d'établissement doivent avoir une abrogation de leur décision d'attribution passée. Ce document n'étant pas encore disponible, veuillez patienter le temps que ces développements soient effectués"
+              needs_abrogated_attributive_decision: "Les élèves ayant changé de formation, de statut ou d'établissement doivent avoir une abrogation de leur décision d'attribution passée. Ce document n'étant pas encore disponible, veuillez patienter le temps que ces développements soient effectués"
               duplicates: "Une autre PFMP existe avec les mêmes dates de début et de fin. Veuillez supprimer l'une des deux."
 
     hints:
@@ -162,7 +168,8 @@ fr:
         missing: &missing_ribs_title Saisir des coordonnées bancaires
         bulk_create: *missing_ribs_title
       validations:
-        index: Paiements
+        index: "Paiements"
+        classes: "Classes avec PFMPs à valider pour envoi en paiement"
         show: Envoyer en paiement les PFMPs de %{name}
 
   global:
@@ -245,6 +252,9 @@ fr:
         title: "Action possible sur le paiement"
         cta: "Relancer une demande de paiement"
         warning: "Vous avez corrigé le problème mentionné dans la liste des erreurs et vous souhaitez redemander un envoi en paiement."
+      update:
+        cta: "Retenter la demande de paiement"
+        warning: "Vous avez corrigé le(s) problème mentionné dans la liste des erreurs et vous souhaitez débloquer le paiement."
     state:
       pending: "En attente"
       ready: "En attente"
@@ -270,14 +280,14 @@ fr:
       ready: |
         La demande de paiement a toutes les informations nécessaires.
         Elle sera intégrée dans le prochain lot journalier.
-      incomplete: Il manque des données pour envoyer le paiement.
+      incomplete: "Il manque des données pour envoyer le paiement : %{incomplete_reason}"
       sent: |
         Une première vérification de la demande sera effectuée sous 24h.
         Puis le traitement du paiement peut prendre une à trois semaines.
       integrated: |
         La demande a été intégrée.
         Le traitement du paiement peut prendre une à trois semaines.
-      rejected: "La demande a été rejetée : %{rejection_reason}."
+      rejected: "La demande a été rejetée : %{rejected_reason}."
       paid: Le paiement a été envoyé par l'agence comptable, et sera effectif dans un délai de un à trois jours ouvrables.
       unpaid: "Le paiement a été refusé par l'agence comptable : %{unpaid_reason}."
   ministries:

@@ -16,6 +16,6 @@
             %td
               = link_to pfmp.formatted_dates, class_schooling_pfmp_path(pfmp.schooling.classe, pfmp.schooling, pfmp), class: "fr-link", title: pfmp.full_dates
             %td
-              = pfmp.payment_requests.last.status_badge
+              = pfmp.latest_payment_request.status_badge
             %td
-              = pfmp.payment_requests.last.status_explanation
+              = pfmp.latest_payment_request.status_explanation

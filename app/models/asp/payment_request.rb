@@ -20,10 +20,10 @@ module ASP
 
     belongs_to :pfmp
 
+    validates :pfmp, uniqueness: { conditions: -> { ongoing } }
+
     has_one :student, through: :pfmp
     has_one :schooling, through: :pfmp
-
-    validate :single_active_payment_request_per_pfmp, on: %i[create update]
 
     scope :active, -> { not_in_state(*ASP::PaymentRequestStateMachine::TERMINATED_STATES) }
     scope :terminated, -> { in_state(*ASP::PaymentRequestStateMachine::TERMINATED_STATES) }
@@ -91,6 +91,10 @@ module ASP
       transition_to!(:unpaid, metadata)
     end
 
+    def ongoing?
+      in_state?(*ASP::PaymentRequestStateMachine::ONGOING_STATES)
+    end
+
     def terminated?
       in_state?(*ASP::PaymentRequestStateMachine::TERMINATED_STATES)
     end
@@ -99,22 +103,12 @@ module ASP
       in_state?(*ASP::PaymentRequestStateMachine::FAILED_STATES)
     end
 
+    def retryable?
+      in_state?(*ASP::PaymentRequestStateMachine::RETRYABLE_STATES)
+    end
+
     def active?
       !terminated?
-    end
-
-    def unpaid_reason
-      last_transition.metadata["PAIEMENT"]["LIBELLEMOTIFINVAL"]
-    end
-
-    private
-
-    def single_active_payment_request_per_pfmp
-      return if pfmp.nil?
-
-      return unless pfmp.payment_requests.excluding(self).active.any?
-
-      errors.add(:base, "There can only be one active payment request per Pfmp.")
     end
   end
 end

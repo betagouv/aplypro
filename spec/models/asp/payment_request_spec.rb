@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe ASP::PaymentRequest do
-  subject { create(:asp_payment_request) }
+  subject(:payment_request) { create(:asp_payment_request) }
 
   describe "associations" do
     it { is_expected.to belong_to(:asp_request).optional }
@@ -80,8 +80,11 @@ RSpec.describe ASP::PaymentRequest do
       let(:existing_payment_request) { create(:asp_payment_request, :sent) }
 
       it "prevents creating the new request" do
+        existing_payment_request.pfmp.reload
+
         new_payment_request.validate
-        expect(new_payment_request.errors[:base]).to eq(["There can only be one active payment request per Pfmp."])
+
+        expect(new_payment_request.errors).to be_of_kind(:pfmp, :taken)
       end
     end
 
@@ -94,19 +97,11 @@ RSpec.describe ASP::PaymentRequest do
     end
   end
 
-  describe "unpaid reason" do
-    let(:payment_request) { create(:asp_payment_request, :unpaid, reason: "failwhale") }
-
-    it "finds the right metadata" do
-      expect(payment_request.unpaid_reason).to eq "failwhale"
-    end
-  end
-
   describe "mark_ready!" do
     context "when the request is not valid" do
       let(:asp_payment_request) { create(:asp_payment_request, :sendable_with_issues) }
 
-      let(:errors) { %w[eligibility lives_in_france missing_rib] }
+      let(:errors) { %w[eligibility doesnt_live_in_france missing_rib] }
       let(:expected_metadata) do
         {
           "incomplete_reasons" => {
@@ -128,6 +123,18 @@ RSpec.describe ASP::PaymentRequest do
 
         expect(asp_payment_request.last_transition.metadata).to eq(expected_metadata)
       end
+    end
+  end
+
+  describe "retryable?" do
+    before do
+      allow(payment_request.state_machine)
+        .to receive(:in_state?).with(*ASP::PaymentRequestStateMachine::RETRYABLE_STATES)
+        .and_return :result
+    end
+
+    it "delegates to the state machine?" do
+      expect(payment_request.retryable?).to eq :result
     end
   end
 end

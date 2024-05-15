@@ -21,7 +21,7 @@ describe PfmpManager do
     end
 
     context "when previous active payment request exists" do
-      let(:pfmp) { create(:asp_payment_request, :integrated).pfmp }
+      let(:pfmp) { create(:pfmp, :validated).reload }
 
       it "raises an error" do
         expect { manager.create_new_payment_request! }.to raise_error(PfmpManager::ExistingActivePaymentRequestError)
@@ -52,7 +52,7 @@ describe PfmpManager do
     context "when the amount is updated" do
       context "with a 'terminated' PFMP" do
         context "with an active payment request" do
-          let(:pfmp) { create(:asp_payment_request, :sent).pfmp }
+          let(:pfmp) { create(:asp_payment_request, :sent).pfmp.reload }
 
           it "throws an error" do
             expect { pfmp.update!(day_count: 15) }.to raise_error(PfmpManager::PfmpNotModifiableError)

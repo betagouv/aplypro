@@ -26,6 +26,11 @@ RSpec.describe IdentityMappers::Base do
     it { is_expected.to contain_exactly "normal", "dir", "delegated" }
 
     context "when there are irrelevant establishments" do
+      before do
+        allow(Establishment).to receive(:accepted_type?).with("CLG").and_return false
+        allow(Establishment).to receive(:accepted_type?).with("LYC").and_return true
+      end
+
       let(:fredurne) { [build(:fredurne, uai: "normal"), build(:fredurne, uai: "normal wrong", tty_code: "CLG")] }
       let(:fredurneresp) { [build(:fredurneresp, uai: "dir"), build(:fredurneresp, uai: "dir wrong", tty_code: "CLG")] }
       let(:freduresdel) { build(:freduresdel, uai: "deleg wrong", tty_code: "CLG") }
@@ -39,6 +44,22 @@ RSpec.describe IdentityMappers::Base do
       let(:freduresdel) { ["X"] }
 
       it { is_expected.to be_empty }
+    end
+
+    context "when some establishments are not included in the perimeter" do
+      before do
+        %w[A B C].each { |uai| allow(Exclusion).to receive(:establishment_excluded?).with(uai).and_return true }
+
+        allow(Exclusion).to receive(:establishment_excluded?).with("Z").and_return false
+      end
+
+      let(:fredurne) { [build(:fredurne, uai: "A"), build(:fredurne, uai: "Z")] }
+      let(:fredurneresp) { build(:fredurneresp, uai: "B") }
+      let(:freduresdel) { build(:freduresdel, uai: "C") }
+
+      it "filters them out" do
+        expect(result).to contain_exactly "Z"
+      end
     end
   end
 

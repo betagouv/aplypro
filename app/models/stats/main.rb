@@ -10,11 +10,17 @@ module Stats
         Indicator::Ribs,
         Indicator::ValidatedPfmps,
         Indicator::StudentsData,
-        Indicator::Payments,
+        Indicator::SendableAmounts,
         Indicator::YearlyAmounts,
         Indicator::Schoolings,
         Indicator::Pfmps
       ].map(&:new)
+
+      %i[sent integrated paid].each do |state|
+        @indicators.push Indicator::PaymentRequestStates.new(state)
+      end
+
+      @indicators.push Indicator::PaymentRequestStateAmounts.new(:paid)
     end
 
     def indicators_titles
@@ -43,7 +49,7 @@ module Stats
           else
             cell
           end
-        end.join(";")
+        end.join("\t")
       end.join("\n")
     end
 

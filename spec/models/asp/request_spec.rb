@@ -150,8 +150,8 @@ RSpec.describe ASP::Request do
       end
     end
 
-    describe ".total_requests_left" do
-      subject(:allowance) { described_class.total_requests_left }
+    describe ".total_payment_requests_left" do
+      subject(:allowance) { described_class.total_payment_requests_left }
 
       before do
         Timecop.travel(2.weeks.ago) do

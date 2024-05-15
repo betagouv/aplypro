@@ -2,27 +2,28 @@
 
 FactoryBot.define do
   factory :asp_payment_request, class: "ASP::PaymentRequest" do
-    initialize_with { pfmp.payment_requests.last } # FIXME
-
-    pfmp { association :pfmp, :validated }
+    pfmp do
+      association(:pfmp, :validated).tap { |p| p.payment_requests.destroy_all }
+    end
 
     trait :pending
 
     trait :sendable do
       after(:create) do |req|
-        student = create(:student, :with_all_asp_info, :adult, :with_french_address)
-        schooling = create(:schooling, :with_attributive_decision, student: student)
-
-        req.pfmp.update!(schooling: schooling)
+        student = build(:student, :with_all_asp_info, :adult, :with_french_address)
+        req.student.update!(**student.attributes.except("id", "updated_at", "created_at"))
+        create(:rib, :personal, student: req.student) if req.student.rib.blank?
+        AttributiveDecisionHelpers.generate_fake_attributive_decision(req.schooling)
+        req.reload ## needed to reload the data of the schooling for the asp xml builder
       end
     end
 
     trait :sendable_with_issues do
       after(:create) do |req|
-        student = create(:student, :underage, :with_foreign_address)
-        schooling = create(:schooling, :with_attributive_decision, student: student)
-
-        req.pfmp.update!(schooling: schooling)
+        student = build(:student, :with_all_asp_info, :underage, :with_foreign_address, biological_sex: nil)
+        req.student.update!(**student.attributes.except("id", "updated_at", "created_at"))
+        AttributiveDecisionHelpers.generate_fake_attributive_decision(req.schooling)
+        req.reload ## needed to reload the data of the schooling for the asp xml builder
       end
     end
 
@@ -34,11 +35,9 @@ FactoryBot.define do
 
     trait :incomplete do
       after(:create) do |req|
-        student = create(:student, :with_all_asp_info, :underage)
-        schooling = create(:schooling, :with_attributive_decision, student: student)
-        req.pfmp.update!(schooling: schooling)
+        req.pfmp.student.update!(birthplace_country_insee_code: nil)
 
-        req.mark_ready! # NOTE: here we might want the metadata
+        req.mark_ready!
       end
     end
 

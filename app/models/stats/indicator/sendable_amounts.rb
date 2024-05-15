@@ -2,7 +2,7 @@
 
 module Stats
   module Indicator
-    class Payments < Sum
+    class SendableAmounts < Sum
       def initialize
         super(
           column: :amount,

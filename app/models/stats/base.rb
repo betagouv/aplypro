@@ -30,6 +30,9 @@ module Stats
       raise NotImplementedError
     end
 
+    # NOTE: the only truly valid reference to the ministry is in Mef not in Establishments
+    #       the value stored in establishments is useless for now (no used, as of 14.05.24)
+    #       ENPU -> Education Nationale PUblique, ENPR -> Education Nationale PRivée
     def bop
       Arel.sql(
         %(

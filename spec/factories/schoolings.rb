@@ -9,9 +9,7 @@ FactoryBot.define do
 
     trait :with_attributive_decision do
       after(:create) do |schooling|
-        schooling.tap(&:generate_administrative_number).save!
-
-        schooling.rattach_attributive_decision!(StringIO.new("hello"))
+        AttributiveDecisionHelpers.generate_fake_attributive_decision(schooling)
       end
     end
 

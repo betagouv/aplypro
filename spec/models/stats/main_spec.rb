@@ -14,7 +14,7 @@ RSpec.describe Stats::Main do
     it "computes the right percentages" do
       expect(data).to eq(
         [indicators_titles,
-         [0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5]]
+         [0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5, 2, 0, 0, 0]]
       )
     end
   end
@@ -28,11 +28,11 @@ RSpec.describe Stats::Main do
     it "computes the correct percentages" do
       expect(data).to eq(
         [["BOP", *indicators_titles],
-         ["ENPU", 0.25, 0.25, 0.25, 0.25, 5.0, 400, 4, 4],
-         ["ENPR", 0.8, 0.8, 0.8, 0.8, 20.0, 500, 5, 5],
-         ["MASA", 0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5],
-         ["MER", 4.0 / 7, 4.0 / 7, 4.0 / 7, 4.0 / 7, 20.0, 700, 7, 7],
-         ["ARMEE", 0.5, 0.5, 0.5, 0.5, 15.0, 600, 6, 6]]
+         ["ENPU", 0.25, 0.25, 0.25, 0.25, 5.0, 400, 4, 4, 1, 1, nil, nil],
+         ["ENPR", 0.8, 0.8, 0.8, 0.8, 20.0, 500, 5, 5, 4, 4, nil, nil],
+         ["MASA", 0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5, 2, 2, nil, nil],
+         ["MER", 4.0 / 7, 4.0 / 7, 4.0 / 7, 4.0 / 7, 20.0, 700, 7, 7, 4, 4, nil, nil],
+         ["ARMEE", 0.5, 0.5, 0.5, 0.5, 15.0, 600, 6, 6, 3, 3, nil, nil]]
       )
     end
     # rubocop:enable RSpec/ExampleLength
@@ -47,9 +47,9 @@ RSpec.describe Stats::Main do
     it "computes the correct percentages" do
       expect(data).to eq(
         [["Académie", *indicators_titles],
-         ["Bordeaux", 0.25, 0.25, 0.25, 0.25, 5.0, 400, 4, 4],
-         ["Montpellier", 0.5, 0.5, 0.5, 0.5, 15.0, 600, 6, 6],
-         ["Paris", 0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5]]
+         ["Bordeaux", 0.25, 0.25, 0.25, 0.25, 5.0, 400, 4, 4, 1, 1, 1, 5],
+         ["Montpellier", 0.5, 0.5, 0.5, 0.5, 15.0, 600, 6, 6, 3, 3, 3, 15],
+         ["Paris", 0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5, 2, 2, 2, 10]]
       )
     end
     # rubocop:enable RSpec/ExampleLength
@@ -65,9 +65,9 @@ RSpec.describe Stats::Main do
     it "computes the correct percentages" do
       expect(data).to eq(
         [["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public", *indicators_titles],
-         ["etab1", "etab1", "MINISTERE DE L'EDUCATION NATIONALE", "Marseille", "Public", 0.25, 0.25, 0.25, 0.25, 5.0, 400, 4, 4],
-         ["etab2", "etab2", "MINISTERE DE L'EDUCATION NATIONALE", "Marseille", "Public", 0.5, 0.5, 0.5, 0.5, 15.0, 600, 6, 6],
-         ["etab3", "etab3", "MINISTERE DE L'EDUCATION NATIONALE", "Marseille", "Public", 0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5]]
+         ["etab1", "etab1", "MINISTERE DE L'EDUCATION NATIONALE", "Marseille", "Public", 0.25, 0.25, 0.25, 0.25, 5.0, 400, 4, 4, 1, 1, 1, 5],
+         ["etab2", "etab2", "MINISTERE DE L'EDUCATION NATIONALE", "Marseille", "Public", 0.5, 0.5, 0.5, 0.5, 15.0, 600, 6, 6, 3, 3, 3, 15],
+         ["etab3", "etab3", "MINISTERE DE L'EDUCATION NATIONALE", "Marseille", "Public", 0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5, 2, 2, 2, 10]]
       )
     end
     # rubocop:enable RSpec/ExampleLength
@@ -86,7 +86,7 @@ RSpec.describe Stats::Main do
     end
 
     it "formats the data into a csv string" do
-      expect(csv_string).to eq("title1;title2;title3\n0,999999;0;0,1\n0,5714285714285714;0;Infini")
+      expect(csv_string).to eq("title1\ttitle2\ttitle3\n0,999999\t0\t0,1\n0,5714285714285714\t0\tInfini")
     end
   end
 end

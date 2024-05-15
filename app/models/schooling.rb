@@ -51,11 +51,7 @@ class Schooling < ApplicationRecord
   end
 
   def excluded?
-    establishment.excluded? || outside_contract?
-  end
-
-  def outside_contract?
-    Exclusion.exists?(uai: establishment.uai, mef_code: mef.code)
+    Exclusion.excluded?(establishment.uai, mef.code)
   end
 
   def attributive_decision_filename

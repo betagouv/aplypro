@@ -7,8 +7,32 @@ describe ASP::PaymentRequestDecorator do
 
   let(:payment_request) { create(:asp_payment_request) }
 
-  describe ".rejection_reason" do
-    subject(:reason) { decorator.rejection_reason }
+  describe "unpaid reason" do
+    subject(:reason) { decorator.unpaid_reason }
+
+    let(:payment_request) { create(:asp_payment_request, :unpaid, reason: "failwhale") }
+
+    it "finds the right metadata" do
+      expect(reason).to eq "failwhale"
+    end
+  end
+
+  describe "incomplete_reason" do
+    subject(:reasons) { decorator.incomplete_reason }
+
+    let(:payment_request) { create(:asp_payment_request, :incomplete) }
+
+    it "finds the right metadata and returns an array of reasons" do
+      error = :doesnt_live_in_france
+
+      msg = I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.#{error}")
+
+      expect(reasons).to include(msg)
+    end
+  end
+
+  describe "rejected_reason" do
+    subject(:reason) { decorator.rejected_reason }
 
     context "when the ASP rejection reason is a cryptic one" do
       let(:payment_request) { create(:asp_payment_request, :rejected, reason: "foo") }

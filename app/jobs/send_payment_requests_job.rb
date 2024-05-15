@@ -1,14 +1,18 @@
 # frozen_string_literal: true
 
 class SendPaymentRequestsJob < ApplicationJob
-  queue_as :payments
+  queue_as :payments_serial
 
   sidekiq_options retry: false
 
-  def perform(payment_requests)
+  def perform
+    payment_requests = ASP::PaymentRequest.in_state(:ready)
+
+    return if payment_requests.none?
+
     limit = [
       payment_requests.count,
-      ASP::Request.total_requests_left,
+      ASP::Request.total_payment_requests_left,
       ASP::Request::MAX_RECORDS_PER_FILE
     ].min
 

@@ -7,6 +7,7 @@ class PfmpManager
   class PfmpManagerError < StandardError; end
   class ExistingActivePaymentRequestError < PfmpManagerError; end
   class PfmpNotModifiableError < PfmpManagerError; end
+  class PaymentRequestNotIncompleteError < PfmpManagerError; end
 
   attr_reader :pfmp
 
@@ -24,9 +25,19 @@ class PfmpManager
   end
 
   def create_new_payment_request!
-    raise ExistingActivePaymentRequestError if pfmp.payment_requests.active.any?
+    raise ExistingActivePaymentRequestError if pfmp.latest_payment_request&.active?
 
     pfmp.payment_requests.create! if pfmp.amount.positive?
+  end
+
+  def retry_incomplete_payment_request!
+    last_payment_request = pfmp.latest_payment_request
+
+    raise PaymentRequestNotIncompleteError unless last_payment_request.in_state?(:incomplete)
+
+    last_payment_request.mark_ready!
+
+    !last_payment_request.in_state?(:incomplete)
   end
 
   private
