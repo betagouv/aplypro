@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SendPaymentRequestsJob < ApplicationJob
-  queue_as :payments_serial
+  queue_as :payments
 
   sidekiq_options retry: false
 

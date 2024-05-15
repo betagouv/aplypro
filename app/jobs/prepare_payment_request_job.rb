@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class PreparePaymentRequestJob < ApplicationJob
-  queue_as :payments
-
   sidekiq_options retry: false
 
   retry_on Faraday::UnauthorizedError, wait: 1.second, attempts: 10
