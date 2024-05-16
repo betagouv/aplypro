@@ -73,7 +73,7 @@ fr:
               missing_address_city_insee_code: "La commune de résidence de l'élève n'est pas renseignée. Veuillez faire le nécessaire dans BEE ou COLENTAGRI (Fregata) pour que cette information soit renseignée."
               missing_biological_sex: "La civilité de l'élève n'est pas renseignée (Homme / Femme). Veuillez faire le nécessaire dans BEE ou COLENTAGRI (Fregata) pour que cette information soit renseignée."
               missing_birthplace_city_insee_code: "La commune de naissance de l'élève né en France n'est pas renseignée. Veuillez faire le nécessaire dans BEE ou COLENTAGRI (Fregata) pour que cette information soit renseignée."
-              missing_birthplace_insee_code: "Le pays de naissance de l'élève né à l'étranger n'est pas renseigné. Veuillez faire le nécessaire dans BEE ou COLENTAGRI (Fregata) pour que cette information soit renseignée."
+              missing_birthplace_country_insee_code: "Le pays de naissance de l'élève né à l'étranger n'est pas renseigné. Veuillez faire le nécessaire dans BEE ou COLENTAGRI (Fregata) pour que cette information soit renseignée."
               doesnt_live_in_france: "Pour les élèves résidant à l'étranger, des développements sont encore nécessaires avant de pouvoir être envoyés à l'Agence de Services et Paiements (ASP). Veuillez patienter le temps que ces développements soient effectués."
               student_type: "L'élève doit avoir un statut de lycéen professionnel d'étudiant. Les apprentis ne sont pas concernés par l'allocation."
               excluded_schooling: "La scolarité mentionnée est exclue de la procédure"

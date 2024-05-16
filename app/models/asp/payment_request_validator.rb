@@ -23,7 +23,7 @@ module ASP
     private
 
     def check_student
-      add_error(:missing_biological_sex) if student.unknown?
+      add_error(:missing_biological_sex) if student.sex_unknown?
 
       add_error(:doesnt_live_in_france) unless student.lives_in_france?
 
@@ -59,7 +59,7 @@ module ASP
     end
 
     def check_insee_code
-      add_error(:missing_birthplace_insee_code) if student.birthplace_country_insee_code.blank?
+      add_error(:missing_birthplace_country_insee_code) if student.birthplace_country_insee_code.blank?
 
       return unless student.born_in_france? && student.birthplace_city_insee_code.blank?
 
