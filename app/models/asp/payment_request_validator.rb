@@ -23,7 +23,7 @@ module ASP
     private
 
     def check_student
-      add_error(:missing_biological_sex) if student.biological_sex.blank?
+      add_error(:missing_biological_sex) if student.unknown?
 
       add_error(:doesnt_live_in_france) unless student.lives_in_france?
 

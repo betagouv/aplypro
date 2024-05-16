@@ -150,7 +150,7 @@ describe ASP::PaymentRequestValidator do
   end
 
   context "when the student is missing biological sex" do
-    before { asp_payment_request.student.update!(biological_sex: nil) }
+    before { asp_payment_request.student.update!(biological_sex: 0) }
 
     include_examples "invalidation", :missing_biological_sex
   end
