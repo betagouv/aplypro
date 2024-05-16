@@ -166,19 +166,19 @@ describe ASP::PaymentRequestValidator do
     include_examples "invalidation", :missing_birthplace_city_insee_code
   end
 
-  context "when the student has missing address postal code" do
+  context "when the student is missing address postal code" do
     before { asp_payment_request.student.update!(address_postal_code: nil) }
 
     include_examples "invalidation", :missing_address_postal_code
   end
 
-  context "when the student has missing address city INSEE code" do
+  context "when the student is missing address city INSEE code" do
     before { asp_payment_request.student.update!(address_city_insee_code: nil) }
 
     include_examples "invalidation", :missing_address_city_insee_code
   end
 
-  context "when the student has missing address country code" do
+  context "when the student is missing address country code" do
     before { asp_payment_request.student.update!(address_country_code: nil) }
 
     include_examples "invalidation", :missing_address_country_code
