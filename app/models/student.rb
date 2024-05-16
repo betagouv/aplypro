@@ -10,7 +10,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   validates :asp_file_reference, uniqueness: true
 
-  enum :biological_sex, { unknown: 0, male: 1, female: 2 }, validate: { allow_nil: true }, default: :unknown
+  enum :biological_sex, { sex_unknown: 0, male: 1, female: 2 }, validate: { allow_nil: true }, default: :sex_unknown
 
   has_many :schoolings, dependent: :delete_all
 

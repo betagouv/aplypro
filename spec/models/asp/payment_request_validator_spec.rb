@@ -51,12 +51,6 @@ describe ASP::PaymentRequestValidator do
   end
   # rubocop:enable Rails/SkipsModelValidations
 
-  context "when the request is missing student information" do
-    before { asp_payment_request.student.update!(birthplace_country_insee_code: nil) }
-
-    include_examples "invalidation", :eligibility
-  end
-
   context "when the PFMP is zero-amount" do
     before { asp_payment_request.pfmp.update!(amount: 0) }
 
@@ -153,5 +147,50 @@ describe ASP::PaymentRequestValidator do
     end
 
     include_examples "invalidation", :needs_abrogated_attributive_decision
+  end
+
+  context "when the student is missing biological sex" do
+    before { asp_payment_request.student.update!(biological_sex: 0) }
+
+    include_examples "invalidation", :missing_biological_sex
+  end
+
+  context "when the student is missing birthplace city INSEE code and is born in France" do
+    before do
+      asp_payment_request.student.update!(
+        birthplace_country_insee_code: "99100",
+        birthplace_city_insee_code: nil
+      )
+    end
+
+    include_examples "invalidation", :missing_birthplace_city_insee_code
+  end
+
+  context "when the student is missing birthplace country INSEE code" do
+    before do
+      asp_payment_request.student.update!(
+        birthplace_country_insee_code: nil
+      )
+    end
+
+    include_examples "invalidation", :missing_birthplace_country_insee_code
+  end
+
+  context "when the student is missing address postal code" do
+    before { asp_payment_request.student.update!(address_postal_code: nil) }
+
+    include_examples "invalidation", :missing_address_postal_code
+  end
+
+  context "when the student is missing address city INSEE code" do
+    before { asp_payment_request.student.update!(address_city_insee_code: nil) }
+
+    include_examples "invalidation", :missing_address_city_insee_code
+  end
+
+  context "when the student is missing address country code" do
+    before { asp_payment_request.student.update!(address_country_code: nil) }
+
+    include_examples "invalidation", :missing_address_country_code
   end
 end
