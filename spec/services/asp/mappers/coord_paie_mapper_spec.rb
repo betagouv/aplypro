@@ -54,11 +54,13 @@ describe ASP::Mappers::CoordPaieMapper do
     end
   end
 
-  context "when the name has special characters in it" do
-    before { rib.update!(name: "Bonnie´ & _Clyde^;retraités-end") }
+  describe "intitdest" do
+    before do
+      allow(ASP::RibNameSanitiser).to receive(:call).with(rib.name).and_return :result
+    end
 
-    it "removes them" do
-      expect(mapper.intitdest).to eq "Bonnie Clyde retraités end"
+    it "returns the name processed by RibNameSanitiser" do
+      expect(mapper.intitdest).to eq :result
     end
   end
 

@@ -10,14 +10,6 @@ module ASP
         CREDIT_MUTUEL_ARKEA: "CMBRFR2BARK"
       }.freeze
 
-      ALLOWED_CHARACTERS = %w[/ - ? : ( ) . , '].freeze
-      RIB_NAME_MASK = /\A[\s[[:alnum:]]#{ALLOWED_CHARACTERS.map { |c| Regexp.escape(c) }.join}]+\z/
-
-      SOFT_HYPHEN = "­" # this invisible thing is not a space and deserves its own variable, see git blame
-
-      SUBSTITUTE_WITH_SPACE_CHARACTERS = %w[; - ´].push(SOFT_HYPHEN).freeze
-      SUBSTITUTE_NOSPACE_CHARACTERS = %w[& _ ^].freeze
-
       MAPPING = {
         bic: :bic
       }.freeze
@@ -46,17 +38,7 @@ module ASP
       end
 
       def intitdest
-        rib.name
-           .chars
-           .map { |c| c.in?(SUBSTITUTE_WITH_SPACE_CHARACTERS) ? " " : c }
-           .reject { |c| c.in?(SUBSTITUTE_NOSPACE_CHARACTERS) }
-           .join
-           .squish
-           .tap do |value|
-          if !RIB_NAME_MASK.match?(value)
-            raise ArgumentError, "the RIB ##{rib.id} name is still invalid after sanitisation"
-          end
-        end
+        ASP::RibNameSanitiser.call(rib.name)
       end
 
       # @emaildoc
