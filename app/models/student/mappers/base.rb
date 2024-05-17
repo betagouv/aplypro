@@ -80,7 +80,7 @@ class Student
       def map_student!(attrs)
         attributes = map_student_attributes(attrs)
 
-        return if attributes[:ine].nil?
+        return if attributes[:ine].blank?
 
         Student
           .find_or_initialize_by(ine: attributes[:ine])

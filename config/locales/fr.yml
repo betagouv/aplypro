@@ -42,6 +42,10 @@ fr:
   activerecord:
     errors:
       models:
+        schooling:
+          attributes:
+            student:
+              unique_active_schooling: "a déjà une scolarité active"
         invitation:
           attributes:
             email:

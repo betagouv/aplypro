@@ -25,7 +25,7 @@ class Schooling < ApplicationRecord
   # https://github.com/betagouv/aplypro/issues/792
   scope :with_one_character_attributive_decision_version, -> { where("schoolings.attributive_decision_version < 10") }
 
-  validates :student, uniqueness: { scope: :end_date }, if: :open?
+  validates :student, uniqueness: { scope: :end_date, message: :unique_active_schooling }, if: :open?
   validates :student, uniqueness: { scope: :classe }, if: :closed?
 
   def generate_administrative_number
