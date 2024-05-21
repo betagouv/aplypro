@@ -30,3 +30,9 @@ end
 every :weekday, at: "7AM" do
   runner "PollPaymentsServerJob.perform_later"
 end
+
+# NOTE: refresh the materialized view that holds our paid requests
+# stats.
+every :weekday, at: "6AM" do
+  runner "PaidPfmp.refresh"
+end

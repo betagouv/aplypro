@@ -94,6 +94,12 @@ Rails.application.routes.draw do
   get "/legal", to: "home#legal"
   get "/faq", to: "home#faq"
 
+  resources :stats, only: [:index] do
+    collection do
+      get "paid_pfmps_per_month"
+    end
+  end
+
   if Rails.env.production?
     Sidekiq::Web.use(Rack::Auth::Basic) do |user, password|
       # https://github.com/sidekiq/sidekiq/wiki/Monitoring#rails-http-basic-auth-from-routes
