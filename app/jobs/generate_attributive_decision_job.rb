@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "attribute_decision_generator"
+require "attribute_decision/generator"
 
 class GenerateAttributiveDecisionJob < ApplicationJob
   queue_as :documents
@@ -30,7 +30,7 @@ class GenerateAttributiveDecisionJob < ApplicationJob
 
     io = StringIO.new
 
-    AttributeDecisionGenerator.new(schooling).generate!(io)
+    AttributeDecision::Generator.new(schooling).generate!(io)
 
     io.rewind
 

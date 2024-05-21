@@ -107,7 +107,7 @@ RSpec.describe Schooling do
 
       it "bumps the version" do
         expect do
-          AttributeDecisionGenerator.new(schooling).generate!(StringIO.new)
+          AttributeDecision::Generator.new(schooling).generate!(StringIO.new)
         end.to change(schooling, :attributive_decision_version).from(0).to(1)
       end
     end
