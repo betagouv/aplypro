@@ -17,15 +17,7 @@ module AttributeDecision
     end
 
     def generate!(file_descriptor)
-      Schooling.transaction do
-        schooling.generate_administrative_number
-        schooling.increment(:attributive_decision_version)
-        schooling.save!
-
-        render
-
-        composer.write(file_descriptor)
-      end
+      composer.write(file_descriptor)
     end
 
     private
