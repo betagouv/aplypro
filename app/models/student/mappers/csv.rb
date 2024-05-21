@@ -52,6 +52,7 @@ class Student
         schooling = Schooling.find_or_initialize_by(classe: classe, student: student) do |sc|
           sc.start_date = entry["date_début"]
           sc.end_date = entry["date_fin"]
+          sc.status = :student
         end
 
         student.close_current_schooling! if schooling.open? && schooling != student.current_schooling
