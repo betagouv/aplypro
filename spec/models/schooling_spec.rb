@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-require "attribute_decision_generator"
+require "attribute_decision/generator"
 
 RSpec.describe Schooling do
   subject(:schooling) { create(:schooling) }
