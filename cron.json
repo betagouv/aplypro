@@ -1,13 +1,13 @@
 {
   "jobs": [
     {
-      "command": "0 0 * * * /bin/bash -l -c 'cd /app && bundle exec bin/rails runner -e production '\\''ConsiderPaymentRequestsJob.perform_later(Date.current)'\\'''"
+      "command": "0 0 * * 1-5 /bin/bash -l -c 'cd /app && bundle exec bin/rails runner -e production '\\''ConsiderPaymentRequestsJob.perform_later(Date.current)'\\'''"
     },
     {
-      "command": "0,30 1,2,3,4,5 * * * /bin/bash -l -c 'cd /app && bundle exec bin/rails runner -e production '\\''SendPaymentRequestsJob.perform_later'\\'''"
+      "command": "0,30 1,2,3,4,5 * * 1-5 /bin/bash -l -c 'cd /app && bundle exec bin/rails runner -e production '\\''SendPaymentRequestsJob.perform_later'\\'''"
     },
     {
-      "command": "0 7 * * * /bin/bash -l -c 'cd /app && bundle exec bin/rails runner -e production '\\''PollPaymentsServerJob.perform_later'\\'''"
+      "command": "0 7 * * 1-5 /bin/bash -l -c 'cd /app && bundle exec bin/rails runner -e production '\\''PollPaymentsServerJob.perform_later'\\'''"
     }
   ]
 }
