@@ -55,4 +55,8 @@ RSpec.describe GenerateAttributiveDecisionJob, :student_api do
 
     expect { job.perform_now }.to change(schooling, :generating_attributive_decision).to(false)
   end
+
+  it "bumps the version" do
+    expect { job.perform_now }.to change(schooling, :attributive_decision_version).from(0).to(1)
+  end
 end

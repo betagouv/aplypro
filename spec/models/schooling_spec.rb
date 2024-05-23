@@ -99,18 +99,6 @@ RSpec.describe Schooling do
     it "defaults to 0" do
       expect(schooling.attributive_decision_version).to eq 0
     end
-
-    context "when an attributive decision is generated" do
-      before do
-        create(:user, :confirmed_director, establishment: schooling.establishment)
-      end
-
-      it "bumps the version" do
-        expect do
-          AttributeDecision::Generator.new(schooling).generate!(StringIO.new)
-        end.to change(schooling, :attributive_decision_version).from(0).to(1)
-      end
-    end
   end
 
   describe "attributive_decision_key" do
