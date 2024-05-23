@@ -1,40 +1,11 @@
 # frozen_string_literal: true
 
-require "hexapdf"
-
 # rubocop:disable all
 module AttributeDecision
-  class Abrogator
-    include ActionView::Helpers::NumberHelper
-
-    attr_reader :composer, :schooling, :student
-
-    def initialize(schooling)
-      @composer = HexaPDF::Composer.new(page_size: :A4, margin: 48)
-
-      @schooling = schooling
-      @student = schooling.student
-    end
-
-    def write
-      io = StringIO.new
-      render
-      composer.write(io)
-      io.rewind
-      io
-    end
-
+  class Abrogator < AttributeDecision::DocumentGenerator
     private
 
-    def render
-      student = @schooling.student
-
-      setup_styles!
-
-      header
-      summary
-      legal
-
+    def articles
       composer.text("Décide :", style: :paragraph_title)
       composer.text("Article 1 : Objet", style: :paragraph_title)
       composer.text("Une aide financière de l’État, dénommée « allocation en faveur des lycéens de la voie professionnelle dans le cadre de la valorisation des périodes de formation en milieu professionnel », est abrogée à :")
@@ -61,16 +32,6 @@ module AttributeDecision
       composer.text("Abrogation de décision d’attribution éditée le #{I18n.l(Date.today)} par validation informatique du responsable légal de l'établissement.", style: :paragraph)
     end
 
-    def setup_styles!
-      composer.style(:base, font: "Times", font_size: 10, line_spacing: 1.4, last_line_gap: true, margin: [3, 0, 0, 0])
-      composer.style(:title, font: ["Times", variant: :bold], font_size: 12, align: :center, padding: [10, 0])
-      composer.style(:direction, font_size: 12, align: :right)
-      composer.style(:subtitle, align: :center, padding: [0, 30], line_height: 12)
-      composer.style(:paragraph_title, font: ["Times", variant: :bold], font_size: 10, margin: [10, 0, 0, 0])
-      composer.style(:paragraph, font_size: 10, margin: [5, 0, 0, 0])
-      composer.style(:legal, font: ["Times", variant: :italic], padding: [10, 0, 0, 0])
-    end
-
     def header
       composer.image(Rails.root.join("app/assets/images/Republique_Francaise_RVB.png").to_s, height: 100, position: :float)
       composer.text("Abrogation de décision d'attribution annuelle".upcase, style: :title, margin: [150, 0, 0, 0])
@@ -89,18 +50,6 @@ module AttributeDecision
       composer.text("Adresse email de l'établissement : #{establishment.email}", style: :paragraph)
       composer.text("Téléphone de l'établissement : #{establishment.telephone}", style: :paragraph)
       composer.text("#{director.name}, représentant légal de l’établissement d’enseignement #{establishment.name}, (#{establishment.uai}), sis #{establishment.address}.", style: :paragraph)
-    end
-
-    def legal
-      I18n.t("attributive_decision.legal").map { |line| composer.text("#{line} ;", style: :legal) }
-    end
-
-    def address_copy
-      if student.missing_address?
-        I18n.t("attributive_decision.missing_address")
-      else
-        I18n.t("attributive_decision.address", address: student.address)
-      end
     end
   end
 end
