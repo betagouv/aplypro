@@ -30,6 +30,19 @@ module WebmockHelpers
            .to_return(status: 200, body: payload, headers: { "Content-Type" => "application/json" })
   end
 
+  def mock_sygne_schooling_endpoint(ine, payload)
+    WebMock.stub_request(:get, %r{#{ENV.fetch('APLYPRO_SYGNE_URL')}eleves/#{ine}/scolarites})
+           .with(
+             headers: {
+               "Accept" => "*/*",
+               "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+               "Authorization" => "Bearer foobar",
+               "User-Agent" => "Rack::OAuth2::AccessToken::Bearer (2.2.1)"
+             }
+           )
+           .to_return(status: 200, body: payload, headers: { "Content-Type" => "application/json" })
+  end
+
   def mock_sygne_students_endpoint(uai, payload)
     url = StudentsApi::Sygne::Api.new(Establishment.new(uai: uai)).endpoint
 

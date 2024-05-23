@@ -27,6 +27,20 @@ describe StudentsApi::Sygne::Api do
     expect(WebMock).to have_requested(:get, %r{etablissements/#{establishment.uai}/eleves})
   end
 
+  describe "fetch_schooling_data!" do
+    let(:student) { create(:student) }
+
+    before do
+      mock_sygne_schooling_endpoint(student.ine, "{}")
+    end
+
+    it "calls the correct endpoint" do
+      api.fetch_schooling_data!(student.ine)
+
+      expect(WebMock).to have_requested(:get, %r{/eleves/#{student.ine}/scolarites})
+    end
+  end
+
   describe "fetch_student_data!" do
     let(:student) { create(:student) }
 
