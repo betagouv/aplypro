@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_06_155825) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_23_061622) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -79,7 +79,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_06_155825) do
   end
 
   create_table "asp_users", force: :cascade do |t|
-    t.string "email", default: "", null: false
+    t.string "email", null: false
     t.string "name", null: false
     t.string "provider", null: false
     t.string "uid", null: false
@@ -300,4 +300,29 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_06_155825) do
   add_foreign_key "schoolings", "classes", column: "classe_id"
   add_foreign_key "schoolings", "students"
   add_foreign_key "users", "establishments", column: "selected_establishment_id"
+
+  create_view "paid_pfmps", materialized: true, sql_definition: <<-SQL
+      WITH paid_requests AS (
+           SELECT asp_payment_requests.pfmp_id,
+              most_recent_asp_payment_request_transition.created_at AS paid_at
+             FROM (asp_payment_requests
+               JOIN asp_payment_request_transitions most_recent_asp_payment_request_transition ON (((asp_payment_requests.id = most_recent_asp_payment_request_transition.asp_payment_request_id) AND (most_recent_asp_payment_request_transition.most_recent = true))))
+            WHERE (((most_recent_asp_payment_request_transition.to_state)::text = 'paid'::text) AND (most_recent_asp_payment_request_transition.to_state IS NOT NULL))
+          )
+   SELECT pfmps.id,
+      pfmps.start_date,
+      pfmps.end_date,
+      pfmps.created_at,
+      pfmps.updated_at,
+      pfmps.day_count,
+      pfmps.schooling_id,
+      pfmps.asp_prestation_dossier_id,
+      pfmps.amount,
+      schoolings.student_id,
+      paid_requests.paid_at
+     FROM ((pfmps
+       JOIN schoolings ON ((schoolings.id = pfmps.schooling_id)))
+       LEFT JOIN paid_requests ON ((paid_requests.pfmp_id = pfmps.id)))
+    WHERE (EXTRACT(isoyear FROM pfmps.end_date) = ANY (ARRAY['2023'::numeric, '2024'::numeric]));
+  SQL
 end
