@@ -2,7 +2,8 @@
 
 # rubocop:disable all
 module AttributeDecision
-  class Generator < AttributeDecision::DocumentGenerator
+  # Generate "Décision d'attribution"
+  class Attributor < DocumentGenerator
     private
 
     def articles

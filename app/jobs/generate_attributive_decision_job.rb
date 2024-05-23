@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "attribute_decision/generator"
+require "attribute_decision/attributor"
 
 class GenerateAttributiveDecisionJob < ApplicationJob
   queue_as :documents
@@ -31,7 +31,7 @@ class GenerateAttributiveDecisionJob < ApplicationJob
     Schooling.transaction do
       schooling.generate_administrative_number
       schooling.increment(:attributive_decision_version)
-      io = AttributeDecision::Generator.new(schooling).write
+      io = AttributeDecision::Attributor.new(schooling).write
       schooling.rattach_attributive_decision!(io)
       schooling.save!
     end

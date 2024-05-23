@@ -2,7 +2,8 @@
 
 # rubocop:disable all
 module AttributeDecision
-  class Abrogator < AttributeDecision::DocumentGenerator
+  # Generate "Décision d'abrogation"
+  class Abrogator < DocumentGenerator
     private
 
     def articles
