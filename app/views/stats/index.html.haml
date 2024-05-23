@@ -1,0 +1,20 @@
+
+.stat
+  %h2 Montant total payé
+  %span.fr-display--xl= number_to_currency(@total_paid)
+
+.stat
+  %h2 Nombre total d'élèves payés
+  %span.fr-display--xl= number_with_delimiter(@total_paid_students)
+
+.stat
+  %h2
+    Nombre total de
+    %acronym{title: "Période de formation en milieu professionnel"} PFMPs
+    payées
+  %span.fr-display--xl= number_with_delimiter(@total_paid_pfmps)
+
+.stat
+  %h2 Nombre de PFMPs payées par mois
+
+  = column_chart paid_pfmps_per_month_stats_path, label: "nombre de stages payés"

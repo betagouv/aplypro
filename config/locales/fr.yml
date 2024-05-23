@@ -129,6 +129,8 @@ fr:
     faq: F.A.Q.
   pages:
     titles:
+      stats:
+        index: Statistiques
       users:
         select_establishment: Choix de l'établissement
       invitations:
