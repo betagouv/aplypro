@@ -16,8 +16,12 @@ module AttributeDecision
       @student = schooling.student
     end
 
-    def generate!(file_descriptor)
-      composer.write(file_descriptor)
+    def write
+      io = StringIO.new
+      render
+      composer.write(io)
+      io.rewind
+      io
     end
 
     private

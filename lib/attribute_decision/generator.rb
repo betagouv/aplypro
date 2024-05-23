@@ -16,16 +16,12 @@ module AttributeDecision
       @student = schooling.student
     end
 
-    def generate!(file_descriptor)
-      Schooling.transaction do
-        schooling.generate_administrative_number
-        schooling.increment(:attributive_decision_version)
-        schooling.save!
-
-        render
-
-        composer.write(file_descriptor)
-      end
+    def write
+      io = StringIO.new
+      render
+      composer.write(io)
+      io.rewind
+      io
     end
 
     private

@@ -28,12 +28,12 @@ class GenerateAttributiveDecisionJob < ApplicationJob
   def perform(schooling)
     FetchStudentInformationJob.new.perform(schooling) if schooling.student.missing_address?
 
-    io = StringIO.new
-
-    AttributeDecision::Generator.new(schooling).generate!(io)
-
-    io.rewind
-
-    schooling.rattach_attributive_decision!(io)
+    Schooling.transaction do
+      schooling.generate_administrative_number
+      schooling.increment(:attributive_decision_version)
+      io = AttributeDecision::Generator.new(schooling).write
+      schooling.rattach_attributive_decision!(io)
+      schooling.save!
+    end
   end
 end
