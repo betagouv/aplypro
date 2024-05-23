@@ -16,7 +16,6 @@ module AttributeDecision
 
     def write
       io = StringIO.new
-      setup_styles!
       render
       composer.write(io)
       io.rewind
@@ -26,13 +25,14 @@ module AttributeDecision
     private
 
     def render
+      setup_styles
       header
       summary
       legal
       articles
     end
 
-    def setup_styles!
+    def setup_styles
       composer.style(:base, font: "Times", font_size: 10, line_spacing: 1.4, last_line_gap: true, margin: [3, 0, 0, 0])
       composer.style(:title, font: ["Times", { variant: :bold }], font_size: 12, align: :center, padding: [10, 0])
       composer.style(:direction, font_size: 12, align: :right)
