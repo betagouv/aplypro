@@ -13,4 +13,26 @@ namespace :students do
 
     CSVImporter.new(data, uai).parse!
   end
+
+  task update_schoolings_status: :environment do
+    Schooling.where(status: nil).each do |schooling|
+      establishment = schooling.establishment
+      student = schooling.student
+      provider = establishment.students_provider
+
+      data = StudentApi.fetch_student_data!(provider, establishment.uai, student.ine)
+
+      case provider
+      when "fregata"
+        unless data.nil?
+          schooling.update(:start_date => data["dateEntreeFormation"])
+        end
+      when "sygne"
+        scolarite = data["scolarite"]
+        schooling.update(:start_date => scolarite["dateDebSco"])
+      else
+        puts "no matching API found for #{provider}"
+      end
+    end
+  end
 end
