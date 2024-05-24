@@ -10,7 +10,7 @@
       "command": "0 7 * * 1-5 /bin/bash -l -c 'cd /app && bundle exec bin/rails runner -e production '\\''PollPaymentsServerJob.perform_later'\\'''"
     },
     {
-      "command": "0 6 * * 1-5 /bin/bash -l -c 'cd /app && bundle exec bin/rails runner -e production '\\''PaidPfmp.refresh'\\'''"
+      "command": "0 9 * * 1-5 /bin/bash -l -c 'cd /app && bundle exec bin/rails runner -e production '\\''PaidPfmp.refresh'\\'''"
     }
   ]
 }
