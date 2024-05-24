@@ -33,6 +33,6 @@ end
 
 # NOTE: refresh the materialized view that holds our paid requests
 # stats.
-every :weekday, at: "6AM" do
+every :weekday, at: "9AM" do
   runner "PaidPfmp.refresh"
 end
