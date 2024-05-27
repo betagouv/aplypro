@@ -6,7 +6,7 @@ module DeveloperOidc
   def oidcize_dev_hash(attrs)
     attrs.merge!(
       {
-        provider: :fim,
+        **provider_info(attrs),
         **static_info(attrs),
         **extra_info(attrs)
       }
@@ -15,8 +15,13 @@ module DeveloperOidc
 
   private
 
-  def provider
-    :fim
+  def provider(attrs)
+    case attrs["info"]["Portail de connexion"]
+    when /MASA/
+      :masa
+    else
+      :fim
+    end
   end
 
   def role(attrs)
@@ -41,10 +46,14 @@ module DeveloperOidc
     }
   end
 
+  def provider_info(attrs)
+    { "provider" => provider(attrs) }
+  end
+
   def extra_info(attrs)
     uai = attrs["info"]["uai"]
 
-    info = role(attrs) == :dir ? responsibility_hash(uai) : authorised_hash(uai)
+    info = role(attrs) == :dir ? responsibility_hash(attrs, uai) : authorised_hash(attrs, uai)
 
     {
       extra: {
@@ -53,14 +62,31 @@ module DeveloperOidc
     }
   end
 
-  def authorised_hash(uai)
-    { FrEduRne: ["#{uai}$UAJ$PU$ADM$111$T3$LYC$340"] }
+  def authorised_hash(attrs, uai)
+    line = ["#{uai}$UAJ$PU$ADM$111$T3$LYC$340"]
+
+    if provider(attrs) == :fim
+      { FrEduRne: line }
+    else
+      { attributes: { fr_edu_rne: line } }
+    end
   end
 
-  def responsibility_hash(uai)
-    {
-      FrEduRneResp: ["#{uai}$UAJ$PU$N$T3$LYC$340"],
-      FrEduFonctAdm: "DIR"
-    }
+  def responsibility_hash(attrs, uai)
+    line = ["#{uai}$UAJ$PU$N$T3$LYC$340"]
+
+    if provider(attrs) == :fim
+      {
+        FrEduRneResp: line,
+        FrEduFonctAdm: "DIR"
+      }
+    else
+      {
+        attributes: {
+          fr_edu_rne_resp: line,
+          fr_edu_fonct_adm: "DIR"
+        }
+      }
+    end
   end
 end

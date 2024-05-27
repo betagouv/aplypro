@@ -10,6 +10,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
              fields: [
                :uai,
                :email,
+               { "Portail de connexion" => ["MENJ (FIM)", "MASA (CAS)"] },
                { "Role assumé" => ["Personnel de direction", "Personnel autorisé"] }
              ]
   end
