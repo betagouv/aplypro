@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-require "./mock/factories/api_student"
+require "./mock/apis/factories/api_student"
 
 # rubocop:disable RSpec/MultipleMemoizedHelpers
 describe Student::InfoMappers::Sygne do
