@@ -5,12 +5,16 @@ OmniAuth.config.logger = Rails.logger
 # rubocop:disable Metrics/BlockLength
 Rails.application.config.middleware.use OmniAuth::Builder do
   unless Rails.env.production?
+    portals = ["MENJ (FIM)"]
+
+    portals.push("MASA (CAS)") if Rails.env.development?
+
     provider :developer,
              path_prefix: "/users/auth",
              fields: [
                :uai,
                :email,
-               { "Portail de connexion" => ["MENJ (FIM)", "MASA (CAS)"] },
+               { "Portail de connexion" => portals },
                { "Role assumé" => ["Personnel de direction", "Personnel autorisé"] }
              ]
   end
