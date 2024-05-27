@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-require "./mock/factories/api_student"
+require "./mock/apis/factories/api_student"
 require "./spec/support/shared/student_mapper"
 
 describe Student::Mappers::Sygne do

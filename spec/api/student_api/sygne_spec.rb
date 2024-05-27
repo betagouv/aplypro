@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require "./mock/factories/api_student"
+require "./mock/apis/factories/api_student"
 
 describe StudentApi::Sygne do
   subject(:api) { described_class.new(establishment.uai) }
 
   let(:establishment) { create(:establishment, :sygne_provider) }
-  let(:data) { Rails.root.join("mock/data/sygne-students-for-uai.json").read }
-  let(:student_data) { Rails.root.join("mock/data/sygne-student.json").read }
+  let(:data) { build_list(:sygne_student, 10).to_json }
+  let(:student_data) { build(:sygne_student_info).to_json }
 
   before do
     mock_sygne_token

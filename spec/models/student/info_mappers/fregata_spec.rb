@@ -2,12 +2,24 @@
 
 require "rails_helper"
 
-require "./mock/factories/api_student"
+require "./mock/apis/factories/api_student"
 
 describe Student::InfoMappers::Fregata do
   subject(:attributes) { described_class.new(data, "001").attributes }
 
-  let!(:fixture) { Rails.root.join("mock/data/fregata-students.json").read }
+  let(:fixture) do
+    build_list(
+      :fregata_student,
+      1,
+      :male,
+      address_line1: "one",
+      address_line2: "two",
+      address_postal_code: "test zipcode",
+      birthplace_city_insee_code: "test birthplace zipcode",
+      birthplace_country_insee_code: "test birthplace country code"
+    ).to_json
+  end
+
   let(:data) { JSON.parse(fixture).first }
 
   context "when there is no address" do
@@ -19,10 +31,10 @@ describe Student::InfoMappers::Fregata do
   end
 
   describe "mapper" do
-    it { is_expected.to include({ address_postal_code: "34080" }) }
-    it { is_expected.to include({ address_line1: "80 RUE DU TEST 34080 MONTPELLIER FRANCE" }) }
-    it { is_expected.to include({ birthplace_city_insee_code: "34000" }) }
-    it { is_expected.to include({ birthplace_country_insee_code: "99100" }) }
+    it { is_expected.to include({ address_postal_code: "test zipcode" }) }
+    it { is_expected.to include({ address_line1: "one two 34080 MONTPELLIER FRANCE" }) }
+    it { is_expected.to include({ birthplace_city_insee_code: "test birthplace zipcode" }) }
+    it { is_expected.to include({ birthplace_country_insee_code: "test birthplace country code" }) }
     it { is_expected.to include({ biological_sex: 1 }) }
   end
 

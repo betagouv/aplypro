@@ -74,6 +74,9 @@ end
 RSpec.configure do |config|
   require "./mock/factories/asp"
 
+  require "./mock/apis/factories/sygne"
+  require "./mock/apis/factories/fregata"
+
   config.include Helpers::ReadOnlyBypass
 
   config.include FactoryBot::Syntax::Methods
