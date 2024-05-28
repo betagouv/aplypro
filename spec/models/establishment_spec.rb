@@ -64,4 +64,27 @@ RSpec.describe Establishment do
       expect(establishment.excluded?).to eq "a fake result"
     end
   end
+
+  describe "#school_year_range" do
+    subject(:establishment) { create(:establishment, academy_code: academy_code) }
+
+    context "when the establishment has a default academy_code" do
+      let(:academy_code) { "14" }
+
+      it "returns the default school year range" do
+        expect(establishment.school_year_range).to eq(
+          Aplypro::DEFAULT_SCHOOL_YEAR_START..Aplypro::DEFAULT_SCHOOL_YEAR_START >> 12
+        )
+      end
+    end
+
+    context "when the establishment has a academy_code with an exception" do
+      let(:academy_code) { "28" }
+      let(:expected_start_date) { Date.new(Aplypro::SCHOOL_YEAR, 8, 16) }
+
+      it "returns the school year range based on the exception" do
+        expect(establishment.school_year_range).to eq(expected_start_date..expected_start_date >> 12)
+      end
+    end
+  end
 end

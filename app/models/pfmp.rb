@@ -7,11 +7,6 @@ class Pfmp < ApplicationRecord
   STATE_MACHINE_CLASS = PfmpStateMachine
   TRANSITION_RELATION_NAME = :transitions
 
-  SCHOOL_YEAR_RANGE_EXCEPTIONS = {
-    "43" => Date.new(Aplypro::SCHOOL_YEAR, 8, 23), # Mayotte
-    "28" => Date.new(Aplypro::SCHOOL_YEAR, 8, 16)  # La Réunion
-  }.freeze
-
   include ::StateMachinable
 
   has_many :transitions, class_name: "PfmpTransition", autosave: false, dependent: :destroy
@@ -35,7 +30,7 @@ class Pfmp < ApplicationRecord
 
   validates :start_date, :end_date, presence: true
 
-  validates :end_date, :start_date, inclusion: { in: ->(pfmp) { pfmp.school_year_range } }
+  validates :end_date, :start_date, inclusion: { in: ->(pfmp) { pfmp.establishment.school_year_range } }
 
   validates :end_date,
             comparison: { greater_than_or_equal_to: :start_date },
@@ -66,13 +61,6 @@ class Pfmp < ApplicationRecord
   end
 
   after_save :recalculate_amounts_if_needed
-
-  # NOTE: this method could fetch the actual data per academie if we stored that information
-  #       this was implemented as a hotfix for La Réunion and Mayotte
-  def school_year_range
-    start_date = SCHOOL_YEAR_RANGE_EXCEPTIONS.fetch(establishment&.academy_code, Aplypro::DEFAULT_SCHOOL_YEAR_START)
-    (start_date..start_date >> 12)
-  end
 
   # Recalculate amounts for the current PFMP and all follow up PFMPs that are still modifiable
   def recalculate_amounts_if_needed

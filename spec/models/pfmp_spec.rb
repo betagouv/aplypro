@@ -203,30 +203,4 @@ RSpec.describe Pfmp do
       expect(pfmp.can_retrigger_payment?).to eq :result
     end
   end
-
-  # rubocop:disable RSpec/MultipleMemoizedHelpers
-  describe "#school_year_range" do
-    let(:establishment) { create(:establishment, academy_code: academy_code) }
-    let(:pfmp) { create(:pfmp, schooling: create(:schooling, establishment: establishment)) }
-
-    context "when the establishment has a default academy_code" do
-      let(:academy_code) { "14" }
-
-      it "returns the default school year range" do
-        expect(pfmp.school_year_range).to eq(
-          Aplypro::DEFAULT_SCHOOL_YEAR_START..Aplypro::DEFAULT_SCHOOL_YEAR_START >> 12
-        )
-      end
-    end
-
-    context "when the establishment has a academy_code with an exception" do
-      let(:academy_code) { "28" }
-      let(:expected_start_date) { Date.new(Aplypro::SCHOOL_YEAR, 8, 16) }
-
-      it "returns the school year range based on the exception" do
-        expect(pfmp.school_year_range).to eq(expected_start_date..expected_start_date >> 12)
-      end
-    end
-  end
-  # rubocop:enable RSpec/MultipleMemoizedHelpers
 end
