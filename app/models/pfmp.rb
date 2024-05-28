@@ -12,6 +12,7 @@ class Pfmp < ApplicationRecord
   has_many :transitions, class_name: "PfmpTransition", autosave: false, dependent: :destroy
 
   belongs_to :schooling
+
   has_one :classe, through: :schooling
   has_one :student, through: :schooling
   has_one :mef, through: :classe
@@ -30,7 +31,10 @@ class Pfmp < ApplicationRecord
 
   validates :start_date, :end_date, presence: true
 
-  validates :end_date, :start_date, inclusion: { in: ->(pfmp) { pfmp.establishment.school_year_range } }
+  validates :end_date,
+            :start_date,
+            if: ->(pfmp) { pfmp.schooling.present? },
+            inclusion: { in: ->(pfmp) { pfmp.schooling.establishment.school_year_range } }
 
   validates :end_date,
             comparison: { greater_than_or_equal_to: :start_date },
