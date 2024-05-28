@@ -58,7 +58,7 @@ RSpec.configure do |config|
   require "./mock/apis/factories/fregata"
 
   config.before(:suite) do
-    Rails.application.load_seed unless database_seeded?
+    Rails.application.load_seed if missing_seeds?
   end
 
   config.include Helpers::ReadOnlyBypass
@@ -117,8 +117,8 @@ RSpec.configure do |config|
     end
   end
 
-  def database_seeded?
-    Mef.count.zero?
+  def missing_seeds?
+    Mef.none?
   end
 end
 
