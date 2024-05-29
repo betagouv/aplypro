@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe StudentApi do
+describe StudentsApi do
   describe ".api_for" do
     subject(:api_for) { described_class.api_for(provider, "123") }
 
@@ -10,7 +10,7 @@ describe StudentApi do
       context "when asked for a #{provider.upcase} API" do
         let(:provider) { provider }
 
-        it { is_expected.to be_a "StudentApi::#{provider.capitalize}".constantize }
+        it { is_expected.to be_a "StudentsApi::#{provider.capitalize}".constantize }
       end
     end
 

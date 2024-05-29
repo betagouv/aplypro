@@ -8,18 +8,18 @@ RSpec.describe FetchStudentsJob do
   let(:establishment) { create(:establishment, :sygne_provider) }
 
   before do
-    allow(StudentApi).to receive(:fetch_students!)
+    allow(StudentsApi).to receive(:fetch_students!)
   end
 
-  it "calls the matchingStudentApi proxy" do
+  it "calls the matchingStudentsApi proxy" do
     described_class.perform_now(establishment)
 
-    expect(StudentApi).to have_received(:fetch_students!).with("sygne", establishment.uai)
+    expect(StudentsApi).to have_received(:fetch_students!).with("sygne", establishment.uai)
   end
 
   context "when the underlying API fails" do
     before do
-      allow(StudentApi).to receive(:fetch_students!).and_raise(Faraday::UnauthorizedError)
+      allow(StudentsApi).to receive(:fetch_students!).and_raise(Faraday::UnauthorizedError)
     end
 
     it "rescues and retry" do
@@ -28,7 +28,7 @@ RSpec.describe FetchStudentsJob do
       rescue Faraday::UnauthorizedError # rubocop:disable Lint/SuppressedException
       end
 
-      expect(StudentApi).to have_received(:fetch_students!).exactly(10).times
+      expect(StudentsApi).to have_received(:fetch_students!).exactly(10).times
     end
   end
 end
