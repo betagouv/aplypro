@@ -31,7 +31,7 @@ module WebmockHelpers
   end
 
   def mock_sygne_students_endpoint(uai, payload)
-    url = StudentsApi::Sygne.new(Establishment.new(uai: uai)).endpoint
+    url = StudentsApi::Sygne::Api.new(Establishment.new(uai: uai)).endpoint
 
     WebMock.stub_request(:get, url)
            .with(
@@ -47,7 +47,7 @@ module WebmockHelpers
   end
 
   def mock_fregata_students_with(uai, payload)
-    url = StudentsApi::Fregata.new(Establishment.new(uai: uai)).endpoint
+    url = StudentsApi::Fregata::Api.new(Establishment.new(uai: uai)).endpoint
 
     WebMock.stub_request(:get, /#{url}/)
            .with(

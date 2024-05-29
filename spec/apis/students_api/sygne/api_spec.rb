@@ -3,7 +3,7 @@
 require "rails_helper"
 require "./mock/apis/factories/api_student"
 
-describe StudentsApi::Sygne do
+describe StudentsApi::Sygne::Api do
   subject(:api) { described_class.new(establishment.uai) }
 
   let(:establishment) { create(:establishment, :sygne_provider) }

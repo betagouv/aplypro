@@ -95,7 +95,7 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  config.define_derived_metadata(file_path: %r{spec/api/student_api/}) do |meta|
+  config.define_derived_metadata(file_path: %r{spec/apis/students_api/}) do |meta|
     meta[:student_api] = true
   end
 

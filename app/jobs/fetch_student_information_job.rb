@@ -9,7 +9,7 @@ class FetchStudentInformationJob < ApplicationJob
 
     return if student.ine_not_found
 
-    api = StudentApi.api_for(establishment.students_provider, establishment.uai)
+    api = StudentsApi.api_for(establishment.students_provider, establishment.uai)
 
     api
       .fetch_student_data!(student.ine)

@@ -93,7 +93,7 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def students_api
-    StudentApi.api_for(students_provider, uai)
+    StudentsApi.api_for(students_provider, uai)
   end
 
   def rattach_attributive_decisions_zip!(content, filename)

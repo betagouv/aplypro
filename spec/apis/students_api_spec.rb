@@ -10,7 +10,7 @@ describe StudentsApi do
       context "when asked for a #{provider.upcase} API" do
         let(:provider) { provider }
 
-        it { is_expected.to be_a "StudentsApi::#{provider.capitalize}".constantize }
+        it { is_expected.to be_a "StudentsApi::#{provider.capitalize}::Api".constantize }
       end
     end
 
