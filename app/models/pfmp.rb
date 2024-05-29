@@ -12,6 +12,7 @@ class Pfmp < ApplicationRecord
   has_many :transitions, class_name: "PfmpTransition", autosave: false, dependent: :destroy
 
   belongs_to :schooling
+
   has_one :classe, through: :schooling
   has_one :student, through: :schooling
   has_one :mef, through: :classe
@@ -31,10 +32,13 @@ class Pfmp < ApplicationRecord
   validates :start_date, :end_date, presence: true
 
   validates :end_date,
+            :start_date,
+            if: ->(pfmp) { pfmp.schooling.present? },
+            inclusion: { in: ->(pfmp) { pfmp.schooling.establishment.school_year_range } }
+
+  validates :end_date,
             comparison: { greater_than_or_equal_to: :start_date },
             if: -> { start_date && end_date }
-
-  validates :end_date, :start_date, inclusion: Aplypro::SCHOOL_YEAR_RANGE
 
   validates :day_count,
             numericality: {
@@ -47,8 +51,6 @@ class Pfmp < ApplicationRecord
   scope :finished, -> { where("pfmps.end_date <= (?)", Time.zone.today) }
   scope :before, ->(date) { where("pfmps.created_at < (?)", date) }
   scope :after, ->(date) { where("pfmps.created_at > (?)", date) }
-
-  scope :this_year, -> { where(start_date: Aplypro::SCHOOL_YEAR_RANGE, end_date: Aplypro::SCHOOL_YEAR_RANGE) }
 
   delegate :wage, to: :mef
 

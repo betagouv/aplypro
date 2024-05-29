@@ -12,6 +12,8 @@ RSpec.describe Pfmp do
 
   describe "associations" do
     it { is_expected.to belong_to(:schooling) }
+    it { is_expected.to have_one(:establishment) }
+    it { is_expected.to have_one(:classe) }
     it { is_expected.to have_many(:payment_requests) }
   end
 
@@ -22,7 +24,7 @@ RSpec.describe Pfmp do
     it {
       expect(pfmp)
         .to validate_inclusion_of(:start_date)
-        .in_range(Aplypro::SCHOOL_YEAR_RANGE)
+        .in_range(pfmp.establishment.school_year_range)
         .with_low_message(/ne peut pas précéder/)
         .allow_blank
     }
@@ -30,7 +32,7 @@ RSpec.describe Pfmp do
     it {
       expect(pfmp)
         .to validate_inclusion_of(:end_date)
-        .in_range(Aplypro::SCHOOL_YEAR_RANGE)
+        .in_range(pfmp.establishment.school_year_range)
         .with_high_message(/ne peut pas excéder/)
         .allow_blank
     }
@@ -48,7 +50,7 @@ RSpec.describe Pfmp do
 
     describe "day count" do
       subject(:pfmp) do
-        build(
+        create(
           :pfmp,
           start_date: Time.zone.now.next_week(:monday),
           end_date: Time.zone.now.next_week(:friday)
