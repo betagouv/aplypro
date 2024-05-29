@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe StudentApi::Fregata do
+describe StudentsApi::Fregata::Api do
   subject(:api) { described_class.new(establishment.uai) }
 
   let(:establishment) { create(:establishment, :fregata_provider) }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module StudentApi
+module StudentsApi
   class << self
     def fetch_students!(provider, uai)
       api_for(provider, uai).fetch_and_parse!
@@ -11,7 +11,7 @@ module StudentApi
     end
 
     def api_for(provider, uai)
-      klass = "StudentApi::#{provider.capitalize}".constantize
+      klass = "StudentsApi::#{provider.capitalize}::Api".constantize
 
       klass.new(uai)
     rescue NameError

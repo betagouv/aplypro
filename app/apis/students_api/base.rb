@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module StudentApi
+module StudentsApi
   class Base
     attr_reader :uai
 
@@ -13,7 +13,7 @@ module StudentApi
     end
 
     def identifier
-      self.class.name.demodulize
+      self.class.module_parent_name.demodulize
     end
 
     def response
