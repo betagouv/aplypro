@@ -4,23 +4,30 @@ class FetchStudentInformationJob < ApplicationJob
   queue_as :default
 
   def perform(schooling)
-    establishment = schooling.establishment
     student = schooling.student
 
     return if student.ine_not_found
 
-    api = StudentsApi.api_for(establishment.students_provider, establishment.uai)
+    fetch_student_data(schooling).then do |data|
+      student_attributes = api.student_mapper.call(data)
+      address_attributes = api.address_mapper.call(data)
 
-    api
-      .fetch_student_data!(student.ine)
-      .then do |data|
-      mapper = api.info_mapper.new(data, establishment.uai)
+      attributes = student_attributes.merge(address_attributes)
 
-      update_student!(schooling, mapper)
-      update_schooling!(mapper)
+      student.update!(attributes.slice(*Student.updatable_attributes))
     end
   rescue Faraday::ResourceNotFound
     schooling.student.update!(ine_not_found: true)
+  end
+
+  private
+
+  def fetch_student_data(schooling)
+    establishment = schooling.establishment
+
+    establishment
+      .students_api
+      .fetch_student_data!(schooling.student.ine)
   end
 
   def update_student!(schooling, mapper)

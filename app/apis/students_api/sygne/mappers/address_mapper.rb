@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-class Student
-  module InfoMappers
-    class Sygne < Base
-      class Mapper < Dry::Transformer::Pipe
+module StudentsApi
+  module Sygne
+    module Mappers
+      class AddressMapper < Dry::Transformer::Pipe
         import Dry::Transformer::HashTransformations
         import Dry::Transformer::Coercions
 
@@ -41,47 +41,6 @@ class Student
             birthplace_country_insee_code
           ]
         end
-      end
-
-      class SchoolingMapper < Dry::Transformer::Pipe
-        import Dry::Transformer::HashTransformations
-        import Dry::Transformer::Coercions
-
-        define! do
-          deep_symbolize_keys
-
-          unwrap :scolarite
-
-          rename_keys(
-            classe: :label,
-            codeStatut: :status,
-            codeMefRatt: :mef_code,
-            codeUai: :uai
-          )
-
-          map_value(:mef_code, Dry::Transformer::Coercions[:to_string])
-
-          map_value :mef_code, ->(value) { value.chop }
-
-          map_value :status, lambda { |value|
-            case value
-            when "ST"
-              :student
-            when "AP"
-              :apprentice
-            when "FQ"
-              :other
-            else
-              raise Student::Mappers::Errors::SchoolingParsingError
-            end
-          }
-
-          accept_keys %i[ine mef_code label status uai]
-        end
-      end
-
-      def schooling_finder_attributes
-        schooling_attributes
       end
     end
   end
