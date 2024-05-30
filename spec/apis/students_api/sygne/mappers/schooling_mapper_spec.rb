@@ -33,4 +33,20 @@ describe StudentsApi::Sygne::Mappers::SchoolingMapper do
 
     expect(mapped).to eq expected
   end
+
+  context "when the codeMefRatt is present" do
+    before { data["codeMef"] = "456" }
+
+    it "uses it" do
+      expect(mapped).to include(mef_code: "123")
+    end
+  end
+
+  context "when the codeMefRatt is missing" do
+    before { data["codeMef"] = data.delete("codeMefRatt") }
+
+    it "falls back on the codeMef" do
+      expect(mapped).to include(mef_code: "123")
+    end
+  end
 end

@@ -22,6 +22,8 @@ module StudentsApi
             dateFinSco: :end_date
           )
 
+          maybe_fallback_mef
+
           map_value(:mef_code, Dry::Transformer::Coercions[:to_string])
 
           map_value(:annee_scolaire, Dry::Transformer::Coercions[:to_string])
@@ -42,6 +44,10 @@ module StudentsApi
           }
 
           accept_keys %i[ine mef_code label status uai start_date end_date school_year]
+        end
+
+        def maybe_fallback_mef(data)
+          data.tap { data[:mef_code] ||= data[:codeMef] }
         end
       end
     end
