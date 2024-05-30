@@ -11,7 +11,7 @@ class Student
         @payload = payload
         @uai = uai
         @establishment = Establishment.find_by(uai: uai)
-        @year = Aplypro::SCHOOL_YEAR
+        @year = SchoolYear.current
       end
 
       def identifier
@@ -75,7 +75,7 @@ class Student
           label:,
           mef:,
           establishment:,
-          start_year: @year
+          school_year: @year
         )
       rescue ClasseParsingError => e
         Sentry.capture_exception(e)
