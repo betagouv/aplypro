@@ -3,11 +3,13 @@
 class ApplicationRecord < ActiveRecord::Base
   primary_abstract_class
 
-  cattr_accessor :_updatable_attributes, default: []
-
   class << self
-    def updatable_attributes(*args)
-      self._updatable_attributes += args
+    attr_accessor :updatable_attributes
+
+    def updatable(*args)
+      self.updatable_attributes ||= []
+
+      self.updatable_attributes += args
     end
   end
 end
