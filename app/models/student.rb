@@ -62,6 +62,16 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     )
   }
 
+  updatable_attributes %i[
+    address_line1
+    address_postal_code
+    address_city_insee_code
+    address_country_code
+    birthplace_city_insee_code
+    birthplace_country_insee_code
+    biological_sex
+  ]
+
   # NOTE: used in stats for column "Données d'élèves nécessaires présentes"
   def self.asp_ready
     with_ine
