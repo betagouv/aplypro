@@ -18,7 +18,7 @@ module Updaters
       mapped_schooling_data.each do |attributes|
         classe = Classe.find_by(
           establishment: Establishment.find_by(uai: attributes[:uai]),
-          start_year: attributes[:school_year],
+          school_year: SchoolYear.find_by(start_year: attributes[:school_year]),
           label: attributes[:label],
           mef: Mef.find_by(code: attributes[:mef_code])
         )

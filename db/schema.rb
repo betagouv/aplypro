@@ -96,9 +96,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_03_124726) do
     t.string "label"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "start_year", null: false
+    t.bigint "school_year_id", null: false
     t.index ["establishment_id"], name: "index_classes_on_establishment_id"
     t.index ["mef_id"], name: "index_classes_on_mef_id"
+    t.index ["school_year_id"], name: "index_classes_on_school_year_id"
   end
 
   create_table "establishment_user_roles", force: :cascade do |t|
@@ -206,6 +207,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_03_124726) do
     t.index ["student_id"], name: "one_active_rib_per_student", unique: true, where: "(archived_at IS NULL)"
   end
 
+  create_table "school_years", force: :cascade do |t|
+    t.integer "start_year", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["start_year"], name: "index_school_years_on_start_year", unique: true
+  end
+
   create_table "schoolings", force: :cascade do |t|
     t.bigint "student_id", null: false
     t.bigint "classe_id", null: false
@@ -291,6 +299,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_03_124726) do
   add_foreign_key "asp_payment_requests", "asp_requests"
   add_foreign_key "asp_payment_requests", "pfmps"
   add_foreign_key "classes", "mefs"
+  add_foreign_key "classes", "school_years"
   add_foreign_key "establishment_user_roles", "establishments"
   add_foreign_key "establishment_user_roles", "users"
   add_foreign_key "establishment_user_roles", "users", column: "granted_by_id"
