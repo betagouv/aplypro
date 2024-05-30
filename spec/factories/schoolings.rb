@@ -13,6 +13,13 @@ FactoryBot.define do
       end
     end
 
+    trait :with_abrogation_decision do
+      after(:create) do |schooling|
+        AttributiveDecisionHelpers.generate_fake_attributive_decision(schooling)
+        AttributiveDecisionHelpers.generate_fake_abrogation_decision(schooling)
+      end
+    end
+
     trait :apprentice do
       status { :apprentice }
     end
