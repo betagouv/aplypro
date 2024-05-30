@@ -99,15 +99,16 @@ class Schooling < ApplicationRecord
     end
   end
 
-  def attach_attributive_document(output, attachment)
-    raise "Unsupported attachment type" unless %i[attributive_decision abrogation_decision].include?(attachment)
+  def attach_attributive_document(output, attachment_name)
+    raise "Unsupported attachment type" unless %i[attributive_decision abrogation_decision].include?(attachment_name)
 
-    description = attachment == :attributive_decision ? "décision-d-attribution" : "décision-d-abrogation"
+    description = attachment_name == :attributive_decision ? "décision-d-attribution" : "décision-d-abrogation"
     name = attachment_file_name(description)
 
-    public_send(attachment).purge if attachment.present?
+    attachment = public_send(attachment_name)
+    attachment.purge if attachment.present?
 
-    public_send(attachment).attach(
+    attachment.attach(
       io: output,
       key: attributive_decision_key(name),
       filename: name,
