@@ -112,7 +112,7 @@ RSpec.describe Schooling do
       key =
         "#{uai}/2023/1ere-apex-test/DUPONT_Jeanne_décision-d-attribution_#{schooling.attributive_decision_number}.pdf"
 
-      expect(schooling.attributive_decision_key).to eq key
+      expect(schooling.attributive_decision_key(schooling.attachment_file_name("décision-d-attribution"))).to eq key
     end
   end
 

@@ -32,7 +32,7 @@ class GenerateAttributiveDecisionJob < ApplicationJob
       schooling.generate_administrative_number
       schooling.increment(:attributive_decision_version)
       io = AttributeDecision::Attributor.new(schooling).write
-      schooling.rattach_attributive_decision!(io)
+      schooling.attach_attributive_document(io, :attributive_decision)
       schooling.save!
     end
   end

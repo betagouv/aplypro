@@ -2,6 +2,7 @@
 
 class Schooling < ApplicationRecord
   has_one_attached :attributive_decision
+  has_one_attached :abrogation_decision
 
   enum :status, { student: 0, apprentice: 1, other: 2 }, validate: { allow_nil: true }
 
@@ -54,21 +55,21 @@ class Schooling < ApplicationRecord
     Exclusion.excluded?(establishment.uai, mef.code)
   end
 
-  def attributive_decision_filename
+  def attachment_file_name(description)
     [
       student.last_name,
       student.first_name,
-      "décision-d-attribution",
+      description,
       attributive_decision_number
     ].join("_").concat(".pdf")
   end
 
-  def attributive_decision_key
+  def attributive_decision_key(filename)
     [
       establishment.uai,
       Aplypro::SCHOOL_YEAR,
       classe.label.parameterize,
-      attributive_decision_filename
+      filename
     ].join("/")
   end
 
@@ -96,14 +97,17 @@ class Schooling < ApplicationRecord
     end
   end
 
-  def rattach_attributive_decision!(output)
-    name = attributive_decision_filename
+  def attach_attributive_document(output, attachment)
+    raise "Unsupported attachment type" unless %i[attributive_decision abrogation_decision].include?(attachment)
 
-    attributive_decision.purge if attributive_decision.present?
+    description = attachment == :attributive_decision ? "décision-d-attribution" : "décision-d-abrogation"
+    name = attachment_file_name(description)
 
-    attributive_decision.attach(
+    public_send(attachment).purge if attachment.present?
+
+    public_send(attachment).attach(
       io: output,
-      key: attributive_decision_key,
+      key: attributive_decision_key(name),
       filename: name,
       content_type: "application/pdf"
     )
