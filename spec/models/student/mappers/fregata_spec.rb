@@ -13,10 +13,6 @@ describe Student::Mappers::Fregata do
   let(:normal_payload) { build_list(:fregata_student, 2) }
 
   it_behaves_like "a student mapper" do
-    # the following lines to test with real payloads
-    # let!(:fixture) { Rails.root.join("mock/data/fregata-students.json").read }
-    # let(:normal_payload) { JSON.parse(fixture) }
-
     let(:normal_payload) { build_list(:fregata_student, 2) }
     let(:irrelevant_mefs_payload) { build_list(:fregata_student, 10, :irrelevant) }
     let(:nil_ine_payload) { normal_payload.push(build(:fregata_student, :no_ine)) }

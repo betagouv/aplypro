@@ -10,6 +10,10 @@ module StudentsApi
       api_for(provider, uai).fetch_student_data!(ine)
     end
 
+    def fetch_schooling_data!(provider, uai, ine)
+      api_for(provider, uai).fetch_schooling_data!(ine)
+    end
+
     def api_for(provider, uai)
       klass = "StudentsApi::#{provider.capitalize}::Api".constantize
 

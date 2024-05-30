@@ -11,6 +11,10 @@ module StudentsApi
         base_url + format("eleves/%s", ine)
       end
 
+      def schooling_endpoint(ine)
+        base_url + format("eleves/%s/scolarites", ine)
+      end
+
       def fetch!
         params = { "etat-scolarisation" => "true" }
 
@@ -19,6 +23,12 @@ module StudentsApi
 
       def fetch_student_data!(ine)
         authenticated_client!.get(student_endpoint(ine)).body
+      end
+
+      def fetch_schooling_data!(ine)
+        data = authenticated_client!.get(schooling_endpoint(ine)).body
+
+        data["scolarites"]
       end
 
       def client

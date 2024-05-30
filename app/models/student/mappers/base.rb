@@ -14,6 +14,18 @@ class Student
         @year = Aplypro::SCHOOL_YEAR
       end
 
+      def identifier
+        self.class.name.demodulize
+      end
+
+      %w[schooling address classe student].each do |klass|
+        define_method "#{klass}_mapper" do
+          mapper = "StudentsApi::#{identifier}::Mappers::#{klass.classify}Mapper".constantize
+
+          mapper.new
+        end
+      end
+
       def parse!
         map_classes!.each do |classe, entries|
           entries.each do |entry|
@@ -93,13 +105,13 @@ class Student
       end
 
       def map_classe_attributes(attrs)
-        self.class::ClasseMapper.new.call(attrs).values_at(:label, :mef_code)
+        classe_mapper.call(attrs).values_at(:label, :mef_code)
       rescue StandardError => e
         raise ClasseParsingError.new, "Classe parsing failure for #{uai}: #{e.message}"
       end
 
       def map_student_attributes(attrs)
-        self.class::StudentMapper.new.call(attrs)
+        student_mapper.call(attrs)
       rescue StandardError => e
         raise StudentParsingError, "Student parsing failure for #{uai}: #{e.message}"
       end

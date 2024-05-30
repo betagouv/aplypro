@@ -35,9 +35,8 @@ module StudentsApi
       private
 
       def find_student_in_payload(ine)
-        m = mapper.new(response, @establishment)
-
-        response.find { |entry| m.map_student_attributes(entry)[:ine] == ine }
+        response
+          .find { |entry| student_mapper.call(entry)[:ine] == ine }
       end
 
       def client
