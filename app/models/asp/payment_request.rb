@@ -17,6 +17,7 @@ module ASP
 
     belongs_to :asp_request, class_name: "ASP::Request", optional: true
     belongs_to :asp_payment_return, class_name: "ASP::PaymentReturn", optional: true
+    belongs_to :rib, optional: true
 
     belongs_to :pfmp
 
