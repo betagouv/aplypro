@@ -3,45 +3,10 @@
 class Student
   module Mappers
     class Fregata < Base
-      class StudentMapper < Dry::Transformer::Pipe
-        import Dry::Transformer::HashTransformations
-
-        define! do
-          deep_symbolize_keys
-
-          unwrap :apprenant
-
-          rename_keys(
-            prenomUsuel: :first_name,
-            nomUsuel: :last_name,
-            dateNaissance: :birthdate
-          )
-
-          accept_keys %i[ine first_name last_name birthdate]
-        end
-      end
-
-      class ClasseMapper < Dry::Transformer::Pipe
-        import Dry::Transformer::HashTransformations
-
-        define! do
-          deep_symbolize_keys
-
-          unwrap :sectionReference
-          unwrap :division
-
-          rename_keys(codeMef: :mef_code, libelle: :label)
-
-          map_value :mef_code, ->(value) { value.chop }
-
-          accept_keys %i[label mef_code]
-        end
-      end
-
       def map_student_attributes(attrs)
         student_attrs = super(attrs)
 
-        extra_attrs = Student::InfoMappers::Fregata.new(attrs, uai).attributes
+        extra_attrs = address_mapper.call(attrs)
 
         student_attrs.merge!(extra_attrs) if extra_attrs.present?
 
@@ -51,7 +16,7 @@ class Student
       def map_schooling!(classe, student, entry)
         schooling = Schooling.find_or_initialize_by(classe: classe, student: student)
 
-        schooling_attributes = Student::InfoMappers::Fregata.new(entry, uai).schooling_attributes
+        schooling_attributes = schooling_mapper.call(entry)
 
         schooling.end_date = left_classe_at(entry)
         schooling.status = schooling_attributes[:status]

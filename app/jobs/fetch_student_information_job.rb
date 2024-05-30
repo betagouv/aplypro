@@ -4,51 +4,28 @@ class FetchStudentInformationJob < ApplicationJob
   queue_as :default
 
   def perform(schooling)
-    establishment = schooling.establishment
     student = schooling.student
 
     return if student.ine_not_found
 
-    api = StudentsApi.api_for(establishment.students_provider, establishment.uai)
+    api = schooling.establishment.students_api
 
-    api
-      .fetch_student_data!(student.ine)
-      .then do |data|
-      mapper = api.info_mapper.new(data, establishment.uai)
-
-      update_student!(schooling, mapper)
-      update_schooling!(mapper)
-    end
+    api.fetch_student_data!(schooling.student.ine)
+       .then { |data| map_student_attributes(data, api) }
+       .then { |attributes| student.update!(attributes) }
   rescue Faraday::ResourceNotFound
     schooling.student.update!(ine_not_found: true)
   end
 
-  def update_student!(schooling, mapper)
-    return if mapper.attributes.blank?
+  private
 
-    schooling.student.update!(mapper.attributes)
-  end
+  def map_student_attributes(data, api)
+    student_attributes = api.student_mapper.call(data)
+    address_attributes = api.address_mapper.call(data)
 
-  def update_schooling!(mapper)
-    schooling = find_schooling(mapper)
-
-    return if schooling.nil?
-
-    attributes = mapper
-                 .schooling_attributes
-                 .slice(*Schooling.attribute_names.map(&:to_sym))
-
-    schooling.update!(attributes)
-  end
-
-  def find_schooling(mapper)
-    mapper.schooling_finder_attributes => { uai:, label:, mef_code:, ine: }
-
-    Schooling
-      .joins(:establishment, :student, [classe: :mef])
-      .where("establishments.uai" => uai)
-      .where("classe.label" => label)
-      .where("mef.code" => mef_code)
-      .find_by("student.ine" => ine)
+    student_attributes
+      .merge(address_attributes)
+      .slice(*Student.updatable_attributes)
+      .except(:ine)
   end
 end

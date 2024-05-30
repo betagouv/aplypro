@@ -29,6 +29,8 @@ class Schooling < ApplicationRecord
   validates :student, uniqueness: { scope: :end_date, message: :unique_active_schooling }, if: :open?
   validates :student, uniqueness: { scope: :classe }, if: :closed?
 
+  updatable :start_date, :end_date, :status
+
   def generate_administrative_number
     return if administrative_number.present?
 
