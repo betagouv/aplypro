@@ -20,14 +20,8 @@ module StudentsApi
             codeCommuneInsee: :address_city_insee_code,
             libelleCommune: :address_city,
             inseeCommuneNaissance: :birthplace_city_insee_code,
-            inseePaysNaissance: :birthplace_country_insee_code,
-            codeSexe: :biological_sex
+            inseePaysNaissance: :birthplace_country_insee_code
           )
-
-          # FIXME: ideally we'd use dry-transformer's `to_integer`
-          # function but for the life of me I *cannot* figure out how
-          # to chain it in here
-          map_value :biological_sex, ->(x) { x.to_i }
 
           accept_keys %i[
             address_postal_code

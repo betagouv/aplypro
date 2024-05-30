@@ -12,10 +12,13 @@ module StudentsApi
           rename_keys(
             prenom: :first_name,
             nom: :last_name,
-            dateNaissance: :birthdate
+            dateNaissance: :birthdate,
+            codeSexe: :biological_sex
           )
 
-          accept_keys %i[ine first_name last_name birthdate]
+          map_value :biological_sex, ->(x) { x == "2" ? :female : :male }
+
+          accept_keys %i[ine first_name last_name birthdate biological_sex]
         end
       end
     end
