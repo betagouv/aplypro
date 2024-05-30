@@ -8,7 +8,9 @@ RSpec.describe EstablishmentFacade do
   let(:establishment) { build(:establishment, :sygne_provider) }
 
   before do
-    payment_requests.each { |pr| pr.schooling.classe.update!(establishment: establishment) }
+    payment_requests.each do |pr|
+      pr.schooling.classe.update!(establishment: establishment, school_year: SchoolYear.current)
+    end
   end
 
   describe "#payment_requests_counts" do

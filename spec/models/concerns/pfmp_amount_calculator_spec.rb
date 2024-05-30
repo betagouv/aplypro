@@ -71,7 +71,9 @@ describe PfmpAmountCalculator do
         it_calculates "a limited amount", 2
 
         context "when the classe is from another year" do
-          before { schooling.classe.update!(start_year: 2022) }
+          let(:school_year) { create(:school_year, start_year: 2022) }
+
+          before { schooling.classe.update!(school_year: school_year) }
 
           it_calculates "the original amount"
         end
@@ -89,6 +91,26 @@ describe PfmpAmountCalculator do
       end
 
       it_calculates "a limited amount", 2
+    end
+  end
+
+  describe "#pfmps_for_mef_and_school_year" do # rubocop:disable RSpec/MultipleMemoizedHelpers
+    let(:mef) { create(:mef, daily_rate: 20, yearly_cap: 400) }
+    let(:school_year) { create(:school_year, start_year: 2022) }
+    let(:classe) { create(:classe, mef: mef, school_year: school_year) }
+    let(:student) { create(:student, :with_all_asp_info) }
+    let(:schooling) { create(:schooling, student: student, classe: classe) }
+    let(:pfmp) { create(:pfmp, :validated, schooling: schooling, day_count: 3) }
+
+    before do
+      school_year = create(:school_year, start_year: 2020)
+      classe = create(:classe, school_year: school_year, mef: mef)
+      schooling = create(:schooling, student: student, classe: classe, end_date: Date.yesterday)
+      create(:pfmp, :validated, schooling: schooling, day_count: 1)
+    end
+
+    it "returns the PFMP for the MEF and the current school year" do
+      expect(pfmp.pfmps_for_mef_and_school_year).to contain_exactly(pfmp)
     end
   end
 end

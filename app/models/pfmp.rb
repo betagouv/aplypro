@@ -14,6 +14,7 @@ class Pfmp < ApplicationRecord
   belongs_to :schooling
 
   has_one :classe, through: :schooling
+  has_one :school_year, through: :classe
   has_one :student, through: :schooling
   has_one :mef, through: :classe
   has_one :establishment, through: :classe

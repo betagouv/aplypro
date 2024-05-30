@@ -3,6 +3,7 @@
 class Classe < ApplicationRecord
   belongs_to :establishment
   belongs_to :mef
+  belongs_to :school_year
 
   has_many :schoolings, dependent: :destroy
 
@@ -40,10 +41,10 @@ class Classe < ApplicationRecord
 
   has_many :active_pfmps, through: :active_schoolings, class_name: "Pfmp", source: :pfmps
 
-  validates :label, :start_year, presence: true
-  validates :start_year, numericality: { only_integer: true }
+  validates :label, presence: true
 
-  scope :current, -> { where(start_year: Aplypro::SCHOOL_YEAR) }
+  scope :current, -> { where(school_year: SchoolYear.current) }
+  scope :for_year, ->(start_year) { joins(:school_year).where("school_year.start_year" => start_year) }
   scope :with_attributive_decisions, -> { joins(schoolings: :attributive_decision_attachment) }
 
   def create_bulk_pfmp(pfmp_params)
