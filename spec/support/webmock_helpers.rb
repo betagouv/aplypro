@@ -30,8 +30,8 @@ module WebmockHelpers
            .to_return(status: 200, body: payload, headers: { "Content-Type" => "application/json" })
   end
 
-  def mock_sygne_schooling_endpoint(ine, payload)
-    url = StudentsApi::Sygne.student_schoolings_endpoint(ine: ine)
+  def mock_sygne_student_schoolings_endpoint(ine, payload)
+    url = StudentsApi::Sygne::Api.student_schoolings_endpoint(ine: ine)
 
     WebMock.stub_request(:get, /#{url}/)
            .with(
