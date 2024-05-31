@@ -20,9 +20,7 @@ class Student
 
       %w[schooling address classe student].each do |klass|
         define_method "#{klass}_mapper" do
-          mapper = "StudentsApi::#{identifier}::Mappers::#{klass.classify}Mapper".constantize
-
-          mapper.new
+          "StudentsApi::#{identifier}::Mappers::#{klass.classify}Mapper".constantize
         end
       end
 
@@ -105,13 +103,13 @@ class Student
       end
 
       def map_classe_attributes(attrs)
-        classe_mapper.call(attrs).values_at(:label, :mef_code)
+        classe_mapper.new.call(attrs).values_at(:label, :mef_code)
       rescue StandardError => e
         raise ClasseParsingError.new, "Classe parsing failure for #{uai}: #{e.message}"
       end
 
       def map_student_attributes(attrs)
-        student_mapper.call(attrs)
+        student_mapper.new.call(attrs)
       rescue StandardError => e
         raise StudentParsingError, "Student parsing failure for #{uai}: #{e.message}"
       end
