@@ -22,7 +22,7 @@ RSpec.describe GenerateMissingAttributiveDecisionsJob do
   end
 
   context "when some attributive decisions are already generated" do
-    before { schooling.rattach_attributive_decision!(StringIO.new("hello")) }
+    before { schooling.attach_attributive_document(StringIO.new("hello"), :attributive_decision) }
 
     it "does not enqueue a job for it" do
       expect { job.perform_now }.not_to have_enqueued_job.with(schooling)

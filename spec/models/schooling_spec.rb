@@ -112,7 +112,7 @@ RSpec.describe Schooling do
       key =
         "#{uai}/2023/1ere-apex-test/DUPONT_Jeanne_décision-d-attribution_#{schooling.attributive_decision_number}.pdf"
 
-      expect(schooling.attributive_decision_key).to eq key
+      expect(schooling.attributive_decision_key(schooling.attachment_file_name("décision-d-attribution"))).to eq key
     end
   end
 
@@ -185,6 +185,50 @@ RSpec.describe Schooling do
 
     it "returns the result" do
       expect(schooling.excluded?).to eq "a fake result"
+    end
+  end
+
+  describe "#attach_attributive_document" do
+    let(:schooling) { create(:schooling) }
+    let(:output) { StringIO.new("test output") }
+
+    context "with a valid attachment type" do
+      it "attaches the attributive decision" do # rubocop:disable RSpec/MultipleExpectations
+        expect do
+          schooling.attach_attributive_document(output, :attributive_decision)
+        end.to change { schooling.attributive_decision.attached? }.from(false).to(true)
+
+        expect(schooling.attributive_decision.filename.to_s).to match(/d\u00E9cision-d-attribution/)
+        expect(schooling.attributive_decision.content_type).to eq("application/pdf")
+      end
+
+      it "attaches the abrogation decision" do # rubocop:disable RSpec/MultipleExpectations
+        expect do
+          schooling.attach_attributive_document(output, :abrogation_decision)
+        end.to change { schooling.abrogation_decision.attached? }.from(false).to(true)
+
+        expect(schooling.abrogation_decision.filename.to_s).to match(/d\u00E9cision-d-abrogation/)
+        expect(schooling.abrogation_decision.content_type).to eq("application/pdf")
+      end
+
+      it "purges the existing attachment before attaching a new one" do # rubocop:disable RSpec/ExampleLength
+        schooling.attributive_decision.attach(
+          io: StringIO.new("existing attachment"),
+          filename: "existing.pdf",
+          content_type: "application/pdf"
+        )
+        expect do
+          schooling.attach_attributive_document(output, :attributive_decision)
+        end.to(change { schooling.attributive_decision.attachment.blob.id })
+      end
+    end
+
+    context "with an invalid attachment type" do
+      it "raises an error" do
+        expect do
+          schooling.attach_attributive_document(output, :invalid_attachment)
+        end.to raise_error("Unsupported attachment type")
+      end
     end
   end
 end

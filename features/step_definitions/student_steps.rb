@@ -43,7 +43,7 @@ Quand("les élèves actuels sont les seuls à avoir des décisions d'attribution
   establishment = Establishment.last
 
   establishment.schoolings.current.find_each do |schooling|
-    schooling.rattach_attributive_decision!(StringIO.new("hello"))
+    schooling.attach_attributive_document(StringIO.new("hello"), :attributive_decision)
   end
 end
 
