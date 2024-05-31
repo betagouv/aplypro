@@ -17,7 +17,8 @@ RSpec.describe PreparePaymentRequestJob, :student_api do
 
   it "tries to get fresh information first" do
     api = payment_request.schooling.establishment.students_api
-    endpoint = api.student_endpoint(payment_request.student.ine)
+
+    endpoint = api.student_endpoint(ine: payment_request.student.ine)
 
     described_class.perform_now(payment_request)
 

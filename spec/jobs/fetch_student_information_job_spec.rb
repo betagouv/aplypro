@@ -44,7 +44,7 @@ RSpec.describe FetchStudentInformationJob, :student_api do
       before { student.update!(ine_not_found: true) }
 
       it "does not make a request the API" do
-        endpoint = StudentsApi::Sygne::Api.new(establishment.uai).student_endpoint(student.ine)
+        endpoint = StudentsApi::Sygne::Api.establishment_students_endpoint(uai: establishment.uai)
 
         described_class.perform_now(schooling)
 

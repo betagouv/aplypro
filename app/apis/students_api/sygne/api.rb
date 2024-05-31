@@ -3,46 +3,36 @@
 module StudentsApi
   module Sygne
     class Api < StudentsApi::Base
-      def endpoint
-        base_url + format("etablissements/%s/eleves/", uai)
-      end
+      class << self
+        def establishment_students_endpoint(params)
+          base_url + format("etablissements/%s/eleves/?etat-scolarisation=true", params[:uai])
+        end
 
-      def student_endpoint(ine)
-        base_url + format("eleves/%s", ine)
-      end
+        def student_endpoint(params)
+          base_url + format("eleves/%s", params[:ine])
+        end
 
-      def schooling_endpoint(ine)
-        base_url + format("eleves/%s/scolarites", ine)
-      end
+        def student_schoolings_endpoint(params)
+          base_url + format("eleves/%s/scolarites", params[:ine])
+        end
 
-      def fetch!
-        params = { "etat-scolarisation" => "true" }
+        def get(url)
+          authenticated_client!.get(url).body
+        end
 
-        authenticated_client!.get(endpoint, params).body
-      end
+        private
 
-      def fetch_student_data!(ine)
-        authenticated_client!.get(student_endpoint(ine)).body
-      end
+        def client
+          Rack::OAuth2::Client.new(
+            identifier: ENV.fetch("APLYPRO_SYGNE_CLIENT_ID"),
+            secret: ENV.fetch("APLYPRO_SYGNE_SECRET"),
+            token_endpoint: ENV.fetch("APLYPRO_SYGNE_TOKEN_URL")
+          )
+        end
 
-      def fetch_schooling_data!(ine)
-        data = authenticated_client!.get(schooling_endpoint(ine)).body
-
-        data["scolarites"]
-      end
-
-      def client
-        Rack::OAuth2::Client.new(
-          identifier: ENV.fetch("APLYPRO_SYGNE_CLIENT_ID"),
-          secret: ENV.fetch("APLYPRO_SYGNE_SECRET"),
-          token_endpoint: ENV.fetch("APLYPRO_SYGNE_TOKEN_URL")
-        )
-      end
-
-      private
-
-      def authenticated_client!
-        client.access_token!
+        def authenticated_client!
+          client.access_token!
+        end
       end
     end
   end
