@@ -20,8 +20,8 @@ class FetchStudentInformationJob < ApplicationJob
   private
 
   def map_student_attributes(data, api)
-    student_attributes = api.student_mapper.call(data)
-    address_attributes = api.address_mapper.call(data)
+    student_attributes = api.student_mapper.new.call(data)
+    address_attributes = api.address_mapper.new.call(data)
 
     student_attributes
       .merge(address_attributes)

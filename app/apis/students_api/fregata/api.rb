@@ -49,7 +49,7 @@ module StudentsApi
         end
 
         def find_student_in_payload(data, ine)
-          data.find { |entry| student_mapper.call(entry)[:ine] == ine }
+          data.find { |entry| student_mapper.new.call(entry)[:ine] == ine }
         end
 
         def client

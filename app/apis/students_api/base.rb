@@ -34,9 +34,7 @@ module StudentsApi
       # projections into known hash structures.
       %w[schooling address classe student].each do |klass|
         define_method "#{klass}_mapper" do
-          mapper = "StudentsApi::#{identifier}::Mappers::#{klass.classify}Mapper".constantize
-
-          mapper.new
+          "StudentsApi::#{identifier}::Mappers::#{klass.classify}Mapper".constantize
         end
       end
 
