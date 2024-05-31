@@ -10,6 +10,7 @@ describe StudentsApi::Sygne::Api do
     mock_sygne_token
     mock_sygne_students_endpoint("007", {}.to_json)
     mock_sygne_student_endpoint_with("007", {}.to_json)
+    mock_sygne_student_schoolings_endpoint("123", {}.to_json)
   end
 
   describe "endpoints" do
@@ -47,6 +48,16 @@ describe StudentsApi::Sygne::Api do
 
         expect(WebMock).to have_requested(:get, url)
       end
+    end
+  end
+
+  describe "student schoolings" do
+    before do
+      mock_sygne_student_schoolings_endpoint("123", { "scolarites" => ["foobar"] }.to_json)
+    end
+
+    it "returns the array at 'scolarites'" do
+      expect(api.fetch_resource(:student_schoolings, ine: 123)).to eq ["foobar"]
     end
   end
 end

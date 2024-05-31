@@ -22,6 +22,12 @@ module StudentsApi
 
         private
 
+        def fetch_student_schoolings(params)
+          data = super
+
+          data["scolarites"]
+        end
+
         def client
           Rack::OAuth2::Client.new(
             identifier: ENV.fetch("APLYPRO_SYGNE_CLIENT_ID"),

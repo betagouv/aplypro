@@ -6,7 +6,7 @@ class Student
       def map_student_attributes(attrs)
         student_attrs = super(attrs)
 
-        extra_attrs = address_mapper.call(attrs)
+        extra_attrs = address_mapper.new.call(attrs)
 
         student_attrs.merge!(extra_attrs) if extra_attrs.present?
 
@@ -16,7 +16,7 @@ class Student
       def map_schooling!(classe, student, entry)
         schooling = Schooling.find_or_initialize_by(classe: classe, student: student)
 
-        schooling_attributes = schooling_mapper.call(entry)
+        schooling_attributes = schooling_mapper.new.call(entry)
 
         schooling.end_date = left_classe_at(entry)
         schooling.status = schooling_attributes[:status]
