@@ -31,7 +31,9 @@ module WebmockHelpers
   end
 
   def mock_sygne_schooling_endpoint(ine, payload)
-    WebMock.stub_request(:get, %r{#{ENV.fetch('APLYPRO_SYGNE_URL')}eleves/#{ine}/scolarites})
+    url = StudentsApi::Sygne.student_schoolings_endpoint(ine: ine)
+
+    WebMock.stub_request(:get, /#{url}/)
            .with(
              headers: {
                "Accept" => "*/*",
@@ -44,7 +46,7 @@ module WebmockHelpers
   end
 
   def mock_sygne_students_endpoint(uai, payload)
-    url = StudentsApi::Sygne::Api.new(Establishment.new(uai: uai)).endpoint
+    url = StudentsApi::Sygne::Api.establishment_students_endpoint(uai: uai)
 
     WebMock.stub_request(:get, url)
            .with(
@@ -60,9 +62,9 @@ module WebmockHelpers
   end
 
   def mock_fregata_students_with(uai, payload)
-    url = StudentsApi::Fregata::Api.new(Establishment.new(uai: uai)).endpoint
+    url = StudentsApi::Fregata::Api.establishment_students_endpoint(uai: uai)
 
-    WebMock.stub_request(:get, /#{url}/)
+    WebMock.stub_request(:get, url)
            .with(
              headers: {
                "Accept" => "*/*",

@@ -10,7 +10,7 @@ class FetchStudentInformationJob < ApplicationJob
 
     api = schooling.establishment.students_api
 
-    api.fetch_student_data!(schooling.student.ine)
+    api.fetch_resource(:student, ine: schooling.student.ine)
        .then { |data| map_student_attributes(data, api) }
        .then { |attributes| student.update!(attributes) }
   rescue Faraday::ResourceNotFound

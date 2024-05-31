@@ -7,7 +7,7 @@ describe Updaters::StudentSchoolingsUpdater do
 
   let(:schooling) { create(:schooling) }
 
-  let(:api_double) { instance_double(StudentsApi::Sygne::Api) }
+  let(:api_double) { class_double(StudentsApi::Sygne::Api) }
   let(:mapper_double) { instance_double(StudentsApi::Sygne::Mappers::SchoolingMapper) }
 
   let(:matching_schooling_attributes) do
@@ -27,14 +27,20 @@ describe Updaters::StudentSchoolingsUpdater do
   before do
     allow(StudentsApi).to receive(:api_for).and_return api_double
 
-    allow(api_double).to receive_messages(fetch_schooling_data!: ["raw result"], schooling_mapper: mapper_double)
+    allow(api_double)
+      .to receive(:fetch_resource)
+      .with(:student_schoolings, ine: schooling.student.ine)
+      .and_return(["raw result"])
+
+    allow(api_double).to receive(:schooling_mapper).and_return(mapper_double)
+
     allow(mapper_double).to receive(:call).and_return(mapped_schooling_attributes)
   end
 
   it "asks for the schooling information" do
     updater.call
 
-    expect(api_double).to have_received(:fetch_schooling_data!).with(schooling.student.ine)
+    expect(api_double).to have_received(:fetch_resource).with(:student_schoolings, ine: schooling.student.ine)
   end
 
   context "when there is a matching schooling" do

@@ -39,7 +39,7 @@ module Updaters
 
     def mapped_schooling_data
       api
-        .fetch_schooling_data!(student.ine)
+        .fetch_resource(:student_schoolings, ine: student.ine)
         .map { |entry| api.schooling_mapper.call(entry) }
         .compact
     end

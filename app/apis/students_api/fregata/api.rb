@@ -5,69 +5,83 @@ require "uri"
 module StudentsApi
   module Fregata
     class Api < StudentsApi::Base
-      SECRET = ENV.fetch("APLYPRO_FREGATA_SECRET")
-      KEY = ENV.fetch("APLYPRO_FREGATA_KEY_ID")
+      class << self
+        SECRET = ENV.fetch("APLYPRO_FREGATA_SECRET")
+        KEY = ENV.fetch("APLYPRO_FREGATA_KEY_ID")
 
-      # MASA has a special encoding of the year, which happens to be the
-      # current year minus 1995. 2022-2023 was year 26, which means the
-      # offset is 1996. Because.
-      YEAR_OFFSET = 1996
+        # MASA has a special encoding of the year, which happens to be the
+        # current year minus 1995. 2022-2023 was year 26, which means the
+        # offset is 1996. Because.
+        YEAR_OFFSET = 1996
 
-      attr_reader :now
+        attr_reader :now
 
-      def fetch!
-        @now = DateTime.now.httpdate
+        def get(endpoint)
+          @now = DateTime.now.httpdate
 
-        params = { rne: @uai, anneeScolaireId: fregata_year }
-        headers = { "Authorization" => signature_header, "Date" => @now }
+          headers = { "Authorization" => signature_header, "Date" => @now }
 
-        client.get(endpoint, params, headers).body
-      end
-
-      def fetch_student_data!(ine)
-        find_student_in_payload(ine)
-      end
-
-      def endpoint
-        base_url
-      end
-
-      private
-
-      def find_student_in_payload(ine)
-        response
-          .find { |entry| student_mapper.call(entry)[:ine] == ine }
-      end
-
-      def client
-        @client ||= Faraday.new do |f|
-          f.response :json
-          f.response :raise_error
+          client.get(endpoint, nil, headers).body
         end
-      end
 
-      def signature
-        str = "date: #{@now}"
+        def establishment_students_endpoint(params)
+          query = { rne: params[:uai], anneeScolaireId: fregata_year }.to_query
 
-        encoded = OpenSSL::HMAC.digest("SHA1", SECRET, str)
+          "#{base_url}/inscriptions/?#{query}"
+        end
 
-        Base64.urlsafe_encode64(encoded)
-      end
+        def student_endpoint(params)
+          uai = Student
+                .find_by(ine: params[:ine])
+                .current_schooling
+                .establishment
+                .uai
 
-      def signature_header
-        params = {
-          keyId: KEY,
-          algorithm: "hmac-sha1",
-          signature: signature
-        }
+          establishment_students_endpoint(uai: uai)
+        end
 
-        sig = params.map { |k, v| [k, v].join("=") }.join(",")
+        private
 
-        "Signature #{sig}"
-      end
+        def fetch_student(params)
+          data = super
 
-      def fregata_year
-        Aplypro::SCHOOL_YEAR - YEAR_OFFSET
+          find_student_in_payload(data, params[:ine])
+        end
+
+        def find_student_in_payload(data, ine)
+          data.find { |entry| student_mapper.call(entry)[:ine] == ine }
+        end
+
+        def client
+          @client ||= Faraday.new do |f|
+            f.response :json
+            f.response :raise_error
+          end
+        end
+
+        def signature
+          str = "date: #{@now}"
+
+          encoded = OpenSSL::HMAC.digest("SHA1", SECRET, str)
+
+          Base64.urlsafe_encode64(encoded)
+        end
+
+        def signature_header
+          params = {
+            keyId: KEY,
+            algorithm: "hmac-sha1",
+            signature: signature
+          }
+
+          sig = params.map { |k, v| [k, v].join("=") }.join(",")
+
+          "Signature #{sig}"
+        end
+
+        def fregata_year
+          Aplypro::SCHOOL_YEAR - YEAR_OFFSET
+        end
       end
     end
   end

@@ -16,6 +16,10 @@ class FetchStudentsJob < ApplicationJob
   end
 
   def perform(establishment)
-    StudentsApi.fetch_students!(establishment.students_provider, establishment.uai)
+    api = establishment.students_api
+
+    api
+      .fetch_resource(:establishment_students, uai: establishment.uai)
+      .then { |data| api.mapper.new(data, establishment.uai).parse! }
   end
 end
