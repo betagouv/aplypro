@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-require "abrogation/generator"
+require "attribute_decision/attributor"
 
 class GenerateAbrogationDecisionJob < ApplicationJob
   include DocumentGeneration
 
   after_discard do |job|
-    self.class.after_discard_callback(job, :generating_abrogation)
+    self.class.after_discard_callback(job, :generating_attributive_decision)
   end
 
   around_perform do |job, block|
-    self.class.around_perform_callback(job, :generating_abrogation, &block)
+    self.class.around_perform_callback(job, :generating_attributive_decision, &block)
   end
 
   def perform(schooling)
