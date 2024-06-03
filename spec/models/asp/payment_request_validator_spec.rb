@@ -58,13 +58,7 @@ describe ASP::PaymentRequestValidator do
   end
 
   context "when the RIB is missing" do
-    before do
-      with_readonly_bypass(asp_payment_request.student.rib) do |rib|
-        rib.destroy
-
-        rib.student.reload
-      end
-    end
+    let(:asp_payment_request) { create(:asp_payment_request, rib: nil) }
 
     include_examples "invalidation", :missing_rib
   end
