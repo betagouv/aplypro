@@ -8,6 +8,7 @@ RSpec.describe ASP::PaymentRequest do
   describe "associations" do
     it { is_expected.to belong_to(:asp_request).optional }
     it { is_expected.to belong_to(:asp_payment_return).optional }
+    it { is_expected.to belong_to(:rib).optional }
   end
 
   describe "scopes" do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_29_093337) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_03_124726) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -60,7 +60,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_29_093337) do
     t.datetime "updated_at", null: false
     t.bigint "pfmp_id", null: false
     t.bigint "asp_payment_return_id"
-    t.integer "rib_id", null: false
+    t.integer "rib_id"
     t.index ["asp_payment_return_id"], name: "index_asp_payment_requests_on_asp_payment_return_id"
     t.index ["asp_request_id"], name: "index_asp_payment_requests_on_asp_request_id"
     t.index ["pfmp_id"], name: "index_asp_payment_requests_on_pfmp_id"

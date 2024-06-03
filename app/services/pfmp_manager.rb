@@ -27,7 +27,7 @@ class PfmpManager
   def create_new_payment_request!
     raise ExistingActivePaymentRequestError if pfmp.latest_payment_request&.active?
 
-    pfmp.payment_requests.create!(rib: pfmp.student.rib) if pfmp.amount.positive?
+    pfmp.payment_requests.create!(rib: pfmp.student&.rib) if pfmp.amount.positive?
   end
 
   def retry_incomplete_payment_request!
