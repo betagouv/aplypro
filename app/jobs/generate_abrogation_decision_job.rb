@@ -23,6 +23,7 @@ class GenerateAbrogationDecisionJob < ApplicationJob
   private
 
   def generate_document(schooling)
+    schooling.increment(:abrogation_decision_version)
     io = AttributeDecision::Abrogator.new(schooling).write
     schooling.attach_attributive_document(io, :abrogation_decision)
   end
