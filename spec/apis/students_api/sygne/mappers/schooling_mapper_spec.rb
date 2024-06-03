@@ -34,6 +34,32 @@ describe StudentsApi::Sygne::Mappers::SchoolingMapper do
     expect(mapped).to eq expected
   end
 
+  describe "status" do
+    context "when the student is an apprentice" do
+      let(:data) { build(:sygne_schooling_data, :apprentice) }
+
+      it "maps it correctly" do
+        expect(mapped[:status]).to eq :apprentice
+      end
+    end
+
+    context "when then student has an unknown type" do
+      let(:data) { build(:sygne_schooling_data, codeStatut: "FOOBAR") }
+
+      it "does not save anything" do
+        expect(mapped[:status]).to be_nil
+      end
+    end
+
+    context "when the value is missing" do
+      let(:data) { build(:sygne_schooling_data).except("codeStatut") }
+
+      it "does not crash" do
+        expect(mapped[:status]).to be_nil
+      end
+    end
+  end
+
   context "when the codeMefRatt is present" do
     before { data["codeMef"] = "456" }
 

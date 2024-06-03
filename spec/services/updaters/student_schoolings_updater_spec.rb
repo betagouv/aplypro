@@ -32,7 +32,9 @@ describe Updaters::StudentSchoolingsUpdater do
       .with(:student_schoolings, ine: schooling.student.ine)
       .and_return(["raw result"])
 
-    allow(api_double).to receive(:schooling_mapper).and_return(mapper_double)
+    allow(api_double)
+      .to receive(:schooling_mapper)
+      .and_return(class_double(StudentsApi::Sygne::Mappers::SchoolingMapper, new: mapper_double))
 
     allow(mapper_double).to receive(:call).and_return(mapped_schooling_attributes)
   end

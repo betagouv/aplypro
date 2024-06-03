@@ -4,6 +4,12 @@ module StudentsApi
   module Sygne
     module Mappers
       class SchoolingMapper < Dry::Transformer::Pipe
+        STATUS_MAPPING = {
+          "ST" => :student,
+          "AP" => :apprentice,
+          "FQ" => :other
+        }.freeze
+
         import Dry::Transformer::HashTransformations
         import Dry::Transformer::Coercions
 
@@ -30,18 +36,7 @@ module StudentsApi
 
           map_value :mef_code, ->(value) { value.chop }
 
-          map_value :status, lambda { |value|
-            case value
-            when "ST"
-              :student
-            when "AP"
-              :apprentice
-            when "FQ"
-              :other
-            else
-              raise Student::Mappers::Errors::SchoolingParsingError
-            end
-          }
+          map_value :status, ->(value) { STATUS_MAPPING[value] }
 
           accept_keys %i[ine mef_code label status uai start_date end_date school_year]
         end
