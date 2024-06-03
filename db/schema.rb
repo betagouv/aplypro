@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_23_061622) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_03_124726) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -216,6 +216,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_23_061622) do
     t.string "asp_dossier_id"
     t.string "administrative_number"
     t.integer "status"
+    t.integer "abrogation_decision_version", default: 0
     t.index ["administrative_number"], name: "index_schoolings_on_administrative_number", unique: true
     t.index ["asp_dossier_id"], name: "index_schoolings_on_asp_dossier_id", unique: true
     t.index ["classe_id"], name: "index_schoolings_on_classe_id"
