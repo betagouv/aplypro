@@ -125,7 +125,7 @@ RSpec.describe ASP::PaymentRequest do
         expect(asp_payment_request.last_transition.metadata).to eq(expected_metadata)
       end
 
-      it 'set the rib of the student on the payment request' do
+      it "set the rib of the student on the payment request" do
         asp_payment_request.mark_ready!
 
         expect(asp_payment_request.rib).to eq(asp_payment_request.pfmp.student.rib)
