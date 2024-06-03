@@ -17,14 +17,14 @@ RSpec.describe GenerateAbrogationDecisionJob do
     end
 
     it "executes within a transaction" do
-      expect(Schooling).to receive(:transaction)
+      expect(Schooling).to receive(:transaction) # rubocop:disable RSpec/MessageSpies
       job.perform_now
     end
   end
 
   describe "callbacks" do
     it "calls the around_perform callback" do
-      expect(described_class).to receive(:around_perform_callback).with(job, :generating_attributive_decision)
+      expect(described_class).to receive(:around_perform_callback).with(job, :generating_attributive_decision) # rubocop:disable RSpec/MessageSpies
       job.perform_now
     end
   end
