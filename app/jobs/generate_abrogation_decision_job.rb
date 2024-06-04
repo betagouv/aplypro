@@ -2,7 +2,7 @@
 
 require "attribute_decision/attributor"
 
-class GenerateAttributiveDecisionJob < ApplicationJob
+class GenerateAbrogationDecisionJob < ApplicationJob
   include DocumentGeneration
 
   after_discard do |job|
@@ -14,8 +14,6 @@ class GenerateAttributiveDecisionJob < ApplicationJob
   end
 
   def perform(schooling)
-    FetchStudentInformationJob.new.perform(schooling) if schooling.student.missing_address?
-
     Schooling.transaction do
       generate_document(schooling)
       schooling.save!
@@ -25,9 +23,8 @@ class GenerateAttributiveDecisionJob < ApplicationJob
   private
 
   def generate_document(schooling)
-    schooling.generate_administrative_number
-    schooling.increment(:attributive_decision_version)
-    io = AttributeDecision::Attributor.new(schooling).write
-    schooling.attach_attributive_document(io, :attributive_decision)
+    schooling.increment(:abrogation_decision_version)
+    io = AttributeDecision::Abrogator.new(schooling).write
+    schooling.attach_attributive_document(io, :abrogation_decision)
   end
 end
