@@ -6,7 +6,7 @@ module DocumentGeneration
   included do
     queue_as :documents
     sidekiq_options retry: false
-    retry_on Faraday::UnauthorizedError, wait: 1.second, attempts: 5
+    retry_on Faraday::UnauthorizedError, wait: 1.second, attempts: 10
   end
 
   module ClassMethods
