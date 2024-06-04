@@ -8,6 +8,7 @@ RSpec.describe ASP::PaymentRequest do
   describe "associations" do
     it { is_expected.to belong_to(:asp_request).optional }
     it { is_expected.to belong_to(:asp_payment_return).optional }
+    it { is_expected.to belong_to(:rib).optional }
   end
 
   describe "scopes" do
@@ -122,6 +123,12 @@ RSpec.describe ASP::PaymentRequest do
         asp_payment_request.mark_ready!
 
         expect(asp_payment_request.last_transition.metadata).to eq(expected_metadata)
+      end
+
+      it "set the rib of the student on the payment request" do
+        asp_payment_request.mark_ready!
+
+        expect(asp_payment_request.rib).to eq(asp_payment_request.pfmp.student.rib)
       end
     end
   end
