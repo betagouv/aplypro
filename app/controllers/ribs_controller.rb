@@ -16,6 +16,10 @@ class RibsController < ApplicationController
     @rib = Rib.new
   end
 
+  def index
+
+  end
+
   def edit; end
 
   def confirm_deletion; end
