@@ -11,6 +11,12 @@ class StudentsController < ClassesController
     infer_page_title(name: @student.full_name, classe: @classe)
   end
 
+  def abrogate_decision
+    GenerateAbrogationDecisionJob.perform_now(@schooling)
+
+    redirect_back fallback_location: "/"
+  end
+
   private
 
   def set_student

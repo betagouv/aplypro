@@ -59,6 +59,9 @@ Rails.application.routes.draw do
     end
 
     resources :students, only: %i[show] do
+      member do
+        get "abrogate_decision"
+      end
       resources :ribs do
         member do
           get "confirm_deletion"

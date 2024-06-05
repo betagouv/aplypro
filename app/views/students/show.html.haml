@@ -45,3 +45,5 @@
     = link_to "Ajouter une PFMP", new_class_schooling_pfmp_path(@classe, @schooling), class: 'fr-btn'
     - if @schooling.attributive_decision.attached?
       = link_to "Télécharger la décision d'attribution", url_for(@schooling.attributive_decision), class: 'fr-btn fr-btn--secondary', target: :download
+    - if @schooling.abrogation_decision.attached?
+      = link_to "Télécharger la décision d'abrogation", url_for(@schooling.abrogation_decision), class: 'fr-btn fr-btn--secondary', target: :download
