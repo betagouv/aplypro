@@ -43,6 +43,6 @@ class Rib < ApplicationRecord
 
   def readonly?
     # student.pfmps.any?(&:locked?)
-    false
+    inactive?
   end
 end
