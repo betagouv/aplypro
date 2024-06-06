@@ -18,6 +18,6 @@ Fonctionnalité: Suivi des demandes de paiement par le personnel
     Et que je passe l'écran d'accueil
     Lorsque je clique sur "Paiements"
     Alors la page ne contient pas "Classes à envoyer en paiement"
-    Alors la page contient "Liste des paiements échoués"
-    Alors la page contient "Le paiement a été refusé par l'agence comptable :"
+    Et la page contient "Le paiement a été refusé par l'agence comptable :"
+    Et la page ne contient pas "Relancer une demande de paiement"
 
