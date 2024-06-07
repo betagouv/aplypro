@@ -13,7 +13,7 @@ RSpec.describe StudentsController do
     let(:schooling) { create(:schooling, :with_attributive_decision) }
 
     it "enqueues a job to generate the abrogation document" do
-      expect(GenerateAbrogationDecisionJob).to receive(:perform_now).with(schooling)
+      expect(GenerateAbrogationDecisionJob).to receive(:perform_now).with(schooling) # rubocop:disable RSpec/MessageSpies
       get abrogate_decision_class_student_path(class_id: student.classe.id, id: student.id)
     end
   end
