@@ -98,7 +98,7 @@ RSpec.describe Schooling do
     let(:schooling) { create(:schooling, :with_attributive_decision) }
 
     it { is_expected.to include schooling.administrative_number }
-    it { is_expected.to include Aplypro::SCHOOL_YEAR.to_s }
+    it { is_expected.to include SchoolYear.current.start_year.to_s }
     it { is_expected.to include schooling.attributive_decision_bop_indicator.upcase }
   end
 

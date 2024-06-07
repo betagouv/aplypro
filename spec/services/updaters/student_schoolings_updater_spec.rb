@@ -15,7 +15,7 @@ describe Updaters::StudentSchoolingsUpdater do
       uai: schooling.establishment.uai,
       label: schooling.classe.label,
       status: :apprentice,
-      school_year: Aplypro::SCHOOL_YEAR,
+      school_year: SchoolYear.current.start_year,
       start_date: Date.yesterday,
       end_date: Date.current,
       mef_code: schooling.mef.code

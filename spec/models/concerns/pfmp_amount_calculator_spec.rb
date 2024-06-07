@@ -10,8 +10,8 @@ describe PfmpAmountCalculator do
   let(:pfmp) do
     create(
       :pfmp,
-      start_date: Aplypro::DEFAULT_SCHOOL_YEAR_START,
-      end_date: Aplypro::DEFAULT_SCHOOL_YEAR_START >> 10,
+      start_date: SchoolYear.default_school_start_date,
+      end_date: SchoolYear.default_school_start_date >> 10,
       day_count: 3
     )
   end
