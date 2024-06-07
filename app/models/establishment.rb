@@ -58,11 +58,6 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     private_allowed: %w[30 31 40 41 60]
   }.freeze
 
-  SCHOOL_YEAR_RANGE_EXCEPTIONS = {
-    "43" => Date.new(Aplypro::SCHOOL_YEAR, 8, 23), # Mayotte
-    "28" => Date.new(Aplypro::SCHOOL_YEAR, 8, 16) # La Réunion
-  }.freeze
-
   class << self
     def accepted_type?(type)
       ACCEPTED_ESTABLISHMENT_TYPES.include?(type)
@@ -72,7 +67,12 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # NOTE: this method could fetch the actual data per academie if we stored that information
   #       this was implemented as a hotfix for La Réunion and Mayotte
   def school_year_range
-    start_date = SCHOOL_YEAR_RANGE_EXCEPTIONS.fetch(academy_code, Aplypro::DEFAULT_SCHOOL_YEAR_START)
+    school_year_range_exceptions = {
+      "43" => Date.new(SchoolYear.current.start_year, 8, 23), # Mayotte
+      "28" => Date.new(SchoolYear.current.start_year, 8, 16) # La Réunion
+    }
+
+    start_date = school_year_range_exceptions.fetch(academy_code, SchoolYear.default_school_start_date)
     (start_date..start_date >> 12)
   end
 

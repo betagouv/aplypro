@@ -13,6 +13,10 @@ class SchoolYear < ApplicationRecord
     order(start_year: :asc).last
   end
 
+  def self.default_school_start_date
+    Date.new(current.start_year, 9, 1)
+  end
+
   def end_year
     start_year + 1
   end
