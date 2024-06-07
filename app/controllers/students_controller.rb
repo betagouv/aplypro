@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 class StudentsController < ClassesController
+  include RoleCheck
+
   before_action :set_classe, :set_student
+  before_action :check_director, only: %i[abrogate_decision]
 
   def show
     add_breadcrumb t("pages.titles.classes.index"), classes_path
