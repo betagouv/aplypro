@@ -18,6 +18,12 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Alors la page contient "Année scolaire 2023-2024"
     Et le bandeau informatif contient "2023-2024"
 
+  Scénario: Le personnel de direction change d'année scolaire et conserve l'année scolaire sélectionnée sur une page n'en ayant pas besoin
+    Quand je clique sur "Changer d'année scolaire"
+    Et que je clique sur "2023-2024"
+    Et que je clique sur "F.A.Q."
+    Alors le bandeau informatif contient "2023-2024"
+
   Scénario: Le personnel de direction consulte une année scolaire sans élèves
     Quand je clique sur "Changer d'année scolaire"
     Et que je clique sur "2023-2024"

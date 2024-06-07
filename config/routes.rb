@@ -29,8 +29,10 @@ Rails.application.routes.draw do
   end
 
   resources :school_years, path: :year, only: [] do
+    get "selected"
+
     collection do
-      get "select", to: "school_years#select"
+      get "select"
     end
 
     get "/home", to: "home#home"
