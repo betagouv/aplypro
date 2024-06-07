@@ -68,7 +68,7 @@ module HomeHelper
   end
 
   def school_year_to_s
-    starting_year = Aplypro::SCHOOL_YEAR
+    starting_year = SchoolYear.current.start_year
 
     t("year", start_year: starting_year, end_year: starting_year + 1)
   end

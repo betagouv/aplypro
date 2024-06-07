@@ -73,14 +73,14 @@ RSpec.describe Establishment do
 
       it "returns the default school year range" do
         expect(establishment.school_year_range).to eq(
-          Aplypro::DEFAULT_SCHOOL_YEAR_START..Aplypro::DEFAULT_SCHOOL_YEAR_START >> 12
+          SchoolYear.default_school_start_date..SchoolYear.default_school_start_date >> 12
         )
       end
     end
 
     context "when the establishment has a academy_code with an exception" do
       let(:academy_code) { "28" }
-      let(:expected_start_date) { Date.new(Aplypro::SCHOOL_YEAR, 8, 16) }
+      let(:expected_start_date) { Date.new(SchoolYear.current.start_year, 8, 16) }
 
       it "returns the school year range based on the exception" do
         expect(establishment.school_year_range).to eq(expected_start_date..expected_start_date >> 12)

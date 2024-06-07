@@ -35,8 +35,8 @@ describe PfmpManager do
         create(
           :pfmp,
           :validated,
-          start_date: Aplypro::DEFAULT_SCHOOL_YEAR_START,
-          end_date: Aplypro::DEFAULT_SCHOOL_YEAR_START >> 4,
+          start_date: SchoolYear.default_school_start_date,
+          end_date: SchoolYear.default_school_start_date >> 4,
           day_count: 100,
           schooling: schooling
         )

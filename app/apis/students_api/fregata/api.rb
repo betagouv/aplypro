@@ -84,7 +84,7 @@ module StudentsApi
         end
 
         def fregata_year
-          Aplypro::SCHOOL_YEAR - YEAR_OFFSET
+          SchoolYear.current.start_year - YEAR_OFFSET
         end
       end
     end
