@@ -81,7 +81,7 @@ class Schooling < ApplicationRecord
   def attributive_decision_key(filename)
     [
       establishment.uai,
-      Aplypro::SCHOOL_YEAR,
+      SchoolYear.current.start_year,
       classe.label.parameterize,
       filename
     ].join("/")
@@ -91,7 +91,7 @@ class Schooling < ApplicationRecord
     [
       attributive_decision_bop_indicator,
       administrative_number,
-      Aplypro::SCHOOL_YEAR,
+      SchoolYear.current.start_year,
       attributive_decision_version
     ].join.upcase
   end

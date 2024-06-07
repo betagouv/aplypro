@@ -25,7 +25,7 @@ describe StudentsApi::Fregata::Api do
 
     context "when the year has changed" do
       before do
-        stub_const("Aplypro::SCHOOL_YEAR", 2040)
+        create(:school_year, start_year: 2040)
 
         mock_fregata_students_with(uai, "")
       end
