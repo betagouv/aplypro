@@ -84,6 +84,8 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # point we should stop doing it, once we've done the work to offer
   # abrogated attributive decisions.
   def needs_abrogated_attributive_decision?
+    return false if current_schooling.abrogation_decision.present?
+
     multiple_mefs? || multiple_establishments?
   end
 
