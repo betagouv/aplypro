@@ -60,7 +60,8 @@ Rails.application.routes.draw do
 
     resources :students, only: %i[show] do
       member do
-        get "abrogate_decision"
+        get "confirm_abrogation"
+        delete "abrogate_decision"
       end
       resources :ribs do
         member do

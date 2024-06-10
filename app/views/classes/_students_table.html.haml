@@ -27,7 +27,7 @@
           %td
             - if schooling.attributive_decision.present? && !schooling.abrogation_decision.present?
               %p= dsfr_badge(status: :success) { "Éditée" }
-              %p= dsfr_link_to "Abroger", abrogate_decision_class_student_path(@classe, student)
+              %p= dsfr_link_to "Abroger", confirm_abrogation_class_student_path(@classe, student)
             - else
               - if schooling.abrogation_decision.present?
                 %p= dsfr_badge(status: :error) { "Abrogée" }

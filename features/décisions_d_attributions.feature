@@ -56,4 +56,6 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
       | Élèves (10) | Décisions d'attribution (10/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
       |             | Éditée                          |                              |           |
     Lorsque je clique sur "Abroger" dans la dernière rangée
-    Alors la page contient "Abrogée"
+    Alors la page contient "Êtes-vous certain(e) d'abroger cette décision d'attribution ?"
+    Lorsque je clique sur "Confirmer l'abrogation"
+    Alors la page contient "Télécharger la décision d'abrogation"

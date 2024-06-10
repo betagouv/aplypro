@@ -18,7 +18,8 @@ fr:
     ribs:
       destroyed: Les coordonnées bancaires de %{name} ont bien été supprimées
       readonly: Les coordonnées bancaires de %{name} ne peuvent pas être supprimées
-
+    da:
+      abrogated: La décision d'attribution de %{name} a bien été abrogée
   helpers:
     submit:
       rib:

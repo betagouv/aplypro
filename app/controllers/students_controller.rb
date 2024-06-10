@@ -17,7 +17,7 @@ class StudentsController < ClassesController
   def abrogate_decision
     GenerateAbrogationDecisionJob.perform_now(@schooling)
 
-    redirect_back fallback_location: "/"
+    redirect_to class_student_path(@classe, @student), notice: t("flash.da.abrogated", name: @student.full_name)
   end
 
   private
