@@ -150,15 +150,6 @@ RSpec.describe Student do
 
     before { create(:schooling, student: student) }
 
-    context "when the current schooling of the student has an abrogation decision" do
-      before do
-        student.current_schooling.delete
-        create(:schooling, :with_abrogation_decision, student: student)
-      end
-
-      it { is_expected.to be false }
-    end
-
     context "when the student has two classes" do
       before { create(:schooling, :closed, student: student) }
 

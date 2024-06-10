@@ -55,7 +55,9 @@ module ASP
     def check_attributive_decision
       add_error(:missing_attributive_decision) if !payment_request.schooling.attributive_decision.attached?
 
-      add_error(:needs_abrogated_attributive_decision) if student.needs_abrogated_attributive_decision?
+      if !payment_request.schooling.abrogation_decision.attached? && student.needs_abrogated_attributive_decision?
+        add_error(:needs_abrogated_attributive_decision)
+      end
     end
 
     def check_insee_code
