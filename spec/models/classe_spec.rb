@@ -35,7 +35,12 @@ RSpec.describe Classe do
   describe "create_bulk_pfmp" do
     subject(:classe) { create(:classe, :with_students, students_count: 5) }
 
-    let(:params) { { start_date: Date.yesterday, end_date: Date.tomorrow } }
+    let(:params) do
+      {
+        start_date: Date.parse("#{SchoolYear.current.start_year}-10-08"),
+        end_date: Date.parse("#{SchoolYear.current.start_year}-10-11")
+      }
+    end
 
     it "creates a PFMP for each student" do
       expect { classe.create_bulk_pfmp(params) }.to change(Pfmp, :count).from(0).to(5)
@@ -45,7 +50,7 @@ RSpec.describe Classe do
       it "does not include them" do
         student = classe.students.last
 
-        student.close_current_schooling!
+        student.close_current_schooling!("#{SchoolYear.current.start_year}-08-27")
 
         expect { classe.create_bulk_pfmp(params) }.not_to change(student, :pfmps)
       end

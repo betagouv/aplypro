@@ -12,13 +12,13 @@ RSpec.describe ConsiderPaymentRequestsJob do
   end
 
   it "passes the upto argument to the scope" do
-    described_class.perform_now(:date)
+    described_class.perform_now
 
-    expect(ASP::PaymentRequest).to have_received(:to_consider).once.with(:date)
+    expect(ASP::PaymentRequest).to have_received(:to_consider).once
   end
 
   it "queues all the payment requests in the to_consider scope" do
-    expect { described_class.perform_now(1.year.from_now) }
+    expect { described_class.perform_now }
       .to have_enqueued_job(PreparePaymentRequestJob).exactly(3).times
   end
 end

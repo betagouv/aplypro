@@ -30,8 +30,22 @@ describe ASP::Readers::RejectsFileReader do
   context "when the original ISO-8859-1 encoding is used by the ASP" do
     let(:data) { File.read("spec/lib/asp/readers/rejets_mock.csv") }
 
+    before do
+      # Ici, on vérifie que le format d'encodage soit le bon
+      # L'ID numéro 43 est donc purement arbitraire (Donnée dans le mock)
+      if ASP::PaymentRequest.where(id: 43).blank?
+        p_r = create(:asp_payment_request, :sendable)
+        p_r.update(id: 43)
+        p_r.mark_ready!
+
+        create(:asp_request, asp_payment_requests: [p_r])
+        p_r.mark_sent!
+      end
+    end
+
     it "can still process the file" do
-      expect { reader.process! }.not_to raise_error(Encoding::CompatibilityError)
+      # We check that no 'Encoding::CompatibilityError' is raised
+      expect { reader.process! }.not_to raise_error
     end
   end
 end

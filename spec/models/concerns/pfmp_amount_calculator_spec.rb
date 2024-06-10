@@ -2,16 +2,20 @@
 
 require "rails_helper"
 
-# Rubocop doesn't understand the alias
 # rubocop:disable RSpec/EmptyExampleGroup
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 describe PfmpAmountCalculator do
   subject(:amount) { pfmp.reload.calculate_amount }
 
+  let(:establishment) { create(:establishment) }
+
   let(:pfmp) do
+    start_date = establishment.school_year_range.first
+    end_date = start_date >> 10
     create(
       :pfmp,
-      start_date: SchoolYear.default_school_start_date,
-      end_date: SchoolYear.default_school_start_date >> 10,
+      start_date: start_date,
+      end_date: end_date,
       day_count: 3
     )
   end
@@ -100,13 +104,28 @@ describe PfmpAmountCalculator do
     let(:classe) { create(:classe, mef: mef, school_year: school_year) }
     let(:student) { create(:student, :with_all_asp_info) }
     let(:schooling) { create(:schooling, student: student, classe: classe) }
-    let(:pfmp) { create(:pfmp, :validated, schooling: schooling, day_count: 3) }
+    let(:pfmp) do
+      create(:pfmp,
+             :validated,
+             start_date: "#{school_year.start_year}-09-03",
+             end_date: "#{school_year.start_year}-09-28",
+             schooling: schooling,
+             day_count: 3)
+    end
 
     before do
       school_year = create(:school_year, start_year: 2020)
       classe = create(:classe, school_year: school_year, mef: mef)
-      schooling = create(:schooling, student: student, classe: classe, end_date: Date.yesterday)
-      create(:pfmp, :validated, schooling: schooling, day_count: 1)
+      schooling = create(:schooling,
+                         student: student,
+                         classe: classe,
+                         end_date: "#{SchoolYear.current.start_year}-08-27")
+      create(:pfmp,
+             :validated,
+             start_date: "#{school_year.start_year}-09-03",
+             end_date: "#{school_year.start_year}-09-28",
+             schooling: schooling,
+             day_count: 1)
     end
 
     it "returns the PFMP for the MEF and the current school year" do
@@ -115,3 +134,4 @@ describe PfmpAmountCalculator do
   end
 end
 # rubocop:enable RSpec/EmptyExampleGroup
+# rubocop:enable RSpec/MultipleMemoizedHelpers

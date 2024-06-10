@@ -32,11 +32,13 @@ describe PfmpManager do
       let(:pfmp) { create(:pfmp, schooling: schooling, day_count: 10) }
 
       before do
+        start_date = Date.parse("#{SchoolYear.current.start_year}-09-03")
+
         create(
           :pfmp,
           :validated,
-          start_date: SchoolYear.default_school_start_date,
-          end_date: SchoolYear.default_school_start_date >> 4,
+          start_date: start_date,
+          end_date: start_date >> 4,
           day_count: 100,
           schooling: schooling
         )
