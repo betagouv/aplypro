@@ -3,7 +3,7 @@
 module UserAuthorisation
   extend ActiveSupport::Concern
 
-  included do
+  included do # rubocop:disable Metrics/BlockLength
     def current_role
       return if selected_establishment.blank?
 
@@ -27,6 +27,10 @@ module UserAuthorisation
     end
 
     def can_validate?
+      director?
+    end
+
+    def can_retry_payment?
       director?
     end
 

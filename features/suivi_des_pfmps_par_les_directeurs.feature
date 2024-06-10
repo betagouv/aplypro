@@ -20,7 +20,7 @@ Fonctionnalité: Suivi des demandes de paiement
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement échouée
     Et que je clique sur "Paiements"
     Alors la page contient "Liste des paiements échoués"
-    Alors la page contient "Le paiement a été refusé par l'agence comptable :"
+    Et la page contient "Le paiement a été refusé par l'agence comptable :"
 
   Scénario: Le personnel peut voir les paiements qui ont été rejetés
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement rejetée
