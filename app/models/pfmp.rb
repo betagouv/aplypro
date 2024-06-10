@@ -35,7 +35,7 @@ class Pfmp < ApplicationRecord
   validates :end_date,
             :start_date,
             if: ->(pfmp) { pfmp.schooling.present? },
-            inclusion: { in: ->(pfmp) { pfmp.schooling.establishment.school_year_range } }
+            inclusion: { in: ->(pfmp) { pfmp.schooling.establishment.school_year_range(pfmp.school_year.start_year) } }
 
   validates :end_date,
             comparison: { greater_than_or_equal_to: :start_date },

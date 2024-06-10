@@ -123,7 +123,7 @@ describe ASP::PaymentRequestValidator do
   context "when the student transferred and the schooling is abrogated and there is a schooling with attribution" do
     before do
       schooling = asp_payment_request.schooling
-      schooling.update!(end_date: Date.yesterday)
+      schooling.update!(end_date: Date.parse("#{SchoolYear.current.start_year}-10-10"))
       AttributiveDecisionHelpers.generate_fake_attributive_decision(schooling)
       AttributiveDecisionHelpers.generate_fake_abrogation_decision(schooling)
       create(:schooling, :with_attributive_decision, student: asp_payment_request.student)

@@ -27,7 +27,7 @@ RSpec.describe StudentsController do
 
     context "when trying to access a student that has left the establishment" do
       before do
-        student.close_current_schooling!
+        student.close_current_schooling!(Date.parse("#{SchoolYear.current.start_year}-10-10"))
 
         get class_student_path(class_id: schooling.classe.id, id: schooling.student.id)
       end

@@ -7,7 +7,7 @@ Fonctionnalité: Complétion des PFMPs d'une classe
     Et que je passe l'écran d'accueil
     Et qu'il y a une élève "Marie Curie" au sein de la classe "2NDEB" pour une formation "2NDEPRO Développement"
     Et qu'il y a un élève "Paul Langevin" au sein de la classe "2NDEB" pour une formation "2NDEPRO Développement"
-    Et que je saisis une PFMP pour toute la classe "2NDEB" avec les dates "01/03/2024" et "30/03/2024"
+    Et que je saisis une PFMP pour toute la classe "2NDEB" avec les dates "01/03/2025" et "30/03/2025"
     Et que je clique sur "Compléter 2 PFMPs"
     Et que je remplis le champ "Nombre de jours" dans la rangée "Curie Marie" avec "12"
     Et que je remplis le champ "Nombre de jours" dans la rangée "Langevin Paul" avec "4"
@@ -30,8 +30,8 @@ Fonctionnalité: Complétion des PFMPs d'une classe
     Et la page contient "100 € de plafond annuel"
     Et je peux voir dans le tableau "Liste des pfmps à valider"
       | Élève         | PFMP      | Nombre de jours | Montant |
-      | Curie Marie   | mars 2024 | 12 jours        | 12 €    |
-      | Langevin Paul | mars 2024 | 4 jours         | 4 €     |
+      | Curie Marie   | mars 2025 | 12 jours        | 12 €    |
+      | Langevin Paul | mars 2025 | 4 jours         | 4 €     |
 
   Scénario: Le personnel ne peut pas valider les PFMPs sans cocher la case de responsable légal
     Et que je clique sur "2NDEB - 2NDEPRO Développement"
@@ -48,8 +48,8 @@ Fonctionnalité: Complétion des PFMPs d'une classe
     Et que je clique sur "2NDEB"
     Alors je peux voir dans le tableau "Liste des élèves"
       | Élèves        | Décisions d'attribution | Coordonnées bancaires | PFMPs             |
-      | Curie Marie   |                         |                       | Validée mars 2024 |
-      | Langevin Paul |                         |                       | Validée mars 2024 |
+      | Curie Marie   |                         |                       | Validée mars 2025 |
+      | Langevin Paul |                         |                       | Validée mars 2025 |
 
   Scénario: Le personnel peut décocher des PFMPs pour éviter de les valider
     Et que je clique sur "2NDEB - 2NDEPRO Développement"
@@ -61,8 +61,8 @@ Fonctionnalité: Complétion des PFMPs d'une classe
     Et que je clique sur "2NDEB"
     Alors je peux voir dans le tableau "Liste des élèves"
       | Élèves        | Décisions d'attribution | Coordonnées bancaires | PFMPs                      |
-      | Curie Marie   |                         |                       | Saisie à valider mars 2024 |
-      | Langevin Paul |                         |                       | Validée mars 2024          |
+      | Curie Marie   |                         |                       | Saisie à valider mars 2025 |
+      | Langevin Paul |                         |                       | Validée mars 2025          |
 
   Scénario: Le personnel ne peut pas valider si toutes les PFMPs sont décochées
     Et que je clique sur "2NDEB - 2NDEPRO Développement"

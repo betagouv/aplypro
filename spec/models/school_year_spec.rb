@@ -15,8 +15,8 @@ RSpec.describe SchoolYear do
   end
 
   describe "#current" do
-    it "select the last year" do # NOTE: here the 2023 - 2024 are created through seeds
-      expect(described_class.current.start_year).to eq 2023
+    it "select the last year" do
+      expect(described_class.current.start_year).to eq 2024
     end
   end
 end

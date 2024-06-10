@@ -19,7 +19,8 @@ RSpec.describe SendPaymentRequestsJob do
     before { ASP::PaymentRequest.destroy_all }
 
     it "does not run" do
-      expect { described_class.perform_now }.not_to raise_error ASP::Errors::MaxRecordsPerWeekLimitReached
+      # We check that no 'ASP::Errors::MaxRecordsPerWeekLimitReached' is raised
+      expect { described_class.perform_now }.not_to raise_error
     end
   end
 
