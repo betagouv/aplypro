@@ -29,7 +29,7 @@ RSpec.describe Schooling do
         let!(:schooling) { create(:schooling) }
 
         context "with an end date" do
-          before { schooling.student.close_current_schooling! }
+          before { schooling.student.close_current_schooling!("#{SchoolYear.current.start_year}-08-27") }
 
           it "can create a new one" do
             expect { create(:schooling, student: schooling.student) }.to change(described_class, :count).by(1)
@@ -120,8 +120,10 @@ RSpec.describe Schooling do
     end
 
     it "creates a sane filename" do
+      year = SchoolYear.current.start_year
+      decision_number = schooling.attributive_decision_number
       key =
-        "#{uai}/2023/1ere-apex-test/DUPONT_Jeanne_décision-d-attribution_#{schooling.attributive_decision_number}.pdf"
+        "#{uai}/#{year}/1ere-apex-test/DUPONT_Jeanne_décision-d-attribution_#{decision_number}.pdf"
 
       expect(schooling.attributive_decision_key(schooling.attachment_file_name("décision-d-attribution"))).to eq key
     end
