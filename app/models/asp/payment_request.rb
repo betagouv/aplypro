@@ -46,7 +46,7 @@ module ASP
       # removed soon. It also holds some filtering logic which we
       # needs further thinking from us like some schoolings without
       # administrative_number.
-      def to_consider(max_date)
+      def to_consider
         in_state(:pending)
           .joins(:schooling, :pfmp, :student)
           .merge(Schooling.with_attributive_decisions)
@@ -54,7 +54,6 @@ module ASP
           .merge(Schooling.with_one_character_attributive_decision_version)
           .merge(Student.with_rib)
           .merge(Pfmp.finished)
-          .where(pfmps: { end_date: ..max_date })
       end
     end
 

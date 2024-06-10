@@ -5,6 +5,8 @@ require "rails_helper"
 RSpec.describe Student do
   subject(:student) { create(:student) }
 
+  let(:school_year) { "#{SchoolYear.current.start_year}-08-27" }
+
   it { is_expected.to have_many(:classes).through(:schoolings) }
 
   it { is_expected.to validate_presence_of(:first_name) }
@@ -61,7 +63,7 @@ RSpec.describe Student do
     it { is_expected.to eq schooling }
 
     context "when it is closed" do
-      before { schooling.update!(end_date: Date.yesterday) }
+      before { schooling.update!(end_date: school_year) }
 
       it { is_expected.to be_nil }
     end
@@ -75,25 +77,26 @@ RSpec.describe Student do
     let!(:schooling) { create(:schooling, student: student) }
 
     it "removes the current schooling" do
-      expect { student.close_current_schooling! }.to change { student.reload.current_schooling }.from(schooling).to(nil)
+      expect { student.close_current_schooling!(school_year) }
+        .to change { student.reload.current_schooling }.from(schooling).to(nil)
     end
 
     it "sets the end date" do
-      expect { student.reload.close_current_schooling! }.to(change { schooling.reload.end_date })
+      expect { student.reload.close_current_schooling!(school_year) }.to(change { schooling.reload.end_date })
     end
 
     it "can use a specific end date" do
-      datetime = 5.days.ago
+      datetime = school_year
 
       expect { student.close_current_schooling!(datetime) }
         .to(change { schooling.reload.end_date }.to(datetime.to_date))
     end
 
     context "when there is no current schooling" do
-      before { student.close_current_schooling! }
+      before { student.close_current_schooling!(school_year) }
 
       it "does not crash" do
-        expect { student.close_current_schooling! }.not_to raise_error
+        expect { student.close_current_schooling!(school_year) }.not_to raise_error
       end
     end
   end

@@ -15,12 +15,10 @@ describe StudentsApi::Fregata::Api do
     it "queries the right endpoint with the right parameters" do
       api.fetch_resource(:establishment_students, uai: uai)
 
-      # this will break next year (or whenever we change
-      # APLYPRO_SCHOOL_YEAR), which is a great reminder to double-check
-      # that everything is updated correctly
+      # this will break whenever we add a year in the school_year_seeder
       expect(WebMock)
         .to have_requested(:get, api.establishment_students_endpoint(uai: uai))
-        .with(query: { rne: uai, anneeScolaireId: 27 })
+        .with(query: { rne: uai, anneeScolaireId: 28 })
     end
 
     context "when the year has changed" do
