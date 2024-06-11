@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
 class StudentsController < ClassesController
-  include RoleCheck
-
   before_action :set_classe, :set_student
-  before_action :check_director, only: %i[abrogate_decision]
 
   def show
     add_breadcrumb t("pages.titles.classes.index"), classes_path
@@ -12,12 +9,6 @@ class StudentsController < ClassesController
     @pfmps = @student.pfmps.joins(:classe).where(schooling: { classe: @classe })
 
     infer_page_title(name: @student.full_name, classe: @classe)
-  end
-
-  def abrogate_decision
-    GenerateAbrogationDecisionJob.perform_now(@schooling)
-
-    redirect_to class_student_path(@classe, @student), notice: t("flash.da.abrogated", name: @student.full_name)
   end
 
   private
