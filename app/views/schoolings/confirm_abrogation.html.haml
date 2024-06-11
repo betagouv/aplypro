@@ -7,6 +7,10 @@
       Etudiant :
       %span= @schooling.student.full_name
 
+    %li
+      Classe :
+      %span= @schooling.classe.to_long_s
+
   .fr-btns-group.fr-btns-group--inline.fr-mt-3w
-    = link_to "Annuler", class_student_path(@classe, @schooling.student), class: 'fr-btn fr-btn--secondary'
+    = link_to "Annuler", class_path(@classe), class: 'fr-btn fr-btn--secondary'
     = button_to "Confirmer l'abrogation", abrogate_decision_class_schooling_path(@classe, @schooling.student), method: :delete, class: 'fr-btn fr-btn--danger fr-btn--secondary'
