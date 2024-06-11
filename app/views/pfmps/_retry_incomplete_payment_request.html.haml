@@ -3,5 +3,5 @@
   .fr-callout__text
   = form_with method: :put, url: class_schooling_payment_request_path(@classe, @schooling, @pfmp) do |form|
     = t("payment_requests.actions.reset.warning")
-    = render partial: "shared/confirmed_director"
+    = render partial: "shared/confirmed_director", locals: { message: t("validations.confirm_director") }
     = form.submit t("payment_requests.actions.update.cta"), class: "fr-btn"

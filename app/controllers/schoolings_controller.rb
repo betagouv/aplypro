@@ -4,7 +4,7 @@ class SchoolingsController < ApplicationController
   include RoleCheck
 
   before_action :authenticate_user!, :set_classe, :set_schooling
-  before_action :check_director, only: %i[abrogate_decision]
+  before_action :check_director, :update_confirmed_director!, :check_confirmed_director, only: %i[abrogate_decision]
 
   def abrogate_decision
     GenerateAbrogationDecisionJob.perform_now(@schooling)
