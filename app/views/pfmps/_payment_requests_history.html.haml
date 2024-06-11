@@ -5,4 +5,4 @@
       %em= payment_request.status_explanation
     .fr-mt-2w.gray-text
       Dernière mise à jour le
-      = l(payment_request.updated_at, format: :long)
+      = l(payment_request.last_transition&.updated_at || payment_request.updated_at, format: :long)
