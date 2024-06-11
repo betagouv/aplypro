@@ -55,7 +55,7 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # Find all codes here : https://infocentre.pleiade.education.fr/bcn/workspace/viewTable/n/N_CONTRAT_ETABLISSEMENT
   CONTRACTS_STATUS = {
     public: ["99"],
-    private_allowed: %w[30 31 40 41]
+    private_allowed: %w[30 31 40 41 60]
   }.freeze
 
   SCHOOL_YEAR_RANGE_EXCEPTIONS = {
