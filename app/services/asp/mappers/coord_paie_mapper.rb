@@ -53,7 +53,7 @@ module ASP
       #
       #   Pour un IBAN avec un BIC non accepté par l'ASP ("CMBRFR2BARK")
       #   il faut appliquer les transformations suivantes : {CMBRFR2BARK
-      #   => CMBRFR2BXXX}
+      #   => CMBRFR2B}
       def bic
         bic = rib.bic
 
@@ -81,7 +81,7 @@ module ASP
       def particular_rib_treatment(bic)
         case PARTICULAR_BICS.key(bic)
         when :CREDIT_MUTUEL_ARKEA
-          bic.gsub("ARK", "XXX")
+          bic.gsub("ARK", "")
         end
       end
     end

@@ -69,7 +69,7 @@ describe ASP::Mappers::CoordPaieMapper do
       before { rib.update!(bic: "CMBRFR2BARK") }
 
       it "modify the rib as expected by the ASP" do
-        expect(mapper.bic).to eq "CMBRFR2BXXX"
+        expect(mapper.bic).to eq "CMBRFR2B"
       end
     end
   end
