@@ -49,10 +49,6 @@ Rails.application.routes.draw do
     end
 
     resources :schoolings, only: [] do
-      member do
-        get "confirm_abrogation"
-        delete "abrogate_decision"
-      end
       resources :pfmps, except: :index do
         member do
           post "validate"

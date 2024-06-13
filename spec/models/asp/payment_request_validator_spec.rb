@@ -134,28 +134,13 @@ describe ASP::PaymentRequestValidator do
   end
 
   context "when the student needs abrogated attributive decisions" do
-    context "when there is no abrogation decision" do
-      before do
-        schooling = create(:schooling, :closed, student: asp_payment_request.student)
+    before do
+      schooling = create(:schooling, :closed, student: asp_payment_request.student)
 
-        create(:pfmp, schooling: schooling)
-      end
-
-      include_examples "invalidation", :needs_abrogated_attributive_decision
+      create(:pfmp, schooling: schooling)
     end
 
-    context "when there is an abrogation decision" do
-      before do
-        schooling = create(:schooling, :closed, :with_abrogation_decision, student: asp_payment_request.student)
-        pfmp = create(:pfmp, :validated, start_date: "2023-09-02", schooling: schooling)
-        asp_payment_request.pfmp = pfmp
-        asp_payment_request.save!
-      end
-
-      it "does not add an error" do
-        expect { validator.validate }.not_to(change { asp_payment_request.errors.details[:ready_state_validation] })
-      end
-    end
+    include_examples "invalidation", :needs_abrogated_attributive_decision
   end
 
   context "when the student is missing biological sex" do

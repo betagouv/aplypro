@@ -16,12 +16,12 @@
       .fr-mr-3w
         %strong
           = @classe.mef.wage.daily_rate
-          €
+          € 
         par jour travaillé
       %div
         %strong
           = @classe.mef.wage.yearly_cap
-          €
+          € 
         de plafond annuel
 
 = form_with scope: :validation, method: :post, url: validation_class_path(@classe) do |form|
@@ -31,11 +31,11 @@
       %thead
         %th{scope: "col"}
           Élèves
-        %th{scope: "col"}
+        %th{scope: "col"} 
           PFMP
-        %th{scope: "col"}
+        %th{scope: "col"} 
           Nombre de jours
-        %th{scope: "col"}
+        %th{scope: "col"} 
           Montant
 
       %tbody
@@ -63,5 +63,5 @@
   .fr-grid-row.fr-grid-row--top
     .fr-mb-2w.fr-mr-md-2w
       = form.submit t("validations.validate"), class: "fr-btn fr-btn--primary"
-      = render partial: "shared/confirmed_director", locals: { message: t("validations.confirm_director") }
+      = render partial: "shared/confirmed_director"
 
