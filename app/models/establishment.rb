@@ -59,7 +59,7 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
   }.freeze
 
   SCHOOL_YEAR_RANGE_EXCEPTIONS = {
-    # "43" => Date.new(Aplypro::SCHOOL_YEAR, 8, 23), # Mayotte
+    "43" => Date.new(Aplypro::SCHOOL_YEAR, 8, 23), # Mayotte
     "28" => Date.new(Aplypro::SCHOOL_YEAR, 8, 16) # La Réunion
   }.freeze
 
