@@ -26,7 +26,7 @@ module Updaters
         next if classe.nil?
 
         Schooling
-          .find_by(classe: classe, student: student)
+          .find_by!(classe: classe, student: student)
           .update(attributes.slice(*Schooling.updatable_attributes))
       end
     end

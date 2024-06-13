@@ -32,7 +32,7 @@ module StudentsApi
 
         def student_endpoint(params)
           uai = Student
-                .find_by(ine: params[:ine])
+                .find_by!(ine: params[:ine])
                 .current_schooling
                 .establishment
                 .uai

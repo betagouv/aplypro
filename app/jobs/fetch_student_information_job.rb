@@ -13,6 +13,8 @@ class FetchStudentInformationJob < ApplicationJob
     api.fetch_resource(:student, ine: schooling.student.ine)
        .then { |data| map_student_attributes(data, api) }
        .then { |attributes| student.update!(attributes) }
+
+    FetchStudentSchoolingsInformationJob.perform_later(student) if Rails.env.production?
   rescue Faraday::ResourceNotFound
     schooling.student.update!(ine_not_found: true)
   end
