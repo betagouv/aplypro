@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe GenerateAbrogationDecisionJob do
   subject(:job) { described_class.new(schooling) }
 
-  let(:schooling) { create(:schooling, :with_attributive_decision) }
+  let(:schooling) { create(:schooling) }
 
   describe "#perform" do
     it "generates one abrogation decision per schooling" do
@@ -19,14 +19,6 @@ RSpec.describe GenerateAbrogationDecisionJob do
     it "executes within a transaction" do
       expect(Schooling).to receive(:transaction) # rubocop:disable RSpec/MessageSpies
       job.perform_now
-    end
-
-    context "when the attributive decision is missing" do
-      let(:schooling) { create(:schooling) }
-
-      it "raises an error" do
-        expect { job.perform_now }.to raise_error GenerateAbrogationDecisionJob::MissingAttributiveDecisionError
-      end
     end
   end
 

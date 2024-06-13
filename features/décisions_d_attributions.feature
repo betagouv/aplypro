@@ -43,7 +43,7 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Alors la page contient "Vous devez être chef d'établissement"
     Et le panneau "Décisions d'attribution" contient "0 / 10"
 
-  Scénario: Le personnel peut voir les décisions d'attributions comptées dans la liste des élèves d'une classe et abroger certaines attributions
+  Scénario: Le personnel peut voir les décisions d'attributions comptées dans la liste des élèves d'une classe
     Quand je consulte la classe de "1MELEC"
     Et je peux voir dans le tableau "Liste des élèves"
       | Élèves (10) | Décisions d'attribution (0/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
@@ -55,7 +55,3 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Alors je peux voir dans le tableau "Liste des élèves"
       | Élèves (10) | Décisions d'attribution (10/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
       |             | Éditée                          |                              |           |
-    Lorsque je clique sur "Abroger" dans la dernière rangée
-    Alors la page contient "Êtes-vous certain(e) de vouloir abroger cette décision d'attribution ?"
-    Lorsque je clique sur "Confirmer l'abrogation"
-    Alors la page contient "Télécharger la décision d'abrogation"
