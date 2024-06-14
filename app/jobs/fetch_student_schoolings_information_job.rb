@@ -6,6 +6,8 @@ class FetchStudentSchoolingsInformationJob < ApplicationJob
   discard_on ActiveRecord::RecordNotFound
 
   def perform(student)
+    return true unless student.current_schooling
+
     Updaters::StudentSchoolingsUpdater.call(student)
   end
 end
