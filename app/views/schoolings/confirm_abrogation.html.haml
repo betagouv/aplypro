@@ -11,6 +11,9 @@
     %li
       Classe :
       %span= @schooling.classe.to_long_s
+    %li
+      Fin de scolarité :
+      %span= @schooling.end_date.to_s
 
   .fr-col-md-6.fr-mt-3w
     = render partial: "shared/confirmed_director", locals: { message: t("panels.attributive_decisions.confirm_director") }
