@@ -25,7 +25,7 @@
           %td
             = dsfr_link_to student.index_name, class_student_path(@classe, student), title: t("links.students.show", name: student)
           %td
-            - if schooling.attributive_decision.present? && !schooling.abrogation_decision.present?
+            - if schooling.attributive_decision.present? && !schooling.abrogation_decision.present? && schooling.closed?
               %p= dsfr_badge(status: :success) { "Éditée" }
               %p= dsfr_link_to "Abroger", confirm_abrogation_class_schooling_path(@classe, schooling)
             - else
