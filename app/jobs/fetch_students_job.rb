@@ -5,7 +5,7 @@ class FetchStudentsJob < ApplicationJob
 
   queue_as :default
 
-  discard_on ActiveJob::DeserializationError, Faraday::ResourceNotFound
+  discard_on ActiveJob::DeserializationError, Faraday::ResourceNotFound, Student::Mappers::Errors::SchoolingParsingError
 
   around_perform do |job, block|
     establishment = job.arguments.first

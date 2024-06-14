@@ -8,5 +8,6 @@ module FregataProof
   included do
     sidekiq_options retry: false
     retry_on Faraday::UnauthorizedError, wait: 1.second, attempts: 10
+    discard_on Faraday::ServerError # 504 sometimes
   end
 end
