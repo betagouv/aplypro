@@ -55,7 +55,8 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Alors je peux voir dans le tableau "Liste des élèves"
       | Élèves (10) | Décisions d'attribution (10/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
       |             | Éditée                          |                              |           |
-    Quand il y a un élève avec une scolarité fermée qui a une PFMP
+    Quand l'élève "Marie Curie" a une scolarité fermée
+    Et je consulte la classe de "1MELEC"
     Lorsque je clique sur "Abroger"
     Alors la page contient "Êtes-vous certain(e) de vouloir abroger cette décision d'attribution ?"
     Lorsque je clique sur "Confirmer l'abrogation"

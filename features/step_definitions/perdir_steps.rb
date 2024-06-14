@@ -21,6 +21,12 @@ Sachantque("il y a un(e) élève avec une scolarité fermée qui a une PFMP") do
   FactoryBot.create(:pfmp, schooling: schooling)
 end
 
+Sachantque("l'élève {string} a une scolarité fermée") do |name|
+  student = find_student_by_full_name(name)
+
+  student.current_schooling.update!(end_date: Date.yesterday)
+end
+
 Quand("l'élève {string} a une PFMP dans un autre établissement") do |name|
   student = find_student_by_full_name(name)
 
