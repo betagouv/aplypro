@@ -7,6 +7,9 @@ class FetchStudentSchoolingsInformationJob < ApplicationJob
 
   discard_on ActiveRecord::RecordNotFound, Student::Mappers::Errors::SchoolingParsingError
 
+  # Sygne rate limiting, 429
+  retry_on Faraday::TooManyRequestsError, wait: 1.hour, attempts: 3
+
   def perform(student)
     return true unless student.current_schooling
 
