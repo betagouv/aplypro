@@ -4,6 +4,7 @@ require "attribute_decision/attributor"
 
 class GenerateAttributiveDecisionJob < ApplicationJob
   include DocumentGeneration
+  include FregataProof
 
   after_discard do |job|
     self.class.after_discard_callback(job, :generating_attributive_decision)

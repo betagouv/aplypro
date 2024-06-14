@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class FetchStudentsJob < ApplicationJob
-  queue_as :default
+  include FregataProof
 
-  retry_on Faraday::UnauthorizedError, wait: 1.second, attempts: 10
+  queue_as :default
 
   discard_on ActiveJob::DeserializationError
 
