@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe FetchStudentSchoolingsInformationJob do
-  let(:student) { create(:student) }
+  let(:student) { create(:schooling).student }
   let(:updater_double) { class_double(Updaters::StudentSchoolingsUpdater) }
 
   before do
