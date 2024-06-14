@@ -30,6 +30,10 @@ module StudentsApi
           "#{base_url}/inscriptions/?#{query}"
         end
 
+        def student_schoolings_endpoint(params)
+          student_endpoint(params)
+        end
+
         def student_endpoint(params)
           uai = Student
                 .find_by!(ine: params[:ine])
