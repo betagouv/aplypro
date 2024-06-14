@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 class PreparePaymentRequestJob < ApplicationJob
-  sidekiq_options retry: false
-
-  retry_on Faraday::UnauthorizedError, wait: 1.second, attempts: 10
+  include FregataProof
 
   def perform(payment_request)
     FetchStudentInformationJob.perform_now(payment_request.schooling)
