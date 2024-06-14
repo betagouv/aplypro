@@ -14,7 +14,7 @@
         .fr-grid-row
           .fr-mr-1w Coordonnées bancaires
           = ribs_progress_badge(schoolings)
-      %th{scope: "col"} 
+      %th{scope: "col"}
         PFMPs
         = "(#{nb_pfmps(schoolings)})"
 
@@ -25,10 +25,14 @@
           %td
             = dsfr_link_to student.index_name, class_student_path(@classe, student), title: t("links.students.show", name: student)
           %td
-            - if schooling.attributive_decision.present?
+            - if schooling.attributive_decision.present? && !schooling.abrogation_decision.present?
               %p= dsfr_badge(status: :success) { "Éditée" }
+              %p= dsfr_link_to "Abroger", confirm_abrogation_class_schooling_path(@classe, schooling)
             - else
-              %p= dsfr_badge(status: :error) { "Manquante" }
+              - if schooling.abrogation_decision.present?
+                %p= dsfr_badge(status: :error) { "Abrogée" }
+              - else
+                %p= dsfr_badge(status: :error) { "Manquante" }
           %td
             - if student.rib.present?
               %p= dsfr_badge(status: :success) { "Saisies" }

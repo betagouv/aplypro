@@ -18,7 +18,8 @@ fr:
     ribs:
       destroyed: Les coordonnées bancaires de %{name} ont bien été supprimées
       readonly: Les coordonnées bancaires de %{name} ne peuvent pas être supprimées
-
+    da:
+      abrogated: La décision d'attribution de %{name} a bien été abrogée
   helpers:
     submit:
       rib:
@@ -37,6 +38,8 @@ fr:
       not_found: "La classe que vous avez demandée n'existe pas."
     students:
       not_found: "L'élève demandé n'est pas ou plus dans cette classe."
+    schoolings:
+      not_found: "La scolarité demandée n'est plus disponible ou a été supprimée."
     pfmps:
       not_found: "La PFMP demandée n'est plus disponible ou a été supprimée."
   activerecord:

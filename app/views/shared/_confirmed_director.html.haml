@@ -1,5 +1,5 @@
 .fr-checkbox-group.fr-mb-2w.fr-mt-md-3w
   = check_box_tag :confirmed_director, checked: current_user.confirmed_director?
   = label_tag :confirmed_director, class: "fr-label" do
-    = t("validations.confirm_director").html_safe
+    = message.html_safe
     .fr-text--sm.fr-mt-1w= confirmed_director_information
