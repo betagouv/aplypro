@@ -92,7 +92,7 @@ fr:
               rib_owner_moral: "Les RIBs appartenant à des personnes morales (ex : associations) seront pris en compte dans quelques semaines"
               pfmp_amount: "La PFMP associée doit avoir un montant positif"
               missing_attributive_decision: "Il manque une décision attributive"
-              needs_abrogated_attributive_decision: "Les élèves ayant changé de formation, de statut ou d'établissement doivent avoir une abrogation de leur décision d'attribution passée. Ce document n'étant pas encore disponible, veuillez patienter le temps que ces développements soient effectués"
+              needs_abrogated_attributive_decision: "Les élèves ayant changé de formation, de statut ou d'établissement doivent avoir une abrogation de leur décision d'attribution passée. Ce document peut être généré dans la liste des élèves."
               duplicates: "Une autre PFMP existe avec les mêmes dates de début et de fin. Veuillez supprimer l'une des deux."
 
     hints:
