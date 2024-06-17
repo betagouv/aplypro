@@ -63,12 +63,21 @@ services:
     ports:
         - "2222:22"
     command: asp:pass:1001
-  mock:
-    environment:
-      PORT: 3002
+  establishments-api:
     build:
       context: './mock'
+    entrypoint: ["rackup", "--host", "0.0.0.0", "establishments.ru"]
     volumes:
       - "./mock:/app"
-    ports:
-      - "3002:3002"
+  sygne-api:
+    build:
+      context: './mock'
+    entrypoint: ["rackup", "--host", "0.0.0.0", "sygne.ru"]
+    volumes:
+      - "./mock:/app"
+  fregata-api:
+    build:
+      context: './mock'
+    entrypoint: ["rackup", "--host", "0.0.0.0", "fregata.ru"]
+    volumes:
+      - "./mock:/app"
