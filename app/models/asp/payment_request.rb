@@ -54,7 +54,7 @@ module ASP
           .merge(Schooling.with_one_character_attributive_decision_version)
           .merge(Student.with_rib)
           .merge(Pfmp.finished)
-          .where("pfmps.end_date <= ?", max_date)
+          .where(pfmps: { end_date: ..max_date })
       end
     end
 

@@ -2,7 +2,7 @@
 
 class AspDateType < ActiveModel::Type::Date
   def cast(value)
-    parsed = super(value)
+    parsed = super
 
     I18n.l(parsed, format: :asp)
   end

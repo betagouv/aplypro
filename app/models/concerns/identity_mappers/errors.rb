@@ -6,7 +6,7 @@ module IdentityMappers
 
     class OmniauthError < Error
       def initialize(msg = "Omniauth failed without an exception")
-        super(msg)
+        super
       end
     end
 
@@ -24,7 +24,7 @@ module IdentityMappers
       attr_reader :attributes
 
       def initialize(msg = "No delegations indicated")
-        super(msg)
+        super
       end
     end
 
@@ -32,7 +32,7 @@ module IdentityMappers
       attr_reader :attributes
 
       def initialize(msg = "No access conclusion")
-        super(msg)
+        super
       end
     end
 
@@ -40,7 +40,7 @@ module IdentityMappers
       attr_reader :attributes
 
       def initialize(msg = "Not allowed in the private beta")
-        super(msg)
+        super
       end
     end
 
@@ -48,7 +48,7 @@ module IdentityMappers
       attr_reader :attributes
 
       def initialize(msg = "The private establishment is not included in the reform")
-        super(msg)
+        super
       end
     end
   end
