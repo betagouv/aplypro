@@ -4,7 +4,7 @@ class Student
   module Mappers
     class Fregata < Base
       def map_student_attributes(attrs)
-        student_attrs = super(attrs)
+        student_attrs = super
 
         extra_attrs = address_mapper.new.call(attrs)
 
