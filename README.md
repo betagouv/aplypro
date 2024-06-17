@@ -41,14 +41,8 @@ Entre autres :
 
 # Deploiement
 
-1. Faire un branche `release/v1.8.2` (la nommer `release/*` évite la CI)
-2. Mettre à jour le fichier `config/initializers/version.rb` dans un commit `release 1.8.2`
-3. Faire une PR sur GitHub `release/v1.8.2` -> `main` et la faire approuver et merge par un autre dev
-4. Créer une [nouvelle release](https://github.com/betagouv/aplypro/releases)
-5. Lui créer un tag `v1.8.2`, puis cliquer "Generate release notes" et "Publish"
-6. Faire une PR `main` -> `deploy/prod` nommée `v1.8.2` et la faire approuver et merge par un autre dev
-
-ATTENTION : Ne pas utiliser la stratégie "rebase and merge" sur cette dernière PR : il ne faut pas réécrire les commits de la branche de production pour éviter tout problème de réconciliation.
+1. Créer une [nouvelle release](https://github.com/betagouv/aplypro/releases)
+2. Deployer la branch `main` depuis [Scalingo](https://dashboard.scalingo.com/)
 
 # Vocabulaire
 
