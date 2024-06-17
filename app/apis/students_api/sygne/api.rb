@@ -3,8 +3,15 @@
 module StudentsApi
   module Sygne
     class Api < StudentsApi::Base
+      class NeedsSchoolYearWorkError < StandardError
+      end
+
       class << self
         def establishment_students_endpoint(params)
+          # NOTE: deactivated api call while waiting for the introduction of the SchoolYear model
+          # TODO: reactivate access once the SchoolYear is merged
+          raise NeedsSchoolYearWorkError unless Rails.env.test?
+
           base_url + format("etablissements/%s/eleves/?etat-scolarisation=true", params[:uai])
         end
 
