@@ -144,9 +144,13 @@ describe ASP::PaymentRequestValidator do
       include_examples "invalidation", :needs_abrogated_attributive_decision
     end
 
-    context "when there is an abrogation decision" do
+    context "when there is an abrogation decision on the previous schooling" do
       before do
-        schooling = create(:schooling, :closed, :with_abrogation_decision, student: asp_payment_request.student)
+        previous_schooling = asp_payment_request.student.schoolings.first
+        previous_schooling.update!(end_date: Date.yesterday)
+        AttributiveDecisionHelpers.generate_fake_attributive_decision(previous_schooling)
+        AttributiveDecisionHelpers.generate_fake_abrogation_decision(previous_schooling)
+        schooling = create(:schooling, :with_attributive_decision, student: asp_payment_request.student)
         pfmp = create(:pfmp, :validated, start_date: "2023-09-02", schooling: schooling)
         asp_payment_request.pfmp = pfmp
         asp_payment_request.save!

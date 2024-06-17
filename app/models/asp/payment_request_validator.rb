@@ -13,7 +13,7 @@ module ASP
       check_student
       check_insee_code
       check_address
-      check_attributive_decision
+      check_documents
       check_rib
       check_pfmp
       check_duplicates
@@ -52,12 +52,16 @@ module ASP
       add_error(:excluded_schooling) if payment_request.schooling.excluded?
     end
 
-    def check_attributive_decision
+    def check_documents # rubocop:disable Metrics/AbcSize
       add_error(:missing_attributive_decision) if !payment_request.schooling.attributive_decision.attached?
 
-      if !payment_request.schooling.abrogation_decision.attached? && student.needs_abrogated_attributive_decision?
-        add_error(:needs_abrogated_attributive_decision)
-      end
+      return unless student.needs_abrogated_attributive_decision?
+
+      previous_schooling = student.schoolings.except(payment_request.schooling).order(created_at: :asc).last
+
+      return unless previous_schooling.closed? && !previous_schooling.abrogation_decision.attached?
+
+      add_error(:needs_abrogated_attributive_decision)
     end
 
     def check_insee_code
