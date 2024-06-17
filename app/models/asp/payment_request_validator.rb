@@ -52,14 +52,14 @@ module ASP
       add_error(:excluded_schooling) if payment_request.schooling.excluded?
     end
 
-    def check_documents # rubocop:disable Metrics/AbcSize
+    def check_documents
       add_error(:missing_attributive_decision) if !payment_request.schooling.attributive_decision.attached?
 
       return unless student.needs_abrogated_attributive_decision?
 
-      previous_schooling = student.schoolings.except(payment_request.schooling).order(created_at: :asc).last
+      other_schoolings = student.schoolings.excluding(payment_request.schooling)
 
-      return unless previous_schooling.closed? && !previous_schooling.abrogation_decision.attached?
+      return if other_schoolings.all?(&:abrogated?)
 
       add_error(:needs_abrogated_attributive_decision)
     end

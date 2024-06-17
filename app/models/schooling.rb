@@ -45,6 +45,10 @@ class Schooling < ApplicationRecord
     end_date.present?
   end
 
+  def abrogated?
+    closed? && abrogation_decision.attached?
+  end
+
   def reopen!
     update!(end_date: nil)
   end
