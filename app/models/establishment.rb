@@ -77,7 +77,7 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def to_s
-    [uai, name, city, postal_code].compact.join(" – ")
+    [uai, name, city, postal_code].compact.join(", ")
   end
 
   def invites?(email)

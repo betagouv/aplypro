@@ -4,10 +4,13 @@ require "rails_helper"
 require "support/webmock_helpers"
 
 RSpec.describe GenerateMissingAttributiveDecisionsJob do
-  subject(:job) { described_class.new(establishment) }
+  subject(:job) { described_class.new(establishment, school_year) }
 
   let(:establishment) { create(:establishment, :with_fim_user) }
-  let(:classes) { create_list(:classe, 2, :with_students, students_count: 3, establishment: establishment) }
+  let(:school_year) { SchoolYear.current }
+  let(:classes) do
+    create_list(:classe, 2, :with_students, students_count: 3, establishment: establishment, school_year: school_year)
+  end
   let(:students) { classes.flat_map(&:students) }
   let(:schooling) { students.last.current_schooling }
 

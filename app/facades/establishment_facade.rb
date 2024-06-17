@@ -1,36 +1,37 @@
 # frozen_string_literal: true
 
 class EstablishmentFacade
-  attr_accessor :establishment
+  attr_accessor :establishment, :school_year
 
   STATES_GROUPS_FOR_COUNTS = [
     %i[pending ready], [:incomplete], %i[sent integrated], [:rejected], [:paid], [:unpaid]
   ].freeze
 
-  def initialize(establishment)
+  def initialize(establishment, school_year)
     @establishment = establishment
+    @school_year = school_year
   end
 
   def schoolings_count
-    @schoolings_count ||= current_classes.joins(:schoolings).count
+    @schoolings_count ||= selected_classes.joins(:schoolings).count
   end
 
   def attributive_decisions_count
-    @attributive_decisions_count ||= current_classes
+    @attributive_decisions_count ||= selected_classes
                                      .joins(:schoolings)
                                      .merge(Schooling.with_attributive_decisions)
                                      .count
   end
 
   def students_count
-    @students_count ||= current_classes
+    @students_count ||= selected_classes
                         .joins(:students)
                         .distinct(:"students.id")
                         .count(:"students.id")
   end
 
   def ribs_count
-    @ribs_count ||= current_classes.joins(students: :rib).distinct(:"students.id").count(:"ribs.id")
+    @ribs_count ||= selected_classes.joins(students: :rib).distinct(:"students.id").count(:"ribs.id")
   end
 
   def pfmps_counts
@@ -51,7 +52,7 @@ class EstablishmentFacade
 
   def payment_requests_all_status_counts
     @payment_requests_all_status_counts ||=
-      current_payment_requests
+      selected_payment_requests
       .joins(ASP::PaymentRequest.most_recent_transition_join)
       .group(:to_state)
       .count
@@ -59,15 +60,15 @@ class EstablishmentFacade
   end
 
   def pfmps
-    establishment.pfmps.merge(Classe.current)
+    establishment.pfmps.merge(Classe.for_year(school_year.start_year))
   end
 
-  def current_payment_requests
-    establishment.payment_requests.latest_per_pfmp.merge(Classe.current)
+  def selected_payment_requests
+    establishment.payment_requests.latest_per_pfmp.merge(Classe.for_year(school_year.start_year))
   end
 
-  def current_classes
-    establishment.classes.current
+  def selected_classes
+    establishment.classes.for_year(school_year.start_year)
   end
 
   def initial_state

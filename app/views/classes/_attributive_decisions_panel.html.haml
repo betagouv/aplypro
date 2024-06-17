@@ -14,5 +14,5 @@
 - else
   .buttons-group
     - if current_establishment.missing_attributive_decisions?
-      = attributive_decisions_generation_form(current_establishment)
-    = attributive_decisions_download_button(current_establishment)
+      = attributive_decisions_generation_form(current_establishment, selected_school_year)
+    = attributive_decisions_download_button(current_establishment, selected_school_year)
