@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class GenerateMissingAttributiveDecisionsJob < ApplicationJob
-  def perform(establishment)
-    schoolings = establishment
-                 .schoolings
-                 .without_attributive_decisions
+  def perform(establishment, school_year)
+    schoolings = establishment.schoolings.without_attributive_decisions
+                              .joins(:classe)
+                              .where(classe: { school_year: school_year })
 
     schoolings.update_all(generating_attributive_decision: true) # rubocop:disable Rails/SkipsModelValidations
 

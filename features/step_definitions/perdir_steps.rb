@@ -108,3 +108,20 @@ end
 Sachantque("mon établissement a un directeur confirmé nommé {string}") do |name|
   FactoryBot.create(:user, :confirmed_director, name: name, establishment: Establishment.last)
 end
+
+Sachantque(
+  "j'ai une classe {string} de {int} élèves " \
+  "pour l'établissement {string} lors de l'année {int}"
+) do |classe, count, uai, start_year|
+  establishment = Establishment.find_by!(uai: uai)
+  school_year = SchoolYear.find_by!(start_year: start_year)
+
+  FactoryBot.create(
+    :classe,
+    :with_students,
+    students_count: count,
+    label: classe,
+    school_year: school_year,
+    establishment: establishment
+  )
+end

@@ -3,13 +3,14 @@
 require "rails_helper"
 
 RSpec.describe EstablishmentFacade do
-  subject(:establishment_facade) { described_class.new(establishment) }
+  subject(:establishment_facade) { described_class.new(establishment, school_year) }
 
   let(:establishment) { build(:establishment, :sygne_provider) }
+  let(:school_year) { create(:school_year, start_year: 2020) }
 
   before do
     payment_requests.each do |pr|
-      pr.schooling.classe.update!(establishment: establishment, school_year: SchoolYear.current)
+      pr.schooling.classe.update!(establishment: establishment, school_year: school_year)
     end
   end
 
@@ -21,6 +22,23 @@ RSpec.describe EstablishmentFacade do
 
       it "counts all statuses at zero" do
         expect(payment_requests_counts.values).to all be_zero
+      end
+    end
+
+    context "when there are payment requests from another year" do
+      subject(:establishment_facade) { described_class.new(establishment, new_school_year) }
+
+      let(:payment_requests) { create_list(:asp_payment_request, 2, :pending) }
+      let(:new_school_year) { create(:school_year, start_year: 2021) }
+
+      before do
+        payment_requests.each do |pr|
+          pr.schooling.classe.update!(establishment: establishment, school_year: school_year)
+        end
+      end
+
+      it "doesn't account for them" do
+        expect(payment_requests_counts[:pending]).to eq 0
       end
     end
 

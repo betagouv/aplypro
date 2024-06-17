@@ -13,7 +13,7 @@ class EstablishmentsController < ApplicationController
   def create_attributive_decisions
     mark_attributive_decision_generation!
 
-    GenerateMissingAttributiveDecisionsJob.perform_later(current_establishment)
+    GenerateMissingAttributiveDecisionsJob.perform_later(current_establishment, selected_school_year)
 
     redirect_to root_path
   end
