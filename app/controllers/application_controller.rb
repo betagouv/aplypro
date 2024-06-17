@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
                 :check_current_establishment,
                 :set_support_banner
 
-  helper_method :current_establishment
+  helper_method :current_establishment, :selected_school_year
 
   def after_sign_in_path_for(_resource)
     classes_path
@@ -43,6 +43,10 @@ class ApplicationController < ActionController::Base
 
   def current_establishment
     @current_establishment ||= current_user&.selected_establishment
+  end
+
+  def selected_school_year
+    @selected_school_year = SchoolYear.find_by(start_year: params[:school_year_id]) || SchoolYear.current
   end
 
   def infer_page_title(attrs = {})

@@ -12,35 +12,41 @@ module HomeHelper
     end
   end
 
-  def attributive_decisions_download_button(establishment)
-    return unless establishment.with_attributive_decisions?
+  def attributive_decisions_download_button
+    return unless current_establishment.with_attributive_decisions?(selected_school_year)
 
-    count = establishment.schoolings.with_attributive_decisions.count
+    count = current_establishment.schoolings.with_attributive_decisions
+                                 .joins(:classe)
+                                 .where(classe: { school_year: selected_school_year })
+                                 .count
 
     button_to(
       t("panels.attributive_decisions.download", count: count),
-      establishment_download_attributive_decisions_path(establishment),
+      school_year_establishment_download_attributive_decisions_path(selected_school_year, current_establishment),
       method: :post,
       class: "fr-btn fr-btn--primary",
       data: { turbo: false }
     )
   end
 
-  def attributive_decisions_reissue_button(establishment)
-    return unless establishment.with_attributive_decisions?
+  def attributive_decisions_reissue_button
+    return unless current_establishment.with_attributive_decisions?(selected_school_year)
 
     button_to "Rééditer les décisions d'attribution",
-              establishment_reissue_attributive_decisions_path(establishment),
+              school_year_establishment_reissue_attributive_decisions_path(selected_school_year, current_establishment),
               method: :post,
               class: "fr-btn fr-btn--tertiary"
   end
 
-  def attributive_decisions_generation_form(establishment)
+  def attributive_decisions_generation_form
     return cannot_generate_attributive_decisions_button unless current_user.can_try_to_generate_attributive_decisions?
 
-    count = establishment.schoolings.without_attributive_decisions.count
+    count = current_establishment.schoolings.without_attributive_decisions
+                                 .joins(:classe)
+                                 .where(classe: { school_year: selected_school_year })
+                                 .count
 
-    render partial: "home/attributive_decision_form", locals: { establishment: establishment, count: count }
+    render partial: "home/attributive_decision_form", locals: { establishment: current_establishment, count: count }
   end
 
   def cannot_generate_attributive_decisions_button
@@ -65,12 +71,6 @@ module HomeHelper
         :success
       end
     end
-  end
-
-  def school_year_to_s
-    starting_year = SchoolYear.current.start_year
-
-    t("year", start_year: starting_year, end_year: starting_year + 1)
   end
 
   def confirmed_director_information

@@ -137,6 +137,8 @@ fr:
     titles:
       stats:
         index: Statistiques
+      school_years:
+        select: Choix de l'année scolaire
       users:
         select_establishment: Choix de l'établissement
       invitations:

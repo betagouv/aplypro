@@ -13,7 +13,9 @@ class EstablishmentsController < ApplicationController
   def create_attributive_decisions
     mark_attributive_decision_generation!
 
-    GenerateAttributiveDecisionsJob.perform_later(current_establishment.schoolings.without_attributive_decisions.to_a)
+    GenerateAttributiveDecisionsJob.perform_later(schoolings_for_selected_school_year
+                                                    .without_attributive_decisions
+                                                    .to_a)
 
     redirect_to root_path
   end
@@ -21,14 +23,13 @@ class EstablishmentsController < ApplicationController
   def reissue_attributive_decisions
     mark_attributive_decision_generation_all!
 
-    GenerateAttributiveDecisionsJob.perform_later(current_establishment.schoolings.to_a)
+    GenerateAttributiveDecisionsJob.perform_later(schoolings_for_selected_school_year.to_a)
 
     redirect_to root_path
   end
 
   def download_attributive_decisions
-    documents = current_establishment
-                .schoolings
+    documents = schoolings_for_selected_school_year
                 .with_attached_attributive_decision
                 .map(&:attributive_decision)
                 .filter(&:attached?)
@@ -51,15 +52,17 @@ class EstablishmentsController < ApplicationController
   # in by the time the page is refreshed so trigger a synchronous DB
   # update to mark the generation process as started
   def mark_attributive_decision_generation!
-    current_establishment
-      .schoolings
+    schoolings_for_selected_school_year
       .without_attributive_decisions
       .update_all(generating_attributive_decision: true) # rubocop:disable Rails/SkipsModelValidations
   end
 
   def mark_attributive_decision_generation_all!
-    current_establishment
-      .schoolings
+    schoolings_for_selected_school_year
       .update_all(generating_attributive_decision: true) # rubocop:disable Rails/SkipsModelValidations
+  end
+
+  def schoolings_for_selected_school_year
+    current_establishment.schoolings.for_year(selected_school_year)
   end
 end

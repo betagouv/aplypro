@@ -24,7 +24,9 @@ Fonctionnalité: Gestion des accès à l'application
     Alors la page ne contient pas "Gestion des accès"
     Et la page ne contient pas "Envoyer en paiement"
 
-  Scénario: Je ne voit pas toutes les actions de directeur
+  Scénario: Je ne vois pas toutes les actions de directeur
+    Sachant que l'API SYGNE renvoie 1 élèves en "1MELEC" pour l'établissement "DINUM"
+    Et que toutes les tâches de fond sont terminées
     Lorsque je me connecte en tant que personnel MENJ
     Et que je passe l'écran d'accueil
     Alors le panneau "Décisions d'attribution" ne contient pas "Éditer les décisions d'attribution"

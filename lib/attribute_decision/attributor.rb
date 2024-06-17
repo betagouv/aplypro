@@ -11,7 +11,7 @@ module AttributeDecision
       composer.text("Article 1 : Objet", style: :paragraph_title)
       composer.text("Une aide financière de l’État, dénommée « allocation en faveur des lycéens de la voie professionnelle dans le cadre de la valorisation des périodes de formation en milieu professionnel », est attribuée à : ")
 
-      composer.text("#{student.full_name}, né(e) le #{I18n.l(student.birthdate)}, #{address_copy}, ci-après désigné « le bénéficiaire », inscrit en « #{@schooling.mef.label} (MEF : #{@schooling.mef.code}) » pour l'année scolaire 2023-2024.")
+      composer.text("#{student.full_name}, né(e) le #{I18n.l(student.birthdate)}, #{address_copy}, ci-après désigné « le bénéficiaire », inscrit en « #{@schooling.mef.label} (MEF : #{@schooling.mef.code}) » pour l'année scolaire #{@school_year}.")
 
       composer.text("Article 2 : Conditions d’éligibilité à l’allocation", style: :paragraph_title)
       composer.text("Cette allocation a pour objectif de reconnaître l’engagement des lycéens professionnels dans la réalisation de leur formation en valorisant les périodes de formation en milieu professionnel (PFMP).")
@@ -136,7 +136,7 @@ module AttributeDecision
       composer.image(Rails.root.join("app/assets/images/Republique_Francaise_RVB.png").to_s, height: 100, position: :float)
       composer.text("Décision d'attribution annuelle".upcase, style: :title, margin: [150, 0, 0, 0])
       composer.text("Relative au versement d’une allocation en faveur des lycéens de la voie professionnelle dans le cadre de la valorisation des périodes de formation en milieu professionnel".upcase, style: :subtitle)
-      composer.text("année scolaire 2023 - 2024".upcase, style: :subtitle, margin: [10, 0, 50, 0])
+      composer.text("année scolaire #{@school_year}".upcase, style: :subtitle, margin: [10, 0, 50, 0])
     end
 
     def summary

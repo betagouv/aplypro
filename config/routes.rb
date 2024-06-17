@@ -26,10 +26,20 @@ Rails.application.routes.draw do
 
   resources :establishments, only: %w[edit update] do
     resources :invitations
+  end
 
-    post "create_attributive_decisions"
-    post "reissue_attributive_decisions"
-    post "download_attributive_decisions"
+  resources :school_years, path: :year, only: [] do
+    collection do
+      get "select", to: "school_years#select"
+    end
+
+    get "/home", to: "home#home"
+
+    resources :establishments, only: [] do
+      post "create_attributive_decisions"
+      post "reissue_attributive_decisions"
+      post "download_attributive_decisions"
+    end
   end
 
   resources :classes, only: %i[show index] do

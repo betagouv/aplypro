@@ -1,4 +1,4 @@
-= form_with method: :post, url: establishment_create_attributive_decisions_path(establishment) do |form|
+= form_with method: :post, url: school_year_establishment_create_attributive_decisions_path(selected_school_year, establishment) do |form|
   .fr-checkbox-group
     = form.check_box :confirmed_director, checked: current_user.confirmed_director?
     = form.label :confirmed_director, class: "fr-label" do
