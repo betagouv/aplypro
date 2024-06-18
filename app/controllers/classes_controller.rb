@@ -26,14 +26,14 @@ class ClassesController < ApplicationController
   end
 
   def create_bulk_pfmp
-    @pfmp = Pfmp.new(pfmp_params)
-
     if @classe.create_bulk_pfmp(pfmp_params)
       redirect_to class_path(@classe), notice: t("pfmps.new.success")
     else
+      @pfmp = Pfmp.new(pfmp_params)
+      # TODO: clean up this hack, here we set a schooling to run conditional validations
+      @pfmp.schooling = @classe.schoolings.last
       @pfmp.save # save to populate the errors hash
       @pfmp.errors.delete(:schooling) # remove the one about schooling
-
       render :bulk_pfmp, status: :unprocessable_entity
     end
   end
