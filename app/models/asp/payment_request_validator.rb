@@ -36,8 +36,6 @@ module ASP
       add_error(:rib) if rib.invalid?
 
       add_error(:adult_without_personal_rib) if student.adult_without_personal_rib?
-
-      add_error(:rib_owner_moral) if rib.moral_person?
     end
 
     def check_pfmp
