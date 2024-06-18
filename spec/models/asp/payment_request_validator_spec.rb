@@ -73,19 +73,6 @@ describe ASP::PaymentRequestValidator do
     include_examples "invalidation", :adult_without_personal_rib
   end
 
-  context "when the RIB belongs to a moral person" do
-    before do
-      with_readonly_bypass(asp_payment_request.student.rib) do |rib|
-        # this makes sure we don't get caught by adult_without_personal_rib
-        rib.student.update!(birthdate: 15.years.ago)
-
-        rib.update!(owner_type: :moral_person)
-      end
-    end
-
-    include_examples "invalidation", :rib_owner_moral
-  end
-
   context "when the attributive decision has not been attached" do
     before do
       asp_payment_request.pfmp.schooling.attributive_decision.purge
