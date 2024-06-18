@@ -47,8 +47,6 @@ class Classe < ApplicationRecord
   scope :with_attributive_decisions, -> { joins(schoolings: :attributive_decision_attachment) }
 
   def create_bulk_pfmp(pfmp_params)
-    @pfmp = Pfmp.new(pfmp_params)
-
     Pfmp.transaction do
       schoolings.current.each do |schooling|
         schooling.pfmps.create!(pfmp_params)
