@@ -34,7 +34,7 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validate :ensure_confirmed_director_is_director
 
   # List of establishment types : https://infocentre.pleiade.education.fr/bcn/workspace/viewTable/n/N_TYPE_UAI
-  ACCEPTED_ESTABLISHMENT_TYPES = %w[LYC LP SEP EREA CFPA EME IMP].freeze
+  ACCEPTED_ESTABLISHMENT_TYPES = %w[LYC LP SEP EREA CFPA EME IMP CONT].freeze
 
   API_MAPPING = {
     "nom_etablissement" => :name,
