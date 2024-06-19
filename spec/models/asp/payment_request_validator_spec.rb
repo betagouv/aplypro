@@ -120,6 +120,36 @@ describe ASP::PaymentRequestValidator do
     include_examples "invalidation", :excluded_schooling
   end
 
+  context "when the schooling is abrogated" do
+    before do
+      previous_schooling = asp_payment_request.schooling
+      previous_schooling.update!(end_date: Date.yesterday)
+      AttributiveDecisionHelpers.generate_fake_attributive_decision(previous_schooling)
+      AttributiveDecisionHelpers.generate_fake_abrogation_decision(previous_schooling)
+      create(:schooling, :with_attributive_decision, student: asp_payment_request.student)
+    end
+
+    context "when the pfmp dates match the schooling" do
+      it "does not add an error" do
+        expect { validator.validate }.not_to(change { asp_payment_request.errors.details[:ready_state_validation] })
+      end
+    end
+
+    context "when the pfmp dates dont match the schooling" do
+      before do
+        schooling = asp_payment_request.schooling
+        pfmp = create(:pfmp, :validated, start_date: "2023-09-02", schooling: schooling)
+        asp_payment_request.pfmp = pfmp
+        asp_payment_request.save!
+        asp_payment_request.pfmp.update!(end_date: schooling.end_date + 1.day)
+      end
+
+      it "adds an error" do
+        expect { validator.validate }.to(change { asp_payment_request.errors.details[:ready_state_validation] })
+      end
+    end
+  end
+
   context "when the student needs abrogated attributive decisions" do
     context "when there is no abrogation decision" do
       before do

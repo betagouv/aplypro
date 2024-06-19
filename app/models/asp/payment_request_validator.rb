@@ -13,7 +13,8 @@ module ASP
       check_student
       check_insee_code
       check_address
-      check_documents
+      check_da_attribution
+      check_da_abrogation
       check_rib
       check_pfmp
       check_duplicates
@@ -50,10 +51,14 @@ module ASP
       add_error(:excluded_schooling) if payment_request.schooling.excluded?
     end
 
-    def check_documents
+    def check_da_attribution
       add_error(:missing_attributive_decision) if !payment_request.schooling.attributive_decision.attached?
+    end
 
-      return unless student.transferred?
+    def check_da_abrogation
+      if !student.transferred? || (payment_request.schooling.abrogated? && payment_request.pfmp.within_schooling?)
+        return
+      end
 
       other_schoolings = student.schoolings.excluding(payment_request.schooling)
 
