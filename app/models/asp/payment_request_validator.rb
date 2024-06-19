@@ -53,7 +53,7 @@ module ASP
     def check_documents
       add_error(:missing_attributive_decision) if !payment_request.schooling.attributive_decision.attached?
 
-      return unless student.needs_abrogated_attributive_decision?
+      return unless student.transferred?
 
       other_schoolings = student.schoolings.excluding(payment_request.schooling)
 

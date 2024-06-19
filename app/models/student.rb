@@ -83,7 +83,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # FIXME: this is used to filter the payment requests but at some
   # point we should stop doing it, once we've done the work to offer
   # abrogated attributive decisions.
-  def needs_abrogated_attributive_decision?
+  def transferred?
     multiple_mefs? || multiple_establishments?
   end
 
