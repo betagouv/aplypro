@@ -56,7 +56,7 @@ module ASP
     end
 
     def check_da_abrogation
-      if !student.transferred? || (payment_request.schooling.abrogated? && payment_request.pfmp.within_schooling?)
+      if !student.transferred? || (payment_request.schooling.abrogated? && payment_request.pfmp.within_schooling_dates?)
         return
       end
 
