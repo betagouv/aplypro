@@ -120,13 +120,22 @@ describe ASP::PaymentRequestValidator do
     include_examples "invalidation", :excluded_schooling
   end
 
-  context "when the schooling is abrogated" do
+  context "when the student transferred and the schooling is abrogated and there is a schooling with attribution" do
     before do
-      previous_schooling = asp_payment_request.schooling
-      previous_schooling.update!(end_date: Date.yesterday)
-      AttributiveDecisionHelpers.generate_fake_attributive_decision(previous_schooling)
-      AttributiveDecisionHelpers.generate_fake_abrogation_decision(previous_schooling)
+      schooling = asp_payment_request.schooling
+      schooling.update!(end_date: Date.yesterday)
+      AttributiveDecisionHelpers.generate_fake_attributive_decision(schooling)
+      AttributiveDecisionHelpers.generate_fake_abrogation_decision(schooling)
       create(:schooling, :with_attributive_decision, student: asp_payment_request.student)
+    end
+
+    context "when the current schooling has no abrogation attached" do
+      before do
+        schooling = asp_payment_request.schooling
+        schooling.abrogation_decision.purge
+      end
+
+      include_examples "invalidation", :needs_abrogated_attributive_decision
     end
 
     context "when the pfmp dates match the schooling" do
@@ -145,40 +154,9 @@ describe ASP::PaymentRequestValidator do
       end
 
       it "adds an error" do
-        expect { validator.validate }.to(change { asp_payment_request.errors.details[:ready_state_validation] })
-      end
-    end
-  end
-
-  context "when the student needs abrogated attributive decisions" do
-    context "when there is no abrogation decision" do
-      before do
-        previous_schooling = asp_payment_request.student.schoolings.first
-        previous_schooling.update!(end_date: Date.yesterday)
-        AttributiveDecisionHelpers.generate_fake_attributive_decision(previous_schooling)
-        schooling = create(:schooling, :with_attributive_decision, student: asp_payment_request.student)
-        pfmp = create(:pfmp, :validated, start_date: "2023-09-02", schooling: schooling)
-        asp_payment_request.pfmp = pfmp
-        asp_payment_request.save!
-      end
-
-      include_examples "invalidation", :needs_abrogated_attributive_decision
-    end
-
-    context "when the other schoolings are properly abrogated" do
-      before do
-        previous_schooling = asp_payment_request.student.schoolings.first
-        previous_schooling.update!(end_date: Date.yesterday)
-        AttributiveDecisionHelpers.generate_fake_attributive_decision(previous_schooling)
-        AttributiveDecisionHelpers.generate_fake_abrogation_decision(previous_schooling)
-        schooling = create(:schooling, :with_attributive_decision, student: asp_payment_request.student)
-        pfmp = create(:pfmp, :validated, start_date: "2023-09-02", schooling: schooling)
-        asp_payment_request.pfmp = pfmp
-        asp_payment_request.save!
-      end
-
-      it "does not add an error" do
-        expect { validator.validate }.not_to(change { asp_payment_request.errors.details[:ready_state_validation] })
+        expect { validator.validate }.to(change do
+                                           asp_payment_request.errors.details[:ready_state_validation]
+                                         end.from([]).to([{ error: :needs_abrogated_attributive_decision }]))
       end
     end
   end
