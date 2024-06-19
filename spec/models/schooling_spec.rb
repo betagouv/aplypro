@@ -13,6 +13,17 @@ RSpec.describe Schooling do
   end
 
   describe "validations" do
+    describe "end_date" do
+      context "when the end date is before the start" do
+        before do
+          schooling.start_date = Time.zone.now
+          schooling.end_date = Date.yesterday
+        end
+
+        it { is_expected.not_to be_valid }
+      end
+    end
+
     describe "student_id" do
       context "when there is another schooling" do
         let!(:schooling) { create(:schooling) }
