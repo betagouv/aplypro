@@ -97,6 +97,12 @@ class Pfmp < ApplicationRecord
     latest_payment_request&.ongoing? || paid?
   end
 
+  def within_schooling_dates?
+    return true if (schooling.open? && start_date >= schooling.start_date) || schooling.no_dates?
+
+    (schooling.start_date..schooling.end_date).cover?(start_date..end_date)
+  end
+
   def paid?
     payment_requests.in_state(:paid).any?
   end

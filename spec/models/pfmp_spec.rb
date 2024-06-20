@@ -205,4 +205,44 @@ RSpec.describe Pfmp do
       expect(pfmp.can_retrigger_payment?).to eq :result
     end
   end
+
+  describe "within_schooling_dates?" do
+    context "when schooling is open" do
+      it "returns true" do
+        expect(pfmp.within_schooling_dates?).to be true
+      end
+
+      context "when the start date of the pfmp is inferior to start_date of schooling" do
+        before do
+          pfmp.schooling.update!(start_date: "2023-10-01")
+          pfmp.update!(start_date: pfmp.schooling.start_date - 1.day, end_date: pfmp.schooling.start_date + 30.days)
+        end
+
+        it "returns false" do
+          expect(pfmp.within_schooling_dates?).to be false
+        end
+      end
+    end
+
+    context "when schooling is closed" do
+      before do
+        pfmp.schooling.update!(end_date: Date.yesterday)
+      end
+
+      it "returns true" do
+        expect(pfmp.within_schooling_dates?).to be true
+      end
+
+      context "when the dates of the schooling dont cover the pfmp" do
+        before do
+          pfmp.schooling.update!(start_date: "2024-03-01", end_date: "2024-04-01")
+          pfmp.update!(start_date: pfmp.schooling.start_date - 1.day, end_date: pfmp.schooling.start_date + 30.days)
+        end
+
+        it "returns false" do
+          expect(pfmp.within_schooling_dates?).to be false
+        end
+      end
+    end
+  end
 end

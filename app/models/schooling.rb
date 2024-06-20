@@ -29,6 +29,10 @@ class Schooling < ApplicationRecord
   validates :student, uniqueness: { scope: :end_date, message: :unique_active_schooling }, if: :open?
   validates :student, uniqueness: { scope: :classe }, if: :closed?
 
+  validates :end_date,
+            comparison: { greater_than_or_equal_to: :start_date },
+            if: -> { start_date && end_date }
+
   updatable :start_date, :end_date, :status
 
   def generate_administrative_number
@@ -55,6 +59,10 @@ class Schooling < ApplicationRecord
 
   def open?
     !closed?
+  end
+
+  def no_dates?
+    start_date.blank? && end_date.blank?
   end
 
   def excluded?
