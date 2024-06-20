@@ -9,9 +9,9 @@ module StudentsApi
         define! do
           deep_symbolize_keys
 
-          rename_keys(label_classe: :label)
+          rename_keys(label_classe: :label, année_scolaire: :year)
 
-          accept_keys %i[label mef_code]
+          accept_keys %i[label mef_code year]
         end
       end
     end
