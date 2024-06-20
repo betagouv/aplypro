@@ -27,22 +27,21 @@ describe Student::Mappers::Fregata do
   end
 
   context "when the student has left the establishment" do
-    let(:data) { build_list(:fregata_student, 1, :left_establishment, left_at: 3.days.ago, ine_value: "test") }
+    let(:data) { build_list(:fregata_student, 1, :left_establishment, left_at: 1.day.ago, ine_value: "test") }
 
     it "sets the correct end date on the previous schooling" do
       mapper.new(data, uai).parse!
-
-      expect(Student.find_by!(ine: "test").schoolings.last.end_date).to eq 3.days.ago.to_date
+      expect(Student.find_by!(ine: "test").schoolings.last.end_date).to eq 1.day.ago.to_date
     end
   end
 
   context "when the student has left the class" do
-    let(:data) { build_list(:fregata_student, 1, :left_classe, left_classe_at: 4.days.ago, ine_value: "test") }
+    let(:data) { build_list(:fregata_student, 1, :left_classe, left_classe_at: 1.day.ago, ine_value: "test") }
 
     it "sets the correct end date on the previous schooling" do
       mapper.new(data, uai).parse!
 
-      expect(Student.find_by!(ine: "test").schoolings.last.end_date).to eq 4.days.ago.to_date
+      expect(Student.find_by!(ine: "test").schoolings.last.end_date).to eq 1.day.ago.to_date
     end
 
     context "when there was already a previous schooling for this class" do
