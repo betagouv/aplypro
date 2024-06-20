@@ -12,11 +12,13 @@ module StudentsApi
           unwrap :sectionReference
           unwrap :division
 
-          rename_keys(codeMef: :mef_code, libelle: :label)
+          rename_keys(codeMef: :mef_code, libelle: :label, anneeScolaireId: :year)
+
+          map_value :year, ->(value) { value + StudentsApi::Fregata::Api::YEAR_OFFSET }
 
           map_value :mef_code, ->(value) { value.chop }
 
-          accept_keys %i[label mef_code]
+          accept_keys %i[label mef_code year]
         end
       end
     end
