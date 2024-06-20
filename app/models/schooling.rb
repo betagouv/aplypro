@@ -60,6 +60,10 @@ class Schooling < ApplicationRecord
     !closed?
   end
 
+  def no_dates?
+    start_date.blank? && end_date.blank?
+  end
+
   def excluded?
     Exclusion.excluded?(establishment.uai, mef.code)
   end

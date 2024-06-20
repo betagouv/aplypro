@@ -32,7 +32,7 @@ describe Student::Mappers::Fregata do
     it "sets the correct end date on the previous schooling" do
       mapper.new(data, uai).parse!
 
-      expect(Student.find_by(ine: "test").schoolings.last.end_date).to eq 3.days.ago.to_date
+      expect(Student.find_by!(ine: "test").schoolings.last.end_date).to eq 3.days.ago.to_date
     end
   end
 
@@ -42,7 +42,7 @@ describe Student::Mappers::Fregata do
     it "sets the correct end date on the previous schooling" do
       mapper.new(data, uai).parse!
 
-      expect(Student.find_by(ine: "test").schoolings.last.end_date).to eq 4.days.ago.to_date
+      expect(Student.find_by!(ine: "test").schoolings.last.end_date).to eq 4.days.ago.to_date
     end
 
     context "when there was already a previous schooling for this class" do
