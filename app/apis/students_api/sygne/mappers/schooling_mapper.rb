@@ -32,8 +32,6 @@ module StudentsApi
 
           map_value(:mef_code, Dry::Transformer::Coercions[:to_string])
 
-          map_value(:annee_scolaire, Dry::Transformer::Coercions[:to_string])
-
           map_value :mef_code, ->(value) { value.chop }
 
           map_value :status, ->(value) { STATUS_MAPPING[value] }
