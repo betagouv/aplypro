@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Aplypro
-  VERSION = "1.17.6"
+  VERSION = "1.17.7"
 end
