@@ -3,10 +3,10 @@
 class FetchStudentInformationJob < ApplicationJob
   queue_as :default
 
-  def perform(schooling)
+  def perform(schooling) # rubocop:disable Metrics/AbcSize
     student = schooling.student
 
-    return if student.ine_not_found
+    return if student.ine_not_found || schooling.closed?
 
     api = schooling.establishment.students_api
 
