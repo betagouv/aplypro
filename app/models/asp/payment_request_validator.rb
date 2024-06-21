@@ -17,7 +17,7 @@ module ASP
       check_da_abrogation
       check_rib
       check_pfmp
-      check_duplicates
+      check_pfmp_overlaps
       check_schooling
     end
 
@@ -75,8 +75,8 @@ module ASP
       add_error(:missing_birthplace_city_insee_code)
     end
 
-    def check_duplicates
-      add_error(:duplicates) if pfmp.duplicates.any? do |p|
+    def check_pfmp_overlaps
+      add_error(:overlaps) if pfmp.overlaps.any? do |p|
         p.in_state?(:validated)
       end
     end

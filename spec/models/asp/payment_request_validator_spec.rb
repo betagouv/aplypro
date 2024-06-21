@@ -89,8 +89,8 @@ describe ASP::PaymentRequestValidator do
       create(
         :pfmp,
         schooling: pfmp.schooling,
-        start_date: pfmp.start_date,
-        end_date: pfmp.end_date,
+        start_date: pfmp.start_date + 1.day,
+        end_date: pfmp.end_date + 3.days,
         day_count: pfmp.day_count
       )
     end
@@ -98,7 +98,7 @@ describe ASP::PaymentRequestValidator do
     context "when it is validated" do
       before { duplicate.validate! }
 
-      include_examples "invalidation", :duplicates
+      include_examples "invalidation", :overlaps
     end
 
     context "when it's not validated" do
@@ -147,10 +147,13 @@ describe ASP::PaymentRequestValidator do
     context "when the pfmp dates dont match the schooling" do
       before do
         schooling = asp_payment_request.schooling
-        pfmp = create(:pfmp, :validated, start_date: "2023-09-02", schooling: schooling)
+        pfmp = create(:pfmp, :validated, day_count: 2, start_date: schooling.end_date + 1.day,
+                                         end_date: schooling.end_date + 3.days, schooling: schooling)
+        # binding.irb
         asp_payment_request.pfmp = pfmp
         asp_payment_request.save!
-        asp_payment_request.pfmp.update!(end_date: schooling.end_date + 1.day)
+        asp_payment_request.pfmp.update!(start_date: schooling.end_date + 5.days,
+                                         end_date: schooling.end_date + 10.days)
       end
 
       it "adds an error" do

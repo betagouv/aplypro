@@ -119,9 +119,9 @@ class Pfmp < ApplicationRecord
     day_count.present?
   end
 
-  def duplicates
+  def overlaps
     student.pfmps.excluding(self).select do |other|
-      other.start_date == start_date && other.end_date == end_date
+      (other.start_date..other.end_date).overlap?(start_date..end_date)
     end
   end
 
