@@ -44,7 +44,7 @@ FactoryBot.define do
       validated
 
       after(:create) do |pfmp|
-        pfmp.latest_payment_request.last.tap do |p|
+        pfmp.latest_payment_request.tap do |p|
           p.mark_ready!
 
           p.asp_request = ASP::Request.create!
