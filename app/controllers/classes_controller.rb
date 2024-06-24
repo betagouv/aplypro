@@ -53,7 +53,7 @@ class ClassesController < ApplicationController
 
   def update_bulk_pfmp
     @pfmps = bulk_pfmp_completion_params[:pfmps].map do |pfmp_params|
-      Pfmp.find(pfmp_params[:id]).tap do |pfmp|
+      @classe.pfmps.find(pfmp_params[:id]).tap do |pfmp|
         pfmp.day_count = pfmp_params[:day_count]
       end
     end
