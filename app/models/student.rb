@@ -150,6 +150,16 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     false
   end
 
+  def add_new_rib(rib_params)
+    transaction do
+      if ribs.count.positive?
+        previous_rib = ribs.order(created_at: :asc).last
+        previous_rib.archive! if previous_rib.payment_request.nil? || previous_rib.payment_request.terminated?
+      end
+      ribs.create!(rib_params)
+    end
+  end
+
   private
 
   def check_asp_file_reference

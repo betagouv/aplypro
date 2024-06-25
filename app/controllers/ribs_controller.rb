@@ -16,10 +16,6 @@ class RibsController < ApplicationController
     @rib = Rib.new
   end
 
-  def index
-
-  end
-
   def edit; end
 
   def confirm_deletion; end
@@ -29,9 +25,6 @@ class RibsController < ApplicationController
 
     respond_to do |format|
       if @rib.save
-        # Archive previous Rib
-        @student.ribs.order(created_at).to[-2].update!(archived_at: DateTime.now)
-
         format.html { redirect_to class_student_path(@classe, @student), notice: t(".success") }
       else
         format.html { render :new, status: :unprocessable_entity }
