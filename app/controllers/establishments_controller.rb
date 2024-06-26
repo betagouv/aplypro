@@ -18,6 +18,14 @@ class EstablishmentsController < ApplicationController
     redirect_to root_path
   end
 
+  def reissue_attributive_decisions
+    mark_attributive_decision_generation_all!
+
+    ReissueAttributiveDecisionJob.perform_later(current_establishment)
+
+    redirect_to root_path
+  end
+
   def download_attributive_decisions
     documents = current_establishment
                 .schoolings
@@ -46,6 +54,12 @@ class EstablishmentsController < ApplicationController
     current_establishment
       .schoolings
       .without_attributive_decisions
+      .update_all(generating_attributive_decision: true) # rubocop:disable Rails/SkipsModelValidations
+  end
+
+  def mark_attributive_decision_generation_all!
+    current_establishment
+      .schoolings
       .update_all(generating_attributive_decision: true) # rubocop:disable Rails/SkipsModelValidations
   end
 end

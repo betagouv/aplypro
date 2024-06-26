@@ -26,6 +26,17 @@ module HomeHelper
     )
   end
 
+  def attributive_decisions_reissue_button(establishment)
+    count = establishment.schoolings.with_attributive_decisions.count
+
+    return if count.zero?
+
+    button_to "Rééditer les décisions d'attribution",
+              establishment_reissue_attributive_decisions_path(establishment),
+              method: :post,
+              class: "fr-btn fr-btn--tertiary"
+  end
+
   def attributive_decisions_generation_form(establishment)
     return cannot_generate_attributive_decisions_button unless current_user.can_try_to_generate_attributive_decisions?
 

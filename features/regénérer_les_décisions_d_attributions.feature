@@ -9,7 +9,15 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Et que je passe l'écran d'accueil
 
   Scénario: Le personnel de direction ne peut pas rééditer les décisions d'attribution si il n'y en a aucune
+    Et que je me rends sur la page d'accueil
     Et que le panneau "Décisions d'attribution" contient un compteur à 0 sur 10
+    Alors le panneau "Décisions d'attribution" ne contient pas "Rééditer les décisions d'attribution"
+
+  Scénario: Seul le personnel de direction peut voir le bouton pour rééditer les décisions d'attribution
+    Et que je suis un personnel MENJ de l'établissement "DINUM"
+    Et que je me déconnecte
+    Et que je me connecte en tant que personnel MENJ
+    Et que je passe l'écran d'accueil
     Alors le panneau "Décisions d'attribution" ne contient pas "Rééditer les décisions d'attribution"
 
   Scénario: Le personnel de direction peut voir un bouton pour régénérer les décisions d'attribution
