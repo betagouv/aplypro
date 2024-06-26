@@ -24,7 +24,7 @@
           €
         de plafond annuel
 
-= form_with scope: :validation, method: :post, url: validation_class_path(@classe) do |form|
+= form_with scope: :validation, method: :post, url: validation_school_year_class_path(selected_school_year.start_year, @classe) do |form|
   .fr-table.fr-table--no-caption.fr-mb-3w
     %table
       %caption Liste des pfmps à valider

@@ -15,8 +15,7 @@
           - @validatable_classes.each do |classe|
             - nb_students = @classes_facade.nb_students_per_class[classe.id]
             %tr
-              %td
-                = dsfr_link_to classe.to_long_s, validation_class_path(classe), title: t("links.classes.show", label: classe.to_long_s)
+              %td= dsfr_link_to classe.to_long_s, validation_school_year_class_path(selected_school_year.start_year, classe), title: t("links.classes.show", label: classe.to_long_s)
               %td= progress_badge @classes_facade.nb_attributive_decisions_per_class[classe.id], nb_students
               %td= progress_badge @classes_facade.nb_ribs_per_class[classe.id], nb_students
               %td= pfmps_status_count_badge :completed, @classes_facade.nb_pfmps(classe.id, :completed)
