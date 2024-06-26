@@ -28,7 +28,20 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Et que je suis responsable légal et que je génère les décisions d'attribution manquantes
     Et que la génération des décisions d'attribution manquantes est complètement finie
     Quand je me rends sur la page d'accueil
-    Et que le panneau "Décisions d'attribution" contient "10 / 10"
+    Alors le panneau "Décisions d'attribution" contient "10 / 10"
     Et que je clique sur "Changer d'année scolaire"
     Et que je clique sur "2023-2024"
     Alors le panneau "Décisions d'attribution" contient "0 / 9"
+
+  Scénario: Le personnel de direction ne voit pas les décisions d'attribution d'une autre année scolaire
+    Lorsque j'ai une classe "1MELEC" de 9 élèves pour l'établissement "DINUM" lors de l'année 2023
+    Et que je clique sur "Élèves"
+    Alors je peux voir dans le tableau "Liste des classes"
+      | Classe | Décisions d'attribution | Coordonnées bancaires | PFMPs |
+      | 1MELEC | 0 / 10                  | 0 / 10                |       |
+    Et que je clique sur "Changer d'année scolaire"
+    Et que je clique sur "2023-2024"
+    Et que je clique sur "Élèves"
+    Alors je peux voir dans le tableau "Liste des classes"
+      | Classe | Décisions d'attribution | Coordonnées bancaires | PFMPs |
+      | 1MELEC | 0 / 9                   | 0 / 9                 |       |

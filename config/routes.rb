@@ -39,9 +39,11 @@ Rails.application.routes.draw do
       post "create_attributive_decisions"
       post "download_attributive_decisions"
     end
+
+    resources :classes, only: %i[show index]
   end
 
-  resources :classes, only: %i[show index] do
+  resources :classes, only: [] do
     member do
       get "bulk_pfmp"
       post "create_bulk_pfmp"

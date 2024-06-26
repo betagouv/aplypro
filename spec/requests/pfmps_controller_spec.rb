@@ -23,7 +23,7 @@ RSpec.describe PfmpsController do
         get class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id, id: pfmp.id)
       end
 
-      it { is_expected.to redirect_to classes_path }
+      it { is_expected.to redirect_to school_year_classes_path(SchoolYear.current.start_year) }
     end
 
     context "when trying to access a deleted PFMP" do
