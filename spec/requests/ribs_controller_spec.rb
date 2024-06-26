@@ -8,6 +8,21 @@ RSpec.describe RibsController do
 
   before { sign_in(user) }
 
+  describe "CREATE /rib" do
+    it "returns ok" do
+      post class_student_ribs_path(student.classe.id, student.id),
+           params: { rib: build(:rib, student: student).attributes }
+
+      expect(response).to have_http_status(:created)
+    end
+
+    it "returns 422" do
+      post class_student_ribs_path(student.classe.id, student.id), params: { rib: build(:rib, iban: nil).attributes }
+
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+  end
+
   describe "DESTROY /rib" do
     context "when trying to update a RIB from a student in another establishment" do
       let(:other_student) { create(:schooling).student }

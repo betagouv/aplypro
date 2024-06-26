@@ -150,7 +150,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     false
   end
 
-  def add_new_rib(rib_params)
+  def create_new_rib!(rib_params)
     transaction do
       if ribs.count.positive?
         previous_rib = ribs.order(created_at: :asc).last
@@ -158,6 +158,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
       end
       ribs.create!(rib_params)
     end
+    rib
   end
 
   private

@@ -21,16 +21,11 @@ class RibsController < ApplicationController
   def confirm_deletion; end
 
   def create
-    @rib = Rib.new(rib_params)
-
-    respond_to do |format|
-      if @rib.save
-        format.html { redirect_to class_student_path(@classe, @student), notice: t(".success") }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @rib.errors, status: :unprocessable_entity }
-      end
-    end
+    @rib = @student.create_new_rib!(rib_params)
+    redirect_to class_student_path(@classe, @student), notice: t(".success"), status: :created
+  rescue StandardError
+    @rib = Rib.new
+    render :new, status: :unprocessable_entity
   end
 
   def update
@@ -55,13 +50,13 @@ class RibsController < ApplicationController
   end
 
   def bulk_create
-    @ribs = bulk_ribs_params
-            .map { |rib_params| Rib.new(rib_params) }
-            .reject { |rib| [rib.iban, rib.bic].all?(&:blank?) }
-
-    if @ribs.each(&:save).all?(&:valid?)
+    filtered_params = bulk_ribs_params
+                      .map { |rib_params| Rib.new(rib_params) }
+                      .reject { |rib| [rib.iban, rib.bic].all?(&:blank?) }
+    begin
+      @ribs = filtered_params.map { |r| @student.create_new_rib!(r.attributes) }
       redirect_to class_path(@classe), notice: t("ribs.create.success")
-    else
+    rescue StandardError
       render :missing, status: :unprocessable_entity
     end
   end
