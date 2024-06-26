@@ -60,7 +60,7 @@ class RibsController < ApplicationController
             .reject { |rib| [rib.iban, rib.bic].all?(&:blank?) }
 
     if @ribs.each(&:save).all?(&:valid?)
-      redirect_to class_path(@classe), notice: t("ribs.create.success")
+      redirect_to school_year_class_path(selected_school_year.start_year, @classe), notice: t("ribs.create.success")
     else
       render :missing, status: :unprocessable_entity
     end
@@ -93,7 +93,8 @@ class RibsController < ApplicationController
   def set_classe
     @classe = Classe.where(establishment: current_establishment).find(params[:class_id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to classes_path, alert: t("errors.classes.not_found"), status: :forbidden and return
+    redirect_to school_year_classes_path(selected_school_year.start_year),
+                alert: t("errors.classes.not_found"), status: :forbidden and return
   end
 
   def set_rib
@@ -101,8 +102,14 @@ class RibsController < ApplicationController
   end
 
   def set_classe_breadcrumbs
-    add_breadcrumb t("pages.titles.classes.index"), classes_path
-    add_breadcrumb t("pages.titles.classes.show", name: @classe.label), class_path(@classe)
+    add_breadcrumb(
+      t("pages.titles.classes.index"),
+      school_year_classes_path(selected_school_year.start_year)
+    )
+    add_breadcrumb(
+      t("pages.titles.classes.show", name: @classe.label),
+      school_year_class_path(selected_school_year.start_year, @classe)
+    )
   end
 
   def set_rib_breadcrumbs

@@ -19,5 +19,5 @@
     = render partial: "shared/confirmed_director", locals: { message: t("panels.attributive_decisions.confirm_director") }
 
   .fr-btns-group.fr-btns-group--inline.fr-mt-3w
-    = link_to "Annuler", class_path(@classe), class: 'fr-btn fr-btn--secondary'
+    = link_to "Annuler", school_year_class_path(selected_school_year.start_year, @classe), class: 'fr-btn fr-btn--secondary'
     = form.submit "Confirmer l'abrogation", class: 'fr-btn fr-btn--danger fr-btn--secondary'
