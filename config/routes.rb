@@ -40,19 +40,19 @@ Rails.application.routes.draw do
       post "download_attributive_decisions"
     end
 
-    resources :classes, only: %i[show index]
+    resources :classes, only: %i[show index] do
+      member do
+        get "bulk_pfmp"
+        post "create_bulk_pfmp"
+        get "bulk_pfmp_completion"
+        put "update_bulk_pfmp"
+        get "validation", to: "validations#show"
+        post "validation", to: "validations#validate"
+      end
+    end
   end
 
   resources :classes, only: [] do
-    member do
-      get "bulk_pfmp"
-      post "create_bulk_pfmp"
-      get "bulk_pfmp_completion"
-      put "update_bulk_pfmp"
-      get "validation", to: "validations#show"
-      post "validation", to: "validations#validate"
-    end
-
     resources :ribs, only: [] do
       collection do
         get "missing"

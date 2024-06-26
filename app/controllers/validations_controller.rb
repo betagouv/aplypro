@@ -33,9 +33,11 @@ class ValidationsController < ApplicationController
   end
 
   # Validate all Pfmps for a given classe
+  # rubocop:disable Metrics/AbcSize
   def validate
     if validation_params.empty?
-      redirect_to validation_class_path(@classe), alert: t("validations.create.empty") and return
+      redirect_to validation_school_year_class_path(selected_school_year.start_year, @classe),
+                  alert: t("validations.create.empty") and return
     end
 
     current_establishment.validatable_pfmps
@@ -44,13 +46,14 @@ class ValidationsController < ApplicationController
 
     redirect_to validations_path, notice: t("validations.create.success", classe_label: @classe.label)
   end
+  # rubocop:enable Metrics/AbcSize
 
   private
 
   def check_confirmed_director_for_validation
     check_confirmed_director(
       alert_message: t("validations.create.not_director"),
-      redirect_path: validation_class_path(@classe)
+      redirect_path: validation_school_year_class_path(selected_school_year.start_year, @classe)
     )
   end
 
