@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class ValidationsFacade
-  attr_reader :establishment
+  attr_reader :establishment, :school_year
 
-  def initialize(establishment)
+  def initialize(establishment, school_year)
     @establishment = establishment
+    @school_year = school_year
   end
 
   def failed_pfmps_per_payment_request_state
@@ -21,7 +22,7 @@ class ValidationsFacade
   end
 
   def validatable_classes
-    Classe.where(id: establishment.validatable_pfmps.distinct.pluck(:"classes.id"))
+    Classe.where(id: establishment.validatable_pfmps.distinct.pluck(:"classes.id"), school_year: school_year)
   end
 
   def classes_facade

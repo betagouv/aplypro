@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_establishment, :selected_school_year
 
   def after_sign_in_path_for(_resource)
-    classes_path
+    school_year_classes_path(selected_school_year.start_year)
   end
 
   protected
@@ -46,7 +46,10 @@ class ApplicationController < ActionController::Base
   end
 
   def selected_school_year
-    @selected_school_year = SchoolYear.find_by(start_year: params[:school_year_id]) || SchoolYear.current
+    @selected_school_year =
+      SchoolYear.find_by(start_year: params[:school_year_id]) ||
+      SchoolYear.find_by(start_year: session[:start_year]) ||
+      SchoolYear.current
   end
 
   def infer_page_title(attrs = {})

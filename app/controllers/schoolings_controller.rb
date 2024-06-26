@@ -28,6 +28,7 @@ class SchoolingsController < ApplicationController
               .where(establishment: current_establishment)
               .find(params[:class_id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to classes_path, alert: t("errors.classes.not_found") and return
+    redirect_to school_year_classes_path(selected_school_year.start_year),
+                alert: t("errors.classes.not_found") and return
   end
 end

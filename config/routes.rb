@@ -29,8 +29,10 @@ Rails.application.routes.draw do
   end
 
   resources :school_years, path: :year, only: [] do
+    get "selected"
+
     collection do
-      get "select", to: "school_years#select"
+      get "select"
     end
 
     get "/home", to: "home#home"
@@ -40,25 +42,29 @@ Rails.application.routes.draw do
       post "reissue_attributive_decisions"
       post "download_attributive_decisions"
     end
-  end
 
-  resources :classes, only: %i[show index] do
-    member do
-      get "bulk_pfmp"
-      post "create_bulk_pfmp"
-      get "bulk_pfmp_completion"
-      put "update_bulk_pfmp"
-      get "validation", to: "validations#show"
-      post "validation", to: "validations#validate"
-    end
+    resources :classes, only: %i[show index] do
+      member do
+        get "bulk_pfmp"
+        post "create_bulk_pfmp"
+        get "bulk_pfmp_completion"
+        put "update_bulk_pfmp"
+        get "validation", to: "validations#show"
+        post "validation", to: "validations#validate"
+      end
 
-    resources :ribs, only: [] do
-      collection do
-        get "missing"
-        post "bulk_create"
+      resources :ribs, only: [] do
+        collection do
+          get "missing"
+          post "bulk_create"
+        end
       end
     end
 
+    resources :validations, only: :index
+  end
+
+  resources :classes, only: [] do
     resources :schoolings, only: [] do
       member do
         get "confirm_abrogation"
@@ -81,8 +87,6 @@ Rails.application.routes.draw do
       end
     end
   end
-
-  resources :validations, only: :index
 
   devise_scope :asp_user do
     get "/auth/asp/callback" => "users/omniauth_callbacks#asp", as: :asp_login

@@ -1,7 +1,7 @@
 %h1= "Année scolaire #{selected_school_year}"
 
 - if @establishment_facade.students_count <= 0
-  Aucun élève récupéré au cours de l'année scolaire #{selected_school_year}
+  = t("errors.school_years.not_found").html_safe
 - else
   .gray-panel#attributive_decision_panel
     = render 'classes/attributive_decisions_panel'
@@ -13,7 +13,7 @@
 
     %p Afin de pouvoir verser l'allocation aux lycéens, APLyPro a besoin de leurs coordonnées bancaires, de celles d'un responsable légal ou d'un tiers.
     %ul.fr-btns-group
-      %li= link_to "Choisir une classe pour saisir des coordonnées bancaires", classes_path, class: "fr-btn fr-btn--primary fr-mb-0"
+      %li= link_to "Choisir une classe pour saisir des coordonnées bancaires", school_year_classes_path(selected_school_year.start_year), class: "fr-btn fr-btn--primary fr-mb-0"
 
   .gray-panel
     %h2.fr-col 3. Périodes de formation en milieu professionnel
@@ -26,7 +26,7 @@
 
     %p Pour calculer le montant des allocations à envoyer, APLyPro a besoin de connaître le nombre de jours travaillés des PFMPs de chaque élève.
     %ul.fr-btns-group
-      %li= link_to "Choisir une classe ou un élève pour saisir une PFMP", classes_path, class: "fr-btn fr-btn--primary fr-mb-0"
+      %li= link_to "Choisir une classe ou un élève pour saisir une PFMP", school_year_classes_path(selected_school_year.start_year), class: "fr-btn fr-btn--primary fr-mb-0"
 
   .gray-panel
     %h2.fr-col 4. Demandes de paiements des PFMPs
@@ -42,6 +42,6 @@
     %p La validation du chef d'établissement est nécessaire pour chaque PFMP. Une fois la PFMP validée, une demande de paiement sera envoyée à l'Agence de Services et de Paiement (ASP).
     %ul.fr-btns-group
       - if current_user.can_validate?
-        %li= link_to "Consulter et gérer les envois en paiement", validations_path, class: "fr-btn fr-btn--primary fr-mb-0"
+        %li= link_to "Consulter et gérer les envois en paiement", school_year_validations_path(selected_school_year.start_year), class: "fr-btn fr-btn--primary fr-mb-0"
       - else
         %li= button_to "Vous n'avez pas le droit de valider des PFMPs", "#", class: 'fr-btn fr-btn--primary fr-mb-0', disabled: true

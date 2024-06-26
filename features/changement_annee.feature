@@ -18,17 +18,23 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Alors la page contient "Année scolaire 2023-2024"
     Et le bandeau informatif contient "2023-2024"
 
+  Scénario: Le personnel de direction change d'année scolaire et conserve l'année scolaire sélectionnée sur une page n'en ayant pas besoin
+    Quand je clique sur "Changer d'année scolaire"
+    Et que je clique sur "2023-2024"
+    Et que je clique sur "F.A.Q."
+    Alors le bandeau informatif contient "2023-2024"
+
   Scénario: Le personnel de direction consulte une année scolaire sans élèves
     Quand je clique sur "Changer d'année scolaire"
     Et que je clique sur "2023-2024"
-    Alors la page contient "Aucun élève récupéré au cours de l'année scolaire 2023-2024"
+    Alors la page contient "Aucun élève récupéré au cours de l'année scolaire sélectionnée."
 
   Scénario: Le personnel de direction ne voit pas les décisions d'attribution d'une autre année scolaire
     Lorsque j'ai une classe "1MELEC" de 9 élèves pour l'établissement "DINUM" lors de l'année 2023
     Et que je suis responsable légal et que je génère les décisions d'attribution manquantes
     Et que la génération des décisions d'attribution manquantes est complètement finie
     Quand je me rends sur la page d'accueil
-    Et que le panneau "Décisions d'attribution" contient "10 / 10"
+    Alors le panneau "Décisions d'attribution" contient "10 / 10"
     Et que je clique sur "Changer d'année scolaire"
     Et que je clique sur "2023-2024"
     Alors le panneau "Décisions d'attribution" contient "0 / 9"

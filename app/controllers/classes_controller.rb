@@ -14,12 +14,12 @@ class ClassesController < ApplicationController
   def index
     infer_page_title
 
-    @classes = current_establishment.classes.current
+    @classes = current_establishment.classes.where(school_year: selected_school_year)
     @classes_facade = ClassesFacade.new(@classes)
   end
 
   def show
-    add_breadcrumb t("pages.titles.classes.index"), classes_path
+    add_breadcrumb t("pages.titles.classes.index"), school_year_classes_path(selected_school_year.start_year)
     infer_page_title(name: @classe)
 
     @classe_facade = ClasseFacade.new(@classe)
@@ -27,7 +27,7 @@ class ClassesController < ApplicationController
 
   def create_bulk_pfmp
     if @classe.create_bulk_pfmp(pfmp_params)
-      redirect_to class_path(@classe), notice: t("pfmps.new.success")
+      redirect_to school_year_class_path(selected_school_year.start_year, @classe), notice: t("pfmps.new.success")
     else
       @pfmp = Pfmp.new(pfmp_params)
       # TODO: clean up this hack, here we set a schooling to run conditional validations
@@ -59,7 +59,7 @@ class ClassesController < ApplicationController
     end
 
     if @pfmps.all?(&:save)
-      redirect_to class_path(@classe), notice: t("pfmps.update.success")
+      redirect_to school_year_class_path(selected_school_year.start_year, @classe), notice: t("pfmps.update.success")
     else
       render :bulk_pfmp_completion, status: :unprocessable_entity
     end
@@ -81,14 +81,21 @@ class ClassesController < ApplicationController
   end
 
   def set_classe
-    @classe = current_establishment.classes.find(params[:id])
+    @classe = current_establishment.classes.find_by!(id: params[:id], school_year: selected_school_year)
   rescue ActiveRecord::RecordNotFound
-    redirect_to classes_path, alert: t("errors.classes.not_found") and return
+    redirect_to school_year_classes_path(selected_school_year.start_year),
+                alert: t("errors.classes.not_found") and return
   end
 
   def add_bulk_action_breadcrumbs
-    add_breadcrumb t("pages.titles.classes.index"), classes_path
-    add_breadcrumb t("pages.titles.classes.show", name: @classe), class_path(@classe)
+    add_breadcrumb(
+      t("pages.titles.classes.index"),
+      school_year_classes_path(selected_school_year.start_year)
+    )
+    add_breadcrumb(
+      t("pages.titles.classes.show", name: @classe),
+      school_year_class_path(selected_school_year.start_year, @classe)
+    )
     infer_page_title
   end
 end

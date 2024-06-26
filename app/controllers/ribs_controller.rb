@@ -57,7 +57,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
       Student.find(rib_params["student_id"]).create_new_rib(rib_params.except("student_id"))
     end
     if @ribs.each(&:save).all?(&:valid?)
-      redirect_to class_path(@classe), notice: t("ribs.create.success")
+      redirect_to school_year_class_path(selected_school_year.start_year, @classe), notice: t("ribs.create.success")
     else
       render :missing, status: :unprocessable_entity
     end
@@ -87,9 +87,10 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   end
 
   def set_classe
-    @classe = current_establishment.classes.find(params[:class_id])
+    @classe = current_establishment.classes.find_by!(id: params[:class_id], school_year: selected_school_year)
   rescue ActiveRecord::RecordNotFound
-    redirect_to classes_path, alert: t("errors.classes.not_found"), status: :forbidden and return
+    redirect_to school_year_classes_path(selected_school_year.start_year),
+                alert: t("errors.classes.not_found") and return
   end
 
   def set_rib
@@ -97,8 +98,14 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   end
 
   def set_classe_breadcrumbs
-    add_breadcrumb t("pages.titles.classes.index"), classes_path
-    add_breadcrumb t("pages.titles.classes.show", name: @classe.label), class_path(@classe)
+    add_breadcrumb(
+      t("pages.titles.classes.index"),
+      school_year_classes_path(selected_school_year.start_year)
+    )
+    add_breadcrumb(
+      t("pages.titles.classes.show", name: @classe.label),
+      school_year_class_path(selected_school_year.start_year, @classe)
+    )
   end
 
   def set_rib_breadcrumbs
@@ -120,7 +127,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
 
     if students_not_in_class.present? # rubocop:disable Style/GuardClause
       redirect_to(
-        missing_class_ribs_path(@classe),
+        missing_school_year_class_ribs_path(selected_school_year.start_year, @classe),
         alert: t("errors.classes.not_found"),
         status: :forbidden
       ) and return
