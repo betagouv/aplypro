@@ -25,3 +25,12 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Et que la génération des décisions d'attribution manquantes est complètement finie
     Et que je me rends sur la page d'accueil
     Alors le panneau "Décisions d'attribution" contient "Rééditer les décisions d'attribution"
+
+  Scénario: Le personnel de direction peut rééditer les décisions d'attribution
+    Et que je suis responsable légal et que je génère les décisions d'attribution manquantes
+    Et que la génération des décisions d'attribution manquantes est complètement finie
+    Et que je me rends sur la page d'accueil
+    Et que le panneau "Décisions d'attribution" contient "Rééditer les décisions d'attribution"
+    Et que je clique sur "Rééditer les décisions d'attribution"
+    Et que la génération des décisions d'attribution est complètement finie
+    Alors le panneau "Décisions d'attribution" contient "Télécharger 10 décisions d'attribution"
