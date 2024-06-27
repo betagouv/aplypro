@@ -149,7 +149,6 @@ describe ASP::PaymentRequestValidator do
         schooling = asp_payment_request.schooling
         pfmp = create(:pfmp, :validated, day_count: 2, start_date: schooling.end_date + 1.day,
                                          end_date: schooling.end_date + 3.days, schooling: schooling)
-        # binding.irb
         asp_payment_request.pfmp = pfmp
         asp_payment_request.save!
         asp_payment_request.pfmp.update!(start_date: schooling.end_date + 5.days,

@@ -124,20 +124,6 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     address.blank?
   end
 
-  def underage?
-    birthdate > 18.years.ago
-  end
-
-  def adult?
-    !underage?
-  end
-
-  def adult_without_personal_rib?
-    return false if underage? || rib.blank?
-
-    !rib.personal?
-  end
-
   def born_in_france?
     InseeCodes.in_france?(birthplace_country_insee_code)
   end
