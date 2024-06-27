@@ -14,7 +14,7 @@ module ASP
       known_with :id_dossier
 
       validates_presence_of %i[numadm codedispositif]
-      validates_length_of :numadm, within: 18..19
+      validates_length_of :numadm, within: 18..19, too_long: :numadm_length_error
 
       def xml_root_args
         if known_record?
@@ -31,6 +31,12 @@ module ASP
         xml.listeprestadoss do
           Prestadoss.from_payment_request(payment_request).to_xml(xml)
         end
+      end
+
+      private
+
+      def numadm_length_error
+        "numadm length must be between 18 and 19 characters (value: #{numadm})"
       end
     end
   end

@@ -10,7 +10,7 @@ RSpec.describe SendPaymentRequestsJob do
   before do
     stub_const("ASP::Server", server_double)
 
-    allow(server_double).to receive(:drop_file!)
+    allow(server_double).to receive(:upload_file!)
 
     create_list(:asp_payment_request, 5, :ready)
   end

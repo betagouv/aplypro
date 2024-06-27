@@ -58,14 +58,14 @@ module ASP
         @asp_file.validate!
 
         attach_asp_file!
-        drop_file!
+        upload_file!
         update_sent_timestamp!
         update_requests! unless rerun
       end
     end
 
-    def drop_file!
-      ASP::Server.drop_file!(
+    def upload_file!
+      ASP::Server.upload_file!(
         io: @asp_file.to_xml,
         path: @asp_file.filename
       )

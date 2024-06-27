@@ -16,7 +16,7 @@ RSpec.describe ASP::Request do
   before do
     stub_const("ASP::Server", server_double)
 
-    allow(server_double).to receive(:drop_file!)
+    allow(server_double).to receive(:upload_file!)
 
     stub_const("ASP::Entities::Fichier", fichier_double)
 
@@ -121,7 +121,7 @@ RSpec.describe ASP::Request do
     end
 
     context "when the server can't upload the file" do
-      before { allow(server_double).to receive(:drop_file!).and_raise }
+      before { allow(server_double).to receive(:upload_file!).and_raise }
 
       include_examples "does not persist anything"
     end
