@@ -33,7 +33,7 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Et que je clique sur "2023-2024"
     Alors le panneau "Décisions d'attribution" contient "0 / 9"
 
-  Scénario: Le personnel de direction ne voit pas les décisions d'attribution d'une autre année scolaire
+  Scénario: Le personnel de direction ne voit pas les classes d'une autre année scolaire
     Lorsque j'ai une classe "1MELEC" de 9 élèves pour l'établissement "DINUM" lors de l'année 2023
     Et que je clique sur "Élèves"
     Alors je peux voir dans le tableau "Liste des classes"
@@ -45,3 +45,14 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Alors je peux voir dans le tableau "Liste des classes"
       | Classe | Décisions d'attribution | Coordonnées bancaires | PFMPs |
       | 1MELEC | 0 / 9                   | 0 / 9                 |       |
+
+  Scénario: Le personnel de direction ne voit pas les paiements d'une autre année scolaire
+    Lorsque j'ai une classe "1MELEC" de 9 élèves pour l'établissement "DINUM" lors de l'année 2023
+    Et que je consulte le profil de "Marie Curie" dans la classe de "1MELEC"
+    Et que je renseigne une PFMP de 9 jours
+    Et que je clique sur "Paiements"
+    Alors la page ne contient pas "Il n'y a aucune PFMP à valider pour l'instant."
+    Et que je clique sur "Changer d'année scolaire"
+    Et que je clique sur "2023-2024"
+    Et que je clique sur "Paiements"
+    Alors la page contient "Il n'y a aucune PFMP à valider pour l'instant."
