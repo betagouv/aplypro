@@ -16,6 +16,7 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Et que je suis un personnel MENJ de l'établissement "DINUM"
     Et que je me déconnecte
     Et que je me connecte en tant que personnel MENJ
+    Et que toutes les tâches de fond sont terminées
     Et que je passe l'écran d'accueil
     Alors le panneau "Décisions d'attribution" ne contient pas "Rééditer les décisions d'attribution"
 
