@@ -21,7 +21,7 @@ class EstablishmentsController < ApplicationController
   def reissue_attributive_decisions
     mark_attributive_decision_generation_all!
 
-    ReissueAttributiveDecisionJob.perform_later(current_establishment)
+    ReissueAttributiveDecisionsJob.perform_later(current_establishment)
 
     redirect_to root_path
   end

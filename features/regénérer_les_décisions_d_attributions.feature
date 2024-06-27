@@ -9,7 +9,6 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Et que je passe l'écran d'accueil
 
   Scénario: Le personnel de direction ne peut pas rééditer les décisions d'attribution si il n'y en a aucune
-    Et que je me rends sur la page d'accueil
     Et que le panneau "Décisions d'attribution" contient un compteur à 0 sur 10
     Alors le panneau "Décisions d'attribution" ne contient pas "Rééditer les décisions d'attribution"
 
