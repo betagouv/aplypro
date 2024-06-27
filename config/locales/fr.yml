@@ -42,6 +42,10 @@ fr:
       not_found: "La scolarité demandée n'est plus disponible ou a été supprimée."
     pfmps:
       not_found: "La PFMP demandée n'est plus disponible ou a été supprimée."
+  activemodel:
+    errors:
+      messages:
+        numadm_length_error: "numadm length must be between 18 and 19 characters (value: '%{value}')"
   activerecord:
     errors:
       models:
