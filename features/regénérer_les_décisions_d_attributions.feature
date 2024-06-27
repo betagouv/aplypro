@@ -17,7 +17,6 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Et que je me déconnecte
     Et que je me connecte en tant que personnel MENJ
     Et que toutes les tâches de fond sont terminées
-    Et que je passe l'écran d'accueil
     Alors le panneau "Décisions d'attribution" ne contient pas "Rééditer les décisions d'attribution"
 
   Scénario: Le personnel de direction peut voir un bouton pour régénérer les décisions d'attribution
