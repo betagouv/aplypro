@@ -6,7 +6,7 @@ module ASP
     READ_FOLDER = ENV.fetch("APLYPRO_ASP_FTP_READ_FOLDER")
 
     class << self
-      def drop_file!(io:, path:)
+      def upload_file!(io:, path:)
         instance.connection.upload!(StringIO.new(io), File.join(DROP_FOLDER, path))
       end
 

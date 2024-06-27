@@ -6,7 +6,7 @@ class SendPaymentRequestsJob < ApplicationJob
   sidekiq_options retry: false
 
   def perform
-    payment_requests = ASP::PaymentRequest.in_state(:ready)
+    payment_requests = ASP::PaymentRequest.in_state(:ready).order(created_at: :asc)
 
     return if payment_requests.none?
 
@@ -22,7 +22,7 @@ class SendPaymentRequestsJob < ApplicationJob
 
     ActiveRecord::Base.transaction do
       ASP::Request
-        .create!(asp_payment_requests: payment_requests.take(limit))
+        .create!(asp_payment_requests: payment_requests.first(limit))
         .send!
     rescue Statesman::TransitionFailedError
       raise ASP::Errors::SendingPaymentRequestInWrongState

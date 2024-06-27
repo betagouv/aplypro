@@ -7,7 +7,7 @@ TEMP_ASP_DIR = "tmp/mock_asp"
 
 class FakeServer
   class << self
-    def drop_file!(io:, path:); end
+    def upload_file!(io:, path:); end
 
     def get_all_files! # rubocop:disable Naming/AccessorMethodName
       TEMP_ASP_DIR
