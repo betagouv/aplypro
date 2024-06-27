@@ -50,6 +50,8 @@ Rails.application.routes.draw do
         post "validation", to: "validations#validate"
       end
     end
+
+    resources :validations, only: :index
   end
 
   resources :classes, only: [] do
@@ -82,8 +84,6 @@ Rails.application.routes.draw do
       end
     end
   end
-
-  resources :validations, only: :index
 
   devise_scope :asp_user do
     get "/auth/asp/callback" => "users/omniauth_callbacks#asp", as: :asp_login

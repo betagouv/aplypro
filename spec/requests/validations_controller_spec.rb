@@ -13,7 +13,7 @@ RSpec.describe ValidationsController do
 
   describe "GET #index" do
     it "renders the :index template" do
-      get validations_path
+      get school_year_validations_path(SchoolYear.current.start_year)
 
       expect(response).to render_template :index
     end

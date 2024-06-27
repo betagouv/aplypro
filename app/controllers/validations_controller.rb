@@ -13,14 +13,14 @@ class ValidationsController < ApplicationController
   def index
     infer_page_title
 
-    @validations_facade = ValidationsFacade.new(current_establishment)
+    @validations_facade = ValidationsFacade.new(current_establishment, selected_school_year)
 
     @validatable_classes = @validations_facade.validatable_classes
     @classes_facade = @validations_facade.classes_facade
   end
 
   def show
-    add_breadcrumb t("pages.titles.validations.index"), validations_path
+    add_breadcrumb t("pages.titles.validations.index"), school_year_validations_path(selected_school_year.start_year)
     infer_page_title(name: @classe.label)
 
     @pfmps = current_establishment.validatable_pfmps
@@ -44,7 +44,8 @@ class ValidationsController < ApplicationController
                          .where(id: validation_params[:pfmp_ids], schoolings: { classe: @classe })
                          .find_each { |pfmp| pfmp.transition_to!(:validated) }
 
-    redirect_to validations_path, notice: t("validations.create.success", classe_label: @classe.label)
+    redirect_to school_year_validations_path(selected_school_year.start_year),
+                notice: t("validations.create.success", classe_label: @classe.label)
   end
   # rubocop:enable Metrics/AbcSize
 
@@ -60,7 +61,8 @@ class ValidationsController < ApplicationController
   def set_classe
     @classe = Classe.where(establishment: current_establishment).find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to validations_path, alert: t("errors.classes.not_found") and return
+    redirect_to school_year_validations_path(selected_school_year.start_year),
+                alert: t("errors.classes.not_found") and return
   end
 
   def validation_params
