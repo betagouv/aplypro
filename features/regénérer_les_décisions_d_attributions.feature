@@ -12,15 +12,15 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Et que le panneau "Décisions d'attribution" contient un compteur à 0 sur 10
     Alors le panneau "Décisions d'attribution" ne contient pas "Rééditer les décisions d'attribution"
 
-  Scénario: Seul le personnel de direction peut voir le bouton pour rééditer les décisions d'attribution
+  Scénario: Seul le directeur peut voir le bouton pour rééditer les décisions d'attribution
     Et que je suis un personnel MENJ de l'établissement "DINUM"
     Et que je me déconnecte
     Et que je me connecte en tant que personnel MENJ
     Et que toutes les tâches de fond sont terminées
     Alors le panneau "Décisions d'attribution" ne contient pas "Rééditer les décisions d'attribution"
 
-  Scénario: Le personnel de direction peut voir un bouton pour régénérer les décisions d'attribution
-    Et que je suis responsable légal et que je génère les décisions d'attribution manquantes
+  Scénario: Le directeur peut voir un bouton pour régénérer les décisions d'attribution
+    Et que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que la génération des décisions d'attribution manquantes est complètement finie
     Et que je me rends sur la page d'accueil
     Alors le panneau "Décisions d'attribution" contient "Rééditer les décisions d'attribution"
