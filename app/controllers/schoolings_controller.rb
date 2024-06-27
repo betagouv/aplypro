@@ -7,7 +7,7 @@ class SchoolingsController < ApplicationController
   before_action :check_director, :update_confirmed_director!, :check_confirmed_director, only: %i[abrogate_decision]
 
   def abrogate_decision
-    GenerateAbrogationDecisionJob.perform_now(@schooling)
+    GenerateAbrogationDecisionsJob.perform_now(@schooling)
 
     redirect_to class_student_path(@classe, @schooling.student),
                 notice: t("flash.da.abrogated", name: @schooling.student.full_name)
