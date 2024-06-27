@@ -13,7 +13,6 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Alors le panneau "Décisions d'attribution" ne contient pas "Rééditer les décisions d'attribution"
 
   Scénario: Seul le directeur peut voir le bouton pour rééditer les décisions d'attribution
-    Et que je suis un personnel MENJ de l'établissement "DINUM"
     Et que je me déconnecte
     Et que je me connecte en tant que personnel MENJ
     Et que toutes les tâches de fond sont terminées
@@ -21,6 +20,7 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
 
   Scénario: Le directeur peut voir un bouton pour régénérer les décisions d'attribution
     Et que je suis un personnel MENJ directeur de l'établissement "DINUM"
+    Et que je suis responsable légal et que je génère les décisions d'attribution manquantes
     Et que la génération des décisions d'attribution manquantes est complètement finie
     Et que je me rends sur la page d'accueil
     Alors le panneau "Décisions d'attribution" contient "Rééditer les décisions d'attribution"
@@ -31,5 +31,6 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Et que je me rends sur la page d'accueil
     Et que le panneau "Décisions d'attribution" contient "Rééditer les décisions d'attribution"
     Et que je clique sur "Rééditer les décisions d'attribution"
-    Et que la génération des décisions d'attribution est complètement finie
+    Et que la génération des décisions d'attribution manquantes est complètement finie
+    Quand je me rends sur la page d'accueil
     Alors le panneau "Décisions d'attribution" contient "Télécharger 10 décisions d'attribution"
