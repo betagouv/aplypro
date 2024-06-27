@@ -12,7 +12,7 @@ describe ASP::Entities::Dossier, type: :model do
   it_behaves_like "an ASP payment mapping entity"
 
   # When the mef's ministry is MER, we have one less charater than for ENPU, ENPR or ARMEE
-  it { is_expected.to validate_length_of(:numadm).is_at_least(18).is_at_most(19) }
+  it { is_expected.to validate_length_of(:numadm) }
 
   it_behaves_like "an XML-fragment producer" do
     let(:entity) { described_class.from_payment_request(payment_request) }

@@ -14,7 +14,7 @@ module ASP
       known_with :id_dossier
 
       validates_presence_of %i[numadm codedispositif]
-      validates_length_of :numadm, within: 18..19, too_long: :numadm_length_error
+      validates_length_of :numadm, within: 18..19, too_short: :numadm_length_error, too_long: :numadm_length_error
 
       def xml_root_args
         if known_record?
@@ -36,7 +36,7 @@ module ASP
       private
 
       def numadm_length_error
-        "numadm length must be between 18 and 19 characters (value: #{numadm})"
+        I18n.t("errors.messages.numadm_length_error", value: numadm)
       end
     end
   end
