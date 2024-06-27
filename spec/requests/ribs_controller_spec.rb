@@ -13,7 +13,7 @@ RSpec.describe RibsController do
       post class_student_ribs_path(student.classe.id, student.id),
            params: { rib: build(:rib, student: student).attributes }
 
-      expect(response).to have_http_status(:created)
+      expect(response).to have_http_status(:found)
     end
 
     it "returns 422" do
@@ -23,7 +23,7 @@ RSpec.describe RibsController do
     end
   end
 
-  describe "DESTROY /rib" do
+  describe "DELETE /rib" do
     context "when trying to update a RIB from a student in another establishment" do
       let(:other_student) { create(:schooling).student }
       let(:other_rib) { create(:rib, student: other_student) }
@@ -74,7 +74,7 @@ RSpec.describe RibsController do
       let(:other_student) { create(:schooling).student }
       let(:rib) { build(:rib, student: other_student) }
 
-      it "returns 403 (Forbidden)" do
+      it "returns 403" do
         post bulk_create_class_ribs_path(student.classe.id),
              params: { ribs: { other_student.id => rib_params } }
 

@@ -21,11 +21,13 @@ class RibsController < ApplicationController
   def confirm_deletion; end
 
   def create
-    @rib = @student.create_new_rib!(rib_params)
-    redirect_to class_student_path(@classe, @student), notice: t(".success"), status: :created
-  rescue StandardError
-    @rib = Rib.new
-    render :new, status: :unprocessable_entity
+    @rib = @student.create_new_rib(rib_params)
+
+    if @rib.save
+      redirect_to class_student_path(@classe, @student), notice: t(".success")
+    else
+      render :new, status: :unprocessable_entity
+    end
   end
 
   def update
@@ -50,16 +52,12 @@ class RibsController < ApplicationController
   end
 
   def bulk_create
-    filtered_params = bulk_ribs_params
-                      .reject { |rib| [rib["iban"], rib["bic"]].all?(&:blank?) }
-    begin
-      @ribs = filtered_params.map do |rib_params|
-        Student.find(rib_params["student_id"]).create_new_rib!(rib_params.except("student_id"))
-      rescue ActiveRecord::RecordInvalid
-        next
-      end
+    @ribs = bulk_ribs_params.map do |rib_params|
+      Student.find(rib_params["student_id"]).create_new_rib(rib_params.except("student_id"))
+    end
+    if @ribs.each(&:save).all?(&:valid?)
       redirect_to class_path(@classe), notice: t("ribs.create.success")
-    rescue StandardError
+    else
       render :missing, status: :unprocessable_entity
     end
   end
@@ -79,9 +77,8 @@ class RibsController < ApplicationController
     params
       .require(:ribs)
       .values
-      .map do |rib_params|
-        rib_params.permit(%i[iban bic name owner_type student_id]).to_h
-      end
+      .map { |p| p.permit(%i[iban bic name owner_type student_id]).to_h }
+      .reject { |rib| [rib["iban"], rib["bic"]].all?(&:blank?) }
   end
 
   def set_student
@@ -89,7 +86,7 @@ class RibsController < ApplicationController
   end
 
   def set_classe
-    @classe = Classe.where(establishment: current_establishment).find(params[:class_id])
+    @classe = current_establishment.classes.find(params[:class_id])
   rescue ActiveRecord::RecordNotFound
     redirect_to classes_path, alert: t("errors.classes.not_found"), status: :forbidden and return
   end

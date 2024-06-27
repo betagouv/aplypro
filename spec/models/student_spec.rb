@@ -199,13 +199,13 @@ RSpec.describe Student do
     end
   end
 
-  describe "#add_new_rib" do
+  describe "#create_new_rib" do
     let(:previous_rib) { create(:rib) }
 
     context "when a new rib is created" do
       it "archives the precedent rib" do
         expect do
-          previous_rib.student.create_new_rib!(build(:rib, student: previous_rib.student).attributes)
+          previous_rib.student.create_new_rib(build(:rib, student: previous_rib.student).attributes)
         end.to change { previous_rib.reload.archived? }.from(false).to(true)
       end
     end

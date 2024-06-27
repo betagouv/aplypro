@@ -136,15 +136,11 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     false
   end
 
-  def create_new_rib!(rib_params)
+  def create_new_rib(rib_params)
     transaction do
-      if ribs.count.positive?
-        previous_rib = ribs.order(created_at: :asc).last
-        previous_rib.archive! if previous_rib.payment_request.nil? || previous_rib.payment_request.terminated?
-      end
-      ribs.find_or_create_by!(rib_params)
+      rib.archive! if rib.present? && rib.archivable?
+      ribs.create(rib_params)
     end
-    rib
   end
 
   private

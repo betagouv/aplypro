@@ -44,7 +44,11 @@ class Rib < ApplicationRecord
     update!(archived_at: DateTime.now)
   end
 
+  def archivable?
+    payment_request.nil? || payment_request.terminated?
+  end
+
   def readonly?
-    payment_request.present? && payment_request.pfmp.locked?
+    !archivable?
   end
 end
