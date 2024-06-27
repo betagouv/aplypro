@@ -51,10 +51,13 @@ class RibsController < ApplicationController
 
   def bulk_create
     filtered_params = bulk_ribs_params
-                      .map { |rib_params| Rib.new(rib_params) }
-                      .reject { |rib| [rib.iban, rib.bic].all?(&:blank?) }
+                      .reject { |rib| [rib["iban"], rib["bic"]].all?(&:blank?) }
     begin
-      @ribs = filtered_params.map { |r| @student.create_new_rib!(r.attributes) }
+      @ribs = filtered_params.map do |rib_params|
+        Student.find(rib_params["student_id"]).create_new_rib!(rib_params.except("student_id"))
+      rescue ActiveRecord::RecordInvalid
+        next
+      end
       redirect_to class_path(@classe), notice: t("ribs.create.success")
     rescue StandardError
       render :missing, status: :unprocessable_entity
@@ -77,7 +80,7 @@ class RibsController < ApplicationController
       .require(:ribs)
       .values
       .map do |rib_params|
-        rib_params.permit(%i[iban bic name owner_type student_id])
+        rib_params.permit(%i[iban bic name owner_type student_id]).to_h
       end
   end
 

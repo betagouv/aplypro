@@ -156,7 +156,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
         previous_rib = ribs.order(created_at: :asc).last
         previous_rib.archive! if previous_rib.payment_request.nil? || previous_rib.payment_request.terminated?
       end
-      ribs.create!(rib_params)
+      ribs.find_or_create_by!(rib_params)
     end
     rib
   end
