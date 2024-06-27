@@ -3,7 +3,7 @@
 require "rails_helper"
 require "support/webmock_helpers"
 
-RSpec.describe GenerateAttributiveDecisionJob, :student_api do
+RSpec.describe GenerateAttributiveDecisionsJob, :student_api do
   subject(:job) { described_class.new(schooling) }
 
   let(:schooling) { create(:schooling) }

@@ -29,7 +29,7 @@ class AddAdministrativeNumberToSchoolings < ActiveRecord::Migration[7.1]
       .with_attributive_decisions
       .where(administrative_number: nil)
       .find_in_batches do |schoolings|
-      jobs = schoolings.map { |schooling| GenerateAttributiveDecisionJob.perform_later(schooling) }
+      jobs = schoolings.map { |schooling| GenerateAttributiveDecisionsJob.perform_later(schooling) }
 
       ActiveJob.perform_all_later(jobs)
     end
