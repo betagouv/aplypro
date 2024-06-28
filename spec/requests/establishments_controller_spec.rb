@@ -7,7 +7,7 @@ RSpec.describe EstablishmentsController do
     post establishment_create_attributive_decisions_path(establishment), params: { confirmed_director: "1" }
   end
 
-  subject(:reissue_attributive_decisions) do
+  let(:reissue_attributive_decisions) do
     post establishment_reissue_attributive_decisions_path(establishment), params: { confirmed_director: "1" }
   end
 
