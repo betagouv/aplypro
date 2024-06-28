@@ -8,7 +8,7 @@ class GenerateMissingAttributiveDecisionsJob < ApplicationJob
 
     schoolings.update_all(generating_attributive_decision: true) # rubocop:disable Rails/SkipsModelValidations
 
-    jobs = schoolings.map { |schooling| GenerateAttributiveDecisionsJob.new(schooling) }
+    jobs = schoolings.map { |schooling| GenerateAttributiveDecisionJob.new(schooling) }
 
     ActiveJob.perform_all_later(jobs)
   end

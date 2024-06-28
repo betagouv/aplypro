@@ -5,7 +5,7 @@ Quand("toutes les tâches de fond sont terminées") do
 end
 
 # NOTE: il arrive qu'une tâche déclence d'autres tâches, comme
-# GenerateAttributiveDecisionsJob qui appelle
+# GenerateAttributiveDecisionJob qui appelle
 # FetchStudentInformationJob ou bien ConsiderPaymentRequestsJob qui
 # appelle PreparePaymentRequestJob, etc. Dans ces cas là il faut
 # épuiser la file de tâches deux fois pour lancer d'abord la tâche

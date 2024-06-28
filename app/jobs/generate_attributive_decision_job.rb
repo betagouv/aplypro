@@ -2,14 +2,9 @@
 
 require "attribute_decision/attributor"
 
-class GenerateAbrogationDecisionsJob < ApplicationJob
+class GenerateAttributiveDecisionJob < ApplicationJob
   include DocumentGeneration
-
-  class MissingAttributiveDecisionError < StandardError
-  end
-
-  class MissingSchoolingEndDateError < StandardError
-  end
+  include FregataProof
 
   after_discard do |job|
     self.class.after_discard_callback(job, :generating_attributive_decision)
@@ -20,8 +15,7 @@ class GenerateAbrogationDecisionsJob < ApplicationJob
   end
 
   def perform(schooling)
-    raise MissingAttributiveDecisionError if schooling.attributive_decision.blank?
-    raise MissingSchoolingEndDateError if schooling.open?
+    FetchStudentInformationJob.new.perform(schooling) if schooling.student.missing_address?
 
     Schooling.transaction do
       generate_document(schooling)
@@ -32,8 +26,9 @@ class GenerateAbrogationDecisionsJob < ApplicationJob
   private
 
   def generate_document(schooling)
-    schooling.increment(:abrogation_decision_version)
-    io = AttributeDecision::Abrogator.new(schooling).write
-    schooling.attach_attributive_document(io, :abrogation_decision)
+    schooling.generate_administrative_number
+    schooling.increment(:attributive_decision_version)
+    io = AttributeDecision::Attributor.new(schooling).write
+    schooling.attach_attributive_document(io, :attributive_decision)
   end
 end
