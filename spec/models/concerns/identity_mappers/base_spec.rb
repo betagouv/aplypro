@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# rubocop:disable Metrics/MultipleMemoizedHelpers
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 
 RSpec.describe IdentityMappers::Base do
   let(:mapper) { described_class.new(attributes) }
@@ -157,5 +157,5 @@ RSpec.describe IdentityMappers::Base do
     end
   end
 
-  # rubocop:enable Metrics/MultipleMemoizedHelpers
+  # rubocop:enable RSpec/MultipleMemoizedHelpers
 end
