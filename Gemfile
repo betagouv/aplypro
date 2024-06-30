@@ -135,4 +135,5 @@ group :development do
   gem "spring-watcher-listen"
 
   gem "whenever", require: false
+  gem "brakeman"
 end
