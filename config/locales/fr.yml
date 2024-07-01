@@ -176,7 +176,7 @@ fr:
         create: *new_rib_title
         edit: &edit_rib_title
           title: "Modification de coordonnées bancaires pour %{name}"
-          breadcrumb: "Modification de coordonnés bancaires"
+          breadcrumb: "Modification de coordonnées bancaires"
         update: *edit_rib_title
         missing: &missing_ribs_title Saisir des coordonnées bancaires
         bulk_create: *missing_ribs_title
