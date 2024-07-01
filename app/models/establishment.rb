@@ -129,7 +129,7 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     schoolings.without_attributive_decisions.any?
   end
 
-  def attributive_decisions?
+  def with_attributive_decisions?
     schoolings.with_attributive_decisions.any?
   end
 

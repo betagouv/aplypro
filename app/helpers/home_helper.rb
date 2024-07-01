@@ -13,9 +13,10 @@ module HomeHelper
   end
 
   def attributive_decisions_download_button(establishment)
-    count = establishment.schoolings.with_attributive_decisions.count
 
-    return if count.zero?
+    return unless establishment.with_attributive_decisions?
+
+    count = establishment.schoolings.with_attributive_decisions.count
 
     button_to(
       t("panels.attributive_decisions.download", count: count),
@@ -27,9 +28,8 @@ module HomeHelper
   end
 
   def attributive_decisions_reissue_button(establishment)
-    count = establishment.schoolings.with_attributive_decisions.count
 
-    return if count.zero?
+    return unless establishment.with_attributive_decisions?
 
     button_to "Rééditer les décisions d'attribution",
               establishment_reissue_attributive_decisions_path(establishment),

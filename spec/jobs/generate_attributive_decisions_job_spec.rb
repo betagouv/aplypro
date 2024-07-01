@@ -3,7 +3,7 @@
 require "rails_helper"
 require "support/webmock_helpers"
 
-RSpec.describe GenerateMissingAttributiveDecisionsJob do
+RSpec.describe GenerateAttributiveDecisionsJob do
   subject(:job) { described_class.new(establishment) }
 
   let(:establishment) { create(:establishment, :with_fim_user) }
