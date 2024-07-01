@@ -9,7 +9,7 @@ RSpec.describe RibsController do
   before { sign_in(user) }
 
   describe "CREATE /rib" do
-    it "returns ok" do
+    it "returns found" do
       post class_student_ribs_path(student.classe.id, student.id),
            params: { rib: build(:rib, student: student).attributes }
 
