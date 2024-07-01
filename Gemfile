@@ -134,5 +134,6 @@ group :development do
   gem "spring-commands-rubocop"
   gem "spring-watcher-listen"
 
+  gem "brakeman"
   gem "whenever", require: false
 end

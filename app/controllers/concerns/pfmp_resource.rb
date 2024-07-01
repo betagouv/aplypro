@@ -14,7 +14,7 @@ module PfmpResource
   end
 
   def set_classe
-    @classe = Classe.where(establishment: current_establishment).find(params[:class_id])
+    @classe = current_establishment.classes.find(params[:class_id])
   rescue ActiveRecord::RecordNotFound
     redirect_to classes_path, alert: t("errors.classes.not_found") and return
   end
