@@ -92,7 +92,7 @@ RSpec.describe EstablishmentsController do
       end
 
       it "queues the document creation job" do
-        expect { reissue_attributive_decisions }.to have_enqueued_job(ReissueAttributiveDecisionsJob)
+        expect { reissue_attributive_decisions }.to have_enqueued_job(GenerateAttributiveDecisionsJob)
       end
     end
   end

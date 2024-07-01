@@ -13,7 +13,7 @@ RSpec.describe GenerateAttributiveDecisionsJob do
 
   context "when there are no attributive decisions" do
     it "generates one for each student" do
-      expect { job.perform_now }.to have_enqueued_job(GenerateAttributiveDecisionJob).exactly(students.count)
+      expect { job.perform_now }.to have_enqueued_job(GenerateAttributiveDecisionsJob).exactly(students.count)
     end
 
     it "toggles the generating attribute on each schooling" do

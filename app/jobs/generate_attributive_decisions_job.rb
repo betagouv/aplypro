@@ -2,7 +2,6 @@
 
 class GenerateAttributiveDecisionsJob < ApplicationJob
   def perform(schooling_ids)
-
     schoolings = Schooling.where(id: schooling_ids)
 
     schoolings.update_all(generating_attributive_decision: true) # rubocop:disable Rails/SkipsModelValidations
