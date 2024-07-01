@@ -4,10 +4,12 @@ require "rails_helper"
 
 RSpec.describe EstablishmentsController do
   subject(:create_attributive_decisions) do
-    post establishment_create_attributive_decisions_path(establishment), params: { confirmed_director: "1" }
+    post school_year_establishment_create_attributive_decisions_path(school_year, establishment),
+         params: { confirmed_director: "1" }
   end
 
-  let(:classe) { create(:classe) }
+  let(:school_year) { SchoolYear.current }
+  let(:classe) { create(:classe, school_year: school_year) }
   let(:establishment) { classe.establishment }
   let(:user) { create(:user, :director, :with_selected_establishment, establishment: establishment) }
 
@@ -17,7 +19,7 @@ RSpec.describe EstablishmentsController do
     before { user.update!(selected_establishment: nil) }
 
     it "redirects them towards the select page" do
-      get "/home"
+      get "/"
 
       expect(response).to redirect_to user_select_establishment_path(user)
     end
@@ -27,7 +29,7 @@ RSpec.describe EstablishmentsController do
     let(:schoolings) { create_list(:schooling, 3, :with_attributive_decision, establishment: establishment) }
 
     it "returns 200" do
-      post establishment_download_attributive_decisions_path(establishment)
+      post school_year_establishment_download_attributive_decisions_path(school_year, establishment)
 
       expect(response).to have_http_status(:ok)
     end
@@ -36,7 +38,7 @@ RSpec.describe EstablishmentsController do
       before { schoolings.last.attributive_decision.purge }
 
       it "still returns 200" do
-        post establishment_download_attributive_decisions_path(establishment)
+        post school_year_establishment_download_attributive_decisions_path(school_year, establishment)
 
         expect(response).to have_http_status(:ok)
       end

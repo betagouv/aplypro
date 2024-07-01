@@ -4,9 +4,10 @@ FactoryBot.define do
   factory :classe do
     establishment factory: %i[establishment with_fim_user]
 
+    school_year { SchoolYear.current }
     mef { Mef.take }
+
     sequence(:label) { |n| "2NDE#{n}" }
-    start_year { 2023 }
 
     trait :with_students do
       transient do

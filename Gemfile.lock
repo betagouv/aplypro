@@ -656,6 +656,7 @@ DEPENDENCIES
   timecop
   turbo-rails
   tzinfo-data
+  wdm (>= 0.1.0)
   web-console
   webmock
   whenever

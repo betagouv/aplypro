@@ -12,24 +12,30 @@ module HomeHelper
     end
   end
 
-  def attributive_decisions_download_button(establishment)
-    count = establishment.schoolings.with_attributive_decisions.count
+  def attributive_decisions_download_button(establishment, school_year)
+    count = establishment.schoolings.with_attributive_decisions
+                         .joins(:classe)
+                         .where(classe: { school_year: school_year })
+                         .count
 
     return if count.zero?
 
     button_to(
       t("panels.attributive_decisions.download", count: count),
-      establishment_download_attributive_decisions_path(establishment),
+      school_year_establishment_download_attributive_decisions_path(school_year, establishment),
       method: :post,
       class: "fr-btn fr-btn--primary",
       data: { turbo: false }
     )
   end
 
-  def attributive_decisions_generation_form(establishment)
+  def attributive_decisions_generation_form(establishment, school_year)
     return cannot_generate_attributive_decisions_button unless current_user.can_try_to_generate_attributive_decisions?
 
-    count = establishment.schoolings.without_attributive_decisions.count
+    count = establishment.schoolings.without_attributive_decisions
+                         .joins(:classe)
+                         .where(classe: { school_year: school_year })
+                         .count
 
     render partial: "home/attributive_decision_form", locals: { establishment: establishment, count: count }
   end
@@ -56,12 +62,6 @@ module HomeHelper
         :success
       end
     end
-  end
-
-  def school_year_to_s
-    starting_year = Aplypro::SCHOOL_YEAR
-
-    t("year", start_year: starting_year, end_year: starting_year + 1)
   end
 
   def confirmed_director_information

@@ -10,7 +10,7 @@
     = dsfr_alert(type: :warning, title: "La PFMP saisie au niveau de la classe est dupliquée pour chaque élève de la classe") do
       Important : Une PFMP saisie au niveau de la classe peut être modifiée au niveau de chaque élève.
 
-= form_with model: @pfmp, url: create_bulk_pfmp_class_path(@classe), builder: DsfrFormBuilder, data: { turbo: false } do |form|
+= form_with model: @pfmp, url: create_bulk_pfmp_school_year_class_path(selected_school_year.start_year, @classe), builder: DsfrFormBuilder, data: { turbo: false } do |form|
   = form.dsfr_error_summary
 
   = form.dsfr_date_field(:start_date, width: 'sm-4 md-3 lg-2')

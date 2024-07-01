@@ -5,15 +5,15 @@ require "uri"
 module StudentsApi
   module Fregata
     class Api < StudentsApi::Base
+      SECRET = ENV.fetch("APLYPRO_FREGATA_SECRET")
+      KEY = ENV.fetch("APLYPRO_FREGATA_KEY_ID")
+
+      # MASA has a special encoding of the year, which happens to be the
+      # current year minus 1995. 2022-2023 was year 26, which means the
+      # offset is 1996. Because.
+      YEAR_OFFSET = 1996
+
       class << self
-        SECRET = ENV.fetch("APLYPRO_FREGATA_SECRET")
-        KEY = ENV.fetch("APLYPRO_FREGATA_KEY_ID")
-
-        # MASA has a special encoding of the year, which happens to be the
-        # current year minus 1995. 2022-2023 was year 26, which means the
-        # offset is 1996. Because.
-        YEAR_OFFSET = 1996
-
         attr_reader :now
 
         def get(endpoint)
@@ -84,7 +84,7 @@ module StudentsApi
         end
 
         def fregata_year
-          Aplypro::SCHOOL_YEAR - YEAR_OFFSET
+          SchoolYear.current.start_year - YEAR_OFFSET
         end
       end
     end

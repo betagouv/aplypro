@@ -26,21 +26,37 @@ Rails.application.routes.draw do
 
   resources :establishments, only: %w[edit update] do
     resources :invitations
-
-    post "create_attributive_decisions"
-    post "download_attributive_decisions"
   end
 
-  resources :classes, only: %i[show index] do
-    member do
-      get "bulk_pfmp"
-      post "create_bulk_pfmp"
-      get "bulk_pfmp_completion"
-      put "update_bulk_pfmp"
-      get "validation", to: "validations#show"
-      post "validation", to: "validations#validate"
+  resources :school_years, path: :year, only: [] do
+    get "selected"
+
+    collection do
+      get "select"
     end
 
+    get "/home", to: "home#home"
+
+    resources :establishments, only: [] do
+      post "create_attributive_decisions"
+      post "download_attributive_decisions"
+    end
+
+    resources :classes, only: %i[show index] do
+      member do
+        get "bulk_pfmp"
+        post "create_bulk_pfmp"
+        get "bulk_pfmp_completion"
+        put "update_bulk_pfmp"
+        get "validation", to: "validations#show"
+        post "validation", to: "validations#validate"
+      end
+    end
+
+    resources :validations, only: :index
+  end
+
+  resources :classes, only: [] do
     resources :ribs, only: [] do
       collection do
         get "missing"
@@ -71,8 +87,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :validations, only: :index
-
   devise_scope :asp_user do
     get "/auth/asp/callback" => "users/omniauth_callbacks#asp", as: :asp_login
   end
@@ -91,7 +105,6 @@ Rails.application.routes.draw do
   root "home#index"
 
   get "/welcome", to: "home#welcome"
-  get "/home", to: "home#home"
   get "/accessibility", to: "home#accessibility"
 
   get "/maintenance", to: "home#maintenance"
