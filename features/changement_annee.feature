@@ -27,7 +27,7 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
   Scénario: Le personnel de direction consulte une année scolaire sans élèves
     Quand je clique sur "Changer d'année scolaire"
     Et que je clique sur "2023-2024"
-    Alors la page contient "Aucun élève récupéré au cours de l'année scolaire 2023-2024"
+    Alors la page contient "Aucun élève récupéré au cours de l'année scolaire sélectionnée."
 
   Scénario: Le personnel de direction ne voit pas les décisions d'attribution d'une autre année scolaire
     Lorsque j'ai une classe "1MELEC" de 9 élèves pour l'établissement "DINUM" lors de l'année 2023

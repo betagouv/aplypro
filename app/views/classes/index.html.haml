@@ -2,6 +2,7 @@
 
 - if @classes.none?
   %p Nous récupérons la liste de vos élèves. (TODO: A CHANGER !!!)
+  /= t("errors.school_years.not_found").html_safe
 - else
   .fr-table.fr-table--no-caption
     %table
