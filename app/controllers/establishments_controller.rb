@@ -13,7 +13,15 @@ class EstablishmentsController < ApplicationController
   def create_attributive_decisions
     mark_attributive_decision_generation!
 
-    GenerateMissingAttributiveDecisionsJob.perform_later(current_establishment)
+    GenerateAttributiveDecisionsJob.perform_later(current_establishment.schoolings.without_attributive_decisions.to_a)
+
+    redirect_to root_path
+  end
+
+  def reissue_attributive_decisions
+    mark_attributive_decision_generation_all!
+
+    GenerateAttributiveDecisionsJob.perform_later(current_establishment.schoolings.to_a)
 
     redirect_to root_path
   end
@@ -46,6 +54,12 @@ class EstablishmentsController < ApplicationController
     current_establishment
       .schoolings
       .without_attributive_decisions
+      .update_all(generating_attributive_decision: true) # rubocop:disable Rails/SkipsModelValidations
+  end
+
+  def mark_attributive_decision_generation_all!
+    current_establishment
+      .schoolings
       .update_all(generating_attributive_decision: true) # rubocop:disable Rails/SkipsModelValidations
   end
 end

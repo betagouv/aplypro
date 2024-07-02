@@ -22,7 +22,7 @@ Quand("la liste des élèves de l'établissement {string} est rafraîchie") do |
 end
 
 # NOTE: pas très élégant mais comme le job parent
-# (GenerateMissingAttributiveDecisionsJob) déclenche un job par DA, il
+# (GenerateAttributiveDecisionsJob) déclenche un job par DA, il
 # faut perform non pas une mais deux fois la liste des tâches pour que
 # tout soit vraiment fini.
 Quand("la génération des décisions d'attribution manquantes est complètement finie") do

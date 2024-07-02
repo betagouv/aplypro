@@ -28,6 +28,7 @@ Rails.application.routes.draw do
     resources :invitations
 
     post "create_attributive_decisions"
+    post "reissue_attributive_decisions"
     post "download_attributive_decisions"
   end
 

@@ -16,3 +16,5 @@
     - if current_establishment.missing_attributive_decisions?
       = attributive_decisions_generation_form(current_establishment)
     = attributive_decisions_download_button(current_establishment)
+    - if current_establishment.with_attributive_decisions? && current_user.director?
+      = attributive_decisions_reissue_button(current_establishment)
