@@ -20,15 +20,12 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   def confirm_deletion; end
 
   def create
-    @rib = Rib.new(rib_params)
+    @rib = @student.create_new_rib(rib_params)
 
-    respond_to do |format|
-      if @rib.save
-        format.html { redirect_to class_student_path(@classe, @student), notice: t(".success") }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @rib.errors, status: :unprocessable_entity }
-      end
+    if @rib.save
+      redirect_to class_student_path(@classe, @student), notice: t(".success")
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -54,10 +51,9 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   end
 
   def bulk_create
-    @ribs = bulk_ribs_params
-            .map { |rib_params| Rib.new(rib_params) }
-            .reject { |rib| [rib.iban, rib.bic].all?(&:blank?) }
-
+    @ribs = bulk_ribs_params.map do |rib_params|
+      Student.find(rib_params["student_id"]).create_new_rib(rib_params.except("student_id"))
+    end
     if @ribs.each(&:save).all?(&:valid?)
       redirect_to class_path(@classe), notice: t("ribs.create.success")
     else
@@ -80,9 +76,8 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     params
       .require(:ribs)
       .values
-      .map do |rib_params|
-        rib_params.permit(%i[iban bic name owner_type student_id])
-      end
+      .map { |p| p.permit(%i[iban bic name owner_type student_id]).to_h }
+      .reject { |rib| [rib["iban"], rib["bic"]].all?(&:blank?) }
   end
 
   def set_student

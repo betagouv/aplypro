@@ -4,7 +4,7 @@
     = l pfmp.start_date
     au
     = l pfmp.end_date
-  
+
   .fr-table.fr-mb-1w
     %table
       %tbody
@@ -26,6 +26,15 @@
           %tr
             %td Montant du paiement
             %td= number_to_currency pfmp.amount
+          %tr
+            %td Nom
+            %td= payment_request.rib.name
+          %tr
+            %td IBAN
+            %td= payment_request.rib.iban
+          %tr
+            %td "SWIFT/BIC"
+            %td= payment_request.rib.bic
           %tr
             %td Date d'envoi du flux
             %td= l payment_request.asp_request.sent_at, format: :long
