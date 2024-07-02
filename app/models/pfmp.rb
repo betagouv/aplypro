@@ -81,7 +81,7 @@ class Pfmp < ApplicationRecord
   end
 
   def relative_index
-    schooling.pfmps.pluck(:id).find_index(id)
+    schooling.pfmps.order(created_at: :asc).pluck(:id).find_index(id)
   end
 
   def relative_human_index

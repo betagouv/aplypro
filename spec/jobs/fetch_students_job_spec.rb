@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe FetchStudentsJob do
+RSpec.describe FetchStudentsJob, skip: "disabled because of Sygne bug" do
   include ActiveJob::TestHelper
 
   let(:establishment) { create(:establishment, :sygne_provider) }
