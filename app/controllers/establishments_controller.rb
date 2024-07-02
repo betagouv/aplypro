@@ -13,7 +13,7 @@ class EstablishmentsController < ApplicationController
   def create_attributive_decisions
     mark_attributive_decision_generation!
 
-    GenerateAttributiveDecisionsJob.perform_later(current_establishment.schoolings.without_attributive_decisions.ids)
+    GenerateAttributiveDecisionsJob.perform_later(current_establishment.schoolings.without_attributive_decisions.to_a)
 
     redirect_to root_path
   end
@@ -21,7 +21,7 @@ class EstablishmentsController < ApplicationController
   def reissue_attributive_decisions
     mark_attributive_decision_generation_all!
 
-    GenerateAttributiveDecisionsJob.perform_later(current_establishment.schoolings.ids)
+    GenerateAttributiveDecisionsJob.perform_later(current_establishment.schoolings.to_a)
 
     redirect_to root_path
   end
