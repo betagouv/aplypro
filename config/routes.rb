@@ -51,19 +51,19 @@ Rails.application.routes.draw do
         get "validation", to: "validations#show"
         post "validation", to: "validations#validate"
       end
+
+      resources :ribs, only: [] do
+        collection do
+          get "missing"
+          post "bulk_create"
+        end
+      end
     end
 
     resources :validations, only: :index
   end
 
   resources :classes, only: [] do
-    resources :ribs, only: [] do
-      collection do
-        get "missing"
-        post "bulk_create"
-      end
-    end
-
     resources :schoolings, only: [] do
       member do
         get "confirm_abrogation"

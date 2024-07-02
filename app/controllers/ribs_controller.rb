@@ -91,10 +91,10 @@ class RibsController < ApplicationController
   end
 
   def set_classe
-    @classe = Classe.where(establishment: current_establishment).find(params[:class_id])
+    @classe = current_establishment.classes.find_by!(id: params[:class_id], school_year: selected_school_year)
   rescue ActiveRecord::RecordNotFound
     redirect_to school_year_classes_path(selected_school_year.start_year),
-                alert: t("errors.classes.not_found"), status: :forbidden and return
+                alert: t("errors.classes.not_found") and return
   end
 
   def set_rib
@@ -131,7 +131,7 @@ class RibsController < ApplicationController
 
     if students_not_in_class.present? # rubocop:disable Style/GuardClause
       redirect_to(
-        missing_class_ribs_path(@classe),
+        missing_school_year_class_ribs_path(selected_school_year.start_year, @classe),
         alert: t("errors.classes.not_found"),
         status: :forbidden
       ) and return

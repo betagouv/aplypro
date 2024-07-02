@@ -1,7 +1,7 @@
 %h1= "Année scolaire #{selected_school_year}"
 
 - if @establishment_facade.students_count <= 0
-  Aucun élève récupéré au cours de l'année scolaire #{selected_school_year}
+  = t("errors.school_years.not_found").html_safe
 - else
   .gray-panel#attributive_decision_panel
     = render 'classes/attributive_decisions_panel'
