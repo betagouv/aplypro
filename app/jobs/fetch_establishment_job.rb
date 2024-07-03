@@ -6,7 +6,7 @@ class FetchEstablishmentJob < ApplicationJob
   def perform(establishment)
     raw = EstablishmentApi.fetch!(establishment.uai)
 
-    return if raw["records"].blank?
+    return true if raw["records"].blank?
 
     data = raw["records"].first["fields"]
 
