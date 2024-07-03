@@ -7,7 +7,7 @@ require "whenever"
 # for when PFMPs are being validated, and you might notice a mistake
 # or want to amend something throughout the day.
 every :weekday, at: "12AM" do
-  runner "ConsiderPaymentRequestsJob.perform_later(Date.current)"
+  runner "ConsiderPaymentRequestsJob.perform_later"
 end
 
 # NOTE: we want to send the maximum number of files (10 per day) in
@@ -33,6 +33,6 @@ end
 
 # NOTE: refresh the materialized view that holds our paid requests
 # stats.
-every :weekday, at: "9AM" do
+every :weekday, at: "6AM" do
   runner "PaidPfmp.refresh"
 end
