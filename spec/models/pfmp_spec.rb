@@ -52,8 +52,8 @@ RSpec.describe Pfmp do
       subject(:pfmp) do
         create(
           :pfmp,
-          start_date: Time.zone.now.next_week(:monday),
-          end_date: Time.zone.now.next_week(:friday)
+          start_date: Date.parse("#{SchoolYear.current.start_year}-10-08"),
+          end_date: Date.parse("#{SchoolYear.current.start_year}-10-13")
         )
       end
 
@@ -214,7 +214,7 @@ RSpec.describe Pfmp do
 
       context "when the start date of the pfmp is inferior to start_date of schooling" do
         before do
-          pfmp.schooling.update!(start_date: "2023-10-01")
+          pfmp.schooling.update!(start_date: "#{SchoolYear.current.start_year}-10-10")
           pfmp.update!(start_date: pfmp.schooling.start_date - 1.day, end_date: pfmp.schooling.start_date + 30.days)
         end
 
@@ -226,7 +226,7 @@ RSpec.describe Pfmp do
 
     context "when schooling is closed" do
       before do
-        pfmp.schooling.update!(end_date: Date.yesterday)
+        pfmp.schooling.update!(end_date: "#{SchoolYear.current.start_year}-09-29")
       end
 
       it "returns true" do
@@ -235,7 +235,10 @@ RSpec.describe Pfmp do
 
       context "when the dates of the schooling dont cover the pfmp" do
         before do
-          pfmp.schooling.update!(start_date: "2024-03-01", end_date: "2024-04-01")
+          pfmp.schooling.update!(
+            start_date: "#{SchoolYear.current.start_year + 1}-03-01",
+            end_date: "#{SchoolYear.current.start_year + 1}-04-01"
+          )
           pfmp.update!(start_date: pfmp.schooling.start_date - 1.day, end_date: pfmp.schooling.start_date + 30.days)
         end
 

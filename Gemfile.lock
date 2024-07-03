@@ -106,6 +106,8 @@ GEM
     bindex (0.8.1)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
+    brakeman (6.1.2)
+      racc
     breadcrumbs_on_rails (4.1.0)
       railties (>= 5.0)
     builder (3.3.0)
@@ -596,6 +598,7 @@ DEPENDENCIES
   aws-sdk-s3
   bank-contact
   bootsnap
+  brakeman
   breadcrumbs_on_rails
   capybara
   chartkick
@@ -653,6 +656,7 @@ DEPENDENCIES
   timecop
   turbo-rails
   tzinfo-data
+  wdm (>= 0.1.0)
   web-console
   webmock
   whenever

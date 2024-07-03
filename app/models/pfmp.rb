@@ -14,6 +14,7 @@ class Pfmp < ApplicationRecord
   belongs_to :schooling
 
   has_one :classe, through: :schooling
+  has_one :school_year, through: :classe
   has_one :student, through: :schooling
   has_one :mef, through: :classe
   has_one :establishment, through: :classe
@@ -34,7 +35,7 @@ class Pfmp < ApplicationRecord
   validates :end_date,
             :start_date,
             if: ->(pfmp) { pfmp.schooling.present? },
-            inclusion: { in: ->(pfmp) { pfmp.schooling.establishment.school_year_range } }
+            inclusion: { in: ->(pfmp) { pfmp.schooling.establishment.school_year_range(pfmp.school_year.start_year) } }
 
   validates :end_date,
             comparison: { greater_than_or_equal_to: :start_date },
@@ -80,7 +81,7 @@ class Pfmp < ApplicationRecord
   end
 
   def relative_index
-    schooling.pfmps.pluck(:id).find_index(id)
+    schooling.pfmps.order(created_at: :asc).pluck(:id).find_index(id)
   end
 
   def relative_human_index

@@ -6,36 +6,41 @@ RSpec.describe Classe do
   describe "associations" do
     it { is_expected.to belong_to(:establishment).class_name("Establishment") }
     it { is_expected.to belong_to(:mef).class_name("Mef") }
+    it { is_expected.to belong_to(:school_year).class_name("SchoolYear") }
     it { is_expected.to have_many(:students).order(%w[last_name first_name]) }
   end
 
   describe "validations" do
     it { is_expected.to validate_presence_of(:label) }
-    it { is_expected.to validate_presence_of(:start_year) }
-    it { is_expected.to validate_numericality_of(:start_year).only_integer }
   end
 
   describe ".current" do
-    subject { described_class.current }
+    let(:current) { create(:classe, school_year: SchoolYear.current) }
 
-    let(:last_year) { create(:classe, start_year: 2020) }
-    let(:next_year) { create(:classe, start_year: 2024) }
-    let(:current) { create(:classe, start_year: 2023) }
-
-    before do
-      allow(ENV)
-        .to receive(:fetch)
-        .with("APLYPRO_SCHOOL_YEAR")
-        .and_return("2023")
+    it "returns the classes of the current school year" do
+      expect(described_class.current).to contain_exactly(current)
     end
+  end
 
-    it { is_expected.to contain_exactly(current) }
+  describe ".for_year" do
+    let(:year) { 2020 }
+    let(:school_year) { create(:school_year, start_year: year) }
+    let(:classe) { create(:classe, school_year: school_year) }
+
+    it "returns the classes of the current school year" do
+      expect(described_class.for_year(year)).to contain_exactly(classe)
+    end
   end
 
   describe "create_bulk_pfmp" do
     subject(:classe) { create(:classe, :with_students, students_count: 5) }
 
-    let(:params) { { start_date: Date.yesterday, end_date: Date.tomorrow } }
+    let(:params) do
+      {
+        start_date: Date.parse("#{SchoolYear.current.start_year}-10-08"),
+        end_date: Date.parse("#{SchoolYear.current.start_year}-10-11")
+      }
+    end
 
     it "creates a PFMP for each student" do
       expect { classe.create_bulk_pfmp(params) }.to change(Pfmp, :count).from(0).to(5)
@@ -45,7 +50,7 @@ RSpec.describe Classe do
       it "does not include them" do
         student = classe.students.last
 
-        student.close_current_schooling!
+        student.close_current_schooling!("#{SchoolYear.current.start_year}-08-27")
 
         expect { classe.create_bulk_pfmp(params) }.not_to change(student, :pfmps)
       end

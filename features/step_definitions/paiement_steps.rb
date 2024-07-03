@@ -3,7 +3,9 @@
 World(ActionView::Helpers::NumberHelper)
 
 Quand("la tâche de préparation des paiements démarre") do
-  ConsiderPaymentRequestsJob.perform_later(1.year.from_now)
+  ASP::PaymentRequest.find_each do |p_r|
+    PreparePaymentRequestJob.new.perform(p_r)
+  end
 end
 
 Quand("la tâche de préparation des paiements est passée") do
@@ -33,19 +35,15 @@ Quand("les tâches de préparation et d'envoi des paiements sont passées") do
   )
 end
 
-Sachantqu("la tâche de lecture des paiements démarre") do
+Sachantque("la tâche de lecture des paiements démarre") do
   PollPaymentsServerJob.perform_later
 end
 
-Sachantqu("la tâche de lecture des paiements est passée") do
+Sachantque("la tâche de lecture des paiements est passée") do
   steps %(
     Quand la tâche de lecture des paiements démarre
     Et que toutes les tâches de fond et leurs sous-tâches sont terminées
   )
-end
-
-Sachantqu("il n'y a pas de fichiers sur le serveur de l'ASP") do
-  FileUtils.rm_rf(TEMP_ASP_DIR) && FileUtils.mkdir_p(TEMP_ASP_DIR)
 end
 
 Sachantque("l'ASP a rejetté le dossier de {string} avec un motif de {string}") do |name, reason|

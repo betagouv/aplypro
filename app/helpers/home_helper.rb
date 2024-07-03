@@ -13,9 +13,9 @@ module HomeHelper
   end
 
   def attributive_decisions_download_button(establishment)
-    count = establishment.schoolings.with_attributive_decisions.count
+    return unless establishment.with_attributive_decisions?
 
-    return if count.zero?
+    count = establishment.schoolings.with_attributive_decisions.count
 
     button_to(
       t("panels.attributive_decisions.download", count: count),
@@ -24,6 +24,15 @@ module HomeHelper
       class: "fr-btn fr-btn--primary",
       data: { turbo: false }
     )
+  end
+
+  def attributive_decisions_reissue_button(establishment)
+    return unless establishment.with_attributive_decisions?
+
+    button_to "Rééditer les décisions d'attribution",
+              establishment_reissue_attributive_decisions_path(establishment),
+              method: :post,
+              class: "fr-btn fr-btn--tertiary"
   end
 
   def attributive_decisions_generation_form(establishment)
@@ -59,7 +68,7 @@ module HomeHelper
   end
 
   def school_year_to_s
-    starting_year = Aplypro::SCHOOL_YEAR
+    starting_year = SchoolYear.current.start_year
 
     t("year", start_year: starting_year, end_year: starting_year + 1)
   end

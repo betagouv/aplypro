@@ -2,8 +2,7 @@
 
 # FIXME: we should rightfully tidy up at some point
 
-# rubocop:disable Metrics/ClassLength
-class RibsController < ApplicationController
+class RibsController < ApplicationController # rubocop:disable Metrics/ClassLength
   rescue_from ActiveRecord::ReadOnlyRecord, with: :rib_is_readonly
 
   before_action :set_classe
@@ -130,4 +129,3 @@ class RibsController < ApplicationController
     redirect_to class_student_path(@classe, @student), alert: t("flash.ribs.readonly", name: @student.full_name)
   end
 end
-# rubocop:enable Metrics/ClassLength

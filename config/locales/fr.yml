@@ -66,10 +66,10 @@ fr:
           attributes:
             start_date:
               format: "La date de début %{message}"
-              inclusion: ne peut pas précéder l'année scolaire en cours
+              inclusion: ne peut pas précéder l'année scolaire de la classe considérée
             end_date:
               format: "La date de fin %{message}"
-              inclusion: ne peut pas excéder l'année scolaire en cours
+              inclusion: ne peut pas excéder l'année scolaire de la classe considérée
               greater_than_or_equal_to: "doit être ultérieure à la date de début"
             day_count:
               format: "Le %{attribute} %{message}"

@@ -19,11 +19,11 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
       | Saisie à valider |               3 | 45 € |
 
   Scénario: Le personnel de direction peut rajouter une PFMP pour toute la classe
-    Quand je saisis une PFMP pour toute la classe "A1" avec les dates "17/03/2024" et "20/03/2024"
+    Quand je saisis une PFMP pour toute la classe "A1" avec les dates "17/03/2025" et "20/03/2025"
     Alors la page contient "Compléter 10 PFMP"
 
   Scénario: Le personnel de direction est informé d'une erreur de saisie pour toute la classe
-    Quand je saisis une PFMP pour toute la classe "A1" avec les dates "17/03/2024" et "10/03/2024"
+    Quand je saisis une PFMP pour toute la classe "A1" avec les dates "17/03/2025" et "10/03/2025"
     Alors la page contient "La date de fin doit être ultérieure à la date de début"
     Et la page ne contient pas "Compléter 10 PFMP"
 

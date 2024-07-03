@@ -55,7 +55,7 @@ class ValidationsController < ApplicationController
   end
 
   def set_classe
-    @classe = Classe.where(establishment: current_establishment).find(params[:id])
+    @classe = current_establishment.classes.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to validations_path, alert: t("errors.classes.not_found") and return
   end

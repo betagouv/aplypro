@@ -96,6 +96,7 @@ group :development, :test do
   gem "debug", platforms: %i[mri mingw x64_mingw]
   gem "factory_bot_rails"
   gem "rspec-rails"
+  gem "wdm", ">= 0.1.0", platforms: %i[mingw mswin x64_mingw jruby]
 end
 
 group :test do
@@ -134,5 +135,6 @@ group :development do
   gem "spring-commands-rubocop"
   gem "spring-watcher-listen"
 
+  gem "brakeman"
   gem "whenever", require: false
 end

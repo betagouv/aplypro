@@ -36,7 +36,10 @@ end
 Quand("l'élève {string} {string} a une ancienne scolarité dans un autre établissement") do |first_name, last_name|
   student = Student.find_by(first_name: first_name, last_name: last_name)
   other_classe = FactoryBot.create(:classe)
-  FactoryBot.create(:schooling, student: student, classe: other_classe, end_date: Date.yesterday)
+  FactoryBot.create(:schooling,
+                    student: student,
+                    classe: other_classe,
+                    end_date: "#{SchoolYear.current.start_year}-08-27")
 end
 
 Quand("les élèves actuels sont les seuls à avoir des décisions d'attribution") do

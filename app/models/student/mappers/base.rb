@@ -5,13 +5,12 @@ class Student
     class Base
       include Student::Mappers::Errors
 
-      attr_reader :payload, :uai, :year, :establishment
+      attr_reader :payload, :uai, :establishment
 
       def initialize(payload, uai)
         @payload = payload
         @uai = uai
         @establishment = Establishment.find_by(uai: uai)
-        @year = Aplypro::SCHOOL_YEAR
       end
 
       def identifier
@@ -63,11 +62,17 @@ class Student
       end
 
       def map_classe!(entry)
-        label, mef_code = map_classe_attributes(entry)
+        label, mef_code, year = map_classe_attributes(entry)
+
+        school_year = if year.nil?
+                        SchoolYear.current
+                      else
+                        SchoolYear.find_by(start_year: year)
+                      end
 
         mef = Mef.find_by(code: mef_code)
 
-        return if label.nil? || mef.nil?
+        return if label.nil? || mef.nil? || school_year.nil?
 
         return if Exclusion.excluded?(uai, mef_code)
 
@@ -75,7 +80,7 @@ class Student
           label:,
           mef:,
           establishment:,
-          start_year: @year
+          school_year:
         )
       rescue ClasseParsingError => e
         Sentry.capture_exception(e)
@@ -103,7 +108,7 @@ class Student
       end
 
       def map_classe_attributes(attrs)
-        classe_mapper.new.call(attrs).values_at(:label, :mef_code)
+        classe_mapper.new.call(attrs).values_at(:label, :mef_code, :year)
       rescue StandardError => e
         raise ClasseParsingError.new, "Classe parsing failure for #{uai}: #{e.message}"
       end

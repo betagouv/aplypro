@@ -12,7 +12,7 @@ describe StudentsApi::Sygne::Mappers::SchoolingMapper do
       start_date: "2024-05-25",
       end_date: "2024-06-01",
       classe_label: "some label",
-      school_year: Aplypro::SCHOOL_YEAR,
+      school_year: "2023",
       mef_code: "1230",
       uai: "007"
     ).tap do |attributes|
