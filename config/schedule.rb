@@ -36,3 +36,9 @@ end
 every :weekday, at: "6AM" do
   runner "PaidPfmp.refresh"
 end
+
+# NOTE: check for ghost schoolings every weekday at 1AM.
+# stats.
+every :weekday, at: "1AM" do
+  runner "Janitor.perform_later"
+end
