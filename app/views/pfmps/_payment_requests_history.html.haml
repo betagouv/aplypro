@@ -2,7 +2,10 @@
   .gray-panel.fr-p-3w.fr-mb-3w
     = render partial: "payment_requests/badges", locals: { payment_request: payment_request }
     .fr-mt-1w
-      %em= payment_request.status_explanation
+      = payment_request.status_explanation
+    .fr-mt-2w.gray-text
+      Coordonnées bancaires utilisées :
+      = payment_request.rib&.iban || payment_request.student.rib&.iban || "manquantes"
     .fr-mt-2w.gray-text
       Dernière mise à jour le
       = l(payment_request.last_transition&.updated_at || payment_request.updated_at, format: :long)

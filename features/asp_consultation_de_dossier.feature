@@ -21,6 +21,7 @@ Fonctionnalité: Le personnel ASP consulte des dossiers
     Quand je clique sur "Rechercher"
     Alors la page contient "ENPUTHEDOSS20241"
     Et la page contient "3 jours x 10 € par jour = 30 €"
+    Et la page contient "IBAN"
 
   Scénario: Le personnel ASP n'a pas accès à l'interface principale
     Quand je me rends sur la page d'accueil

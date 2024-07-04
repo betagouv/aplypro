@@ -5,8 +5,11 @@ class Rib < ApplicationRecord
 
   enum :owner_type, { personal: 0, other_person: 1, moral_person: 2 }
 
+  has_one :payment_request, class_name: "ASP::PaymentRequest", dependent: :nullify
+
   validates :iban, :bic, :name, presence: true
-  validates :student_id, uniqueness: { scope: :archived_at }, if: :active?
+
+  validates :student_id, uniqueness: { scope: :archived_at }, unless: :archived?
 
   scope :multiple_ibans, -> { Rib.select(:iban).group(:iban).having("count(iban) > 1") }
 
@@ -31,17 +34,21 @@ class Rib < ApplicationRecord
             }
   validates :bic, bic: true
 
-  scope :active, -> { where.not(archived_at: nil) }
+  scope :archived, -> { where.not(archived_at: nil) }
 
-  def active?
-    archived_at.blank?
+  def archived?
+    archived_at.present?
   end
 
-  def inactive?
-    !active?
+  def archive!
+    update!(archived_at: DateTime.now)
+  end
+
+  def archivable?
+    payment_request.nil? || payment_request.terminated?
   end
 
   def readonly?
-    student.pfmps.any?(&:locked?)
+    !archivable?
   end
 end
