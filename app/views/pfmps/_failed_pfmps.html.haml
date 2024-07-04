@@ -24,7 +24,7 @@
                       %td
                         = pfmp.student.full_name
                       %td
-                        = link_to pfmp.formatted_dates, class_schooling_pfmp_path(pfmp.schooling.classe, pfmp.schooling, pfmp), class: "fr-link", title: pfmp.full_dates
+                        = link_to pfmp.formatted_dates, school_year_class_schooling_pfmp_path(selected_school_year.start_year, pfmp.schooling.classe, pfmp.schooling, pfmp), class: "fr-link", title: pfmp.full_dates
                       %td
                         = pfmp.latest_payment_request.status_badge
                       %td

@@ -53,7 +53,7 @@
               = closed_schooling_information_tag(pfmp.schooling, class: "fr-mt-1w")
 
             %td
-              = link_to pfmp.formatted_dates, edit_class_schooling_pfmp_path(@classe, pfmp.schooling, pfmp), class: "fr-link", title: pfmp.full_dates
+              = link_to pfmp.formatted_dates, edit_school_year_class_schooling_pfmp_path(selected_school_year.start_year, @classe, pfmp.schooling, pfmp), class: "fr-link", title: pfmp.full_dates
             %td
               = pfmp.day_count
               jours

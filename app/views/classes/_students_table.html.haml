@@ -28,7 +28,7 @@
             - if schooling.attributive_decision.present? && !schooling.abrogation_decision.present?
               %p= dsfr_badge(status: :success) { "Éditée" }
               - if schooling.closed?
-                %p= dsfr_link_to "Abroger", confirm_abrogation_class_schooling_path(@classe, schooling)
+                %p= dsfr_link_to "Abroger", confirm_abrogation_school_year_class_schooling_path(selected_school_year.start_year, @classe, schooling)
             - else
               - if schooling.abrogation_decision.present?
                 %p= dsfr_badge(status: :error) { "Abrogée" }
@@ -44,5 +44,5 @@
           %td
             %ul
               - schooling.pfmps.each do |pfmp|
-                %li= dsfr_link_to pfmp.listing_to_s, class_schooling_pfmp_path(@classe, schooling, pfmp), title: pfmp.full_dates
-              %li= dsfr_link_to "Ajouter une PFMP individuelle", new_class_schooling_pfmp_path(@classe, schooling)
+                %li= dsfr_link_to pfmp.listing_to_s, school_year_class_schooling_pfmp_path(selected_school_year.start_year, @classe, schooling, pfmp), title: pfmp.full_dates
+              %li= dsfr_link_to "Ajouter une PFMP individuelle", new_school_year_class_schooling_pfmp_path(selected_school_year.start_year, @classe, schooling)

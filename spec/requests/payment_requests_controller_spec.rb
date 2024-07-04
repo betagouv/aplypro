@@ -2,7 +2,9 @@
 
 require "rails_helper"
 
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 RSpec.describe PaymentRequestsController do
+  let(:school_year) { SchoolYear.current }
   let(:schooling) { create(:schooling) }
   let(:student) { schooling.student }
   let(:user) { create(:user, :director, :with_selected_establishment, establishment: schooling.classe.establishment) }
@@ -20,16 +22,20 @@ RSpec.describe PaymentRequestsController do
 
     context "when the director is confirmed" do
       it "calls the PfmpManager" do
-        post class_schooling_payment_requests_path(class_id: schooling.classe.id, schooling_id: schooling.id,
-                                                   id: pfmp.id), params: { confirmed_director: "1" }
+        post school_year_class_schooling_payment_requests_path(school_year.start_year,
+                                                               class_id: schooling.classe.id,
+                                                               schooling_id: schooling.id,
+                                                               id: pfmp.id), params: { confirmed_director: "1" }
         expect(pfmp_manager).to have_received(:create_new_payment_request!)
       end
     end
 
     context "when the director is not confirmed" do
       it "does not call the PfmpManager" do
-        post class_schooling_payment_requests_path(class_id: schooling.classe.id, schooling_id: schooling.id,
-                                                   id: pfmp.id), params: { confirmed_director: "0" }
+        post school_year_class_schooling_payment_requests_path(school_year.start_year,
+                                                               class_id: schooling.classe.id,
+                                                               schooling_id: schooling.id,
+                                                               id: pfmp.id), params: { confirmed_director: "0" }
         expect(pfmp_manager).not_to have_received(:create_new_payment_request!)
       end
     end
@@ -45,18 +51,23 @@ RSpec.describe PaymentRequestsController do
 
     context "when the director is confirmed" do
       it "calls the PfmpManager" do
-        put class_schooling_payment_request_path(class_id: schooling.classe.id, schooling_id: schooling.id,
-                                                 id: pfmp.id), params: { confirmed_director: "1" }
+        put school_year_class_schooling_payment_request_path(school_year.start_year,
+                                                             class_id: schooling.classe.id,
+                                                             schooling_id: schooling.id,
+                                                             id: pfmp.id), params: { confirmed_director: "1" }
         expect(pfmp_manager).to have_received(:retry_incomplete_payment_request!)
       end
     end
 
     context "when the director is not confirmed" do
       it "does not call the PfmpManager" do
-        put class_schooling_payment_request_path(class_id: schooling.classe.id, schooling_id: schooling.id,
-                                                 id: pfmp.id), params: { confirmed_director: "0" }
+        put school_year_class_schooling_payment_request_path(school_year.start_year,
+                                                             class_id: schooling.classe.id,
+                                                             schooling_id: schooling.id,
+                                                             id: pfmp.id), params: { confirmed_director: "0" }
         expect(pfmp_manager).not_to have_received(:retry_incomplete_payment_request!)
       end
     end
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers

@@ -59,26 +59,27 @@ Rails.application.routes.draw do
           post "bulk_create"
         end
       end
+
+      resources :schoolings, only: [] do
+        member do
+          get "confirm_abrogation"
+          delete "abrogate_decision"
+        end
+
+        resources :pfmps, except: :index do
+          member do
+            post "validate"
+            get "confirm_deletion"
+            resources :payment_requests, only: %i[create update]
+          end
+        end
+      end
     end
 
     resources :validations, only: :index
   end
 
   resources :classes, only: [] do
-    resources :schoolings, only: [] do
-      member do
-        get "confirm_abrogation"
-        delete "abrogate_decision"
-      end
-      resources :pfmps, except: :index do
-        member do
-          post "validate"
-          get "confirm_deletion"
-          resources :payment_requests, only: %i[create update]
-        end
-      end
-    end
-
     resources :students, only: %i[show] do
       resources :ribs, only: %i[new create destroy update edit] do
         member do

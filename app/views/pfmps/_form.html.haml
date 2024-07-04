@@ -1,7 +1,7 @@
 .fr-col-md-6.fr-mb-3w
   = render 'dates_warning'
 
-= form_with model: [@classe, @schooling, @pfmp], builder: DsfrFormBuilder do |form|
+= form_with model: [selected_school_year, @classe, @schooling, @pfmp], builder: DsfrFormBuilder do |form|
   = form.dsfr_error_summary
 
   = render partial: "pfmp_badges"

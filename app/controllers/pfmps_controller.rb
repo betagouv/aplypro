@@ -31,7 +31,8 @@ class PfmpsController < ApplicationController
 
   def update
     if @pfmp.update(pfmp_params)
-      redirect_to class_schooling_pfmp_path(@classe, @schooling, @pfmp), notice: t("pfmps.edit.success")
+      redirect_to school_year_class_schooling_pfmp_path(selected_school_year.start_year, @classe, @schooling, @pfmp),
+                  notice: t("pfmps.edit.success")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -40,7 +41,10 @@ class PfmpsController < ApplicationController
   def validate
     @pfmp.validate!
 
-    redirect_back_or_to class_schooling_pfmp_path(@classe, @schooling, @pfmp),
+    redirect_back_or_to school_year_class_schooling_pfmp_path(selected_school_year.start_year,
+                                                              @classe,
+                                                              @schooling,
+                                                              @pfmp),
                         notice: t("flash.pfmps.validated", name: @schooling.student.full_name)
   end
 
@@ -48,7 +52,7 @@ class PfmpsController < ApplicationController
     set_student_breadcrumbs
     add_breadcrumb(
       t("pages.titles.pfmps.show", name: @schooling.student.full_name),
-      class_schooling_pfmp_path(@classe, @schooling, @pfmp)
+      school_year_class_schooling_pfmp_path(selected_school_year.start_year, @classe, @schooling, @pfmp)
     )
     infer_page_title
 

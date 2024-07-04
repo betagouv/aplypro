@@ -2,7 +2,9 @@
 
 require "rails_helper"
 
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 RSpec.describe PfmpsController do
+  let(:school_year) { SchoolYear.current }
   let(:schooling) { create(:schooling) }
   let(:student) { schooling.student }
   let(:user) { create(:user, :director, :with_selected_establishment, establishment: schooling.classe.establishment) }
@@ -12,7 +14,10 @@ RSpec.describe PfmpsController do
 
   describe "GET /pfmp" do
     before do
-      get class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id, id: pfmp.id)
+      get school_year_class_schooling_pfmp_path(school_year.start_year,
+                                                class_id: schooling.classe.id,
+                                                schooling_id: schooling.id,
+                                                id: pfmp.id)
     end
 
     it { is_expected.to render_template(:show) }
@@ -20,7 +25,10 @@ RSpec.describe PfmpsController do
     context "when trying to access a PFMP from another establishment" do
       before do
         schooling = create(:schooling)
-        get class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id, id: pfmp.id)
+        get school_year_class_schooling_pfmp_path(school_year.start_year,
+                                                  class_id: schooling.classe.id,
+                                                  schooling_id: schooling.id,
+                                                  id: pfmp.id)
       end
 
       it { is_expected.to redirect_to school_year_classes_path(SchoolYear.current.start_year) }
@@ -30,7 +38,10 @@ RSpec.describe PfmpsController do
       before do
         pfmp.destroy!
 
-        get class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id, id: pfmp.id)
+        get school_year_class_schooling_pfmp_path(school_year.start_year,
+                                                  class_id: schooling.classe.id,
+                                                  schooling_id: schooling.id,
+                                                  id: pfmp.id)
       end
 
       it { is_expected.to redirect_to class_student_path(schooling.classe, student) }
@@ -42,7 +53,10 @@ RSpec.describe PfmpsController do
 
     context "when validating as a director" do
       it "returns found (but there is an error flash on the page)" do
-        post validate_class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id, id: pfmp.id)
+        post validate_school_year_class_schooling_pfmp_path(school_year.start_year,
+                                                            class_id: schooling.classe.id,
+                                                            schooling_id: schooling.id,
+                                                            id: pfmp.id)
 
         expect(response).to have_http_status(:found)
       end
@@ -54,7 +68,10 @@ RSpec.describe PfmpsController do
       end
 
       it "returns 200" do
-        post validate_class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id, id: pfmp.id)
+        post validate_school_year_class_schooling_pfmp_path(school_year.start_year,
+                                                            class_id: schooling.classe.id,
+                                                            schooling_id: schooling.id,
+                                                            id: pfmp.id)
 
         expect(response).to have_http_status(:found)
       end
@@ -71,7 +88,10 @@ RSpec.describe PfmpsController do
       end
 
       it "returns 403 (Forbidden)" do
-        post validate_class_schooling_pfmp_path(class_id: schooling.classe.id, schooling_id: schooling.id, id: pfmp.id)
+        post validate_school_year_class_schooling_pfmp_path(school_year.start_year,
+                                                            class_id: schooling.classe.id,
+                                                            schooling_id: schooling.id,
+                                                            id: pfmp.id)
 
         expect(response).to have_http_status(:forbidden)
       end
@@ -83,7 +103,9 @@ RSpec.describe PfmpsController do
     let(:pfmp_params) { { pfmp: pfmp.attributes } }
 
     it "returns 200" do
-      post class_schooling_pfmps_path(class_id: schooling.classe.id, schooling_id: schooling.id), params: pfmp_params
+      post school_year_class_schooling_pfmps_path(school_year.start_year,
+                                                  class_id: schooling.classe.id,
+                                                  schooling_id: schooling.id), params: pfmp_params
 
       expect(response).to have_http_status(:found)
     end
@@ -92,10 +114,13 @@ RSpec.describe PfmpsController do
       let(:schooling) { create(:schooling, :closed) }
 
       it "returns 200" do
-        post class_schooling_pfmps_path(class_id: schooling.classe.id, schooling_id: schooling.id), params: pfmp_params
+        post school_year_class_schooling_pfmps_path(school_year.start_year,
+                                                    class_id: schooling.classe.id,
+                                                    schooling_id: schooling.id), params: pfmp_params
 
         expect(response).to have_http_status(:found)
       end
     end
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers
