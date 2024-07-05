@@ -1,4 +1,4 @@
-= form_with model: [@classe, @student, @rib], builder: DsfrFormBuilder do |form|
+= form_with model: [selected_school_year, @classe, @student, @rib], builder: DsfrFormBuilder do |form|
   = form.dsfr_error_summary
 
   = form.dsfr_radio_buttons(:owner_type,  %i[personal other_person moral_person])

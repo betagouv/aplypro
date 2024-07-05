@@ -6,7 +6,8 @@ module PfmpResource
   def set_pfmp
     @pfmp = @schooling.student.pfmps.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to class_student_path(@classe, @schooling.student), alert: t("errors.pfmps.not_found") and return
+    redirect_to school_year_class_student_path(selected_school_year.start_year, @classe, @schooling.student),
+                alert: t("errors.pfmps.not_found") and return
   end
 
   def set_schooling
@@ -32,7 +33,7 @@ module PfmpResource
     )
     add_breadcrumb(
       t("pages.titles.students.show", name: @schooling.student.full_name, classe: @classe.label),
-      class_student_path(@classe, @schooling.student)
+      school_year_class_student_path(selected_school_year.start_year, @classe, @schooling.student)
     )
   end
   # rubocop:enable Metrics/AbcSize

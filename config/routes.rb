@@ -60,6 +60,14 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :students, only: %i[show] do
+        resources :ribs, only: %i[new create destroy update edit] do
+          member do
+            get "confirm_deletion"
+          end
+        end
+      end
+
       resources :schoolings, only: [] do
         member do
           get "confirm_abrogation"
@@ -77,16 +85,6 @@ Rails.application.routes.draw do
     end
 
     resources :validations, only: :index
-  end
-
-  resources :classes, only: [] do
-    resources :students, only: %i[show] do
-      resources :ribs, only: %i[new create destroy update edit] do
-        member do
-          get "confirm_deletion"
-        end
-      end
-    end
   end
 
   devise_scope :asp_user do

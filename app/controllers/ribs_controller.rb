@@ -23,7 +23,8 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     @rib = @student.create_new_rib(rib_params)
 
     if @rib.save
-      redirect_to class_student_path(@classe, @student), notice: t(".success")
+      redirect_to school_year_class_student_path(selected_school_year.start_year, @classe, @student),
+                  notice: t(".success")
     else
       render :new, status: :unprocessable_entity
     end
@@ -33,7 +34,8 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     @rib = @student.create_new_rib(rib_params)
 
     if @rib.save
-      redirect_to class_student_path(@classe, @student), notice: t(".success")
+      redirect_to school_year_class_student_path(selected_school_year.start_year, @classe, @student),
+                  notice: t(".success")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -42,7 +44,8 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   def destroy
     @rib.destroy
 
-    redirect_to class_student_path(@classe, @student), notice: t("flash.ribs.destroyed", name: @student.full_name)
+    redirect_to school_year_class_student_path(selected_school_year.start_year, @classe, @student),
+                notice: t("flash.ribs.destroyed", name: @student.full_name)
   end
 
   def missing
@@ -112,7 +115,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     set_classe_breadcrumbs
     add_breadcrumb(
       t("pages.titles.students.show", name: @student.full_name, classe: @classe.label),
-      class_student_path(@classe, @student)
+      school_year_class_student_path(selected_school_year.start_year, @classe, @student)
     )
     infer_page_title(name: @student.full_name)
   end
@@ -135,6 +138,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   end
 
   def rib_is_readonly
-    redirect_to class_student_path(@classe, @student), alert: t("flash.ribs.readonly", name: @student.full_name)
+    redirect_to school_year_class_student_path(selected_school_year.start_year, @classe, @student),
+                alert: t("flash.ribs.readonly", name: @student.full_name)
   end
 end

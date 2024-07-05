@@ -23,7 +23,7 @@
         - student = schooling.student
         %tr
           %td
-            = dsfr_link_to student.index_name, class_student_path(@classe, student), title: t("links.students.show", name: student)
+            = dsfr_link_to student.index_name, school_year_class_student_path(selected_school_year.start_year, @classe, student), title: t("links.students.show", name: student)
           %td
             - if schooling.attributive_decision.present? && !schooling.abrogation_decision.present?
               %p= dsfr_badge(status: :success) { "Éditée" }
@@ -37,10 +37,10 @@
           %td
             - if student.rib.present?
               %p= dsfr_badge(status: :success) { "Saisies" }
-              = dsfr_link_to "Modifier les coordonnées bancaires", edit_class_student_rib_path(@classe, student, student.rib)
+              = dsfr_link_to "Modifier les coordonnées bancaires", edit_school_year_class_student_rib_path(selected_school_year.start_year, @classe, student, student.rib)
             - else
               %p= dsfr_badge(status: :error) { "Non saisies" }
-              = dsfr_link_to "Saisir les coordonnées bancaires", new_class_student_rib_path(@classe, student)
+              = dsfr_link_to "Saisir les coordonnées bancaires", new_school_year_class_student_rib_path(selected_school_year.start_year, @classe, student)
           %td
             %ul
               - schooling.pfmps.each do |pfmp|

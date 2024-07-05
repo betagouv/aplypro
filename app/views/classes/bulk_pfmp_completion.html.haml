@@ -15,7 +15,7 @@
         %tr
           %td
             - student = pfmp.schooling.student # need to go through schooling to prevent extra requests
-            = dsfr_link_to student.index_name, class_student_path(@classe, student), title: t("links.students.show", name: student), tabindex: "1"
+            = dsfr_link_to student.index_name, school_year_class_student_path(selected_school_year.start_year, @classe, student), title: t("links.students.show", name: student), tabindex: "1"
             .fr-mt-1w= closed_schooling_information_tag(pfmp.schooling)
 
           %td= dsfr_link_to pfmp.formatted_dates, school_year_class_schooling_pfmp_path(selected_school_year.start_year, @classe, pfmp.schooling, pfmp), tabindex: "1", title: pfmp.full_dates

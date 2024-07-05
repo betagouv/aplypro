@@ -23,7 +23,8 @@ class PfmpsController < ApplicationController
     @pfmp = Pfmp.new(pfmp_params.merge(schooling: @schooling))
 
     if @pfmp.save
-      redirect_to class_student_path(@classe, @schooling.student), notice: t("pfmps.new.success")
+      redirect_to school_year_class_student_path(selected_school_year.start_year, @classe, @schooling.student),
+                  notice: t("pfmps.new.success")
     else
       render :new, status: :unprocessable_entity
     end
@@ -56,15 +57,17 @@ class PfmpsController < ApplicationController
     )
     infer_page_title
 
-    redirect_to class_student_path(@classe, @schooling.student) and return if @pfmp.nil?
+    return unless @pfmp.nil?
+
+    redirect_to school_year_class_student_path(selected_school_year.start_year, @classe, @schooling.student)
   end
 
   def destroy
     if @pfmp.destroy
-      redirect_to class_student_path(@classe, @schooling.student),
+      redirect_to school_year_class_student_path(selected_school_year.start_year, @classe, @schooling.student),
                   notice: t("flash.pfmps.destroyed", name: @schooling.student.full_name)
     else
-      redirect_to class_student_path(@classe, @schooling.student),
+      redirect_to school_year_class_student_path(selected_school_year.start_year, @classe, @schooling.student),
                   alert: t("flash.pfmps.not_destroyed")
     end
   end

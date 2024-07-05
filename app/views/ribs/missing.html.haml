@@ -10,7 +10,7 @@
 
               .fr-grid-md-row.fr-grid-row--middle
                 .fr-col.fr-mb-3w
-                  %h2.fr-mb-1w= dsfr_link_to rib.student.index_name, class_student_path(@classe, rib.student), title: t("links.students.show", name: rib.student), tabindex: "1", class: 'fr-h3'
+                  %h2.fr-mb-1w= dsfr_link_to rib.student.index_name, school_year_class_student_path(selected_school_year.start_year, @classe, rib.student), title: t("links.students.show", name: rib.student), tabindex: "1", class: 'fr-h3'
                   = closed_schooling_information_tag(@classe.closed_schooling_of rib.student_id)
                   = form.hidden_field :student_id
 

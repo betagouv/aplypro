@@ -2,7 +2,9 @@
 
 require "rails_helper"
 
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 RSpec.describe RibsController do
+  let(:school_year) { SchoolYear.current }
   let(:student) { create(:schooling).student }
   let(:user) { create(:user, :director, :with_selected_establishment, establishment: student.classe.establishment) }
 
@@ -17,7 +19,8 @@ RSpec.describe RibsController do
     end
 
     it "returns 422" do
-      post class_student_ribs_path(student.classe.id, student.id), params: { rib: build(:rib, iban: nil).attributes }
+      post school_year_class_student_ribs_path(school_year, student.classe.id, student.id),
+           params: { rib: build(:rib, iban: nil).attributes }
 
       expect(response).to have_http_status(:unprocessable_content)
     end
@@ -29,7 +32,9 @@ RSpec.describe RibsController do
       let(:other_rib) { create(:rib, student: other_student) }
 
       it "doesnt delete the rib" do
-        delete class_student_rib_path(other_student.classe.id, other_student, other_rib)
+        delete school_year_class_student_rib_path(school_year.start_year,
+                                                  other_student.classe.id,
+                                                  other_student, other_rib)
 
         expect(Rib.find(other_rib.id)).not_to be_nil
       end
@@ -42,7 +47,7 @@ RSpec.describe RibsController do
 
     context "with a correct request" do
       it "returns 302 (redirected to /classes/:classe_id)" do
-        post bulk_create_school_year_class_ribs_path(SchoolYear.current.start_year, student.classe.id),
+        post bulk_create_school_year_class_ribs_path(school_year.start_year, student.classe.id),
              params: { ribs: { student.id => rib_params } }
 
         expect(response).to have_http_status(:found)
@@ -65,7 +70,7 @@ RSpec.describe RibsController do
 
         it "tries to save as many ribs as possible" do
           expect do
-            post bulk_create_school_year_class_ribs_path(SchoolYear.current.start_year,
+            post bulk_create_school_year_class_ribs_path(school_year.start_year,
                                                          student.classe.id,
                                                          params: rib_params)
           end.to change(Rib, :count).by(2)
@@ -78,7 +83,7 @@ RSpec.describe RibsController do
       let(:rib) { build(:rib, student: other_student) }
 
       it "returns 403" do
-        post bulk_create_school_year_class_ribs_path(SchoolYear.current.start_year, student.classe.id),
+        post bulk_create_school_year_class_ribs_path(school_year.start_year, student.classe.id),
              params: { ribs: { other_student.id => rib_params } }
 
         expect(response).to have_http_status(:forbidden)
@@ -86,3 +91,4 @@ RSpec.describe RibsController do
     end
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers

@@ -44,7 +44,11 @@ RSpec.describe PfmpsController do
                                                   id: pfmp.id)
       end
 
-      it { is_expected.to redirect_to class_student_path(schooling.classe, student) }
+      it "redirect" do
+        expect(response).to redirect_to school_year_class_student_path(school_year.start_year,
+                                                                       schooling.classe,
+                                                                       student)
+      end
     end
   end
 
