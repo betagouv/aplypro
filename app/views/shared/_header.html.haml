@@ -33,13 +33,13 @@
         %ul.fr-nav__list
           - if current_user and not @inhibit_nav
             %li.fr-nav__item
-              %a.fr-nav__link{ href: school_year_home_path(selected_school_year.start_year), target: "_self", "aria-current" => current_path?(school_year_home_path(selected_school_year.start_year)) ? "page" : nil }
+              %a.fr-nav__link{ href: school_year_home_path(selected_school_year), target: "_self", "aria-current" => current_path?(school_year_home_path(selected_school_year)) ? "page" : nil }
                 = t("menu.home")
             %li.fr-nav__item
-              %a.fr-nav__link{ href: school_year_classes_path(selected_school_year.start_year), target: "_self", "aria-current" => current_path?(school_year_classes_path(selected_school_year.start_year)) ? "page" : nil }
+              %a.fr-nav__link{ href: school_year_classes_path(selected_school_year), target: "_self", "aria-current" => current_path?(school_year_classes_path(selected_school_year)) ? "page" : nil }
                 = t("menu.classes")
             %li.fr-nav__item
-              %a.fr-nav__link{ href: school_year_validations_path(selected_school_year.start_year), target: "_self", "aria-current" => (current_path_is_validation? ? "page" : nil) }
+              %a.fr-nav__link{ href: school_year_validations_path(selected_school_year), target: "_self", "aria-current" => (current_path_is_validation? ? "page" : nil) }
                 = t("menu.validate_all_pfmps")
           - if current_establishment.present? && current_user.can_invite?
             %li.fr-nav__item

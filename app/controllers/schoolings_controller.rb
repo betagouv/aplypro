@@ -9,7 +9,7 @@ class SchoolingsController < ApplicationController
   def abrogate_decision
     GenerateAbrogationDecisionJob.perform_now(@schooling)
 
-    redirect_to school_year_class_student_path(selected_school_year.start_year, @classe, @schooling.student),
+    redirect_to school_year_class_student_path(selected_school_year, @classe, @schooling.student),
                 notice: t("flash.da.abrogated", name: @schooling.student.full_name)
   end
 
@@ -28,7 +28,7 @@ class SchoolingsController < ApplicationController
               .where(establishment: current_establishment)
               .find(params[:class_id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to school_year_classes_path(selected_school_year.start_year),
+    redirect_to school_year_classes_path(selected_school_year),
                 alert: t("errors.classes.not_found") and return
   end
 end

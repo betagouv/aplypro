@@ -19,7 +19,7 @@ class ClassesController < ApplicationController
   end
 
   def show
-    add_breadcrumb t("pages.titles.classes.index"), school_year_classes_path(selected_school_year.start_year)
+    add_breadcrumb t("pages.titles.classes.index"), school_year_classes_path(selected_school_year)
     infer_page_title(name: @classe)
 
     @classe_facade = ClasseFacade.new(@classe)
@@ -27,7 +27,7 @@ class ClassesController < ApplicationController
 
   def create_bulk_pfmp
     if @classe.create_bulk_pfmp(pfmp_params)
-      redirect_to school_year_class_path(selected_school_year.start_year, @classe), notice: t("pfmps.new.success")
+      redirect_to school_year_class_path(selected_school_year, @classe), notice: t("pfmps.new.success")
     else
       @pfmp = Pfmp.new(pfmp_params)
       # TODO: clean up this hack, here we set a schooling to run conditional validations
@@ -59,7 +59,7 @@ class ClassesController < ApplicationController
     end
 
     if @pfmps.all?(&:save)
-      redirect_to school_year_class_path(selected_school_year.start_year, @classe), notice: t("pfmps.update.success")
+      redirect_to school_year_class_path(selected_school_year, @classe), notice: t("pfmps.update.success")
     else
       render :bulk_pfmp_completion, status: :unprocessable_entity
     end
@@ -83,18 +83,18 @@ class ClassesController < ApplicationController
   def set_classe
     @classe = current_establishment.classes.find_by!(id: params[:id], school_year: selected_school_year)
   rescue ActiveRecord::RecordNotFound
-    redirect_to school_year_classes_path(selected_school_year.start_year),
+    redirect_to school_year_classes_path(selected_school_year),
                 alert: t("errors.classes.not_found") and return
   end
 
   def add_bulk_action_breadcrumbs
     add_breadcrumb(
       t("pages.titles.classes.index"),
-      school_year_classes_path(selected_school_year.start_year)
+      school_year_classes_path(selected_school_year)
     )
     add_breadcrumb(
       t("pages.titles.classes.show", name: @classe),
-      school_year_class_path(selected_school_year.start_year, @classe)
+      school_year_class_path(selected_school_year, @classe)
     )
     infer_page_title
   end

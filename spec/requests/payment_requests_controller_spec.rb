@@ -22,7 +22,7 @@ RSpec.describe PaymentRequestsController do
 
     context "when the director is confirmed" do
       it "calls the PfmpManager" do
-        post school_year_class_schooling_payment_requests_path(school_year.start_year,
+        post school_year_class_schooling_payment_requests_path(school_year,
                                                                class_id: schooling.classe.id,
                                                                schooling_id: schooling.id,
                                                                id: pfmp.id), params: { confirmed_director: "1" }
@@ -32,7 +32,7 @@ RSpec.describe PaymentRequestsController do
 
     context "when the director is not confirmed" do
       it "does not call the PfmpManager" do
-        post school_year_class_schooling_payment_requests_path(school_year.start_year,
+        post school_year_class_schooling_payment_requests_path(school_year,
                                                                class_id: schooling.classe.id,
                                                                schooling_id: schooling.id,
                                                                id: pfmp.id), params: { confirmed_director: "0" }
@@ -51,7 +51,7 @@ RSpec.describe PaymentRequestsController do
 
     context "when the director is confirmed" do
       it "calls the PfmpManager" do
-        put school_year_class_schooling_payment_request_path(school_year.start_year,
+        put school_year_class_schooling_payment_request_path(school_year,
                                                              class_id: schooling.classe.id,
                                                              schooling_id: schooling.id,
                                                              id: pfmp.id), params: { confirmed_director: "1" }
@@ -61,7 +61,7 @@ RSpec.describe PaymentRequestsController do
 
     context "when the director is not confirmed" do
       it "does not call the PfmpManager" do
-        put school_year_class_schooling_payment_request_path(school_year.start_year,
+        put school_year_class_schooling_payment_request_path(school_year,
                                                              class_id: schooling.classe.id,
                                                              schooling_id: schooling.id,
                                                              id: pfmp.id), params: { confirmed_director: "0" }

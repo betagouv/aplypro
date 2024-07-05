@@ -23,7 +23,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     @rib = @student.create_new_rib(rib_params)
 
     if @rib.save
-      redirect_to school_year_class_student_path(selected_school_year.start_year, @classe, @student),
+      redirect_to school_year_class_student_path(selected_school_year, @classe, @student),
                   notice: t(".success")
     else
       render :new, status: :unprocessable_entity
@@ -34,7 +34,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     @rib = @student.create_new_rib(rib_params)
 
     if @rib.save
-      redirect_to school_year_class_student_path(selected_school_year.start_year, @classe, @student),
+      redirect_to school_year_class_student_path(selected_school_year, @classe, @student),
                   notice: t(".success")
     else
       render :edit, status: :unprocessable_entity
@@ -44,7 +44,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   def destroy
     @rib.destroy
 
-    redirect_to school_year_class_student_path(selected_school_year.start_year, @classe, @student),
+    redirect_to school_year_class_student_path(selected_school_year, @classe, @student),
                 notice: t("flash.ribs.destroyed", name: @student.full_name)
   end
 
@@ -60,7 +60,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
       Student.find(rib_params["student_id"]).create_new_rib(rib_params.except("student_id"))
     end
     if @ribs.each(&:save).all?(&:valid?)
-      redirect_to school_year_class_path(selected_school_year.start_year, @classe), notice: t("ribs.create.success")
+      redirect_to school_year_class_path(selected_school_year, @classe), notice: t("ribs.create.success")
     else
       render :missing, status: :unprocessable_entity
     end
@@ -92,7 +92,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   def set_classe
     @classe = current_establishment.classes.find_by!(id: params[:class_id], school_year: selected_school_year)
   rescue ActiveRecord::RecordNotFound
-    redirect_to school_year_classes_path(selected_school_year.start_year),
+    redirect_to school_year_classes_path(selected_school_year),
                 alert: t("errors.classes.not_found") and return
   end
 
@@ -103,11 +103,11 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   def set_classe_breadcrumbs
     add_breadcrumb(
       t("pages.titles.classes.index"),
-      school_year_classes_path(selected_school_year.start_year)
+      school_year_classes_path(selected_school_year)
     )
     add_breadcrumb(
       t("pages.titles.classes.show", name: @classe.label),
-      school_year_class_path(selected_school_year.start_year, @classe)
+      school_year_class_path(selected_school_year, @classe)
     )
   end
 
@@ -115,7 +115,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     set_classe_breadcrumbs
     add_breadcrumb(
       t("pages.titles.students.show", name: @student.full_name, classe: @classe.label),
-      school_year_class_student_path(selected_school_year.start_year, @classe, @student)
+      school_year_class_student_path(selected_school_year, @classe, @student)
     )
     infer_page_title(name: @student.full_name)
   end
@@ -130,7 +130,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
 
     if students_not_in_class.present? # rubocop:disable Style/GuardClause
       redirect_to(
-        missing_school_year_class_ribs_path(selected_school_year.start_year, @classe),
+        missing_school_year_class_ribs_path(selected_school_year, @classe),
         alert: t("errors.classes.not_found"),
         status: :forbidden
       ) and return
@@ -138,7 +138,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   end
 
   def rib_is_readonly
-    redirect_to school_year_class_student_path(selected_school_year.start_year, @classe, @student),
+    redirect_to school_year_class_student_path(selected_school_year, @classe, @student),
                 alert: t("flash.ribs.readonly", name: @student.full_name)
   end
 end

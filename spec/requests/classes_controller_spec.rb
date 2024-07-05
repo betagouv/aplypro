@@ -12,7 +12,7 @@ RSpec.describe ClassesController do
 
   describe "GET /index" do
     it "returns a list of classes" do
-      get school_year_classes_path(school_year.start_year)
+      get school_year_classes_path(school_year)
 
       expect(response).to have_http_status(:ok)
     end
@@ -20,17 +20,17 @@ RSpec.describe ClassesController do
 
   describe "GET /classe" do
     before do
-      get school_year_class_path(school_year.start_year, classe)
+      get school_year_class_path(school_year, classe)
     end
 
     it { is_expected.to render_template(:show) }
 
     context "when the classe doesn't belong to the establishment of the user" do
       before do
-        get school_year_class_path(school_year.start_year, create(:classe))
+        get school_year_class_path(school_year, create(:classe))
       end
 
-      it { is_expected.to redirect_to school_year_classes_path(school_year.start_year) }
+      it { is_expected.to redirect_to school_year_classes_path(school_year) }
     end
   end
 end

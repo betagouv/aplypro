@@ -20,7 +20,7 @@ class ValidationsController < ApplicationController
   end
 
   def show
-    add_breadcrumb t("pages.titles.validations.index"), school_year_validations_path(selected_school_year.start_year)
+    add_breadcrumb t("pages.titles.validations.index"), school_year_validations_path(selected_school_year)
     infer_page_title(name: @classe.label)
 
     @pfmps = current_establishment.validatable_pfmps
@@ -36,7 +36,7 @@ class ValidationsController < ApplicationController
   # rubocop:disable Metrics/AbcSize
   def validate
     if validation_params.empty?
-      redirect_to validation_school_year_class_path(selected_school_year.start_year, @classe),
+      redirect_to validation_school_year_class_path(selected_school_year, @classe),
                   alert: t("validations.create.empty") and return
     end
 
@@ -44,7 +44,7 @@ class ValidationsController < ApplicationController
                          .where(id: validation_params[:pfmp_ids], schoolings: { classe: @classe })
                          .find_each { |pfmp| pfmp.transition_to!(:validated) }
 
-    redirect_to school_year_validations_path(selected_school_year.start_year),
+    redirect_to school_year_validations_path(selected_school_year),
                 notice: t("validations.create.success", classe_label: @classe.label)
   end
   # rubocop:enable Metrics/AbcSize
@@ -54,14 +54,14 @@ class ValidationsController < ApplicationController
   def check_confirmed_director_for_validation
     check_confirmed_director(
       alert_message: t("validations.create.not_director"),
-      redirect_path: validation_school_year_class_path(selected_school_year.start_year, @classe)
+      redirect_path: validation_school_year_class_path(selected_school_year, @classe)
     )
   end
 
   def set_classe
     @classe = current_establishment.classes.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to school_year_validations_path(selected_school_year.start_year),
+    redirect_to school_year_validations_path(selected_school_year),
                 alert: t("errors.classes.not_found") and return
   end
 

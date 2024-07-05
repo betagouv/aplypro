@@ -3,7 +3,7 @@
   .fr-callout.fr-icon-information-line
     %h3.fr-callout__title=t("payment_requests.actions.reset.title")
     .fr-callout__text
-    = form_with method: :post, url: school_year_class_schooling_payment_requests_path(selected_school_year.start_year, @classe, @schooling, @pfmp) do |form|
+    = form_with method: :post, url: school_year_class_schooling_payment_requests_path(selected_school_year, @classe, @schooling, @pfmp) do |form|
       = t("payment_requests.actions.reset.warning")
       = render partial: "shared/confirmed_director", locals: { message: t("validations.confirm_director") }
       = form.submit t("payment_requests.actions.reset.cta"), class: "fr-btn"

@@ -19,4 +19,8 @@ class SchoolYear < ApplicationRecord
   def to_s
     "#{start_year}-#{end_year}"
   end
+
+  def to_param
+    start_year.to_s
+  end
 end

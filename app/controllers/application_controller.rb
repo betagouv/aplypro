@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_establishment, :selected_school_year
 
   def after_sign_in_path_for(_resource)
-    school_year_classes_path(selected_school_year.start_year)
+    school_year_classes_path(selected_school_year)
   end
 
   protected

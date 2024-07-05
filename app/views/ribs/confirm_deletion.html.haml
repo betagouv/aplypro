@@ -14,5 +14,5 @@
       %code= @student.rib.bic
 
   .fr-btns-group.fr-btns-group--inline.fr-mt-3w
-    = link_to "Annuler", school_year_class_student_path(selected_school_year.start_year, @classe, @student), class: 'fr-btn fr-btn--secondary'
-    = button_to "Confirmer la suppression", school_year_class_student_rib_path(selected_school_year.start_year, @classe, @student, @rib), method: :delete, class: 'fr-btn fr-btn--danger fr-btn--secondary'
+    = link_to "Annuler", school_year_class_student_path(selected_school_year, @classe, @student), class: 'fr-btn fr-btn--secondary'
+    = button_to "Confirmer la suppression", school_year_class_student_rib_path(selected_school_year, @classe, @student, @rib), method: :delete, class: 'fr-btn fr-btn--danger fr-btn--secondary'

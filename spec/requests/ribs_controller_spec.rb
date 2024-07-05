@@ -12,7 +12,7 @@ RSpec.describe RibsController do
 
   describe "CREATE /rib" do
     it "returns found" do
-      post class_student_ribs_path(student.classe.id, student.id),
+      post school_year_class_student_ribs_path(school_year, student.classe.id, student.id),
            params: { rib: build(:rib, student: student).attributes }
 
       expect(response).to have_http_status(:found)
@@ -32,7 +32,7 @@ RSpec.describe RibsController do
       let(:other_rib) { create(:rib, student: other_student) }
 
       it "doesnt delete the rib" do
-        delete school_year_class_student_rib_path(school_year.start_year,
+        delete school_year_class_student_rib_path(school_year,
                                                   other_student.classe.id,
                                                   other_student, other_rib)
 
@@ -47,7 +47,7 @@ RSpec.describe RibsController do
 
     context "with a correct request" do
       it "returns 302 (redirected to /classes/:classe_id)" do
-        post bulk_create_school_year_class_ribs_path(school_year.start_year, student.classe.id),
+        post bulk_create_school_year_class_ribs_path(school_year, student.classe.id),
              params: { ribs: { student.id => rib_params } }
 
         expect(response).to have_http_status(:found)
@@ -70,7 +70,7 @@ RSpec.describe RibsController do
 
         it "tries to save as many ribs as possible" do
           expect do
-            post bulk_create_school_year_class_ribs_path(school_year.start_year,
+            post bulk_create_school_year_class_ribs_path(school_year,
                                                          student.classe.id,
                                                          params: rib_params)
           end.to change(Rib, :count).by(2)
@@ -83,7 +83,7 @@ RSpec.describe RibsController do
       let(:rib) { build(:rib, student: other_student) }
 
       it "returns 403" do
-        post bulk_create_school_year_class_ribs_path(school_year.start_year, student.classe.id),
+        post bulk_create_school_year_class_ribs_path(school_year, student.classe.id),
              params: { ribs: { other_student.id => rib_params } }
 
         expect(response).to have_http_status(:forbidden)

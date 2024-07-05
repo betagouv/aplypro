@@ -9,7 +9,7 @@ class HomeController < ApplicationController
   before_action :infer_page_title, except: %i[index maintenance]
 
   def index
-    redirect_to school_year_home_path(SchoolYear.current.start_year) and return if user_signed_in?
+    redirect_to school_year_home_path(SchoolYear.current) and return if user_signed_in?
 
     redirect_to new_user_session_path
   end

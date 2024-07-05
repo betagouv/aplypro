@@ -14,7 +14,7 @@ RSpec.describe PfmpsController do
 
   describe "GET /pfmp" do
     before do
-      get school_year_class_schooling_pfmp_path(school_year.start_year,
+      get school_year_class_schooling_pfmp_path(school_year,
                                                 class_id: schooling.classe.id,
                                                 schooling_id: schooling.id,
                                                 id: pfmp.id)
@@ -25,27 +25,27 @@ RSpec.describe PfmpsController do
     context "when trying to access a PFMP from another establishment" do
       before do
         schooling = create(:schooling)
-        get school_year_class_schooling_pfmp_path(school_year.start_year,
+        get school_year_class_schooling_pfmp_path(school_year,
                                                   class_id: schooling.classe.id,
                                                   schooling_id: schooling.id,
                                                   id: pfmp.id)
       end
 
-      it { is_expected.to redirect_to school_year_classes_path(SchoolYear.current.start_year) }
+      it { is_expected.to redirect_to school_year_classes_path(SchoolYear.current) }
     end
 
     context "when trying to access a deleted PFMP" do
       before do
         pfmp.destroy!
 
-        get school_year_class_schooling_pfmp_path(school_year.start_year,
+        get school_year_class_schooling_pfmp_path(school_year,
                                                   class_id: schooling.classe.id,
                                                   schooling_id: schooling.id,
                                                   id: pfmp.id)
       end
 
       it "redirect" do
-        expect(response).to redirect_to school_year_class_student_path(school_year.start_year,
+        expect(response).to redirect_to school_year_class_student_path(school_year,
                                                                        schooling.classe,
                                                                        student)
       end
@@ -57,7 +57,7 @@ RSpec.describe PfmpsController do
 
     context "when validating as a director" do
       it "returns found (but there is an error flash on the page)" do
-        post validate_school_year_class_schooling_pfmp_path(school_year.start_year,
+        post validate_school_year_class_schooling_pfmp_path(school_year,
                                                             class_id: schooling.classe.id,
                                                             schooling_id: schooling.id,
                                                             id: pfmp.id)
@@ -72,7 +72,7 @@ RSpec.describe PfmpsController do
       end
 
       it "returns 200" do
-        post validate_school_year_class_schooling_pfmp_path(school_year.start_year,
+        post validate_school_year_class_schooling_pfmp_path(school_year,
                                                             class_id: schooling.classe.id,
                                                             schooling_id: schooling.id,
                                                             id: pfmp.id)
@@ -92,7 +92,7 @@ RSpec.describe PfmpsController do
       end
 
       it "returns 403 (Forbidden)" do
-        post validate_school_year_class_schooling_pfmp_path(school_year.start_year,
+        post validate_school_year_class_schooling_pfmp_path(school_year,
                                                             class_id: schooling.classe.id,
                                                             schooling_id: schooling.id,
                                                             id: pfmp.id)
@@ -107,7 +107,7 @@ RSpec.describe PfmpsController do
     let(:pfmp_params) { { pfmp: pfmp.attributes } }
 
     it "returns 200" do
-      post school_year_class_schooling_pfmps_path(school_year.start_year,
+      post school_year_class_schooling_pfmps_path(school_year,
                                                   class_id: schooling.classe.id,
                                                   schooling_id: schooling.id), params: pfmp_params
 
@@ -118,7 +118,7 @@ RSpec.describe PfmpsController do
       let(:schooling) { create(:schooling, :closed) }
 
       it "returns 200" do
-        post school_year_class_schooling_pfmps_path(school_year.start_year,
+        post school_year_class_schooling_pfmps_path(school_year,
                                                     class_id: schooling.classe.id,
                                                     schooling_id: schooling.id), params: pfmp_params
 
