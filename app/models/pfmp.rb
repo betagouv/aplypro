@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Pfmp < ApplicationRecord
+class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include PfmpAmountCalculator
 
   TRANSITION_CLASS = PfmpTransition
@@ -55,7 +55,7 @@ class Pfmp < ApplicationRecord
 
   delegate :wage, to: :mef
 
-  before_destroy :ensure_unlocked?, prepend: true
+  before_destroy :ensure_destroyable?, prepend: true
 
   after_save do
     if day_count.present?
@@ -112,6 +112,12 @@ class Pfmp < ApplicationRecord
     !locked?
   end
 
+  def can_be_destroyed?
+    return true if latest_payment_request.blank?
+
+    latest_payment_request.in_state?(:pending)
+  end
+
   def stalled_payment_request?
     latest_payment_request&.failed?
   end
@@ -126,16 +132,14 @@ class Pfmp < ApplicationRecord
     end
   end
 
-  def ensure_unlocked?
-    # using `return unless locked?` is awkward
-    if locked? # rubocop:disable Style/GuardClause
-      errors.add(:base, :locked)
+  def ensure_destroyable?
+    return true if can_be_destroyed?
 
-      throw :abort
-    end
+    errors.add(:base, :locked)
+    throw :abort
   end
 
   def can_retrigger_payment?
-    latest_payment_request.retryable?
+    latest_payment_request.failed?
   end
 end
