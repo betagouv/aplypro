@@ -26,15 +26,16 @@
           %tr
             %td Montant du paiement
             %td= number_to_currency pfmp.amount
-          %tr
-            %td Titulaire du compte
-            %td= payment_request.rib.name
-          %tr
-            %td IBAN
-            %td= payment_request.rib.iban
-          %tr
-            %td "SWIFT/BIC"
-            %td= payment_request.rib.bic
+          - if payment_request.rib.present?
+            %tr
+              %td Titulaire du compte
+              %td= payment_request.rib.name
+            %tr
+              %td IBAN
+              %td= payment_request.rib.iban
+            %tr
+              %td "SWIFT/BIC"
+              %td= payment_request.rib.bic
           %tr
             %td Date d'envoi du flux
             %td= l payment_request.asp_request.sent_at, format: :long

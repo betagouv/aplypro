@@ -155,11 +155,11 @@ module Users
     end
 
     def fetch_students_for!(establishments)
-      ActiveJob.perform_all_later(establishments.map { |e| FetchStudentsJob.new(e) })
+      ActiveJob.perform_all_later(establishments.map { |e| Sync::ClassesJob.new(e) })
     end
 
     def fetch_establishments!
-      @mapper.establishments_in_responsibility_and_delegated.each { |e| FetchEstablishmentJob.perform_now(e) }
+      @mapper.establishments_in_responsibility_and_delegated.each { |e| Sync::EstablishmentJob.perform_now(e) }
     end
 
     def check_limited_access!

@@ -198,7 +198,7 @@ RSpec.describe Pfmp do
     let(:pfmp) { create(:pfmp, :validated).reload }
 
     before do
-      allow(pfmp.latest_payment_request).to receive(:retryable?).and_return :result
+      allow(pfmp.latest_payment_request).to receive(:failed?).and_return :result
     end
 
     it "delegates to the latest payment request" do

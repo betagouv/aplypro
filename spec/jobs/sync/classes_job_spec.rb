@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe FetchStudentsJob do
+RSpec.describe Sync::ClassesJob do
   include ActiveJob::TestHelper
 
   let(:establishment) { create(:establishment, :sygne_provider) }

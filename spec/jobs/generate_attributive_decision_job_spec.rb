@@ -22,7 +22,7 @@ RSpec.describe GenerateAttributiveDecisionJob, :student_api do
   # NOTE: there's the much nicer
   #
   #   expect { job.perform_now }
-  #     .to have_enqueued_job(FetchStudentAddressJob).with(schooling)
+  #     .to have_enqueued_job(XXXXX).with(schooling)
   #
   # but we can't use it because we request the address *synchronously*
   # hence we use `perform_now` which skips the underlying job queue

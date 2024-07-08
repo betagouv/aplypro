@@ -132,16 +132,4 @@ RSpec.describe ASP::PaymentRequest do
       end
     end
   end
-
-  describe "retryable?" do
-    before do
-      allow(payment_request.state_machine)
-        .to receive(:in_state?).with(*ASP::PaymentRequestStateMachine::RETRYABLE_STATES)
-        .and_return :result
-    end
-
-    it "delegates to the state machine?" do
-      expect(payment_request.retryable?).to eq :result
-    end
-  end
 end
