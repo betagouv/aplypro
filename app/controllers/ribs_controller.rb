@@ -30,7 +30,9 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   end
 
   def update
-    if @rib.update(rib_params)
+    @rib = @student.create_new_rib(rib_params)
+
+    if @rib.save
       redirect_to class_student_path(@classe, @student), notice: t(".success")
     else
       render :edit, status: :unprocessable_entity
