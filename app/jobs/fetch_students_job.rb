@@ -20,7 +20,8 @@ class FetchStudentsJob < ApplicationJob
   def perform(establishment)
     # NOTE: there is a bug in Sygne where students are removed from classes
     # earlier than they should be so we disable student list fetching for now
-    return true if establishment.students_provider == "sygne" && Rails.env.production?
+    # (only in production because we want to keep our tests intact)
+    return true if establishment.provided_by?(:sygne) && Rails.env.production?
 
     api = establishment.students_api
 

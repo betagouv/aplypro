@@ -96,6 +96,10 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     StudentsApi.api_for(students_provider)
   end
 
+  def provided_by?(provider)
+    students_provider.to_sym == provider.to_sym
+  end
+
   def rattach_attributive_decisions_zip!(content, filename)
     attributive_decisions_zip.purge if attributive_decisions_zip.present?
 

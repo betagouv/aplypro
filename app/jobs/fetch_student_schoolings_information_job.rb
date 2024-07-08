@@ -11,7 +11,8 @@ class FetchStudentSchoolingsInformationJob < ApplicationJob
   retry_on Faraday::TooManyRequestsError, wait: 1.hour, attempts: 3
 
   def perform(student)
-    return true unless student.current_schooling
+    # XXX: Sygne temporarily disabled
+    return true if (student.establishment.provided_by?(:sygne) && Rails.env.production?) || student.current_schooling.nil?
 
     Updaters::StudentSchoolingsUpdater.call(student)
   end
