@@ -5,6 +5,7 @@ module DocumentGeneration
 
   included do
     queue_as :documents
+    sidekiq_options retry: false
   end
 
   module ClassMethods
