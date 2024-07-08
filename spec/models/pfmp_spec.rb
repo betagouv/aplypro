@@ -3,12 +3,14 @@
 require "rails_helper"
 
 RSpec.describe Pfmp do
-  subject(:pfmp) { create(:pfmp, schooling: schooling) }
+  let(:schooling) do
+    mef = create(:mef)
+    classe = create(:classe, mef: mef)
+    student = create(:student, :with_all_asp_info)
+    create(:schooling, student: student, classe: classe)
+  end
 
-  let(:mef) { create(:mef) }
-  let(:classe) { create(:classe, mef: mef) }
-  let(:student) { create(:student, :with_all_asp_info) }
-  let(:schooling) { create(:schooling, student: student, classe: classe) }
+  subject(:pfmp) { create(:pfmp, schooling: schooling) }
 
   describe "associations" do
     it { is_expected.to belong_to(:schooling) }
@@ -24,17 +26,17 @@ RSpec.describe Pfmp do
     it {
       expect(pfmp)
         .to validate_inclusion_of(:start_date)
-        .in_range(pfmp.establishment.school_year_range)
-        .with_low_message(/ne peut pas précéder/)
-        .allow_blank
+              .in_range(pfmp.establishment.school_year_range)
+              .with_low_message(/ne peut pas précéder/)
+              .allow_blank
     }
 
     it {
       expect(pfmp)
         .to validate_inclusion_of(:end_date)
-        .in_range(pfmp.establishment.school_year_range)
-        .with_high_message(/ne peut pas excéder/)
-        .allow_blank
+              .in_range(pfmp.establishment.school_year_range)
+              .with_high_message(/ne peut pas excéder/)
+              .allow_blank
     }
 
     it { is_expected.to validate_numericality_of(:day_count).only_integer.is_greater_than(0) }
@@ -106,8 +108,8 @@ RSpec.describe Pfmp do
       it "is moved to completed" do
         expect { pfmp.update!(day_count: 10) }
           .to change(pfmp, :current_state)
-          .from("pending")
-          .to("completed")
+                .from("pending")
+                .to("completed")
       end
     end
 
@@ -135,8 +137,8 @@ RSpec.describe Pfmp do
       it "moves back to pending" do
         expect { pfmp.update!(day_count: nil) }
           .to change(pfmp, :current_state)
-          .from("completed")
-          .to("pending")
+                .from("completed")
+                .to("pending")
       end
     end
 
@@ -249,14 +251,11 @@ RSpec.describe Pfmp do
     end
   end
 
-  describe 'when the pfmp object is correctly set from the schooling object' do
-    let(:schooling) { create(:schooling)}
-    let!(:pfmp1) { create(:pfmp, schooling: schooling) }
-    let!(:pfmp2) { create(:pfmp, schooling: schooling) }
+  describe "when the pfmp object is correctly set from the schooling object" do
+    let(:pfmp) { create(:pfmp, schooling: schooling) }
 
-    it 'correctly generates administrative_number based on schooling' do
-      expect(pfmp1.administrative_number).to eq('DEC12301')
-      expect(pfmp2.administrative_number).to eq('DEC12302')
+    it "correctly generates administrative_number based on schooling" do
+      expect(pfmp.administrative_number).to eq(schooling.administrative_number)
     end
   end
 end

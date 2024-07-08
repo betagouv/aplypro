@@ -5,7 +5,6 @@ FactoryBot.define do
     schooling { association :schooling, student: student }
     start_date { "#{SchoolYear.current.start_year}-09-03" }
     end_date { "#{SchoolYear.current.start_year}-09-28" }
-    administrative_number { SecureRandom.alphanumeric(10).upcase }
 
     transient do
       student { build(:student) } # rubocop:disable FactoryBot/FactoryAssociationWithStrategy
