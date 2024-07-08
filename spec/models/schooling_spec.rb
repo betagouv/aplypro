@@ -154,6 +154,12 @@ RSpec.describe Schooling do
       it { is_expected.to include schooling }
     end
 
+    context "when the schooling has an end_date in the future" do
+      let(:schooling) { create(:schooling, start_date: Date.yesterday, end_date: Date.tomorrow) }
+
+      it { is_expected.not_to include schooling }
+    end
+
     context "when the schooling is active" do
       let(:schooling) { create(:schooling) }
 
