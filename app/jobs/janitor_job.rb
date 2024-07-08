@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 class JanitorJob < ApplicationJob
   def perform
     reset_attributive_decision_version_overflow
