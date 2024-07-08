@@ -13,13 +13,13 @@ end
 Sachantque("les informations personnelles ont été récupérées pour l'élève {string}") do |name|
   student = find_student_by_full_name(name)
 
-  FetchStudentInformationJob.perform_now(student.current_schooling)
+  Sync::StudentJob.perform_now(student.current_schooling)
 end
 
 Sachantque("les informations personnelles ont été récupérées pour tous les élèves de l'établissement {string}") do |uai|
   establishment = Establishment.find_by(uai: uai)
 
-  ActiveJob.perform_all_later(establishment.schoolings.map { |schooling| FetchStudentInformationJob.new(schooling) })
+  ActiveJob.perform_all_later(establishment.schoolings.map { |schooling| Sync::StudentJob.new(schooling) })
 end
 
 Quand(

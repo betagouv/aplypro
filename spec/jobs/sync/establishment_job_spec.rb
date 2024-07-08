@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe FetchEstablishmentJob do
+RSpec.describe Sync::EstablishmentJob do
   # we want a "dehydrated" (i.e not API-refreshed) establishment to
   # avoid flaky specs where the data returned from the fixture matches
   # the factory's attribute which will crash the

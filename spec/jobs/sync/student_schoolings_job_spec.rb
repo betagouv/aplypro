@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe FetchStudentSchoolingsInformationJob do
+RSpec.describe Sync::StudentSchoolingsJob do
   let(:student) { create(:schooling).student }
   let(:updater_double) { class_double(Updaters::StudentSchoolingsUpdater) }
 

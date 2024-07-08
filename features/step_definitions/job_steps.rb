@@ -6,7 +6,7 @@ end
 
 # NOTE: il arrive qu'une tâche déclence d'autres tâches, comme
 # GenerateAttributiveDecisionJob qui appelle
-# FetchStudentInformationJob ou bien ConsiderPaymentRequestsJob qui
+# Sync::StudentJob ou bien ConsiderPaymentRequestsJob qui
 # appelle PreparePaymentRequestJob, etc. Dans ces cas là il faut
 # épuiser la file de tâches deux fois pour lancer d'abord la tâche
 # puis ensuite les sous-tâches.
@@ -18,7 +18,7 @@ Quand("toutes les tâches de fond et leurs sous-tâches sont terminées") do
 end
 
 Quand("la liste des élèves de l'établissement {string} est rafraîchie") do |uai|
-  FetchStudentsJob.perform_later(Establishment.find_by(uai: uai))
+  Sync::ClassesJob.perform_later(Establishment.find_by(uai: uai))
 end
 
 # NOTE: pas très élégant mais comme le job parent

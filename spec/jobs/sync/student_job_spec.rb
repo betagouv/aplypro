@@ -4,7 +4,7 @@ require "rails_helper"
 require "support/webmock_helpers"
 
 # rubocop:disable RSpec/MultipleMemoizedHelpers
-RSpec.describe FetchStudentInformationJob, :student_api do
+RSpec.describe Sync::StudentJob, :student_api do
   let(:classe) { create(:classe, establishment: establishment) }
   let(:schooling) { create(:schooling, classe: classe) }
   let(:student) { schooling.student }
