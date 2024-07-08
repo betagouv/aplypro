@@ -248,4 +248,15 @@ RSpec.describe Pfmp do
       end
     end
   end
+
+  describe 'when the pfmp object is correctly set from the schooling object' do
+    let(:schooling) { create(:schooling)}
+    let!(:pfmp1) { create(:pfmp, schooling: schooling) }
+    let!(:pfmp2) { create(:pfmp, schooling: schooling) }
+
+    it 'correctly generates administrative_number based on schooling' do
+      expect(pfmp1.administrative_number).to eq('DEC12301')
+      expect(pfmp2.administrative_number).to eq('DEC12302')
+    end
+  end
 end
