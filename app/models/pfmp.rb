@@ -49,6 +49,8 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
               less_than_or_equal_to: ->(pfmp) { (pfmp.end_date - pfmp.start_date).to_i + 1 }
             }
 
+  before_save :copy_administrative_number_from_schooling
+
   scope :finished, -> { where("pfmps.end_date <= (?)", Time.zone.today) }
   scope :before, ->(date) { where("pfmps.created_at < (?)", date) }
   scope :after, ->(date) { where("pfmps.created_at > (?)", date) }
@@ -141,5 +143,11 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def can_retrigger_payment?
     latest_payment_request.failed?
+  end
+
+  private
+
+  def copy_administrative_number_from_schooling
+    self.administrative_number = schooling.administrative_number
   end
 end
