@@ -37,9 +37,9 @@ RSpec.describe Pfmp do
         .allow_blank
     }
 
-    it 'validates numericality of day count' do
-      expect(subject).to validate_numericality_of(:day_count)
-                           .only_integer.is_greater_than(0)
+    it "validates numericality of day count" do
+      expect(pfmp).to validate_numericality_of(:day_count)
+        .only_integer.is_greater_than(0)
     end
 
     context "when the end date is before the start" do
