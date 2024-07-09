@@ -24,22 +24,25 @@ RSpec.describe Pfmp do
     it { is_expected.to validate_presence_of(:end_date) }
 
     it {
-      expect(pfmp).to validate_inclusion_of(:start_date)
-                        .in_range(pfmp.establishment.school_year_range)
-                        .with_low_message(/ne peut pas précéder/)
-                        .allow_blank
+      expect(pfmp)
+        .to validate_inclusion_of(:start_date)
+        .in_range(pfmp.establishment.school_year_range)
+        .with_low_message(/ne peut pas précéder/)
+        .allow_blank
     }
 
     it {
-      expect(pfmp).to validate_inclusion_of(:end_date)
-                        .in_range(pfmp.establishment.school_year_range)
-                        .with_high_message(/ne peut pas excéder/)
-                        .allow_blank
+      expect(pfmp)
+        .to validate_inclusion_of(:end_date)
+        .in_range(pfmp.establishment.school_year_range)
+        .with_high_message(/ne peut pas excéder/)
+        .allow_blank
     }
 
     it {
-      is_expected.to validate_numericality_of(:day_count)
-                       .only_integer.is_greater_than(0)
+      is_expected
+        .to validate_numericality_of(:day_count)
+        .only_integer.is_greater_than(0)
     }
 
     context "when the end date is before the start" do
