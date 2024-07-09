@@ -24,24 +24,21 @@ RSpec.describe Pfmp do
     it { is_expected.to validate_presence_of(:end_date) }
 
     it {
-      expect(pfmp)
-        .to validate_inclusion_of(:start_date)
+      expect(pfmp).to validate_inclusion_of(:start_date)
         .in_range(pfmp.establishment.school_year_range)
         .with_low_message(/ne peut pas précéder/)
         .allow_blank
     }
 
     it {
-      expect(pfmp)
-        .to validate_inclusion_of(:end_date)
+      expect(pfmp).to validate_inclusion_of(:end_date)
         .in_range(pfmp.establishment.school_year_range)
         .with_high_message(/ne peut pas excéder/)
         .allow_blank
     }
 
     it {
-      is_expected
-        .to validate_numericality_of(:day_count)
+      is_expected.to validate_numericality_of(:day_count)
         .only_integer.is_greater_than(0)
     }
 
@@ -112,8 +109,8 @@ RSpec.describe Pfmp do
       it "is moved to completed" do
         expect { pfmp.update!(day_count: 10) }
           .to change(pfmp, :current_state)
-                .from("pending")
-                .to("completed")
+          .from("pending")
+          .to("completed")
       end
     end
 
@@ -141,8 +138,8 @@ RSpec.describe Pfmp do
       it "moves back to pending" do
         expect { pfmp.update!(day_count: nil) }
           .to change(pfmp, :current_state)
-                .from("completed")
-                .to("pending")
+          .from("completed")
+          .to("pending")
       end
     end
 
