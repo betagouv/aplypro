@@ -75,7 +75,7 @@ module Stats
 
     def menj_academies_data
       titles = ["Académie", *indicators_titles]
-      academies = Establishment.distinct.order(:academy_label).pluck(:academy_label)
+      academies = Establishment.distinct.order(:academy_label).reject(&:excluded?).map(&:academy_label)
 
       academy_lines = academies.map do |academy|
         [
@@ -87,12 +87,13 @@ module Stats
       [titles, *academy_lines]
     end
 
-    def establishments_data
+    def establishments_data # rubocop:disable Metrics/AbcSize
       titles = ["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public", *indicators_titles]
       establishments = Establishment
                        .distinct
                        .order(:uai)
-                       .pluck(:uai, :name, :academy_label, :private_contract_type_code, :ministry)
+                       .reject(&:excluded?)
+                       .map { |e| [e.uai, e.name, e.academy_label, e.private_contract_type_code, e.ministry] }
 
       establishment_lines = establishments.map do |uai, name, academy, private_code, ministry|
         is_private = private_code == "99" ? "Public" : "Privé"
