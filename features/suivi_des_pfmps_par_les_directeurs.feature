@@ -14,24 +14,31 @@ Fonctionnalité: Suivi des demandes de paiement
   Scénario: le personnel peut ne pas voir de paiements en échecs
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement intégrée
     Et que je clique sur "Paiements"
-    Alors la page ne contient pas "Liste des paiements échoués"
+    Alors la page ne contient pas "Liste des paiements non-aboutis"
+
+  Scénario: Le personnel voit la liste en accordéon des paiements non-aboutis
+    Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement échouée
+    Et que je clique sur "Paiements"
+    Alors la liste des paiements non-aboutis ne contient pas l'accordéon intitulé "Bloquée"
+    Et la liste des paiements non-aboutis ne contient pas l'accordéon intitulé "Demande rejetée"
+    Et la liste des paiements non-aboutis contient l'accordéon intitulé "Paiement échoué"
 
   Scénario: Le personnel peut voir les paiements qui ont échoués et relancer une demande de paiement
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement échouée
     Et que je clique sur "Paiements"
-    Alors la page contient "Liste des paiements échoués"
+    Alors la page contient "Liste des paiements non-aboutis"
     Et la page contient "Le paiement a été refusé par l'agence comptable :"
 
   Scénario: Le personnel peut voir les paiements qui ont été rejetés
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement rejetée
     Et que je clique sur "Paiements"
-    Alors la page contient "Liste des paiements échoués"
+    Alors la page contient "Liste des paiements non-aboutis"
     Alors la page contient "La demande a été rejetée :"
 
   Scénario: Le personnel peut identifier les paiements qui sont actuellement bloqués
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement incomplète
     Et que je clique sur "Paiements"
-    Alors la page contient "Liste des paiements échoués"
+    Alors la page contient "Liste des paiements non-aboutis"
     Alors la page contient "Il manque des données pour envoyer le paiement : "
 
   Scénario: Le personnel peut relancer une demande de paiement dans les cas de paiements préalables échoués

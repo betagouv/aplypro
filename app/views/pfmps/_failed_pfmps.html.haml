@@ -1,21 +1,31 @@
-- if failed_pfmps.any?
-  .fr-table.fr-table.fr-mb-3w
-    %table
-      %caption.fr-h2 Liste des paiements échoués
-      %thead
-        %th Élève
-        %th PFMP
-        %th Etat
-        %th Motif
+- if failed_pfmps_per_payment_request_state.any?
+  %h2 Liste des paiements non-aboutis
+  .fr-accordions-group
+    /Le "sort_by" permet d'afficher les paiements non-aboutis dans l'ordre suivant : "Bloquées", "Demandes rejetées", "Paiements échoués"
+    - failed_pfmps_per_payment_request_state.sort_by{ |p_r_state, _pfmps| ASP::PaymentRequestDecorator::ORDERED_FAILED_STATES.index(p_r_state.to_sym) }.each do |p_r_state, pfmps|
+      - if pfmps.any?
+        %section.fr-accordion
+          %h3.fr-accordion__title
+            %button.fr-accordion__btn{"aria-controls" => "accordion-#{p_r_state}", "aria-expanded" => "false"}
+              = t("payment_requests.state#{pfmps.count > 1 ? "s" : ""}.#{p_r_state}") + " (#{pfmps.count})"
 
-      %tbody
-        - failed_pfmps.each do |pfmp|
-          %tr
-            %td
-              = pfmp.student.full_name
-            %td
-              = link_to pfmp.formatted_dates, class_schooling_pfmp_path(pfmp.schooling.classe, pfmp.schooling, pfmp), class: "fr-link", title: pfmp.full_dates
-            %td
-              = pfmp.latest_payment_request.status_badge
-            %td
-              = pfmp.latest_payment_request.status_explanation
+          %div.fr-collapse{id: "accordion-#{p_r_state}"}
+            .fr-table.fr-mb-3w
+              %table
+                %thead
+                  %th Élève
+                  %th PFMP
+                  %th Etat
+                  %th Motif
+
+                %tbody
+                  - pfmps.sort_by{ |pfmp| pfmp.student.full_name }.each do |pfmp|
+                    %tr
+                      %td
+                        = pfmp.student.full_name
+                      %td
+                        = link_to pfmp.formatted_dates, class_schooling_pfmp_path(pfmp.schooling.classe, pfmp.schooling, pfmp), class: "fr-link", title: pfmp.full_dates
+                      %td
+                        = pfmp.latest_payment_request.status_badge
+                      %td
+                        = pfmp.latest_payment_request.status_explanation
