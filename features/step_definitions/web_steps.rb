@@ -127,3 +127,15 @@ Quand("je clique sur {string} dans le menu principal") do |item|
     click_link_or_button(item)
   end
 end
+
+Quand("la liste des paiements non-aboutis contient l'accordéon intitulé {string}") do |label|
+  within("section.fr-accordion") do
+    expect(page).to have_button(label)
+  end
+end
+
+Quand("la liste des paiements non-aboutis ne contient pas l'accordéon intitulé {string}") do |label|
+  within("section.fr-accordion") do
+    expect(page).to have_no_button(label)
+  end
+end

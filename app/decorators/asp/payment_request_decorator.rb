@@ -13,6 +13,8 @@ module ASP
       unpaid: :error
     }.freeze
 
+    ORDERED_FAILED_STATES = %i[incomplete rejected unpaid].freeze
+
     PAYMENT_STAGES = [
       %i[pending ready incomplete],
       %i[sent integrated rejected],
@@ -63,7 +65,7 @@ module ASP
     end
 
     def failure_reasons
-      %i[incomplete rejected unpaid].each do |state|
+      ORDERED_FAILED_STATES.each do |state|
         return public_send("#{state}_reason") if in_state?(state)
       end
       nil
