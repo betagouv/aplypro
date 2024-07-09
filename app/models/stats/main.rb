@@ -61,7 +61,7 @@ module Stats
 
     def bops_data
       titles = ["BOP", *indicators_titles]
-      bops = %w[ENPU ENPR MASA MER ARMEE]
+      bops = %w[ENPU ENPR MASA MER]
 
       bop_lines = bops.map do |bop|
         [
