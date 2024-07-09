@@ -49,7 +49,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
               less_than_or_equal_to: ->(pfmp) { (pfmp.end_date - pfmp.start_date).to_i + 1 }
             }
 
-  before_create -> { self.administrative_number = administrative_number }
+  after_create -> { self.administrative_number = administrative_number }
 
   scope :finished, -> { where("pfmps.end_date <= (?)", Time.zone.today) }
   scope :before, ->(date) { where("pfmps.created_at < (?)", date) }
