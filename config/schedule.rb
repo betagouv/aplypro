@@ -41,6 +41,6 @@ end
 # Schooling records that have a version higher than 9.
 #
 # We want to do this every weekday at 1AM.
-every :weekday, at: "1AM" do
-  runner "Janitor.perform_later"
+every :weekday, at: "12:30AM" do
+  runner "JanitorJob.perform_later"
 end
