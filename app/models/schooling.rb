@@ -46,7 +46,7 @@ class Schooling < ApplicationRecord
   end
 
   def closed?
-    end_date.present?
+    end_date.present? && end_date <= Date.current
   end
 
   def abrogated?
