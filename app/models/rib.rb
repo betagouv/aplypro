@@ -9,7 +9,7 @@ class Rib < ApplicationRecord
 
   validates :iban, :bic, :name, presence: true
 
-  validates :student_id, uniqueness: { scope: :archived_at }, unless: :archived?
+  validates :student_id, uniqueness: { scope: :archived_at, message: :unarchivable_rib }, unless: :archived?
 
   scope :multiple_ibans, -> { Rib.select(:iban).group(:iban).having("count(iban) > 1") }
 
