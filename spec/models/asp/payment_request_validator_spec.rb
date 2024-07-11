@@ -123,7 +123,7 @@ describe ASP::PaymentRequestValidator do
   context "when the student transferred and the schooling is abrogated and there is a schooling with attribution" do
     before do
       schooling = asp_payment_request.schooling
-      schooling.update!(end_date: Date.parse("#{SchoolYear.current.start_year}-10-10"))
+      schooling.update!(end_date: Date.yesterday)
       AttributiveDecisionHelpers.generate_fake_attributive_decision(schooling)
       AttributiveDecisionHelpers.generate_fake_abrogation_decision(schooling)
       create(:schooling, :with_attributive_decision, student: asp_payment_request.student)
@@ -147,12 +147,12 @@ describe ASP::PaymentRequestValidator do
     context "when the pfmp dates dont match the schooling" do
       before do
         schooling = asp_payment_request.schooling
-        pfmp = create(:pfmp, :validated, day_count: 2, start_date: schooling.end_date + 1.day,
-                                         end_date: schooling.end_date + 3.days, schooling: schooling)
+        schooling.classe = create(:classe, school_year: SchoolYear.find_by!(start_year: 2023))
+        schooling.save!
+        pfmp = create(:pfmp, :validated, day_count: 2, start_date: schooling.start_date - 1.day,
+                                         end_date: schooling.end_date, schooling: schooling)
         asp_payment_request.pfmp = pfmp
         asp_payment_request.save!
-        asp_payment_request.pfmp.update!(start_date: schooling.end_date + 5.days,
-                                         end_date: schooling.end_date + 10.days)
       end
 
       it "adds an error" do
