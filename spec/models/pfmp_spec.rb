@@ -5,10 +5,12 @@ require "rails_helper"
 RSpec.describe Pfmp do
   subject(:pfmp) { create(:pfmp, schooling: schooling) }
 
-  let(:mef) { create(:mef) }
-  let(:classe) { create(:classe, mef: mef) }
-  let(:student) { create(:student, :with_all_asp_info) }
-  let(:schooling) { create(:schooling, student: student, classe: classe) }
+  let(:schooling) do
+    mef = create(:mef)
+    classe = create(:classe, mef: mef)
+    student = create(:student, :with_all_asp_info)
+    create(:schooling, student: student, classe: classe)
+  end
 
   describe "associations" do
     it { is_expected.to belong_to(:schooling) }
@@ -22,22 +24,23 @@ RSpec.describe Pfmp do
     it { is_expected.to validate_presence_of(:end_date) }
 
     it {
-      expect(pfmp)
-        .to validate_inclusion_of(:start_date)
+      expect(pfmp).to validate_inclusion_of(:start_date)
         .in_range(pfmp.establishment.school_year_range)
         .with_low_message(/ne peut pas précéder/)
         .allow_blank
     }
 
     it {
-      expect(pfmp)
-        .to validate_inclusion_of(:end_date)
+      expect(pfmp).to validate_inclusion_of(:end_date)
         .in_range(pfmp.establishment.school_year_range)
         .with_high_message(/ne peut pas excéder/)
         .allow_blank
     }
 
-    it { is_expected.to validate_numericality_of(:day_count).only_integer.is_greater_than(0) }
+    it "validates numericality of day count" do
+      expect(pfmp).to validate_numericality_of(:day_count)
+        .only_integer.is_greater_than(0)
+    end
 
     context "when the end date is before the start" do
       before do
@@ -246,6 +249,13 @@ RSpec.describe Pfmp do
           expect(pfmp.within_schooling_dates?).to be false
         end
       end
+    end
+  end
+
+  describe "after_create callback" do
+    it "correctly sets the administrative_number" do
+      p = create(:pfmp)
+      expect(p.administrative_number).to eq("ENPU#{SchoolYear.current.start_year}001")
     end
   end
 end
