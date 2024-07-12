@@ -145,6 +145,22 @@ RSpec.describe Schooling do
     end
   end
 
+  describe "#closed?" do
+    subject(:schooling) { create(:schooling, end_date: Date.tomorrow) }
+
+    it "returns false" do
+      expect(schooling.closed?).to be false
+    end
+
+    context "when the schooling is closed in the past" do
+      subject(:schooling) { create(:schooling, end_date: Date.yesterday) }
+
+      it "returns true" do
+        expect(schooling.closed?).to be true
+      end
+    end
+  end
+
   describe ".former" do
     subject { described_class.former }
 
