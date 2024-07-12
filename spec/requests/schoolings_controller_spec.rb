@@ -6,6 +6,8 @@ RSpec.describe SchoolingsController do
   let(:schooling) { create(:schooling, :with_attributive_decision) }
   let(:student) { schooling.student }
   let(:user) { create(:user, :director, :with_selected_establishment, establishment: student.classe.establishment) }
+  let(:pfmp) { create(:pfmp, schooling: schooling) }
+  let(:asp_payment_request) { create(:asp_payment_request, pfmp: pfmp, state: :incomplete) }
 
   before { sign_in(user) }
 
@@ -15,6 +17,14 @@ RSpec.describe SchoolingsController do
       delete abrogate_decision_school_year_class_schooling_path(SchoolYear.current,
                                                                 class_id: schooling.classe.id,
                                                                 id: schooling.id),
+             params: { confirmed_director: "1" }
+    end
+  end
+
+  describe "retry_eligibile_payment_requests" do
+    it "retries eligible payment requests" do
+      expect(asp_payment_request).to be_in_state :ready
+      delete abrogate_decision_class_schooling_path(class_id: schooling.classe.id, id: schooling.id),
              params: { confirmed_director: "1" }
     end
   end

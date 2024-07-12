@@ -9,6 +9,8 @@ class SchoolingsController < ApplicationController
   def abrogate_decision
     GenerateAbrogationDecisionJob.perform_now(@schooling)
 
+    retry_eligibile_payment_requests!
+
     redirect_to student_path(@schooling.student),
                 notice: t("flash.da.abrogated", name: @schooling.student.full_name)
   end
