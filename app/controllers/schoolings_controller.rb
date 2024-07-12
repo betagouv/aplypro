@@ -9,6 +9,8 @@ class SchoolingsController < ApplicationController
   def abrogate_decision
     GenerateAbrogationDecisionJob.perform_now(@schooling)
 
+    retry_eligibile_payment_requests!
+
     redirect_to student_path(@schooling.student),
                 notice: t("flash.da.abrogated", name: @schooling.student.full_name)
   end
@@ -30,5 +32,14 @@ class SchoolingsController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     redirect_to school_year_classes_path(selected_school_year),
                 alert: t("errors.classes.not_found") and return
+  end
+
+  # Les requetes bloquées pour da non abrogée doivent être relancées automatiquement
+  def retry_eligibile_payment_requests!
+    Pfmp.find_by(schooling: @schooling) do |pfmp|
+      if pfmp.latest_payment_request.in_state?(:incomplete)
+        pfmp.latest_payment_request.mark_ready!
+      end
+    end
   end
 end
