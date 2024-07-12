@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :schooling do
     student
     classe
-    start_date { "#{SchoolYear.current.start_year}-08-26" }
+    start_date { Date.yesterday - 1.month }
     status { :student }
 
     trait :with_attributive_decision do
@@ -25,7 +25,7 @@ FactoryBot.define do
     end
 
     trait :closed do
-      end_date { "#{SchoolYear.current.start_year}-08-27" }
+      end_date { Date.yesterday }
     end
   end
 end

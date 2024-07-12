@@ -75,7 +75,7 @@ module Stats
 
     def menj_academies_data
       titles = ["Académie", *indicators_titles]
-      academies = Establishment.distinct.order(:academy_label).reject(&:excluded?).map(&:academy_label)
+      academies = Establishment.distinct.order(:academy_label).reject(&:excluded?).map(&:academy_label).uniq
 
       academy_lines = academies.map do |academy|
         [

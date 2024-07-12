@@ -60,6 +60,8 @@ fr:
               taken: ": cet email est déjà autorisé."
         rib:
           attributes:
+            student_id:
+              unarchivable_rib: "le RIB actuel est en cours d'utilisation pour un paiement"
             iban:
               sepa: "Le code IBAN ne fait pas partie de la zone SEPA"
         pfmp:

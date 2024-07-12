@@ -16,7 +16,7 @@ class Schooling < ApplicationRecord
   has_one :establishment, through: :classe
 
   scope :current, -> { where(end_date: nil) }
-  scope :former, -> { where.not(end_date: nil) }
+  scope :former, -> { where.not(end_date: nil).where(end_date: ..Date.current) }
 
   scope :with_attributive_decisions, -> { joins(:attributive_decision_attachment) }
   scope :without_attributive_decisions, -> { where.missing(:attributive_decision_attachment) }
@@ -46,7 +46,7 @@ class Schooling < ApplicationRecord
   end
 
   def closed?
-    end_date.present?
+    end_date.present? && end_date <= Date.current
   end
 
   def abrogated?
