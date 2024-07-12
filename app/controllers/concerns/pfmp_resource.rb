@@ -6,7 +6,7 @@ module PfmpResource
   def set_pfmp
     @pfmp = @schooling.student.pfmps.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to school_year_class_student_path(selected_school_year, @classe, @schooling.student),
+    redirect_to student_path(@schooling.student),
                 alert: t("errors.pfmps.not_found") and return
   end
 
@@ -32,7 +32,7 @@ module PfmpResource
     )
     add_breadcrumb(
       t("pages.titles.students.show", name: @schooling.student.full_name, classe: @classe.label),
-      school_year_class_student_path(selected_school_year, @classe, @schooling.student)
+      student_path(@schooling.student)
     )
   end
 

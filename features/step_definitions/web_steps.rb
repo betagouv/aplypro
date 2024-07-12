@@ -78,6 +78,32 @@ Quand("je clique sur {string} dans la dernière rangée") do |link|
   end
 end
 
+Quand("je clique sur {string} dans la classe {string}") do |link, title|
+  within("section", text: title) do
+    click_link_or_button(link)
+  end
+end
+
+Alors("la section pour la classe {string} contient {string}") do |title, text|
+  expect(page.find("section", text: title)).to have_content(text).or(have_button(text))
+end
+
+Alors("la section pour la classe {string} contient le tableau {string}") do |title, caption, table|
+  expect(page.find("section", text: title)).to have_table(caption, with_rows: table.rows)
+end
+
+Alors("la section pour la classe {string} contient un bouton {string} désactivé") do |title, content|
+  expect(page.find("section", text: title)).to have_button(content, disabled: true)
+end
+
+Alors("la section pour la classe {string} contient un lien sur {string}") do |title, content|
+  expect(page.find("section", text: title)).to have_link(content)
+end
+
+Alors("la section pour la classe {string} ne contient pas de lien sur {string}") do |title, content|
+  expect(page.find("section", text: title)).to have_no_link(content)
+end
+
 Quand("je remplis le champ {string} dans la rangée {string} avec {string}") do |locator, row, value|
   within("tr", text: row) do
     fill_in locator, with: value

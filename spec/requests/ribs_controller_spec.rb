@@ -12,15 +12,13 @@ RSpec.describe RibsController do
 
   describe "CREATE /rib" do
     it "returns found" do
-      post school_year_class_student_ribs_path(school_year, student.classe.id, student.id),
-           params: { rib: build(:rib, student: student).attributes }
+      post student_ribs_path(student.id), params: { rib: build(:rib, student: student).attributes }
 
       expect(response).to have_http_status(:found)
     end
 
     it "returns 422" do
-      post school_year_class_student_ribs_path(school_year, student.classe.id, student.id),
-           params: { rib: build(:rib, iban: nil).attributes }
+      post student_ribs_path(student.id), params: { rib: build(:rib, iban: nil).attributes }
 
       expect(response).to have_http_status(:unprocessable_content)
     end
@@ -32,9 +30,7 @@ RSpec.describe RibsController do
       let(:other_rib) { create(:rib, student: other_student) }
 
       it "doesnt delete the rib" do
-        delete school_year_class_student_rib_path(school_year,
-                                                  other_student.classe.id,
-                                                  other_student, other_rib)
+        delete student_rib_path(other_student, other_rib)
 
         expect(Rib.find(other_rib.id)).not_to be_nil
       end

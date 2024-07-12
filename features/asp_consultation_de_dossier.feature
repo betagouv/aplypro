@@ -26,7 +26,7 @@ Fonctionnalité: Le personnel ASP consulte des dossiers
   Scénario: Le personnel ASP n'a pas accès à l'interface principale
     Quand je me rends sur la page d'accueil
     Alors le titre de la page contient "Rechercher un dossier"
-    Et la page ne contient pas "Élèves"
+    Et la page ne contient pas "Classes"
     Et la page ne contient pas "Envoyer en paiement"
 
   Scénario: Le personnel ASP est redirigé vers la page de connexion ASP en cas d'erreur de connexion

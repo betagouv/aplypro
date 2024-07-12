@@ -13,6 +13,19 @@ Quand("je renseigne une PFMP de {int} jours") do |days|
   )
 end
 
+Quand("je renseigne une PFMP de {int} jours pour la classe {string}") do |days, classe|
+  start_date = Date.parse("#{SchoolYear.current.end_year}-03-17")
+  end_date   = start_date + days.days
+
+  steps %(
+    Quand je clique sur "Ajouter une PFMP" dans la classe "#{classe}"
+    Et que je remplis "Date de début" avec "#{start_date}"
+    Et que je remplis "Date de fin" avec "#{end_date}"
+    Et que je remplis "Nombre de jours effectués" avec "#{days}"
+    Et que je clique sur "Enregistrer"
+  )
+end
+
 Quand("je renseigne une PFMP de {int} jours pour {string}") do |days, name|
   steps %(
     Et que je clique sur "Voir le profil" dans la rangée "#{name}"

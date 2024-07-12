@@ -8,7 +8,7 @@ Fonctionnalité: Le personnel de direction peut constater les montants des PFMPs
     Et que mon établissement propose une formation "Développement" rémunérée à 10 euros par jour et plafonnée à 100 euros par an
     Et qu'il y a une élève "Marie Curie" au sein de la classe "2NDEB" pour une formation "Développement"
     Quand je rafraîchis la page
-    Et que je clique sur "Élèves"
+    Et que je clique sur "Classes"
     Et que je clique sur "Voir la classe" dans la rangée "2NDEB"
     Et que je clique sur "Voir le profil" dans la rangée "Curie Marie"
 
