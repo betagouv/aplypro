@@ -42,6 +42,8 @@ fr:
       not_found: "La scolarité demandée n'est plus disponible ou a été supprimée."
     pfmps:
       not_found: "La PFMP demandée n'est plus disponible ou a été supprimée."
+    school_years:
+      not_found: "Aucun élève récupéré au cours de l'année scolaire sélectionnée."
   activemodel:
     errors:
       messages:
@@ -139,6 +141,8 @@ fr:
     titles:
       stats:
         index: Statistiques
+      school_years:
+        select: Choix de l'année scolaire
       users:
         select_establishment: Choix de l'établissement
       invitations:

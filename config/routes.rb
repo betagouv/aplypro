@@ -26,53 +26,66 @@ Rails.application.routes.draw do
 
   resources :establishments, only: %w[edit update] do
     resources :invitations
-
-    post "create_attributive_decisions"
-    post "reissue_attributive_decisions"
-    post "download_attributive_decisions"
   end
 
-  resources :classes, only: %i[show index] do
-    member do
-      get "bulk_pfmp"
-      post "create_bulk_pfmp"
-      get "bulk_pfmp_completion"
-      put "update_bulk_pfmp"
-      get "validation", to: "validations#show"
-      post "validation", to: "validations#validate"
+  resources :school_years, path: :year, only: [] do
+    get "selected"
+
+    collection do
+      get "select"
     end
 
-    resources :ribs, only: [] do
-      collection do
-        get "missing"
-        post "bulk_create"
-      end
+    get "/home", to: "home#home"
+
+    resources :establishments, only: [] do
+      post "create_attributive_decisions"
+      post "reissue_attributive_decisions"
+      post "download_attributive_decisions"
     end
 
-    resources :schoolings, only: [] do
+    resources :classes, only: %i[show index] do
       member do
-        get "confirm_abrogation"
-        delete "abrogate_decision"
+        get "bulk_pfmp"
+        post "create_bulk_pfmp"
+        get "bulk_pfmp_completion"
+        put "update_bulk_pfmp"
+        get "validation", to: "validations#show"
+        post "validation", to: "validations#validate"
       end
-      resources :pfmps, except: :index do
+
+      resources :ribs, only: [] do
+        collection do
+          get "missing"
+          post "bulk_create"
+        end
+      end
+
+      resources :students, only: %i[show] do
+        resources :ribs, only: %i[new create destroy update edit] do
+          member do
+            get "confirm_deletion"
+          end
+        end
+      end
+
+      resources :schoolings, only: [] do
         member do
-          post "validate"
-          get "confirm_deletion"
-          resources :payment_requests, only: %i[create update]
+          get "confirm_abrogation"
+          delete "abrogate_decision"
+        end
+
+        resources :pfmps, except: :index do
+          member do
+            post "validate"
+            get "confirm_deletion"
+            resources :payment_requests, only: %i[create update]
+          end
         end
       end
     end
 
-    resources :students, only: %i[show] do
-      resources :ribs, only: %i[new create destroy update edit] do
-        member do
-          get "confirm_deletion"
-        end
-      end
-    end
+    resources :validations, only: :index
   end
-
-  resources :validations, only: :index
 
   devise_scope :asp_user do
     get "/auth/asp/callback" => "users/omniauth_callbacks#asp", as: :asp_login

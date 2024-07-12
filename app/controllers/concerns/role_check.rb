@@ -3,13 +3,16 @@
 module RoleCheck
   private
 
-  def check_director(redirect_path: home_path)
+  def check_director(redirect_path: school_year_home_path(selected_school_year))
     return if current_user.director?
 
     redirect_to redirect_path, status: :forbidden and return
   end
 
-  def check_confirmed_director(alert_message: t("roles.errors.not_director"), redirect_path: home_path)
+  def check_confirmed_director(
+    alert_message: t("roles.errors.not_director"),
+    redirect_path: school_year_home_path(selected_school_year)
+  )
     return if current_user.confirmed_director?
 
     redirect_back fallback_location: redirect_path, alert: alert_message and return

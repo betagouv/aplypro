@@ -9,8 +9,8 @@ RSpec.describe Establishment do
   it { is_expected.to validate_presence_of(:uai) }
   it { is_expected.to validate_uniqueness_of(:uai) }
 
-  describe "some_attributive_decisions?" do
-    subject { establishment.some_attributive_decisions? }
+  describe "with_attributive_decisions?" do
+    subject { establishment.with_attributive_decisions?(SchoolYear.current) }
 
     context "when there are some attributive decisions" do
       before { create(:schooling, :with_attributive_decision, establishment: establishment) }
@@ -31,7 +31,7 @@ RSpec.describe Establishment do
 
       it "returns true" do
         expect { schooling.update!(generating_attributive_decision: true) }
-          .to change(establishment, :some_attributive_decisions_generating?)
+          .to change { establishment.some_attributive_decisions_generating?(SchoolYear.current) }
           .from(false).to(true)
       end
     end

@@ -13,14 +13,14 @@ RSpec.describe ValidationsController do
 
   describe "GET #index" do
     it "renders the :index template" do
-      get validations_path
+      get school_year_validations_path(SchoolYear.current)
 
       expect(response).to render_template :index
     end
   end
 
   describe "GET #show" do
-    before { get validation_class_path(classe) }
+    before { get validation_school_year_class_path(SchoolYear.current, classe) }
 
     it "assigns the requested classe to @classe" do
       expect(assigns(:classe)).to eq classe
@@ -35,7 +35,8 @@ RSpec.describe ValidationsController do
     context "with valid attributes" do
       it "validates selected pfmps" do
         expect do
-          post validation_class_path(classe), params: { validation: { pfmp_ids: [pfmp.id] }, confirmed_director: "1" }
+          post validation_school_year_class_path(SchoolYear.current, classe),
+               params: { validation: { pfmp_ids: [pfmp.id] }, confirmed_director: "1" }
         end.to change { pfmp.reload.current_state }.from("completed").to("validated")
       end
     end
@@ -43,7 +44,8 @@ RSpec.describe ValidationsController do
     context "with invalid attributes" do
       it "does not validate the pfmp" do
         expect do
-          post validation_class_path(classe), params: { validation: { pfmp_ids: [] }, confirmed_director: "0" }
+          post validation_school_year_class_path(SchoolYear.current, classe),
+               params: { validation: { pfmp_ids: [] }, confirmed_director: "0" }
         end.not_to change(pfmp, :current_state)
       end
     end

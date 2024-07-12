@@ -23,6 +23,8 @@ class Schooling < ApplicationRecord
   scope :generating_attributive_decision, -> { where(generating_attributive_decision: true) }
   scope :with_administrative_number, -> { where.not(administrative_number: nil) }
 
+  scope :for_year, ->(school_year) { joins(:classe).where("classe.school_year": school_year) }
+
   # https://github.com/betagouv/aplypro/issues/792
   scope :with_one_character_attributive_decision_version, -> { where("schoolings.attributive_decision_version < 10") }
 
@@ -81,7 +83,7 @@ class Schooling < ApplicationRecord
   def attributive_decision_key(filename)
     [
       establishment.uai,
-      SchoolYear.current.start_year,
+      classe.school_year.start_year,
       classe.label.parameterize,
       filename
     ].join("/")
@@ -91,7 +93,7 @@ class Schooling < ApplicationRecord
     [
       attributive_decision_bop_indicator,
       administrative_number,
-      SchoolYear.current.start_year,
+      classe.school_year.start_year,
       attributive_decision_version
     ].join.upcase
   end

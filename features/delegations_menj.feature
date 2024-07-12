@@ -8,7 +8,9 @@ Fonctionnalité: Gestion des délégations par DELEG-CE
 
   Scénario: Je suis considéré comme un invité et non un chef d'établissement si j'ai une délégation DELEG-CE
     Sachant que je suis un personnel MENJ de l'établissement "DINUM" avec une délégation DELEG-CE pour APLyPro
-    Lorsque je me connecte en tant que personnel MENJ
+    Et que je me connecte en tant que personnel MENJ
+    Lorsque l'API SYGNE renvoie 1 élèves en "1MELEC" pour l'établissement "DINUM"
+    Et que toutes les tâches de fond sont terminées
     Et que je passe l'écran d'accueil
     Alors je n'ai pas accès aux actions de chef d'établissement
 

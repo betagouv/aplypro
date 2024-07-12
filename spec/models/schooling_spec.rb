@@ -24,6 +24,17 @@ RSpec.describe Schooling do
       end
     end
 
+    describe ".for_year" do
+      before { schooling.update!(classe: classe) }
+
+      let(:school_year) { create(:school_year, start_year: 2020) }
+      let(:classe) { create(:classe, school_year: school_year) }
+
+      it "returns the schoolings of the current school year" do
+        expect(described_class.for_year(school_year)).to contain_exactly(schooling)
+      end
+    end
+
     describe "student_id" do
       context "when there is another schooling" do
         let!(:schooling) { create(:schooling) }

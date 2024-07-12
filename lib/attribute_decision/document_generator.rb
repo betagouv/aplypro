@@ -6,12 +6,13 @@ module AttributeDecision
   class DocumentGenerator
     include ActionView::Helpers::NumberHelper
 
-    attr_reader :composer, :schooling, :student
+    attr_reader :composer, :schooling, :student, :school_year
 
     def initialize(schooling)
       @composer = HexaPDF::Composer.new(page_size: :A4, margin: 48)
       @schooling = schooling
       @student = schooling.student
+      @school_year = schooling.classe.school_year
     end
 
     def write

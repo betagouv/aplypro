@@ -1,6 +1,9 @@
 .etab-banner
   .fr-container
     .fr-grid-row.fr-text--sm
-      .fr-col-sm.fr-col-12= current_establishment
-      - if current_user.establishments.many?
-        = dsfr_link_to "Changer d'établissement", user_select_establishment_path(current_user), class: "fr-text--sm"
+      .fr-col
+        = "#{selected_school_year} - #{current_establishment}"
+      %div
+        = dsfr_link_to "Changer d'année scolaire", select_school_years_path, class: "fr-text--sm"
+        - if current_user.establishments.many?
+          = dsfr_link_to "Changer d'établissement", user_select_establishment_path(current_user), class: "fr-text--sm fr-ml-1w"

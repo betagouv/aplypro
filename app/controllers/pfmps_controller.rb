@@ -23,7 +23,8 @@ class PfmpsController < ApplicationController
     @pfmp = Pfmp.new(pfmp_params.merge(schooling: @schooling))
 
     if @pfmp.save
-      redirect_to class_student_path(@classe, @schooling.student), notice: t("pfmps.new.success")
+      redirect_to school_year_class_student_path(selected_school_year, @classe, @schooling.student),
+                  notice: t("pfmps.new.success")
     else
       render :new, status: :unprocessable_entity
     end
@@ -31,7 +32,8 @@ class PfmpsController < ApplicationController
 
   def update
     if @pfmp.update(pfmp_params)
-      redirect_to class_schooling_pfmp_path(@classe, @schooling, @pfmp), notice: t("pfmps.edit.success")
+      redirect_to school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp),
+                  notice: t("pfmps.edit.success")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -40,7 +42,10 @@ class PfmpsController < ApplicationController
   def validate
     @pfmp.validate!
 
-    redirect_back_or_to class_schooling_pfmp_path(@classe, @schooling, @pfmp),
+    redirect_back_or_to school_year_class_schooling_pfmp_path(selected_school_year,
+                                                              @classe,
+                                                              @schooling,
+                                                              @pfmp),
                         notice: t("flash.pfmps.validated", name: @schooling.student.full_name)
   end
 
@@ -48,19 +53,21 @@ class PfmpsController < ApplicationController
     set_student_breadcrumbs
     add_breadcrumb(
       t("pages.titles.pfmps.show", name: @schooling.student.full_name),
-      class_schooling_pfmp_path(@classe, @schooling, @pfmp)
+      school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp)
     )
     infer_page_title
 
-    redirect_to class_student_path(@classe, @schooling.student) and return if @pfmp.nil?
+    return unless @pfmp.nil?
+
+    redirect_to school_year_class_student_path(selected_school_year, @classe, @schooling.student)
   end
 
   def destroy
     if @pfmp.destroy
-      redirect_to class_student_path(@classe, @schooling.student),
+      redirect_to school_year_class_student_path(selected_school_year, @classe, @schooling.student),
                   notice: t("flash.pfmps.destroyed", name: @schooling.student.full_name)
     else
-      redirect_to class_student_path(@classe, @schooling.student),
+      redirect_to school_year_class_student_path(selected_school_year, @classe, @schooling.student),
                   alert: t("flash.pfmps.not_destroyed")
     end
   end

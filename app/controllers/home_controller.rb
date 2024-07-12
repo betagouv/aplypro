@@ -9,7 +9,7 @@ class HomeController < ApplicationController
   before_action :infer_page_title, except: %i[index maintenance]
 
   def index
-    redirect_to home_path and return if user_signed_in?
+    redirect_to school_year_home_path(SchoolYear.current) and return if user_signed_in?
 
     redirect_to new_user_session_path
   end
@@ -17,7 +17,7 @@ class HomeController < ApplicationController
   def home
     @inhibit_title = true
 
-    @establishment_facade = EstablishmentFacade.new(current_establishment)
+    @establishment_facade = EstablishmentFacade.new(current_establishment, selected_school_year)
   end
 
   def welcome

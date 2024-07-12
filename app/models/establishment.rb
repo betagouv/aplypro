@@ -77,7 +77,7 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def to_s
-    [uai, name, city, postal_code].compact.join(" – ")
+    [uai, name, city, postal_code].compact.join(", ")
   end
 
   def invites?(email)
@@ -125,20 +125,20 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def some_attributive_decisions?
-    schoolings.with_attributive_decisions.any?
+  def missing_attributive_decisions?(school_year)
+    schoolings_for_school_year(school_year).without_attributive_decisions.any?
   end
 
-  def missing_attributive_decisions?
-    schoolings.without_attributive_decisions.any?
+  def with_attributive_decisions?(school_year)
+    schoolings_for_school_year(school_year).with_attributive_decisions.any?
   end
 
-  def with_attributive_decisions?
-    schoolings.with_attributive_decisions.any?
+  def some_attributive_decisions_generating?(school_year)
+    schoolings_for_school_year(school_year).generating_attributive_decision.any?
   end
 
-  def some_attributive_decisions_generating?
-    schoolings.generating_attributive_decision.any?
+  def schoolings_for_school_year(school_year)
+    schoolings.joins(:classe).where(classe: { school_year: school_year })
   end
 
   def validatable_pfmps

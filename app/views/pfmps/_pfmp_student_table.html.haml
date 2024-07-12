@@ -8,7 +8,7 @@
     %tbody
       - @pfmps.each do |pfmp|
         %tr
-          %td= dsfr_link_to pfmp.listing_to_s.html_safe, class_schooling_pfmp_path(@classe, @schooling, pfmp), title: "Voir la PFMP #{pfmp.full_dates}"
+          %td= dsfr_link_to pfmp.listing_to_s.html_safe, school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, pfmp), title: "Voir la PFMP #{pfmp.full_dates}"
           %td= pfmp.day_count
           %td
             %strong= number_to_currency(pfmp.amount)

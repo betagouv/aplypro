@@ -1,7 +1,7 @@
 = render partial: "alert_apprentices"
 
 - if @classes.none?
-  %p Nous récupérons la liste de vos élèves.
+  %p Récupération de la liste des élèves en cours (si ces derniers sont présents dans les bases de données dans BEE [SYGNE] ou COLENTAGRI [FREGATA]).
 - else
   .fr-table.fr-table--no-caption
     %table
@@ -15,8 +15,7 @@
         - @classes.each do |classe|
           - nb_students = @classes_facade.nb_students_per_class[classe.id]
           %tr
-            %td
-              = dsfr_link_to classe.to_long_s, classe, title: t("links.classes.show", label: classe.to_long_s)
+            %td= dsfr_link_to classe.to_long_s, school_year_class_path(selected_school_year, classe), title: t("links.classes.show", label: classe.to_long_s)
             %td= progress_badge @classes_facade.nb_attributive_decisions_per_class[classe.id], nb_students
             %td= progress_badge @classes_facade.nb_ribs_per_class[classe.id], nb_students
             %td

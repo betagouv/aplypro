@@ -14,14 +14,20 @@ class PaymentRequestsController < ApplicationController
   def create
     PfmpManager.new(@pfmp).create_new_payment_request!
 
-    redirect_back_or_to class_schooling_pfmp_path(@classe, @schooling, @pfmp),
+    redirect_back_or_to school_year_class_schooling_pfmp_path(selected_school_year,
+                                                              @classe,
+                                                              @schooling,
+                                                              @pfmp),
                         notice: t("flash.payment_requests.create", name: @schooling.student.full_name)
   end
 
   def update
     result = PfmpManager.new(@pfmp).retry_incomplete_payment_request!
 
-    redirect_back_or_to class_schooling_pfmp_path(@classe, @schooling, @pfmp),
+    redirect_back_or_to school_year_class_schooling_pfmp_path(selected_school_year,
+                                                              @classe,
+                                                              @schooling,
+                                                              @pfmp),
                         notice: t("flash.payment_requests.mark_ready.#{result ? 'success' : 'failure'}",
                                   name: @schooling.student.full_name)
   end
