@@ -41,6 +41,14 @@ FactoryBot.define do
       end
     end
 
+    trait :incomplete_for_missing_abrogation_da do
+      after(:create) do |req|
+        # set up pour qu'il y a une abrogation manquante
+
+        req.mark_ready!
+      end
+    end
+
     trait :sent do
       ready
 

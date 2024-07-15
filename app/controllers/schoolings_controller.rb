@@ -33,4 +33,14 @@ class SchoolingsController < ApplicationController
     redirect_to school_year_classes_path(selected_school_year),
                 alert: t("errors.classes.not_found") and return
   end
+
+  # Les requetes bloquées pour da non abrogée doivent être relancées automatiquement
+  def retry_eligibile_payment_requests!
+    @schooling.pfmps.each do |pfmp|
+      p_r = pfmp.latest_payment_request
+      if p_r.in_state?(:incomplete) && p_r.last_transition.metadata.match?(/abrogation/)
+        pfmp.latest_payment_request.mark_ready!
+      end
+    end
+  end
 end
