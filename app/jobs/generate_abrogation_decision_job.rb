@@ -21,7 +21,6 @@ class GenerateAbrogationDecisionJob < ApplicationJob
 
   def perform(schooling)
     raise MissingAttributiveDecisionError if schooling.attributive_decision.blank?
-    binding.irb
     raise MissingSchoolingEndDateError if schooling.open?
 
     Schooling.transaction do

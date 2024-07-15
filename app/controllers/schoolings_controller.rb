@@ -36,8 +36,9 @@ class SchoolingsController < ApplicationController
 
   # Les requetes bloquées pour da non abrogée doivent être relancées automatiquement
   def retry_eligibile_payment_requests!
-    Pfmp.find_by(schooling: @schooling) do |pfmp|
-      if pfmp.latest_payment_request.in_state?(:incomplete)
+    @schooling.pfmps.each do |pfmp|
+      p_r = pfmp.latest_payment_request
+      if p_r.in_state?(:incomplete) && p_r.last_transition.metadata.match?(/abrogation/)
         pfmp.latest_payment_request.mark_ready!
       end
     end
