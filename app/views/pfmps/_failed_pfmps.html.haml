@@ -2,7 +2,7 @@
   %h2 Liste des paiements non-aboutis
   .fr-accordions-group
     /Le "sort_by" permet d'afficher les paiements non-aboutis dans l'ordre suivant : "Bloquées", "Demandes rejetées", "Paiements échoués"
-    - failed_pfmps_per_payment_request_state.sort_by{ |p_r_state, _pfmps| ASP::PaymentRequestDecorator::ORDERED_FAILED_STATES.index(p_r_state.to_sym) }.each do |p_r_state, pfmps|
+    - failed_pfmps_per_payment_request_state.sort_by{ |p_r_state, _pfmps| p_r_state }.each do |p_r_state, pfmps|
       - if pfmps.any?
         %section.fr-accordion
           %h3.fr-accordion__title
