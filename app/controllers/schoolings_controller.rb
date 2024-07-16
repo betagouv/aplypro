@@ -35,12 +35,27 @@ class SchoolingsController < ApplicationController
   end
 
   # Les requetes bloquées pour da non abrogée doivent être relancées automatiquement
+  # def retry_eligibile_payment_requests!
+  #   @schooling.pfmps.each do |pfmp|
+  #     p_r = pfmp.latest_payment_request
+  #     if p_r.in_state?(:incomplete) && p_r.last_transition.metadata.match?(/abrogation/)
+  #       pfmp.latest_payment_request.mark_ready!
+  #     end
+  #   end
+  # end
+
   def retry_eligibile_payment_requests!
-    @schooling.pfmps.each do |pfmp|
-      p_r = pfmp.latest_payment_request
-      if p_r.in_state?(:incomplete) && p_r.last_transition.metadata.match?(/abrogation/)
+
+    @schooling.pfmps.each{|pfmp| pfmp.latest_payment_request.in_state?(:incomplete)}.each do |pfmp|
+
+      if valid?(pfmp.latest_payment_request)
         pfmp.latest_payment_request.mark_ready!
       end
     end
+  end
+
+  def valid?(payment_request)
+    payment_request.in_state?(:incomplete) &&
+      payment_request.last_transition.metadata["incomplete_reasons"]["activemodel.errors.models.asp/payment_request.attributes.needs_abrogated_attributive_decision"]
   end
 end
