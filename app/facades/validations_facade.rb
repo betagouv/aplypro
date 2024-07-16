@@ -8,6 +8,8 @@ class ValidationsFacade
     @school_year = school_year
   end
 
+  # TODO: this query somehow (cant reproduce) returns p_r also not in failed state
+  # the reject at the end is duct tape to prevent that from happening
   def failed_pfmps_per_payment_request_state
     subquery = ASP::PaymentRequest.latest_per_pfmp.failed.to_sql
 
@@ -19,6 +21,7 @@ class ValidationsFacade
                 .includes(:student, payment_requests: :asp_payment_request_transitions)
 
     pfmps.group_by { |pfmp| pfmp.latest_payment_request.current_state }
+         .reject { |pfmp_state| ASP::PaymentRequestStateMachine::FAILED_STATES.exclude?(pfmp_state.to_sym) }
   end
 
   def validatable_classes
