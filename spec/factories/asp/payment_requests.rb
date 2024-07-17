@@ -42,10 +42,13 @@ FactoryBot.define do
     end
 
     trait :incomplete_for_missing_abrogation_da do
-      after(:create) do |req|
-        binding.irb
-        req.mark_incomplete!(incomplete_reasons: {ready_state_validation: t("activemodel.errors.models.asp/payment_request.attributes.needs_abrogated_attributive_decision")})
+      sendable
 
+      after(:create) do |req|
+        # TODO: fix this
+        # I18n.t("activerecord.errors.models.asp/payment_request.attributes.needs_abrogated_attributive_decision")
+        req.errors.add(:ready_state_validation, :needs_abrogated_attributive_decision)
+        req.mark_incomplete!(incomplete_reasons: { ready_state_validation: ["Les élèves ayant changé de formation, de statut ou d'établissement doivent avoir une abrogation de leur décision d'attribution passée. Ce document peut être généré dans la liste des élèves."] })
       end
     end
 
