@@ -6,7 +6,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   rescue_from ActiveRecord::ReadOnlyRecord, with: :rib_is_readonly
 
   before_action :set_classe, :set_bulk_rib_breadcrumbs, only: %i[missing bulk_create]
-  before_action :set_student, :set_rib_breadcrumbs, except: %i[missing bulk_create]
+  before_action :set_student, :check_establishment, :set_rib_breadcrumbs, except: %i[missing bulk_create]
   before_action :check_classes, only: :bulk_create
   before_action :set_rib, only: %i[edit update destroy confirm_deletion]
 
@@ -138,8 +138,11 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     end
   end
 
+  def check_establishment
+    raise ActiveRecord::ReadOnlyRecord unless @student.latest_establishment.eql?(current_establishment)
+  end
+
   def rib_is_readonly
-    redirect_to student_path(@student),
-                alert: t("flash.ribs.readonly", name: @student.full_name)
+    redirect_to student_path(@student), alert: t("flash.ribs.readonly", name: @student.full_name)
   end
 end
