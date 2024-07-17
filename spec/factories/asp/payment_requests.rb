@@ -43,9 +43,9 @@ FactoryBot.define do
 
     trait :incomplete_for_missing_abrogation_da do
       after(:create) do |req|
-        # set up pour qu'il y a une abrogation manquante
+        binding.irb
+        req.mark_incomplete!(incomplete_reasons: {ready_state_validation: t("activemodel.errors.models.asp/payment_request.attributes.needs_abrogated_attributive_decision")})
 
-        req.mark_ready!
       end
     end
 
