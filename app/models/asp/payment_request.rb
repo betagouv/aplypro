@@ -110,7 +110,7 @@ module ASP
     def eligible_for_auto_retry?
       in_state?(:incomplete) &&
         last_transition.metadata["incomplete_reasons"]["ready_state_validation"].include?(
-          t("activemodel.errors.models.asp/payment_request.attributes.needs_abrogated_attributive_decision")
+          "Les élèves ayant changé de formation, de statut ou d'établissement doivent avoir une abrogation de leur décision d'attribution passée. Ce document peut être généré dans la liste des élèves."
         )
     end
   end
