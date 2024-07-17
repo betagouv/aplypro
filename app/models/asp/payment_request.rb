@@ -106,5 +106,12 @@ module ASP
     def active?
       !terminated?
     end
+
+    def eligible_for_auto_retry?
+      in_state?(:incomplete) &&
+        last_transition.metadata["incomplete_reasons"]["ready_state_validation"].include?(
+          t("activemodel.errors.models.asp/payment_request.attributes.needs_abrogated_attributive_decision")
+        )
+    end
   end
 end
