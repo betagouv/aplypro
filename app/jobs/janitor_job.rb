@@ -15,4 +15,12 @@ class JanitorJob < ApplicationJob
     end
     true
   end
+
+  def squish_codes_above_five
+    %i[address_city_insee_code address_postal_code].each do |code|
+      Student.where("LENGTH(#{code}) > 5").find_each do |s|
+        s.update!(code => s.public_send(code).squish)
+      end
+    end
+  end
 end
