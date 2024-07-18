@@ -32,7 +32,7 @@ RSpec.describe SchoolingsController do
                                                                 class_id: schooling.classe.id,
                                                                 id: schooling.id),
              params: { confirmed_director: "1" }
-      expect(payment_request).to be_in_state :ready
+      expect(payment_request.last_transition.metadata).not_to include(I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.needs_abrogated_attributive_decision"))
     end
   end
 end

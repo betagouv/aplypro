@@ -45,10 +45,10 @@ FactoryBot.define do
       sendable
 
       after(:create) do |req|
-        # TODO: fix this
-        # I18n.t("activerecord.errors.models.asp/payment_request.attributes.needs_abrogated_attributive_decision")
         req.errors.add(:ready_state_validation, :needs_abrogated_attributive_decision)
-        req.mark_incomplete!(incomplete_reasons: { ready_state_validation: ["Les élèves ayant changé de formation, de statut ou d'établissement doivent avoir une abrogation de leur décision d'attribution passée. Ce document peut être généré dans la liste des élèves."] })
+        req.mark_incomplete!(incomplete_reasons: { ready_state_validation: [
+                               I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.needs_abrogated_attributive_decision")
+                             ] })
       end
     end
 
