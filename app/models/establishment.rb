@@ -49,7 +49,8 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     "mail" => :email,
     "code_type_contrat_prive" => :private_contract_type_code,
     "ministere_tutelle" => :ministry,
-    "code_departement" => :department_code
+    "code_departement" => :department_code,
+    "code_commune" => :commune_code
   }.freeze
 
   # Find all codes here : https://infocentre.pleiade.education.fr/bcn/workspace/viewTable/n/N_CONTRAT_ETABLISSEMENT
