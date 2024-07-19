@@ -21,7 +21,9 @@ module ASP
     end
 
     def parse_response_file!(_type)
-      ASP::Readers::PaymentsFileReader.new(io: file.download, record: self).process!
+      file.open do |tempfile|
+        ASP::Readers::PaymentsFileReader.new(io: tempfile, record: self).process!
+      end
     end
   end
 end

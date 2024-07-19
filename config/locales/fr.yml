@@ -183,6 +183,9 @@ fr:
         edit: &edit_rib_title
           title: "Modification de coordonnées bancaires pour %{name}"
           breadcrumb: "Modification de coordonnées bancaires"
+        confirm_deletion:
+          title: "Suppression de coordonnées bancaires pour %{name}"
+          breadcrumb: "Suppression de coordonnées bancaires"
         update: *edit_rib_title
         missing: &missing_ribs_title Saisir des coordonnées bancaires
         bulk_create: *missing_ribs_title
