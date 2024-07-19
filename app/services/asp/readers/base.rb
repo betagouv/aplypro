@@ -13,7 +13,7 @@ module ASP
       end
 
       def handle_input(str)
-        str.strip
+        str.strip if str.is_a?(String)
       end
 
       def process!

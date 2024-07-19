@@ -50,7 +50,7 @@ module ASP
             rescue ActiveRecord::RecordNotFound => e
               Sentry.capture_exception(
                 DuplicatedIneCaseError.new(
-                  "PaymentsFileReader could not process this asp_prestation_dossier_id: #{asp_prestation_dossier_id}, #{e.full_messages}" # rubocop:disable Layout/LineLength
+                  "PaymentsFileReader could not process this asp_prestation_dossier_id: #{asp_prestation_dossier_id}, #{e}" # rubocop:disable Layout/LineLength
                 )
               )
               next
