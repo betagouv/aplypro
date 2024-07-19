@@ -47,10 +47,10 @@ module ASP
           request =
             begin
               find_payment_request!(node.asp_prestation_dossier_id)
-            rescue ActiveRecord::RecordNotFound => e
+            rescue ActiveRecord::RecordNotFound => e # TODO: remove when problem has been clarified
               Sentry.capture_exception(
                 DuplicatedIneCaseError.new(
-                  "PaymentsFileReader could not process this asp_prestation_dossier_id: #{asp_prestation_dossier_id}, #{e}" # rubocop:disable Layout/LineLength
+                  "PaymentsFileReader could not process this asp_prestation_dossier_id: #{node.asp_prestation_dossier_id}, #{e}" # rubocop:disable Layout/LineLength
                 )
               )
               next
