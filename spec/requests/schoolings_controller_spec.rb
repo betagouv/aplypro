@@ -36,11 +36,30 @@ RSpec.describe SchoolingsController do
       schooling.update!(end_date: Date.parse("2024-06-20"))
     end
 
-    it "retries eligible payment requests" do
-      delete abrogate_decision_school_year_class_schooling_path(schooling.classe.school_year,
-                                                                class_id: schooling.classe.id, id: schooling.id),
-             params: { confirmed_director: "1" }
-      expect(payment_request.last_transition.metadata).not_to include(I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.needs_abrogated_attributive_decision"))
+    context "when the payment request is retry eligible" do
+      it "Do not return abrogated decision error" do
+        delete abrogate_decision_school_year_class_schooling_path(schooling.classe.school_year,
+                                                                  class_id: schooling.classe.id, id: schooling.id),
+               params: { confirmed_director: "1" }
+        expect(payment_request.last_transition.metadata).not_to include(
+          I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.needs_abrogated_attributive_decision")
+        )
+      end
+    end
+
+    context "when the payment request is not retry eligible" do
+      let(:pfmp) { create(:pfmp, :completed) }
+
+      before do
+        schooling.update!(pfmps: [pfmp])
+      end
+
+      it "Return abrogated decision error" do
+        delete abrogate_decision_school_year_class_schooling_path(schooling.classe.school_year,
+                                                                  class_id: schooling.classe.id, id: schooling.id),
+               params: { confirmed_director: "1" }
+        expect(payment_request.current_state).not_to eq(:ready)
+      end
     end
   end
 end
