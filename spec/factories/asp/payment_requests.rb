@@ -2,6 +2,10 @@
 
 FactoryBot.define do
   factory :asp_payment_request, class: "ASP::PaymentRequest" do
+    # rubocop:disable Layout/LineLength
+    error_message = I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.needs_abrogated_attributive_decision")
+    # rubocop:enable Layout/LineLength
+
     pfmp do
       association(:pfmp, :validated).tap { |p| p.payment_requests.destroy_all }
     end
@@ -46,9 +50,7 @@ FactoryBot.define do
 
       after(:create) do |req|
         req.errors.add(:ready_state_validation, :needs_abrogated_attributive_decision)
-        req.mark_incomplete!(incomplete_reasons: { ready_state_validation: [
-                               I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.needs_abrogated_attributive_decision")
-                             ] })
+        req.mark_incomplete!(incomplete_reasons: { ready_state_validation: [error_message] })
       end
     end
 

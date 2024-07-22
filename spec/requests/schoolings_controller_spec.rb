@@ -9,6 +9,10 @@ RSpec.describe SchoolingsController do
   let(:schooling) { create(:schooling, :with_attributive_decision) }
   let(:payment_request) { create(:asp_payment_request, :incomplete_for_missing_abrogation_da) }
 
+  # rubocop:disable Layout/LineLength
+  error_message = I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.needs_abrogated_attributive_decision")
+  # rubocop:enable Layout/LineLength
+
   before do
     sign_in(user)
     schooling.pfmps = [payment_request.pfmp]
@@ -41,9 +45,7 @@ RSpec.describe SchoolingsController do
         delete abrogate_decision_school_year_class_schooling_path(schooling.classe.school_year,
                                                                   class_id: schooling.classe.id, id: schooling.id),
                params: { confirmed_director: "1" }
-        expect(payment_request.last_transition.metadata).not_to include(
-          I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.needs_abrogated_attributive_decision")
-        )
+        expect(payment_request.last_transition.metadata).not_to include(error_message)
       end
     end
 
