@@ -17,6 +17,8 @@ module ASP
 
       def handle_request(request, row)
         request.mark_rejected!(row.to_h)
+      rescue Statesman::TransitionFailedError
+        true
       end
     end
   end
