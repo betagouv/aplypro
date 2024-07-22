@@ -37,7 +37,7 @@ RSpec.describe SchoolingsController do
 
   describe "retry_eligibile_payment_requests" do
     before do
-      schooling.update!(end_date: Date.parse("2024-06-20"))
+      schooling.update!(end_date: Date.parse("2024-06-21"))
     end
 
     context "when the payment request is retry eligible" do
