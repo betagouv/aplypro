@@ -1,5 +1,4 @@
-/le '-' dans le 'sort_by' permet de retourner la liste des années scolaires dans le sens décroissant (-2024, -2023, ...)
-- schoolings.sort_by{ |schooling| -schooling.classe.school_year.start_year}.each do |schooling|
+- schoolings.sort_by{ |schooling| schooling.classe.school_year.start_year}.reverse.each do |schooling|
   - pfmps = schooling.pfmps
   - classe = schooling.classe
   %section.fr-my-6w

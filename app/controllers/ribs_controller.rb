@@ -139,7 +139,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   end
 
   def check_establishment!
-    raise ActiveRecord::ReadOnlyRecord unless @student.latest_establishment.eql?(current_establishment)
+    raise ActiveRecord::ReadOnlyRecord unless @student.establishment.eql?(current_establishment)
   end
 
   def rib_is_readonly

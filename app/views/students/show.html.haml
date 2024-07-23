@@ -4,7 +4,7 @@
   - if @student.rib.nil?
     %p Aucune coordonnée bancaire enregistrée pour le moment.
 
-    = button_to "Saisir les coordonnées bancaires", new_student_rib_path(@student), class: 'fr-btn', disabled: !@student.latest_establishment.eql?(current_establishment), method: :get
+    = button_to "Saisir les coordonnées bancaires", new_student_rib_path(@student), class: 'fr-btn', disabled: !@student.establishment.eql?(current_establishment), method: :get
   - else
     %ul
       %li
@@ -23,7 +23,7 @@
           %p Ces coordonnées bancaires ne sont pas modifiables car elles sont actuellement utilisées dans une ou plusieurs requêtes de paiement.
 
       .fr-btns-group.fr-btns-group--inline
-        %li= button_to "Modifier les coordonnées bancaires", edit_student_rib_path(@student, @student.rib), class: 'fr-btn fr-btn--secondary', disabled: @student.rib.readonly? || !@student.latest_establishment.eql?(current_establishment), method: :get
-        %li= button_to "Supprimer les coordonnées bancaires", confirm_deletion_student_rib_path(@student, @student.rib), class: 'fr-btn fr-btn--secondary', disabled: @student.rib.readonly? || !@student.latest_establishment.eql?(current_establishment), method: :get
+        %li= button_to "Modifier les coordonnées bancaires", edit_student_rib_path(@student, @student.rib), class: 'fr-btn fr-btn--secondary', disabled: @student.rib.readonly? || !@student.establishment.eql?(current_establishment), method: :get
+        %li= button_to "Supprimer les coordonnées bancaires", confirm_deletion_student_rib_path(@student, @student.rib), class: 'fr-btn fr-btn--secondary', disabled: @student.rib.readonly? || !@student.establishment.eql?(current_establishment), method: :get
 
 = render partial: 'pfmps/pfmp_student_table', locals: { schoolings: @schoolings }

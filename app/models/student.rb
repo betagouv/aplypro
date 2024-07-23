@@ -144,10 +144,6 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def latest_establishment
-    schoolings.sort_by(&:created_at).max.establishment
-  end
-
   private
 
   def check_asp_file_reference
