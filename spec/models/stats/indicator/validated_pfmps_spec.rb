@@ -28,7 +28,7 @@ describe Stats::Indicator::ValidatedPfmps do
     it { is_expected.to eq({ "Bordeaux" => 0.25, "Montpellier" => 0.5, "Paris" => 0.4 }) }
   end
 
-  describe "#establishments_data", skip: "flaky" do
+  describe "#establishments_data" do
     subject { described_class.new.establishments_data }
 
     include_context "when there is data for stats per establishments"

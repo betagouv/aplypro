@@ -20,7 +20,7 @@ describe Stats::Indicator::Schoolings do
     it { is_expected.to eq({ "ENPU" => 4, "ENPR" => 5, "MASA" => 5, "MER" => 7, "ARMEE" => 6 }) }
   end
 
-  describe "#menj_academies_data", skip: "flaky, violates unique constraint 'index_schoolings_on_asp_dossier_id'" do
+  describe "#menj_academies_data" do
     subject { described_class.new.menj_academies_data }
 
     include_context "when there is data for stats per MENJ academies"
