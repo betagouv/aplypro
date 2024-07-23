@@ -14,6 +14,18 @@ Sachantque(
   @student.schoolings.create!(classe: @classe)
 end
 
+Sachantque(
+  "l'élève {string} a été transféré dans l'établissement {string} en classe {string}"
+) do |name, uai, classe_label|
+  establishment = Establishment.find_by(uai: uai) || FactoryBot.create(:establishment, uai: uai)
+  student = find_student_by_full_name(name)
+  classe = Classe.find_by(label: classe_label, establishment: establishment) ||
+           FactoryBot.create(:classe, label: classe_label, establishment: establishment)
+
+  student.schoolings.last.update(end_date: Date.yesterday)
+  student.schoolings.create!(classe: classe)
+end
+
 Sachantque("il y a un(e) élève avec une scolarité fermée qui a une PFMP") do
   @etab ||= User.last.selected_establishment
   classe = @etab.classes.first || FactoryBot.create(:classe, establishment: establishment)
@@ -27,12 +39,10 @@ Sachantque("l'élève {string} a une scolarité fermée") do |name|
   student.current_schooling.update!(end_date: Date.yesterday)
 end
 
-Quand("l'élève {string} a une PFMP dans un autre établissement") do |name|
-  student = find_student_by_full_name(name)
+Quand("l'élève {string} a une PFMP dans la classe {string} dans un autre établissement") do |name, classe_label|
+  steps %(Quand l'élève "#{name}" a une ancienne scolarité dans la classe "#{classe_label}" dans un autre établissement)
 
-  schooling = FactoryBot.create(:schooling, :closed, student: student)
-
-  FactoryBot.create(:pfmp, schooling: schooling)
+  FactoryBot.create(:pfmp, schooling: Schooling.last)
 end
 
 Alors("l'élève a {int} PFMP") do |count|
@@ -40,7 +50,7 @@ Alors("l'élève a {int} PFMP") do |count|
 end
 
 Quand("je consulte la liste des classes") do
-  steps %(Quand je clique sur "Élèves" dans le menu principal)
+  steps %(Quand je clique sur "Classes" dans le menu principal)
 end
 
 Quand("je consulte le profil de {string} dans la classe de {string}") do |name, label|

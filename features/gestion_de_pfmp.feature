@@ -10,15 +10,25 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Et que toutes les tâches de fond sont terminées
     Et que je consulte le profil de "Marie Curie" dans la classe de "A1"
 
-  Scénario: Le personnel de direction peut rajouter une PFMP
+  Scénario: Le personnel de direction peut ajouter une PFMP quand l'élève n'en a pas encore
+    Alors la section pour la classe "A1" contient "Aucune PFMP enregistrée pour le moment"
+    Et la section pour la classe "A1" contient "Ajouter une PFMP"
+
+  Scénario: Le personnel de direction peut ajouter une PFMP et la modifier
     Sachant que je renseigne une PFMP de 3 jours
     Et que la page contient "La PFMP a bien été enregistrée"
-    Quand je consulte le profil de "Marie Curie" dans la classe de "A1"
-    Et je peux voir dans le tableau "Liste des PFMPs de l'élève"
+    Quand la section pour la classe "A1" contient le tableau "Liste des PFMPs de l'élève"
       | État             | Nombre de jours | Montant |
       | Saisie à valider |               3 | 45 € |
+    Et la section pour la classe "A1" contient un lien sur "Voir la PFMP"
 
-  Scénario: Le personnel de direction peut rajouter une PFMP pour toute la classe
+  Scénario: Le personnel peut voir les PFMPs d'autres établissements et ne peut pas les modifier
+    Sachant que l'élève "Marie Curie" a une PFMP dans la classe "A2" dans un autre établissement
+    Et que je rafraîchis la page
+    Alors la section pour la classe "A2" contient un bouton "Ajouter une PFMP" désactivé
+    Et la section pour la classe "A2" ne contient pas de lien sur "Voir la PFMP"
+
+  Scénario: Le personnel de direction peut ajouter une PFMP pour toute la classe
     Quand je saisis une PFMP pour toute la classe "A1" avec les dates "17/03/2025" et "20/03/2025"
     Alors la page contient "Compléter 10 PFMP"
 
@@ -62,8 +72,3 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Et que je clique sur "Confirmer la suppression"
     Alors la page contient "La PFMP de Marie Curie a bien été supprimée"
     Et la page contient "Aucune PFMP enregistrée pour le moment"
-
-  Scénario: Le personnel ne peut pas voir les PFMPs d'autres établissements
-    Sachant que l'élève "Marie Curie" a une PFMP dans un autre établissement
-    Et que je rafraîchis la page
-    Alors la page contient "Aucune PFMP enregistrée pour le moment"

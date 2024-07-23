@@ -48,3 +48,10 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
     Alors la page contient "Ces coordonnées bancaires ne sont pas modifiables"
     Et la page contient un bouton "Modifier les coordonnées bancaires" désactivé
     Et la page contient un bouton "Supprimer les coordonnées bancaires" désactivé
+
+  Scénario: Le personnel de direction ne peut pas modifier un RIB s'il n'est pas le dernier établissement fréquenté par l'élève
+    Sachant que je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"
+    Et que l'élève "Marie Curie" a été transféré dans l'établissement "TEST" en classe "1EREB"
+    Quand je rafraîchis la page
+    Et la page contient un bouton "Modifier les coordonnées bancaires" désactivé
+    Et la page contient un bouton "Supprimer les coordonnées bancaires" désactivé

@@ -8,7 +8,7 @@ Fonctionnalité: Le personnel de direction consulte les listes
     Et que je me connecte en tant que personnel MENJ
     Et que je passe l'écran d'accueil
     Et que toutes les tâches de fond sont terminées
-    Et que je clique sur "Élèves"
+    Et que je clique sur "Classes"
 
   Scénario: Le personnel de direction peut voir la complétion des saisies de coordonnées bancaires
     Quand je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"

@@ -107,7 +107,7 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
     Et que je coche la case de responsable légal
     Lorsque je clique sur "Envoyer en paiement les PFMPs cochées"
     Alors la page contient "PFMPs envoyées en paiement pour la classe 1MELEC"
-    Lorsque je clique sur "Élèves"
+    Lorsque je clique sur "Classes"
     Et que je clique sur "1MELEC"
     Alors je peux voir dans le tableau "Élèves sortis de la classe"
       | Élèves      | Décisions d'attribution | Coordonnées bancaires | PFMPs             |

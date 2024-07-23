@@ -1,16 +1,14 @@
-- content_for(:page_title) { [@page_title, t("pages.titles.classes.show", name: @classe.label)].join(" - ") }
-
-%section
+%section.fr-pb-3w
   %h2.fr-h4 Coordonnées bancaires
 
   - if @student.rib.nil?
     %p Aucune coordonnée bancaire enregistrée pour le moment.
 
-    = link_to "Saisir les coordonnées bancaires", new_school_year_class_student_rib_path(selected_school_year, @classe.id, @student.id), class: 'fr-btn'
+    = button_to "Saisir les coordonnées bancaires", new_student_rib_path(@student), class: 'fr-btn', disabled: !@student.any_classes_in_establishment?(current_establishment), method: :get
   - else
     %ul
       %li
-        Titulaire :
+        Titulaire du compte :
         %span= @student.rib.name
       %li
         IBAN :
@@ -25,25 +23,7 @@
           %p Ces coordonnées bancaires ne sont pas modifiables car elles sont actuellement utilisées dans une ou plusieurs requêtes de paiement.
 
       .fr-btns-group.fr-btns-group--inline
-        %li= button_to "Modifier les coordonnées bancaires", edit_school_year_class_student_rib_path(selected_school_year, @classe.id, @student.id, @student.rib.id), class: 'fr-btn fr-btn--secondary', disabled: @student.rib.readonly?, method: :get
-        %li= button_to "Supprimer les coordonnées bancaires", confirm_deletion_school_year_class_student_rib_path(selected_school_year, @classe, @student, @student.rib), class: 'fr-btn fr-btn--secondary', disabled: @student.rib.readonly?, method: :get
+        %li= button_to "Modifier les coordonnées bancaires", edit_student_rib_path(@student, @student.rib), class: 'fr-btn fr-btn--secondary', disabled: @student.rib.readonly? || !@student.establishment.eql?(current_establishment), method: :get
+        %li= button_to "Supprimer les coordonnées bancaires", confirm_deletion_student_rib_path(@student, @student.rib), class: 'fr-btn fr-btn--secondary', disabled: @student.rib.readonly? || !@student.establishment.eql?(current_establishment), method: :get
 
-%section.fr-mt-3w
-  %h2.fr-h4
-    PFMPs dans la classe
-    = @classe.label
-
-  = closed_schooling_information_tag(@schooling, class: "fr-mb-2w")
-
-  - if @pfmps.none?
-    %p Aucune PFMP enregistrée pour le moment.
-  - else
-    = render partial: 'pfmps/pfmp_student_table'
-
-.actions.fr-py-3w
-  .fr-btns-group.fr-btns-group--inline
-    = link_to "Ajouter une PFMP", new_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling), class: 'fr-btn'
-    - if @schooling.attributive_decision.attached?
-      = link_to "Télécharger la décision d'attribution", url_for(@schooling.attributive_decision), class: 'fr-btn fr-btn--secondary', target: :download
-    - if @schooling.abrogation_decision.attached?
-      = link_to "Télécharger la décision d'abrogation", url_for(@schooling.abrogation_decision), class: 'fr-btn fr-btn--secondary', target: :download
+= render partial: 'pfmps/pfmp_student_table', locals: { schoolings: @schoolings }

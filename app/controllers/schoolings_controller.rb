@@ -9,7 +9,7 @@ class SchoolingsController < ApplicationController
   def abrogate_decision
     GenerateAbrogationDecisionJob.perform_now(@schooling)
 
-    redirect_to school_year_class_student_path(selected_school_year, @classe, @schooling.student),
+    redirect_to student_path(@schooling.student),
                 notice: t("flash.da.abrogated", name: @schooling.student.full_name)
   end
 

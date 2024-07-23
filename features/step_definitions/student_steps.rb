@@ -36,11 +36,17 @@ end
 Quand("l'élève {string} {string} a une ancienne scolarité dans un autre établissement") do |first_name, last_name|
   student = Student.find_by(first_name: first_name, last_name: last_name)
   other_classe = FactoryBot.create(:classe)
-  FactoryBot.create(:schooling,
-                    student: student,
-                    classe: other_classe,
-                    end_date: "#{SchoolYear.current.start_year}-08-27")
+  FactoryBot.create(:schooling, :closed, student: student, classe: other_classe)
 end
+
+# rubocop:disable Layout/LineLength
+Quand("l'élève {string} a une ancienne scolarité dans la classe {string} dans un autre établissement") do |name, classe_label|
+  student = find_student_by_full_name(name)
+  classe = Classe.find_by(label: classe_label) || FactoryBot.create(:classe, label: classe_label)
+
+  FactoryBot.create(:schooling, :closed, student: student, classe: classe)
+end
+# rubocop:enable Layout/LineLength
 
 Quand("les élèves actuels sont les seuls à avoir des décisions d'attribution") do
   establishment = Establishment.last

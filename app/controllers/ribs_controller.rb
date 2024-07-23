@@ -5,10 +5,9 @@
 class RibsController < ApplicationController # rubocop:disable Metrics/ClassLength
   rescue_from ActiveRecord::ReadOnlyRecord, with: :rib_is_readonly
 
-  before_action :set_classe
-  before_action :set_student, :set_rib_breadcrumbs, except: %i[missing bulk_create]
+  before_action :set_classe, :set_bulk_rib_breadcrumbs, only: %i[missing bulk_create]
+  before_action :set_student, :check_establishment!, :set_rib_breadcrumbs, except: %i[missing bulk_create]
   before_action :check_classes, only: :bulk_create
-  before_action :set_bulk_rib_breadcrumbs, only: %i[missing bulk_create]
   before_action :set_rib, only: %i[edit update destroy confirm_deletion]
 
   def new
@@ -23,7 +22,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     @rib = @student.create_new_rib(rib_params)
 
     if @rib.save
-      redirect_to school_year_class_student_path(selected_school_year, @classe, @student),
+      redirect_to student_path(@student),
                   notice: t(".success")
     else
       render :new, status: :unprocessable_entity
@@ -34,7 +33,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     @rib = @student.create_new_rib(rib_params)
 
     if @rib.save
-      redirect_to school_year_class_student_path(selected_school_year, @classe, @student),
+      redirect_to student_path(@student),
                   notice: t(".success")
     else
       render :edit, status: :unprocessable_entity
@@ -44,7 +43,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   def destroy
     @rib.destroy
 
-    redirect_to school_year_class_student_path(selected_school_year, @classe, @student),
+    redirect_to student_path(@student),
                 notice: t("flash.ribs.destroyed", name: @student.full_name)
   end
 
@@ -86,7 +85,10 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   end
 
   def set_student
-    @student = @classe.students.find(params[:student_id])
+    @student = Student.find(params[:student_id])
+    raise ActiveRecord::RecordNotFound unless @student.any_classes_in_establishment?(current_establishment)
+  rescue ActiveRecord::RecordNotFound
+    redirect_to school_year_classes_path(selected_school_year), alert: t("errors.students.not_found")
   end
 
   def set_classe
@@ -112,10 +114,9 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   end
 
   def set_rib_breadcrumbs
-    set_classe_breadcrumbs
     add_breadcrumb(
-      t("pages.titles.students.show", name: @student.full_name, classe: @classe.label),
-      school_year_class_student_path(selected_school_year, @classe, @student)
+      t("pages.titles.students.show", name: @student.full_name),
+      student_path(@student)
     )
     infer_page_title(name: @student.full_name)
   end
@@ -137,8 +138,11 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     end
   end
 
+  def check_establishment!
+    raise ActiveRecord::ReadOnlyRecord unless @student.any_classes_in_establishment?(current_establishment)
+  end
+
   def rib_is_readonly
-    redirect_to school_year_class_student_path(selected_school_year, @classe, @student),
-                alert: t("flash.ribs.readonly", name: @student.full_name)
+    redirect_to student_path(@student), alert: t("flash.ribs.readonly", name: @student.full_name)
   end
 end

@@ -92,6 +92,10 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     classes.select(:establishment_id).distinct.count > 1
   end
 
+  def any_classes_in_establishment?(establishment)
+    classes.any? { |classe| classe.establishment.eql?(establishment) }
+  end
+
   def to_s
     full_name
   end

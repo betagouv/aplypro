@@ -44,7 +44,7 @@ Fonctionnalité: Complétion des PFMPs d'une classe
     Et que je coche la case de responsable légal
     Lorsque je clique sur "Envoyer en paiement les PFMPs cochées"
     Alors la page contient "PFMPs envoyées en paiement pour la classe 2NDEB"
-    Lorsque je clique sur "Élèves"
+    Lorsque je clique sur "Classes"
     Et que je clique sur "2NDEB"
     Alors je peux voir dans le tableau "Liste des élèves"
       | Élèves        | Décisions d'attribution | Coordonnées bancaires | PFMPs             |
@@ -57,7 +57,7 @@ Fonctionnalité: Complétion des PFMPs d'une classe
     Et que je coche la case de responsable légal
     Lorsque je clique sur "Envoyer en paiement les PFMPs cochées"
     Alors la page contient "PFMPs envoyées en paiement pour la classe 2NDEB"
-    Lorsque je clique sur "Élèves"
+    Lorsque je clique sur "Classes"
     Et que je clique sur "2NDEB"
     Alors je peux voir dans le tableau "Liste des élèves"
       | Élèves        | Décisions d'attribution | Coordonnées bancaires | PFMPs                      |

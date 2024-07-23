@@ -45,9 +45,7 @@ RSpec.describe PfmpsController do
       end
 
       it "redirect" do
-        expect(response).to redirect_to school_year_class_student_path(school_year,
-                                                                       schooling.classe,
-                                                                       student)
+        expect(response).to redirect_to student_path(student)
       end
     end
   end

@@ -41,13 +41,13 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
 
   Scénario: Le personnel de direction ne voit pas les classes d'une autre année scolaire
     Lorsque j'ai une classe "1MELEC" de 9 élèves pour l'établissement "DINUM" lors de l'année 2023
-    Et que je clique sur "Élèves"
+    Et que je clique sur "Classes"
     Alors je peux voir dans le tableau "Liste des classes"
       | Classe | Décisions d'attribution | Coordonnées bancaires | PFMPs |
       | 1MELEC | 0 / 10                  | 0 / 10                |       |
     Et que je clique sur "Changer d'année scolaire"
     Et que je clique sur "2023-2024"
-    Et que je clique sur "Élèves"
+    Et que je clique sur "Classes"
     Alors je peux voir dans le tableau "Liste des classes"
       | Classe | Décisions d'attribution | Coordonnées bancaires | PFMPs |
       | 1MELEC | 0 / 9                   | 0 / 9                 |       |
