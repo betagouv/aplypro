@@ -4,11 +4,11 @@
   - if @student.rib.nil?
     %p Aucune coordonnée bancaire enregistrée pour le moment.
 
-    = button_to "Saisir les coordonnées bancaires", new_student_rib_path(@student), class: 'fr-btn', disabled: !@student.establishment.eql?(current_establishment), method: :get
+    = button_to "Saisir les coordonnées bancaires", new_student_rib_path(@student), class: 'fr-btn', disabled: !@student.any_classes_in_establishment?(current_establishment), method: :get
   - else
     %ul
       %li
-        Titulaire :
+        Titulaire du compte :
         %span= @student.rib.name
       %li
         IBAN :
