@@ -24,6 +24,8 @@ module ASP
           ASP::PaymentRequest
             .find(request_identifier(row))
             .tap { |request| handle_request(request, row) }
+        rescue ActiveRecord::RecordNotFound
+          next
         end
       end
 

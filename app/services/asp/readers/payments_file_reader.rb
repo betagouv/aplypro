@@ -5,8 +5,6 @@ require "csv"
 module ASP
   module Readers
     class PaymentsFileReader < Base
-      class DuplicatedIneCaseError < StandardError; end
-
       attr_reader :xml, :records
 
       class Node
@@ -42,20 +40,10 @@ module ASP
         end
       end
 
-      def process! # rubocop:disable Metrics/MethodLength
+      def process!
         each do |node|
           request =
-            begin
-              find_payment_request!(node.asp_prestation_dossier_id)
-            rescue ActiveRecord::RecordNotFound => e # TODO: remove when problem has been clarified
-              Sentry.capture_exception(
-                DuplicatedIneCaseError.new(
-                  "PaymentsFileReader could not process this asp_prestation_dossier_id: #{node.asp_prestation_dossier_id}, #{e}" # rubocop:disable Layout/LineLength
-                )
-              )
-              next
-            end
-
+            find_payment_request!(node.asp_prestation_dossier_id)
           case node.state
           when "PAYE"
             request.mark_paid!(node.to_h, record)

@@ -11,15 +11,6 @@ module ASP
 
     validates :filename, presence: true, uniqueness: true
 
-    def self.create_with_file!(io:, filename:)
-      create!(filename: filename)
-        .file.attach(
-          io: StringIO.new(io),
-          filename: filename,
-          content_type: "text/xml"
-        )
-    end
-
     def parse_response_file!(_type)
       file.open do |tempfile|
         ASP::Readers::PaymentsFileReader.new(io: tempfile, record: self).process!
