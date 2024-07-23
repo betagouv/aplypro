@@ -18,7 +18,11 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   has_many :pfmps, -> { order "pfmps.created_at" }, through: :schoolings
 
-  has_one :current_schooling, -> { current }, class_name: "Schooling", dependent: :destroy, inverse_of: :student
+  has_one :current_schooling,
+          -> { where(end_date: nil).or(where("end_date > ?", Date.current)) },
+          class_name: "Schooling",
+          dependent: :destroy,
+          inverse_of: :student
 
   has_one :classe, through: :current_schooling
 

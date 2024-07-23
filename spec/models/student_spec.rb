@@ -63,7 +63,7 @@ RSpec.describe Student do
     it { is_expected.to eq schooling }
 
     context "when it is closed" do
-      before { schooling.update!(end_date: school_year) }
+      before { schooling.update!(end_date: Date.yesterday) }
 
       it { is_expected.to be_nil }
     end
@@ -77,7 +77,7 @@ RSpec.describe Student do
     let!(:schooling) { create(:schooling, student: student) }
 
     it "removes the current schooling" do
-      expect { student.close_current_schooling!(school_year) }
+      expect { student.close_current_schooling!(Date.yesterday) }
         .to change { student.reload.current_schooling }.from(schooling).to(nil)
     end
 
