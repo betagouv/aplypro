@@ -41,7 +41,16 @@ RSpec.describe SchoolingsController do
     end
 
     context "when the payment request is retry eligible" do
-      it "Do not return abrogated decision error" do
+      it "Does not return abrogated decision error" do
+        delete abrogate_decision_school_year_class_schooling_path(schooling.classe.school_year,
+                                                                  class_id: schooling.classe.id, id: schooling.id),
+               params: { confirmed_director: "1" }
+        expect(payment_request.last_transition.metadata).not_to include(error_message)
+      end
+    end
+
+    context "when the payment request is retry eligible" do
+      it "Does not return abrogated decision error" do
         delete abrogate_decision_school_year_class_schooling_path(schooling.classe.school_year,
                                                                   class_id: schooling.classe.id, id: schooling.id),
                params: { confirmed_director: "1" }
@@ -56,7 +65,7 @@ RSpec.describe SchoolingsController do
         schooling.update!(pfmps: [pfmp])
       end
 
-      it "Return abrogated decision error" do
+      it "Returns abrogated decision error" do
         delete abrogate_decision_school_year_class_schooling_path(schooling.classe.school_year,
                                                                   class_id: schooling.classe.id, id: schooling.id),
                params: { confirmed_director: "1" }
