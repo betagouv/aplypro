@@ -106,5 +106,13 @@ module ASP
     def active?
       !terminated?
     end
+
+    def eligible_for_auto_retry?
+      # rubocop:disable Layout/LineLength
+      error_message = I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.needs_abrogated_attributive_decision")
+      # rubocop:enable Layout/LineLength
+      in_state?(:incomplete) &&
+        last_transition.metadata["incomplete_reasons"]["ready_state_validation"].include?(error_message)
+    end
   end
 end
