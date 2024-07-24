@@ -7,7 +7,8 @@ RSpec.describe SchoolingsController do
   let(:user) { create(:user, :director, :with_selected_establishment, establishment: student.classe.establishment) }
 
   let(:schooling) { create(:schooling, :with_attributive_decision) }
-  let(:payment_request) { create(:asp_payment_request, :incomplete_for_missing_abrogation_da) }
+  let(:payment_request_missing_da) { create(:asp_payment_request, :incomplete_for_missing_abrogation_da) }
+  let(:payment_request) { create(:asp_payment_request, :incomplete) }
 
   # rubocop:disable Layout/LineLength
   error_message = I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.needs_abrogated_attributive_decision")
@@ -15,7 +16,7 @@ RSpec.describe SchoolingsController do
 
   before do
     sign_in(user)
-    schooling.pfmps = [payment_request.pfmp]
+    schooling.pfmps = [payment_request_missing_da.pfmp]
     schooling.save!
     Timecop.safe_mode = false
     Timecop.freeze(Date.new(2024, 6, 21))
@@ -45,7 +46,18 @@ RSpec.describe SchoolingsController do
         delete abrogate_decision_school_year_class_schooling_path(schooling.classe.school_year,
                                                                   class_id: schooling.classe.id, id: schooling.id),
                params: { confirmed_director: "1" }
-        expect(payment_request.last_transition.metadata).not_to include(error_message)
+        expect(payment_request_missing_da.last_transition.metadata).not_to include(error_message)
+      end
+    end
+
+    context "when the payment request is retry eligible" do
+      it "Does not return abrogated decision error" do
+        schooling.pfmps = [payment_request.pfmp]
+        schooling.save!
+        delete abrogate_decision_school_year_class_schooling_path(schooling.classe.school_year,
+                                                                  class_id: schooling.classe.id, id: schooling.id),
+               params: { confirmed_director: "1" }
+        expect(payment_request.last_transition.metadata).to include(error_message)
       end
     end
 
@@ -60,7 +72,7 @@ RSpec.describe SchoolingsController do
         delete abrogate_decision_school_year_class_schooling_path(schooling.classe.school_year,
                                                                   class_id: schooling.classe.id, id: schooling.id),
                params: { confirmed_director: "1" }
-        expect(payment_request.current_state).not_to eq(:ready)
+        expect(payment_request_missing_da.current_state).not_to eq(:ready)
       end
     end
   end
