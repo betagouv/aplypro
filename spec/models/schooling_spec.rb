@@ -12,6 +12,52 @@ RSpec.describe Schooling do
     it { is_expected.to have_one(:mef).class_name("Mef") }
   end
 
+  describe "scopes" do
+    let!(:current_schooling_no_end_date) { create(:schooling, end_date: nil) }
+    let!(:current_schooling_future_end_date) { create(:schooling, end_date: 1.day.from_now) }
+    let!(:former_schooling_past_end_date) { create(:schooling, end_date: 1.day.ago) }
+
+    describe ".former" do
+      subject { described_class.former }
+
+      it { is_expected.to include(former_schooling_past_end_date) }
+      it { is_expected.not_to include(current_schooling_no_end_date) }
+      it { is_expected.not_to include(current_schooling_future_end_date) }
+
+      it "includes schoolings with end_date on or before the current date" do
+        expect(described_class.former.to_a).to eq([former_schooling_past_end_date])
+      end
+    end
+
+    describe ".current" do
+      subject { described_class.current }
+
+      it { is_expected.to include(current_schooling_no_end_date) }
+      it { is_expected.to include(current_schooling_future_end_date) }
+      it { is_expected.not_to include(former_schooling_past_end_date) }
+
+      it "includes schoolings with no end_date or end_date after the current date" do
+        expect(described_class.current.to_a).to contain_exactly(current_schooling_no_end_date,
+                                                                current_schooling_future_end_date)
+      end
+    end
+
+    describe "mutual exclusivity" do
+      it "ensures every schooling is either current or former" do
+        all_schoolings = described_class.all
+        current_and_former = described_class.current.or(described_class.former)
+
+        expect(all_schoolings).to match_array(current_and_former)
+      end
+
+      it "ensures no schooling is both current and former" do
+        overlap = described_class.current.where(id: described_class.former)
+
+        expect(overlap).to be_empty
+      end
+    end
+  end
+
   describe "validations" do
     describe "end_date" do
       context "when the end date is before the start" do
@@ -137,22 +183,6 @@ RSpec.describe Schooling do
         "#{uai}/#{year}/1ere-apex-test/DUPONT_Jeanne_décision-d-attribution_#{decision_number}.pdf"
 
       expect(schooling.attributive_decision_key(schooling.attachment_file_name("décision-d-attribution"))).to eq key
-    end
-  end
-
-  describe ".current" do
-    subject { described_class.current }
-
-    context "when the schooling is over" do
-      let(:schooling) { create(:schooling, :closed) }
-
-      it { is_expected.not_to include schooling }
-    end
-
-    context "when the schooling is active" do
-      let(:schooling) { create(:schooling) }
-
-      it { is_expected.to include schooling }
     end
   end
 

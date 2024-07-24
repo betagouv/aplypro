@@ -15,8 +15,8 @@ class Schooling < ApplicationRecord
   has_one :mef, through: :classe
   has_one :establishment, through: :classe
 
-  scope :current, -> { where(end_date: nil).or(where("end_date > ?", Date.current)) }
   scope :former, -> { where.not(end_date: nil).where(end_date: ..Date.current) }
+  scope :current, -> { where.not(id: former) }
 
   scope :with_attributive_decisions, -> { joins(:attributive_decision_attachment) }
   scope :without_attributive_decisions, -> { where.missing(:attributive_decision_attachment) }
