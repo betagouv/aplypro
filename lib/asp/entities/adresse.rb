@@ -31,6 +31,23 @@ module ASP
         end
       end
 
+      def self.from_payment_request(payment_request)
+        student = payment_request.schooling.student
+
+        if student.lives_in_france?
+          super
+        else
+          establishment = payment_request.pfmp.establishment
+
+          new(
+            codetypeadr: Mappers::AdresseMapper::PRINCIPAL_ADDRESS_TYPE,
+            codecominsee: establishment.commune_code,
+            codepostalcedex: establishment.postal_code,
+            codeinseepays: InseeCodes::FRANCE_INSEE_COUNTRY_CODE
+          )
+        end
+      end
+
       private
 
       def french_address?

@@ -22,8 +22,10 @@ describe ASP::Entities::Adresse, type: :model do
     context "when the address is abroad" do
       let(:student) { create(:student, :with_all_asp_info, :with_foreign_address) }
 
-      it { is_expected.to validate_presence_of(:localiteetranger) }
-      it { is_expected.to validate_presence_of(:bureaudistribetranger) }
+      it_behaves_like "an XML-fragment producer" do
+        let(:entity) { described_class.from_payment_request(request) }
+        let(:probe) { ["adresse/codecominsee", student.establishment.commune_code] }
+      end
     end
   end
 
