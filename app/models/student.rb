@@ -29,10 +29,13 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_one :rib, -> { where(archived_at: nil) }, dependent: :destroy, inverse_of: :student
 
   scope :without_ribs, -> { where.missing(:rib) }
+
   scope :lives_in_france, -> { where(address_country_code: %w[100 99100]) }
-  scope :lives_abroad, -> { where.not(address_country_code: %w[100 99100]) }
+  scope :lives_abroad, -> { where.not(id: lives_in_france) }
+
   scope :ine_not_found, -> { where(ine_not_found: true) }
   scope :with_ine, -> { where(ine_not_found: false) }
+
   scope :with_biological_sex, -> { where(biological_sex: %i[male female]) }
   scope :with_known_postal_code, -> { where.not(address_postal_code: nil) }
   scope :with_rib, -> { joins(:rib) }
@@ -127,14 +130,6 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def born_in_france?
     InseeCodes.in_france?(birthplace_country_insee_code)
-  end
-
-  def lives_in_france?
-    return false if address_country_code.blank?
-
-    InseeCodes.in_france?(address_country_code)
-  rescue InseeCountryCodeMapper::UnusableCountryCode
-    false
   end
 
   def create_new_rib(rib_params)
