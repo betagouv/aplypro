@@ -7,6 +7,12 @@ module ASP
 
     TRANSITION_RELATION_NAME = :asp_payment_request_transitions
 
+    # rubocop:disable Layout/LineLength
+    needs_abrogated_attributive_decision = I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.needs_abrogated_attributive_decision")
+    missing_attributive_decision = I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.missing_attributive_decision")
+    RETRYABLE_INCOMPLETE_MESSAGES = [needs_abrogated_attributive_decision, missing_attributive_decision].freeze
+    # rubocop:enable Layout/LineLength
+
     include ::StateMachinable
 
     has_many :asp_payment_request_transitions, class_name: "ASP::PaymentRequestTransition", dependent: :destroy,
@@ -107,24 +113,11 @@ module ASP
       !terminated?
     end
 
-    def needs_action?
-      need_abrogation? || need_attributive_decision?
-    end
-
-    def need_abrogation?
-      # rubocop:disable Layout/LineLength
-      error_message = I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.needs_abrogated_attributive_decision")
-      # rubocop:enable Layout/LineLength
+    def eligible_for_auto_retry?
+      return false unless last_transition.metadata && last_transition.metadata["incomplete_reasons"]
+      error_messages = last_transition.metadata["incomplete_reasons"]["ready_state_validation"]
       in_state?(:incomplete) &&
-        last_transition.metadata["incomplete_reasons"]["ready_state_validation"].include?(error_message)
-    end
-
-    def need_attributive_decision?
-      # rubocop:disable Layout/LineLength
-      error_message = I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.missing_attributive_decision")
-      # rubocop:enable Layout/LineLength
-      in_state?(:incomplete) &&
-        last_transition.metadata["incomplete_reasons"]["ready_state_validation"].include?(error_message)
+        error_messages.any? { |error| RETRYABLE_INCOMPLETE_MESSAGES.include?(error)}
     end
   end
 end

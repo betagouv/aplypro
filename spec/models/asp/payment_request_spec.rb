@@ -133,50 +133,34 @@ RSpec.describe ASP::PaymentRequest do
     end
   end
 
-  describe "needs_action?" do
+  describe "eligible_for_auto_retry?" do
     let(:p_r_incomplete_for_abrogation) { create(:asp_payment_request, :incomplete_for_missing_abrogation_da) }
+    let(:p_r_incomplete_for_missing_da) { create(:asp_payment_request, :incomplete_for_missing_da) }
+    let(:schooling) { create(:schooling, :with_attributive_decision) }
+    let(:p_r_incomplete) { create(:asp_payment_request, :incomplete, schooling: schooling) }
     let(:p_r_ready) { create(:asp_payment_request, :ready) }
-    let(:p_r_incomplete) { create(:asp_payment_request, :incomplete) }
 
-    context "when the payment request is in 'incomplete' state with specific error message" do
+    context "when the payment request is in 'incomplete' state with the abrogation specific error message" do
       it "returns true" do
-        expect(p_r_incomplete_for_abrogation.needs_action?).to be true
+        expect(p_r_incomplete_for_abrogation.eligible_for_auto_retry?).to be true
+      end
+    end
+
+    context "when the payment request is in 'incomplete' state with the missing DA specific error message" do
+      it "returns true" do
+        expect(p_r_incomplete_for_missing_da.eligible_for_auto_retry?).to be true
       end
     end
 
     context "when the payment request is not in 'incomplete' state" do
       it "returns false" do
-        expect(p_r_ready.needs_action?).to be false
+        expect(p_r_ready.eligible_for_auto_retry?).to be false
       end
     end
 
-    context "when the payment request is in 'incomplete' state without the specific error message" do
-      it "returns false" do
-        expect(p_r_incomplete.needs_action?).to be false
-      end
-    end
-  end
-
-  describe "need_abrogation?" do
-    let(:p_r_incomplete_for_abrogation) { create(:asp_payment_request, :incomplete_for_missing_abrogation_da) }
-    let(:p_r_ready) { create(:asp_payment_request, :ready) }
-    let(:p_r_incomplete) { create(:asp_payment_request, :incomplete) }
-
-    context "when the payment request is in 'incomplete' state with specific error message" do
+    context "when the payment request is in 'incomplete' state without any specific error message" do
       it "returns true" do
-        expect(p_r_incomplete_for_abrogation.need_abrogation?).to be true
-      end
-    end
-
-    context "when the payment request is not in 'incomplete' state" do
-      it "returns false" do
-        expect(p_r_ready.need_abrogation?).to be false
-      end
-    end
-
-    context "when the payment request is in 'incomplete' state without the specific error message" do
-      it "returns false" do
-        expect(p_r_incomplete.need_abrogation?).to be false
+        expect(p_r_incomplete.eligible_for_auto_retry?).to be false
       end
     end
   end
