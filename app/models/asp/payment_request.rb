@@ -115,9 +115,10 @@ module ASP
 
     def eligible_for_auto_retry?
       return false unless last_transition.metadata && last_transition.metadata["incomplete_reasons"]
+
       error_messages = last_transition.metadata["incomplete_reasons"]["ready_state_validation"]
       in_state?(:incomplete) &&
-        error_messages.any? { |error| RETRYABLE_INCOMPLETE_MESSAGES.include?(error)}
+        error_messages.any? { |error| RETRYABLE_INCOMPLETE_MESSAGES.include?(error) }
     end
   end
 end
