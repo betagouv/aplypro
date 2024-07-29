@@ -20,12 +20,11 @@ describe ASP::PaymentRequestDecorator do
   describe "incomplete_reason" do
     subject(:reasons) { decorator.incomplete_reason }
 
-    let(:payment_request) { create(:asp_payment_request, :incomplete) }
+    let(:expected_error) { :excluded_schooling }
+    let(:payment_request) { create(:asp_payment_request, :incomplete, incomplete_reason: expected_error) }
 
     it "finds the right metadata and returns an array of reasons" do
-      error = :excluded_schooling
-
-      msg = I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.#{error}")
+      msg = I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.#{expected_error}")
 
       expect(reasons).to include(msg)
     end

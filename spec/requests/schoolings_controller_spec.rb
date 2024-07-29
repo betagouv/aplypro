@@ -9,7 +9,7 @@ RSpec.describe SchoolingsController do
   let(:schooling) { create(:schooling, :with_attributive_decision) }
 
   let(:payment_request) do
-    create(:asp_payment_request, :incomplete_for, incomplete_reason: :missing_attributive_decision)
+    create(:asp_payment_request, :incomplete, incomplete_reason: :missing_attributive_decision)
   end
 
   before do
