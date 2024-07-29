@@ -36,8 +36,8 @@ class SchoolingsController < ApplicationController
 
   def retry_eligibile_payment_requests!
     @schooling.pfmps.in_state(:validated).each do |pfmp|
-      p_r = pfmp.latest_payment_request
-      p_r.mark_ready! if pfmp.latest_payment_request.eligible_for_auto_retry?
+      payment_request = pfmp.latest_payment_request
+      payment_request.mark_ready! if payment_request.eligible_for_auto_retry?
     end
   end
 end

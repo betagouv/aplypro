@@ -7,11 +7,10 @@ module ASP
 
     TRANSITION_RELATION_NAME = :asp_payment_request_transitions
 
-    # rubocop:disable Layout/LineLength
-    needs_abrogated_attributive_decision = I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.needs_abrogated_attributive_decision")
-    missing_attributive_decision = I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.missing_attributive_decision")
-    RETRYABLE_INCOMPLETE_MESSAGES = [needs_abrogated_attributive_decision, missing_attributive_decision].freeze
-    # rubocop:enable Layout/LineLength
+    RETRYABLE_INCOMPLETE_VALIDATION_TYPES = %i[
+      needs_abrogated_attributive_decision
+      missing_attributive_decision
+    ].freeze
 
     include ::StateMachinable
 
@@ -114,11 +113,12 @@ module ASP
     end
 
     def eligible_for_auto_retry?
-      return false unless last_transition.metadata && last_transition.metadata["incomplete_reasons"]
+      return false unless in_state?(:incomplete)
 
-      error_messages = last_transition.metadata["incomplete_reasons"]["ready_state_validation"]
-      in_state?(:incomplete) &&
-        error_messages.any? { |error| RETRYABLE_INCOMPLETE_MESSAGES.include?(error) }
+      retryable_messages = RETRYABLE_INCOMPLETE_VALIDATION_TYPES.map do |r|
+        I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.#{r}")
+      end
+      last_transition.metadata["incomplete_reasons"]["ready_state_validation"].intersect?(retryable_messages)
     end
   end
 end
