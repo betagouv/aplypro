@@ -134,8 +134,12 @@ RSpec.describe ASP::PaymentRequest do
   end
 
   describe "eligible_for_auto_retry?" do
-    let(:p_r_incomplete_for_abrogation) { create(:asp_payment_request, :incomplete_for_missing_abrogation_da) }
-    let(:p_r_incomplete_for_missing_da) { create(:asp_payment_request, :incomplete_for_missing_da) }
+    let(:p_r_incomplete_for_abrogation) do
+      create(:asp_payment_request, :incomplete_for, incomplete_reason: :needs_abrogated_attributive_decision)
+    end
+    let(:p_r_incomplete_for_missing_da) do
+      create(:asp_payment_request, :incomplete_for, incomplete_reason: :missing_attributive_decision)
+    end
     let(:schooling) { create(:schooling, :with_attributive_decision) }
     let(:p_r_incomplete) { create(:asp_payment_request, :incomplete, schooling: schooling) }
     let(:p_r_ready) { create(:asp_payment_request, :ready) }

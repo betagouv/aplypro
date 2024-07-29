@@ -2,11 +2,6 @@
 
 FactoryBot.define do
   factory :asp_payment_request, class: "ASP::PaymentRequest" do
-    # rubocop:disable Layout/LineLength
-    missing_abrogation_error = I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.needs_abrogated_attributive_decision")
-    missing_da_error = I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.missing_attributive_decision")
-    # rubocop:enable Layout/LineLength
-
     pfmp do
       association(:pfmp, :validated).tap { |p| p.payment_requests.destroy_all }
     end
@@ -46,21 +41,24 @@ FactoryBot.define do
       end
     end
 
-    trait :incomplete_for_missing_abrogation_da do
+    trait :incomplete_for do
       sendable
 
-      after(:create) do |req|
-        req.errors.add(:ready_state_validation, :needs_abrogated_attributive_decision)
-        req.mark_incomplete!(incomplete_reasons: { ready_state_validation: [missing_abrogation_error] })
-      end
-    end
+      transient { incomplete_reason { "XXXX" } }
 
-    trait :incomplete_for_missing_da do
-      sendable
-
-      after(:create) do |req|
-        req.errors.add(:ready_state_validation, :needs_abrogated_attributive_decision)
-        req.mark_incomplete!(incomplete_reasons: { ready_state_validation: [missing_da_error] })
+      after(:create) do |req, ctx|
+        req.errors.add(:ready_state_validation, ctx.incomplete_reason)
+        req.mark_incomplete!(
+          incomplete_reasons: {
+            ready_state_validation:
+              [
+                I18n.t(
+                  "asp/payment_request.attributes.ready_state_validation.#{ctx.incomplete_reason}",
+                  scope: "activerecord.errors.models"
+                )
+              ]
+          }
+        )
       end
     end
 
