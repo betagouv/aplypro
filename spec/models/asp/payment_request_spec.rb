@@ -134,13 +134,25 @@ RSpec.describe ASP::PaymentRequest do
   end
 
   describe "eligible_for_auto_retry?" do
-    let(:p_r_incomplete_for_abrogation) { create(:asp_payment_request, :incomplete_for_missing_abrogation_da) }
+    let(:p_r_incomplete_for_abrogation) do
+      create(:asp_payment_request, :incomplete_for, incomplete_reason: :needs_abrogated_attributive_decision)
+    end
+    let(:p_r_incomplete_for_missing_da) do
+      create(:asp_payment_request, :incomplete_for, incomplete_reason: :missing_attributive_decision)
+    end
+    let(:schooling) { create(:schooling, :with_attributive_decision) }
+    let(:p_r_incomplete) { create(:asp_payment_request, :incomplete, schooling: schooling) }
     let(:p_r_ready) { create(:asp_payment_request, :ready) }
-    let(:p_r_incomplete) { create(:asp_payment_request, :incomplete) }
 
-    context "when the payment request is in 'incomplete' state with specific error message" do
+    context "when the payment request is in 'incomplete' state with the abrogation specific error message" do
       it "returns true" do
         expect(p_r_incomplete_for_abrogation.eligible_for_auto_retry?).to be true
+      end
+    end
+
+    context "when the payment request is in 'incomplete' state with the missing DA specific error message" do
+      it "returns true" do
+        expect(p_r_incomplete_for_missing_da.eligible_for_auto_retry?).to be true
       end
     end
 
@@ -150,8 +162,8 @@ RSpec.describe ASP::PaymentRequest do
       end
     end
 
-    context "when the payment request is in 'incomplete' state without the specific error message" do
-      it "returns false" do
+    context "when the payment request is in 'incomplete' state without any specific error message" do
+      it "returns true" do
         expect(p_r_incomplete.eligible_for_auto_retry?).to be false
       end
     end

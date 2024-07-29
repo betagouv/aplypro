@@ -7,6 +7,11 @@ module ASP
 
     TRANSITION_RELATION_NAME = :asp_payment_request_transitions
 
+    RETRYABLE_INCOMPLETE_VALIDATION_TYPES = %i[
+      needs_abrogated_attributive_decision
+      missing_attributive_decision
+    ].freeze
+
     include ::StateMachinable
 
     has_many :asp_payment_request_transitions, class_name: "ASP::PaymentRequestTransition", dependent: :destroy,
@@ -108,11 +113,12 @@ module ASP
     end
 
     def eligible_for_auto_retry?
-      # rubocop:disable Layout/LineLength
-      error_message = I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.needs_abrogated_attributive_decision")
-      # rubocop:enable Layout/LineLength
-      in_state?(:incomplete) &&
-        last_transition.metadata["incomplete_reasons"]["ready_state_validation"].include?(error_message)
+      return false unless in_state?(:incomplete)
+
+      retryable_messages = RETRYABLE_INCOMPLETE_VALIDATION_TYPES.map do |r|
+        I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.#{r}")
+      end
+      last_transition.metadata["incomplete_reasons"]["ready_state_validation"].intersect?(retryable_messages)
     end
   end
 end
