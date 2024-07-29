@@ -63,3 +63,8 @@ Quand("l'élève {string} a bien le statut étudiant") do |name|
 
   student.current_schooling.update!(status: :student)
 end
+
+Sachantque("l'élève {string} n'a pas d'INE") do |name|
+  student = find_student_by_full_name(name)
+  student.update!(ine_not_found: true)
+end

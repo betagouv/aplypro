@@ -19,7 +19,7 @@ Sachantque(
 ) do |name, classe|
   steps %(
     Quand l'élève "#{name}" en classe de "#{classe}" a toutes les informations nécessaires pour le paiement
-    Mais que l'API SYGNE renvoie une adresse à l'étranger pour l'élève "#{name}"
+    Mais que l'élève "#{name}" n'a pas d'INE
     Et que les tâches de préparation et d'envoi des paiements sont passées
   )
 end
