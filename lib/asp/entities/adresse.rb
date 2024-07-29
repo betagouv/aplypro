@@ -23,7 +23,7 @@ module ASP
       end
 
       def self.from_payment_request(payment_request)
-        if french_address?
+        if payment_request.student.lives_in_france?
           super
         else
           establishment = payment_request.pfmp.establishment
@@ -35,16 +35,6 @@ module ASP
             codeinseepays: InseeCodes::FRANCE_INSEE_COUNTRY_CODE
           )
         end
-      end
-
-      private
-
-      def french_address?
-        InseeCodes.in_france?(codeinseepays)
-      end
-
-      def foreign_address?
-        !french_address?
       end
     end
   end

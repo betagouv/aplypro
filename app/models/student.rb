@@ -83,6 +83,14 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   before_validation :check_asp_file_reference
 
+  def lives_in_france?
+    return false if address_country_code.blank?
+
+    InseeCodes.in_france?(address_country_code)
+  rescue InseeCountryCodeMapper::UnusableCountryCode
+    false
+  end
+
   def transferred?
     multiple_mefs? || multiple_establishments?
   end
