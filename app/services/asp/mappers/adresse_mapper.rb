@@ -4,6 +4,7 @@ module ASP
   module Mappers
     class AdresseMapper
       PRINCIPAL_ADDRESS_TYPE = "PRINCIPALE"
+      ABROAD_ADDRESS_TYPE = "ADMIN" # From ASP Doc
 
       MAPPING = {
         codecominsee: :address_city_insee_code,

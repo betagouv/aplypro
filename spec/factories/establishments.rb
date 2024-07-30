@@ -17,6 +17,7 @@ FactoryBot.define do
     ministry { "MINISTERE DE L'EDUCATION NATIONALE" }
     confirmed_director { nil }
     department_code { "034" }
+    commune_code { "78354" }
 
     trait :dehydrated do
       Establishment::API_MAPPING.each_value do |field|

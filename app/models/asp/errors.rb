@@ -10,5 +10,7 @@ module ASP
     class MaxRecordsPerWeekLimitReached < Error; end
     class MaxRequestsPerDayLimitReached < Error; end
     class IncompletePaymentRequestError < Error; end
+    class MissingEstablishmentCommuneCodeError < Error; end
+    class MissingEstablishmentPostalCodeError < Error; end
   end
 end

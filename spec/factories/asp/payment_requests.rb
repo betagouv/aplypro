@@ -34,17 +34,9 @@ FactoryBot.define do
     end
 
     trait :incomplete do
-      after(:create) do |req|
-        req.pfmp.student.update!(birthplace_country_insee_code: nil)
-
-        req.mark_ready!
-      end
-    end
-
-    trait :incomplete_for do
       sendable
 
-      transient { incomplete_reason { "XXXX" } }
+      transient { incomplete_reason { :ine_not_found } }
 
       after(:create) do |req, ctx|
         req.errors.add(:ready_state_validation, ctx.incomplete_reason)

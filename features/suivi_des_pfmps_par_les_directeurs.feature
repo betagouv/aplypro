@@ -68,7 +68,7 @@ Fonctionnalité: Suivi des demandes de paiement
   Scénario: Le personnel peut réussir à débloquer une demande de paiement si les raisons de bloquage sont addressées
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement incomplète
     Et que je consulte le profil de "Marie Curie" dans la classe de "A1"
-    Et que l'API SYGNE renvoie une adresse en France pour l'élève "Marie Curie"
+    Et que l'élève "Marie Curie" a un INE
     Et que les informations personnelles ont été récupérées pour l'élève "Marie Curie"
     Quand je consulte la dernière PFMP
     Et que je coche la case de responsable légal

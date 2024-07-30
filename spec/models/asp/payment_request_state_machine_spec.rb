@@ -87,7 +87,7 @@ describe ASP::PaymentRequestStateMachine do
         )
 
         allow(validator_double).to receive(:validate) do
-          asp_payment_request.errors.add(:ready_state_validation, :doesnt_live_in_france)
+          asp_payment_request.errors.add(:ready_state_validation, :excluded_schooling)
         end
       end
 
