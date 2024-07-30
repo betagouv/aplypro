@@ -6,7 +6,8 @@ module PfmpDecorator
   PFMP_STATE_MAPPING = {
     pending: :new,
     completed: :info,
-    validated: :success
+    validated: :success,
+    rectified: :error
   }.freeze
 
   def status_badge

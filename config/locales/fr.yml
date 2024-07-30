@@ -252,10 +252,12 @@ fr:
       pending: À compléter
       completed: Saisies à valider
       validated: Validées
+      rectified: Rectifiées
     state:
       pending: À compléter
       completed: Saisie à valider
       validated: Validée
+      rectified: Rectifiée
     state_explanations:
       pending: |
         Le nombre de jours realisés par l'élève au terme de sa PFMP
