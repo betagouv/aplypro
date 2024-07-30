@@ -28,6 +28,9 @@ module ASP
         else
           establishment = payment_request.pfmp.establishment
 
+          raise ASP::Errors::MissingEstablishmentCommuneCodeError if establishment.commune_code.blank?
+          raise ASP::Errors::MissingEstablishmentPostalCodeError if establishment.postal_code.blank?
+
           new(
             codetypeadr: Mappers::AdresseMapper::ABROAD_ADDRESS_TYPE,
             codecominsee: establishment.commune_code,
