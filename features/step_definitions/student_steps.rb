@@ -68,3 +68,8 @@ Sachantque("l'élève {string} n'a pas d'INE") do |name|
   student = find_student_by_full_name(name)
   student.update!(ine_not_found: true)
 end
+
+Sachantque("l'élève {string} a un INE") do |name|
+  student = find_student_by_full_name(name)
+  student.update!(ine_not_found: false)
+end
