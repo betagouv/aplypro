@@ -97,7 +97,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def locked?
-    latest_payment_request&.ongoing? || paid?
+    latest_payment_request&.ongoing?
   end
 
   def within_schooling_dates?

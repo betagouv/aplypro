@@ -10,6 +10,8 @@ fr:
       destroyed: La PFMP de %{name} a bien été supprimée
       not_destroyed: La PFMP ne peut pas être supprimée car son paiement est en cours de traitement
       validated: La PFMP de %{name} a bien été validée
+      cannot_rectify: La correction des données n'est pas correcte
+      rectified: La PFMP a bien été corrigée et relancée pour un nouveau paiement
     payment_requests:
       create: Une nouvelle demande de paiement a été créée pour %{name}
       mark_ready:
@@ -269,6 +271,9 @@ fr:
       validated: |
         La PFMP a été validée. La demande de paiement sera envoyée dès que
         les développements nécessaires auront été effectués.
+      rectified: |
+        La PFMP a été corrigée. La nouvelle demande de paiement sera envoyée dès que
+        possible avec les nouvelles informations fournises.
   payment_requests:
     actions:
       reset:
@@ -386,6 +391,8 @@ fr:
       not_director:
         title: *not_director_error
         content: Si vous êtes adjoint, veuillez contacter votre chef d'établissement pour qu'il valide les PFMPs afin de les envoyer en paiement.
+  rectifications:
+    confirm: Je confirme que <strong>je suis le responsable légal de l'établissement</strong> et qu'en tant qu'<strong>ordonnateur</strong> je rectifie informatiquement cette demande de paiement dans le cadre de la gestion d'un indu.
   asp:
     errors:
       bank_coordinates_not_found: Les coordonnées bancaires ne correspondent à aucune agence connue, veuillez vérifier l'IBAN et le BIC saisis

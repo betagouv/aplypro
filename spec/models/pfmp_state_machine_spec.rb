@@ -42,17 +42,10 @@ describe PfmpStateMachine do
 
   describe "guards" do
     describe "transition to rectified" do
-      let(:pfmp) { create(:pfmp, :validated) }
-      let(:payment_request) { instance_double(ASP::PaymentRequest) }
-
-      before do
-        allow(pfmp).to receive(:latest_payment_request).and_return(payment_request)
-      end
+      let(:payment_request) { pfmp.latest_payment_request }
 
       context "when the latest payment request is paid" do
-        before do
-          allow(payment_request).to receive(:in_state?).with(:paid).and_return(true)
-        end
+        let(:pfmp) { create(:asp_payment_request, :paid).pfmp }
 
         it "allows transition to rectified" do
           expect { pfmp.state_machine.transition_to!(:rectified) }.to change(pfmp.state_machine, :current_state)
@@ -62,13 +55,26 @@ describe PfmpStateMachine do
       end
 
       context "when the latest payment request is not paid" do
-        before do
-          allow(payment_request).to receive(:in_state?).with(:paid).and_return(false)
-        end
+        let(:pfmp) { create(:asp_payment_request, :unpaid).pfmp }
 
         it "does not allow transition to rectified" do
           expect { pfmp.state_machine.transition_to!(:rectified) }.to raise_error(Statesman::GuardFailedError)
         end
+      end
+    end
+  end
+
+  describe "after_transition hooks" do
+    describe "transition to rectified" do
+      let(:pfmp) { create(:asp_payment_request, :paid).pfmp }
+
+      it "recalculates amounts and creates a new payment request and attempts to mark it as ready" do # rubocop:disable RSpec/MultipleExpectations
+        expect do
+          pfmp.state_machine.transition_to!(:rectified)
+        end.to change { pfmp.payment_requests.count }.by(1)
+
+        expect(pfmp.current_state).to eq("rectified")
+        expect(pfmp.payment_requests.last.reload.current_state).to eq("ready")
       end
     end
   end
