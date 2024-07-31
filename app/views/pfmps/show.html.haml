@@ -29,12 +29,11 @@
       - if @pfmp.can_be_modified?
         = link_to "Modifier la PFMP", edit_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
         = link_to "Supprimer la PFMP", confirm_deletion_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
+          - if @pfmp.can_transition_to?(:rectified)
+          = link_to "Gérer un indu", confirm_rectification_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
       - else
         = button_tag "Modifier la PFMP", disabled: true, class: 'fr-btn fr-btn--secondary', title: "Vous ne pouvez pas modifier une PFMP dont le paiement est en cours de traitement"
         = button_tag "Supprimer la PFMP", disabled: true, class: 'fr-btn fr-btn--secondary', title: "Vous ne pouvez pas supprimer une PFMP dont le paiement est en cours de traitement"
-
-      - if @pfmp.can_transition_to?(:rectified)
-        = link_to "Gérer un indus", confirm_rectification_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
 
 
   - if @pfmp.payment_due?

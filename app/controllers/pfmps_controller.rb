@@ -5,7 +5,7 @@ class PfmpsController < ApplicationController
   include PfmpResource
 
   before_action :check_director, :update_confirmed_director!, :check_confirmed_director,
-                only: %i[validate]
+                only: %i[validate rectify]
 
   before_action :set_classe, :set_schooling
   before_action :set_pfmp_breadcrumbs, except: :confirm_deletion
@@ -72,6 +72,7 @@ class PfmpsController < ApplicationController
     end
   end
 
+  # TODO: maybe put this logic in PfmpManager
   def rectify # rubocop:disable Metrics/AbcSize
     if @pfmp.can_transition_to?(:rectified)
       ActiveRecord::Base.transaction do

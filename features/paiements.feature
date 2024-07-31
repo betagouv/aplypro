@@ -52,6 +52,7 @@ Fonctionnalité: Gestion des paiements
     Quand je consulte la dernière PFMP
     Alors je peux voir une demande de paiement "envoyé" de 90 euros
     Et je ne peux pas éditer ni supprimer la PFMP
+    Et la page contient un bouton "Gérer un indu"
 
   Scénario: une PFMP avec une requête de paiement échouée peut être modifiée
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement échouée
