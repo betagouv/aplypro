@@ -21,6 +21,10 @@ class PfmpStateMachine
     pfmp.previous_pfmps.not_in_state(:validated).empty?
   end
 
+  guard_transition(to: :rectified) do |pfmp|
+    pfmp.latest_payment_request.in_state?(:paid)
+  end
+
   after_transition(to: :completed) do |pfmp|
     PfmpManager.new(pfmp).recalculate_amounts!
   end

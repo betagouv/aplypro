@@ -33,10 +33,43 @@ describe PfmpStateMachine do
     end
 
     it "can transition from validated to rectified" do
-      pfmp = create(:pfmp, :validated)
+      pfmp = create(:asp_payment_request, :paid).pfmp
       expect { pfmp.state_machine.transition_to!(:rectified) }.to change(pfmp.state_machine, :current_state)
         .from("validated")
         .to("rectified")
+    end
+  end
+
+  describe "guards" do
+    describe "transition to rectified" do
+      let(:pfmp) { create(:pfmp, :validated) }
+      let(:payment_request) { instance_double(ASP::PaymentRequest) }
+
+      before do
+        allow(pfmp).to receive(:latest_payment_request).and_return(payment_request)
+      end
+
+      context "when the latest payment request is paid" do
+        before do
+          allow(payment_request).to receive(:in_state?).with(:paid).and_return(true)
+        end
+
+        it "allows transition to rectified" do
+          expect { pfmp.state_machine.transition_to!(:rectified) }.to change(pfmp.state_machine, :current_state)
+            .from("validated")
+            .to("rectified")
+        end
+      end
+
+      context "when the latest payment request is not paid" do
+        before do
+          allow(payment_request).to receive(:in_state?).with(:paid).and_return(false)
+        end
+
+        it "does not allow transition to rectified" do
+          expect { pfmp.state_machine.transition_to!(:rectified) }.to raise_error(Statesman::GuardFailedError)
+        end
+      end
     end
   end
 end
