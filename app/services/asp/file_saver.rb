@@ -26,7 +26,7 @@ module ASP
     end
 
     def find_record!
-      if filename.payments_file?
+      if filename.payments_file? || filename.rectifications_file?
         ASP::PaymentReturn.find_or_create_by!(filename: filename.to_s)
       else
         ASP::Request
@@ -41,7 +41,7 @@ module ASP
       if filename.payments_file?
         record.file
       else
-        record.send "#{filename.kind}_file"
+        record.public_send "#{filename.kind}_file"
       end
     end
   end

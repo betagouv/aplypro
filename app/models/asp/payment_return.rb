@@ -3,6 +3,7 @@
 module ASP
   class PaymentReturn < ApplicationRecord
     has_one_attached :file
+    has_one_attached :rectifications_file
 
     has_many :asp_payment_requests,
              class_name: "ASP::PaymentRequest",
