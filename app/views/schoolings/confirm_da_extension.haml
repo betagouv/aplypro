@@ -1,0 +1,25 @@
+%h1= t('pages.titles.da_report.index')
+
+.fr-col-md-6
+  = dsfr_alert(type: :warning, title: "Êtes-vous certain(e) de vouloir reporter cette décision d'attribution ?")
+
+.fr-col-md-6.fr-mt-3w
+= form_with url: confirm_da_extension_school_year_class_schooling_path(selected_school_year, @classe, @schooling), method: :update do |form|
+  %ul
+    %li
+      Etudiant :
+      %span= @schooling.student.full_name
+
+    %li
+      Classe :
+      %span= @schooling.classe.to_long_s
+
+  .fr-col-md-6
+    = form.dsfr_date_field(:extended_end_date, width: 'sm-4 md-3 lg-2')
+
+  .fr-col-md-6.fr-mt-3w
+    = render partial: "shared/confirmed_director", locals: { message: t("panels.attributive_decisions.confirm_director") }
+
+  .fr-btns-group.fr-btns-group--inline.fr-mt-3w
+    = link_to "Annuler", confirm_da_extension_school_year_class_schooling_path(selected_school_year, @classe), class: 'fr-btn fr-btn--secondary'
+    = form.submit "Confirmer le repport", class: 'fr-btn fr-btn--danger fr-btn--secondary'

@@ -17,6 +17,8 @@ class SchoolingsController < ApplicationController
 
   def confirm_abrogation; end
 
+  def confirm_da_extension; end
+
   private
 
   def set_schooling
