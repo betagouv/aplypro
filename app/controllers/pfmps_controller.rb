@@ -76,7 +76,7 @@ class PfmpsController < ApplicationController
   def rectify # rubocop:disable Metrics/AbcSize
     if @pfmp.can_transition_to?(:rectified)
       ActiveRecord::Base.transaction do
-        @pfmp.transition_to!(:rectified)
+        @pfmp.rectify!
         @pfmp.update(day_count: params[:pfmp][:day_count])
         @pfmp.student.update!(address_params)
       end

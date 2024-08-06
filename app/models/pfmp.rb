@@ -82,6 +82,10 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     transition_to!(:validated)
   end
 
+  def rectify!
+    transition_to!(:rectified)
+  end
+
   def relative_index
     schooling.pfmps.order(created_at: :asc).pluck(:id).find_index(id)
   end
