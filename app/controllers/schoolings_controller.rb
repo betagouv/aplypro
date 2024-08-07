@@ -22,6 +22,13 @@ class SchoolingsController < ApplicationController
     infer_page_title(name: t("pages.titles.schoolings.confirm_da_extension"))
   end
 
+  def extend_da;
+    @schooling.update!(extended_end_date: params[:extended_end_date])
+
+    redirect_to school_year_class_path(selected_school_year, @classe),
+                notice: t("flash.da.extended", name: @schooling.student.full_name)
+  end
+
   private
 
   def set_schooling
