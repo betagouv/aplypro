@@ -13,9 +13,7 @@
       .fr-collapse#accordion-pfmp-details
         .fr-grid-row.fr-mb-3w
           .fr-col-md-6
-            %h4.fr-h5 Détails de la PFMP
             %table.fr-table
-              %caption.fr-sr-only Détails de la PFMP
               %tbody
                 %tr
                   %th{scope: "row"} Période
@@ -28,18 +26,19 @@
                   %td= number_to_currency(@pfmp.amount, unit: "€", format: "%n %u")
 
           .fr-col-md-6
-            %h4.fr-h5 Dernier paiement
             %table.fr-table
-              %caption.fr-sr-only Détails du dernier paiement
               %tbody
                 - if @pfmp.payment_requests.in_state(:paid).any?
                   - last_paid_request = @pfmp.payment_requests.in_state(:paid).order(created_at: :desc).first
                   %tr
-                    %th{scope: "row"} Date de paiement
+                    %th{scope: "row"} Date
                     %td= l(last_paid_request.last_transition.created_at.to_date)
                   %tr
                     %th{scope: "row"} Montant payé
                     %td= number_to_currency(last_paid_request.pfmp.amount, unit: "€", format: "%n %u")
+                  %tr
+                    %th{scope: "row"} IBAN
+                    %td= last_paid_request.rib.iban
                 - else
                   %tr
                     %td{colspan: 2} Aucun paiement effectué
@@ -48,15 +47,14 @@
     = form_with model: @pfmp, url: rectify_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), method: :post do |f|
       .fr-mb-3w
         %h2.fr-h4 Modification du nombre de jours
-        .fr-grid-row.fr-col-md-8
+        .fr-grid-row.fr-col-md-4
           .fr-input-group
           = f.label :day_count, "Nouveau nombre de jours travaillés", class: 'fr-label'
           = f.number_field :day_count, class: 'fr-input'
 
       %h2.fr-h4 Coordonnées de l'élève
-      %p Veuillez vérifier les coordonnées de l'élève et corriger si besoin
-      .fr-grid-row.fr-grid-row--middle.fr-mb-3w
-        .fr-col-md-5
+      .fr-grid-row.fr-mb-3w
+        .fr-col-md-5.fr-mr-3w
           .fr-input-group
             = f.label :address_line1, "Adresse", class: 'fr-label'
             = f.text_field :address_line1, value: @student.address_line1, class: 'fr-input'
@@ -65,8 +63,8 @@
             = f.label :address_line2, "Complément d'adresse", class: 'fr-label'
             = f.text_field :address_line2, value: @student.address_line2, class: 'fr-input'
 
-      .fr-grid-row.fr-grid-row--middle.fr-mb-3w
-        .fr-col-md-5
+      .fr-grid-row.fr-mb-3w
+        .fr-col-md-5.fr-mr-3w
           .fr-input-group
             = f.label :address_postal_code, "Code postal", class: 'fr-label'
             = f.text_field :address_postal_code, value: @student.address_postal_code, class: 'fr-input'
@@ -74,8 +72,9 @@
           .fr-input-group
             = f.label :address_city, "Ville", class: 'fr-label'
             = f.text_field :address_city, value: @student.address_city, class: 'fr-input'
-      .fr-grid-row.fr-grid-row--middle.fr-mb-3w
-        .fr-col-md-5
+
+      .fr-grid-row.fr-mb-3w
+        .fr-col-md-5.fr-mr-3w
           .fr-input-group
             = f.label :address_city_insee_code, "Code INSEE de la ville", class: 'fr-label'
             = f.text_field :address_city_insee_code, value: @student.address_city_insee_code, class: 'fr-input'
