@@ -72,14 +72,9 @@ class PfmpsController < ApplicationController
     end
   end
 
-  # TODO: maybe put this logic in PfmpManager
-  def rectify # rubocop:disable Metrics/AbcSize
+  def rectify
     if @pfmp.can_transition_to?(:rectified)
-      ActiveRecord::Base.transaction do
-        @pfmp.rectify!
-        @pfmp.update(day_count: params[:pfmp][:day_count])
-        @pfmp.student.update!(address_params)
-      end
+      PfmpManager.new(@pfmp).rectify!(pfmp_params, addresse_params)
       redirect_to school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp),
                   notice: t("flash.pfmps.rectified")
     else

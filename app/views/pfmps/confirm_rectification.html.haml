@@ -44,13 +44,18 @@
                     %td{colspan: 2} Aucun paiement effectué
   .fr-grid-row
     .fr-col-md-6.fr-mb-3w
-    = form_with model: @pfmp, url: rectify_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), method: :post do |f|
+    = form_with model: @pfmp, url: rectify_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), builder: DsfrFormBuilder, method: :post do |f|
       .fr-mb-3w
         %h2.fr-h4 Modification du nombre de jours
-        .fr-grid-row.fr-col-md-4
-          .fr-input-group
-          = f.label :day_count, "Nouveau nombre de jours travaillés", class: 'fr-label'
-          = f.number_field :day_count, class: 'fr-input'
+        .fr-grid-row
+          .fr-col-md-5.fr-mr-3w
+            .fr-input-group
+              = f.label :day_count, "Nouveau nombre de jours travaillés", class: 'fr-label'
+              = f.number_field :day_count, class: 'fr-input'
+          .fr-col-md-2.fr-mr-3w
+            = f.dsfr_date_field(:start_date)
+          .fr-col-md-2.fr-mr-3w
+            = f.dsfr_date_field(:end_date)
 
       %h2.fr-h4 Coordonnées de l'élève
       .fr-grid-row.fr-mb-3w
