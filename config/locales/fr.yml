@@ -22,6 +22,7 @@ fr:
       readonly: Les coordonnées bancaires de %{name} ne peuvent pas être supprimées
     da:
       abrogated: La décision d'attribution de %{name} a bien été abrogée
+      extended: La décision d'attribution de %{name} a bien été prolongée
   helpers:
     submit:
       rib:
@@ -195,8 +196,7 @@ fr:
         classes: "Classes avec PFMPs à valider pour envoi en paiement"
         show: Envoyer en paiement les PFMPs de %{name}
       schoolings:
-        index: "Autoriser un report de décision d'attribution"
-        confirm_da_extension: "Report de décision d'attribution"
+        confirm_da_extension: "Autoriser un report de DA"
 
   global:
     sponsor: "Direction\nInterministérielle\ndu Numérique"
