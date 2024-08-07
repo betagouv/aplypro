@@ -17,7 +17,10 @@ class SchoolingsController < ApplicationController
 
   def confirm_abrogation; end
 
-  def confirm_da_extension; end
+  def confirm_da_extension;
+    add_breadcrumb t("pages.titles.students.show", name: @schooling.student.full_name), school_year_class_path(selected_school_year, @classe)
+    infer_page_title(name: t("pages.titles.schoolings.confirm_da_extension"))
+  end
 
   private
 

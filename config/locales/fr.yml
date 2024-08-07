@@ -194,8 +194,9 @@ fr:
         index: "Paiements"
         classes: "Classes avec PFMPs à valider pour envoi en paiement"
         show: Envoyer en paiement les PFMPs de %{name}
-      da_report:
+      schoolings:
         index: "Autoriser un report de décision d'attribution"
+        confirm_da_extension: "Report de décision d'attribution"
 
   global:
     sponsor: "Direction\nInterministérielle\ndu Numérique"
