@@ -24,9 +24,8 @@ class SchoolingsController < ApplicationController
 
   def extend_da;
     @schooling.update!(extended_end_date: params[:extended_end_date])
-
-    redirect_to school_year_class_path(selected_school_year, @classe),
-                notice: t("flash.da.extended", name: @schooling.student.full_name)
+      redirect_to school_year_class_path(selected_school_year, @classe),
+                  notice: t("flash.da.extended", name: @schooling.student.full_name)
   end
 
   private
@@ -34,7 +33,7 @@ class SchoolingsController < ApplicationController
   def set_schooling
     @schooling = Schooling.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to @classe, alert: t("errors.schoolings.not_found")
+    redirect_to @classe, alert: t("pages.titles.schoolings.failure")
   end
 
   def set_classe
