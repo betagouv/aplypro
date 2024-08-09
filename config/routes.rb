@@ -68,16 +68,18 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :schoolings, only: [] do
+      resources :schoolings, only: [:update] do
         member do
           get "confirm_abrogation"
           delete "abrogate_decision"
+          get "confirm_da_extension"
+          post "update"
         end
 
         resources :pfmps, except: :index do
           member do
-            post "validate"
-            get "confirm_deletion"
+            post :validate
+            get :confirm_deletion
             resources :payment_requests, only: %i[create update]
           end
         end
