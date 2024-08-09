@@ -36,7 +36,9 @@
                 = dsfr_badge(status: :error) { "Manquante" }
               - if schooling.extended_end_date.present?
                 = dsfr_badge(status: :info) { "Reportée" }
-            %p= dsfr_link_to "Autoriser un report", confirm_da_extension_school_year_class_schooling_path(selected_school_year, @classe, schooling)
+                %p= dsfr_link_to "Annuler le report", confirm_da_extension_school_year_class_schooling_path(selected_school_year, @classe, schooling)
+              - else
+                %p= dsfr_link_to "Autoriser un report", confirm_da_extension_school_year_class_schooling_path(selected_school_year, @classe, schooling)
           %td
             - if student.rib.present?
               %p= dsfr_badge(status: :success) { "Saisies" }
