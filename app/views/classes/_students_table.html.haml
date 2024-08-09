@@ -28,13 +28,15 @@
             - if schooling.attributive_decision.present? && !schooling.abrogation_decision.present?
               %p= dsfr_badge(status: :success) { "Éditée" }
               - if schooling.closed?
-                %p= dsfr_link_to "Abroger", confirm_abrogation_school_year_class_schooling_path(selected_school_year, @classe, schooling)
+                = dsfr_link_to "Abroger", confirm_abrogation_school_year_class_schooling_path(selected_school_year, @classe, schooling)
             - else
               - if schooling.abrogation_decision.present?
-                %p= dsfr_badge(status: :error) { "Abrogée" }
+                = dsfr_badge(status: :error) { "Abrogée" }
               - else
-                %p= dsfr_badge(status: :error) { "Manquante" }
-            = dsfr_link_to "Autoriser un report", confirm_da_extension_school_year_class_schooling_path(selected_school_year, @classe, schooling)
+                = dsfr_badge(status: :error) { "Manquante" }
+              - if schooling.extended_end_date.present?
+                = dsfr_badge(status: :info) { "Reportée" }
+            %p= dsfr_link_to "Autoriser un report", confirm_da_extension_school_year_class_schooling_path(selected_school_year, @classe, schooling)
           %td
             - if student.rib.present?
               %p= dsfr_badge(status: :success) { "Saisies" }
