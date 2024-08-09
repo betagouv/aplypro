@@ -8,6 +8,9 @@ module ASP
       attribute :codeinseepays, :string
       attribute :codepostalcedex, :string
 
+      attribute :pointremise, :string
+      attribute :cpltdistribution, :string
+
       validates_presence_of %i[
         codetypeadr
         codeinseepays
@@ -22,9 +25,18 @@ module ASP
         xml.codecominsee(codecominsee)
       end
 
-      def self.from_payment_request(payment_request)
+      def self.from_payment_request(payment_request) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
         if payment_request.student.lives_in_france?
           super
+        elsif payment_request.pfmp.in_state?(:rectified)
+          new(
+            pointremise: payment_request.student.address_line1,
+            cpltdistribution: payment_request.student.address_line2,
+            codetypeadr: ASP::Mappers::PRINCIPAL_ADDRESS_TYPE,
+            codeinseepays: InseeCountryCodeMapper.call(student.address_country_code),
+            codecominsee: payment_request.student.address_city_insee_code,
+            codepostalcedex: payment_request.student.address_postal_code
+          )
         else
           establishment = payment_request.pfmp.establishment
 

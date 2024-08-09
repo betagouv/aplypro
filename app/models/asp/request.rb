@@ -98,7 +98,7 @@ module ASP
     end
 
     def attachment_for(type)
-      send "#{type}_file"
+      public_send "#{type}_file"
     end
 
     private

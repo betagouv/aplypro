@@ -24,34 +24,11 @@ FactoryBot.define do
       validated
     end
 
-    trait :paid do
+    trait :rectified do
       validated
-
       after(:create) do |pfmp|
-        pfmp.latest_payment_request.tap do |p|
-          p.mark_ready!
-
-          p.asp_request = ASP::Request.create!
-
-          p.mark_sent!
-          p.mark_integrated!({})
-          p.mark_paid!
-        end
-      end
-    end
-
-    trait :with_failed_payment do
-      validated
-
-      after(:create) do |pfmp|
-        pfmp.latest_payment_request.tap do |p|
-          p.mark_ready!
-
-          p.asp_request = ASP::Request.create!
-
-          p.mark_sent!
-          p.mark_rejected!({})
-        end
+        create(:asp_payment_request, :paid, pfmp: pfmp)
+        pfmp.reload.rectify!
       end
     end
   end

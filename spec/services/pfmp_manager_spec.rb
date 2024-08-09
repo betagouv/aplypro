@@ -78,4 +78,20 @@ describe PfmpManager do
       end
     end
   end
+
+  describe "#rectify_and_update_attributes!" do # rubocop:disable RSpec/MultipleMemoizedHelpers
+    let(:pfmp) { create(:asp_payment_request, :paid).pfmp }
+    let(:confirmed_pfmp_params) { { day_count: 5, start_date: pfmp.start_date + 2.days, end_date: pfmp.end_date } }
+    let(:confirmed_address_params) { { address_line1: "123 New St", address_city: "New City" } }
+
+    it "rectifies the PFMP and updates attributes" do # rubocop:disable RSpec/ExampleLength
+      expect do
+        manager.rectify_and_update_attributes!(confirmed_pfmp_params, confirmed_address_params)
+      end.to change { pfmp.reload.current_state }.from("validated").to("rectified")
+                                                 .and change(pfmp, :day_count).to(confirmed_pfmp_params[:day_count])
+                                                                              .and change {
+                                                                                     pfmp.student.address_line1
+                                                                                   }.to(confirmed_address_params[:address_line1]) # rubocop:disable Layout/LineLength
+    end
+  end
 end

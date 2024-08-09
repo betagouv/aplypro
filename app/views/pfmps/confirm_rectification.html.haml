@@ -1,0 +1,96 @@
+.fr-container
+  %h1.fr-h3 Confirmer les données pour rectification de la PFMP
+  .fr-grid-row
+    .fr-col-md-6.fr-mb-3w
+      = dsfr_alert(type: :warning, title: "Êtes-vous certain(e) de vouloir rectifier cette PFMP ?")
+
+  .fr-accordions-group
+    %section.fr-accordion
+      %h3.fr-accordion__title
+        %button.fr-accordion__btn{"aria-controls" => "accordion-pfmp-details", "aria-expanded" => "false"}
+          Détails de la PFMP et du dernier paiement associé
+
+      .fr-collapse#accordion-pfmp-details
+        .fr-grid-row.fr-mb-3w
+          .fr-col-md-6
+            %table.fr-table
+              %tbody
+                %tr
+                  %th{scope: "row"} Période
+                  %td= "Du #{l @pfmp.start_date} au #{l @pfmp.end_date}"
+                %tr
+                  %th{scope: "row"} Jours travaillés
+                  %td= @pfmp.day_count
+                %tr
+                  %th{scope: "row"} Montant
+                  %td= number_to_currency(@pfmp.amount, unit: "€", format: "%n %u")
+
+          .fr-col-md-6
+            %table.fr-table
+              %tbody
+                - if @pfmp.payment_requests.in_state(:paid).any?
+                  - last_paid_request = @pfmp.payment_requests.in_state(:paid).order(created_at: :desc).first
+                  %tr
+                    %th{scope: "row"} Date
+                    %td= l(last_paid_request.last_transition.created_at.to_date)
+                  %tr
+                    %th{scope: "row"} Montant payé
+                    %td= number_to_currency(last_paid_request.pfmp.amount, unit: "€", format: "%n %u")
+                  %tr
+                    %th{scope: "row"} IBAN
+                    %td= last_paid_request.rib.iban
+                - else
+                  %tr
+                    %td{colspan: 2} Aucun paiement effectué
+  .fr-grid-row
+    .fr-col-md-6.fr-mb-3w
+    = form_with model: @pfmp, url: rectify_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), builder: DsfrFormBuilder, method: :post do |f|
+      .fr-mb-3w
+        %h2.fr-h4 Modification du nombre de jours
+        .fr-grid-row
+          .fr-col-md-5.fr-mr-3w
+            .fr-input-group
+              = f.label :day_count, "Nouveau nombre de jours travaillés", class: 'fr-label'
+              = f.number_field :day_count, class: 'fr-input'
+          .fr-col-md-3.fr-mr-3w
+            = f.dsfr_date_field(:start_date)
+          .fr-col-md-3
+            = f.dsfr_date_field(:end_date)
+
+      %h2.fr-h4 Coordonnées de l'élève
+      .fr-grid-row.fr-mb-3w
+        .fr-col-md-5.fr-mr-3w
+          .fr-input-group
+            = f.label :address_line1, "Adresse", class: 'fr-label'
+            = f.text_field :address_line1, value: @student.address_line1, class: 'fr-input'
+        .fr-col-md-5
+          .fr-input-group
+            = f.label :address_line2, "Complément d'adresse", class: 'fr-label'
+            = f.text_field :address_line2, value: @student.address_line2, class: 'fr-input'
+
+      .fr-grid-row.fr-mb-3w
+        .fr-col-md-5.fr-mr-3w
+          .fr-input-group
+            = f.label :address_postal_code, "Code postal", class: 'fr-label'
+            = f.text_field :address_postal_code, value: @student.address_postal_code, class: 'fr-input'
+        .fr-col-md-5
+          .fr-input-group
+            = f.label :address_city, "Ville", class: 'fr-label'
+            = f.text_field :address_city, value: @student.address_city, class: 'fr-input'
+
+      .fr-grid-row.fr-mb-3w
+        .fr-col-md-5.fr-mr-3w
+          .fr-input-group
+            = f.label :address_city_insee_code, "Code INSEE de la ville", class: 'fr-label'
+            = f.text_field :address_city_insee_code, value: @student.address_city_insee_code, class: 'fr-input'
+        .fr-col-md-5
+          .fr-input-group
+            = f.label :address_country_code, "Code pays", class: 'fr-label'
+            = f.text_field :address_country_code, value: @student.address_country_code, class: 'fr-input'
+
+      .fr-mt-3w
+        = render partial: "shared/confirmed_director", locals: { message: t("rectifications.confirm") }
+
+      .fr-btns-group.fr-btns-group--inline.fr-mt-3w
+        = link_to "Annuler", school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
+        = f.submit "Confirmer la rectification", class: 'fr-btn fr-btn--danger'

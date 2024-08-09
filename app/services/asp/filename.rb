@@ -2,7 +2,7 @@
 
 module ASP
   class Filename
-    TYPES = %i[rejects integrations payments].freeze
+    TYPES = %i[rejects integrations payments rectifications].freeze
 
     attr_reader :filename
 
@@ -36,6 +36,8 @@ module ASP
         :rejects
       when /^identifiants_generes/
         :integrations
+      when /^renvoi_ordrereversement/
+        :rectifications
       else
         :payments
       end
