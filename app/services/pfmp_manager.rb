@@ -40,10 +40,10 @@ class PfmpManager
     !last_payment_request.in_state?(:incomplete)
   end
 
-  def rectify!(confirmed_pfmp_params, confirmed_address_params)
+  def rectify_and_update_attributes!(confirmed_pfmp_params, confirmed_address_params)
     ApplicationRecord.transaction do
       @pfmp.rectify!
-      @pfmp.update(day_count: confirmed_pfmp_params)
+      @pfmp.update!(confirmed_pfmp_params)
       @pfmp.student.update!(confirmed_address_params)
     end
   end
