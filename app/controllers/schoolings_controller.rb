@@ -33,7 +33,7 @@ class SchoolingsController < ApplicationController
   def set_schooling
     @schooling = Schooling.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to @classe, alert: t("pages.titles.schoolings.failure")
+    redirect_to @classe, alert: t("errors.schoolings.not_found")
   end
 
   def schooling_params
