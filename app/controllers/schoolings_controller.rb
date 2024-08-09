@@ -3,6 +3,7 @@
 class SchoolingsController < ApplicationController
   include RoleCheck
 
+  before_action :set_schooling, only: [:update]
   before_action :authenticate_user!, :set_classe, :set_schooling
   before_action :check_director, :update_confirmed_director!, :check_confirmed_director, only: %i[abrogate_decision]
 
@@ -17,15 +18,14 @@ class SchoolingsController < ApplicationController
 
   def confirm_abrogation; end
 
-  def confirm_da_extension;
+  def confirm_da_extension
     add_breadcrumb t("pages.titles.students.show", name: @schooling.student.full_name), school_year_class_path(selected_school_year, @classe)
     infer_page_title(name: t("pages.titles.schoolings.confirm_da_extension"))
   end
 
-  def extend_da;
-    @schooling.update!(extended_end_date: params[:extended_end_date])
-      redirect_to school_year_class_path(selected_school_year, @classe),
-                  notice: t("flash.da.extended", name: @schooling.student.full_name)
+  def update
+    @schooling.update(schooling_params)
+    redirect_to school_year_class_path(selected_school_year, @classe), notice: t("flash.da.extended", name: @schooling.student.full_name)
   end
 
   private
@@ -34,6 +34,10 @@ class SchoolingsController < ApplicationController
     @schooling = Schooling.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to @classe, alert: t("pages.titles.schoolings.failure")
+  end
+
+  def schooling_params
+    params.require(:schooling).permit(:extended_end_date)
   end
 
   def set_classe
