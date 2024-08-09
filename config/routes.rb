@@ -73,7 +73,7 @@ Rails.application.routes.draw do
           get "confirm_abrogation"
           delete "abrogate_decision"
           get "confirm_da_extension", to: "schoolings#confirm_da_extension"
-          post "extend_da"
+          post "update"
         end
 
         resources :pfmps, except: :index do
