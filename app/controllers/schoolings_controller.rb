@@ -24,14 +24,12 @@ class SchoolingsController < ApplicationController
   end
 
   def update
-    if params[:remove_extension] && @schooling.update(extended_end_date: nil)
-      redirect_to school_year_class_path(selected_school_year, @classe), notice: t("flash.da.extension_removed", name: @schooling.student.full_name)
-
-    elsif @schooling.update(schooling_params)
-      redirect_to school_year_class_path(selected_school_year, @classe), notice: t("flash.da.extended", name: @schooling.student.full_name)
-
+    param = schooling_params[:extended_end_date]
+    if @schooling.update(param)
+      redirect_to school_year_class_path(selected_school_year, @classe),
+                  notice: t( param.blank? ? "flash.da.extension_removed" : "flash.da.extended", name: @schooling.student.full_name)
     else
-      render :confirm_da_extension, status: :unprocessable
+      render :confirm_da_extension, status: :unprocessable_entity
     end
   end
 

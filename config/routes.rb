@@ -72,7 +72,7 @@ Rails.application.routes.draw do
         member do
           get "confirm_abrogation"
           delete "abrogate_decision"
-          get "confirm_da_extension", to: "schoolings#confirm_da_extension"
+          get "confirm_da_extension"
           post "update"
         end
 
