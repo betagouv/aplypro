@@ -21,7 +21,7 @@ module PfmpDecorator
   end
 
   def all_status_badges
-    t("pfmps.state").except(:rectified).map do |status_key, status_string|
+    t("pfmps.state").map do |status_key, status_string|
       disabled = current_state.to_sym == status_key ? "" : "disabled"
       dsfr_badge(status: PFMP_STATE_MAPPING[status_key], classes: ["fr-badge--sm", disabled]) do
         status_string
