@@ -74,7 +74,8 @@ class PfmpsController < ApplicationController
 
   def rectify
     if @pfmp.can_transition_to?(:rectified)
-      PfmpManager.new(@pfmp).rectify_and_update_attributes!(pfmp_params, addresse_params)
+      @student = @pfmp.student
+      PfmpManager.new(@pfmp).rectify_and_update_attributes!(pfmp_params, address_params)
       redirect_to school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp),
                   notice: t("flash.pfmps.rectified")
     else

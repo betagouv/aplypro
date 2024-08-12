@@ -124,5 +124,53 @@ RSpec.describe PfmpsController do
       end
     end
   end
+
+  describe "POST /rectify" do
+    let(:pfmp) do
+      pfmp = create(:asp_payment_request, :paid).pfmp.reload
+      pfmp.update!(schooling: schooling)
+      pfmp
+    end
+    let(:new_start_date) { pfmp.start_date + 2.days }
+    let(:pfmp_params) { { start_date: new_start_date, end_date: pfmp.end_date, day_count: 5 } }
+    let(:addresse_params) { { address_line1: "123 New St", address_city: "New City" } }
+
+    context "when the PFMP can be rectified" do
+      it "rectifies the PFMP and redirects with a success notice" do # rubocop:disable RSpec/ExampleLength,RSpec/MultipleExpectations
+        post rectify_school_year_class_schooling_pfmp_path(school_year, class_id: pfmp.classe.id, schooling_id: pfmp.schooling.id, id: pfmp.id),
+             params: { pfmp: pfmp_params, addresse: addresse_params, confirmed_director: "1" }
+
+        expect(flash[:notice]).to eq(I18n.t("flash.pfmps.rectified"))
+        expect(pfmp.reload.attributes.slice("start_date", "end_date", "day_count", "current_state"))
+          .to eq("start_date" => new_start_date, "end_date" => pfmp_params[:end_date], "day_count" => 5)
+        expect(pfmp).to be_in_state(:rectified)
+      end
+    end
+
+    context "when the PFMP cannot be rectified" do
+      let(:pfmp) { create(:pfmp, :validated, schooling: schooling) }
+
+      it "redirects with an alert" do # rubocop:disable RSpec/MultipleExpectations
+        post rectify_school_year_class_schooling_pfmp_path(
+          school_year, class_id: pfmp.classe.id, schooling_id: pfmp.schooling.id, id: pfmp.id
+        ), params: { pfmp: pfmp_params, addresse: addresse_params, confirmed_director: "1" }
+
+        expect(flash[:alert]).to eq(I18n.t("flash.pfmps.cannot_rectify"))
+        expect(pfmp).to be_in_state(:validated)
+      end
+    end
+
+    context "when the PFMP update is invalid" do
+      let(:pfmp_params) { { start_date: pfmp.end_date + 1.day, end_date: pfmp.end_date } }
+
+      it "renders the confirm_rectification template with unprocessable_entity status" do
+        post rectify_school_year_class_schooling_pfmp_path(
+          school_year, class_id: pfmp.classe.id, schooling_id: pfmp.schooling.id, id: pfmp.id
+        ), params: { pfmp: pfmp_params, addresse: addresse_params, confirmed_director: "1" }
+
+        expect(pfmp).to be_in_state(:validated)
+      end
+    end
+  end
 end
 # rubocop:enable RSpec/MultipleMemoizedHelpers
