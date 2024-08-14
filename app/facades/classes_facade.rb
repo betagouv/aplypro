@@ -6,47 +6,60 @@ class ClassesFacade
   end
 
   def nb_students_per_class
-    @nb_students_per_class ||= @classes
-                               .joins(:students)
-                               .reorder(nil)
-                               .group(:"classes.id")
-                               .count
+    @nb_students_per_class ||= compute_nb_students_per_class
   end
 
   def nb_attributive_decisions_per_class
-    @nb_attributive_decisions_per_class ||= @classes
-                                            .joins(:schoolings)
-                                            .merge(Schooling.with_attributive_decisions)
-                                            .group(:"classes.id")
-                                            .count
+    @nb_attributive_decisions_per_class ||= compute_nb_attributive_decisions_per_class
   end
 
   def nb_ribs_per_class
-    @nb_ribs_per_class ||= @classes
-                           .joins(students: :rib)
-                           .reorder(nil)
-                           .group(:"classes.id")
-                           .count
+    @nb_ribs_per_class ||= compute_nb_ribs_per_class
   end
 
-  def nb_pfmps(classe_id, status)
-    nb_pfmp_per_class_and_status[[classe_id, status]]
+  def nb_pfmps(class_id, state)
+    pfmps_by_classe_and_state.dig(class_id, state.to_s) || 0
   end
 
-  def nb_pfmp_per_class_and_status
-    @nb_pfmp_per_class_and_status ||= transform_pfmp_status_keys(
-      @classes
-      .joins(:pfmps)
-      .reorder(nil)
-      .joins(Pfmp.most_recent_transition_join)
-      .group(:"classes.id", :to_state)
-      .count
-    )
+  private
+
+  def compute_nb_students_per_class
+    Schooling.where(classe_id: @classes.pluck(:id))
+             .group(:classe_id)
+             .count
   end
 
-  def transform_pfmp_status_keys(hash)
-    hash.transform_keys do |classe_id, state|
-      [classe_id, state.blank? ? :pending : state.to_sym]
+  def compute_nb_attributive_decisions_per_class
+    Schooling.where(classe_id: @classes.pluck(:id))
+             .with_attributive_decisions
+             .group(:classe_id)
+             .count
+  end
+
+  def compute_nb_ribs_per_class
+    Rib.joins(student: :schoolings)
+       .where(schoolings: { classe_id: @classes.pluck(:id) })
+       .group("schoolings.classe_id")
+       .count
+  end
+
+  def pfmps_by_classe_and_state
+    @pfmps_by_classe_and_state ||= group_pfmps_by_classe_and_state
+  end
+
+  def group_pfmps_by_classe_and_state
+    counts = {}
+
+    Pfmp.joins(:schooling)
+        .joins("LEFT JOIN pfmp_transitions ON pfmp_transitions.pfmp_id = pfmps.id AND pfmp_transitions.most_recent = true") # rubocop:disable Layout/LineLength
+        .where(schoolings: { classe_id: @classes.pluck(:id) })
+        .group("schoolings.classe_id", "COALESCE(pfmp_transitions.to_state, 'pending')")
+        .count
+        .each do |(class_id, state), count|
+      counts[class_id] ||= {}
+      counts[class_id][state.presence || "pending"] = count
     end
+
+    counts
   end
 end
