@@ -7,6 +7,7 @@ FactoryBot.define do
     short { "1ERE COLLAGE DE GOMETTES" }
     mefstat11 { Faker::Number.number(digits: 11) }
     ministry { Mef.ministries[:menj] }
+    school_year { SchoolYear.current }
 
     transient do
       daily_rate { 1 }
