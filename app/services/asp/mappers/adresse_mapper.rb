@@ -8,8 +8,7 @@ module ASP
 
       MAPPING = {
         codecominsee: :address_city_insee_code,
-        codepostalcedex: :address_postal_code,
-        bureaudistribetranger: :address_postal_code
+        codepostalcedex: :address_postal_code
       }.freeze
 
       attr_reader :student
@@ -24,10 +23,6 @@ module ASP
 
       def codetypeadr
         PRINCIPAL_ADDRESS_TYPE
-      end
-
-      def localiteetranger
-        student.address[..37]
       end
 
       def codeinseepays

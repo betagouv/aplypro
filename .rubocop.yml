@@ -9,6 +9,10 @@ require:
 
 AllCops:
   NewCops: enable
+  Exclude:
+    - 'mock/**/*'
+    - 'db/**/*'
+    - 'bin/**/*'
 
 Style/StringLiterals:
   Enabled: true

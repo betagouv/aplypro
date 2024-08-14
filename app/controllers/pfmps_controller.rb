@@ -5,7 +5,7 @@ class PfmpsController < ApplicationController
   include PfmpResource
 
   before_action :check_director, :update_confirmed_director!, :check_confirmed_director,
-                only: %i[validate]
+                only: %i[validate rectify]
 
   before_action :set_classe, :set_schooling
   before_action :set_pfmp_breadcrumbs, except: :confirm_deletion
@@ -62,6 +62,30 @@ class PfmpsController < ApplicationController
     redirect_to student_path(@schooling.student)
   end
 
+  def confirm_rectification
+    if @pfmp.can_transition_to?(:rectified)
+      @student = @pfmp.student
+      render :confirm_rectification
+    else
+      redirect_to school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp),
+                  alert: t("flash.pfmps.cannot_rectify")
+    end
+  end
+
+  def rectify
+    if @pfmp.can_transition_to?(:rectified)
+      @student = @pfmp.student
+      PfmpManager.new(@pfmp).rectify_and_update_attributes!(pfmp_params, address_params)
+      redirect_to school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp),
+                  notice: t("flash.pfmps.rectified")
+    else
+      redirect_to school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp),
+                  alert: t("flash.pfmps.cannot_rectify")
+    end
+  rescue ActiveRecord::RecordInvalid
+    render :confirm_rectification, status: :unprocessable_entity
+  end
+
   def destroy
     if @pfmp.destroy
       redirect_to student_path(@schooling.student),
@@ -73,6 +97,17 @@ class PfmpsController < ApplicationController
   end
 
   private
+
+  def address_params
+    params.require(:pfmp).permit(
+      :address_line1,
+      :address_line2,
+      :address_postal_code,
+      :address_city,
+      :address_city_insee_code,
+      :address_country_code
+    )
+  end
 
   def pfmp_params
     params.require(:pfmp).permit(

@@ -47,11 +47,12 @@ Fonctionnalité: Gestion des paiements
     Et la page contient "La demande a été rejetée : mauvais RIB"
     Et je peux changer le nombre de jours de la PFMP à 8
 
-  Scénario: une PFMP avec une requête de paiement liquidé ne peut être modifiée
+  Scénario: une PFMP avec une requête de paiement liquidée ne peut être modifiée
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement liquidée
     Quand je consulte la dernière PFMP
     Alors je peux voir une demande de paiement "envoyé" de 90 euros
     Et je ne peux pas éditer ni supprimer la PFMP
+    Et la page contient "Gérer un indu"
 
   Scénario: une PFMP avec une requête de paiement échouée peut être modifiée
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement échouée
