@@ -3,6 +3,8 @@
 class Mef < ApplicationRecord
   enum :ministry, %i[menj masa armee mer]
 
+  belongs_to :school_year
+
   scope :with_wages, -> { joins("JOIN wages ON wages.mef_codes ? mefs.code") }
 
   validates :label, :code, :short, :mefstat11, :ministry, presence: true
