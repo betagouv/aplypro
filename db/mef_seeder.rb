@@ -26,7 +26,7 @@ class MefSeeder
         end
       end
 
-      attributes
+      attributes.merge("school_year_id" => SchoolYear.current.id)
     end
 
     Mef.upsert_all(mefs, unique_by: :code) # rubocop:disable Rails/SkipsModelValidations

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_19_093120) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_14_133039) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -166,8 +166,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_19_093120) do
     t.datetime "updated_at", null: false
     t.string "mefstat11", null: false
     t.integer "ministry", null: false
+    t.bigint "school_year_id"
     t.index ["code"], name: "index_mefs_on_code", unique: true
     t.index ["mefstat11"], name: "index_mefs_on_mefstat11"
+    t.index ["school_year_id"], name: "index_mefs_on_school_year_id"
   end
 
   create_table "pfmp_transitions", force: :cascade do |t|
@@ -308,6 +310,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_19_093120) do
   add_foreign_key "establishments", "users", column: "confirmed_director_id"
   add_foreign_key "invitations", "establishments"
   add_foreign_key "invitations", "users"
+  add_foreign_key "mefs", "school_years"
   add_foreign_key "pfmp_transitions", "pfmps"
   add_foreign_key "pfmps", "schoolings"
   add_foreign_key "ribs", "students"
