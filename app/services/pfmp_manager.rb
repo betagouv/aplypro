@@ -45,6 +45,7 @@ class PfmpManager
       @pfmp.update!(confirmed_pfmp_params)
       @pfmp.student.update!(confirmed_address_params)
       update_amount_and_rebalance_following_pfmps!
+      create_new_payment_request!
     end
   end
 
