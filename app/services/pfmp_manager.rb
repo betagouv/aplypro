@@ -19,8 +19,7 @@ class PfmpManager
     raise PfmpNotModifiableError unless pfmp.can_be_modified?
 
     ApplicationRecord.transaction do
-      pfmp.update!(amount: pfmp.calculate_amount)
-      rebalance_following_pfmps!
+      update_amount_and_rebalance_following_pfmps!
     end
   end
 
@@ -45,10 +44,16 @@ class PfmpManager
       @pfmp.rectify!
       @pfmp.update!(confirmed_pfmp_params)
       @pfmp.student.update!(confirmed_address_params)
+      update_amount_and_rebalance_following_pfmps!
     end
   end
 
   private
+
+  def update_amount_and_rebalance_following_pfmps!
+    pfmp.update!(amount: pfmp.calculate_amount)
+    rebalance_following_pfmps!
+  end
 
   def rebalance_following_pfmps!
     pfmp.following_modifiable_pfmps.each do |following_pfmp|
