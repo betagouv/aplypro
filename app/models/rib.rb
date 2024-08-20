@@ -5,7 +5,7 @@ class Rib < ApplicationRecord
 
   enum :owner_type, { personal: 0, other_person: 1, moral_person: 2 }
 
-  has_one :payment_request, class_name: "ASP::PaymentRequest", dependent: :nullify
+  has_many :payment_requests, class_name: "ASP::PaymentRequest", dependent: :nullify
 
   validates :iban, :bic, :name, presence: true
 
@@ -45,7 +45,7 @@ class Rib < ApplicationRecord
   end
 
   def archivable?
-    payment_request.nil? || payment_request.terminated?
+    payment_requests.empty? || payment_requests.all?(&:terminated?)
   end
 
   def readonly?
