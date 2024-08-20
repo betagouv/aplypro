@@ -18,9 +18,9 @@
   Date de fin du report :
   .fr-col-md-6
     - if @schooling.extended_end_date.present?
-      = form.date_field :extended_end_date, value: @schooling.extended_end_date, class: "fr-input", disabled: true
+      = form.date_field :extended_end_date, value: @schooling.extended_end_date, class: "fr-input", name: "date_input", disabled: true
     - else
-      = form.date_field :extended_end_date, value: @schooling.extended_end_date, class: "fr-input"
+      = form.date_field :extended_end_date, value: @schooling.extended_end_date, class: "fr-input", name: "date_input"
 
   .fr-col-md-6.fr-mt-3w
     = render partial: "shared/confirmed_director", locals: { message: t("panels.attributive_decisions.confirm_director") }

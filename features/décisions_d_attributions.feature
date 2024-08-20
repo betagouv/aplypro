@@ -61,3 +61,20 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Alors la page contient "Êtes-vous certain(e) de vouloir abroger cette décision d'attribution ?"
     Lorsque je clique sur "Confirmer l'abrogation"
     Alors la page contient "Télécharger la décision d'abrogation"
+
+  Scénario: Le personnel peut reporter une décision d'attribution
+    Quand je consulte la classe de "1MELEC"
+    Alors je peux voir dans le tableau "Liste des élèves"
+      | Élèves (10) | Décisions d'attribution (0/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
+      |             | Autoriser un report            |                              |           |
+    Quand je clique sur le premier "Autoriser un report"
+    Alors la page contient "Date de fin du report"
+    Quand je remplis "date_input" avec "2024-08-21"
+    Et que je coche la case de responsable légal
+    Et que je clique sur "Confirmer le report"
+
+  Scénario: Le personnel qui ne coche pas la case de responsable légal ne peut pas reporter les décisions d'attribution
+
+  Scénario: Le personnel peut annuler la saisie d'un report de décision d'attribution
+
+  Scénario: Le personnel peut supprimer le report d'une décision d'attribution

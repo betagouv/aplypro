@@ -12,6 +12,10 @@ Quand("je clique sur {string}") do |label|
   click_link_or_button label
 end
 
+Quand("je clique sur le premier {string}") do |label|
+  click_link_or_button(label, match: :first)
+end
+
 Alors("la page contient {string}") do |content|
   expect(page).to have_content(content).or(have_button(content))
 end

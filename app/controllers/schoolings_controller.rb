@@ -25,7 +25,7 @@ class SchoolingsController < ApplicationController
 
   def update
     param = schooling_params[:extended_end_date]
-    if @schooling.update(param)
+    if @schooling.update(extended_end_date: param)
       redirect_to school_year_class_path(selected_school_year, @classe),
                   notice: t( param.blank? ? "flash.da.extension_removed" : "flash.da.extended", name: @schooling.student.full_name)
     else
