@@ -69,7 +69,7 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
       |             | Autoriser un report            |                              |           |
     Quand je clique sur le premier "Autoriser un report"
     Alors la page contient "Date de fin du report"
-    Quand je remplis "date_input" avec "2024-08-21"
+    Quand je remplis "schooling_extended_end_date" avec "2024-08-21"
     Et que je coche la case de responsable légal
     Et que je clique sur "Confirmer le report"
 

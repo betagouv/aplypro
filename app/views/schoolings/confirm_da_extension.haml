@@ -15,12 +15,9 @@
       Classe :
       %span= @schooling.classe.to_long_s
 
-  Date de fin du report :
   .fr-col-md-6
-    - if @schooling.extended_end_date.present?
-      = form.date_field :extended_end_date, value: @schooling.extended_end_date, class: "fr-input", name: "date_input", disabled: true
-    - else
-      = form.date_field :extended_end_date, value: @schooling.extended_end_date, class: "fr-input", name: "date_input"
+    = form.label :extended_end_date, "Date de fin du report", class: 'fr-label'
+    = form.date_field :extended_end_date, value: @schooling.extended_end_date, class: 'fr-input', disabled: @schooling.extended_end_date.present?
 
   .fr-col-md-6.fr-mt-3w
     = render partial: "shared/confirmed_director", locals: { message: t("panels.attributive_decisions.confirm_director") }
