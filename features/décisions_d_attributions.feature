@@ -69,12 +69,34 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
       |             | Autoriser un report            |                              |           |
     Quand je clique sur le premier "Autoriser un report"
     Alors la page contient "Date de fin du report"
-    Quand je remplis "schooling_extended_end_date" avec "2024-08-21"
+    Quand je remplis "Date de fin du report" avec "#{Date.parse('#{SchoolYear.current.end_date}-12-31')}"
     Et que je coche la case de responsable légal
     Et que je clique sur "Confirmer le report"
+    Alors la page contient "La décision d'attribution de"
+    Alors la page contient "a bien été prolongée"
+    Alors je peux voir dans le tableau "Liste des élèves"
+      | Élèves (10) | Décisions d'attribution (0/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
+      |             | Reportée                       |                              |           |
+
+  Scénario: Le personnel peut annuler la saisie d'un report de décision d'attribution
+    Quand je consulte la classe de "1MELEC"
+    Et que je clique sur le premier "Autoriser un report"
+    Et que je remplis "Date de fin du report" avec "#{Date.parse('#{SchoolYear.current.end_date}-12-31')}"
+    Et que je coche la case de responsable légal
+    Et que je clique sur "Confirmer le report"
+    Alors la page contient "La décision d'attribution de"
+    Alors je peux voir dans le tableau "Liste des élèves"
+      | Élèves (10) | Décisions d'attribution (0/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
+      |             | Annuler le report              |                              |           |
+    Quand je clique sur le premier "Annuler le report"
+    Alors la page contient "Êtes-vous certain(e) de vouloir supprimer le report de cette décision d'attribution ?"
+    Quand je coche la case de responsable légal
+    Et que je clique sur "Supprimer le report"
+    Alors la page contient "La décision d'attribution de"
+    Alors la page contient "a bien été supprimée"
+
 
   Scénario: Le personnel qui ne coche pas la case de responsable légal ne peut pas reporter les décisions d'attribution
 
-  Scénario: Le personnel peut annuler la saisie d'un report de décision d'attribution
 
   Scénario: Le personnel peut supprimer le report d'une décision d'attribution
