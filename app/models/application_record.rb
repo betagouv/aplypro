@@ -6,6 +6,7 @@ class ApplicationRecord < ActiveRecord::Base
   class << self
     attr_accessor :updatable_attributes
 
+    # TODO: rename to sourced_from_external_api or something like that
     def updatable(*args)
       self.updatable_attributes ||= []
 

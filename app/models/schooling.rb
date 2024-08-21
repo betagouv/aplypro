@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Schooling < ApplicationRecord
+class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_one_attached :attributive_decision
   has_one_attached :abrogation_decision
 
@@ -35,6 +35,10 @@ class Schooling < ApplicationRecord
             comparison: { greater_than_or_equal_to: :start_date },
             if: -> { start_date && end_date }
 
+  validates :extended_end_date,
+            comparison: { greater_than: :end_date },
+            if: -> { end_date && extended_end_date }
+
   updatable :start_date, :end_date, :status
 
   def generate_administrative_number
@@ -65,6 +69,10 @@ class Schooling < ApplicationRecord
 
   def no_dates?
     start_date.blank? && end_date.blank?
+  end
+
+  def max_end_date
+    extended_end_date || end_date
   end
 
   def excluded?
