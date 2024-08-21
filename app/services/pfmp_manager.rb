@@ -42,9 +42,9 @@ class PfmpManager
 
   def rectify_and_update_attributes!(confirmed_pfmp_params, confirmed_address_params)
     ApplicationRecord.transaction do
-      @pfmp.rectify!
       @pfmp.update!(confirmed_pfmp_params)
       @pfmp.student.update!(confirmed_address_params)
+      @pfmp.rectify!
     end
   end
 
