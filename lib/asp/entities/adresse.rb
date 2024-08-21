@@ -33,7 +33,7 @@ module ASP
             pointremise: payment_request.student.address_line1,
             cpltdistribution: payment_request.student.address_line2,
             codetypeadr: ASP::Mappers::PRINCIPAL_ADDRESS_TYPE,
-            codeinseepays: InseeCountryCodeMapper.call(student.address_country_code),
+            codeinseepays: InseeCountryCodeMapper.call(payment_request.student.address_country_code),
             codecominsee: payment_request.student.address_city_insee_code,
             codepostalcedex: payment_request.student.address_postal_code
           )
