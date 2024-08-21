@@ -7,6 +7,7 @@ RSpec.describe Rib do
 
   describe "associations" do
     it { is_expected.to belong_to(:student) }
+    it { is_expected.to have_many(:payment_requests) }
   end
 
   describe "validations" do

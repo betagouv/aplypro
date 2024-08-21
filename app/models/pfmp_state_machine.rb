@@ -12,6 +12,7 @@ class PfmpStateMachine
   transition from: :completed, to: :validated
   transition from: :completed, to: :pending
   transition from: :validated, to: :rectified
+  transition from: :rectified, to: :rectified
 
   guard_transition(to: :completed) do |pfmp|
     pfmp.day_count.present?

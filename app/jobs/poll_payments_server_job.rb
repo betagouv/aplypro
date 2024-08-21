@@ -18,6 +18,9 @@ class PollPaymentsServerJob < ApplicationJob
       ProcessASPResponseFileJob.perform_later(filename)
 
       ASP::Server.remove_file!(filename: filename)
+    rescue ASP::Errors::UnmatchedResponseFile => e
+      Sentry.capture_exception(e)
+      next
     end
   end
 end
