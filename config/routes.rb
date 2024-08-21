@@ -80,6 +80,8 @@ Rails.application.routes.draw do
           member do
             post :validate
             get :confirm_deletion
+            get :confirm_rectification
+            post :rectify
             resources :payment_requests, only: %i[create update]
           end
         end
