@@ -76,7 +76,7 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Alors la page contient "a bien été prolongée"
 
   Scénario: Le personnel peut annuler la saisie d'un report de décision d'attribution
-    Quand les élèves ont un report de décisions d'attribution
+    Quand l'élève "Marie Curie" a un report de décisions d'attribution
     Et que je consulte la classe de "1MELEC"
     Alors je peux voir dans le tableau "Liste des élèves"
       | Élèves (10) | Décisions d'attribution (0/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
@@ -85,5 +85,4 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Alors la page contient "Êtes-vous certain(e) de vouloir supprimer le report de cette décision d'attribution ?"
     Et que je coche la case de responsable légal
     Lorsque je clique sur "Supprimer le report"
-    Alors la page contient "Le report de la décision d'attribution de"
-    Alors la page contient "a bien été supprimée"
+    Alors la page contient "Le report de la décision d'attribution de Marie Curie a bien été supprimé"
