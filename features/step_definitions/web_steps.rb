@@ -4,10 +4,6 @@ Quand("je me rends sur la page d'accueil") do
   visit "/"
 end
 
-Quand("print the page") do
-  log page.body
-end
-
 Quand("je clique sur {string}") do |label|
   click_link_or_button label
 end

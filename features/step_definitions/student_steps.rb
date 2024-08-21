@@ -56,6 +56,14 @@ Quand("les élèves actuels sont les seuls à avoir des décisions d'attribution
   end
 end
 
+Quand("les élèves ont un report de décisions d'attribution") do
+  establishment = Establishment.last
+
+  establishment.schoolings.find_each do |schooling|
+    schooling.update!(extended_end_date: "2024-11-02")
+  end
+end
+
 # FIXME: we should mock the API step instead and have the correct
 # schooling + status returned in the data.
 Quand("l'élève {string} a bien le statut étudiant") do |name|

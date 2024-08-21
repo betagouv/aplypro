@@ -74,29 +74,16 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Et que je clique sur "Confirmer le report"
     Alors la page contient "La décision d'attribution de"
     Alors la page contient "a bien été prolongée"
+
+  Scénario: Le personnel peut annuler la saisie d'un report de décision d'attribution
+    Quand les élèves ont un report de décisions d'attribution
+    Et que je consulte la classe de "1MELEC"
     Alors je peux voir dans le tableau "Liste des élèves"
       | Élèves (10) | Décisions d'attribution (0/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
       |             | Reportée                       |                              |           |
-
-  Scénario: Le personnel peut annuler la saisie d'un report de décision d'attribution
-    Quand je consulte la classe de "1MELEC"
-    Et que je clique sur le premier "Autoriser un report"
-    Et que je remplis "Date de fin du report" avec "#{Date.parse('#{SchoolYear.current.end_date}-12-31')}"
-    Et que je coche la case de responsable légal
-    Et que je clique sur "Confirmer le report"
-    Alors la page contient "La décision d'attribution de"
-    Alors je peux voir dans le tableau "Liste des élèves"
-      | Élèves (10) | Décisions d'attribution (0/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
-      |             | Annuler le report              |                              |           |
     Quand je clique sur le premier "Annuler le report"
     Alors la page contient "Êtes-vous certain(e) de vouloir supprimer le report de cette décision d'attribution ?"
-    Quand je coche la case de responsable légal
-    Et que je clique sur "Supprimer le report"
-    Alors la page contient "La décision d'attribution de"
+    Et que je coche la case de responsable légal
+    Lorsque je clique sur "Supprimer le report"
+    Alors la page contient "Le report de la décision d'attribution de"
     Alors la page contient "a bien été supprimée"
-
-
-  Scénario: Le personnel qui ne coche pas la case de responsable légal ne peut pas reporter les décisions d'attribution
-
-
-  Scénario: Le personnel peut supprimer le report d'une décision d'attribution

@@ -23,7 +23,7 @@ fr:
     da:
       abrogated: La décision d'attribution de %{name} a bien été abrogée
       extended: La décision d'attribution de %{name} a bien été prolongée
-      extension_removed: La décision d'attribution de %{name} a bien été supprimée
+      extension_removed: Le report de la décision d'attribution de %{name} a bien été supprimée
       extension_failure: La décision d'attribution de %{name} n'a pas pu être modifiée
   helpers:
     submit:
