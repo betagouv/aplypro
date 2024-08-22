@@ -15,6 +15,14 @@
       Classe :
       %span= @schooling.classe.to_long_s
 
+    %li
+      Date de début :
+      %span= @schooling.start_date
+
+    %li
+      Date de fin initiale :
+      %span= @schooling.end_date
+
   .fr-col-md-6
     = form.label :extended_end_date, "Date de fin du report", class: 'fr-label'
     = form.date_field :extended_end_date, value: @schooling.extended_end_date, class: 'fr-input', disabled: @schooling.extended_end_date.present?

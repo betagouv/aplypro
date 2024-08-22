@@ -199,7 +199,7 @@ fr:
         classes: "Classes avec PFMPs à valider pour envoi en paiement"
         show: Envoyer en paiement les PFMPs de %{name}
       schoolings:
-        confirm_da_extension: "Autoriser un report de DA"
+        confirm_da_extension: "Autoriser un report de décision d'attribution"
 
   global:
     sponsor: "Direction\nInterministérielle\ndu Numérique"
