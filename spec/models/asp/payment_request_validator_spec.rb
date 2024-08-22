@@ -138,6 +138,18 @@ describe ASP::PaymentRequestValidator do
       end
     end
 
+    context "when the pfmp dates match the schooling with an extended end date" do
+      before do
+        asp_payment_request.pfmp.update!(end_date: asp_payment_request.pfmp.end_date + 5.month)
+        schooling = asp_payment_request.schooling
+        schooling.update!(extended_end_date: schooling.end_date + 6.month)
+      end
+
+      it "does not add an error" do
+        expect { validator.validate }.not_to(change { asp_payment_request.errors.details[:ready_state_validation] })
+      end
+    end
+
     context "when the pfmp dates dont match the schooling" do
       before do
         schooling = asp_payment_request.schooling
