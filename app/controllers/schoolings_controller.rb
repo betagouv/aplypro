@@ -27,12 +27,15 @@ class SchoolingsController < ApplicationController
 
   def update
     param = schooling_params[:extended_end_date]
-    if @schooling.update(extended_end_date: param)
+    if param.nil? && has_extended_pfmp?
+      redirect_to school_year_class_path(selected_school_year, @classe),
+                  notice: t("flash.da.cant_remove_extension", name: @schooling.student.full_name)
+    elsif @schooling.update(extended_end_date: param)
       redirect_to school_year_class_path(selected_school_year, @classe),
                   notice: t(param.blank? ? "flash.da.extension_removed" : "flash.da.extended",
                             name: @schooling.student.full_name)
     else
-      render :confirm_da_extension, status: :unprocessable_entity
+      render :confirm_da_extension, status: :unprocessable_entity, alert: "roles.errors.not_director"
     end
   end
 
@@ -62,5 +65,9 @@ class SchoolingsController < ApplicationController
       payment_request = pfmp.latest_payment_request
       payment_request.mark_ready! if payment_request&.eligible_for_auto_retry?
     end
+  end
+
+  def has_extended_pfmp?
+    @schooling.pfmps.any? { |pfmp| pfmp.end_date > @schooling.end_date }
   end
 end

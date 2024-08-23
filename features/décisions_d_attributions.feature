@@ -63,7 +63,8 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Alors la page contient "Télécharger la décision d'abrogation"
 
   Scénario: Le personnel peut reporter une décision d'attribution
-    Quand je consulte la classe de "1MELEC"
+    Quand l'élève "Marie Curie" a une date de début et une date de fin de scolarité
+    Et que je consulte la classe de "1MELEC"
     Alors je peux voir dans le tableau "Liste des élèves"
       | Élèves (10) | Décisions d'attribution (0/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
       |             | Autoriser un report            |                              |           |
