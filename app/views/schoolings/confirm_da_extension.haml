@@ -5,7 +5,7 @@
     = dsfr_alert(type: :warning, title: "Êtes-vous certain(e) de vouloir reporter cette décision d'attribution ?")
 
 .fr-col-md-6.fr-mt-3w
-= form_with model: @schooling, url: school_year_class_schooling_path(selected_school_year, @classe, @schooling), method: :update, builder: DsfrFormBuilder do |form|
+= form_with model: @schooling, url: school_year_class_schooling_path(selected_school_year, @classe, @schooling), method: :put, builder: DsfrFormBuilder do |form|
   %ul
     %li
       Etudiant :

@@ -64,6 +64,7 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
 
   Scénario: Le personnel peut reporter une décision d'attribution
     Quand l'élève "Marie Curie" a une date de début et une date de fin de scolarité
+    Et que l'élève "Marie Curie" a une décision d'attribution
     Et que je consulte la classe de "1MELEC"
     Alors je peux voir dans le tableau "Liste des élèves"
       | Élèves (10) | Décisions d'attribution (0/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
