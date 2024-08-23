@@ -2,7 +2,7 @@
 
 class ClassesFacade
   def initialize(classes)
-    @classes = classes
+    @classes = classes.includes(:school_year)
   end
 
   def nb_students_per_class
