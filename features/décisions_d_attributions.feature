@@ -70,19 +70,18 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
       | Élèves (10) | Décisions d'attribution (0/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
       |             | Autoriser un report            |                              |           |
     Quand je clique sur le premier "Autoriser un report"
-    Alors la page contient "Date de fin du report"
-    Quand je remplis "Date de fin du report" avec "#{Date.parse('#{SchoolYear.current.end_date}-12-31')}"
+    Alors la page contient "Date de report"
+    Quand je remplis "Date de report" avec "#{Date.parse('#{SchoolYear.current.end_date}-12-31')}"
     Et que je coche la case de responsable légal
     Et que je clique sur "Confirmer le report"
     Alors la page contient "La décision d'attribution de"
     Alors la page contient "a bien été prolongée"
 
   Scénario: Le personnel peut annuler la saisie d'un report de décision d'attribution
-    Quand l'élève "Marie Curie" a un report de décisions d'attribution
+    Quand l'élève "Marie Curie" a une date de début et une date de fin de scolarité
+    Et que l'élève "Marie Curie" a une décision d'attribution
+    Et que l'élève "Marie Curie" a un report de décision d'attribution
     Et que je consulte la classe de "1MELEC"
-    Alors je peux voir dans le tableau "Liste des élèves"
-      | Élèves (10) | Décisions d'attribution (0/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
-      |             | Reportée                       |                              |           |
     Quand je clique sur le premier "Annuler le report"
     Alors la page contient "Êtes-vous certain(e) de vouloir supprimer le report de cette décision d'attribution ?"
     Et que je coche la case de responsable légal

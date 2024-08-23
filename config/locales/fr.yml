@@ -116,6 +116,8 @@ fr:
       pfmp:
         day_count: "Le nombre de jours présent sur l'attestation. Il doit être entier (pas de demi-journées)."
     attributes:
+      schooling:
+        extended_end_date: "Date de report"
       pfmp:
         start_date: "Date de début"
         end_date: "Date de fin"

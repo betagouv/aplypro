@@ -25,17 +25,18 @@ class SchoolingsController < ApplicationController
     infer_page_title(name: t("pages.titles.schoolings.confirm_da_extension"))
   end
 
-  def update
-    param = schooling_params[:extended_end_date]
-    if param.nil? && has_extended_pfmp?
+  def update # rubocop:disable Metrics/AbcSize
+    extended_end_date = schooling_params[:extended_end_date]
+    if extended_end_date.nil? && has_extended_pfmp?
       redirect_to school_year_class_path(selected_school_year, @classe),
                   notice: t("flash.da.cant_remove_extension", name: @schooling.student.full_name)
-    elsif @schooling.update(extended_end_date: param)
+    elsif @schooling.update(extended_end_date: extended_end_date)
       redirect_to school_year_class_path(selected_school_year, @classe),
-                  notice: t(param.blank? ? "flash.da.extension_removed" : "flash.da.extended",
+                  notice: t(extended_end_date.blank? ? "flash.da.extension_removed" : "flash.da.extended",
                             name: @schooling.student.full_name)
     else
-      render :confirm_da_extension, status: :unprocessable_entity, alert: "roles.errors.not_director"
+      @schooling.extended_end_date = nil
+      render :confirm_da_extension, status: :unprocessable_entity
     end
   end
 
@@ -67,7 +68,7 @@ class SchoolingsController < ApplicationController
     end
   end
 
-  def has_extended_pfmp?
+  def has_extended_pfmp? # rubocop:disable Naming/PredicateName
     @schooling.pfmps.any? { |pfmp| pfmp.end_date > @schooling.end_date }
   end
 end
