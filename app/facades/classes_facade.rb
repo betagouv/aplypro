@@ -6,15 +6,27 @@ class ClassesFacade
   end
 
   def nb_students_per_class
-    @nb_students_per_class ||= compute_nb_students_per_class
+    @nb_students_per_class ||= @classes
+                               .joins(:students)
+                               .reorder(nil)
+                               .group(:"classes.id")
+                               .count
   end
 
   def nb_attributive_decisions_per_class
-    @nb_attributive_decisions_per_class ||= compute_nb_attributive_decisions_per_class
+    @nb_attributive_decisions_per_class ||= @classes
+                                            .joins(:schoolings)
+                                            .merge(Schooling.with_attributive_decisions)
+                                            .group(:"classes.id")
+                                            .count
   end
 
   def nb_ribs_per_class
-    @nb_ribs_per_class ||= compute_nb_ribs_per_class
+    @nb_ribs_per_class ||= @classes
+                           .joins(students: :rib)
+                           .reorder(nil)
+                           .group(:"classes.id")
+                           .count
   end
 
   def nb_pfmps(class_id, state)
@@ -22,26 +34,6 @@ class ClassesFacade
   end
 
   private
-
-  def compute_nb_students_per_class
-    Schooling.where(classe_id: @classes.pluck(:id))
-             .group(:classe_id)
-             .count
-  end
-
-  def compute_nb_attributive_decisions_per_class
-    Schooling.where(classe_id: @classes.pluck(:id))
-             .with_attributive_decisions
-             .group(:classe_id)
-             .count
-  end
-
-  def compute_nb_ribs_per_class
-    Rib.joins(student: :schoolings)
-       .where(schoolings: { classe_id: @classes.pluck(:id) })
-       .group("schoolings.classe_id")
-       .count
-  end
 
   def pfmps_by_classe_and_state
     @pfmps_by_classe_and_state ||= group_pfmps_by_classe_and_state
