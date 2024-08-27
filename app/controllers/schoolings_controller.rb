@@ -27,9 +27,9 @@ class SchoolingsController < ApplicationController
 
   def update # rubocop:disable Metrics/AbcSize
     extended_end_date = schooling_params[:extended_end_date]
-    if extended_end_date.nil? && has_extended_pfmp?
+    if extended_end_date.blank? && has_extended_pfmp?
       redirect_to school_year_class_path(selected_school_year, @classe),
-                  notice: t("flash.da.cant_remove_extension", name: @schooling.student.full_name)
+                  alert: t("flash.da.cant_remove_extension", name: @schooling.student.full_name)
     elsif @schooling.update(extended_end_date: extended_end_date)
       redirect_to school_year_class_path(selected_school_year, @classe),
                   notice: t(extended_end_date.blank? ? "flash.da.extension_removed" : "flash.da.extended",
@@ -69,6 +69,8 @@ class SchoolingsController < ApplicationController
   end
 
   def has_extended_pfmp? # rubocop:disable Naming/PredicateName
-    @schooling.pfmps.any? { |pfmp| pfmp.end_date > @schooling.end_date }
+    @schooling.pfmps.any? do |pfmp|
+      pfmp.end_date > @schooling.end_date
+    end
   end
 end
