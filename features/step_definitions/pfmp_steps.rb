@@ -64,7 +64,7 @@ end
 
 Quand("je renseigne une PFMP provisoire") do
   start_date = Date.parse("#{SchoolYear.current.end_year}-03-17")
-  end_date   = start_date + 3.days
+  end_date = start_date + 3.days
 
   steps %(
     Et que je clique sur "Ajouter une PFMP"
@@ -72,10 +72,9 @@ Quand("je renseigne une PFMP provisoire") do
     Et que je remplis "Date de fin" avec "#{end_date}"
     Et que je clique sur "Enregistrer"
   )
-  end
+end
 
 Quand("je renseigne une PFMP provisoire dans la période de report pour l'élève {string}") do |name|
-
   schooling = find_schooling_by_student_full_name(name)
   start_date = schooling.end_date - 3.days
   end_date = schooling.end_date + 3.days
