@@ -111,10 +111,11 @@ module Users
       # Manage authorised establishments first, just in case someone has a
       # former authorisation for an establishment now in responsibility.
 
-      # En supprimant les 'EstablishmentUserRole' liés à l'utilisateur,
-      # cela permet de gérer le cas où un accès a été retiré via KeyCloak.
-      # Les accès toujours effectifs sont réintroduits dans le code ci-dessous.
-      @user.establishment_user_roles.destroy_all
+      # Supprime les accès qui ne sont plus présents dans KeyCloak.
+      # (Le symbole ^ retourne les éléments non-communs entre 2 arrays)
+      (@user.establishments ^ @user.all_indicated_uais).each do |establishment|
+        delete_role(establishment)
+      end
 
       @mapper.establishments_authorised_for(@user.email).each do |establishment|
         save_role(establishment, :authorised)
@@ -123,6 +124,12 @@ module Users
       @mapper.establishments_in_responsibility.each do |establishment|
         save_role(establishment, :dir)
       end
+    end
+
+    def delete_role(establishment)
+      EstablishmentUserRole
+        .find_by!(user: @user, establishment: establishment)
+        .destroy
     end
 
     def save_role(establishment, role)
