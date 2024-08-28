@@ -132,14 +132,15 @@ module Users
       establishments_in_responsibility = @mapper.establishments_in_responsibility
       combined_establishments = establishments_authorised + establishments_in_responsibility
 
-      @user.establishments.where.not(id: combined_establishments.select(:id)).each do |establishment|
-        delete_role(establishment)
-      end
+      # Ne garde que les élements distincts entre les rôles d'APLyPro et ceux de KeyCloak.
+      @user.establishments
+           .reject { |establishment| combined_establishments.include?(establishment) }
+           .each { |establishment| delete_role(establishment) }
     end
 
     def delete_role(establishment)
       EstablishmentUserRole
-        .find_by!(user: @user, establishment: establishment)
+        .find_by(user: @user, establishment: establishment)
         .destroy
     end
 
