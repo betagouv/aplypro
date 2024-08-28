@@ -36,6 +36,7 @@ module Users
       add_auth_breadcrumb(data: { user_uais: @mapper.all_indicated_uais }, message: "Found establishments")
 
       log_user_in!
+      delete_roles!
       save_roles!
       fetch_establishments!
       choose_redirect_page!
@@ -110,13 +111,6 @@ module Users
     def save_roles!
       # Manage authorised establishments first, just in case someone has a
       # former authorisation for an establishment now in responsibility.
-
-      # Supprime les accès qui ne sont plus présents dans KeyCloak.
-      # (Le symbole ^ retourne les éléments non-communs entre 2 arrays)
-      (@user.establishments ^ @user.all_indicated_uais).each do |establishment|
-        delete_role(establishment)
-      end
-
       @mapper.establishments_authorised_for(@user.email).each do |establishment|
         save_role(establishment, :authorised)
       end
@@ -126,16 +120,27 @@ module Users
       end
     end
 
-    def delete_role(establishment)
-      EstablishmentUserRole
-        .find_by!(user: @user, establishment: establishment)
-        .destroy
-    end
-
     def save_role(establishment, role)
       EstablishmentUserRole
         .find_or_create_by(user: @user, establishment: establishment)
         .update(role: role)
+    end
+
+    def delete_roles!
+      # Supprime les accès qui ne sont plus présents dans KeyCloak.
+      establishments_authorised = @mapper.establishments_authorised_for(@user.email)
+      establishments_in_responsibility = @mapper.establishments_in_responsibility
+      combined_establishments = establishments_authorised + establishments_in_responsibility
+
+      @user.establishments.where.not(id: combined_establishments.select(:id)).each do |establishment|
+        delete_role(establishment)
+      end
+    end
+
+    def delete_role(establishment)
+      EstablishmentUserRole
+        .find_by!(user: @user, establishment: establishment)
+        .destroy
     end
 
     def log_user_in!
