@@ -39,7 +39,7 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
             comparison: { greater_than: :end_date },
             if: -> { end_date && extended_end_date }
 
-  updatable :start_date, :end_date, :status
+  sourced_from_external_api :start_date, :end_date, :status
 
   def generate_administrative_number
     return if administrative_number.present?
