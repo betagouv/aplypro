@@ -74,7 +74,7 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     }
 
     start_date = school_year_range_exceptions.fetch(academy_code, Date.new(year, 9, 1))
-    end_date = extended_end_date.blank? ? start_date >> 12 : extended_end_date
+    end_date = extended_end_date.presence || start_date >> 12
     (start_date..end_date)
   end
 
