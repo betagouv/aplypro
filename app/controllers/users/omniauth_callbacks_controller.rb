@@ -110,6 +110,12 @@ module Users
     def save_roles!
       # Manage authorised establishments first, just in case someone has a
       # former authorisation for an establishment now in responsibility.
+
+      # En supprimant les 'EstablishmentUserRole' liés à l'utilisateur,
+      # cela permet de gérer le cas où un accès a été retiré via KeyCloak.
+      # Les accès toujours effectifs sont réintroduits dans le code ci-dessous.
+      @user.establishment_user_roles.destroy_all
+
       @mapper.establishments_authorised_for(@user.email).each do |establishment|
         save_role(establishment, :authorised)
       end
