@@ -1,47 +1,51 @@
 %h1= "Année scolaire #{selected_school_year}"
 
-- if @establishment_facade.students_count <= 0
-  = t("errors.school_years.not_found").html_safe
-- else
-  .gray-panel#attributive_decision_panel
-    = render 'classes/attributive_decisions_panel'
+.fr-grid-row.fr-grid-row--center
+  .fr-col-md-6
+    = render partial: "dashboard"
+  .fr-col-md-6
+    - if @establishment_facade.students_count <= 0
+      = t("errors.school_years.not_found").html_safe
+    - else
+      .gray-panel#attributive_decision_panel
+        = render 'classes/attributive_decisions_panel'
 
-  .gray-panel
-    .fr-grid-row.fr-grid-row--top
-      %h2.fr-col 2. Coordonnées bancaires
-      = progress_badge(@establishment_facade.ribs_count, @establishment_facade.students_count, title: "Les coordonnées bancaires sont réutilisées pour un même élève\nà travers toutes les classes qu'il a pu fréquenter.")
+      .gray-panel
+        .fr-grid-row.fr-grid-row--top
+          %h2.fr-col 2. Coordonnées bancaires
+          = progress_badge(@establishment_facade.ribs_count, @establishment_facade.students_count, title: "Les coordonnées bancaires sont réutilisées pour un même élève\nà travers toutes les classes qu'il a pu fréquenter.")
 
-    %p Afin de pouvoir verser l'allocation aux lycéens, APLyPro a besoin de leurs coordonnées bancaires, de celles d'un responsable légal ou d'un tiers.
-    %ul.fr-btns-group
-      %li= link_to "Choisir une classe pour saisir des coordonnées bancaires", school_year_classes_path(selected_school_year), class: "fr-btn fr-btn--primary fr-mb-0"
+        %p Afin de pouvoir verser l'allocation aux lycéens, APLyPro a besoin de leurs coordonnées bancaires, de celles d'un responsable légal ou d'un tiers.
+        %ul.fr-btns-group
+          %li= link_to "Choisir une classe pour saisir des coordonnées bancaires", school_year_classes_path(selected_school_year), class: "fr-btn fr-btn--primary fr-mb-0"
 
-  .gray-panel
-    %h2.fr-col 3. Périodes de formation en milieu professionnel
+      .gray-panel
+        %h2.fr-col 3. Périodes de formation en milieu professionnel
 
-    .fr-grid-row
-      - PfmpStateMachine.states.each_with_index do |state, index|
-        - if index > 0
-          .fr-mx-1w →
-        = pfmps_status_count_badge(state.to_sym, @establishment_facade.pfmps_counts[state.to_sym], display_zero: true)
+        .fr-grid-row
+          - PfmpStateMachine.states.each_with_index do |state, index|
+            - if index > 0
+              .fr-mx-1w →
+            = pfmps_status_count_badge(state.to_sym, @establishment_facade.pfmps_counts[state.to_sym], display_zero: true)
 
-    %p Pour calculer le montant des allocations à envoyer, APLyPro a besoin de connaître le nombre de jours travaillés des PFMPs de chaque élève.
-    %ul.fr-btns-group
-      %li= link_to "Choisir une classe ou un élève pour saisir une PFMP", school_year_classes_path(selected_school_year), class: "fr-btn fr-btn--primary fr-mb-0"
+        %p Pour calculer le montant des allocations à envoyer, APLyPro a besoin de connaître le nombre de jours travaillés des PFMPs de chaque élève.
+        %ul.fr-btns-group
+          %li= link_to "Choisir une classe ou un élève pour saisir une PFMP", school_year_classes_path(selected_school_year), class: "fr-btn fr-btn--primary fr-mb-0"
 
-  .gray-panel
-    %h2.fr-col 4. Demandes de paiements des PFMPs
+      .gray-panel
+        %h2.fr-col 4. Demandes de paiements des PFMPs
 
-    .fr-grid-row
-      - ASP::PaymentRequestDecorator::PAYMENT_STAGES.each_with_index do |states, index|
-        - if index > 0
-          .fr-mx-1w →
-        .centering-container.fr-mb-2w
-          = payment_requests_status_count_badge(states.first, @establishment_facade.payment_requests_counts[states.first], display_zero: true)
-          = payment_requests_status_count_badge(states.last, @establishment_facade.payment_requests_counts[states.last], display_zero: false)
+        .fr-grid-row
+          - ASP::PaymentRequestDecorator::PAYMENT_STAGES.each_with_index do |states, index|
+            - if index > 0
+              .fr-mx-1w →
+            .centering-container.fr-mb-2w
+              = payment_requests_status_count_badge(states.first, @establishment_facade.payment_requests_counts[states.first], display_zero: true)
+              = payment_requests_status_count_badge(states.last, @establishment_facade.payment_requests_counts[states.last], display_zero: false)
 
-    %p La validation du chef d'établissement est nécessaire pour chaque PFMP. Une fois la PFMP validée, une demande de paiement sera envoyée à l'Agence de Services et de Paiement (ASP).
-    %ul.fr-btns-group
-      - if current_user.can_validate?
-        %li= link_to "Consulter et gérer les envois en paiement", school_year_validations_path(selected_school_year), class: "fr-btn fr-btn--primary fr-mb-0"
-      - else
-        %li= button_to "Vous n'avez pas le droit de valider des PFMPs", "#", class: 'fr-btn fr-btn--primary fr-mb-0', disabled: true
+        %p La validation du chef d'établissement est nécessaire pour chaque PFMP. Une fois la PFMP validée, une demande de paiement sera envoyée à l'Agence de Services et de Paiement (ASP).
+        %ul.fr-btns-group
+          - if current_user.can_validate?
+            %li= link_to "Consulter et gérer les envois en paiement", school_year_validations_path(selected_school_year), class: "fr-btn fr-btn--primary fr-mb-0"
+          - else
+            %li= button_to "Vous n'avez pas le droit de valider des PFMPs", "#", class: 'fr-btn fr-btn--primary fr-mb-0', disabled: true

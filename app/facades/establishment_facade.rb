@@ -12,10 +12,12 @@ class EstablishmentFacade
     @school_year = school_year
   end
 
+  # TODO: Ajouter la condition sur l'année scolaire
   def schoolings_count
     @schoolings_count ||= selected_classes.joins(:schoolings).count
   end
 
+  # TODO: Ajouter la condition sur l'année scolaire
   def attributive_decisions_count
     @attributive_decisions_count ||= selected_classes
                                      .joins(:schoolings)
@@ -23,6 +25,15 @@ class EstablishmentFacade
                                      .count
   end
 
+  # TODO: Ajouter la condition sur l'année scolaire
+  def without_attributive_decisions_count
+    @without_attributive_decisions_count ||= selected_classes
+                                             .joins(:schoolings)
+                                             .merge(Schooling.without_attributive_decisions)
+                                             .count
+  end
+
+  # TODO: Ajouter la condition sur l'année scolaire
   def students_count
     @students_count ||= selected_classes
                         .joins(:students)
@@ -30,10 +41,12 @@ class EstablishmentFacade
                         .count(:"students.id")
   end
 
+  # TODO: Ajouter la condition sur l'année scolaire
   def ribs_count
     @ribs_count ||= selected_classes.joins(students: :rib).distinct(:"students.id").count(:"ribs.id")
   end
 
+  # TODO: Ajouter la condition sur l'année scolaire
   def pfmps_counts
     @pfmps_counts ||= PfmpStateMachine
                       .states
@@ -41,6 +54,7 @@ class EstablishmentFacade
                       .index_with { |state| pfmps.in_state(state).count }
   end
 
+  # TODO: Ajouter la condition sur l'année scolaire
   def payment_requests_counts
     @payment_requests_counts ||= STATES_GROUPS_FOR_COUNTS.to_h do |states|
       count = states.map { |state| payment_requests_all_status_counts[state] }.compact.sum
@@ -50,6 +64,7 @@ class EstablishmentFacade
 
   private
 
+  # TODO: Ajouter la condition sur l'année scolaire
   def payment_requests_all_status_counts
     @payment_requests_all_status_counts ||=
       selected_payment_requests

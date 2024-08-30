@@ -1,0 +1,17 @@
+/Test qui ne fonctionne pas
+.part_container
+  %pie-chart{x: '[1, 2, 3]', y: '[10, 20, 30]', fill: true}
+
+%h2.fr-col Décisions d'attribution
+%p= "Nombre d'élèves avec DA : #{@establishment_facade.attributive_decisions_count}"
+%p= "Nombre d'élèves sans DA : #{@establishment_facade.without_attributive_decisions_count}"
+
+%h2.fr-col Coordonnées bancaires
+%p= "Nombre d'élèves avec RIB : #{@establishment_facade.ribs_count}"
+%p Nombre d'élèves sans RIB :
+
+%h2.fr-col Suivi des paiements
+%p Nombre de PFMPs attendues :
+%p Nombre de PFMPs complétées :
+%p Nombre de PFMPs validées (envoyées en paiement) :
+%p Nombre de PFMPs payées :
