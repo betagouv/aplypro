@@ -61,3 +61,43 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Alors la page contient "Êtes-vous certain(e) de vouloir abroger cette décision d'attribution ?"
     Lorsque je clique sur "Confirmer l'abrogation"
     Alors la page contient "Télécharger la décision d'abrogation"
+
+  Scénario: Le personnel peut reporter une décision d'attribution
+    Quand l'élève "Marie Curie" a une date de début et une date de fin de scolarité
+    Et que l'élève "Marie Curie" a une décision d'attribution
+    Et que je consulte la classe de "1MELEC"
+    Alors je peux voir dans le tableau "Liste des élèves"
+      | Élèves (10) | Décisions d'attribution (0/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
+      |             | Autoriser un report            |                              |           |
+    Quand je clique sur le premier "Autoriser un report"
+    Alors la page contient "Date de report"
+    Quand je remplis "Date de report" avec "#{Date.parse('#{SchoolYear.current.end_date}-12-31')}"
+    Et que je coche la case de responsable légal
+    Et que je clique sur "Confirmer le report"
+    Alors la page contient "La décision d'attribution de"
+    Alors la page contient "a bien été prolongée"
+
+  Scénario: Le personnel peut annuler la saisie d'un report de décision d'attribution
+    Quand l'élève "Marie Curie" a une date de début et une date de fin de scolarité
+    Et que l'élève "Marie Curie" a une décision d'attribution
+    Et que l'élève "Marie Curie" a un report de décision d'attribution
+    Et que je consulte la classe de "1MELEC"
+    Quand je clique sur le premier "Annuler le report"
+    Alors la page contient "Êtes-vous certain(e) de vouloir supprimer le report de cette décision d'attribution ?"
+    Et que je coche la case de responsable légal
+    Lorsque je clique sur "Supprimer le report"
+    Alors la page contient "Le report de la décision d'attribution de Marie Curie a bien été supprimé"
+
+  Scénario: Le personnel ne peut pas annuler la saisie d'un report de décision d'attribution si une pfmp est saisie
+    Quand l'élève "Marie Curie" a une date de début et une date de fin de scolarité
+    Et que je consulte le profil de "Marie Curie" dans la classe de "1MELEC"
+    Et que je renseigne une PFMP provisoire dans la période de report pour l'élève "Marie Curie"
+    Et que l'élève "Marie Curie" a une décision d'attribution
+    Et que l'élève "Marie Curie" a un report de décision d'attribution
+    Et que je consulte la classe de "1MELEC"
+    Quand je clique sur le premier "Annuler le report"
+    Alors la page contient "Êtes-vous certain(e) de vouloir supprimer le report de cette décision d'attribution ?"
+    Et que je coche la case de responsable légal
+    Lorsque je clique sur "Supprimer le report"
+    Et print the page
+    Alors la page contient "Le report de la décision d'attribution de Marie Curie n'a pas pu être supprimé car celui ci contient une PFMP"

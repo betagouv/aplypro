@@ -35,7 +35,14 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validates :end_date,
             :start_date,
             if: ->(pfmp) { pfmp.schooling.present? },
-            inclusion: { in: ->(pfmp) { pfmp.schooling.establishment.school_year_range(pfmp.school_year.start_year) } }
+            inclusion: {
+              in: lambda { |pfmp|
+                pfmp.schooling.establishment.school_year_range(
+                  pfmp.school_year.start_year,
+                  pfmp.schooling.extended_end_date
+                )
+              }
+            }
 
   validates :end_date,
             comparison: { greater_than_or_equal_to: :start_date },
@@ -107,7 +114,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def within_schooling_dates?
     return true if (schooling.open? && start_date >= schooling.start_date) || schooling.no_dates?
 
-    (schooling.start_date..schooling.end_date).cover?(start_date..end_date)
+    (schooling.start_date..schooling.max_end_date).cover?(start_date..end_date)
   end
 
   def paid?

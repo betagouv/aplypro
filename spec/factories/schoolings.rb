@@ -27,5 +27,9 @@ FactoryBot.define do
     trait :closed do
       end_date { Date.yesterday }
     end
+
+    trait :extended do
+      extended_end_date { Date.tomorrow + 10.days }
+    end
   end
 end
