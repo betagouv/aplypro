@@ -4,6 +4,7 @@ module StudentsApi
   module Sygne
     module Mappers
       class SchoolingMapper < Dry::Transformer::Pipe
+        # Seul le MAPPING "ST" est encore utilisé, les autres statuts ne sont plus retournés par SYGNE
         STATUS_MAPPING = {
           "ST" => :student,
           "AP" => :apprentice,
