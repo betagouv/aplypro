@@ -10,13 +10,6 @@ module Sync
       return true if schooling.establishment.provided_by?(:sygne) && Rails.env.production?
       return true if student.ine_not_found || schooling.closed?
 
-      # TODO: Ce morceau de code ne doit pas rester là !
-      # Si la scolarité actuelle n'est pas dans la liste des scolarités de l'élève dans APLyPro
-      # et que son statut n'est pas "ST" et que la date de fin de la scolarité est nulle
-      if student.schoolings.exclude?(schooling) && !schooling.status.eql?(:student) && schooling.end_date.nil?
-        schooling.end_date = Time.zone.today
-      end
-
       fetch_student_data(schooling)
 
       Sync::StudentSchoolingsJob.perform_later(student) if Rails.env.production?
