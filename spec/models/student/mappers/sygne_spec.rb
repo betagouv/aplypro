@@ -66,19 +66,12 @@ describe Student::Mappers::Sygne do
       end
     end
 
-    # TODO: Pas au bon endroit, le code qui gère ça est au moment de l'authentification
     context "when the student's statut changes (is no longer returned)" do
       let(:next_data) { normal_payload }
-      let(:schooling) { student.schoolings.last }
-
-      before do
-        mapper.parse!
-
-        schooling.update!(status: :apprentice)
-      end
+      let(:schooling) { build(:sygne_schooling_data, :apprentice) }
 
       it "closes the schooling" do
-        expect { mapper.parse! }.to change { student.current_schooling.end_date }.from(nil).to(Time.zone.today)
+        expect { mapper.parse! }.to change { student.reload.current_schooling.end_date }.from(nil).to(Time.zone.today)
       end
     end
   end

@@ -159,18 +159,7 @@ module Users
     end
 
     def fetch_establishments!
-      # Pour toutes les scolarités retournées par SYGNE
-      @mapper.establishments_in_responsibility_and_delegated.each do |establishment|
-        establishment.classes.each do |classe|
-          # Pour toutes les scolarités retournées par la base de données APLyPro
-          Schooling.where(classe: classe).find_each do |schooling|
-            # Si la scolarité n'est pas dans la liste des scolarités de la base de données APLyPro
-            schooling.end_date = Time.zone.today if classe.schoolings.exclude?(schooling)
-          end
-        end
-
-        Sync::EstablishmentJob.perform_now(establishment)
-      end
+      @mapper.establishments_in_responsibility_and_delegated.each { |e| Sync::EstablishmentJob.perform_now(e) }
     end
 
     def check_limited_access!
