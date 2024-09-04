@@ -26,6 +26,16 @@ Fonctionnalité: Saisie des coordonnées banquaires manquantes pour une classe
       | Curie Marie   |                               | Saisies                     |           |
       | Langevin Paul |                               | Saisies                     |           |
 
+  Scénario: Le personnel peut saisir et sauvegarder des coordonnées bancaires pour plusieurs élèves à la fois
+    Sachant que je saisis en masse les coordonées bancaires d'une personne morale pour "Curie Marie"
+    Et que je saisis en masse les coordonées bancaires d'une personne morale pour "Langevin Paul"
+    Quand je clique sur "Enregistrer les coordonnées bancaires saisies"
+    Alors la page contient "Coordonnées bancaires enregistrées avec succès"
+    Et je peux voir dans le tableau "Liste des élèves"
+      | Élèves (2)    | Décisions d'attribution (0/2) | Coordonnées Bancaires (2/2) | PFMPs (0) |
+      | Curie Marie   |                               | Saisies                     |           |
+      | Langevin Paul |                               | Saisies                     |           |
+
   Scénario: Le personnel peut laisser des coordonnées bancaires vides et quand même sauvegarder le reste
     Quand je saisis en masse les coordonées bancaires d'un tiers pour "Curie Marie"
     Et que je clique sur "Enregistrer les coordonnées bancaires saisies"
