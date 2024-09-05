@@ -67,8 +67,7 @@ describe Student::Mappers::Sygne do
     end
 
     context "when the student's statut changes (is no longer returned)" do
-      let(:next_data) { normal_payload }
-      let(:schooling) { build(:sygne_schooling_data, :apprentice) }
+      let(:next_data) { normal_payload.dup.tap(&:pop) }
 
       it "closes the schooling" do
         expect { mapper.parse! }.to change { student.reload.current_schooling.end_date }.from(nil).to(Time.zone.today)
