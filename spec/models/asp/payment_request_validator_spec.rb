@@ -153,6 +153,7 @@ describe ASP::PaymentRequestValidator do
     context "when the pfmp dates dont match the schooling" do
       before do
         schooling = asp_payment_request.schooling
+        schooling.update!(start_date: "2024-04-22", end_date: "2024-08-10")
         schooling.classe = create(:classe, school_year: SchoolYear.find_by!(start_year: 2023))
         schooling.save!
         pfmp = create(:pfmp, :validated, day_count: 2, start_date: schooling.start_date - 1.day,
