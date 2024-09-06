@@ -31,13 +31,6 @@ class Student
             next if student.nil? # ine == nil
 
             begin
-              # Si l'élève n'est plus retourné par l'API, alors on clôture sa scolarité
-              Schooling.where(classe: classe).find_each do |schooling|
-                if schooling.open? && classe.schoolings.exclude?(schooling)
-                  schooling.update!(end_date: Time.zone.today)
-                end
-              end
-
               map_schooling!(classe, student, entry)
             rescue StandardError => e
               Sentry.capture_exception(
