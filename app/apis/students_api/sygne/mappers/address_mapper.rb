@@ -45,7 +45,7 @@ module StudentsApi
             data[:address_line1] = if data[:address_line1].nil?
                                      data[:address_line2]
                                    else
-                                     "#{data[:address_line1]}, #{data[:address_line2]}" unless data[:address_line2].nil?
+                                     "#{data[:address_line1]} #{data[:address_line2]}" unless data[:address_line2].nil?
                                    end
 
             data[:address_line2] = if data[:address_line3].nil?
@@ -53,7 +53,7 @@ module StudentsApi
                                    elsif data[:address_line4].nil?
                                      data[:address_line3]
                                    else
-                                     "#{data[:address_line3]}, #{data[:address_line4]}"
+                                     "#{data[:address_line3]} #{data[:address_line4]}"
                                    end
           end
         end
