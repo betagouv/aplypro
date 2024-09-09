@@ -45,7 +45,9 @@
             %td
               .fr-grid-row
                 .fr-checkbox-group
-                  = f.check_box checked: true
+                  - disabled = !pfmp.fully_completed?
+                  - title = disabled ? t("pfmps.not_fully_completed") : ""
+                  = f.check_box checked: !disabled, disabled: disabled, title: title
                   = f.label class: 'fr-label'
                 %ul.fr-badge-group.fr-ml-md-2w
                   %li= attributive_decision_badge(pfmp.schooling)
