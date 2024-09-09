@@ -17,6 +17,12 @@ class ClasseFacade
     @nb_missing_ribs ||= @classe.students.without_ribs.count
   end
 
+  def all_pfmps_attributive_decisions_validated?
+    completed_pfmps = @classe.pfmps.in_state(:completed)
+    @all_pfmps_attributive_decisions_validated ||= completed_pfmps.includes(schooling: :attributive_decision_attachment)
+                                                                  .eql?(completed_pfmps)
+  end
+
   def schoolings
     @classe.schoolings
            .includes(:attributive_decision_attachment, pfmps: :transitions, student: :rib)

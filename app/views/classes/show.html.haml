@@ -14,7 +14,9 @@
         = t("pfmps.states.pending")
   
   - if current_user.can_validate? && @classe_facade.nb_completed_pfmps > 0
-    = link_to validation_school_year_class_path(selected_school_year, @classe), class: 'fr-btn fr-btn--secondary' do
+    - disabled = !@classe_facade.all_pfmps_attributive_decisions_validated?
+    - title = disabled ? "Vous ne pouvez pas valider les PFMPs de la classe car au moins l'une d'entre elles n'a pas de décision d'attribution renseignée" : ""
+    = button_to validation_school_year_class_path(selected_school_year, @classe), class: 'fr-btn fr-btn--secondary', disabled: disabled, title: title do
       = @classe_facade.completed_pfmps_button_text
       = dsfr_badge(status: :info, classes: ["fr-badge--sm", "fr-ml-1w"]) do
         = t("pfmps.states.completed")
