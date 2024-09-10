@@ -24,10 +24,6 @@ Alors("la page contient un bouton {string} désactivé") do |content|
   expect(page).to have_button(content, disabled: true)
 end
 
-Alors("la page contient un bouton {string} cliquable") do |content|
-  expect(page).to have_button(content, disabled: false)
-end
-
 Alors("la page ne contient pas {string}") do |content|
   expect(page).to have_no_content(content)
 end

@@ -156,7 +156,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     latest_payment_request.failed?
   end
 
-  def fully_completed?
+  def validatable?
     !schooling.attributive_decision_attachment.nil? && !student.ribs.nil?
   end
 end

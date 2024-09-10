@@ -258,7 +258,7 @@ fr:
     update:
       success: Coordonnées bancaires mises à jour
   pfmps:
-    not_fully_completed: "Vous ne pouvez pas valider cette PFMP car elle n'est pas complètement remplie (décision d'attribution ou coordonnées bancaires manquantes)."
+    not_validatable: "Vous ne pouvez pas valider cette PFMP car elle n'est pas complètement remplie (décision d'attribution ou coordonnées bancaires manquantes)."
     edit:
       success: La PFMP a bien été mise à jour
     new:

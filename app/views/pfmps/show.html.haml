@@ -18,11 +18,12 @@
 
     - if @pfmp.in_state?(:completed) && current_user.can_validate?
       - if @pfmp.can_transition_to?(:validated)
-        - disabled = !@pfmp.fully_completed?
-        - title = disabled ? t("pfmps.not_fully_completed") : ""
+        - disabled = !@pfmp.validatable?
+        - title = disabled ? t("pfmps.not_validatable") : ""
         = form_with method: :post, url: validate_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp) do |form|
-          = form.submit "Valider", class: "fr-btn fr-btn--primary", disabled: disabled, title: title
-          = render partial: "shared/confirmed_director", locals: { message: t("validations.confirm_director") }
+          = form.submit "Valider", class: "fr-btn fr-btn--primary fr-mb-2w", disabled: disabled, title: title
+          - if !disabled
+            = render partial: "shared/confirmed_director", locals: { message: t("validations.confirm_director") }
 
       - else
         = button_tag "Valider", disabled: true, class: 'fr-btn fr-btn--secondary', title: "Vous ne pouvez pas valider cette PFMP car les PFMPs précédentes ne sont pas validées"
