@@ -11,7 +11,7 @@ class ClasseFacade
 
   def nb_can_transition_to_validated_pfmps
     @nb_can_transition_to_validated_pfmps ||= @classe.pfmps.in_state(:completed)
-                                                     .filter{|pfmp| pfmp.can_transition_to?(:validated)}
+                                                     .filter{ |pfmp| pfmp.can_transition_to?(:validated) }
                                                      .count
   end
 
