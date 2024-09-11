@@ -37,4 +37,7 @@
                   = form.text_field :bic, class: "fr-input fr-input--code", placeholder: "BIC"
                   - rib.errors.full_messages_for(:bic).each do |error_message|
                     %p.fr-error-text= error_message
+              .fr-grid-row.fr-grid-row--middle.fr-grid-row--gutters
+                = render partial: 'ribs/owner_type'
+
   = f.submit "Enregistrer les coordonnées bancaires saisies", class: "fr-btn fr-btn-primary"

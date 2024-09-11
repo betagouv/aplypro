@@ -1,0 +1,19 @@
+%fieldset.fr-fieldset#radio-inline{"aria-labelledby" => "radio-inline-legend radio-inline-messages"}
+  %legend#radio-inline-legend.fr-fieldset__legend--regular.fr-fieldset__legend
+    Légende pour l'ensemble des éléments
+  .fr-fieldset__element.fr-fieldset__element--inline
+    .fr-radio-group
+      %input#radio-inline-1{type: "radio", name: "radio-inline"}
+      %label.fr-label{for: "radio-inline-1"}
+        Libellé bouton radio
+  .fr-fieldset__element.fr-fieldset__element--inline
+    .fr-radio-group
+      %input#radio-inline-2{type: "radio", name: "radio-inline"}
+      %label.fr-label{for: "radio-inline-2"}
+        Libellé bouton radio
+  .fr-fieldset__element.fr-fieldset__element--inline
+    .fr-radio-group
+      %input#radio-inline-3{type: "radio", name: "radio-inline"}
+      %label.fr-label{for: "radio-inline-3"}
+        Libellé bouton radio
+  #radio-inline-messages.fr-messages-group{"aria-live" => "assertive"}
