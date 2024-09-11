@@ -13,9 +13,8 @@
     = csrf_meta_tags
     = csp_meta_tag
     = stylesheet_link_tag "application", "data-turbo-track": "reload"
-    = stylesheet_link_tag "https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@1.9.0/dist/dsfr.min.css", "data-turbo-track": "reload"
     = javascript_importmap_tags
-    = javascript_include_tag "https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@1.9.0/dist/dsfr.nomodule.min.js", nomodule: true, "data-turbo-track": "reload"
+    = javascript_include_tag "dsfr.nomodule.min", nomodule: true, "data-turbo-track": "reload"
     = favicon_link_tag "favicon/favicon.ico"
 
   %body

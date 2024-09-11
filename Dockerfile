@@ -14,6 +14,8 @@ RUN bundle install
 # Move to the main folder
 WORKDIR /app
 
+COPY . .
+
 ENTRYPOINT ["./entrypoint.sh"]
 
 CMD ["bundle", "exec", "rails", "s", "-b", "0.0.0.0"]
