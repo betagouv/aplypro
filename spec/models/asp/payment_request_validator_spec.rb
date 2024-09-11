@@ -8,6 +8,8 @@ describe ASP::PaymentRequestValidator do
   let(:asp_payment_request) { create(:asp_payment_request, :ready) }
 
   RSpec.shared_examples "invalidation" do |attr|
+    before { asp_payment_request.student.update(ribs: []) }
+
     it "adds a `#{attr}` error" do
       expect { validator.validate }
         .to change { asp_payment_request.errors.details[:ready_state_validation] }

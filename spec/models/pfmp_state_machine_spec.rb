@@ -19,7 +19,7 @@ describe PfmpStateMachine do
     end
 
     it "can transition from completed to validated" do
-      pfmp = create(:pfmp, :completed)
+      pfmp = create(:pfmp, :can_be_validated)
       expect { pfmp.state_machine.transition_to!(:validated) }.to change(pfmp.state_machine, :current_state)
         .from("completed")
         .to("validated")

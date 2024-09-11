@@ -115,7 +115,7 @@ RSpec.describe Pfmp do
     end
 
     describe "completed" do
-      let(:pfmp) { create(:pfmp, :completed) }
+      let(:pfmp) { create(:pfmp, :can_be_validated) }
 
       context "when the PFMP is validated" do
         it "creates a new payment request" do
@@ -150,7 +150,7 @@ RSpec.describe Pfmp do
     end
 
     context "when the previous pfmps are validated" do
-      let(:pfmps) { create_list(:pfmp, 2, :completed, schooling: schooling) }
+      let(:pfmps) { create_list(:pfmp, 2, :can_be_validated, schooling: schooling) }
 
       before { pfmps.first.transition_to!(:validated) }
 
@@ -161,7 +161,7 @@ RSpec.describe Pfmp do
     end
 
     context "when previous pfmps are not all validated" do
-      let(:pfmps) { create_list(:pfmp, 3, :completed, schooling: schooling) }
+      let(:pfmps) { create_list(:pfmp, 3, :can_be_validated, schooling: schooling) }
 
       before { pfmps.first.transition_to!(:validated) }
 
