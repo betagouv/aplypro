@@ -1,6 +1,0 @@
-{
-  "name": "aplypro",
-  "dependencies": {
-    "@gouvfr/dsfr": "^1.9"
-  }
-}
