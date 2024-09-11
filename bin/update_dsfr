@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+require 'fileutils'
+
+DSFR_VERSION = '1.12.1'
+SOURCE_DIR = "node_modules/@gouvfr/dsfr/dist"
+JS_DEST = "app/javascript/dsfr"
+CSS_DEST = "app/assets/stylesheets/dsfr"
+FONTS_DEST = "app/assets/fonts/dsfr"
+ICONS_DEST = "app/assets/images/dsfr/icons"
+FAVICON_DEST = "app/assets/images/dsfr/favicon"
+
+FileUtils.mkdir_p [JS_DEST, CSS_DEST, FONTS_DEST, ICONS_DEST, FAVICON_DEST]
+
+# Copy JS files
+FileUtils.cp_r Dir.glob("#{SOURCE_DIR}/*.js"), JS_DEST
+
+# Copy CSS files
+FileUtils.cp_r Dir.glob("#{SOURCE_DIR}/*.css"), CSS_DEST
+
+# Copy fonts
+FileUtils.cp_r "#{SOURCE_DIR}/fonts/.", FONTS_DEST
+
+# Copy icons
+FileUtils.cp_r "#{SOURCE_DIR}/icons/.", ICONS_DEST
+
+# Copy favicon
+FileUtils.cp_r "#{SOURCE_DIR}/favicon/.", FAVICON_DEST
+
+puts "DSFR assets updated to version #{DSFR_VERSION}"

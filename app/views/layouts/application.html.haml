@@ -14,8 +14,9 @@
     = csp_meta_tag
     = stylesheet_link_tag "application", "data-turbo-track": "reload"
     = javascript_importmap_tags
-    = javascript_include_tag "dsfr.nomodule.min", nomodule: true, "data-turbo-track": "reload"
-    = favicon_link_tag "favicon/favicon.ico"
+    = javascript_include_tag "dsfr/dsfr.nomodule.min", nomodule: true, "data-turbo-track": "reload"
+    = favicon_link_tag 'dsfr/favicon/favicon.ico'
+
 
   %body
     = render 'shared/skiplinks'
