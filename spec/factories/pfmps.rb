@@ -17,13 +17,11 @@ FactoryBot.define do
     trait :validated do
       completed
 
-      transient do
-        student { create(:student, :with_rib) }
+      after(:create) do |pfmp|
+        create(:rib, :personal, student: pfmp.student) if pfmp.student.rib.blank?
+        AttributiveDecisionHelpers.generate_fake_attributive_decision(pfmp.schooling)
+        pfmp.validate!
       end
-
-      schooling { association :schooling, :with_attributive_decision, student: student }
-
-      after(:create, &:validate!)
     end
 
     trait :with_pending_payment do
