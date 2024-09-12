@@ -1,19 +1,21 @@
-%fieldset.fr-fieldset#radio-inline{"aria-labelledby" => "radio-inline-legend radio-inline-messages"}
-  %legend#radio-inline-legend.fr-fieldset__legend--regular.fr-fieldset__legend
-    Les coordonnées bancaires appartiennent à:
+- student_id = local_assigns.fetch(:student_id)
+
+%fieldset.fr-fieldset{id: "radio-inline-#{student_id}", "aria-labelledby": "radio-inline-legend-#{student_id} radio-inline-messages-#{student_id}"}
+  %legend.fr-fieldset__legend--regular.fr-fieldset__legend{id: "radio-inline-legend-#{student_id}"}
+    Les coordonnées bancaires appartiennent à :
   .fr-fieldset__element.fr-fieldset__element--inline
     .fr-radio-group
-      %input#radio-inline-1{type: "radio", value:"personal", name:"rib[owner_type]"}
-      %label.fr-label{for: "radio-inline-1"}
+      %input{id: "radio-inline-personal-#{student_id}", type: "radio", value: "personal", name: "rib[owner_type]"}
+      %label.fr-label{for: "radio-inline-personal-#{student_id}"}
         l'élève
   .fr-fieldset__element.fr-fieldset__element--inline
     .fr-radio-group
-      %input#radio-inline-2{type: "radio", value:"other_person", name:"rib[owner_type]"}
-      %label.fr-label{for: "radio-inline-2"}
+      %input{id: "radio-inline-other-#{student_id}", type: "radio", value: "other_person", name: "rib[owner_type]"}
+      %label.fr-label{for: "radio-inline-other-#{student_id}"}
         un représentant légal ou à un tiers
   .fr-fieldset__element.fr-fieldset__element--inline
     .fr-radio-group
-      %input#radio-inline-3{type: "radio", value:"moral", name:"rib[owner_type]"}
-      %label.fr-label{for: "radio-inline-3"}
+      %input{id: "radio-inline-moral-#{student_id}", type: "radio", value: "moral", name: "rib[owner_type]"}
+      %label.fr-label{for: "radio-inline-moral-#{student_id}"}
         une personne morale
-  #radio-inline-messages.fr-messages-group{"aria-live" => "assertive"}
+  .fr-messages-group{id: "radio-inline-messages-#{student_id}", "aria-live": "assertive"}
