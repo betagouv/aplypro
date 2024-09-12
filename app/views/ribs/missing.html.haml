@@ -13,11 +13,6 @@
                   %h2.fr-mb-1w= dsfr_link_to rib.student.index_name, student_path(rib.student), title: t("links.students.show", name: rib.student), tabindex: "1", class: 'fr-h3'
                   = closed_schooling_information_tag(@classe.closed_schooling_of rib.student_id)
                   = form.hidden_field :student_id
-
-                .fr-checkbox-group
-                  = form.check_box :owner_type, {}, "personal", "other_person"
-                  = form.label :owner_type, t("activerecord.attributes.rib.owner_type_personal"), classe: "fr-label"
-
             .fr-col-md-7.fr-col-12
               .fr-mb-2w
                 = form.label :name, "Titulaire du compte", class: "hidden"
@@ -38,6 +33,8 @@
                   - rib.errors.full_messages_for(:bic).each do |error_message|
                     %p.fr-error-text= error_message
               .fr-grid-row.fr-grid-row--middle.fr-grid-row--gutters
-                = render partial: 'ribs/owner_type'
+                .fr-col-md-12.fr-col-12
+                  .fr-mb-2w
+                    = render partial: 'ribs/owner_type'
 
   = f.submit "Enregistrer les coordonnées bancaires saisies", class: "fr-btn fr-btn-primary"

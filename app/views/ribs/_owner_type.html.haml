@@ -1,19 +1,19 @@
 %fieldset.fr-fieldset#radio-inline{"aria-labelledby" => "radio-inline-legend radio-inline-messages"}
   %legend#radio-inline-legend.fr-fieldset__legend--regular.fr-fieldset__legend
-    Légende pour l'ensemble des éléments
+    Les coordonnées bancaires appartiennent à:
   .fr-fieldset__element.fr-fieldset__element--inline
     .fr-radio-group
-      %input#radio-inline-1{type: "radio", name: "radio-inline"}
+      %input#radio-inline-1{type: "radio", value:"personal", name:"rib[owner_type]"}
       %label.fr-label{for: "radio-inline-1"}
-        Libellé bouton radio
+        l'élève
   .fr-fieldset__element.fr-fieldset__element--inline
     .fr-radio-group
-      %input#radio-inline-2{type: "radio", name: "radio-inline"}
+      %input#radio-inline-2{type: "radio", value:"other_person", name:"rib[owner_type]"}
       %label.fr-label{for: "radio-inline-2"}
-        Libellé bouton radio
+        un représentant légal ou à un tiers
   .fr-fieldset__element.fr-fieldset__element--inline
     .fr-radio-group
-      %input#radio-inline-3{type: "radio", name: "radio-inline"}
+      %input#radio-inline-3{type: "radio", value:"moral", name:"rib[owner_type]"}
       %label.fr-label{for: "radio-inline-3"}
-        Libellé bouton radio
+        une personne morale
   #radio-inline-messages.fr-messages-group{"aria-live" => "assertive"}
