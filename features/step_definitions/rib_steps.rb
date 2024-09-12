@@ -35,7 +35,7 @@ Quand("je saisis en masse les coordonées bancaires d'un tiers pour {string}") d
   within_fieldset(name) do
     steps %(
       Quand je remplis des coordonnées bancaires
-      Et que je décoche "Les coordonnées bancaires appartiennent à l'élève"
+      Et que je choisis "une personne morale"
     )
   end
 end
