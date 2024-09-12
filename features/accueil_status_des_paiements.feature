@@ -8,8 +8,8 @@ Fonctionnalité: Aperçu des paiements par status dans la page d'accueil
     Et que toutes les tâches de fond sont terminées
     Et que je passe l'écran d'accueil
     Et que l'élève "Marie Curie" en classe de "A1" a toutes les informations nécessaires pour le paiement
-    Et que je consulte le profil de "Marie Curie" dans la classe de "A1"
-    Et que je renseigne et valide une PFMP de 3 jours
+    Et que je consulte la classe de "A1"
+    Et que je renseigne et valide une PFMP de 3 jours pour "Marie Curie"
     Quand je me rends sur la page d'accueil
 
   Scénario: Le personnel de direction voit une demande de paiement en attente

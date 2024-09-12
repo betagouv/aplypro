@@ -8,8 +8,8 @@ Fonctionnalité: Suivi des demandes de paiement
     Et que je me connecte en tant que personnel MENJ
     Et que je passe l'écran d'accueil
     Et que toutes les tâches de fond sont terminées
-    Et que je consulte le profil de "Marie Curie" dans la classe de "A1"
-    Et que je renseigne et valide une PFMP de 9 jours
+    Et que je consulte la classe de "A1"
+    Et que je renseigne et valide une PFMP de 9 jours pour "Marie Curie"
 
   Scénario: le personnel peut ne pas voir de paiements en échecs
     Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement intégrée

@@ -91,6 +91,7 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
   Scénario: Le personnel peut voir les PFMPs à valider des anciens élèves
     Quand je consulte la classe de "1MELEC"
     Et que je renseigne une PFMP de 3 jours pour "Dupuis Jean"
+    Et que la dernière PFMP de "Jean Dupuis" est validable
     Et que je clique sur "Paiements"
     Alors je peux voir 1 PFMP "Saisies à valider" pour la classe "1MELEC"
     Quand je clique sur "1MELEC"
@@ -102,6 +103,7 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
   Scénario: Le personnel peut valider les PFMPs des anciens élèves
     Quand je consulte la classe de "1MELEC"
     Et que je renseigne une PFMP de 3 jours pour "Dupuis Jean"
+    Et que la dernière PFMP de "Jean Dupuis" est validable
     Et que je clique sur "Paiements"
     Et que je clique sur "1MELEC"
     Et que je coche la case de responsable légal

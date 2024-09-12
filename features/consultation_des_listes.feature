@@ -25,8 +25,8 @@ Fonctionnalité: Le personnel de direction consulte les listes
       | 2NDEB  | 10 / 10                 | 0 / 10                |       |
 
   Scénario: Le personnel de direction peut voir les PFMPs dans différents états
-    Sachant que je consulte le profil de "Marie Curie" dans la classe de "2NDEB"
-    Et que je renseigne et valide une PFMP de 10 jours
+    Sachant que je consulte la classe de "2NDEB"
+    Et que je renseigne et valide une PFMP de 10 jours pour "Marie Curie"
     Et que je consulte le profil de "Marie Curie" dans la classe de "2NDEB"
     Et que je renseigne une PFMP provisoire
     Et que je renseigne une PFMP de 3 jours

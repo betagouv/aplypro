@@ -99,5 +99,4 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Alors la page contient "Êtes-vous certain(e) de vouloir supprimer le report de cette décision d'attribution ?"
     Et que je coche la case de responsable légal
     Lorsque je clique sur "Supprimer le report"
-    Et print the page
     Alors la page contient "Le report de la décision d'attribution de Marie Curie n'a pas pu être supprimé car celui ci contient une PFMP"
