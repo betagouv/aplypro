@@ -5,17 +5,17 @@
     Les coordonnées bancaires appartiennent à :
   .fr-fieldset__element.fr-fieldset__element--inline
     .fr-radio-group
-      %input{id: "radio-inline-personal-#{student_id}", type: "radio", value: "personal", name: "rib[owner_type]"}
-      %label.fr-label{for: "radio-inline-personal-#{student_id}"}
+      %input{id: "radio-inline-1-#{student_id}", type: "radio", value: "personal", name: "ribs[#{student_id}][owner_type]"}
+      %label.fr-label{for: "radio-inline-1-#{student_id}"}
         l'élève
   .fr-fieldset__element.fr-fieldset__element--inline
     .fr-radio-group
-      %input{id: "radio-inline-other-#{student_id}", type: "radio", value: "other_person", name: "rib[owner_type]"}
-      %label.fr-label{for: "radio-inline-other-#{student_id}"}
+      %input{id: "radio-inline-2-#{student_id}", type: "radio", value: "other_person", name: "ribs[#{student_id}][owner_type]"}
+      %label.fr-label{for: "radio-inline-2-#{student_id}"}
         un représentant légal ou à un tiers
   .fr-fieldset__element.fr-fieldset__element--inline
     .fr-radio-group
-      %input{id: "radio-inline-moral-#{student_id}", type: "radio", value: "moral", name: "rib[owner_type]"}
-      %label.fr-label{for: "radio-inline-moral-#{student_id}"}
+      %input{id: "radio-inline-3-#{student_id}", type: "radio", value: "moral", name: "ribs[#{student_id}][owner_type]"}
+      %label.fr-label{for: "radio-inline-3-#{student_id}"}
         une personne morale
   .fr-messages-group{id: "radio-inline-messages-#{student_id}", "aria-live": "assertive"}
