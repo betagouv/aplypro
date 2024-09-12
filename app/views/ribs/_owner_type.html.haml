@@ -1,0 +1,23 @@
+- student_id = local_assigns.fetch(:student_id)
+- field_name = local_assigns.fetch(:field_name)
+- current_value = local_assigns.fetch(:current_value)
+
+%fieldset.fr-fieldset{id: "radio-inline-#{student_id}", "aria-labelledby": "radio-inline-legend-#{student_id} radio-inline-messages-#{student_id}"}
+  %legend.fr-fieldset__legend--regular.fr-fieldset__legend{id: "radio-inline-legend-#{student_id}"}
+    Les coordonnées bancaires appartiennent à :
+  .fr-fieldset__element.fr-fieldset__element--inline
+    .fr-radio-group
+      %input{id: "radio-inline-1-#{student_id}", type: "radio", value: "personal", name: field_name, checked: current_value == "personal"}
+      %label.fr-label{for: "radio-inline-1-#{student_id}"}
+        l'élève
+  .fr-fieldset__element.fr-fieldset__element--inline
+    .fr-radio-group
+      %input{id: "radio-inline-2-#{student_id}", type: "radio", value: "other_person", name: field_name, checked: current_value == "other_person"}
+      %label.fr-label{for: "radio-inline-2-#{student_id}"}
+        un représentant légal ou à un tiers
+  .fr-fieldset__element.fr-fieldset__element--inline
+    .fr-radio-group
+      %input{id: "radio-inline-3-#{student_id}", type: "radio", value: "moral_person", name: field_name, checked: current_value == "moral_person"}
+      %label.fr-label{for: "radio-inline-3-#{student_id}"}
+        une personne morale
+  .fr-messages-group{id: "radio-inline-messages-#{student_id}", "aria-live": "assertive"}
