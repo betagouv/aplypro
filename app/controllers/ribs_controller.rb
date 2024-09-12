@@ -19,7 +19,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   def confirm_deletion; end
 
   def create
-    @rib = @student.create_new_rib(rib_params)
+    @rib = @student.create_new_rib(rib_params.merge(establishment: current_establishment))
 
     if @rib.save
       redirect_to student_path(@student),
@@ -30,7 +30,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   end
 
   def update
-    @rib = @student.create_new_rib(rib_params)
+    @rib = @student.create_new_rib(rib_params.merge(establishment: current_establishment))
 
     if @rib.save
       redirect_to student_path(@student),
@@ -99,7 +99,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   end
 
   def set_rib
-    @rib = @student.ribs.find(params[:id])
+    @rib = @student.ribs.find_by!(id: params[:id], establishment: current_establishment)
   end
 
   def set_classe_breadcrumbs
