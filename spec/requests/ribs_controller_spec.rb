@@ -39,7 +39,7 @@ RSpec.describe RibsController do
 
   describe "POST classes/:classe_id/ribs/bulk_create" do
     let(:rib) { build(:rib, student: student) }
-    let(:rib_params) { { name: rib.student.index_name, iban: rib.iban, bic: rib.bic, student_id: rib.student.id } }
+    let(:rib_params) { { name: rib.student.index_name, iban: rib.iban, bic: rib.bic, student_id: rib.student.id, establishment_id: rib.establishment.id } }
 
     context "with a correct request" do
       it "returns 302 (redirected to /classes/:classe_id)" do
