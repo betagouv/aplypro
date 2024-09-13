@@ -35,7 +35,16 @@ Quand("je saisis en masse les coordonées bancaires d'un tiers pour {string}") d
   within_fieldset(name) do
     steps %(
       Quand je remplis des coordonnées bancaires
-      Et que je choisis "une personne morale"
+      Et que je choisis "Un représentant légal ou à un tiers"
+    )
+  end
+end
+
+Quand("je saisis en masse les coordonées bancaires d'une personne morale pour {string}") do |name|
+  within_fieldset(name) do
+    steps %(
+      Quand je remplis des coordonnées bancaires
+      Et que je choisis "Une personne morale"
     )
   end
 end
