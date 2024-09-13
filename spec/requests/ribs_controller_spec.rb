@@ -55,7 +55,7 @@ RSpec.describe RibsController do
         let(:rib_params) do
           {
             "ribs" => students.to_h do |student|
-              [student.id, build(:rib, student: student).attributes]
+              [student.id, build(:rib, student: student, establishment: student.classe.establishment).attributes]
             end
           }
         end
