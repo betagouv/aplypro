@@ -130,12 +130,11 @@ fr:
         owner_type_personal: "Les coordonnées bancaires appartiennent à l'élève"
         owner_type_other_person: "Les coordonnées bancaires appartiennent à un représentant légal ou à un tiers"
         owner_type_moral_person: "Les coordonnées bancaires appartiennent à une personne morale (ex : association)"
-        missing :
-            owner_type: "Les coordonnées bancaires appartiennent à :"
-            owner_type_personal: "L'élève"
-            owner_type_other_person: "Un représentant légal ou à un tiers"
-            owner_type_moral_person: "Une personne morale"
-            owner_type_moral_person_hint: "ex : association"
+      missing :
+          owner_type: "Les coordonnées bancaires appartiennent à :"
+          owner_type_personal: "L'élève"
+          owner_type_other_person: "Un représentant légal ou à un tiers"
+          owner_type_moral_person: "Une personne morale"
       establishment:
         uai: "UAI"
         name: "Nom"
