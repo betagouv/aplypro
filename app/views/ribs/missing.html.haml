@@ -1,4 +1,4 @@
-= form_with scope: :ribs, url: bulk_create_school_year_class_ribs_path(selected_school_year, @classe), method: :post, builder: DsfrFormBuilder do |f|
+= form_with scope: :ribs, url: bulk_create_school_year_class_ribs_path(selected_school_year, @classe), method: :post do |f|
   - @ribs.each do |rib|
     = f.fields_for rib.student_id.to_s, rib do |form|
       %fieldset.fr-fieldset.fr-m-0.fr-p-0
