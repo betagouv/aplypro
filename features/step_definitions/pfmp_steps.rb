@@ -28,15 +28,14 @@ end
 
 Quand("je renseigne une PFMP de {int} jours pour {string}") do |days, name|
   steps %(
-    Et print the page
-    Et que je clique sur "Voir le profil" dans la rangée "#{name}"
+    Et que je clique sur "Voir le profil de #{name}"
     Et que je renseigne une PFMP de #{days} jours
   )
 end
 
 Quand("je renseigne une PFMP pour {string}") do |name|
   steps %(
-    Et que je clique sur "Voir le profil" dans la rangée "#{name}"
+    Et que je clique sur "Voir le profil de #{name}"
     Et que je renseigne une PFMP provisoire
   )
 end

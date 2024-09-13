@@ -7,7 +7,13 @@ Sachantque(
     Sachant que l'API SYGNE renvoie une adresse en France pour l'élève "#{name}"
     Quand les informations personnelles ont été récupérées pour l'élève "#{name}"
     Et que l'élève "#{name}" a bien le statut étudiant
+  )
+
+  steps %(
     Et que je renseigne les coordonnées bancaires de l'élève "#{name}" de la classe "#{classe}"
+  ) if find_student_by_full_name(name).ribs.empty?
+
+  steps %(
     Et que je génère les décisions d'attribution de mon établissement
     Et que toutes les tâches de fond sont terminées
     Et que je consulte le profil de "#{name}" dans la classe de "#{classe}"
