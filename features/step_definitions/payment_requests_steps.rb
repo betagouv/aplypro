@@ -9,9 +9,11 @@ Sachantque(
     Et que l'élève "#{name}" a bien le statut étudiant
   )
 
-  steps %(
-    Et que je renseigne les coordonnées bancaires de l'élève "#{name}" de la classe "#{classe}"
-  ) if find_student_by_full_name(name).ribs.empty?
+  if find_student_by_full_name(name).ribs.empty?
+    steps %(
+      Et que je renseigne les coordonnées bancaires de l'élève "#{name}" de la classe "#{classe}"
+    )
+  end
 
   steps %(
     Et que je génère les décisions d'attribution de mon établissement
