@@ -40,7 +40,7 @@ Quand("je saisis en masse les coordonées bancaires d'un tiers pour {string}") d
   end
 end
 
-Quand("je saisis en masse les coordonées bancaires d'une personne morale pour {string}") do |name|
+Quand("je saisis en masse les coordonnées bancaires d'une personne morale pour {string}") do |name|
   within_fieldset(name) do
     steps %(
       Quand je remplis des coordonnées bancaires

@@ -37,7 +37,7 @@ Fonctionnalité: Saisie des coordonnées banquaires manquantes pour une classe
       | Langevin Paul |                               | Saisies                     |           |
 
   Scénario: Le personnel peut saisir et sauvegarder des coordonnées bancaires pour un tiers
-    Sachant que je saisis en masse les coordonées bancaires d'un tiers pour "Curie Marie"
+    Sachant que je saisis en masse les coordonnées bancaires d'un tiers pour "Curie Marie"
     Et que je saisis en masse les coordonées bancaires d'un tiers pour "Langevin Paul"
     Quand je clique sur "Enregistrer les coordonnées bancaires saisies"
     Alors la page contient "Coordonnées bancaires enregistrées avec succès"
