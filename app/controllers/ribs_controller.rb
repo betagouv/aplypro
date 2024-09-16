@@ -19,7 +19,8 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   def confirm_deletion; end
 
   def create
-    @rib = @student.create_new_rib(rib_params.merge(establishment: current_establishment))
+    @rib = @student.create_new_rib(rib_params)
+    @rib.update(establishment: current_establishment)
 
     if @rib.save
       redirect_to student_path(@student),
@@ -30,7 +31,8 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   end
 
   def update
-    @rib = @student.create_new_rib(rib_params.merge(establishment: current_establishment))
+    @rib = @student.create_new_rib(rib_params)
+    @rib.update(establishment: current_establishment)
 
     if @rib.save
       redirect_to student_path(@student),
@@ -56,6 +58,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
 
   def bulk_create
     @ribs = bulk_ribs_params.map do |rib_params|
+      rib_params.update(establishment_id: current_establishment.id)
       Student.find(rib_params["student_id"]).create_new_rib(rib_params.except("student_id"))
     end
     if @ribs.each(&:save).all?(&:valid?)
@@ -72,7 +75,8 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
       :iban,
       :bic,
       :name,
-      :owner_type
+      :owner_type,
+      :establishment_id
     ).with_defaults(student: @student)
   end
 
@@ -80,7 +84,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     params
       .require(:ribs)
       .values
-      .map { |p| p.permit(%i[iban bic name owner_type student_id]).to_h }
+      .map { |p| p.permit(%i[iban bic name owner_type student_id establishment_id]).to_h }
       .reject { |rib| [rib["iban"], rib["bic"]].all?(&:blank?) }
   end
 
