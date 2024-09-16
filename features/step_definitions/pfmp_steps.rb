@@ -130,6 +130,14 @@ Quand("la dernière PFMP de {string} est validable") do |name|
   schooling.attach_attributive_document(StringIO.new("hello"), :attributive_decision)
 end
 
+Quand("toutes les PFMPs pour la classe {string} sont validables") do |classe_label|
+  Classe.find_by!(label: classe_label).students.each do |student|
+    steps %(
+      Quand la dernière PFMP de "#{student}" est validable
+    )
+  end
+end
+
 Alors("je peux changer le nombre de jours de la PFMP à {int}") do |days|
   steps %(
     Quand je clique sur "Modifier la PFMP"
