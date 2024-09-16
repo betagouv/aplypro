@@ -12,7 +12,7 @@ RSpec.describe RibsController do
 
   describe "CREATE /rib" do
     it "returns found" do
-      post student_ribs_path(student.id), params: { rib: build(:rib, student: student).attributes }
+      post student_ribs_path(student.id), params: { rib: attributes_for(:rib, student_id: student.id, establishment_id: student.classe.establishment.id) }
 
       expect(response).to have_http_status(:found)
     end

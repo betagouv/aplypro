@@ -20,7 +20,6 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
 
   def create
     @rib = @student.create_new_rib(rib_params)
-    @rib.update(establishment: current_establishment)
 
     if @rib.save
       redirect_to student_path(@student),
@@ -32,7 +31,6 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
 
   def update
     @rib = @student.create_new_rib(rib_params)
-    @rib.update(establishment: current_establishment)
 
     if @rib.save
       redirect_to student_path(@student),
@@ -77,7 +75,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
       :name,
       :owner_type,
       :establishment_id
-    ).with_defaults(student: @student)
+    ).with_defaults(student: @student, establishment_id: current_establishment.id)
   end
 
   def bulk_ribs_params
