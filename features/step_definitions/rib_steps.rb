@@ -31,7 +31,7 @@ Quand("je supprime les coordonnées bancaires") do
   )
 end
 
-Quand("je saisis en masse les coordonées bancaires d'un tiers pour {string}") do |name|
+Quand("je saisis en masse les coordonnées bancaires d'un tiers pour {string}") do |name|
   within_fieldset(name) do
     steps %(
       Quand je remplis des coordonnées bancaires
