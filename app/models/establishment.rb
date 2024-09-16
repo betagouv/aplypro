@@ -67,14 +67,15 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   # NOTE: this method could fetch the actual data per academie if we stored that information
   #       this was implemented as a hotfix for La Réunion and Mayotte
-  def school_year_range(year = SchoolYear.current.start_year)
+  def school_year_range(year = SchoolYear.current.start_year, extended_end_date = nil)
     school_year_range_exceptions = {
       "43" => Date.new(year, 8, 23), # Mayotte
       "28" => Date.new(year, 8, 16) # La Réunion
     }
 
     start_date = school_year_range_exceptions.fetch(academy_code, Date.new(year, 9, 1))
-    (start_date..start_date >> 12)
+    end_date = extended_end_date.presence || (start_date >> 12)
+    (start_date..end_date)
   end
 
   def to_s

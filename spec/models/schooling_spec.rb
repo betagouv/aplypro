@@ -70,6 +70,24 @@ RSpec.describe Schooling do
       end
     end
 
+    describe "extended_end_date" do
+      context "when end_date is present" do
+        before do
+          schooling.end_date = Date.current
+        end
+
+        it "is invalid when extended_end_date is before end_date" do
+          schooling.extended_end_date = schooling.end_date - 1.day
+          expect(schooling).not_to be_valid
+        end
+
+        it "is valid when extended_end_date is on or after end_date" do
+          schooling.extended_end_date = schooling.end_date + 1.day
+          expect(schooling).to be_valid
+        end
+      end
+    end
+
     describe ".for_year" do
       before { schooling.update!(classe: classe) }
 
@@ -261,6 +279,34 @@ RSpec.describe Schooling do
 
     it "returns the result" do
       expect(schooling.excluded?).to eq "a fake result"
+    end
+  end
+
+  describe "#max_end_date" do
+    let(:schooling) { create(:schooling) }
+
+    context "when extended_end_date is present" do
+      it "returns the extended_end_date" do
+        schooling.end_date = Date.new(2023, 6, 30)
+        schooling.extended_end_date = Date.new(2023, 7, 31)
+        expect(schooling.max_end_date).to eq(Date.new(2023, 7, 31))
+      end
+    end
+
+    context "when extended_end_date is nil" do
+      it "returns the end_date" do
+        schooling.end_date = Date.new(2023, 6, 30)
+        schooling.extended_end_date = nil
+        expect(schooling.max_end_date).to eq(Date.new(2023, 6, 30))
+      end
+    end
+
+    context "when both extended_end_date and end_date are nil" do
+      it "returns nil" do
+        schooling.end_date = nil
+        schooling.extended_end_date = nil
+        expect(schooling.max_end_date).to be_nil
+      end
     end
   end
 

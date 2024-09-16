@@ -56,6 +56,29 @@ Quand("les élèves actuels sont les seuls à avoir des décisions d'attribution
   end
 end
 
+Quand("l'élève {string} a un report de décision d'attribution") do |name|
+  extended_end_date = Date.parse("#{SchoolYear.current.end_year}-11-30")
+  student = find_student_by_full_name(name)
+
+  student.current_schooling.update!(extended_end_date: extended_end_date)
+end
+
+Quand("l'élève {string} a une date de début et une date de fin de scolarité") do |name|
+  start_date = Date.parse("#{SchoolYear.current.start_year}-09-01")
+  end_date = Date.parse("#{SchoolYear.current.end_year}-06-30")
+  student = find_student_by_full_name(name)
+
+  student.current_schooling.update!(start_date: start_date, end_date: end_date)
+end
+
+Quand("l'élève {string} a une décision d'attribution") do |name|
+  student = find_student_by_full_name(name)
+
+  establishment = Establishment.last
+  establishment.schoolings.find_by(student: student).attach_attributive_document(StringIO.new("hello"),
+                                                                                 :attributive_decision)
+end
+
 # FIXME: we should mock the API step instead and have the correct
 # schooling + status returned in the data.
 Quand("l'élève {string} a bien le statut étudiant") do |name|

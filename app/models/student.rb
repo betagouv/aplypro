@@ -65,13 +65,13 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     )
   }
 
-  updatable :address_line1,
-            :address_postal_code,
-            :address_city_insee_code,
-            :address_country_code,
-            :birthplace_city_insee_code,
-            :birthplace_country_insee_code,
-            :biological_sex
+  sourced_from_external_api :address_line1,
+                            :address_postal_code,
+                            :address_city_insee_code,
+                            :address_country_code,
+                            :birthplace_city_insee_code,
+                            :birthplace_country_insee_code,
+                            :biological_sex
 
   # NOTE: used in stats for column "Données d'élèves nécessaires présentes"
   def self.asp_ready

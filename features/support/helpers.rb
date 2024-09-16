@@ -9,6 +9,10 @@ def find_student_by_full_name(name)
   Student.all.find { |s| s.full_name == name }
 end
 
+def find_schooling_by_student_full_name(name)
+  Schooling.find_by(student: find_student_by_full_name(name))
+end
+
 def last_payment_request_for_name(name)
   find_student_by_full_name(name)
     .pfmps
