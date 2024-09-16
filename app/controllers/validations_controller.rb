@@ -23,9 +23,7 @@ class ValidationsController < ApplicationController
     add_breadcrumb t("pages.titles.validations.index"), school_year_validations_path(selected_school_year)
     infer_page_title(name: @classe.label)
 
-    # TODO: Supprimer les 3 lignes après le "validatable_pfmps" ?
     @pfmps = current_establishment.validatable_pfmps
-                                  .includes(schooling: :attributive_decision_attachment)
                                   .where(schoolings: { classe: @classe })
                                   .includes(student: :rib)
                                   .order(:"students.last_name", :"pfmps.start_date")
