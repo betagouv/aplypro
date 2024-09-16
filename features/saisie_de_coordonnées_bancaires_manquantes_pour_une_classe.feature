@@ -17,8 +17,28 @@ Fonctionnalité: Saisie des coordonnées banquaires manquantes pour une classe
     Et la page contient "Langevin Paul"
 
   Scénario: Le personnel peut saisir et sauvegarder des coordonnées bancaires pour plusieurs élèves à la fois
-    Sachant que je saisis en masse les coordonées bancaires d'un tiers pour "Curie Marie"
-    Et que je saisis en masse les coordonées bancaires d'un tiers pour "Langevin Paul"
+    Sachant que je saisis en masse les coordonnées bancaires d'un tiers pour "Curie Marie"
+    Et que je saisis en masse les coordonnées bancaires d'un tiers pour "Langevin Paul"
+    Quand je clique sur "Enregistrer les coordonnées bancaires saisies"
+    Alors la page contient "Coordonnées bancaires enregistrées avec succès"
+    Et je peux voir dans le tableau "Liste des élèves"
+      | Élèves (2)    | Décisions d'attribution (0/2) | Coordonnées Bancaires (2/2) | PFMPs (0) |
+      | Curie Marie   |                               | Saisies                     |           |
+      | Langevin Paul |                               | Saisies                     |           |
+
+  Scénario: Le personnel peut saisir et sauvegarder des coordonnées bancaires pour une personne morale
+    Sachant que je saisis en masse les coordonnées bancaires d'une personne morale pour "Curie Marie"
+    Et que je saisis en masse les coordonnées bancaires d'une personne morale pour "Langevin Paul"
+    Quand je clique sur "Enregistrer les coordonnées bancaires saisies"
+    Alors la page contient "Coordonnées bancaires enregistrées avec succès"
+    Et je peux voir dans le tableau "Liste des élèves"
+      | Élèves (2)    | Décisions d'attribution (0/2) | Coordonnées Bancaires (2/2) | PFMPs (0) |
+      | Curie Marie   |                               | Saisies                     |           |
+      | Langevin Paul |                               | Saisies                     |           |
+
+  Scénario: Le personnel peut saisir et sauvegarder des coordonnées bancaires pour un tiers
+    Sachant que je saisis en masse les coordonnées bancaires d'un tiers pour "Curie Marie"
+    Et que je saisis en masse les coordonnées bancaires d'un tiers pour "Langevin Paul"
     Quand je clique sur "Enregistrer les coordonnées bancaires saisies"
     Alors la page contient "Coordonnées bancaires enregistrées avec succès"
     Et je peux voir dans le tableau "Liste des élèves"
@@ -27,7 +47,7 @@ Fonctionnalité: Saisie des coordonnées banquaires manquantes pour une classe
       | Langevin Paul |                               | Saisies                     |           |
 
   Scénario: Le personnel peut laisser des coordonnées bancaires vides et quand même sauvegarder le reste
-    Quand je saisis en masse les coordonées bancaires d'un tiers pour "Curie Marie"
+    Quand je saisis en masse les coordonnées bancaires d'un tiers pour "Curie Marie"
     Et que je clique sur "Enregistrer les coordonnées bancaires saisies"
     Alors la page contient "Coordonnées bancaires enregistrées avec succès"
     Et je peux voir dans le tableau "Liste des élèves"
@@ -45,7 +65,7 @@ Fonctionnalité: Saisie des coordonnées banquaires manquantes pour une classe
     Et la page contient "BIC n'est pas valide"
 
   Scénario: Le personnel saisit des coordonnées bancaires valides et invalides et enregistre quand même les valides
-    Quand je saisis en masse les coordonées bancaires d'un tiers pour "Curie Marie"
+    Quand je saisis en masse les coordonnées bancaires d'un tiers pour "Curie Marie"
     Et que je remplis le champ "IBAN" avec "AAA" dans les champs de "Langevin Paul"
     Et que je clique sur "Enregistrer les coordonnées bancaires saisies"
     Alors la page contient "IBAN n'est pas valide"
@@ -57,8 +77,8 @@ Fonctionnalité: Saisie des coordonnées banquaires manquantes pour une classe
 
   Scénario: Le personnel peut saisir des coordonnées bancaires pour une classe même si un élève a d'autres scolarités dans d'autres classes
     Sachant que l'élève "Marie" "Curie" a une ancienne scolarité dans un autre établissement
-    Et que je saisis en masse les coordonées bancaires d'un tiers pour "Curie Marie"
-    Et que je saisis en masse les coordonées bancaires d'un tiers pour "Langevin Paul"
+    Et que je saisis en masse les coordonnées bancaires d'un tiers pour "Curie Marie"
+    Et que je saisis en masse les coordonnées bancaires d'un tiers pour "Langevin Paul"
     Quand je clique sur "Enregistrer les coordonnées bancaires saisies"
     Alors la page contient "Coordonnées bancaires enregistrées avec succès"
     Et je peux voir dans le tableau "Liste des élèves"
