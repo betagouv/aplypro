@@ -117,9 +117,11 @@ end
 Quand("la dernière PFMP de {string} est validable") do |name|
   student = find_student_by_full_name(name)
 
-  steps %(
-    Et que l'élève "#{name}" a déjà des coordonnées bancaires
-  ) if student.ribs.empty?
+  if student.ribs.empty?
+    steps %(
+      Et que l'élève "#{name}" a déjà des coordonnées bancaires
+    )
+  end
 
   pfmp = student.pfmps.last
   schooling = pfmp.schooling
