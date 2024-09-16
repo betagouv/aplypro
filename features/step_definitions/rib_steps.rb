@@ -66,7 +66,7 @@ end
 
 Quand("l'élève {string} a déjà des coordonnées bancaires") do |name|
   student = find_student_by_full_name(name)
-  FactoryBot.create(:rib, student: student)
+  FactoryBot.create(:rib, :personal, student: student)
 end
 
 Quand("il manque des coordonnées bancaires à {string}") do |name|
