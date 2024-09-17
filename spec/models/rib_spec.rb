@@ -14,7 +14,11 @@ RSpec.describe Rib do
     it { is_expected.to validate_presence_of(:iban) }
     it { is_expected.to validate_presence_of(:bic) }
     it { is_expected.to validate_presence_of(:name) }
-    it { is_expected.to validate_uniqueness_of(:student_id).scoped_to(:archived_at, :establishment_id).with_message(:unarchivable_rib) }
+
+    it {
+      expect(rib).to validate_uniqueness_of(:student_id).scoped_to(:archived_at, :establishment_id)
+                                                        .with_message(:unarchivable_rib)
+    }
 
     context "when the IBAN is from outside the SEPA zone" do
       subject(:rib) { build(:rib, iban: Faker::Bank.iban(country_code: "br")) }

@@ -2,7 +2,9 @@
 
 class Rib < ApplicationRecord
   belongs_to :student
-  belongs_to :establishment
+
+  # TODO: migrate all previous ribs to associate them to an establishment
+  belongs_to :establishment, optional: true
 
   enum :owner_type, { personal: 0, other_person: 1, moral_person: 2 }
 
@@ -10,7 +12,8 @@ class Rib < ApplicationRecord
 
   validates :iban, :bic, :name, presence: true
 
-  validates :student_id, uniqueness: { scope: [:archived_at, :establishment_id], message: :unarchivable_rib }, unless: :archived?
+  validates :student_id, uniqueness: { scope: %i[archived_at establishment_id], message: :unarchivable_rib },
+                         unless: :archived?
 
   scope :multiple_ibans, -> { Rib.select(:iban).group(:iban).having("count(iban) > 1") }
 
