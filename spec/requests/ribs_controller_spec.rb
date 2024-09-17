@@ -2,7 +2,6 @@
 
 require "rails_helper"
 
-# rubocop:disable RSpec/MultipleMemoizedHelpers
 RSpec.describe RibsController do
   let(:school_year) { SchoolYear.current }
   let(:student) { create(:schooling).student }
@@ -42,8 +41,7 @@ RSpec.describe RibsController do
   describe "POST classes/:classe_id/ribs/bulk_create" do
     let(:rib) { build(:rib, student: student, establishment: student.establishment) }
     let(:rib_params) do
-      { name: rib.student.index_name, iban: rib.iban, bic: rib.bic, student_id: rib.student.id,
-        establishment_id: rib.establishment.id }
+      { name: rib.student.index_name, iban: rib.iban, bic: rib.bic, student_id: rib.student.id }
     end
 
     context "with a correct request" do
@@ -54,13 +52,13 @@ RSpec.describe RibsController do
         expect(response).to have_http_status(:found)
       end
 
-      context "when some ribs are invalid" do
+      context "when some ribs are invalid" do # rubocop:disable RSpec/MultipleMemoizedHelpers
         let(:students) { create_list(:student, 3, classe: student.classe) }
 
         let(:rib_params) do
           {
             "ribs" => students.to_h do |student|
-              [student.id, build(:rib, student: student, establishment: student.classe.establishment).attributes]
+              [student.id, build(:rib, student: student).attributes]
             end
           }
         end
@@ -79,7 +77,7 @@ RSpec.describe RibsController do
       end
     end
 
-    context "when trying to create a RIB for a student in another establishment" do
+    context "when trying to create a RIB for a student in another establishment" do # rubocop:disable RSpec/MultipleMemoizedHelpers
       let(:other_student) { create(:schooling).student }
       let(:rib) { build(:rib, student: other_student, establishment: other_student.establishment) }
 
@@ -92,4 +90,3 @@ RSpec.describe RibsController do
     end
   end
 end
-# rubocop:enable RSpec/MultipleMemoizedHelpers

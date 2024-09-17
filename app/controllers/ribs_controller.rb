@@ -56,8 +56,9 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
 
   def bulk_create
     @ribs = bulk_ribs_params.map do |rib_params|
-      rib_params.update(establishment_id: current_establishment.id)
-      Student.find(rib_params["student_id"]).create_new_rib(rib_params.except("student_id"))
+      Student.find(rib_params["student_id"]).create_new_rib(
+        rib_params.except("student_id")
+      )
     end
     if @ribs.each(&:save).all?(&:valid?)
       redirect_to school_year_class_path(selected_school_year, @classe), notice: t("ribs.create.success")
@@ -73,8 +74,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
       :iban,
       :bic,
       :name,
-      :owner_type,
-      :establishment_id
+      :owner_type
     ).with_defaults(student: @student, establishment_id: current_establishment.id)
   end
 
@@ -82,7 +82,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     params
       .require(:ribs)
       .values
-      .map { |p| p.permit(%i[iban bic name owner_type student_id establishment_id]).to_h }
+      .map { |p| p.permit(%i[iban bic name owner_type student_id]).to_h }
       .reject { |rib| [rib["iban"], rib["bic"]].all?(&:blank?) }
   end
 
