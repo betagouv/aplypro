@@ -46,4 +46,24 @@ RSpec.describe Sync::ClassesJob do
       expect(api_double).to have_received(:fetch_resource).exactly(10).times
     end
   end
+
+  # rubocop:disable RSpec/MultipleMemoizedHelpers
+  context "when the student's marital status has changed" do
+    let(:classe) { create(:classe, establishment: establishment) }
+    let(:schooling) { create(:schooling, student: student, classe: classe) }
+    let(:student) { create(:student, ine: "007", first_name: "Marie", last_name: "Curie") }
+
+    before do
+      described_class.perform_now(establishment)
+      build(:sygne_student, ine_value: "007", first_name: "Mario", last_name: "Curio", schooling: schooling)
+    end
+
+    it "maps and updates the first name" do
+      expect { described_class.perform_now(establishment) }
+        .to change { student.attributes.slice("first_name", "last_name") }
+        .from("first_name" => "Marie", "last_name" => "Curie")
+        .to("first_name" => "Mario", "last_name" => "Curio")
+    end
+  end
+  # rubocop:enable RSpec/MultipleMemoizedHelpers
 end
