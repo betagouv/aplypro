@@ -49,8 +49,8 @@ describe PfmpStateMachine do
 
         it "allows transition to validated" do
           expect { pfmp.state_machine.transition_to!(:validated) }.to change(pfmp.state_machine, :current_state)
-                                                                        .from("completed")
-                                                                        .to("validated")
+            .from("completed")
+            .to("validated")
         end
       end
 
