@@ -17,9 +17,9 @@ Fonctionnalité: Le personnel ASP consulte des dossiers
 
   Scénario: Le personnel ASP entre un numéro de décision d'attribution existant
     Sachant que le numéro administratif de "Marie Curie" est "THEDOSS"
-    Et que je remplis "Numéro de décision d'attribution" avec "ENPUTHEDOSS20241"
+    Et que je remplis "Numéro de décision d'attribution" avec "ENPUTHEDOSS20240"
     Quand je clique sur "Rechercher"
-    Alors la page contient "ENPUTHEDOSS20241"
+    Alors la page contient "ENPUTHEDOSS20240"
     Et la page contient "3 jours x 10 € par jour = 30 €"
     Et la page contient "IBAN"
 

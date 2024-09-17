@@ -14,9 +14,18 @@ FactoryBot.define do
       day_count { rand(1..6) } # lovely roll dice
     end
 
-    trait :validated do
+    trait :can_be_validated do
       completed
 
+      after(:create) do |pfmp|
+        create(:rib, :personal, student: pfmp.student) if pfmp.student.rib.blank?
+        AttributiveDecisionHelpers.generate_fake_attributive_decision(pfmp.schooling)
+        pfmp.reload
+      end
+    end
+
+    trait :validated do
+      can_be_validated
       after(:create, &:validate!)
     end
 
@@ -26,6 +35,7 @@ FactoryBot.define do
 
     trait :rectified do
       validated
+
       after(:create) do |pfmp|
         create(:asp_payment_request, :paid, pfmp: pfmp)
         pfmp.reload.rectify!

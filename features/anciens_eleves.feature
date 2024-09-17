@@ -67,7 +67,7 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
 
   Scénario: Le personnel peut créer une PFMP pour un ancien élève
     Quand je consulte la classe de "1MELEC"
-    Et que je renseigne une PFMP de 3 jours pour "Dupuis Jean"
+    Et que je renseigne une PFMP de 3 jours pour "Jean Dupuis"
     Alors la page contient "La PFMP a bien été enregistrée"
     Et je peux voir dans le tableau "Liste des PFMPs de l'élève"
       | État             | Nombre de jours | Montant |
@@ -75,7 +75,7 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
 
   Scénario: Le personnel peut compléter les PFMPs pour les anciens élèves
     Quand je consulte la classe de "1MELEC"
-    Et que je renseigne une PFMP pour "Dupuis Jean"
+    Et que je renseigne une PFMP pour "Jean Dupuis"
     Et que je consulte la classe de "1MELEC"
     Et que je clique sur "Compléter 1 PFMP"
     Et que je peux voir dans le tableau "Liste des pfmps à compléter de la classe 1MELEC"
@@ -90,7 +90,8 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
 
   Scénario: Le personnel peut voir les PFMPs à valider des anciens élèves
     Quand je consulte la classe de "1MELEC"
-    Et que je renseigne une PFMP de 3 jours pour "Dupuis Jean"
+    Et que je renseigne une PFMP de 3 jours pour "Jean Dupuis"
+    Et que la dernière PFMP de "Jean Dupuis" est validable
     Et que je clique sur "Paiements"
     Alors je peux voir 1 PFMP "Saisies à valider" pour la classe "1MELEC"
     Quand je clique sur "1MELEC"
@@ -101,7 +102,8 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
 
   Scénario: Le personnel peut valider les PFMPs des anciens élèves
     Quand je consulte la classe de "1MELEC"
-    Et que je renseigne une PFMP de 3 jours pour "Dupuis Jean"
+    Et que je renseigne une PFMP de 3 jours pour "Jean Dupuis"
+    Et que la dernière PFMP de "Jean Dupuis" est validable
     Et que je clique sur "Paiements"
     Et que je clique sur "1MELEC"
     Et que je coche la case de responsable légal

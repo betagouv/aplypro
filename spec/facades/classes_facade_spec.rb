@@ -49,9 +49,9 @@ RSpec.describe ClassesFacade do
     let(:classe) { classes.first }
 
     before do
-      create(:pfmp, schooling: create(:schooling, classe: classe))
-      create(:pfmp, :completed, schooling: create(:schooling, classe: classe))
-      create(:pfmp, :validated, schooling: create(:schooling, classe: classe))
+      create(:pfmp).update(classe: classe)
+      create(:pfmp, :completed).update(classe: classe)
+      create(:pfmp, :validated).update(classe: classe)
     end
 
     it "returns the correct number of PFMPs for each state" do

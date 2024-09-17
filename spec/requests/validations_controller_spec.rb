@@ -7,7 +7,7 @@ RSpec.describe ValidationsController do
   let(:student) { schooling.student }
   let(:user) { create(:user, :director, :with_selected_establishment, establishment: schooling.classe.establishment) }
   let(:classe) { schooling.classe }
-  let(:pfmp) { create(:pfmp, :completed, schooling: schooling) }
+  let(:pfmp) { create(:pfmp, :can_be_validated, schooling: schooling) }
 
   before { sign_in(user) }
 

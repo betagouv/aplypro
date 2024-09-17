@@ -9,8 +9,10 @@ class ClasseFacade
     @nb_pending_pfmps ||= @classe.pfmps.in_state(:pending).count
   end
 
-  def nb_completed_pfmps
-    @nb_completed_pfmps ||= @classe.pfmps.in_state(:completed).count
+  def nb_can_transition_to_validated_pfmps
+    @nb_can_transition_to_validated_pfmps ||= @classe.pfmps.in_state(:completed)
+                                                     .filter { |pfmp| pfmp.can_transition_to?(:validated) }
+                                                     .count
   end
 
   def nb_missing_ribs
@@ -31,7 +33,7 @@ class ClasseFacade
     "Compléter #{nb_pending_pfmps} #{'PFMP'.pluralize(nb_pending_pfmps)}"
   end
 
-  def completed_pfmps_button_text
-    "Valider #{nb_completed_pfmps} #{'PFMP'.pluralize(nb_completed_pfmps)}"
+  def can_transition_to_validated_pfmps_button_text
+    "Valider #{nb_can_transition_to_validated_pfmps} #{'PFMP'.pluralize(nb_can_transition_to_validated_pfmps)}"
   end
 end

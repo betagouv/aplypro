@@ -56,6 +56,7 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Lorsque j'ai une classe "1MELEC" de 9 élèves pour l'établissement "DINUM" lors de l'année 2023
     Et que je consulte le profil de "Marie Curie" dans la classe de "1MELEC"
     Et que je renseigne une PFMP de 9 jours
+    Et que la dernière PFMP de "Marie Curie" est validable
     Et que je clique sur "Paiements"
     Alors la page ne contient pas "Il n'y a aucune PFMP à valider pour l'instant."
     Et que je clique sur "Changer d'année scolaire"

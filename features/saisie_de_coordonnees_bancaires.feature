@@ -42,7 +42,8 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
     Et la page contient "Aucune coordonnée bancaire enregistrée pour le moment."
 
   Scénario: Quand il y a une requête de paiement en cours le personnel ne peut pas modifier un RIB
-    Sachant que je renseigne et valide une PFMP de 3 jours
+    Sachant que je consulte la classe "2NDEB"
+    Et que je renseigne et valide une PFMP de 3 jours pour "Marie Curie"
     Et que la dernière PFMP de "Marie Curie" en classe de "2NDEB" a une requête de paiement envoyée
     Quand je rafraîchis la page
     Alors la page contient "Ces coordonnées bancaires ne sont pas modifiables"
