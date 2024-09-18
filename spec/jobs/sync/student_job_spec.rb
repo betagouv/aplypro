@@ -16,7 +16,6 @@ RSpec.describe Sync::StudentJob, :student_api do
         last_name
         birthdate
         address_line1
-        address_line2
         address_postal_code
         address_city_insee_code
         address_country_code

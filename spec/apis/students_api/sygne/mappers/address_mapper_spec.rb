@@ -9,8 +9,8 @@ describe StudentsApi::Sygne::Mappers::AddressMapper do
 
   let(:expected) do
     {
-      address_line1: "#{data['adrResidenceEle']['adresseLigne1']} #{data['adrResidenceEle']['adresseLigne2']}",
-      address_line2: "#{data['adrResidenceEle']['adresseLigne3']} #{data['adrResidenceEle']['adresseLigne4']}",
+      address_line1: [data['adrResidenceEle']['adresseLigne1'], data['adrResidenceEle']['adresseLigne2'],
+                      data['adrResidenceEle']['adresseLigne3'], data['adrResidenceEle']['adresseLigne4']].join(" "),
       address_postal_code: data["adrResidenceEle"]["codePostal"],
       address_city: data["adrResidenceEle"]["libelleCommune"],
       address_city_insee_code: data["adrResidenceEle"]["codeCommuneInsee"],
@@ -24,19 +24,13 @@ describe StudentsApi::Sygne::Mappers::AddressMapper do
     expect(mapper.call(data)).to eq expected
   end
 
-  context "when address_line1 is nil" do
-    before { data["adrResidenceEle"]["adresseLigne1"] = nil }
+  context "when address_line2 is nil" do
+    before { data["adrResidenceEle"]["adresseLigne2"] = nil }
 
-    it "maps address_line2 correctly" do
-      expect(mapper.call(data)[:address_line1]).to eq data["adrResidenceEle"]["adresseLigne2"]
-    end
-  end
-
-  context "when address_line3 is nil" do
-    before { data["adrResidenceEle"]["adresseLigne3"] = nil }
-
-    it "maps address_line2 correctly" do
-      expect(mapper.call(data)[:address_line2]).to eq data["adrResidenceEle"]["adresseLigne4"]
+    it "maps addresses correctly" do
+      expect(mapper.call(data)[:address_line1]).to eq [data["adrResidenceEle"]["adresseLigne1"],
+                                                       data["adrResidenceEle"]["adresseLigne3"],
+                                                       data["adrResidenceEle"]["adresseLigne4"]].join(" ")
     end
   end
 end
