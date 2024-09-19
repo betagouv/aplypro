@@ -46,6 +46,10 @@ class EstablishmentFacade
     @ribs_count ||= selected_classes.joins(students: :rib).distinct(:"students.id").count(:"ribs.id")
   end
 
+  def students_without_rib_count
+    @students_without_rib_count ||= students_count - ribs_count
+  end
+
   # TODO: Ajouter la condition sur l'année scolaire
   def pfmps_counts
     @pfmps_counts ||= PfmpStateMachine
