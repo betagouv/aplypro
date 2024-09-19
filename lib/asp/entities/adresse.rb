@@ -30,8 +30,8 @@ module ASP
           super
         elsif payment_request.pfmp.in_state?(:rectified)
           new(
-            pointremise: payment_request.student.address_line1,
-            cpltdistribution: payment_request.student.address_line2,
+            pointremise: payment_request.student.address_line1.to_s.slice(0, 38), # Max 38 characters
+            cpltdistribution: payment_request.student.address_line2.slice(0, 38), # Max 38 characters
             codetypeadr: ASP::Mappers::PRINCIPAL_ADDRESS_TYPE,
             codeinseepays: InseeCountryCodeMapper.call(payment_request.student.address_country_code),
             codecominsee: payment_request.student.address_city_insee_code,
