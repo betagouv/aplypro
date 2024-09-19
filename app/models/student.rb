@@ -65,7 +65,8 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     )
   }
 
-  sourced_from_external_api :address_line1,
+  sourced_from_external_api :birthdate,
+                            :address_line1,
                             :address_postal_code,
                             :address_city_insee_code,
                             :address_country_code,
