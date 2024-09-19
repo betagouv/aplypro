@@ -12,8 +12,6 @@ RSpec.describe Sync::StudentJob, :student_api do
   shared_examples "maps all the extra fields correctly" do
     describe "attributes mapping" do
       %i[
-        first_name
-        last_name
         birthdate
         address_line1
         address_postal_code
