@@ -1,6 +1,5 @@
 %h2.fr-col Décisions d'attribution
-%p= "Nombre d'élèves avec DA : #{@establishment_facade.attributive_decisions_count}"
-%p= "Nombre d'élèves sans DA : #{@establishment_facade.without_attributive_decisions_count}"
+%p= pie_chart({ "Élèves avec DA" => @establishment_facade.attributive_decisions_count, "Élèves sans DA" => @establishment_facade.without_attributive_decisions_count }, colors: ["#4e73df", "#1cc88a"], donut: true)
 
 %h2.fr-col Coordonnées bancaires
 %p= "Nombre d'élèves avec RIB : #{@establishment_facade.ribs_count}"
