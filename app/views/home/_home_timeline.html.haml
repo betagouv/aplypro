@@ -3,14 +3,14 @@
 .fr-grid-row.fr-grid-row--center
   .fr-col-md-6
     = render partial: "dashboard"
-  .fr-col-md-6
+  .fr-col-md-6#timeline-container
     - if @establishment_facade.students_count <= 0
       = t("errors.school_years.not_found").html_safe
     - else
-      .gray-panel#attributive_decision_panel
+      .gray-panel.timeline-section
         = render 'classes/attributive_decisions_panel'
 
-      .gray-panel
+      .gray-panel.timeline-section
         .fr-grid-row.fr-grid-row--top
           %h2.fr-col 2. Coordonnées bancaires
           = progress_badge(@establishment_facade.ribs_count, @establishment_facade.students_count, title: "Les coordonnées bancaires sont réutilisées pour un même élève\nà travers toutes les classes qu'il a pu fréquenter.")
@@ -19,7 +19,7 @@
         %ul.fr-btns-group
           %li= link_to "Choisir une classe pour saisir des coordonnées bancaires", school_year_classes_path(selected_school_year), class: "fr-btn fr-btn--primary fr-mb-0"
 
-      .gray-panel
+      .gray-panel.timeline-section
         %h2.fr-col 3. Périodes de formation en milieu professionnel
 
         .fr-grid-row
@@ -32,7 +32,7 @@
         %ul.fr-btns-group
           %li= link_to "Choisir une classe ou un élève pour saisir une PFMP", school_year_classes_path(selected_school_year), class: "fr-btn fr-btn--primary fr-mb-0"
 
-      .gray-panel
+      .gray-panel.timeline-section
         %h2.fr-col 4. Demandes de paiements des PFMPs
 
         .fr-grid-row

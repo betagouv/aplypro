@@ -14,3 +14,23 @@
  *= require_self
  *= require utility/icons/icons.css
  */
+
+ #dashboard-container {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+#timeline-container {
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.dashboard-section {
+  display: none;
+}
+
+.dashboard-section.active {
+  display: block;
+}

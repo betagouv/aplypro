@@ -1,13 +1,21 @@
-%h2.fr-col Décisions d'attribution
-%p= pie_chart({ "Élèves avec DA" => @establishment_facade.attributive_decisions_count, "Élèves sans DA" => @establishment_facade.without_attributive_decisions_count }, colors: ["#4e73df", "#1cc88a"], donut: true)
+.dashboard-section
+  %h2.fr-col Décisions d'attribution
+  %p= pie_chart({ "Élèves avec DA" => @establishment_facade.attributive_decisions_count, "Élèves sans DA" => @establishment_facade.without_attributive_decisions_count }, colors: ["#4e73df", "#1cc88a"], donut: true)
 
-%h2.fr-col Coordonnées bancaires
-%p= pie_chart({ "Élèves avec RIB" => @establishment_facade.ribs_count, "Élèves sans RIB" => @establishment_facade.students_without_rib_count }, colors: ["#4e73df", "#1cc88a"], donut: true)
+.dashboard-section
+  %h2.fr-col Coordonnées bancaires
+  %p= pie_chart({ "Élèves avec RIB" => @establishment_facade.ribs_count, "Élèves sans RIB" => @establishment_facade.students_without_rib_count }, colors: ["#4e73df", "#1cc88a"], donut: true)
 
-%h2.fr-col Suivi des paiements
-.fr-my-3w.fr-px-3w
-  = column_chart(@establishment_facade.pfmps_counts.transform_keys { |key| t("pfmps.state.#{key}") },
+.dashboard-section
+  %h2.fr-col PFMPs par états
+  %p= column_chart(@establishment_facade.pfmps_counts.transform_keys { |key| t("pfmps.state.#{key}") },
     colors: ["#000091", "#0063cb", "#18753c", "#ce0500"],
     label: "PFMPs par états")
+
+.dashboard-section
+  %h2.fr-col Suivi des paiements
+  %p= column_chart(@establishment_facade.payment_requests_counts.transform_keys { |key| t("payment_requests.state.#{key}") },
+    colors: ["#000091", "#0063cb", "#18753c", "#ce0500", "#000091", "#0063cb", "#18753c", "#ce0500"],
+    label: "Demandes de paiements par états")
 
 
