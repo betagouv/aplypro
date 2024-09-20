@@ -5,14 +5,15 @@
 - else
   - chart_colors = ["#000091", "#0063cb", "#18753c", "#ce0500"]
 
-  .fr-grid-row
+  .fr-grid-row.timeline-row
     .fr-col-md-7
       .gray-panel.timeline-section
         = render 'classes/attributive_decisions_panel'
-    .fr-col-md-4
-      = pie_chart({ "Élèves avec DA" => @establishment_facade.attributive_decisions_count, "Élèves sans DA" => @establishment_facade.without_attributive_decisions_count }, colors: [chart_colors[0], chart_colors[1]], donut: true)
+    .fr-col-md-4.fr-ml-4w
+      .chart-container
+        = pie_chart({ "Élèves avec DA" => @establishment_facade.attributive_decisions_count, "Élèves sans DA" => @establishment_facade.without_attributive_decisions_count }, colors: [chart_colors[0], chart_colors[1]], donut: true)
 
-  .fr-grid-row
+  .fr-grid-row.timeline-row
     .fr-col-md-7
       .gray-panel.timeline-section
         %h2 2. Coordonnées bancaires
@@ -20,9 +21,10 @@
         %ul.fr-btns-group
           %li= link_to "Choisir une classe pour saisir des coordonnées bancaires", school_year_classes_path(selected_school_year), class: "fr-btn fr-btn--primary fr-mb-0"
     .fr-col-md-4.fr-ml-4w
-      = pie_chart({ "Élèves avec RIB" => @establishment_facade.ribs_count, "Élèves sans RIB" => @establishment_facade.students_without_rib_count }, colors: [chart_colors[0], chart_colors[1]], donut: true)
+      .chart-container
+        = pie_chart({ "Élèves avec RIB" => @establishment_facade.ribs_count, "Élèves sans RIB" => @establishment_facade.students_without_rib_count }, colors: [chart_colors[0], chart_colors[1]], donut: true)
 
-  .fr-grid-row
+  .fr-grid-row.timeline-row
     .fr-col-md-7
       .gray-panel.timeline-section
         %h2 3. Périodes de formation en milieu professionnel
@@ -35,11 +37,12 @@
         %ul.fr-btns-group
           %li= link_to "Choisir une classe ou un élève pour saisir une PFMP", school_year_classes_path(selected_school_year), class: "fr-btn fr-btn--primary fr-mb-0"
     .fr-col-md-4.fr-ml-4w
-      = column_chart(@establishment_facade.pfmps_counts.transform_keys { |key| t("pfmps.state.#{key}") },
-        colors: chart_colors,
-        label: "PFMPs par états")
+      .chart-container
+        = column_chart(@establishment_facade.pfmps_counts.transform_keys { |key| t("pfmps.state.#{key}") },
+          colors: chart_colors,
+          label: "PFMPs par états")
 
-  .fr-grid-row
+  .fr-grid-row.timeline-row
     .fr-col-md-7
       .gray-panel.timeline-section
         %h2 4. Demandes de paiements des PFMPs
@@ -57,6 +60,7 @@
           - else
             %li= button_to "Vous n'avez pas le droit de valider des PFMPs", "#", class: 'fr-btn fr-btn--primary fr-mb-0', disabled: true
     .fr-col-md-4.fr-ml-4w
-      = column_chart(@establishment_facade.payment_requests_counts.transform_keys { |key| t("payment_requests.state.#{key}") },
-        colors: chart_colors,
-        label: "Demandes de paiements par états")
+      .chart-container
+        = column_chart(@establishment_facade.payment_requests_counts.transform_keys { |key| t("payment_requests.state.#{key}") },
+          colors: chart_colors,
+          label: "Demandes de paiements par états")
