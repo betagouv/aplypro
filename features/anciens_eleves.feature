@@ -11,7 +11,18 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
 
   Scénario: Les anciens élèves sont affichés dans le compteur des décisions d'attribution
     Quand je rafraîchis la page
-    Alors le panneau "Décisions d'attribution" contient "Éditer 10 décisions d'attribution manquantes"
+    Alors le panneau "Décisions d'attribution" contient "0 / 10"
+    Et le panneau "Décisions d'attribution" contient "Éditer 10 décisions d'attribution manquantes"
+
+  Scénario: Les anciens élèves sont affichés dans le compteur des saisies bancaires
+    Quand je rafraîchis la page
+    Alors le panneau "Coordonnées bancaires" contient "0 / 10"
+
+  Scénario: Les élèves qui ont changé de classe au sein du même établissement sont correctement comptabilisés dans la page d'accueil
+    Sachant que l'élève "Jean Dupuis" a une ancienne scolarité dans la classe "2NDEB" dans le même établissement
+    Quand je rafraîchis la page
+    Alors le panneau "Décisions d'attribution" contient "0 / 11"
+    Et le panneau "Coordonnées bancaires" contient "0 / 10"
 
   Scénario: Les anciens élèves sont affichés dans les listings de classe
     Quand je consulte la liste des classes
@@ -39,6 +50,7 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
     Et que la génération des décisions d'attribution manquantes est complètement finie
     Quand je me rends sur la page d'accueil
     Alors la page contient "Télécharger 10 décisions d'attribution"
+    Et le panneau "Décisions d'attribution" contient "10 / 10"
 
   Scénario: Le personnel voit le bouton pour générer des décisions d'attribution même si il n'y a que des anciens élèves qui n'en ont pas
     Lorsque les élèves actuels sont les seuls à avoir des décisions d'attribution
