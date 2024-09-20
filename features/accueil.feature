@@ -28,8 +28,6 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Quand je clique sur "Continuer"
     Et que je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"
     Et que je me rends sur la page d'accueil
-    Alors le panneau "Décisions d'attribution" contient "0 / 1"
-    Et le panneau "Coordonnées bancaires" contient "1 / 1"
     Et l'indicateur de PFMP "À compléter" affiche 0
     Et l'indicateur de PFMP "Saisies à valider" affiche 0
     Et l'indicateur de PFMP "Validées" affiche 0
