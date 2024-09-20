@@ -1,9 +1,10 @@
 %h1= "Année scolaire #{selected_school_year}"
 
-.fr-grid-row.fr-grid-row--center
-  .fr-col-md-6
+.fr-grid-row
+  .fr-col-md-4
     = render partial: "dashboard"
-  .fr-col-md-6#timeline-container
+  .fr-col-md-8
+    #timeline-container
     - if @establishment_facade.students_count <= 0
       = t("errors.school_years.not_found").html_safe
     - else
