@@ -3,7 +3,6 @@
 class Rib < ApplicationRecord
   belongs_to :student
 
-  # TODO: migrate all previous ribs to associate them to an establishment
   belongs_to :establishment, optional: true
 
   enum :owner_type, { personal: 0, other_person: 1, moral_person: 2 }
