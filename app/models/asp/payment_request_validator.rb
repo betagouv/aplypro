@@ -34,7 +34,7 @@ module ASP
 
       add_error(:rib) if rib.invalid?
 
-      return unless student.adult_at?(pfmp.start_date) && !rib.personal?
+      return unless student.adult_at?(pfmp.start_date) && (rib.other_person? || rib.moral_person?)
 
       add_error(:adult_without_personal_rib)
     end
