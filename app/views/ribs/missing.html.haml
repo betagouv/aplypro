@@ -36,6 +36,6 @@
               .fr-grid-row.fr-grid-row--middle.fr-grid-row--gutters
                 .fr-col-md-12.fr-col-12
                   .fr-mb-2w
-                    = render partial: 'ribs/owner_type', locals: { student: rib.student, field_name: "ribs[#{rib.student_id}][owner_type]", current_value: rib.owner_type }
+                    = render partial: 'ribs/owner_type', locals: { student_id: rib.student_id, field_name: "ribs[#{rib.student_id}][owner_type]", current_value: rib.owner_type }
 
   = f.submit "Enregistrer les coordonnées bancaires saisies", class: "fr-btn fr-btn-primary"

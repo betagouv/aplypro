@@ -130,7 +130,7 @@ fr:
         owner_type_personal: "Les coordonnées bancaires appartiennent à l'élève"
         owner_type_other_person: "Les coordonnées bancaires appartiennent à un représentant légal ou à un tiers"
         owner_type_moral_person: "Les coordonnées bancaires appartiennent à une personne morale (ex : association)"
-        owner_type_seing: "Cas d'un élève majeur payé sur le compte d'un tiers (Je confirme, qu’en tant que chef.fe d’établissement responsable de la collecte et de la vérification des pièces justificatives relatives à l’identité de l’élève bénéficiaire, avoir pris connaissance des conditions associées à la prise en compte du mandat sous seing privé par l’Agence de services et de paiement.)"
+        owner_type_mandate: "Cas d'un élève majeur payé sur le compte d'un tiers (Je confirme, qu’en tant que chef.fe d’établissement responsable de la collecte et de la vérification des pièces justificatives relatives à l’identité de l’élève bénéficiaire, avoir pris connaissance des conditions associées à la prise en compte du mandat sous seing privé par l’Agence de services et de paiement.)"
       missing :
           owner_type: "Les coordonnées bancaires appartiennent à :"
           owner_type_personal: "L'élève"

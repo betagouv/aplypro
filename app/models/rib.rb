@@ -5,7 +5,7 @@ class Rib < ApplicationRecord
 
   belongs_to :establishment, optional: true
 
-  enum :owner_type, { personal: 0, other_person: 1, moral_person: 2, seing: 3 }
+  enum :owner_type, { personal: 0, other_person: 1, moral_person: 2, mandate: 3 }
 
   has_many :payment_requests, class_name: "ASP::PaymentRequest", dependent: :nullify
 
