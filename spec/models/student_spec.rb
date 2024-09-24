@@ -146,24 +146,14 @@ RSpec.describe Student do
   end
 
   describe "adult?" do
-    before do
-      Timecop.safe_mode = false
-      Timecop.freeze(Date.new(2022, 3, 1))
-      student.update(birthdate: 18.years.ago)
-    end
-
-    after do
-      Timecop.return
-    end
+    before { student.update(birthdate: 18.years.ago) }
 
     context "when the student is an adult" do
-      it { expect(student.adult?).to be true }
+      it { expect(student.adult_at?(Time.zone.today)).to be true }
     end
 
-    context "when the student is not an adult and is born a leap year" do
-      before { student.update(birthdate: Date.new(2004, 2, 29)) }
-
-      it { expect(student.adult?).to be false }
+    context "when the student is not an adult" do
+      it { expect(student.adult_at?(Time.zone.today - 1.day)).to be false }
     end
   end
 

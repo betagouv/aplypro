@@ -148,8 +148,8 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def adult?
-    birthdate + 18.years >= Time.zone.today
+  def adult_at?(date)
+    date >= birthdate + 18.years
   end
 
   private
