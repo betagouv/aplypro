@@ -36,7 +36,7 @@ module ASP
 
       return unless student.adult_at?(pfmp.start_date) && (rib.other_person? || rib.moral_person?)
 
-      add_error(:adult_without_personal_rib)
+      add_error(:adult_wrong_owner_type)
     end
 
     def check_pfmp

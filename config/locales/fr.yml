@@ -101,7 +101,7 @@ fr:
               rib: "Les coordonnées bancaires saisies sont invalides ou incorrectes"
               pfmp: "La PFMP associée n'est pas valide"
               ine_not_found: "L'INE de l'étudiant est introuvable. Il a certainement été supprimé lors d'une réconciliation d'INE, vous devriez retrouver cet étudiant en double dans APLyPro. Veuillez utiliser l'autre occurrence de cet étudiant pour saisir ses PFMPs"
-              adult_without_personal_rib: "Les étudiants majeurs doivent être payés sur leurs propres coordonnées bancaires"
+              adult_wrong_owner_type: "Les étudiants majeurs doivent être payés sur leurs propres coordonnées bancaires ou posséder un mandat sous seing privé"
               pfmp_amount: "La PFMP associée doit avoir un montant positif"
               missing_attributive_decision: "Il manque une décision attributive"
               needs_abrogated_attributive_decision: "Les élèves ayant changés de formation, de statut ou d'établissement doivent avoir une abrogation de leur décision d'attribution passée. Ce document peut être généré dans la liste des élèves."
