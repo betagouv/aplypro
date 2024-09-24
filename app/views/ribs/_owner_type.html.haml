@@ -20,4 +20,9 @@
       %input{id: "radio-inline-3-#{student_id}", type: "radio", value: "moral_person", name: field_name, checked: current_value == "moral_person"}
       %label.fr-label{for: "radio-inline-3-#{student_id}"}
         = t("activerecord.attributes.missing.owner_type_moral_person")
+  .fr-fieldset__element
+    .fr-radio-group
+      %input{id: "radio-inline-4-#{student_id}", type: "radio", value: "mandate", name: field_name, checked: current_value == "mandate"}
+      %label.fr-label{for: "radio-inline-4-#{student_id}"}
+        = t("activerecord.attributes.rib.owner_type_mandate")
   .fr-messages-group{id: "radio-inline-messages-#{student_id}", "aria-live": "assertive"}

@@ -29,14 +29,14 @@ module ASP
       add_error(:ine_not_found) if student.ine_not_found
     end
 
-    def check_rib # rubocop:disable Metrics/AbcSize
+    def check_rib
       add_error(:missing_rib) and return if rib.blank?
 
       add_error(:rib) if rib.invalid?
 
-      return unless pfmp.start_date >= (student.birthdate + 18.years) && !rib.personal?
+      return unless student.adult_at?(pfmp.start_date) && (rib.other_person? || rib.moral_person?)
 
-      add_error(:adult_without_personal_rib)
+      add_error(:adult_wrong_owner_type)
     end
 
     def check_pfmp

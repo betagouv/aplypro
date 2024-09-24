@@ -72,7 +72,7 @@ describe ASP::PaymentRequestValidator do
       with_readonly_bypass(asp_payment_request.student.rib) { |rib| rib.update!(owner_type: :other_person) }
     end
 
-    include_examples "invalidation", :adult_without_personal_rib
+    include_examples "invalidation", :adult_wrong_owner_type
   end
 
   context "when the attributive decision has not been attached" do

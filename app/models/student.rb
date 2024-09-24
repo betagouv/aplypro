@@ -148,6 +148,10 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
+  def adult_at?(date)
+    date >= birthdate + 18.years
+  end
+
   private
 
   def check_asp_file_reference

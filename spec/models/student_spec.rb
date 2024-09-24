@@ -145,6 +145,18 @@ RSpec.describe Student do
     end
   end
 
+  describe "adult?" do
+    before { student.update(birthdate: 18.years.ago) }
+
+    context "when the student is an adult" do
+      it { expect(student.adult_at?(Time.zone.today)).to be true }
+    end
+
+    context "when the student is not an adult" do
+      it { expect(student.adult_at?(Time.zone.today - 1.day)).to be false }
+    end
+  end
+
   describe "transferred?" do
     subject { student.transferred? }
 
