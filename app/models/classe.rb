@@ -27,6 +27,12 @@ class Classe < ApplicationRecord
            class_name: "Schooling",
            inverse_of: :classe
 
+  has_many :removed_schoolings,
+           -> { with_removed_students },
+           dependent: :destroy,
+           class_name: "Schooling",
+           inverse_of: :classe
+
   has_many :active_students,
            -> { order("last_name", "first_name") },
            class_name: "Student",
@@ -37,6 +43,12 @@ class Classe < ApplicationRecord
            -> { order("last_name", "first_name") },
            class_name: "Student",
            through: :inactive_schoolings,
+           source: :student
+
+  has_many :removed_students,
+           -> { order("last_name", "first_name") },
+           class_name: "Student",
+           through: :removed_schoolings,
            source: :student
 
   has_many :active_pfmps, through: :active_schoolings, class_name: "Pfmp", source: :pfmps

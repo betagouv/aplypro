@@ -26,6 +26,9 @@ fr:
       extension_removed: Le report de la décision d'attribution de %{name} a bien été supprimé
       cant_remove_extension: Le report de la décision d'attribution de %{name} n'a pas pu être supprimé car celui ci contient une PFMP
       extension_failure: La décision d'attribution de %{name} n'a pas pu être modifiée
+    schooling:
+      removed: L'élève %{name} a bien été retiré de la classe %{classe}
+      unremoved: L'élève %{name} a bien été réintégré dans la classe %{classe}
   helpers:
     submit:
       rib:
@@ -210,6 +213,12 @@ fr:
         show: Envoyer en paiement les PFMPs de %{name}
       schoolings:
         confirm_da_extension: "Autoriser un report de décision d'attribution"
+        confirm_removed:
+          title: "Retrait de l'élève de la classe"
+          breadcrumb: "Retrait de l'élève de la classe"
+        confirm_unremoved:
+          title: "Réintégration de l'élève dans la classe"
+          breadcrumb: "Réintégration de l'élève dans la classe"
 
   global:
     sponsor: "Direction\nInterministérielle\ndu Numérique"
@@ -286,8 +295,7 @@ fr:
         PFMP est maintenant sujette à l'approbation du chef
         d'établissement sans quoi le paiement ne peut pas être déclenché.
       validated: |
-        La PFMP a été validée. La demande de paiement sera envoyée dès que
-        les développements nécessaires auront été effectués.
+        La PFMP a été validée. La demande de paiement sera envoyée dans le prochain lot journalier.
       rectified: |
         La PFMP a été corrigée. La nouvelle demande de paiement sera envoyée dès que
         possible avec les nouvelles informations fournises.
