@@ -50,17 +50,16 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
     Et la page contient un bouton "Modifier les coordonnées bancaires" désactivé
     Et la page contient un bouton "Supprimer les coordonnées bancaires" désactivé
 
-  # TODO: Ce test devrait normalement passer
-  # Scénario: Le personnel de direction ne peut pas accéder au RIB d'un élève s'il a été déclaré dans un autre établissement
-  #  Sachant que l'élève "Marie Curie" a été transféré dans l'établissement "TEST" en classe "1EREB"
-  #  Et que je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"
-  #  Quand je rafraîchis la page
-  #  Et la page contient "Modifier les coordonnées bancaires"
-  #  Et la page contient "Supprimer les coordonnées bancaires"
-  #  Sachant que je suis un personnel MENJ directeur de l'établissement "TEST"
-  #  Quand je me déconnecte
-  #  Et que je me connecte en tant que personnel MENJ
-  #  Et que je passe l'écran d'accueil
-  #  Et que je consulte le profil de "Marie Curie" dans la classe de "1EREB"
-  #  Et la page ne contient pas "Modifier les coordonnées bancaires"
-  #  Et la page ne contient pas "Supprimer les coordonnées bancaires"
+  Scénario: Le personnel de direction ne peut pas accéder au RIB d'un élève s'il a été déclaré dans un autre établissement
+    Sachant que l'élève "Marie Curie" a été transféré dans l'établissement "TEST" en classe "1EREB"
+    Et que je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"
+    Quand je rafraîchis la page
+    Et la page contient "Modifier les coordonnées bancaires"
+    Et la page contient "Supprimer les coordonnées bancaires"
+    Sachant que je suis un personnel MENJ directeur de l'établissement "TEST"
+    Quand je me déconnecte
+    Et que je me connecte en tant que personnel MENJ
+    Et que je passe l'écran d'accueil
+    Et que je consulte le profil de "Marie Curie" dans la classe de "1EREB"
+    Et la page ne contient pas "Modifier les coordonnées bancaires"
+    Et la page ne contient pas "Supprimer les coordonnées bancaires"
