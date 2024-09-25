@@ -6,7 +6,7 @@ module Stats
       def initialize
         super(
           column: :amount,
-          all: Pfmp.joins(schooling: { student: :rib })
+          all: Pfmp.joins(schooling: { student: :ribs })
                    .merge(Pfmp.finished)
                    .merge(Pfmp.in_state(:validated))
                    .merge(Schooling.with_attributive_decisions)

@@ -23,10 +23,12 @@ class ClassesFacade
 
   def nb_ribs_per_class
     @nb_ribs_per_class ||= @classes
-                           .joins(students: :rib)
+                           .joins(students: :ribs)
+                           .where(ribs: { archived_at: nil })
                            .reorder(nil)
                            .group(:"classes.id")
-                           .count
+                           .distinct
+                           .count(:"students.id")
   end
 
   def nb_pfmps(class_id, state)

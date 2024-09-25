@@ -96,7 +96,7 @@ module ASP
     end
 
     def rib
-      @rib ||= student.rib
+      @rib ||= payment_request.rib || student.rib
     end
 
     def pfmp

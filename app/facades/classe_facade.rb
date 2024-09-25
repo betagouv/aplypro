@@ -21,7 +21,7 @@ class ClasseFacade
 
   def schoolings
     @classe.schoolings
-           .includes(:attributive_decision_attachment, pfmps: :transitions, student: :rib)
+           .includes(:attributive_decision_attachment, pfmps: :transitions, student: :ribs)
            .order("students.last_name", "students.first_name")
   end
 
