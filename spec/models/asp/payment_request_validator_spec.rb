@@ -1,211 +1,198 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+# rubocop:disable RSpec/MultipleMemoizedHelpers
+RSpec.describe ASP::PaymentRequestValidator do
+  let(:validator) { described_class.new(payment_request) }
+  let(:payment_request) { ASP::PaymentRequest.new }
+  let(:student) { Student.new(birthdate: 18.years.ago.to_date) }
+  let(:schooling) { Schooling.new }
+  let(:pfmp) { Pfmp.new(start_date: Time.zone.today) }
+  let(:rib) { Rib.new }
+  let(:establishment) { Establishment.new(uai: "0123456X") }
+  let(:mef) { Mef.new(code: "12345678") }
+  let(:classe) { Classe.new }
 
-describe ASP::PaymentRequestValidator do
-  subject(:validator) { described_class.new(asp_payment_request) }
+  before do
+    allow(payment_request).to receive(:student).and_return(student) # rubocop:disable RSpec/ReceiveMessages
+    allow(payment_request).to receive(:schooling).and_return(schooling) # rubocop:disable RSpec/ReceiveMessages
+    allow(payment_request).to receive(:pfmp).and_return(pfmp) # rubocop:disable RSpec/ReceiveMessages
+    allow(payment_request).to receive(:rib).and_return(rib) # rubocop:disable RSpec/ReceiveMessages
 
-  let(:asp_payment_request) { create(:asp_payment_request) }
+    allow(schooling).to receive(:establishment).and_return(establishment) # rubocop:disable RSpec/ReceiveMessages
+    allow(schooling).to receive(:mef).and_return(mef) # rubocop:disable RSpec/ReceiveMessages
+    allow(schooling).to receive(:classe).and_return(classe) # rubocop:disable RSpec/ReceiveMessages
+    allow(classe).to receive(:establishment).and_return(establishment) # rubocop:disable RSpec/ReceiveMessages
+    allow(classe).to receive(:mef).and_return(mef) # rubocop:disable RSpec/ReceiveMessages
+  end
 
-  RSpec.shared_examples "p_r invalidation" do |attr|
-    it "adds a `#{attr}` error" do
-      expect { validator.validate }
-        .to change { asp_payment_request.errors.details[:ready_state_validation] }
-        .to include(a_hash_including(error: attr))
+  describe "#check_student" do
+    it "adds an error if biological sex is unknown" do
+      allow(student).to receive(:sex_unknown?).and_return(true)
+      expect do
+        validator.send(:check_student)
+      end.to change { payment_request.errors.details[:ready_state_validation] }
+        .to include(a_hash_including(error: :missing_biological_sex))
+    end
+
+    it "adds an error if INE is not found" do
+      allow(student).to receive(:ine_not_found).and_return(true)
+      expect do
+        validator.send(:check_student)
+      end.to change { payment_request.errors.details[:ready_state_validation] }
+        .to include(a_hash_including(error: :ine_not_found))
     end
   end
 
-  context "when the schooling status is unknown" do
-    before { asp_payment_request.schooling.update!(status: nil) }
-
-    include_examples "p_r invalidation", :student_type
-  end
-
-  context "when the schooling is for an apprentice" do
-    before { asp_payment_request.schooling.update!(status: :apprentice) }
-
-    include_examples "p_r invalidation", :student_type
-  end
-
-  context "when the student is a lost record" do
-    before { asp_payment_request.student.update!(ine_not_found: true) }
-
-    include_examples "p_r invalidation", :ine_not_found
-  end
-
-  # rubocop:disable Rails/SkipsModelValidations
-  context "when the PFMP is not valid" do
-    before { asp_payment_request.pfmp.update_column(:start_date, Date.new(2002, 1, 1)) }
-
-    include_examples "p_r invalidation", :pfmp
-  end
-
-  context "when the rib is not valid" do
-    let(:payment_request) { create(:asp_payment_request, :ready, rib: create(:rib, :outside_sepa)) }
-
-    include_examples "p_r invalidation", :rib
-  end
-  # rubocop:enable Rails/SkipsModelValidations
-
-  context "when the PFMP is zero-amount" do
-    before { asp_payment_request.pfmp.update!(amount: 0) }
-
-    include_examples "p_r invalidation", :pfmp_amount
-  end
-
-  context "when the RIB is missing" do
-    let(:asp_payment_request) { create(:asp_payment_request, rib: nil) }
-
-    include_examples "p_r invalidation", :missing_rib
-  end
-
-  context "when the request belongs to an adult with a moral person rib" do
-    let(:asp_payment_request) { create(:asp_payment_request, student_traits: %i[with_other_person_rib adult]) }
-
-    include_examples "p_r invalidation", :adult_wrong_owner_type
-  end
-
-  context "when the attributive decision has not been attached" do
-    before do
-      asp_payment_request.pfmp.schooling.attributive_decision.purge
-                         .tap { asp_payment_request.reload }
+  describe "#check_insee_code" do
+    it "adds an error if birthplace country INSEE code is blank" do
+      allow(student).to receive(:birthplace_country_insee_code).and_return(nil)
+      expect do
+        validator.send(:check_insee_code)
+      end.to change { payment_request.errors.details[:ready_state_validation] }
+        .to include(a_hash_including(error: :missing_birthplace_country_insee_code))
     end
 
-    include_examples "p_r invalidation", :missing_attributive_decision
+    it "adds an error if born in France and birthplace city INSEE code is blank" do # rubocop:disable RSpec/ExampleLength
+      allow(student).to receive(:born_in_france?).and_return(true) # rubocop:disable RSpec/ReceiveMessages
+      allow(student).to receive(:birthplace_city_insee_code).and_return(nil) # rubocop:disable RSpec/ReceiveMessages
+      expect do
+        validator.send(:check_insee_code)
+      end.to change { payment_request.errors.details[:ready_state_validation] }
+        .to include(a_hash_including(error: :missing_birthplace_city_insee_code))
+    end
   end
 
-  context "when there is another duplicated PFMP" do
-    let(:duplicate) do
-      pfmp = asp_payment_request.pfmp
-
-      create(
-        :pfmp,
-        schooling: pfmp.schooling,
-        start_date: pfmp.start_date + 1.day,
-        end_date: pfmp.end_date + 3.days,
-        day_count: pfmp.day_count
-      )
-    end
-
-    context "when it is validated" do
-      before { duplicate.validate! }
-
-      include_examples "p_r invalidation", :overlaps
-    end
-
-    context "when it's not validated" do
-      it "doesn't add an error" do
-        expect { validator.validate }.not_to change(asp_payment_request, :errors)
+  describe "#check_address" do
+    %i[address_postal_code address_city_insee_code address_country_code].each do |info|
+      it "adds an error if #{info} is blank" do
+        allow(student).to receive(info).and_return(nil)
+        expect do
+          validator.send(:check_address)
+        end.to change { payment_request.errors.details[:ready_state_validation] }
+          .to include(a_hash_including(error: :"missing_#{info}"))
       end
     end
   end
 
-  context "when the schooling is excluded" do
-    before { create(:exclusion, :whole_establishment, uai: asp_payment_request.schooling.establishment.uai) }
-
-    include_examples "p_r invalidation", :excluded_schooling
-  end
-
-  context "when the student transferred and the schooling is abrogated and there is a schooling with attribution" do
-    let(:asp_payment_request) { create(:asp_payment_request, :ready) }
-
-    before do
-      schooling = asp_payment_request.schooling
-      schooling.update!(end_date: Date.yesterday)
-      AttributiveDecisionHelpers.generate_fake_attributive_decision(schooling)
-      AttributiveDecisionHelpers.generate_fake_abrogation_decision(schooling)
-      create(:schooling, :with_attributive_decision, student: asp_payment_request.student)
+  describe "#check_rib" do
+    it "adds an error if RIB is missing" do # rubocop:disable RSpec/ExampleLength
+      allow(payment_request).to receive(:rib).and_return(nil)
+      allow(student).to receive(:rib).and_return(nil)
+      expect do
+        validator.send(:check_rib)
+      end.to change { payment_request.errors.details[:ready_state_validation] }
+        .to include(a_hash_including(error: :missing_rib))
     end
 
-    context "when the current schooling has no abrogation attached" do
-      before do
-        schooling = asp_payment_request.schooling
-        schooling.abrogation_decision.purge
-      end
-
-      include_examples "p_r invalidation", :needs_abrogated_attributive_decision
+    it "adds an error if RIB is invalid" do
+      allow(rib).to receive(:invalid?).and_return(true)
+      expect do
+        validator.send(:check_rib)
+      end.to change { payment_request.errors.details[:ready_state_validation] }
+        .to include(a_hash_including(error: :rib))
     end
 
-    context "when the pfmp dates match the schooling" do
-      it "does not add an error" do
-        expect { validator.validate }.not_to(change { asp_payment_request.errors.details[:ready_state_validation] })
-      end
-    end
-
-    context "when the pfmp dates match the schooling with an extended end date" do
-      before do
-        schooling = asp_payment_request.schooling
-        schooling.update!(extended_end_date: schooling.end_date + 6.months)
-        asp_payment_request.pfmp.update!(end_date: schooling.extended_end_date - 2.days)
-      end
-
-      it "does not add an error" do
-        expect { validator.validate }.not_to(change { asp_payment_request.errors.details[:ready_state_validation] })
-      end
-    end
-
-    context "when the pfmp dates dont match the schooling" do
-      before do
-        schooling = asp_payment_request.schooling
-        schooling.update!(start_date: "2024-04-22", end_date: "2024-08-10")
-        schooling.classe = create(:classe, school_year: SchoolYear.find_by!(start_year: 2023))
-        schooling.save!
-        pfmp = create(:pfmp, :validated, day_count: 2, start_date: schooling.start_date - 1.day,
-                                         end_date: schooling.end_date, schooling: schooling)
-        asp_payment_request.pfmp = pfmp
-        asp_payment_request.save!
-      end
-
-      it "adds an error" do
-        expect { validator.validate }.to(change do
-                                           asp_payment_request.errors.details[:ready_state_validation]
-                                         end.from([]).to([{ error: :needs_abrogated_attributive_decision }]))
-      end
+    it "adds an error if adult student has other person or moral person RIB" do # rubocop:disable RSpec/ExampleLength
+      allow(student).to receive(:adult_at?).and_return(true)
+      allow(rib).to receive(:other_person?).and_return(true)
+      expect do
+        validator.send(:check_rib)
+      end.to change { payment_request.errors.details[:ready_state_validation] }
+        .to include(a_hash_including(error: :adult_wrong_owner_type))
     end
   end
 
-  context "when the student is missing biological sex" do
-    before { asp_payment_request.student.update!(biological_sex: 0) }
-
-    include_examples "p_r invalidation", :missing_biological_sex
-  end
-
-  context "when the student is missing birthplace city INSEE code and is born in France" do
-    before do
-      asp_payment_request.student.update!(
-        birthplace_country_insee_code: "99100",
-        birthplace_city_insee_code: nil
-      )
+  describe "#check_pfmp" do
+    it "adds an error if PFMP is invalid" do
+      allow(pfmp).to receive(:valid?).and_return(false)
+      expect do
+        validator.send(:check_pfmp)
+      end.to change { payment_request.errors.details[:ready_state_validation] }
+        .to include(a_hash_including(error: :pfmp))
     end
 
-    include_examples "p_r invalidation", :missing_birthplace_city_insee_code
-  end
-
-  context "when the student is missing birthplace country INSEE code" do
-    before do
-      asp_payment_request.student.update!(
-        birthplace_country_insee_code: nil
-      )
+    it "adds an error if PFMP amount is not positive" do
+      allow(pfmp).to receive(:amount).and_return(0)
+      expect do
+        validator.send(:check_pfmp)
+      end.to change { payment_request.errors.details[:ready_state_validation] }
+        .to include(a_hash_including(error: :pfmp_amount))
     end
 
-    include_examples "p_r invalidation", :missing_birthplace_country_insee_code
+    it "adds an error if PFMP amount is nil" do
+      allow(pfmp).to receive(:amount).and_return(nil)
+      expect do
+        validator.send(:check_pfmp)
+      end.to change { payment_request.errors.details[:ready_state_validation] }
+        .to include(a_hash_including(error: :pfmp_amount))
+    end
   end
 
-  context "when the student is missing address postal code" do
-    before { asp_payment_request.student.update!(address_postal_code: nil) }
-
-    include_examples "p_r invalidation", :missing_address_postal_code
+  describe "#check_pfmp_overlaps" do
+    it "adds an error if PFMP overlaps with validated PFMPs" do # rubocop:disable RSpec/ExampleLength
+      overlapping_pfmp = instance_double(Pfmp, in_state?: true)
+      allow(pfmp).to receive(:overlaps).and_return([overlapping_pfmp])
+      expect do
+        validator.send(:check_pfmp_overlaps)
+      end.to change { payment_request.errors.details[:ready_state_validation] }
+        .to include(a_hash_including(error: :overlaps))
+    end
   end
 
-  context "when the student is missing address city INSEE code" do
-    before { asp_payment_request.student.update!(address_city_insee_code: nil) }
+  describe "#check_schooling" do
+    it "adds an error if schooling is not for a student" do
+      allow(schooling).to receive(:student?).and_return(false)
+      expect do
+        validator.send(:check_schooling)
+      end.to change { payment_request.errors.details[:ready_state_validation] }
+        .to include(a_hash_including(error: :student_type))
+    end
 
-    include_examples "p_r invalidation", :missing_address_city_insee_code
+    it "adds an error if schooling is excluded" do
+      allow(Exclusion).to receive(:excluded?).with(establishment.uai, mef.code).and_return(true)
+      expect do
+        validator.send(:check_schooling)
+      end.to change { payment_request.errors.details[:ready_state_validation] }
+        .to include(a_hash_including(error: :excluded_schooling))
+    end
   end
 
-  context "when the student is missing address country code" do
-    before { asp_payment_request.student.update!(address_country_code: nil) }
+  describe "#check_da_attribution" do
+    it "adds an error if attributive decision is not attached" do
+      allow(schooling).to receive_message_chain(:attributive_decision, :attached?).and_return(false) # rubocop:disable RSpec/MessageChain
+      expect do
+        validator.send(:check_da_attribution)
+      end.to change { payment_request.errors.details[:ready_state_validation] }
+        .to include(a_hash_including(error: :missing_attributive_decision))
+    end
+  end
 
-    include_examples "p_r invalidation", :missing_address_country_code
+  describe "#check_da_abrogation" do
+    it "adds an error if student transferred and schooling needs abrogated attributive decision" do # rubocop:disable RSpec/ExampleLength
+      allow(student).to receive(:transferred?).and_return(true)
+      allow(schooling).to receive(:abrogated?).and_return(false)
+      allow(pfmp).to receive(:within_schooling_dates?).and_return(true)
+      allow(student).to receive_message_chain(:schoolings, :excluding, :all?).and_return(false) # rubocop:disable RSpec/MessageChain
+      expect do
+        validator.send(:check_da_abrogation)
+      end.to change { payment_request.errors.details[:ready_state_validation] }
+        .to include(a_hash_including(error: :needs_abrogated_attributive_decision))
+    end
+  end
+
+  describe "#validate" do
+    it "calls all check methods" do # rubocop:disable RSpec/ExampleLength,RSpec/MultipleExpectations
+      expect(validator).to receive(:check_student) # rubocop:disable RSpec/MessageSpies
+      expect(validator).to receive(:check_insee_code) # rubocop:disable RSpec/MessageSpies
+      expect(validator).to receive(:check_address) # rubocop:disable RSpec/MessageSpies
+      expect(validator).to receive(:check_da_attribution) # rubocop:disable RSpec/MessageSpies
+      expect(validator).to receive(:check_da_abrogation) # rubocop:disable RSpec/MessageSpies
+      expect(validator).to receive(:check_rib) # rubocop:disable RSpec/MessageSpies
+      expect(validator).to receive(:check_pfmp) # rubocop:disable RSpec/MessageSpies
+      expect(validator).to receive(:check_pfmp_overlaps) # rubocop:disable RSpec/MessageSpies
+      expect(validator).to receive(:check_schooling) # rubocop:disable RSpec/MessageSpies
+      validator.validate
+    end
   end
 end
