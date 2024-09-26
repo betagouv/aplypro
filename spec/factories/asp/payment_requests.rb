@@ -2,21 +2,15 @@
 
 FactoryBot.define do
   factory :asp_payment_request, class: "ASP::PaymentRequest" do
-    transient do
-      student_traits { [] }
-    end
-
     pfmp do
-      association(:pfmp, :validated, student_traits: student_traits).tap do |p|
-        p.payment_requests.destroy_all
-      end
+      association(:pfmp, :validated).tap { |p| p.payment_requests.destroy_all }
     end
 
     trait :pending
 
     trait :sendable do
-      after(:create) do |req, evaluator|
-        student = build(:student, :with_all_asp_info, :adult, :with_french_address, *evaluator.student_traits)
+      after(:create) do |req|
+        student = build(:student, :with_all_asp_info, :adult, :with_french_address)
         req.student.update!(**student.attributes.except("id", "updated_at", "created_at"))
         req.reload ## needed to reload the data of the schooling for the asp xml builder
       end
@@ -26,7 +20,7 @@ FactoryBot.define do
       after(:create) do |req|
         student = build(:student, :with_all_asp_info, :underage, :with_foreign_address, biological_sex: nil)
         req.student.update!(**student.attributes.except("id", "updated_at", "created_at"), ribs: [])
-        req.reload # needed to reload the data of the schooling for the asp xml builder
+        req.reload ## needed to reload the data of the schooling for the asp xml builder
       end
     end
 

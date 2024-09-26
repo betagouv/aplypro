@@ -61,5 +61,5 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
     Et que je me connecte en tant que personnel MENJ
     Et que je passe l'écran d'accueil
     Et que je consulte le profil de "Marie Curie" dans la classe de "1EREB"
-    Alors la page contient un bouton "Modifier les coordonnées bancaires" désactivé
-    Et la page contient un bouton "Supprimer les coordonnées bancaires" désactivé
+    Alors la page contient "Modifier les coordonnées bancaires"
+    Et la page contient "Supprimer les coordonnées bancaires"

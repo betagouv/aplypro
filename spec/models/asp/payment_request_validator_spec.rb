@@ -196,3 +196,4 @@ RSpec.describe ASP::PaymentRequestValidator do
     end
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers

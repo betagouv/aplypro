@@ -5,7 +5,7 @@ module Stats
     class Ribs < Ratio
       def initialize
         super(
-          subset: Student.joins(:ribs).where(ribs: { archived_at: nil }).distinct,
+          subset: Student.with_rib,
           all: Student.all
         )
       end

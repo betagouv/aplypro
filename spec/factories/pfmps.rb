@@ -11,19 +11,14 @@ FactoryBot.define do
     end
 
     trait :completed do
-      day_count { rand(1..6) }
+      day_count { rand(1..6) } # lovely roll dice
     end
 
     trait :can_be_validated do
       completed
 
-      transient do
-        student_traits { [] }
-      end
-
-      after(:create) do |pfmp, evaluator|
-        student = create(:student, :with_all_asp_info, *evaluator.student_traits)
-        pfmp.schooling.update!(student: student)
+      after(:create) do |pfmp|
+        create(:rib, :personal, student: pfmp.student) if pfmp.student.rib.blank?
         AttributiveDecisionHelpers.generate_fake_attributive_decision(pfmp.schooling)
         pfmp.reload
       end
