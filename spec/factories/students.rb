@@ -65,6 +65,12 @@ FactoryBot.define do
       end
     end
 
+    trait :with_other_person_rib do
+      after(:create) do |student|
+        create(:rib, :other_person, student: student)
+      end
+    end
+
     trait :with_personal_rib do
       after(:create) do |student|
         create(:rib, :personal, student: student)

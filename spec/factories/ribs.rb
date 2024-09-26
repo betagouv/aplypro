@@ -7,7 +7,7 @@ FactoryBot.define do
     bic { Faker::Bank.swift_bic }
     archived_at { nil }
     name { Faker::Name.name }
-    owner_type { %i[personal other_person moral_person].sample }
+    owner_type { %i[personal other_person moral_person mandate].sample }
 
     trait :outside_sepa do
       iban { Faker::Bank.iban(country_code: "sa") }

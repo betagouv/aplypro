@@ -51,6 +51,8 @@ class Rib < ApplicationRecord
     payment_requests.empty? || payment_requests.all?(&:terminated?)
   end
 
+  # NOTE: this is used by the framework itself
+  # https://devdocs.io/rails~7.1/activerecord/core#method-i-readonly-3F
   def readonly?
     !archivable?
   end

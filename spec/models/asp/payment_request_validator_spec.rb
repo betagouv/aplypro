@@ -7,9 +7,7 @@ describe ASP::PaymentRequestValidator do
 
   let(:asp_payment_request) { create(:asp_payment_request, :ready) }
 
-  RSpec.shared_examples "invalidation" do |attr|
-    before { asp_payment_request.student.update(ribs: []) }
-
+  RSpec.shared_examples "p_r invalidation" do |attr|
     it "adds a `#{attr}` error" do
       expect { validator.validate }
         .to change { asp_payment_request.errors.details[:ready_state_validation] }
@@ -20,59 +18,51 @@ describe ASP::PaymentRequestValidator do
   context "when the schooling status is unknown" do
     before { asp_payment_request.schooling.update!(status: nil) }
 
-    include_examples "invalidation", :student_type
+    include_examples "p_r invalidation", :student_type
   end
 
   context "when the schooling is for an apprentice" do
     before { asp_payment_request.schooling.update!(status: :apprentice) }
 
-    include_examples "invalidation", :student_type
+    include_examples "p_r invalidation", :student_type
   end
 
   context "when the student is a lost record" do
     before { asp_payment_request.student.update!(ine_not_found: true) }
 
-    include_examples "invalidation", :ine_not_found
+    include_examples "p_r invalidation", :ine_not_found
   end
 
   # rubocop:disable Rails/SkipsModelValidations
   context "when the PFMP is not valid" do
     before { asp_payment_request.pfmp.update_column(:start_date, Date.new(2002, 1, 1)) }
 
-    include_examples "invalidation", :pfmp
+    include_examples "p_r invalidation", :pfmp
   end
 
   context "when the rib is not valid" do
-    before do
-      with_readonly_bypass(asp_payment_request.student.rib) do |rib|
-        rib.update_columns(attributes_for(:rib, :outside_sepa))
-      end
-    end
+    let(:payment_request) { create(:asp_payment_request, :ready, rib: create(:rib, :outside_sepa)) }
 
-    include_examples "invalidation", :rib
+    include_examples "p_r invalidation", :rib
   end
   # rubocop:enable Rails/SkipsModelValidations
 
   context "when the PFMP is zero-amount" do
     before { asp_payment_request.pfmp.update!(amount: 0) }
 
-    include_examples "invalidation", :pfmp_amount
+    include_examples "p_r invalidation", :pfmp_amount
   end
 
   context "when the RIB is missing" do
-    let(:asp_payment_request) { create(:asp_payment_request, rib: nil) }
+    let(:asp_payment_request) { create(:asp_payment_request, :ready, pfmp: pfmp, rib: rib) }
 
-    include_examples "invalidation", :missing_rib
+    include_examples "p_r invalidation", :missing_rib
   end
 
-  context "when the request belongs to a student over 18 with an external rib" do
-    before do
-      asp_payment_request.student.update!(birthdate: 20.years.ago)
+  context "when the request belongs to an adult with a moral person rib" do
+    let(:asp_payment_request) { create(:asp_payment_request, :ready, student_traits: %i[with_other_person_rib adult]) }
 
-      with_readonly_bypass(asp_payment_request.student.rib) { |rib| rib.update!(owner_type: :other_person) }
-    end
-
-    include_examples "invalidation", :adult_wrong_owner_type
+    include_examples "p_r invalidation", :adult_wrong_owner_type
   end
 
   context "when the attributive decision has not been attached" do
@@ -81,7 +71,7 @@ describe ASP::PaymentRequestValidator do
                          .tap { asp_payment_request.reload }
     end
 
-    include_examples "invalidation", :missing_attributive_decision
+    include_examples "p_r invalidation", :missing_attributive_decision
   end
 
   context "when there is another duplicated PFMP" do
@@ -100,7 +90,7 @@ describe ASP::PaymentRequestValidator do
     context "when it is validated" do
       before { duplicate.validate! }
 
-      include_examples "invalidation", :overlaps
+      include_examples "p_r invalidation", :overlaps
     end
 
     context "when it's not validated" do
@@ -113,7 +103,7 @@ describe ASP::PaymentRequestValidator do
   context "when the schooling is excluded" do
     before { create(:exclusion, :whole_establishment, uai: asp_payment_request.schooling.establishment.uai) }
 
-    include_examples "invalidation", :excluded_schooling
+    include_examples "p_r invalidation", :excluded_schooling
   end
 
   context "when the student transferred and the schooling is abrogated and there is a schooling with attribution" do
@@ -131,7 +121,7 @@ describe ASP::PaymentRequestValidator do
         schooling.abrogation_decision.purge
       end
 
-      include_examples "invalidation", :needs_abrogated_attributive_decision
+      include_examples "p_r invalidation", :needs_abrogated_attributive_decision
     end
 
     context "when the pfmp dates match the schooling" do
@@ -175,7 +165,7 @@ describe ASP::PaymentRequestValidator do
   context "when the student is missing biological sex" do
     before { asp_payment_request.student.update!(biological_sex: 0) }
 
-    include_examples "invalidation", :missing_biological_sex
+    include_examples "p_r invalidation", :missing_biological_sex
   end
 
   context "when the student is missing birthplace city INSEE code and is born in France" do
@@ -186,7 +176,7 @@ describe ASP::PaymentRequestValidator do
       )
     end
 
-    include_examples "invalidation", :missing_birthplace_city_insee_code
+    include_examples "p_r invalidation", :missing_birthplace_city_insee_code
   end
 
   context "when the student is missing birthplace country INSEE code" do
@@ -196,24 +186,24 @@ describe ASP::PaymentRequestValidator do
       )
     end
 
-    include_examples "invalidation", :missing_birthplace_country_insee_code
+    include_examples "p_r invalidation", :missing_birthplace_country_insee_code
   end
 
   context "when the student is missing address postal code" do
     before { asp_payment_request.student.update!(address_postal_code: nil) }
 
-    include_examples "invalidation", :missing_address_postal_code
+    include_examples "p_r invalidation", :missing_address_postal_code
   end
 
   context "when the student is missing address city INSEE code" do
     before { asp_payment_request.student.update!(address_city_insee_code: nil) }
 
-    include_examples "invalidation", :missing_address_city_insee_code
+    include_examples "p_r invalidation", :missing_address_city_insee_code
   end
 
   context "when the student is missing address country code" do
     before { asp_payment_request.student.update!(address_country_code: nil) }
 
-    include_examples "invalidation", :missing_address_country_code
+    include_examples "p_r invalidation", :missing_address_country_code
   end
 end

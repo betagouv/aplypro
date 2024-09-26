@@ -17,8 +17,13 @@ FactoryBot.define do
     trait :can_be_validated do
       completed
 
-      after(:create) do |pfmp|
-        create(:rib, :personal, student: pfmp.student) if pfmp.student.rib.nil?
+      transient do
+        student_traits { [] }
+      end
+
+      after(:create) do |pfmp, evaluator|
+        student = create(:student, :with_all_asp_info, *evaluator.student_traits)
+        pfmp.schooling.update!(student: student)
         AttributiveDecisionHelpers.generate_fake_attributive_decision(pfmp.schooling)
         pfmp.reload
       end

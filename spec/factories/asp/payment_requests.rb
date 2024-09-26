@@ -2,8 +2,14 @@
 
 FactoryBot.define do
   factory :asp_payment_request, class: "ASP::PaymentRequest" do
+    transient do
+      student_traits { [] }
+    end
+
     pfmp do
-      association(:pfmp, :validated).tap { |p| p.payment_requests.destroy_all }
+      association(:pfmp, :validated, student_traits: student_traits).tap do |p|
+        p.payment_requests.destroy_all
+      end
     end
 
     trait :pending

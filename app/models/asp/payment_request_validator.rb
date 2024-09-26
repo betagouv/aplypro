@@ -30,7 +30,7 @@ module ASP
     end
 
     def check_rib
-      add_error(:missing_rib) and return if rib.blank?
+      add_error(:missing_rib) and return if rib.nil?
 
       add_error(:rib) if rib.invalid?
 
