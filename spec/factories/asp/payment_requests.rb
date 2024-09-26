@@ -15,8 +15,8 @@ FactoryBot.define do
     trait :pending
 
     trait :sendable do
-      after(:create) do |req|
-        student = build(:student, :with_all_asp_info, :adult, :with_french_address)
+      after(:create) do |req, evaluator|
+        student = build(:student, :with_all_asp_info, :adult, :with_french_address, *evaluator.student_traits)
         req.student.update!(**student.attributes.except("id", "updated_at", "created_at"))
         req.reload ## needed to reload the data of the schooling for the asp xml builder
       end
@@ -26,7 +26,7 @@ FactoryBot.define do
       after(:create) do |req|
         student = build(:student, :with_all_asp_info, :underage, :with_foreign_address, biological_sex: nil)
         req.student.update!(**student.attributes.except("id", "updated_at", "created_at"), ribs: [])
-        req.reload ## needed to reload the data of the schooling for the asp xml builder
+        req.reload # needed to reload the data of the schooling for the asp xml builder
       end
     end
 

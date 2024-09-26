@@ -11,7 +11,7 @@ FactoryBot.define do
     end
 
     trait :completed do
-      day_count { rand(1..6) } # lovely roll dice
+      day_count { rand(1..6) }
     end
 
     trait :can_be_validated do

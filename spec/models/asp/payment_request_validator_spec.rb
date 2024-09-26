@@ -5,7 +5,7 @@ require "rails_helper"
 describe ASP::PaymentRequestValidator do
   subject(:validator) { described_class.new(asp_payment_request) }
 
-  let(:asp_payment_request) { create(:asp_payment_request, :ready) }
+  let(:asp_payment_request) { create(:asp_payment_request) }
 
   RSpec.shared_examples "p_r invalidation" do |attr|
     it "adds a `#{attr}` error" do
@@ -54,13 +54,13 @@ describe ASP::PaymentRequestValidator do
   end
 
   context "when the RIB is missing" do
-    let(:asp_payment_request) { create(:asp_payment_request, :ready, pfmp: pfmp, rib: rib) }
+    let(:asp_payment_request) { create(:asp_payment_request, rib: nil) }
 
     include_examples "p_r invalidation", :missing_rib
   end
 
   context "when the request belongs to an adult with a moral person rib" do
-    let(:asp_payment_request) { create(:asp_payment_request, :ready, student_traits: %i[with_other_person_rib adult]) }
+    let(:asp_payment_request) { create(:asp_payment_request, student_traits: %i[with_other_person_rib adult]) }
 
     include_examples "p_r invalidation", :adult_wrong_owner_type
   end
@@ -107,6 +107,8 @@ describe ASP::PaymentRequestValidator do
   end
 
   context "when the student transferred and the schooling is abrogated and there is a schooling with attribution" do
+    let(:asp_payment_request) { create(:asp_payment_request, :ready) }
+
     before do
       schooling = asp_payment_request.schooling
       schooling.update!(end_date: Date.yesterday)
