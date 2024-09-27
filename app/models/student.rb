@@ -72,8 +72,12 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
                             :birthplace_country_insee_code,
                             :biological_sex
 
+  # NOTE: Not all ribs have an establishment just yet
+  # Some students also have no establishment
   def rib(etab = establishment)
     return ribs.last if ribs.size == 1
+
+    return ribs.find_by(archived_at: nil) if establishment.nil?
 
     ribs.find_by(establishment: etab, archived_at: nil)
   end

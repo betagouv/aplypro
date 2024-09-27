@@ -15,6 +15,33 @@ RSpec.describe Student do
   it { is_expected.to validate_presence_of(:ine) }
   it { is_expected.to validate_uniqueness_of(:asp_file_reference) }
 
+  describe "#rib" do
+    subject(:student) { classe.students.first }
+
+    let(:classe) { create(:classe, :with_students) }
+
+    it "returns nil when the student has no RIBs" do
+      expect(student.rib).to be_nil
+    end
+
+    context "when the student has RIBs" do
+      before do
+        create(:rib, student: student, archived_at: 1.day.ago, establishment: classe.establishment)
+        create(:rib, student: student, archived_at: nil, establishment: classe.establishment)
+      end
+
+      it "returns the active RIB" do
+        expect(student.rib).to eq(student.ribs.last)
+      end
+
+      context "when an establishment is provided" do
+        it "returns the active RIB for the given establishment" do
+          expect(student.rib(classe.establishment)).to eq(student.ribs.last)
+        end
+      end
+    end
+  end
+
   describe "biological_sex" do
     it "can be unknown" do
       expect(build(:student, biological_sex: nil)).to be_valid
