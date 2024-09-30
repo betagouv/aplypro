@@ -77,8 +77,6 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def rib(etab = establishment)
     return ribs.last if ribs.size == 1
 
-    return ribs.find_by(archived_at: nil) if establishment.nil?
-
     ribs.find_by(establishment: etab, archived_at: nil)
   end
 
