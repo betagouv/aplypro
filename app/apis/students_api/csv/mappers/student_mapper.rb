@@ -10,8 +10,8 @@ module StudentsApi
           symbolize_keys
 
           rename_keys(
-            :prénom => :last_name,
-            :nom => :first_name,
+            :prénom => :first_name,
+            :nom => :last_name,
             :date_naissance => :birthdate,
             :"Sexe biologique" => :biological_sex,
             :"Code INSEE de ville de naissance" => :birthplace_city_insee_code,
