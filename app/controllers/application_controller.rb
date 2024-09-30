@@ -77,16 +77,6 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def eligible_for_support?(establishment)
-    return false if establishment.nil?
-
-    supported_uais = ENV
-                     .fetch("APLYPRO_DIRECT_SUPPORT_UAIS", "")
-                     .split(",")
-
-    supported_uais.include?(establishment.uai)
-  end
-
   def check_current_establishment
     return unless user_signed_in?
 
