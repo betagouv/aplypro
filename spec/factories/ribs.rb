@@ -12,5 +12,9 @@ FactoryBot.define do
     trait :outside_sepa do
       iban { Faker::Bank.iban(country_code: "sa") }
     end
+
+    after(:build) do |rib|
+      rib.establishment = (rib.student.establishment.presence || create(:establishment))
+    end
   end
 end

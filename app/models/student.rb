@@ -73,6 +73,8 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
                             :biological_sex
 
   def rib(etab = establishment)
+    return ribs.last if ribs.size == 1
+
     ribs.find_by(establishment: etab, archived_at: nil)
   end
 
@@ -146,7 +148,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def create_new_rib(rib_params)
     transaction do
       rib.archive! if rib.present? && rib.archivable?
-      ribs.create(rib_params.merge("establishment_id" => establishment.id))
+      ribs.create(rib_params)
     end
   end
 
