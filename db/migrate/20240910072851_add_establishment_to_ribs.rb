@@ -7,7 +7,7 @@ class AddEstablishmentToRibs < ActiveRecord::Migration[7.2]
       etab = student&.establishment
       next unless etab
 
-      student.rib.update!(establishment: etab)
+      student.rib.update_columns(establishment_id: etab.id)
     end
   end
 end
