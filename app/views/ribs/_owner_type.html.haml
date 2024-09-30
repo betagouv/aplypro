@@ -24,5 +24,9 @@
     .fr-radio-group
       %input{id: "radio-inline-4-#{student_id}", type: "radio", value: "mandate", name: field_name, checked: current_value == "mandate"}
       %label.fr-label{for: "radio-inline-4-#{student_id}"}
-        = t("activerecord.attributes.rib.owner_type_mandate")
+        = t("activerecord.attributes.missing.owner_type_mandate")
+    %button.fr-btn--tooltip.fr-btn{"type"=> "button", "id" => "button-2995", "aria-describedby"=> "tooltip-2994"}
+      Info
+    %span.fr-tooltip.fr-placement{"id" => "tooltip-2994", "role"=>"tooltip", "aria-hidden"=> "true"}
+      Je confirme, qu’en tant que chef.fe d’établissement responsable de la collecte et de la vérification des pièces justificatives relatives à l’identité de l’élève bénéficiaire, avoir pris connaissance des conditions associées à la prise en compte du mandat sous seing privé par l’Agence de services et de paiement.
   .fr-messages-group{id: "radio-inline-messages-#{student_id}", "aria-live": "assertive"}
