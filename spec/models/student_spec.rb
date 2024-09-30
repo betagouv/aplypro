@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Student do
   subject(:student) { create(:student) }
 
-  let(:schooling_end_date) { "#{SchoolYear.current.start_year}-10-27" }
+  let(:school_year) { "#{SchoolYear.current.start_year}-08-27" }
 
   it { is_expected.to have_many(:classes).through(:schoolings) }
 
@@ -82,21 +82,21 @@ RSpec.describe Student do
     end
 
     it "sets the end date" do
-      expect { student.reload.close_current_schooling!(schooling_end_date) }.to(change { schooling.reload.end_date })
+      expect { student.reload.close_current_schooling!(school_year) }.to(change { schooling.reload.end_date })
     end
 
     it "can use a specific end date" do
-      datetime = schooling_end_date
+      datetime = school_year
 
       expect { student.close_current_schooling!(datetime) }
         .to(change { schooling.reload.end_date }.to(datetime.to_date))
     end
 
     context "when there is no current schooling" do
-      before { student.close_current_schooling!(schooling_end_date) }
+      before { student.close_current_schooling!(school_year) }
 
       it "does not crash" do
-        expect { student.close_current_schooling!(schooling_end_date) }.not_to raise_error
+        expect { student.close_current_schooling!(school_year) }.not_to raise_error
       end
     end
   end
