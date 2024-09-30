@@ -1,9 +1,0 @@
-.beta-banner
-  .fr-container
-    .fr-grid-row
-      .fr-col-12.fr-py-2w
-        = dsfr_badge(status: :warning, classes: ['fr-badge--no-icon']) { "Support" }
-        Ce service est en évolution continue – faites-nous part de vos retours pour nous aider à l'améliorer :
-        - support_email = ENV.fetch("APLYPRO_SUPPORT_EMAIL", "support@aplypro.beta.gouv.fr")
-        - support_email_body = current_user ? "...\n\nMon addresse email sur APLyPro est : #{current_user.email}" : "ATTENTION: Veuillez nous contacter avec votre adresse mail académique"
-        = mail_to support_email, support_email, { body: support_email_body }
