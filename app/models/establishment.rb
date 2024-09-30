@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
-  validates :uai, presence: true, uniqueness: true, with: /\A\d{7}[A-Z]\z/
+  validates :uai, presence: true, uniqueness: true, format: { with: /\A\d{7}[A-Z]\z/ }
 
   has_many :invitations, dependent: :nullify
 

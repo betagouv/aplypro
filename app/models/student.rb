@@ -146,7 +146,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def create_new_rib(rib_params)
     transaction do
       rib.archive! if rib.present? && rib.archivable?
-      ribs.create(rib_params)
+      ribs.create(rib_params.merge("establishment_id" => establishment.id))
     end
   end
 

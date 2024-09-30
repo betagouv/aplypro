@@ -129,9 +129,9 @@ RSpec.describe Student do
   end
 
   describe "without_ribs" do
-    let(:students) { create_list(:student, 3) }
+    let(:students) { create(:classe, :with_students, students_count: 3).students }
 
-    before { students.first(2).each { |student| create(:rib, student: student) } }
+    before { students.first(2).each { |student| create(:rib, establishment: student.establishment, student: student) } }
 
     it "returns only the students without ribs" do
       expect(described_class.without_ribs).to contain_exactly students.last
@@ -242,7 +242,8 @@ RSpec.describe Student do
   end
 
   describe "#create_new_rib" do
-    let(:previous_rib) { create(:rib) }
+    let(:student) { create(:schooling).student }
+    let(:previous_rib) { create(:rib, student: student, establishment: student.establishment) }
 
     context "when a new rib is created" do
       context "when the precedent rib can be archived" do
