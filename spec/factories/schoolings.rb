@@ -7,6 +7,14 @@ FactoryBot.define do
     start_date { Date.yesterday - 1.month }
     status { :student }
 
+    after(:build) do |schooling|
+      schooling.start_date = if schooling.end_date.present?
+                               schooling.end_date - 1.month
+                             else
+                               "#{SchoolYear.current.start_year}-01-10"
+                             end
+    end
+
     trait :with_attributive_decision do
       after(:create) do |schooling|
         AttributiveDecisionHelpers.generate_fake_attributive_decision(schooling)
