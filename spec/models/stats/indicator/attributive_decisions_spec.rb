@@ -38,6 +38,6 @@ describe Stats::Indicator::AttributiveDecisions do
 
     include_context "when there is data for stats per establishments"
 
-    it { is_expected.to eq({ "etab1" => 0.25, "etab2" => 0.5, "etab3" => 0.4 }) }
+    it { is_expected.to eq({ "0000000A" => 0.25, "0000000B" => 0.5, "0000000C" => 0.4 }) }
   end
 end

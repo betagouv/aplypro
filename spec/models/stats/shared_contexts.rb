@@ -106,7 +106,7 @@ RSpec.shared_context "when there is data for stats per establishments" do
   include_context "when we are in October 2024"
 
   before do
-    %w[etab1 etab3 etab2].each.with_index do |uai, index|
+    %w[0000000A 0000000B 0000000C].each.with_index do |uai, index|
       establishment = create(:establishment, uai: uai, name: uai)
       mef = create(:mef, daily_rate: 1, yearly_cap: 100)
       classe = create(:classe, establishment: establishment, mef: mef)

@@ -33,6 +33,6 @@ describe Stats::Indicator::Schoolings do
 
     include_context "when there is data for stats per establishments"
 
-    it { is_expected.to eq({ "etab1" => 4, "etab2" => 6, "etab3" => 5 }) }
+    it { is_expected.to eq({ "0000000A" => 4, "0000000B" => 6, "0000000C" => 5 }) }
   end
 end

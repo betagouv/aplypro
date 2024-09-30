@@ -33,6 +33,6 @@ describe Stats::Indicator::PaymentRequestStates do
 
     include_context "when there is data for stats per establishments"
 
-    it { is_expected.to eq({ "etab1" => 1, "etab2" => 3, "etab3" => 2 }) }
+    it { is_expected.to eq({ "0000000A" => 1, "0000000B" => 3, "0000000C" => 2 }) }
   end
 end
