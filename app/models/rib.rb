@@ -3,7 +3,7 @@
 class Rib < ApplicationRecord
   belongs_to :student
 
-  belongs_to :establishment, optional: true
+  belongs_to :establishment
 
   enum :owner_type, { personal: 0, other_person: 1, moral_person: 2, mandate: 3 }
 
