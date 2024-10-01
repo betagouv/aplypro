@@ -6,7 +6,7 @@ module StudentsApi
       class << self
         def establishment_students_endpoint(params)
           base_url +
-            format("etablissements/%s/eleves/?statut=ST&annee-scolaire=#{SchoolYear.current.start_year}&etat-scolarisation=true", # rubocop:disable Layout/LineLength
+            format("etablissements/%s/eleves?statut=ST&annee-scolaire=#{SchoolYear.current.start_year}&etat-scolarisation=true", # rubocop:disable Layout/LineLength
                    params[:uai])
         end
 
