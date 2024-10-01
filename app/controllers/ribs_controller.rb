@@ -57,7 +57,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   def bulk_create
     @ribs = bulk_ribs_params.map do |rib_params|
       Student.find(rib_params["student_id"]).create_new_rib(
-        rib_params.except("student_id")
+        rib_params.except("student_id").merge("establishment_id" => current_establishment.id)
       )
     end
     if @ribs.each(&:save).all?(&:valid?)
