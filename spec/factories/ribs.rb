@@ -14,7 +14,7 @@ FactoryBot.define do
     end
 
     after(:build) do |rib|
-      rib.establishment = (rib.student.establishment.presence || create(:establishment))
+      rib.establishment = (rib.establishment.presence || rib.student.establishment.presence || create(:establishment))
     end
   end
 end
