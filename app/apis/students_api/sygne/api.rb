@@ -5,7 +5,7 @@ module StudentsApi
     class Api < StudentsApi::Base
       class << self
         def establishment_students_endpoint(params)
-          base_url + format("etablissements/%s/eleves/?statut=ST&etat-scolarisation=true", params[:uai])
+          base_url + format("etablissements/%s/eleves?statut=ST&etat-scolarisation=true", params[:uai])
         end
 
         def student_endpoint(params)
