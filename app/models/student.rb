@@ -73,8 +73,6 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
                             :biological_sex
 
   def rib(etab = establishment)
-    return ribs.last if ribs.size == 1
-
     ribs.find_by(establishment: etab, archived_at: nil)
   end
 
