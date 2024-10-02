@@ -2,13 +2,4 @@
   %h3.fr-callout__title=t("payment_requests.actions.reset.title")
   .fr-callout__text
   = form_with method: :put, url: school_year_class_schooling_payment_request_path(selected_school_year, @classe, @schooling, @pfmp) do |form|
-    = t("payment_requests.actions.reset.warning")
-    - if current_user.can_retry_payment?
-      = t("payment_requests.actions.reset.warning")
-      = render partial: "shared/confirmed_director", locals: { message: t("validations.confirm_director") }
-      - disabled = false
-    - else
-      = t("validations.not_director")
-      - disabled = true
-
-    = form.submit t("payment_requests.actions.update.cta"), class: "fr-btn #{disabled}"
+    = render partial: "form_content_payment_request", locals: { form: form, action: "update" }

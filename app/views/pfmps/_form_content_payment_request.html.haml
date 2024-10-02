@@ -1,0 +1,10 @@
+= t("payment_requests.actions.reset.warning")
+- if current_user.can_retry_payment?
+  = t("payment_requests.actions.reset.warning")
+  = render partial: "shared/confirmed_director", locals: { message: t("validations.confirm_director") }
+  - disabled = false
+- else
+  = t("validations.not_director")
+  - disabled = true
+
+= form.submit t("payment_requests.actions.#{action}.cta"), class: "fr-btn", disabled: disabled
