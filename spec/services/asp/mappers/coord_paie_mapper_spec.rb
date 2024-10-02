@@ -6,7 +6,7 @@ describe ASP::Mappers::CoordPaieMapper do
   subject(:mapper) { described_class.new(payment_request) }
 
   let(:payment_request) { create(:asp_payment_request, :ready) }
-  let(:rib) { payment_request.student.rib }
+  let(:rib) { payment_request.rib }
 
   before do
     with_readonly_bypass(rib)
