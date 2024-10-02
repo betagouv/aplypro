@@ -8,6 +8,7 @@ RSpec.describe Establishment do
 
   it { is_expected.to validate_presence_of(:uai) }
   it { is_expected.to validate_uniqueness_of(:uai) }
+  it { is_expected.to have_many(:ribs) }
 
   describe "with_attributive_decisions?" do
     subject { establishment.with_attributive_decisions?(SchoolYear.current) }

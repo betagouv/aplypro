@@ -4,6 +4,7 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validates :uai, presence: true, uniqueness: true, format: { with: -> { uai_regex } }
 
   has_many :invitations, dependent: :nullify
+  has_many :ribs, dependent: :nullify
 
   has_many :establishment_user_roles, dependent: :destroy
 
