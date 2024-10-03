@@ -69,6 +69,12 @@ Quand("l'élève {string} a déjà des coordonnées bancaires") do |name|
   FactoryBot.create(:rib, :personal, student: student)
 end
 
+Quand("l'élève {string} a déjà des coordonnées bancaires pour l'établissement {string}") do |name, uai|
+  student = find_student_by_full_name(name)
+  etab = Establishment.find_by!(uai: uai)
+  FactoryBot.create(:rib, :personal, student: student, establishment: etab)
+end
+
 Quand("il manque des coordonnées bancaires à {string}") do |name|
   student = find_student_by_full_name(name)
 
