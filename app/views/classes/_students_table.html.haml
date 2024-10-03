@@ -15,7 +15,7 @@
           .fr-mr-1w Coordonnées bancaires
           = ribs_progress_badge(schoolings)
       %th{scope: "col"}
-        PFMPs
+        PFMPs et Paiements
         = "(#{nb_pfmps(schoolings)})"
 
     %tbody
@@ -47,7 +47,4 @@
               %p= dsfr_badge(status: :error) { "Non saisies" }
               = dsfr_link_to "Saisir les coordonnées bancaires", new_student_rib_path(student)
           %td
-            %ul
-              - schooling.pfmps.each do |pfmp|
-                %li= dsfr_link_to pfmp.listing_to_s, school_year_class_schooling_pfmp_path(selected_school_year, @classe, schooling, pfmp), title: pfmp.full_dates
-              %li= dsfr_link_to "Ajouter une PFMP individuelle", new_school_year_class_schooling_pfmp_path(selected_school_year, @classe, schooling)
+            = render partial: "pfmps_payments_table", locals: { schooling: schooling }
