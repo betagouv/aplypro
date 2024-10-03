@@ -295,10 +295,10 @@ fr:
       reset:
         title: "Action possible sur le paiement"
         cta: "Relancer une demande de paiement"
-        warning: "Vous avez corrigé le problème mentionné dans la liste des erreurs et vous souhaitez redemander un envoi en paiement."
+        warning: "Vous avez corrigé le(s) problème(s) mentionné(s) dans la liste des erreurs et vous souhaitez redemander un envoi en paiement."
       update:
         cta: "Retenter la demande de paiement"
-        warning: "Vous avez corrigé le(s) problème mentionné dans la liste des erreurs et vous souhaitez débloquer le paiement."
+        warning: "Vous avez corrigé le(s) problème(s) mentionné(s) dans la liste des erreurs et vous souhaitez débloquer le paiement."
     state:
       pending: "En attente"
       ready: "En attente"
@@ -400,6 +400,7 @@ fr:
         content: Si vous êtes adjoint, veuillez contacter votre chef d'établissement pour qu'il édite les décisions d'attributions et que son nom apparaisse dans les documents générés.
   validations:
     confirm_director: Je confirme que <strong>je suis le responsable légal de l'établissement</strong> et qu'en tant qu'<strong>ordonnateur</strong> je valide informatiquement ces demandes de paiement.
+    not_director: Vous devez être le responsable légal de l'établissement pour pouvoir retenter la demande de paiement.
     validate: Envoyer en paiement les PFMPs cochées
     create:
       success: PFMPs envoyées en paiement pour la classe %{classe_label}
