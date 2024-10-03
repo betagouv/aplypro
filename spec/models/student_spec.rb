@@ -15,6 +15,33 @@ RSpec.describe Student do
   it { is_expected.to validate_presence_of(:ine) }
   it { is_expected.to validate_uniqueness_of(:asp_file_reference) }
 
+  describe "#rib" do
+    subject(:student) { classe.students.first }
+
+    let(:classe) { create(:classe, :with_students) }
+
+    it "returns nil when the student has no RIBs" do
+      expect(student.rib).to be_nil
+    end
+
+    context "when the student has RIBs" do
+      before do
+        create(:rib, student: student, archived_at: 1.day.ago, establishment: classe.establishment)
+        create(:rib, student: student, archived_at: nil, establishment: classe.establishment)
+      end
+
+      it "returns the active RIB" do
+        expect(student.rib).to eq(student.ribs.last)
+      end
+
+      context "when an establishment is provided" do
+        it "returns the active RIB for the given establishment" do
+          expect(student.rib(classe.establishment)).to eq(student.ribs.last)
+        end
+      end
+    end
+  end
+
   describe "biological_sex" do
     it "can be unknown" do
       expect(build(:student, biological_sex: nil)).to be_valid
@@ -102,9 +129,9 @@ RSpec.describe Student do
   end
 
   describe "without_ribs" do
-    let(:students) { create_list(:student, 3) }
+    let(:students) { create(:classe, :with_students, students_count: 3).students }
 
-    before { students.first(2).each { |student| create(:rib, student: student) } }
+    before { students.first(2).each { |student| create(:rib, establishment: student.establishment, student: student) } }
 
     it "returns only the students without ribs" do
       expect(described_class.without_ribs).to contain_exactly students.last
@@ -215,7 +242,8 @@ RSpec.describe Student do
   end
 
   describe "#create_new_rib" do
-    let(:previous_rib) { create(:rib) }
+    let(:student) { create(:schooling).student }
+    let(:previous_rib) { create(:rib, student: student, establishment: student.establishment) }
 
     context "when a new rib is created" do
       context "when the precedent rib can be archived" do

@@ -18,14 +18,15 @@ RSpec.shared_context "when there is data for global stats" do
 
   before do
     mef = create(:mef, daily_rate: 1, yearly_cap: 100)
-    classe = create(:classe, mef: mef)
+    establishment = create(:establishment)
+    classe = create(:classe, mef: mef, establishment: establishment)
 
     create_list(:schooling, 3, classe: classe) do |schooling|
       create(:pfmp, schooling: schooling, day_count: 5)
     end
 
-    create_list(:student, 2, :asp_ready) do |student|
-      schooling = create(:schooling, :with_attributive_decision, :student, classe: classe, student: student)
+    create_list(:student, 2, :asp_ready, establishment: establishment) do |student|
+      schooling = create(:schooling, :with_attributive_decision, classe: classe, student: student)
       pfmp = create(:pfmp, :validated, schooling: schooling, day_count: 5)
       create(:asp_payment_request, :sent, pfmp: pfmp)
     end
@@ -38,13 +39,14 @@ RSpec.shared_context "when there is data for stats per bops" do
   before do
     Mef.ministries.each_key.with_index do |ministry, index|
       mef = create(:mef, ministry: ministry, daily_rate: 1, yearly_cap: 100)
-      classe = create(:classe, mef: mef)
+      establishment = create(:establishment)
+      classe = create(:classe, mef: mef, establishment: establishment)
 
       create_list(:schooling, 3, classe: classe) do |schooling|
         create(:pfmp, schooling: schooling, day_count: 5)
       end
 
-      create_list(:student, index + 1, :asp_ready) do |student|
+      create_list(:student, index + 1, :asp_ready, establishment: establishment) do |student|
         schooling = create(:schooling, :with_attributive_decision, classe: classe, student: student)
         pfmp = create(:pfmp, :validated, schooling: schooling, day_count: 5)
         create(:asp_payment_request, :integrated, pfmp: pfmp)
@@ -59,7 +61,7 @@ RSpec.shared_context "when there is data for stats per bops" do
       create(:pfmp, schooling: schooling, day_count: 5)
     end
 
-    create_list(:student, 4, :asp_ready) do |student|
+    create_list(:student, 4, :asp_ready, establishment: private_establishment) do |student|
       schooling = create(:schooling, :with_attributive_decision, classe: private_classe, student: student)
       pfmp = create(:pfmp, :validated, schooling: schooling, day_count: 5)
       create(:asp_payment_request, :integrated, pfmp: pfmp)
@@ -81,7 +83,7 @@ RSpec.shared_context "when there is data for stats per MENJ academies" do
         create(:pfmp, schooling: schooling, day_count: 5)
       end
 
-      create_list(:student, index + 1, :asp_ready) do |student|
+      create_list(:student, index + 1, :asp_ready, establishment: establishment) do |student|
         schooling = create(:schooling, :with_attributive_decision, classe: classe, student: student)
         pfmp = create(:pfmp, :validated, schooling: schooling, day_count: 5)
         create(:asp_payment_request, :paid, pfmp: pfmp)
@@ -106,7 +108,7 @@ RSpec.shared_context "when there is data for stats per establishments" do
   include_context "when we are in October 2024"
 
   before do
-    %w[etab1 etab3 etab2].each.with_index do |uai, index|
+    %w[0000000A 0000000C 0000000B].each.with_index do |uai, index|
       establishment = create(:establishment, uai: uai, name: uai)
       mef = create(:mef, daily_rate: 1, yearly_cap: 100)
       classe = create(:classe, establishment: establishment, mef: mef)
@@ -115,7 +117,7 @@ RSpec.shared_context "when there is data for stats per establishments" do
         create(:pfmp, schooling: schooling, day_count: 5)
       end
 
-      create_list(:student, index + 1, :asp_ready) do |student|
+      create_list(:student, index + 1, :asp_ready, establishment: establishment) do |student|
         schooling = create(:schooling, :with_attributive_decision, classe: classe, student: student)
         pfmp = create(:pfmp, :validated, schooling: schooling, day_count: 5)
         create(:asp_payment_request, :paid, pfmp: pfmp)

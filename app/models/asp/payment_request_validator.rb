@@ -30,7 +30,7 @@ module ASP
     end
 
     def check_rib
-      add_error(:missing_rib) and return if rib.blank?
+      add_error(:missing_rib) and return if rib.nil?
 
       add_error(:rib) if rib.invalid?
 
@@ -41,8 +41,7 @@ module ASP
 
     def check_pfmp
       add_error(:pfmp) unless pfmp.valid?
-
-      add_error(:pfmp_amount) unless pfmp.amount.positive?
+      add_error(:pfmp_amount) if pfmp.amount.nil? || pfmp.amount <= 0
     end
 
     def check_schooling
@@ -96,7 +95,7 @@ module ASP
     end
 
     def rib
-      @rib ||= student.rib
+      @rib ||= payment_request.rib || student.rib
     end
 
     def pfmp

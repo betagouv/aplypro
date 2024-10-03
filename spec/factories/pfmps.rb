@@ -18,7 +18,10 @@ FactoryBot.define do
       completed
 
       after(:create) do |pfmp|
-        create(:rib, :personal, student: pfmp.student) if pfmp.student.rib.blank?
+        if pfmp.student.rib(pfmp.establishment).blank?
+          create(:rib, :personal, student: pfmp.student,
+                                  establishment: pfmp.establishment)
+        end
         AttributiveDecisionHelpers.generate_fake_attributive_decision(pfmp.schooling)
         pfmp.reload
       end

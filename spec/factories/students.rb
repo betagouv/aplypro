@@ -8,6 +8,7 @@ FactoryBot.define do
     birthdate { Faker::Date.birthday(min_age: 16, max_age: 20) }
 
     transient do
+      establishment { nil }
       birth_country_code { Faker::Number.number(digits: 5) }
       address_country_code_value { Faker::Number.number(digits: 5) }
     end
@@ -65,9 +66,16 @@ FactoryBot.define do
       end
     end
 
-    trait :with_personal_rib do
+    trait :with_other_person_rib do
       after(:create) do |student|
-        create(:rib, :personal, student: student)
+        create(:rib, :other_person, student: student)
+      end
+    end
+
+    trait :with_personal_rib do
+      after(:create) do |student, evaluator|
+        create(:rib, :personal, student: student,
+                                establishment: evaluator.establishment || student.establishment || create(:establishment)) # rubocop:disable Layout/LineLength
       end
     end
 

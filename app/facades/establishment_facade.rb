@@ -31,7 +31,11 @@ class EstablishmentFacade
   end
 
   def ribs_count
-    @ribs_count ||= selected_classes.joins(students: :rib).distinct(:"students.id").count(:"ribs.id")
+    @ribs_count ||= selected_classes
+                    .joins(students: :ribs)
+                    .where(ribs: { archived_at: nil })
+                    .distinct(:"students.id")
+                    .count(:"students.id")
   end
 
   def pfmps_counts

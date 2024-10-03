@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
-  validates :uai, presence: true, uniqueness: true
+  validates :uai, presence: true, uniqueness: true, format: { with: -> { uai_regex } }
 
   has_many :invitations, dependent: :nullify
+  has_many :ribs, dependent: :nullify
 
   has_many :establishment_user_roles, dependent: :destroy
 
@@ -154,5 +155,9 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     return if !confirmed_director || establishment_user_roles.find_by({ user: confirmed_director }).dir?
 
     errors.add :confirmed_director, "is not a director"
+  end
+
+  def self.uai_regex
+    Rails.env.production? ? /\A\d{7}[A-Z]\z/m : /\A*.\z/m
   end
 end

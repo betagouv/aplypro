@@ -33,6 +33,6 @@ describe Stats::Indicator::YearlyAmounts do
 
     include_context "when there is data for stats per establishments"
 
-    it { is_expected.to eq({ "etab1" => 400, "etab2" => 600, "etab3" => 500 }) }
+    it { is_expected.to eq({ "0000000A" => 400, "0000000B" => 600, "0000000C" => 500 }) }
   end
 end
