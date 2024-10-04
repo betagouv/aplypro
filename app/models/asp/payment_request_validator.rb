@@ -81,6 +81,8 @@ module ASP
     end
 
     def check_address
+      return unless student.lives_in_france?
+
       %i[address_postal_code address_city_insee_code address_country_code].each do |info|
         add_error(:"missing_#{info}") if student[info].blank?
       end
