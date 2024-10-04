@@ -3,6 +3,7 @@
     %tr
       %td
         = dsfr_link_to pfmp.listing_to_s, school_year_class_schooling_pfmp_path(selected_school_year, @classe, schooling, pfmp), title: pfmp.full_dates
+      %td
         -if pfmp.latest_payment_request.present?
           = pfmp.latest_payment_request.status_badge
 = dsfr_link_to "Ajouter une PFMP individuelle", new_school_year_class_schooling_pfmp_path(selected_school_year, @classe, schooling)
