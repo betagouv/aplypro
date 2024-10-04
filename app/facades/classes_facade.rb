@@ -68,7 +68,7 @@ class ClassesFacade
   end
 
   def payments_requests_by_classe_and_state
-    @payments_requests_by_classe_and_state ||= group_payements_requests_by_classe_and_state
+    @payments_requests_by_classe_and_state ||= group_payments_requests_by_classe_and_state
   end
 
   def group_pfmps_by_classe_and_state
@@ -87,7 +87,7 @@ class ClassesFacade
     counts
   end
 
-  def group_payements_requests_by_classe_and_state
+  def group_payments_requests_by_classe_and_state
     counts = {}
 
     ASP::PaymentRequest.joins(:schooling)
