@@ -26,17 +26,21 @@ module ASP
       end
 
       def self.from_payment_request(payment_request) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-        if payment_request.student.lives_in_france?
-          super
-        elsif payment_request.pfmp.in_state?(:rectified)
-          new(
+        # TODO: what about the case of a rectified pfmp for a student abroad
+        # what should be sent for cpltdistribution & pointremise
+        if payment_request.pfmp.in_state?(:rectified)
+          return new(
             pointremise: payment_request.student.address_line1.to_s.slice(0, 38), # Max 38 characters
             cpltdistribution: payment_request.student.address_line2.slice(0, 38), # Max 38 characters
             codetypeadr: ASP::Mappers::PRINCIPAL_ADDRESS_TYPE,
             codeinseepays: InseeCountryCodeMapper.call(payment_request.student.address_country_code),
-            codecominsee: payment_request.student.address_city_insee_code,
-            codepostalcedex: payment_request.student.address_postal_code
+            codepostalcedex: payment_request.student.address_postal_code,
+            codecominsee: payment_request.student.address_city_insee_code
           )
+        end
+
+        if payment_request.student.lives_in_france?
+          super
         else
           establishment = payment_request.pfmp.establishment
 
