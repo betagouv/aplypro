@@ -26,7 +26,7 @@
                 = pfmps_status_count_badge :validated, @classes_facade.nb_pfmps(classe.id, :validated)
             %td
               %div
-                = payment_requests_status_count_badge :pending, @classes_facade.nb_new_payment_requests(classe.id)
-                = payment_requests_status_count_badge :sent, @classes_facade.nb_info_payment_requests(classe.id)
-                = payment_requests_status_count_badge :incomplete, @classes_facade.nb_error_payment_requests(classe.id)
-                = payment_requests_status_count_badge :paid, @classes_facade.nb_success_payment_requests(classe.id)
+                = payment_requests_status_count_badge :pending, @classes_facade.nb_payment_requests(classe.id, %i[pending ready])
+                = payment_requests_status_count_badge :sent, @classes_facade.nb_payment_requests(classe.id, %i[sent integrated])
+                = payment_requests_status_count_badge :incomplete, @classes_facade.nb_payment_requests(classe.id, %i[incomplete rejected unpaid])
+                = payment_requests_status_count_badge :paid, @classes_facade.nb_payment_requests(classe.id, %i[paid])

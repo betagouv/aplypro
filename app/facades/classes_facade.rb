@@ -33,32 +33,12 @@ class ClassesFacade
     pfmps_by_classe_and_state.dig(class_id, state.to_s) || 0
   end
 
-  def nb_new_payment_requests(class_id)
+  def nb_payment_requests(class_id, states)
     count = 0
-    %i[pending ready].each do |state|
+    states.each do |state|
       count += payments_requests_by_classe_and_state.dig(class_id, state.to_s) || 0
     end
     count
-  end
-
-  def nb_info_payment_requests(class_id)
-    count = 0
-    %i[sent integrated].each do |state|
-      count += payments_requests_by_classe_and_state.dig(class_id, state.to_s) || 0
-    end
-    count
-  end
-
-  def nb_error_payment_requests(class_id)
-    count = 0
-    %i[incomplete rejected unpaid].each do |state|
-      count += payments_requests_by_classe_and_state.dig(class_id, state.to_s) || 0
-    end
-    count
-  end
-
-  def nb_success_payment_requests(class_id)
-    payments_requests_by_classe_and_state.dig(class_id, "paid") || 0
   end
 
   private
