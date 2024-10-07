@@ -62,6 +62,11 @@ module ASP
       end
     end
 
+    # XXX: Some records dont have a rib attached (yet)
+    def rib_with_fallback
+      rib || student.rib(payment_request.pfmp.establishment)
+    end
+
     def mark_ready!
       transition_to!(:ready)
     rescue ASP::Errors::IncompletePaymentRequestError
