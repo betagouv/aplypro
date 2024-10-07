@@ -112,6 +112,11 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     full_name
   end
 
+  def describe
+    [id: id, ine: ine, first_name: first_name, last_name: last_name,
+     birthdate: birthdate.to_s, current_schooling: current_schooling.describe]
+  end
+
   def full_name
     [first_name, last_name].join(" ")
   end

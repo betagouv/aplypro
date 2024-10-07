@@ -86,6 +86,11 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
     removed_at.present?
   end
 
+  def describe
+    [id: id, start_date: start_date.to_s, end_date: end_date.to_s,
+     status: status, student_id: student.id, classe_id: classe.id]
+  end
+
   def attachment_file_name(description)
     [
       student.last_name,

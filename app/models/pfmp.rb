@@ -155,4 +155,8 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def can_retrigger_payment?
     latest_payment_request.failed?
   end
+
+  def describe
+    [id: id, start_date: start_date.to_s, end_date: end_date.to_s, day_count: day_count, amount: amount]
+  end
 end
