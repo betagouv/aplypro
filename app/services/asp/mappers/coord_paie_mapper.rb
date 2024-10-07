@@ -17,7 +17,7 @@ module ASP
       attr_reader :rib, :iban
 
       def initialize(payment_request)
-        @rib = payment_request.rib || payment_request.student.rib
+        @rib = payment_request.rib_with_fallback
         @iban = Bank::IBAN.new(rib.iban)
       end
 

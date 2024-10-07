@@ -25,7 +25,7 @@ class PfmpStateMachine
   end
 
   guard_transition(to: :rectified) do |pfmp|
-    pfmp.latest_payment_request.in_state?(:paid)
+    pfmp.latest_payment_request&.in_state?(:paid)
   end
 
   after_transition(to: :rectified) do |pfmp|

@@ -99,7 +99,7 @@ module ASP
     end
 
     def rib
-      @rib ||= payment_request.rib || student.rib
+      @rib ||= payment_request.rib_with_fallback
     end
 
     def pfmp

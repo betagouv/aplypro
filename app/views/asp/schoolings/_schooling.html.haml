@@ -65,22 +65,23 @@
   %table
     %caption.fr-h2 Coordonnées bancaires
     %tbody
+      - rib = @schooling.student.rib(@schooling.establishment)
       - if @schooling.student.rib.blank?
         %tr
           %td Pas de coordonnées bancaires renseignées
       - else
         %tr
           %td Nom du RIB
-          %td= @schooling.student.rib.name
+          %td= rib.name
         %tr
           %td IBAN
-          %td= @schooling.student.rib.iban
+          %td= rib.iban
         %tr
           %td BIC
-          %td= @schooling.student.rib.bic
+          %td= rib.bic
         %tr
           %td RIB appartient à l'élève ?
-          %td= @schooling.student.rib.personal? ? "Oui" : "Non"
+          %td= rib.personal? ? "Oui" : "Non"
 
 %h2 Demandes de paiements
 - if @pfmps.blank?

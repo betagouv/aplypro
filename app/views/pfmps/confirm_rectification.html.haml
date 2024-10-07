@@ -38,7 +38,7 @@
                     %td= number_to_currency(last_paid_request.pfmp.amount, unit: "€", format: "%n %u")
                   %tr
                     %th{scope: "row"} IBAN
-                    %td= last_paid_request.rib&.iban || @student.rib(current_establishment).iban
+                    %td= last_paid_request.rib_with_fallback&.iban
                 - else
                   %tr
                     %td{colspan: 2} Aucun paiement effectué
