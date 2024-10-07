@@ -15,7 +15,7 @@ class MefSeeder
     logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
     logger.info "[seeds] inserting MEF codes..."
 
-    data = CSV.read(Rails.root.join("data/mefs.csv"), headers: true)
+    data = CSV.read(Rails.root.join("data/mefs/2024_2025.csv"), headers: true)
 
     mefs = data.map do |entry|
       attributes = MAPPING.transform_values do |value|
