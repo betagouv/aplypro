@@ -3,7 +3,7 @@
   - classe = schooling.classe
   %section.fr-my-6w
     %h2.fr-h4
-      = "#{classe.school_year} - #{classe.label} - #{classe.establishment}"
+      = link_to "#{classe.school_year} - #{classe.label} - #{classe.establishment}", school_year_class_path(selected_school_year, classe)
 
     = closed_schooling_information_tag(schooling, class: "fr-mb-2w")
 

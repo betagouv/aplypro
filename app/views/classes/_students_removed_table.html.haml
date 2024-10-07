@@ -1,0 +1,20 @@
+
+.fr-table.fr-table--no-caption
+  %table
+    %caption= "Élèves retirés manuellement de la classe"
+    %thead
+      %th{scope: "col"}
+        Élèves
+        = "(#{schoolings.count})"
+      %th{scole: "col"}
+        .fr-grid-row
+          .fr-mr-1w Réintégration de l'élève dans la classe
+
+    %tbody
+      - schoolings.each do |schooling|
+        - student = schooling.student
+        %tr
+          %td
+            = dsfr_link_to student.index_name, student_path(student), title: t("links.students.show", name: student)
+          %td
+            = link_to "Réintégrer #{student} dans la classe #{@classe.label}", confirm_removal_cancellation_school_year_class_schooling_path(selected_school_year, @classe, schooling), class: 'fr-btn fr-btn--primary'

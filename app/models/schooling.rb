@@ -16,7 +16,10 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_one :establishment, through: :classe
 
   scope :former, -> { where.not(end_date: nil).where(end_date: ..Date.current) }
-  scope :current, -> { where.not(id: former) }
+  scope :current, -> { where.not(id: former).where(id: without_removed_students) }
+
+  scope :with_removed_students, -> { where.not(removed_at: nil) }
+  scope :without_removed_students, -> { where(removed_at: nil) }
 
   scope :with_attributive_decisions, -> { joins(:attributive_decision_attachment) }
   scope :without_attributive_decisions, -> { where.missing(:attributive_decision_attachment) }
@@ -77,6 +80,10 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def excluded?
     Exclusion.excluded?(establishment.uai, mef.code)
+  end
+
+  def removed?
+    removed_at.present?
   end
 
   def attachment_file_name(description)

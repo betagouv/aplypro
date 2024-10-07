@@ -22,6 +22,8 @@ module Sync
         return true
       end
 
+      return true if student.current_schooling.removed?
+
       Updaters::StudentSchoolingsUpdater.call(student)
     end
   end
