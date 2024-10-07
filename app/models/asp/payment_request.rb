@@ -64,7 +64,7 @@ module ASP
 
     # XXX: Some records dont have a rib attached (yet)
     def rib_with_fallback
-      rib || student.rib(payment_request.pfmp.establishment)
+      rib || student.rib(pfmp.establishment)
     end
 
     def mark_ready!
