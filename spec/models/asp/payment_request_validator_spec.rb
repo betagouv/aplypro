@@ -74,18 +74,23 @@ RSpec.describe ASP::PaymentRequestValidator do
   end
 
   describe "#check_address" do
-    %i[address_postal_code address_city_insee_code address_country_code].each do |info|
-      context "when #{info} is blank" do
-        before { allow(student).to receive(info).and_return(nil) }
+    context "when student lives in France" do
+      before { allow(student).to receive(:lives_in_france?).and_return(true) }
 
-        it "adds an error" do
-          expect { validator.send(:check_address) }
-            .to change { payment_request.errors.details[:ready_state_validation] }
-            .to include(a_hash_including(error: :"missing_#{info}"))
+      %i[address_postal_code address_city_insee_code address_country_code].each do |info|
+        context "when #{info} is blank" do
+          before { allow(student).to receive(info).and_return(nil) }
+
+          it "adds an error" do
+            expect { validator.send(:check_address) }
+              .to change { payment_request.errors.details[:ready_state_validation] }
+              .to include(a_hash_including(error: :"missing_#{info}"))
+          end
         end
       end
     end
   end
+
 
   describe "#check_rib" do
     context "when RIB is missing" do
