@@ -12,3 +12,10 @@ class Schooling < ApplicationRecord
      status: status, student_id: student.id, classe_id: classe.id]
   end
 end
+
+class Student < ApplicationRecord
+  def describe
+    [id: id, ine: ine, first_name: first_name, last_name: last_name,
+     birthdate: birthdate.to_s, current_schooling: current_schooling.describe]
+  end
+end
