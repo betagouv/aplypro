@@ -92,3 +92,8 @@ Correspondances entre leurs modèles et les notres :
 - Dossier -> Schooling
 - Prestation Dossier (prestadoss) -> Pfmp
 - Liste Element Paiement -> PaymentRequest
+
+### Démarrage de la console en mode support
+
+- `rails c`
+- `load 'support/overrides.rb'`
