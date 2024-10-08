@@ -117,13 +117,22 @@ module ASP
       !terminated?
     end
 
+    # rubocop:disable Metrics/AbcSize
     def eligible_for_auto_retry?
-      return false unless in_state?(:incomplete)
-
       retryable_messages = RETRYABLE_INCOMPLETE_VALIDATION_TYPES.map do |r|
         I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.#{r}")
       end
-      last_transition.metadata["incomplete_reasons"]["ready_state_validation"].intersect?(retryable_messages)
+
+      if in_state?(:incomplete)
+        retryable_messages.intersect?(last_transition.metadata["incomplete_reasons"]["ready_state_validation"])
+      elsif in_state?(:rejected)
+        retryable_messages.include?(last_transition.metadata["Motif rejet"])
+      elsif in_state?(:unpaid)
+        retryable_messages.include?(last_transition.metadata["PAIEMENT"]["LIBELLEMOTIFINVAL"])
+      else
+        false
+      end
     end
+    # rubocop:enable Metrics/AbcSize
   end
 end

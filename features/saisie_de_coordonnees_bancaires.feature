@@ -50,6 +50,16 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
     Et la page contient un bouton "Modifier les coordonnées bancaires" désactivé
     Et la page contient un bouton "Supprimer les coordonnées bancaires" désactivé
 
+  Scénario: Le personnel de direction peut relancer une demande de paiement en saisissant les coordonnées bancaires
+    Quand je consulte la classe de "2NDEB"
+    Et que je renseigne et valide une PFMP de 9 jours pour "Marie Curie"
+    Sachant que la dernière PFMP de "Marie Curie" en classe de "2NDEB" a une requête de paiement rejetée
+    Et que je clique sur "Modifier les coordonnées bancaires"
+    Quand je clique sur "Modifier les coordonnées bancaires"
+    Alors la page contient "Ces coordonnées bancaires ne sont pas modifiables"
+    Et la page contient un bouton "Modifier les coordonnées bancaires" désactivé
+    Et la page contient un bouton "Supprimer les coordonnées bancaires" désactivé
+
   Scénario: Le personnel de direction ne peut pas accéder au RIB d'un élève s'il a été déclaré dans un autre établissement
     Sachant que je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"
     Et que l'élève "Marie Curie" a été transféré dans l'établissement "TEST" en classe "1EREB"
