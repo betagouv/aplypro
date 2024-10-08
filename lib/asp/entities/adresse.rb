@@ -32,7 +32,7 @@ module ASP
           return new(
             pointremise: payment_request.student.address_line1.to_s.slice(0, 38), # Max 38 characters
             cpltdistribution: payment_request.student.address_line2.slice(0, 38), # Max 38 characters
-            codetypeadr: ASP::Mappers::PRINCIPAL_ADDRESS_TYPE,
+            codetypeadr: ASP::Mappers::AdresseMapper::PRINCIPAL_ADDRESS_TYPE,
             codeinseepays: InseeCountryCodeMapper.call(payment_request.student.address_country_code),
             codepostalcedex: payment_request.student.address_postal_code,
             codecominsee: payment_request.student.address_city_insee_code
