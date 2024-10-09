@@ -2,7 +2,15 @@
 
 class ClassesFacade
   def initialize(classes)
-    @classes = classes.includes(:school_year)
+    @classes = classes.includes(
+      :school_year,
+      students: :ribs,
+      schoolings:
+        [
+          { attributive_decision_attachment: :blob },
+          { abrogation_decision_attachment: :blob }
+        ]
+    )
   end
 
   def nb_students_per_class
