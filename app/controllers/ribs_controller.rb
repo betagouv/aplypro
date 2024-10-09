@@ -153,8 +153,10 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   # TODO: Factoriser avec 'retry_eligible_payment_requests!' de 'schoolings_controller'
   def retry_eligible_payment_requests!
     @student.pfmps.in_state(:validated).each do |pfmp|
-      p_r = pfmp.latest_payment_request
-      p_r.mark_ready! if p_r&.eligible_for_auto_retry?
+       if pfmp.latest_payment_request&.eligible_for_auto_retry?
+         p_r = PfmpManager.new(pfmp).create_new_payment_request!
+         p_r.mark_ready!
+      end
     end
   end
 end

@@ -53,9 +53,11 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
   Scénario: Le personnel de direction peut relancer une demande de paiement en saisissant les coordonnées bancaires
     Quand je consulte la classe de "2NDEB"
     Et que je renseigne et valide une PFMP de 9 jours pour "Marie Curie"
-    Sachant que la dernière PFMP de "Marie Curie" en classe de "2NDEB" a une requête de paiement rejetée
-    Et que je clique sur "Modifier les coordonnées bancaires"
+    Sachant que la dernière PFMP de "Marie Curie" en classe de "2NDEB" a une requête de paiement envoyée
+    Et que l'ASP a rejetté le dossier de "Marie Curie" avec un motif de "Le pays correspondant au code BIC 1234 n'autorise pas le mode de réglement SEPA"
+    Et que la tâche de lecture des paiements est passée
     Quand je clique sur "Modifier les coordonnées bancaires"
+    Et que je clique sur "Modifier les coordonnées bancaires"
     Alors la page contient "Ces coordonnées bancaires ne sont pas modifiables"
     Et la page contient un bouton "Modifier les coordonnées bancaires" désactivé
     Et la page contient un bouton "Supprimer les coordonnées bancaires" désactivé
