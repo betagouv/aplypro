@@ -117,19 +117,25 @@ module ASP
       !terminated?
     end
 
-    def eligible_for_auto_retry?
-      if in_state?(:incomplete)
-        retryable_messages = RETRYABLE_INCOMPLETE_VALIDATION_TYPES.map do |r|
-          I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.#{r}")
-        end
-        retryable_messages.intersect?(last_transition.metadata["incomplete_reasons"]["ready_state_validation"])
-      elsif in_state?(:rejected)
-        %w[RIB BIC PAIEMENT].any? { |word| last_transition.metadata["Motif rejet"].upcase.include?(word) }
-      elsif in_state?(:unpaid)
-        %w[RIB BIC PAIEMENT].any? { |word| last_transition.metadata["PAIEMENT"]["LIBELLEMOTIFINVAL"].upcase.include?(word) }
-      else
-        false
+    def eligible_for_incomplete_retry?
+      return false unless in_state?(:incomplete)
+
+      retryable_messages = RETRYABLE_INCOMPLETE_VALIDATION_TYPES.map do |r|
+        I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.#{r}")
       end
+      last_transition.metadata["incomplete_reasons"]["ready_state_validation"].intersect?(retryable_messages)
+    end
+
+    def eligible_for_rejected_and_unpaid_auto_retry?
+      if in_state?(:rejected)
+        message = last_transition.metadata["Motif rejet"]
+      elsif in_state?(:unpaid)
+        message = last_transition.metadata["PAIEMENT"]["LIBELLEMOTIFINVAL"]
+      else
+        return false
+      end
+
+      %w[RIB BIC PAIEMENT].any? { |word| message.upcase.include?(word) }
     end
   end
 end
