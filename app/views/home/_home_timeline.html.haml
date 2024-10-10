@@ -3,15 +3,14 @@
 - if @establishment_facade.students_count <= 0
   = t("errors.school_years.not_found").html_safe
 - else
-  - chart_colors = ["#000091", "#0063cb", "#18753c", "#ce0500"]
-
+  - dsfr_colors = { blue: "#000091", light_blue: "#bccdff", green: "#88fdaa", red: "#ffbdbd" } # https://www.systeme-de-design.gouv.fr/fondamentaux/couleurs-palette
   .fr-grid-row.timeline-row
     .fr-col-md-7
       .gray-panel.timeline-section
         = render 'classes/attributive_decisions_panel'
     .fr-col-md-4.fr-ml-4w
       .chart-container
-        = pie_chart({ "Élèves avec DA" => @establishment_facade.attributive_decisions_count, "Élèves sans DA" => @establishment_facade.without_attributive_decisions_count }, colors: [chart_colors[0], chart_colors[1]], donut: true)
+        = pie_chart({ "Élèves avec DA" => @establishment_facade.attributive_decisions_count, "Élèves sans DA" => @establishment_facade.without_attributive_decisions_count }, colors: [dsfr_colors[:green], dsfr_colors[:red]], donut: true)
 
   .fr-grid-row.timeline-row
     .fr-col-md-7
@@ -24,7 +23,7 @@
           %li= link_to "Choisir une classe pour saisir des coordonnées bancaires", school_year_classes_path(selected_school_year), class: "fr-btn fr-btn--primary fr-mb-0"
     .fr-col-md-4.fr-ml-4w
       .chart-container
-        = pie_chart({ "Élèves avec RIB" => @establishment_facade.ribs_count, "Élèves sans RIB" => @establishment_facade.students_without_rib_count }, colors: [chart_colors[0], chart_colors[1]], donut: true)
+        = pie_chart({ "Élèves avec RIB" => @establishment_facade.ribs_count, "Élèves sans RIB" => @establishment_facade.students_without_rib_count }, colors: [dsfr_colors[:green], dsfr_colors[:red]], donut: true)
 
   .fr-grid-row.timeline-row
     .fr-col-md-7
@@ -41,7 +40,7 @@
     .fr-col-md-4.fr-ml-4w
       .chart-container
         = column_chart(@establishment_facade.pfmps_counts.transform_keys { |key| t("pfmps.state.#{key}") },
-          colors: chart_colors,
+          colors: [dsfr_colors[:light_blue], dsfr_colors[:red], dsfr_colors[:green], dsfr_colors[:red]],
           label: "PFMPs par états")
 
   .fr-grid-row.timeline-row
@@ -55,7 +54,7 @@
             .centering-container.fr-mb-2w
               = payment_requests_status_count_badge(states.first, @establishment_facade.payment_requests_counts[states.first], display_zero: true)
               = payment_requests_status_count_badge(states.last, @establishment_facade.payment_requests_counts[states.last], display_zero: false)
-        %p La validation du chef d'établissement est nécessaire pour chaque PFMP. Une fois la PFMP validée, une demande de paiement sera envoyée à l'Agence de Services et de Paiement (ASP).
+        %p La validation du chef d'établissement est nécessaire pour chaque PFMP. Une fois la PFMP validée, une demande de paiement est ensuite envoyée à l'Agence de Services et de Paiement (ASP). Chaque demande de paiement possède un statut affiché dans la page "Paiements".
         %ul.fr-btns-group
           - if current_user.can_validate?
             %li= link_to "Consulter et gérer les envois en paiement", school_year_validations_path(selected_school_year), class: "fr-btn fr-btn--primary fr-mb-0"
@@ -64,5 +63,5 @@
     .fr-col-md-4.fr-ml-4w
       .chart-container
         = column_chart(@establishment_facade.payment_requests_counts.transform_keys { |key| t("payment_requests.state.#{key}") },
-          colors: chart_colors,
+          colors: [dsfr_colors[:blue], dsfr_colors[:red], dsfr_colors[:light_blue], dsfr_colors[:red], dsfr_colors[:green], dsfr_colors[:red]],
           label: "Demandes de paiements par états")
