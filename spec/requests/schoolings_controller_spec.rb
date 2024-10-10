@@ -34,7 +34,7 @@ RSpec.describe SchoolingsController do
     end
   end
 
-  describe "retry_eligibile_payment_requests" do
+  describe "retry_eligible_payment_requests" do
     let(:expected_error_message) do
       I18n.t(
         "asp/payment_request.attributes.ready_state_validation.needs_abrogated_attributive_decision",

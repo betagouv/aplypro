@@ -146,6 +146,11 @@ RSpec.describe ASP::PaymentRequest do
     end
     let(:p_r_ready) { create(:asp_payment_request, :ready) }
 
+    let(:p_r_rejected) { create(:asp_payment_request, :rejected) }
+    let(:p_r_rejected_rib) { create(:asp_payment_request, :rejected, reason: "Test d'une raison de blocage d'un paiement bancaire") }
+    let(:p_r_unpaid) { create(:asp_payment_request, :unpaid) }
+    let(:p_r_unpaid_rib) { create(:asp_payment_request, :unpaid, reason: "Test d'une raison de blocage d'un paiement bancaire") }
+
     context "when the payment request is in 'incomplete' state with the abrogation specific error message" do
       it "returns true" do
         expect(p_r_incomplete_for_abrogation.eligible_for_auto_retry?).to be true
@@ -161,6 +166,30 @@ RSpec.describe ASP::PaymentRequest do
     context "when the payment request is not in 'incomplete' state" do
       it "returns false" do
         expect(p_r_ready.eligible_for_auto_retry?).to be false
+      end
+    end
+
+    context "when the payment request is in 'rejected' state without a RIB reason" do
+      it "returns false" do
+        expect(p_r_rejected.eligible_for_auto_retry?).to be false
+      end
+    end
+
+    context "when the payment request is in 'rejected' state with a RIB reason" do
+      it "returns true" do
+        expect(p_r_rejected_rib.eligible_for_auto_retry?).to be true
+      end
+    end
+
+    context "when the payment request is in 'unpaid' state without a RIB reason" do
+      it "returns false" do
+        expect(p_r_unpaid.eligible_for_auto_retry?).to be false
+      end
+    end
+
+    context "when the payment request is in 'unpaid' state with a RIB reason" do
+      it "returns true" do
+        expect(p_r_unpaid_rib.eligible_for_auto_retry?).to be true
       end
     end
   end
