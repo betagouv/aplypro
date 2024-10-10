@@ -33,7 +33,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     @rib = @student.create_new_rib(rib_params)
 
     if @rib.save
-      retry_eligible_payment_requests!
+      retry_rejected_or_unpaid_payment_request!
 
       redirect_to student_path(@student),
                   notice: t(".success")
@@ -150,10 +150,10 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     redirect_to student_path(@student), alert: t("flash.ribs.readonly", name: @student.full_name)
   end
 
-  # TODO: Factoriser avec 'retry_eligible_payment_requests!' de 'schoolings_controller'
-  def retry_eligible_payment_requests!
+  # TODO: Factoriser avec 'retry_incomplete_payment_request!' de 'schoolings_controller' ?
+  def retry_rejected_or_unpaid_payment_request!
     @student.pfmps.in_state(:validated).each do |pfmp|
-      if pfmp.latest_payment_request&.eligible_for_rejected_and_unpaid_auto_retry?
+      if pfmp.latest_payment_request&.eligible_for_auto_retry?
         p_r = PfmpManager.new(pfmp).create_new_payment_request!
         p_r.mark_ready!
       end
