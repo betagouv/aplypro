@@ -37,7 +37,7 @@ describe ASP::Entities::Adresse, type: :model do
       it "creates an Adresse instance with establishment details" do # rubocop:disable RSpec/ExampleLength
         adresse = described_class.from_payment_request(request)
         expect(adresse).to have_attributes(
-          codetypeadr: ASP::Mappers::AdresseMapper::ABROAD_ADDRESS_TYPE,
+          codetypeadr: ASP::Mappers::AdresseMapper::PRINCIPAL_ADDRESS_TYPE,
           codecominsee: establishment.commune_code,
           codepostalcedex: establishment.postal_code,
           codeinseepays: InseeCodes::FRANCE_INSEE_COUNTRY_CODE
