@@ -72,12 +72,12 @@ describe ASP::Entities::Adresse, type: :model do
           )
         end
 
-        it "creates an Adresse instance with truncated attrs" do
+        it "creates an Adresse instance with truncated attrs" do # rubocop:disable RSpec/ExampleLength
           adresse = described_class.from_payment_request(pfmp.latest_payment_request)
           expect(adresse).to have_attributes(
             codetypeadr: ASP::Mappers::AdresseMapper::PRINCIPAL_ADDRESS_TYPE,
             pointremise: "A" * 38,
-            cpltdistribution: "B" * 38,
+            cpltdistribution: "B" * 38
           )
         end
       end
