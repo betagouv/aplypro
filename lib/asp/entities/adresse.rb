@@ -48,7 +48,7 @@ module ASP
           raise ASP::Errors::MissingEstablishmentPostalCodeError if establishment.postal_code.blank?
 
           new(
-            codetypeadr: Mappers::AdresseMapper::ABROAD_ADDRESS_TYPE,
+            codetypeadr: Mappers::AdresseMapper::PRINCIPAL_ADDRESS_TYPE,
             codecominsee: establishment.commune_code,
             codepostalcedex: establishment.postal_code,
             codeinseepays: InseeCodes::FRANCE_INSEE_COUNTRY_CODE
