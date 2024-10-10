@@ -61,6 +61,26 @@ describe ASP::Entities::Adresse, type: :model do
             .to raise_error(ASP::Errors::MissingEstablishmentPostalCodeError)
         end
       end
+
+      context "when the PFMP is rectified" do
+        let(:pfmp) { create(:pfmp, :rectified) }
+
+        before do
+          pfmp.student.update(
+            address_line1: "A" * 50,
+            address_line2: "B" * 50
+          )
+        end
+
+        it "creates an Adresse instance with truncated attrs" do # rubocop:disable RSpec/ExampleLength
+          adresse = described_class.from_payment_request(pfmp.latest_payment_request)
+          expect(adresse).to have_attributes(
+            codetypeadr: ASP::Mappers::AdresseMapper::PRINCIPAL_ADDRESS_TYPE,
+            pointremise: "A" * 38,
+            cpltdistribution: "B" * 38
+          )
+        end
+      end
     end
   end
 end
