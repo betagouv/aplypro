@@ -64,9 +64,9 @@ RSpec.describe Stats::Main do
     it "computes the correct percentages" do
       expect(data).to eq(
         [["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public", *indicators_titles],
-         ["etab1", "etab1", "MINISTERE DE L'EDUCATION NATIONALE", "Marseille", "Public", 0.25, 0.25, 0.25, 0.25, 5.0, 400, 4, 4, 1, 1, 1, 5],
-         ["etab2", "etab2", "MINISTERE DE L'EDUCATION NATIONALE", "Marseille", "Public", 0.5, 0.5, 0.5, 0.5, 15.0, 600, 6, 6, 3, 3, 3, 15],
-         ["etab3", "etab3", "MINISTERE DE L'EDUCATION NATIONALE", "Marseille", "Public", 0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5, 2, 2, 2, 10]]
+         ["0000000A", "0000000A", "MINISTERE DE L'EDUCATION NATIONALE", "Marseille", "Public", 0.25, 0.25, 0.25, 0.25, 5.0, 400, 4, 4, 1, 1, 1, 5],
+         ["0000000B", "0000000B", "MINISTERE DE L'EDUCATION NATIONALE", "Marseille", "Public", 0.5, 0.5, 0.5, 0.5, 15.0, 600, 6, 6, 3, 3, 3, 15],
+         ["0000000C", "0000000C", "MINISTERE DE L'EDUCATION NATIONALE", "Marseille", "Public", 0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5, 2, 2, 2, 10]]
       )
     end
     # rubocop:enable RSpec/ExampleLength

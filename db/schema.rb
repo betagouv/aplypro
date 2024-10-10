@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_14_133039) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_25_131116) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -207,8 +207,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_14_133039) do
     t.datetime "updated_at", null: false
     t.string "name", null: false
     t.integer "owner_type", default: 1, null: false
+    t.bigint "establishment_id"
+    t.index ["establishment_id"], name: "index_ribs_on_establishment_id"
+    t.index ["student_id", "establishment_id"], name: "one_active_rib_per_student_per_establishment", unique: true, where: "(archived_at IS NULL)"
     t.index ["student_id"], name: "index_ribs_on_student_id"
-    t.index ["student_id"], name: "one_active_rib_per_student", unique: true, where: "(archived_at IS NULL)"
   end
 
   create_table "school_years", force: :cascade do |t|
@@ -232,6 +234,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_14_133039) do
     t.integer "status"
     t.integer "abrogation_decision_version", default: 0
     t.date "extended_end_date"
+    t.datetime "removed_at", precision: nil
     t.index ["administrative_number"], name: "index_schoolings_on_administrative_number", unique: true
     t.index ["asp_dossier_id"], name: "index_schoolings_on_asp_dossier_id", unique: true
     t.index ["classe_id"], name: "index_schoolings_on_classe_id"
@@ -314,6 +317,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_14_133039) do
   add_foreign_key "mefs", "school_years"
   add_foreign_key "pfmp_transitions", "pfmps"
   add_foreign_key "pfmps", "schoolings"
+  add_foreign_key "ribs", "establishments"
   add_foreign_key "ribs", "students"
   add_foreign_key "schoolings", "classes", column: "classe_id"
   add_foreign_key "schoolings", "students"

@@ -21,7 +21,6 @@
   %body
     = render 'shared/skiplinks'
     = render 'shared/analytics' if Rails.env.production?
-    = render 'shared/support_banner' if @show_support_banner
     = render 'shared/header'
     - unless @inhibit_nav
       - if current_establishment

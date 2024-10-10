@@ -31,11 +31,20 @@ Quand("je supprime les coordonnées bancaires") do
   )
 end
 
-Quand("je saisis en masse les coordonées bancaires d'un tiers pour {string}") do |name|
+Quand("je saisis en masse les coordonnées bancaires d'un tiers pour {string}") do |name|
   within_fieldset(name) do
     steps %(
       Quand je remplis des coordonnées bancaires
-      Et que je choisis "une personne morale"
+      Et que je choisis "Un représentant légal ou à un tiers"
+    )
+  end
+end
+
+Quand("je saisis en masse les coordonnées bancaires d'une personne morale pour {string}") do |name|
+  within_fieldset(name) do
+    steps %(
+      Quand je remplis des coordonnées bancaires
+      Et que je choisis "Une personne morale"
     )
   end
 end
@@ -57,7 +66,13 @@ end
 
 Quand("l'élève {string} a déjà des coordonnées bancaires") do |name|
   student = find_student_by_full_name(name)
-  FactoryBot.create(:rib, student: student)
+  FactoryBot.create(:rib, :personal, student: student)
+end
+
+Quand("l'élève {string} a déjà des coordonnées bancaires pour l'établissement {string}") do |name, uai|
+  student = find_student_by_full_name(name)
+  etab = Establishment.find_by!(uai: uai)
+  FactoryBot.create(:rib, :personal, student: student, establishment: etab)
 end
 
 Quand("il manque des coordonnées bancaires à {string}") do |name|

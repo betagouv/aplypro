@@ -28,14 +28,14 @@ end
 
 Quand("je renseigne une PFMP de {int} jours pour {string}") do |days, name|
   steps %(
-    Et que je clique sur "Voir le profil" dans la rangée "#{name}"
+    Et que je clique sur "Voir le profil de #{name}"
     Et que je renseigne une PFMP de #{days} jours
   )
 end
 
 Quand("je renseigne une PFMP pour {string}") do |name|
   steps %(
-    Et que je clique sur "Voir le profil" dans la rangée "#{name}"
+    Et que je clique sur "Voir le profil de #{name}"
     Et que je renseigne une PFMP provisoire
   )
 end
@@ -53,9 +53,10 @@ Alors("je ne peux pas éditer ni supprimer la PFMP") do
   )
 end
 
-Quand("je renseigne et valide une PFMP de {int} jours") do |days|
+Quand("je renseigne et valide une PFMP de {int} jours pour {string}") do |days, name|
   steps %(
-    Quand je renseigne une PFMP de #{days} jours
+    Quand je renseigne une PFMP de #{days} jours pour "#{name}"
+    Et que la dernière PFMP de "#{name}" est validable
     Et que je consulte la dernière PFMP
     Et que je coche la case de responsable légal
     Et que je clique sur "Valider"
@@ -113,10 +114,29 @@ Quand(
   )
 end
 
-Quand("je valide la dernière PFMP de {string}") do |name|
+Quand("la dernière PFMP de {string} est validable") do |name|
   student = find_student_by_full_name(name)
+  pfmp = student.pfmps.last
+  uai = pfmp.establishment.uai
 
-  student.pfmps.last.transition_to!(:validated)
+  if student.ribs.empty?
+    steps %(
+      Et que l'élève "#{name}" a déjà des coordonnées bancaires pour l'établissement "#{uai}"
+    )
+  end
+
+  schooling = pfmp.schooling
+
+  schooling.tap(&:generate_administrative_number).save!
+  schooling.attach_attributive_document(StringIO.new("hello"), :attributive_decision)
+end
+
+Quand("toutes les PFMPs pour la classe {string} sont validables") do |classe_label|
+  Classe.find_by!(label: classe_label).students.each do |student|
+    steps %(
+      Quand la dernière PFMP de "#{student}" est validable
+    )
+  end
 end
 
 Alors("je peux changer le nombre de jours de la PFMP à {int}") do |days|

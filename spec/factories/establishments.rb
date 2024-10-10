@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :establishment do
-    uai { Faker::Alphanumeric.alpha(number: 8).upcase }
+    uai { Faker::Base.regexify("^[0-9]{7}[A-Z]$") }
     name { Faker::Educator.secondary_school }
     denomination { "LYCEE GENERAL ET TECHNOLOGIQUE" }
     nature { Faker::Number.between(from: 300, to: 399) }

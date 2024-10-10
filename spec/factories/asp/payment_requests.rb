@@ -12,8 +12,6 @@ FactoryBot.define do
       after(:create) do |req|
         student = build(:student, :with_all_asp_info, :adult, :with_french_address)
         req.student.update!(**student.attributes.except("id", "updated_at", "created_at"))
-        create(:rib, :personal, student: req.student) if req.student.rib.blank?
-        AttributiveDecisionHelpers.generate_fake_attributive_decision(req.schooling)
         req.reload ## needed to reload the data of the schooling for the asp xml builder
       end
     end
@@ -21,8 +19,7 @@ FactoryBot.define do
     trait :sendable_with_issues do
       after(:create) do |req|
         student = build(:student, :with_all_asp_info, :underage, :with_foreign_address, biological_sex: nil)
-        req.student.update!(**student.attributes.except("id", "updated_at", "created_at"))
-        AttributiveDecisionHelpers.generate_fake_attributive_decision(req.schooling)
+        req.student.update!(**student.attributes.except("id", "updated_at", "created_at"), ribs: [])
         req.reload ## needed to reload the data of the schooling for the asp xml builder
       end
     end

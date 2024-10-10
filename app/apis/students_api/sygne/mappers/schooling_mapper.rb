@@ -4,6 +4,7 @@ module StudentsApi
   module Sygne
     module Mappers
       class SchoolingMapper < Dry::Transformer::Pipe
+        # Seul le MAPPING "ST" est encore utilisé, les autres statuts ne sont plus retournés par SYGNE
         STATUS_MAPPING = {
           "ST" => :student,
           "AP" => :apprentice,
@@ -39,6 +40,8 @@ module StudentsApi
           accept_keys %i[ine mef_code label status uai start_date end_date school_year]
         end
 
+        # Cette fonction ne devrait plus être appelée,
+        # SYGNE renvoie désormais toujours le code MEF de rattachement
         def maybe_fallback_mef(data)
           data.tap { data[:mef_code] ||= data[:codeMef] }
         end

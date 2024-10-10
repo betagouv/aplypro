@@ -26,10 +26,6 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   has_many :ribs, dependent: :destroy
 
-  has_one :rib, -> { where(archived_at: nil) }, dependent: :destroy, inverse_of: :student
-
-  scope :without_ribs, -> { where.missing(:rib) }
-
   scope :lives_in_france, -> { where(address_country_code: %w[100 99100]) }
   scope :lives_abroad, -> { where.not(id: lives_in_france) }
 
@@ -38,7 +34,9 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   scope :with_biological_sex, -> { where(biological_sex: %i[male female]) }
   scope :with_known_postal_code, -> { where.not(address_postal_code: nil) }
-  scope :with_rib, -> { joins(:rib) }
+
+  scope :without_ribs, -> { where.missing(:ribs) }
+  scope :with_rib, -> { joins(:ribs).distinct }
 
   scope :with_known_birthplace, -> { where.not(birthplace_country_insee_code: nil) }
   scope :with_valid_birthplace, lambda {
@@ -65,13 +63,18 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     )
   }
 
-  sourced_from_external_api :address_line1,
+  sourced_from_external_api :birthdate,
+                            :address_line1,
                             :address_postal_code,
                             :address_city_insee_code,
                             :address_country_code,
                             :birthplace_city_insee_code,
                             :birthplace_country_insee_code,
                             :biological_sex
+
+  def rib(etab = establishment)
+    ribs.find_by(establishment: etab, archived_at: nil)
+  end
 
   # NOTE: used in stats for column "Données d'élèves nécessaires présentes"
   def self.asp_ready
@@ -84,8 +87,6 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   before_validation :check_asp_file_reference
 
   def lives_in_france?
-    return false if address_country_code.blank?
-
     InseeCodes.in_france?(address_country_code)
   rescue InseeCountryCodeMapper::UnusableCountryCode
     false
@@ -145,6 +146,10 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
       rib.archive! if rib.present? && rib.archivable?
       ribs.create(rib_params)
     end
+  end
+
+  def adult_at?(date)
+    date >= birthdate + 18.years
   end
 
   private

@@ -12,6 +12,7 @@ Fonctionnalité: Complétion des PFMPs d'une classe
     Et que je remplis le champ "Nombre de jours" dans la rangée "Curie Marie" avec "12"
     Et que je remplis le champ "Nombre de jours" dans la rangée "Langevin Paul" avec "4"
     Et que je clique sur "Enregistrer 2 PFMPs"
+    Et que toutes les PFMPs pour la classe "2NDEB" sont validables
     Et que je clique sur "Paiements"
 
   Scénario: Le personnel peut accéder à la page des classes avec PFMPs à valider

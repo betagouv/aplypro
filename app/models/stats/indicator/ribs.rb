@@ -5,7 +5,7 @@ module Stats
     class Ribs < Ratio
       def initialize
         super(
-          subset: Student.joins(:rib),
+          subset: Student.with_rib,
           all: Student.all
         )
       end

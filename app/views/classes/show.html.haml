@@ -13,9 +13,9 @@
       = dsfr_badge(status: :new, classes: ["fr-badge--sm", "fr-ml-1w"]) do
         = t("pfmps.states.pending")
   
-  - if current_user.can_validate? && @classe_facade.nb_completed_pfmps > 0
+  - if current_user.can_validate? && @classe_facade.nb_can_transition_to_validated_pfmps > 0
     = link_to validation_school_year_class_path(selected_school_year, @classe), class: 'fr-btn fr-btn--secondary' do
-      = @classe_facade.completed_pfmps_button_text
+      = @classe_facade.can_transition_to_validated_pfmps_button_text
       = dsfr_badge(status: :info, classes: ["fr-badge--sm", "fr-ml-1w"]) do
         = t("pfmps.states.completed")
 
@@ -23,5 +23,8 @@
 
 - if @classe.inactive_students.any?
   %h2 Élèves sortis de la classe
-
   = render partial: "students_table", locals: { schoolings: @classe_facade.schoolings.former, caption: "Élèves sortis de la classe" }
+
+- if @classe.removed_students.any?
+  %h2 Élèves retirés manuellement de la classe
+  = render partial: "students_removed_table", locals: { schoolings: @classe_facade.schoolings.with_removed_students }

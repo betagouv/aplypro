@@ -19,12 +19,13 @@ class PfmpStateMachine
   end
 
   guard_transition(to: :validated) do |pfmp|
-    pfmp.previous_pfmps.not_in_state(:validated).empty?
+    pfmp.previous_pfmps.not_in_state(:validated).empty? &&
+      pfmp.student.rib(pfmp.classe.establishment).present? &&
+      pfmp.schooling.attributive_decision.attached?
   end
 
   guard_transition(to: :rectified) do |pfmp|
-    # TODO: remove first predicate on release after staging test
-    !Rails.env.production? && pfmp.latest_payment_request.in_state?(:paid)
+    pfmp.latest_payment_request&.in_state?(:paid)
   end
 
   after_transition(to: :rectified) do |pfmp|

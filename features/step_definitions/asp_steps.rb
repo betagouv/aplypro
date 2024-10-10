@@ -13,8 +13,8 @@ Quand("une PFMP de 30 euros a été saisie, validée et envoyée en paiement pou
     Et que je me connecte en tant que personnel MENJ
     Et que toutes les tâches de fond sont terminées
     Et que je passe l'écran d'accueil
-    Et que je consulte le profil de "#{name}" dans la classe de "A1"
-    Et que je renseigne et valide une PFMP de 3 jours
+    Et que je consulte la classe de "A1"
+    Et que je renseigne et valide une PFMP de 3 jours pour "#{name}"
     Et que la dernière PFMP de "#{name}" en classe de "A1" a une requête de paiement envoyée
   )
 end

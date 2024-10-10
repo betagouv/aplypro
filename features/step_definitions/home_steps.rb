@@ -8,10 +8,6 @@ Alors("le panneau {string} ne contient pas {string}") do |title, text|
   expect(page.find(".gray-panel", text: title)).to have_no_content(text)
 end
 
-Quand("l'établissement {string} fait parti des établissments soutenus directement") do |uai|
-  ENV.update("APLYPRO_DIRECT_SUPPORT_UAIS" => uai)
-end
-
 Alors("le panneau {string} contient un compteur à {int} sur {int}") do |title, low, high|
   within(".gray-panel", text: title) do
     expect(page).to have_content("#{low} / #{high}")

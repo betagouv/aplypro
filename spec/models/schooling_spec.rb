@@ -282,6 +282,17 @@ RSpec.describe Schooling do
     end
   end
 
+  describe "removed?" do
+    it "returns false" do
+      expect(schooling.removed?).to be false
+    end
+
+    it "returns true" do
+      schooling.removed_at = Time.zone.today
+      expect(schooling.removed?).to be true
+    end
+  end
+
   describe "#max_end_date" do
     let(:schooling) { create(:schooling) }
 

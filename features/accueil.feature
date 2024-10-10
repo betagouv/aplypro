@@ -42,11 +42,6 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Et que je me rends sur la page d'accueil
     Alors le panneau "Décisions d'attribution" contient "Vous remplacerez Jean Dupuis"
 
-  Scénario: Le personnel voit un bandeau de support si son établissement est enlicé
-    Quand l'établissement "DINUM" fait parti des établissments soutenus directement
-    Et que je rafraîchis la page
-    Alors la page contient "faites-nous part de vos retours"
-
   Scénario: Le personnel ne voit pas de bandeau de support si son établissement n'est pas enlicé
     Quand je rafraîchis la page
     Alors la page ne contient pas "faites-nous part de vos retours"

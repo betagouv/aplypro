@@ -33,6 +33,6 @@ describe Stats::Indicator::SendableAmounts do
 
     include_context "when there is data for stats per establishments"
 
-    it { is_expected.to eq({ "etab1" => 5.0, "etab2" => 15.0, "etab3" => 10.0 }) }
+    it { is_expected.to eq({ "0000000A" => 5.0, "0000000B" => 15.0, "0000000C" => 10.0 }) }
   end
 end

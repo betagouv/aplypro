@@ -73,6 +73,9 @@ Rails.application.routes.draw do
           get "confirm_abrogation"
           delete "abrogate_decision"
           get "confirm_da_extension"
+          get "confirm_removal"
+          get "confirm_removal_cancellation"
+          post "remove"
         end
 
         resources :pfmps, except: :index do

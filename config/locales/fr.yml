@@ -26,6 +26,9 @@ fr:
       extension_removed: Le report de la décision d'attribution de %{name} a bien été supprimé
       cant_remove_extension: Le report de la décision d'attribution de %{name} n'a pas pu être supprimé car celui ci contient une PFMP
       extension_failure: La décision d'attribution de %{name} n'a pas pu être modifiée
+    schooling:
+      removed: L'élève %{name} a bien été retiré de la classe %{classe}
+      unremoved: L'élève %{name} a bien été réintégré dans la classe %{classe}
   helpers:
     submit:
       rib:
@@ -101,7 +104,7 @@ fr:
               rib: "Les coordonnées bancaires saisies sont invalides ou incorrectes"
               pfmp: "La PFMP associée n'est pas valide"
               ine_not_found: "L'INE de l'étudiant est introuvable. Il a certainement été supprimé lors d'une réconciliation d'INE, vous devriez retrouver cet étudiant en double dans APLyPro. Veuillez utiliser l'autre occurrence de cet étudiant pour saisir ses PFMPs"
-              adult_without_personal_rib: "Les étudiants majeurs doivent avoir être payés sur leurs propres coordonnées bancaires"
+              adult_wrong_owner_type: "Les étudiants majeurs doivent être payés sur leurs propres coordonnées bancaires ou posséder un mandat sous seing privé"
               pfmp_amount: "La PFMP associée doit avoir un montant positif"
               missing_attributive_decision: "Il manque une décision attributive"
               needs_abrogated_attributive_decision: "Les élèves ayant changés de formation, de statut ou d'établissement doivent avoir une abrogation de leur décision d'attribution passée. Ce document peut être généré dans la liste des élèves."
@@ -130,6 +133,13 @@ fr:
         owner_type_personal: "Les coordonnées bancaires appartiennent à l'élève"
         owner_type_other_person: "Les coordonnées bancaires appartiennent à un représentant légal ou à un tiers"
         owner_type_moral_person: "Les coordonnées bancaires appartiennent à une personne morale (ex : association)"
+        owner_type_mandate: "Les coordonnées bancaires appartiennent à un élève majeur payé sur le compte d'un tiers"
+      missing :
+          owner_type: "Les coordonnées bancaires appartiennent à :"
+          owner_type_personal: "L'élève"
+          owner_type_other_person: "Un représentant légal ou à un tiers"
+          owner_type_moral_person: "Une personne morale"
+          owner_type_mandate: "Un élève majeur payé sur le compte d'un tiers"
       establishment:
         uai: "UAI"
         name: "Nom"
@@ -203,6 +213,12 @@ fr:
         show: Envoyer en paiement les PFMPs de %{name}
       schoolings:
         confirm_da_extension: "Autoriser un report de décision d'attribution"
+        confirm_removed:
+          title: "Retrait de l'élève de la classe"
+          breadcrumb: "Retrait de l'élève de la classe"
+        confirm_unremoved:
+          title: "Réintégration de l'élève dans la classe"
+          breadcrumb: "Réintégration de l'élève dans la classe"
 
   global:
     sponsor: "Direction\nInterministérielle\ndu Numérique"
@@ -253,6 +269,7 @@ fr:
     update:
       success: Coordonnées bancaires mises à jour
   pfmps:
+    not_validatable: "Vous ne pouvez pas valider cette PFMP car elle n'est pas complètement remplie (décision d'attribution ou coordonnées bancaires manquantes)."
     edit:
       success: La PFMP a bien été mise à jour
     new:
@@ -278,8 +295,7 @@ fr:
         PFMP est maintenant sujette à l'approbation du chef
         d'établissement sans quoi le paiement ne peut pas être déclenché.
       validated: |
-        La PFMP a été validée. La demande de paiement sera envoyée dès que
-        les développements nécessaires auront été effectués.
+        La PFMP a été validée. La demande de paiement sera envoyée dans le prochain lot journalier.
       rectified: |
         La PFMP a été corrigée. La nouvelle demande de paiement sera envoyée dès que
         possible avec les nouvelles informations fournises.
@@ -288,10 +304,10 @@ fr:
       reset:
         title: "Action possible sur le paiement"
         cta: "Relancer une demande de paiement"
-        warning: "Vous avez corrigé le problème mentionné dans la liste des erreurs et vous souhaitez redemander un envoi en paiement."
+        warning: "Vous avez corrigé le(s) problème(s) mentionné(s) dans la liste des erreurs et vous souhaitez redemander un envoi en paiement."
       update:
         cta: "Retenter la demande de paiement"
-        warning: "Vous avez corrigé le(s) problème mentionné dans la liste des erreurs et vous souhaitez débloquer le paiement."
+        warning: "Vous avez corrigé le(s) problème(s) mentionné(s) dans la liste des erreurs et vous souhaitez débloquer le paiement."
     state:
       pending: "En attente"
       ready: "En attente"
@@ -393,6 +409,7 @@ fr:
         content: Si vous êtes adjoint, veuillez contacter votre chef d'établissement pour qu'il édite les décisions d'attributions et que son nom apparaisse dans les documents générés.
   validations:
     confirm_director: Je confirme que <strong>je suis le responsable légal de l'établissement</strong> et qu'en tant qu'<strong>ordonnateur</strong> je valide informatiquement ces demandes de paiement.
+    not_director: Vous devez être le responsable légal de l'établissement pour pouvoir retenter la demande de paiement.
     validate: Envoyer en paiement les PFMPs cochées
     create:
       success: PFMPs envoyées en paiement pour la classe %{classe_label}

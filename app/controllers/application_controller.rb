@@ -7,8 +7,7 @@ class ApplicationController < ActionController::Base
                 :log_user,
                 :redirect_asp_users!,
                 :check_maintenance,
-                :check_current_establishment,
-                :set_support_banner
+                :check_current_establishment
 
   helper_method :current_establishment, :selected_school_year
 
@@ -25,10 +24,6 @@ class ApplicationController < ActionController::Base
     when :asp_user
       new_asp_user_session_path
     end
-  end
-
-  def set_support_banner
-    @show_support_banner = eligible_for_support?(current_establishment)
   end
 
   def check_maintenance
@@ -81,16 +76,6 @@ class ApplicationController < ActionController::Base
   end
 
   private
-
-  def eligible_for_support?(establishment)
-    return false if establishment.nil?
-
-    supported_uais = ENV
-                     .fetch("APLYPRO_DIRECT_SUPPORT_UAIS", "")
-                     .split(",")
-
-    supported_uais.include?(establishment.uai)
-  end
 
   def check_current_establishment
     return unless user_signed_in?
