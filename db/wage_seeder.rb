@@ -19,7 +19,7 @@ class WageSeeder
       end
     end
 
-    @@logger.info "[seeds] done upserting #{Wage.count} wages"
+    @@logger.info "[seeds] upserted #{Wage.count} total wages"
   end
 
   private
@@ -53,6 +53,6 @@ class WageSeeder
       )
     )
 
-    @@logger.info "[seeds] upserted wages for school year #{school_year.start_year}-#{school_year.start_year + 1}."
+    @@logger.info "[seeds] upserted wages for school year #{school_year.start_year}-#{school_year.start_year + 1}"
   end
 end

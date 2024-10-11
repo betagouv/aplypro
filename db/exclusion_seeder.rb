@@ -34,6 +34,6 @@ class ExclusionSeeder
       Exclusion.find_or_create_by!(uai: uai, mef_code: mef_code)
     end
 
-    logger.info { "[seeds] done upserting #{Exclusion.count} exclusions" }
+    logger.info { "[seeds] upserted #{Exclusion.count} exclusions" }
   end
 end

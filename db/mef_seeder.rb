@@ -23,7 +23,7 @@ class MefSeeder
       end
     end
 
-    @@logger.info "[seeds] done upserting #{Mef.count} MEFs"
+    @@logger.info "[seeds] upserted #{Mef.count} total MEFs"
   end
 
   private
@@ -52,14 +52,14 @@ class MefSeeder
                    .select { |_, group| group.size > 1 }
 
     if duplicates.any?
-      @@logger.warn "[seeds] found duplicates in MEF data for school year #{school_year.start_year}-#{school_year.start_year + 1}:"
+      @@logger.warn "[seeds] found duplicates in MEF data for school year #{school_year}"
       duplicates.each do |key, group|
-        @@logger.warn "duplicate for code: #{key[0]}, school_year_id: #{key[1]}"
+        @@logger.warn "[seeds] duplicate found for code: #{key[0]} and school_year_id: #{key[1]}"
       end
     end
 
     Mef.upsert_all(mefs, unique_by: [:code, :school_year_id]) # rubocop:disable Rails/SkipsModelValidations
 
-    @@logger.info "[seeds] upserted #{mefs.size} for school year #{school_year.start_year}-#{school_year.start_year + 1}."
+    @@logger.info "[seeds] upserted #{mefs.size} MEFs for school year: #{school_year}"
   end
 end
