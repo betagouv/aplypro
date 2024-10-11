@@ -17,11 +17,11 @@ class MefSeeder
   def self.seed
     @@logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
 
-    Mef.transaction do
+    # Mef.transaction do
       Dir.glob(Rails.root.join("data/mefs/*.csv")).each do |file_path|
         process_file(file_path)
       end
-    end
+    # end
 
     @@logger.info "[seeds] done inserting MEF codes."
   end
@@ -34,11 +34,6 @@ class MefSeeder
 
     school_year = SchoolYear.find_by!(start_year: start_year)
 
-    if school_year.nil?
-      @@logger.warn "[seeds] School year not found for #{file_name}. Skipping file."
-      return
-    end
-
     data = CSV.read(file_path, headers: true)
 
     mefs = data.map do |entry|
@@ -50,10 +45,21 @@ class MefSeeder
         end
       end
 
-      attributes.merge("school_year_id" => school_year.id)
+      attributes.merge(school_year_id: school_year.id)
     end
 
-    Mef.upsert_all(mefs, unique_by: :code) # rubocop:disable Rails/SkipsModelValidations
+    duplicates = mefs.group_by { |mef| [mef[:code], mef[:school_year_id]] }
+                   .select { |_, group| group.size > 1 }
+
+    puts duplicates
+    if duplicates.any?
+      @@logger.warn "[seeds] Found duplicates in MEF data for school year #{school_year.start_year}-#{school_year.start_year + 1}:"
+      duplicates.each do |key, group|
+        @@logger.warn "  Duplicate for code: #{key[0]}, school_year_id: #{key[1]}"
+      end
+    end
+
+    # Mef.upsert_all(mefs, unique_by: [:code, :school_year_id]) # rubocop:disable Rails/SkipsModelValidations
 
     @@logger.info "[seeds] Inserted MEF codes for school year #{school_year.start_year}-#{school_year.start_year + 1}."
   end
