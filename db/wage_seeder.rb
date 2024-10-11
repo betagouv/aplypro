@@ -17,7 +17,7 @@ class WageSeeder
 
     Wage.delete_all
 
-    data = CSV.read(Rails.root.join("data/mefs-amounts.csv"), headers: true)
+    data = CSV.read(Rails.root.join("data/wages/2023_2024.csv"), headers: true)
 
     data
       .group_by { |d| d.fields(*WAGE_MAPPING.values) }

@@ -15,11 +15,15 @@ class MefSeeder
   }.freeze
 
   def self.seed
-    Dir.glob(Rails.root.join("data/mefs/*.csv")).each do |file_path|
-      process_file(file_path)
+    @@logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
+
+    Mef.transaction do
+      Dir.glob(Rails.root.join("data/mefs/*.csv")).each do |file_path|
+        process_file(file_path)
+      end
     end
 
-    logger.info "[seeds] done inserting MEF codes."
+    @@logger.info "[seeds] done inserting MEF codes."
   end
 
   private
@@ -31,7 +35,7 @@ class MefSeeder
     school_year = SchoolYear.find_by!(start_year: start_year)
 
     if school_year.nil?
-      logger.warn "[seeds] School year not found for #{file_name}. Skipping file."
+      @@logger.warn "[seeds] School year not found for #{file_name}. Skipping file."
       return
     end
 
@@ -51,6 +55,6 @@ class MefSeeder
 
     Mef.upsert_all(mefs, unique_by: :code) # rubocop:disable Rails/SkipsModelValidations
 
-    logger.info "[seeds] Inserted MEF codes for school year #{school_year.start_year}-#{school_year.start_year + 1}."
+    @@logger.info "[seeds] Inserted MEF codes for school year #{school_year.start_year}-#{school_year.start_year + 1}."
   end
 end
