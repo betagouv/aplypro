@@ -3,13 +3,11 @@
 class SchoolYearSeeder
   def self.seed
     logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
-    logger.info "[seeds] inserting school years..."
+    logger.info "[seeds] upserting school years..."
 
-    SchoolYear.delete_all
+    SchoolYear.find_or_create_by(start_year: 2023)
+    SchoolYear.find_or_create_by(start_year: 2024)
 
-    SchoolYear.create(start_year: 2023)
-    SchoolYear.create(start_year: 2024)
-
-    logger.info "[seeds] done inserting #{SchoolYear.count} school years."
+    logger.info "[seeds] done upserting #{SchoolYear.count} school years."
   end
 end

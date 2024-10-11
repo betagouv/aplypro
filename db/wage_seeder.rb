@@ -19,7 +19,7 @@ class WageSeeder
       end
     end
 
-    @@logger.info "[seeds] Inserted #{Wage.count} wages"
+    @@logger.info "[seeds] done upserting #{Wage.count} wages"
   end
 
   private
