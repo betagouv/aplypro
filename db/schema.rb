@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_25_131116) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_11_120605) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -167,7 +167,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_25_131116) do
     t.string "mefstat11", null: false
     t.integer "ministry", null: false
     t.bigint "school_year_id"
-    t.index ["code"], name: "index_mefs_on_code", unique: true
+    t.index ["code", "school_year_id"], name: "index_mefs_on_code_and_school_year", unique: true
     t.index ["mefstat11"], name: "index_mefs_on_mefstat11"
     t.index ["school_year_id"], name: "index_mefs_on_school_year_id"
   end
