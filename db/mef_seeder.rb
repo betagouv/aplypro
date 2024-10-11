@@ -17,11 +17,11 @@ class MefSeeder
   def self.seed
     @@logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
 
-    # Mef.transaction do
+    Mef.transaction do
       Dir.glob(Rails.root.join("data/mefs/*.csv")).each do |file_path|
         process_file(file_path)
       end
-    # end
+    end
 
     @@logger.info "[seeds] done inserting MEF codes."
   end

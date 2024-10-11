@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_11_120605) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_11_131127) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -298,6 +298,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_11_120605) do
     t.datetime "updated_at", null: false
     t.integer "ministry", null: false
     t.jsonb "mef_codes"
+    t.bigint "school_year_id"
+    t.index ["mefstat4", "ministry", "school_year_id"], name: "index_wages_on_mefstat4_and_ministry_and_school_year_id", unique: true
+    t.index ["school_year_id"], name: "index_wages_on_school_year_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -322,6 +325,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_11_120605) do
   add_foreign_key "schoolings", "classes", column: "classe_id"
   add_foreign_key "schoolings", "students"
   add_foreign_key "users", "establishments", column: "selected_establishment_id"
+  add_foreign_key "wages", "school_years"
 
   create_view "paid_pfmps", materialized: true, sql_definition: <<-SQL
       WITH paid_requests AS (
