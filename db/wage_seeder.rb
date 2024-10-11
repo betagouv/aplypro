@@ -48,7 +48,7 @@ class WageSeeder
 
     Wage.upsert_all(
       wages,
-      unique_by: [:mefstat4, :ministry, :daily_rate, :yearly_cap, :school_year_id],
+      unique_by: [:mefstat4, :ministry, :school_year_id],
       on_duplicate: Arel.sql(
         "mef_codes = EXCLUDED.mef_codes"
       )
