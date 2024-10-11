@@ -8,7 +8,7 @@ class Mef < ApplicationRecord
   scope :with_wages, -> { joins("JOIN wages ON wages.mef_codes ? mefs.code") }
 
   validates :label, :code, :short, :mefstat11, :ministry, presence: true
-  validates :code, uniqueness: true
+  validates :code, uniqueness: { scope: :school_year_id }
 
   def mefstat4
     mefstat11.slice(0..3)
