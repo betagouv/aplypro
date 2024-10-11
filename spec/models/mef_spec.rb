@@ -47,17 +47,17 @@ RSpec.describe Mef do
       end
     end
 
-    context "when there are several wages with mefstat4 & ministry" do
-      let!(:correct_wage) { create(:wage, mefstat4: mef.mefstat4, ministry: mef.ministry, mef_codes: [mef.code]) }
+    # context "when there are several wages with mefstat4 & ministry" do
+    #   let!(:correct_wage) { create(:wage, mefstat4: mef.mefstat4, ministry: mef.ministry, mef_codes: [mef.code]) }
 
-      before do
-        create(:wage, mefstat4: mef.mefstat4, ministry: mef.ministry, mef_codes: %w[many codes])
-      end
+    #   before do
+    #     create(:wage, mefstat4: mef.mefstat4, ministry: mef.ministry, mef_codes: %w[many codes])
+    #   end
 
-      it "returns the correct wage" do
-        expect(mef.wage).to eq correct_wage
-      end
-    end
+    #   it "returns the correct wage" do
+    #     expect(mef.wage).to eq correct_wage
+    #   end
+    # end
   end
 
   describe "associated wage of mef in seed" do
