@@ -12,7 +12,6 @@ class WageSeeder
 
   def self.seed
     @@logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
-    @@logger.info "[seeds] inserting daily wages by mef..."
 
     Wage.transaction do
       Dir.glob(Rails.root.join("data/wages/*.csv")).each do |file_path|
@@ -20,7 +19,7 @@ class WageSeeder
       end
     end
 
-    @@logger.info "[seeds] done inserting daily wages by mef."
+    @@logger.info "[seeds] Inserted #{Wage.count} wages"
   end
 
   private
@@ -48,12 +47,12 @@ class WageSeeder
 
     Wage.upsert_all(
       wages,
-      unique_by: [:mefstat4, :ministry, :school_year_id],
+      unique_by: Wage::UNIQUENESS_SCOPE,
       on_duplicate: Arel.sql(
         "mef_codes = EXCLUDED.mef_codes"
       )
     )
 
-    @@logger.info "[seeds] Inserted/updated wages for school year #{school_year.start_year}-#{school_year.start_year + 1}."
+    @@logger.info "[seeds] upserted wages for school year #{school_year.start_year}-#{school_year.start_year + 1}."
   end
 end
