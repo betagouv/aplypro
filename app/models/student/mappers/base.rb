@@ -70,7 +70,7 @@ class Student
                         SchoolYear.find_by(start_year: year)
                       end
 
-        mef = Mef.find_by(code: mef_code)
+        mef = Mef.find_by(code: mef_code, school_year: school_year)
 
         return if label.nil? || mef.nil? || school_year.nil?
 

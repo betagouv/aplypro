@@ -6,5 +6,6 @@ FactoryBot.define do
     yearly_cap { 100 }
     mefstat4 { 123 }
     ministry { :menj }
+    school_year { SchoolYear.current }
   end
 end
