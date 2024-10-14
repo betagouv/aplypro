@@ -3,7 +3,7 @@
 require "rails_helper"
 
 # rubocop:disable RSpec/EmptyExampleGroup
-# # rubocop:disable RSpec/MultipleMemoizedHelpers
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 describe PfmpAmountCalculator do
   subject(:amount) { pfmp.reload.calculate_amount }
 
