@@ -5,7 +5,7 @@ class Classe < ApplicationRecord
   belongs_to :mef
   belongs_to :school_year
 
-  validate :mef_matching_school_years
+  validate :mef_matching_school_year
 
   has_many :schoolings, dependent: :destroy
 
@@ -93,7 +93,7 @@ class Classe < ApplicationRecord
     @closed_schoolings_per_student_id ||= inactive_schoolings.index_by(&:student_id)
   end
 
-  def mef_matching_school_years
+  def mef_matching_school_year
     return if mef.school_year.eql?(school_year)
 
     errors.add(:mef, "doit avoir la même année scolaire que la classe.")
