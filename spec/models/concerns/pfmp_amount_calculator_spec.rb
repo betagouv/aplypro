@@ -20,7 +20,8 @@ describe PfmpAmountCalculator do
     )
   end
 
-  let(:mef) { create(:mef, daily_rate: 1, yearly_cap: 10) }
+  let(:mef) { create(:mef, daily_rate: 1, yearly_cap: 10, school_year: SchoolYear.current) }
+  let(:classe) { create(:classe, school_year: SchoolYear.current, mef: mef) }
 
   RSpec.configure do |config|
     config.alias_it_behaves_like_to(:it_calculates, "calculates")
@@ -39,7 +40,7 @@ describe PfmpAmountCalculator do
   end
 
   before do
-    pfmp.schooling.classe.update!(mef: mef)
+    pfmp.schooling.update!(classe: classe)
   end
 
   context "when the PFMP doesn't have a day count" do
@@ -75,9 +76,12 @@ describe PfmpAmountCalculator do
         it_calculates "a limited amount", 2
 
         context "when the classe is from another year" do
-          let(:school_year) { create(:school_year, start_year: 2022) }
+          before do
+            old_school_year = create(:school_year, start_year: 2022)
+            old_classe = create(:classe, school_year: old_school_year)
 
-          before { schooling.classe.update!(school_year: school_year) }
+            schooling.update!(classe: old_classe)
+          end
 
           it_calculates "the original amount"
         end
@@ -99,28 +103,26 @@ describe PfmpAmountCalculator do
   end
 
   describe "#pfmps_for_mef_and_school_year" do
-    let(:school_year) { create(:school_year, start_year: 2020) }
-    let(:classe) { create(:classe, school_year: school_year) }
     let(:student) { create(:student, :with_all_asp_info) }
-    let(:schooling) { create(:schooling, :closed, student: student, classe: classe) }
+    let(:schooling) { create(:schooling, student: student, classe: classe) }
     let(:pfmp) do
       create(:pfmp,
              :validated,
-             start_date: "#{school_year.start_year}-09-03",
-             end_date: "#{school_year.start_year}-09-28",
+             start_date: "2024-09-03",
+             end_date: "2024-09-28",
              schooling: schooling,
              day_count: 3)
     end
 
     before do
-      new_school_year = create(:school_year, start_year: 2022)
-      new_classe = create(:classe, school_year: new_school_year)
-      new_schooling = create(:schooling, student: student, classe: new_classe)
+      old_school_year = create(:school_year, start_year: 2022)
+      old_classe = create(:classe, school_year: old_school_year)
+      old_schooling = create(:schooling, :closed, student: student, classe: old_classe)
       create(:pfmp,
              :validated,
-             start_date: "#{new_school_year.start_year}-09-03",
-             end_date: "#{new_school_year.start_year}-09-28",
-             schooling: new_schooling,
+             start_date: "#{old_school_year.start_year}-09-03",
+             end_date: "#{old_school_year.start_year}-09-28",
+             schooling: old_schooling,
              day_count: 1)
     end
 
