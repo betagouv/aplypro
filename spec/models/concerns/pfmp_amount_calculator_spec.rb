@@ -3,7 +3,6 @@
 require "rails_helper"
 
 # rubocop:disable RSpec/EmptyExampleGroup
-# rubocop:disable RSpec/MultipleMemoizedHelpers
 describe PfmpAmountCalculator do
   subject(:amount) { pfmp.reload.calculate_amount }
 
@@ -99,11 +98,10 @@ describe PfmpAmountCalculator do
   end
 
   describe "#pfmps_for_mef_and_school_year" do # rubocop:disable RSpec/MultipleMemoizedHelpers
-    let(:mef) { create(:mef, daily_rate: 20, yearly_cap: 400) }
-    let(:school_year) { create(:school_year, start_year: 2022) }
-    let(:classe) { create(:classe, mef: mef, school_year: school_year) }
+    let(:school_year) { create(:school_year, start_year: 2020) }
+    let(:classe) { create(:classe, school_year: school_year) }
     let(:student) { create(:student, :with_all_asp_info) }
-    let(:schooling) { create(:schooling, student: student, classe: classe) }
+    let(:schooling) { create(:schooling, :closed, student: student, classe: classe) }
     let(:pfmp) do
       create(:pfmp,
              :validated,
@@ -114,24 +112,20 @@ describe PfmpAmountCalculator do
     end
 
     before do
-      school_year = create(:school_year, start_year: 2020)
-      classe = create(:classe, school_year: school_year, mef: mef)
-      schooling = create(:schooling,
-                         student: student,
-                         classe: classe,
-                         end_date: "#{SchoolYear.current.start_year}-08-27")
+      new_school_year = create(:school_year, start_year: 2022)
+      new_classe = create(:classe, school_year: new_school_year)
+      new_schooling = create(:schooling, student: student, classe: new_classe)
       create(:pfmp,
              :validated,
-             start_date: "#{school_year.start_year}-09-03",
-             end_date: "#{school_year.start_year}-09-28",
-             schooling: schooling,
+             start_date: "#{new_school_year.start_year}-09-03",
+             end_date: "#{new_school_year.start_year}-09-28",
+             schooling: new_schooling,
              day_count: 1)
     end
 
     it "returns the PFMP for the MEF and the current school year" do
       expect(pfmp.pfmps_for_mef_and_school_year).to contain_exactly(pfmp)
     end
-  end
+  end # rubocop:enable RSpec/MultipleMemoizedHelpers
 end
 # rubocop:enable RSpec/EmptyExampleGroup
-# rubocop:enable RSpec/MultipleMemoizedHelpers

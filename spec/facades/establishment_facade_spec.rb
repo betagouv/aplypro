@@ -7,10 +7,11 @@ RSpec.describe EstablishmentFacade do
 
   let(:establishment) { build(:establishment, :sygne_provider) }
   let(:school_year) { create(:school_year, start_year: 2020) }
+  let(:classe) { build(:classe, establishment: establishment, school_year: school_year) }
 
   before do
     payment_requests.each do |pr|
-      pr.schooling.classe.update!(establishment: establishment, school_year: school_year)
+      pr.schooling.update!(classe: classe)
     end
   end
 
