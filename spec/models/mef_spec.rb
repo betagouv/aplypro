@@ -47,17 +47,17 @@ RSpec.describe Mef do
       end
     end
 
-    # context "when there are several wages with mefstat4 & ministry" do
-    #   let!(:correct_wage) { create(:wage, mefstat4: mef.mefstat4, ministry: mef.ministry, mef_codes: [mef.code]) }
+    context "when there are several wages with same mefstat4 & ministry" do
+      let!(:correct_wage) { create(:wage, mefstat4: mef.mefstat4, ministry: mef.ministry, mef_codes: [mef.code]) }
 
-    #   before do
-    #     create(:wage, mefstat4: mef.mefstat4, ministry: mef.ministry, mef_codes: %w[many codes])
-    #   end
+      before do
+        create(:wage, mefstat4: mef.mefstat4, ministry: mef.ministry, mef_codes: %w[many codes])
+      end
 
-    #   it "returns the correct wage" do
-    #     expect(mef.wage).to eq correct_wage
-    #   end
-    # end
+      it "returns the correct wage" do
+        expect(mef.wage).to eq correct_wage
+      end
+    end
   end
 
   describe "associated wage of mef in seed" do
@@ -68,7 +68,7 @@ RSpec.describe Mef do
       "2532210311" => { daily_rate: 15, yearly_cap: 1350 }
     }.each do |mef_code, amounts|
       context mef_code.to_s do
-        let(:wage) { described_class.find_by(code: mef_code).wage }
+        let(:wage) { described_class.find_by!(code: mef_code).wage }
 
         it "has daily_rate = #{amounts[:daily_rate]}" do
           expect(wage.daily_rate).to eq amounts[:daily_rate]

@@ -46,11 +46,7 @@ class WageSeeder
     end
 
     Wage.upsert_all(
-      wages,
-      unique_by: Wage::UNIQUENESS_SCOPE,
-      on_duplicate: Arel.sql(
-        "mef_codes = EXCLUDED.mef_codes"
-      )
+      wages
     )
 
     @@logger.info "[seeds] upserted wages for school year #{school_year.start_year}-#{school_year.start_year + 1}"

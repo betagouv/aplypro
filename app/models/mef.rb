@@ -15,7 +15,7 @@ class Mef < ApplicationRecord
   end
 
   def wage
-    wages = Wage.where(mefstat4: mefstat4, ministry: ministry)
+    wages = Wage.where(mefstat4: mefstat4, ministry: ministry, school_year: school_year)
     return wages.first unless wages.many?
 
     wages.find { |wage| wage.mef_codes.include? code }

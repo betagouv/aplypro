@@ -299,7 +299,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_11_131127) do
     t.integer "ministry", null: false
     t.jsonb "mef_codes"
     t.bigint "school_year_id"
-    t.index ["mefstat4", "ministry", "daily_rate", "yearly_cap", "school_year_id"], name: "idx_on_mefstat4_ministry_daily_rate_yearly_cap_scho_4a8479a0cd", unique: true
     t.index ["school_year_id"], name: "index_wages_on_school_year_id"
   end
 
