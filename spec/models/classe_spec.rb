@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe Classe do
+  subject(:classe) { build(:classe) }
+
   describe "associations" do
     it { is_expected.to belong_to(:establishment).class_name("Establishment") }
     it { is_expected.to belong_to(:mef).class_name("Mef") }
