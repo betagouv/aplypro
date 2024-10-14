@@ -5,7 +5,7 @@ FactoryBot.define do
     establishment factory: %i[establishment with_fim_user]
 
     school_year { SchoolYear.current }
-    mef { create(:mef, school_year: school_year) }
+    mef { association :mef, school_year: }
 
     sequence(:label) { |n| "2NDE#{n}" }
 

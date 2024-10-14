@@ -3,6 +3,7 @@
 require "rails_helper"
 
 # rubocop:disable RSpec/EmptyExampleGroup
+# # rubocop:disable RSpec/MultipleMemoizedHelpers
 describe PfmpAmountCalculator do
   subject(:amount) { pfmp.reload.calculate_amount }
 
@@ -97,7 +98,7 @@ describe PfmpAmountCalculator do
     end
   end
 
-  describe "#pfmps_for_mef_and_school_year" do # rubocop:disable RSpec/MultipleMemoizedHelpers
+  describe "#pfmps_for_mef_and_school_year" do
     let(:school_year) { create(:school_year, start_year: 2020) }
     let(:classe) { create(:classe, school_year: school_year) }
     let(:student) { create(:student, :with_all_asp_info) }
@@ -126,6 +127,7 @@ describe PfmpAmountCalculator do
     it "returns the PFMP for the MEF and the current school year" do
       expect(pfmp.pfmps_for_mef_and_school_year).to contain_exactly(pfmp)
     end
-  end # rubocop:enable RSpec/MultipleMemoizedHelpers
+  end
 end
 # rubocop:enable RSpec/EmptyExampleGroup
+# rubocop:enable RSpec/MultipleMemoizedHelpers
