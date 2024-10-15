@@ -94,7 +94,7 @@ class Classe < ApplicationRecord
   end
 
   def mef_matching_school_year
-    return if mef.school_year.eql?(school_year)
+    return if mef.present? && mef.school_year.eql?(school_year)
 
     errors.add(:mef, "doit avoir la même année scolaire que la classe.")
   end
