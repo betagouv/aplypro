@@ -34,7 +34,7 @@ RSpec.describe EstablishmentFacade do
 
       before do
         payment_requests.each do |pr|
-          pr.schooling.classe.update!(establishment: establishment, school_year: school_year)
+          pr.schooling.update!(classe: classe)
         end
       end
 
