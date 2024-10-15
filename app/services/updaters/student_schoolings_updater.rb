@@ -16,11 +16,13 @@ module Updaters
 
     def call
       mapped_schooling_data.each do |attributes|
+        school_year = SchoolYear.find_by(start_year: attributes[:school_year])
+
         classe = Classe.find_by(
           establishment: Establishment.find_by(uai: attributes[:uai]),
-          school_year: SchoolYear.find_by(start_year: attributes[:school_year]),
+          school_year:,
           label: attributes[:label],
-          mef: Mef.find_by(code: attributes[:mef_code])
+          mef: Mef.find_by(code: attributes[:mef_code], school_year:)
         )
 
         next if classe.nil?
