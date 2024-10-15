@@ -32,12 +32,6 @@ RSpec.describe EstablishmentFacade do
       let(:payment_requests) { create_list(:asp_payment_request, 2, :pending) }
       let(:new_school_year) { create(:school_year, start_year: 2021) }
 
-      before do
-        payment_requests.each do |pr|
-          pr.schooling.update!(classe: classe)
-        end
-      end
-
       it "doesn't account for them" do
         expect(payment_requests_counts[:pending]).to eq 0
       end
