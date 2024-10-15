@@ -12,7 +12,7 @@ FactoryBot.define do
     transient do
       daily_rate { 1 }
       yearly_cap { 100 }
-      wage { create(:wage, daily_rate: daily_rate, yearly_cap: yearly_cap) } # rubocop:disable FactoryBot/FactoryAssociationWithStrategy
+      wage { create(:wage, daily_rate: daily_rate, yearly_cap: yearly_cap, school_year: school_year) } # rubocop:disable FactoryBot/FactoryAssociationWithStrategy
     end
 
     after :create do |mef, evaluator|

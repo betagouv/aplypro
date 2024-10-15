@@ -7,10 +7,11 @@ RSpec.describe EstablishmentFacade do
 
   let(:establishment) { build(:establishment, :sygne_provider) }
   let(:school_year) { create(:school_year, start_year: 2020) }
+  let(:classe) { build(:classe, establishment: establishment, school_year: school_year) }
 
   before do
     payment_requests.each do |pr|
-      pr.schooling.classe.update!(establishment: establishment, school_year: school_year)
+      pr.schooling.update!(classe: classe)
     end
   end
 
@@ -30,12 +31,6 @@ RSpec.describe EstablishmentFacade do
 
       let(:payment_requests) { create_list(:asp_payment_request, 2, :pending) }
       let(:new_school_year) { create(:school_year, start_year: 2021) }
-
-      before do
-        payment_requests.each do |pr|
-          pr.schooling.classe.update!(establishment: establishment, school_year: school_year)
-        end
-      end
 
       it "doesn't account for them" do
         expect(payment_requests_counts[:pending]).to eq 0
