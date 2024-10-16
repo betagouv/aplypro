@@ -54,12 +54,14 @@ module ASP
       add_error(:missing_attributive_decision) if !payment_request.schooling.attributive_decision.attached?
     end
 
-    def check_da_abrogation
+    def check_da_abrogation # rubocop:disable Metrics/AbcSize
       if !student.transferred? || (payment_request.schooling.abrogated? && payment_request.pfmp.within_schooling_dates?)
         return
       end
 
-      other_schoolings = student.schoolings.excluding(payment_request.schooling)
+      other_schoolings = student.schoolings.excluding(payment_request.schooling).to_a.select do |sc|
+        sc.classe.school_year == SchoolYear.current
+      end
 
       return if other_schoolings.all?(&:abrogated?)
 
