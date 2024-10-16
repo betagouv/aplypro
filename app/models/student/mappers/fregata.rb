@@ -19,7 +19,6 @@ class Student
         schooling_attributes = schooling_mapper.new.call(entry)
 
         # TODO: shouldnt this be mapped in schooling_attributes instead to be consistent?
-        schooling.start_date = entry["dateEntreeFormation"]
         schooling.end_date = left_classe_at(entry)
 
         schooling.status = schooling_attributes[:status]
