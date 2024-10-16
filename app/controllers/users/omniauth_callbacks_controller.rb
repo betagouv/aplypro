@@ -133,15 +133,9 @@ module Users
       combined_establishments = establishments_authorised + establishments_in_responsibility
 
       # Ne garde que les élements distincts entre les rôles d'APLyPro et ceux de KeyCloak.
-      @user.establishments
-           .reject { |establishment| combined_establishments.include?(establishment) }
-           .each { |establishment| delete_role(establishment) }
-    end
-
-    def delete_role(establishment)
-      EstablishmentUserRole
-        .find_by(user: @user, establishment: establishment)
-        .destroy
+      EstablishmentUserRole.where(user: @user).find_each do |access|
+        access.destroy unless combined_establishments.include?(access.establishment)
+      end
     end
 
     def log_user_in!
