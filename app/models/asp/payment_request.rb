@@ -123,7 +123,7 @@ module ASP
       retryable_messages = RETRYABLE_INCOMPLETE_VALIDATION_TYPES.map do |r|
         I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.#{r}")
       end
-      ActiveDecorator::Decorator.instance.decorate(self).incomplete_reason.intersect?(retryable_messages)
+      last_transition.metadata["incomplete_reasons"]["ready_state_validation"].intersect?(retryable_messages)
     end
 
     def eligible_for_rejected_or_unpaid_auto_retry?
