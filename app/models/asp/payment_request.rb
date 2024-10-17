@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ASP
-  class PaymentRequest < ApplicationRecord # rubocop:disable Metrics/ClassLength
+  class PaymentRequest < ApplicationRecord
     TRANSITION_CLASS = ASP::PaymentRequestTransition
     STATE_MACHINE_CLASS = ASP::PaymentRequestStateMachine
 
@@ -133,5 +133,5 @@ module ASP
       message = in_state?(:rejected) ? decorator.rejected_reason : decorator.unpaid_reason
       %w[RIB BIC PAIEMENT].any? { |word| message.upcase.include?(word) }
     end
-  end # rubocop:enable Metrics/ClassLength
+  end
 end
