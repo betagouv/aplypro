@@ -117,19 +117,9 @@ module ASP
       !terminated?
     end
 
-    def eligible_for_auto_retry?
-      if in_state?(:incomplete)
-        eligible_for_incomplete_retry?
-      elsif in_state?(:rejected) || in_state?(:unpaid)
-        eligible_for_rejected_or_unpaid_auto_retry?
-      else
-        false
-      end
-    end
-
-    private
-
     def eligible_for_incomplete_retry?
+      return false unless in_state?(:incomplete)
+
       retryable_messages = RETRYABLE_INCOMPLETE_VALIDATION_TYPES.map do |r|
         I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.#{r}")
       end
@@ -137,6 +127,8 @@ module ASP
     end
 
     def eligible_for_rejected_or_unpaid_auto_retry?
+      return false unless in_state?(:rejected) || in_state?(:unpaid)
+
       decorator = ActiveDecorator::Decorator.instance.decorate(self)
       message = in_state?(:rejected) ? decorator.rejected_reason : decorator.unpaid_reason
       %w[RIB BIC PAIEMENT].any? { |word| message.upcase.include?(word) }

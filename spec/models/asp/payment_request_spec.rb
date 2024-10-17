@@ -133,8 +133,7 @@ RSpec.describe ASP::PaymentRequest do
     end
   end
 
-  # rubocop:disable RSpec/MultipleMemoizedHelpers
-  describe "eligible_for_auto_retry?" do
+  describe "eligible_for_incomplete_retry?" do
     let(:p_r_incomplete_for_abrogation) do
       create(:asp_payment_request, :incomplete, incomplete_reason: :needs_abrogated_attributive_decision)
     end
@@ -147,6 +146,26 @@ RSpec.describe ASP::PaymentRequest do
     end
     let(:p_r_ready) { create(:asp_payment_request, :ready) }
 
+    context "when the payment request is in 'incomplete' state with the abrogation specific error message" do
+      it "returns true" do
+        expect(p_r_incomplete_for_abrogation.eligible_for_incomplete_retry?).to be true
+      end
+    end
+
+    context "when the payment request is in 'incomplete' state with the missing DA specific error message" do
+      it "returns true" do
+        expect(p_r_incomplete_for_missing_da.eligible_for_incomplete_retry?).to be true
+      end
+    end
+
+    context "when the payment request is not in 'incomplete' state" do
+      it "returns false" do
+        expect(p_r_ready.eligible_for_incomplete_retry?).to be false
+      end
+    end
+  end
+
+  describe "eligible_for_rejected_or_unpaid_auto_retry?" do
     let(:p_r_rejected) { create(:asp_payment_request, :rejected) }
     let(:p_r_rejected_rib) do
       create(:asp_payment_request, :rejected, reason: "Test d'une raison de blocage d'un paiement bancaire")
@@ -156,47 +175,28 @@ RSpec.describe ASP::PaymentRequest do
       create(:asp_payment_request, :unpaid, reason: "Test d'une raison de blocage d'un paiement bancaire")
     end
 
-    context "when the payment request is in 'incomplete' state with the abrogation specific error message" do
-      it "returns true" do
-        expect(p_r_incomplete_for_abrogation.eligible_for_auto_retry?).to be true
-      end
-    end
-
-    context "when the payment request is in 'incomplete' state with the missing DA specific error message" do
-      it "returns true" do
-        expect(p_r_incomplete_for_missing_da.eligible_for_auto_retry?).to be true
-      end
-    end
-
-    context "when the payment request is not in 'incomplete' state" do
-      it "returns false" do
-        expect(p_r_ready.eligible_for_auto_retry?).to be false
-      end
-    end
-
     context "when the payment request is in 'rejected' state without a RIB reason" do
       it "returns false" do
-        expect(p_r_rejected.eligible_for_auto_retry?).to be false
+        expect(p_r_rejected.eligible_for_rejected_or_unpaid_auto_retry?).to be false
       end
     end
 
     context "when the payment request is in 'rejected' state with a RIB reason" do
       it "returns true" do
-        expect(p_r_rejected_rib.eligible_for_auto_retry?).to be true
+        expect(p_r_rejected_rib.eligible_for_rejected_or_unpaid_auto_retry?).to be true
       end
     end
 
     context "when the payment request is in 'unpaid' state without a RIB reason" do
       it "returns false" do
-        expect(p_r_unpaid.eligible_for_auto_retry?).to be false
+        expect(p_r_unpaid.eligible_for_rejected_or_unpaid_auto_retry?).to be false
       end
     end
 
     context "when the payment request is in 'unpaid' state with a RIB reason" do
       it "returns true" do
-        expect(p_r_unpaid_rib.eligible_for_auto_retry?).to be true
+        expect(p_r_unpaid_rib.eligible_for_rejected_or_unpaid_auto_retry?).to be true
       end
     end
   end
-  # rubocop:enable RSpec/MultipleMemoizedHelpers
 end
