@@ -27,13 +27,13 @@ RSpec.describe IdentityMappers::Base do
 
     context "when there are irrelevant establishments" do
       before do
-        allow(Establishment).to receive(:accepted_type?).with("CLG").and_return false
+        allow(Establishment).to receive(:accepted_type?).with("SOC").and_return false
         allow(Establishment).to receive(:accepted_type?).with("LYC").and_return true
       end
 
-      let(:fredurne) { [build(:fredurne, uai: "normal"), build(:fredurne, uai: "normal wrong", tty_code: "CLG")] }
-      let(:fredurneresp) { [build(:fredurneresp, uai: "dir"), build(:fredurneresp, uai: "dir wrong", tty_code: "CLG")] }
-      let(:freduresdel) { build(:freduresdel, uai: "deleg wrong", tty_code: "CLG") }
+      let(:fredurne) { [build(:fredurne, uai: "normal"), build(:fredurne, uai: "normal wrong", tty_code: "SOC")] }
+      let(:fredurneresp) { [build(:fredurneresp, uai: "dir"), build(:fredurneresp, uai: "dir wrong", tty_code: "SOC")] }
+      let(:freduresdel) { build(:freduresdel, uai: "deleg wrong", tty_code: "SOC") }
 
       it { is_expected.not_to include "normal wrong", "dir wrong", "deleg wrong" }
     end
@@ -98,7 +98,7 @@ RSpec.describe IdentityMappers::Base do
       subject(:result) { mapper.responsibility_uais }
 
       context "when it's a not the right kind of school" do
-        let(:fredurneresp) { [build(:fredurneresp, uai: "dir wrong", tty_code: "CLG")] }
+        let(:fredurneresp) { [build(:fredurneresp, uai: "dir wrong", tty_code: "SOC")] }
 
         it { is_expected.to be_empty }
       end
