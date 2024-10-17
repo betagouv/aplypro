@@ -55,14 +55,16 @@ describe Student::Mappers::Sygne do
       end
     end
 
-    context "when there is a schooling for that classe that was closed" do
-      let(:next_data) { normal_payload }
-      let(:schooling) { student.schoolings.last }
+    context "when processing closed schoolings" do
+      let(:closed_payload) { build_list(:sygne_student, 3, :closed, classe: "1MELEC") }
 
-      before { student.close_current_schooling! }
+      let(:mapper) { described_class.new(closed_payload, uai) }
+      let(:student) { Student.find_by(ine: closed_payload.last["ine"]) }
 
-      it "reopens the schooling" do
-        expect { mapper.parse! }.to change { student.reload.current_schooling }.from(nil).to(schooling)
+      it "sets the end_date for closed schoolings" do
+        mapper.parse!
+
+        expect(student.schoolings.last.end_date.to_s).to eq closed_payload.last["dateFinSco"]
       end
     end
   end
