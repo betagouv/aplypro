@@ -11,9 +11,6 @@ class Student
 
         student.close_current_schooling! if schooling != student.current_schooling
 
-        # we might have an existing closed schooling which needs to be re-opened
-        schooling.reopen! if schooling.closed?
-
         schooling.save!
       end
 
