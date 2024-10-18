@@ -44,7 +44,7 @@ module IdentityMappers
 
     def relevant?(attrs)
       (Establishment.accepted_type?(attrs[:tty_code]) && !Exclusion.establishment_excluded?(attrs[:uai])) ||
-        Establishment::AUTHORISED_COLLEGES_UAIS.include?([attrs[:uai]])
+        Establishment::AUTHORISED_CLG_UAIS.include?(attrs[:uai])
     end
 
     def no_responsibilities?
