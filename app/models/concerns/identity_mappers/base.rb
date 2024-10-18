@@ -43,7 +43,8 @@ module IdentityMappers
     end
 
     def relevant?(attrs)
-      Establishment.accepted_type?(attrs[:tty_code]) && !Exclusion.establishment_excluded?(attrs[:uai])
+      (Establishment.accepted_type?(attrs[:tty_code]) && !Exclusion.establishment_excluded?(attrs[:uai])) ||
+        Aplypro::AUTHORISED_ESTABLISHMENTS.include?([attrs[:uai]])
     end
 
     def no_responsibilities?
