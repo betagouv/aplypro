@@ -155,7 +155,7 @@ module Users
     end
 
     def fetch_students_for!(establishments)
-      ActiveJob.perform_all_later(establishments.map { |e| Sync::ClassesJob.new(e, selected_school_year.start_year) })
+      ActiveJob.perform_all_later(establishments.map { |e| Sync::ClassesJob.new(e, selected_school_year) })
     end
 
     def fetch_establishments!
