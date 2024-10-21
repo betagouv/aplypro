@@ -166,36 +166,39 @@ RSpec.describe ASP::PaymentRequest do
   end
 
   describe "eligible_for_rejected_or_unpaid_auto_retry?" do
-    let(:p_r_rejected) { create(:asp_payment_request, :rejected) }
-    let(:p_r_rejected_rib) do
-      create(:asp_payment_request, :rejected, reason: "Test d'une raison de blocage d'un paiement bancaire")
-    end
-    let(:p_r_unpaid) { create(:asp_payment_request, :unpaid) }
-    let(:p_r_unpaid_rib) do
-      create(:asp_payment_request, :unpaid, reason: "Test d'une raison de blocage d'un paiement bancaire")
-    end
-
     context "when the payment request is in 'rejected' state without a RIB reason" do
+      let(:p_r) { create(:asp_payment_request, :rejected) }
+
       it "returns false" do
-        expect(p_r_rejected.eligible_for_rejected_or_unpaid_auto_retry?).to be false
+        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?).to be false
       end
     end
 
     context "when the payment request is in 'rejected' state with a RIB reason" do
+      let(:p_r) do
+        create(:asp_payment_request, :rejected, reason: "Test d'une raison de blocage d'un paiement bancaire")
+      end
+
       it "returns true" do
-        expect(p_r_rejected_rib.eligible_for_rejected_or_unpaid_auto_retry?).to be true
+        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?).to be true
       end
     end
 
     context "when the payment request is in 'unpaid' state without a RIB reason" do
+      let(:p_r) { create(:asp_payment_request, :unpaid) }
+
       it "returns false" do
-        expect(p_r_unpaid.eligible_for_rejected_or_unpaid_auto_retry?).to be false
+        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?).to be false
       end
     end
 
     context "when the payment request is in 'unpaid' state with a RIB reason" do
+      let(:p_r) do
+        create(:asp_payment_request, :unpaid, reason: "Test d'une raison de blocage d'un paiement bancaire")
+      end
+
       it "returns true" do
-        expect(p_r_unpaid_rib.eligible_for_rejected_or_unpaid_auto_retry?).to be true
+        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?).to be true
       end
     end
   end
