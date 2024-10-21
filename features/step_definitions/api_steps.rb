@@ -93,7 +93,7 @@ Sachantque("l'API SYGNE peut fournir les informations complètes des étudiants"
 end
 
 Sachantque("les élèves de l'établissement {string} sont rafraîchis") do |uai|
-  Sync::ClassesJob.new(Establishment.find_by(uai: uai)).perform_now
+  Sync::ClassesJob.new(Establishment.find_by(uai: uai), SchoolYear.current).perform_now
 end
 
 Sachantque("l'API SYGNE renvoie un élève avec l'INE {string} qui a quitté l'établissement {string}") do |ine, uai|

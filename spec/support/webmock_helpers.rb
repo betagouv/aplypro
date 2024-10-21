@@ -45,12 +45,12 @@ module WebmockHelpers
            .to_return(status: 200, body: payload, headers: { "Content-Type" => "application/json" })
   end
 
-  def mock_sygne_students_endpoint(uai, payload, school_year = SchoolYear.current)
+  def mock_sygne_students_endpoint(uai, payload, school_year = SchoolYear.current.start_year)
     url = StudentsApi::Sygne::Api.establishment_students_endpoint(uai: uai, school_year: school_year)
 
     WebMock.stub_request(:get, url)
            .with(
-             query: { "etat-scolarisation" => true, "annee-scolaire" => school_year.start_year },
+             query: { "etat-scolarisation" => true, "annee-scolaire" => school_year },
              headers: {
                "Accept" => "*/*",
                "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
