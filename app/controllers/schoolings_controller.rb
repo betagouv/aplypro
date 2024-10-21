@@ -3,7 +3,6 @@
 class SchoolingsController < ApplicationController
   include RoleCheck
 
-  before_action :set_schooling, only: [:update]
   before_action :authenticate_user!, :set_classe, :set_schooling
   before_action :check_director, :update_confirmed_director!, :check_confirmed_director,
                 only: %i[abrogate_decision update]
@@ -27,7 +26,7 @@ class SchoolingsController < ApplicationController
   def confirm_removal_cancellation; end
 
   def remove
-    @schooling.update(removed_at: params[:value])
+    @schooling.update!(removed_at: params[:value])
 
     redirect_to school_year_class_path(selected_school_year, @classe),
                 notice: t("flash.schooling.removed", name: @schooling.student, classe: @schooling.classe.label)
@@ -53,7 +52,7 @@ class SchoolingsController < ApplicationController
   def set_schooling
     @schooling = Schooling.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to @classe, alert: t("errors.schoolings.not_found")
+    redirect_to school_year_classes_path(selected_school_year), alert: t("errors.schoolings.not_found")
   end
 
   def schooling_params
