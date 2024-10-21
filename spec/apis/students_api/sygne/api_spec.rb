@@ -8,7 +8,7 @@ describe StudentsApi::Sygne::Api do
 
   before do
     mock_sygne_token
-    mock_sygne_students_endpoint("007", {}.to_json)
+    mock_sygne_students_endpoint("007", {}.to_json, SchoolYear.create!(start_year: 2022))
     mock_sygne_student_endpoint_with("007", {}.to_json)
     mock_sygne_student_schoolings_endpoint("123", {}.to_json)
   end
@@ -32,7 +32,7 @@ describe StudentsApi::Sygne::Api do
   end
 
   [
-    [:establishment_students, { uai: "007" }],
+    [:establishment_students, { uai: "007", school_year: 2022 }],
     [:student, { ine: "007" }],
     [:student_schoolings, { ine: "007" }]
   ].each do |resource, params|
