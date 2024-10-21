@@ -36,6 +36,8 @@ class Student
             begin
               map_schooling!(classe, student, entry)
             rescue StandardError => e
+              raise e unless Rails.env.production?
+
               Sentry.capture_exception(
                 SchoolingParsingError.new(
                   "Schooling parsing failed for #{uai}: #{e.message}"
