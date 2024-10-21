@@ -12,7 +12,7 @@ RSpec.describe Sync::ClassesJob do
   before do
     allow(StudentsApi).to receive(:api_for).with("sygne").and_return(api_double)
 
-    allow(api_double).to receive(:fetch_resource).with(:establishment_students, uai: establishment.uai)
+    allow(api_double).to receive(:fetch_resource).with(:establishment_students, uai: establishment.uai, school_year: 2022)
     allow(api_double)
       .to receive(:mapper)
       .and_return(class_double(Student::Mappers::Sygne, new: mapper_double))
@@ -21,13 +21,13 @@ RSpec.describe Sync::ClassesJob do
   end
 
   it "calls the matchingStudentsApi proxy" do
-    described_class.perform_now(establishment)
+    described_class.perform_now(establishment, 2022)
 
     expect(StudentsApi).to have_received(:api_for).with("sygne")
   end
 
   it "maps and parse the results" do
-    described_class.perform_now(establishment)
+    described_class.perform_now(establishment, 2022)
 
     expect(mapper_double).to have_received(:parse!)
   end
@@ -39,7 +39,7 @@ RSpec.describe Sync::ClassesJob do
 
     it "rescues and retry" do
       perform_enqueued_jobs do
-        described_class.perform_now(establishment)
+        described_class.perform_now(establishment, 2022)
       rescue Faraday::UnauthorizedError # rubocop:disable Lint/SuppressedException
       end
 

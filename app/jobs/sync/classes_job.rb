@@ -19,7 +19,7 @@ module Sync
       establishment.update!(fetching_students: false)
     end
 
-    def perform(establishment)
+    def perform(establishment, school_year)
       # NOTE: there is a bug in Sygne where students are removed from classes
       # earlier than they should be so we disable student list fetching for now
       # (only in production because we want to keep our tests intact)
@@ -28,7 +28,7 @@ module Sync
       api = establishment.students_api
 
       api
-        .fetch_resource(:establishment_students, uai: establishment.uai)
+        .fetch_resource(:establishment_students, uai: establishment.uai, school_year:)
         .then { |data| api.mapper.new(data, establishment.uai).parse! }
     end
   end

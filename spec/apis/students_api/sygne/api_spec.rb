@@ -15,9 +15,9 @@ describe StudentsApi::Sygne::Api do
 
   describe "endpoints" do
     specify "establishment students endpoint" do
-      expect(api.establishment_students_endpoint(uai: "007")).to(
+      expect(api.establishment_students_endpoint(uai: "007", school_year: 2022)).to(
         end_with(
-          "etablissements/007/eleves?statut=ST&annee-scolaire=#{SchoolYear.current.start_year}&etat-scolarisation=true"
+          "etablissements/007/eleves?annee-scolaire=2022&etat-scolarisation=true&statut=ST"
         )
       )
     end
