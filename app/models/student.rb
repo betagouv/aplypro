@@ -9,6 +9,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
             presence: true
 
   validates :asp_file_reference, uniqueness: true
+  validates :address_city_insee_code, length: { maximum: 5 }, allow_blank: true
 
   enum :biological_sex, { sex_unknown: 0, male: 1, female: 2 }, validate: { allow_nil: true }, default: :sex_unknown
 

@@ -1,5 +1,6 @@
-%h1= "Année scolaire #{selected_school_year}"
+= render 'school_years/announcement'
 
+%h1= "Année scolaire #{selected_school_year}"
 - if @establishment_facade.students_count <= 0
   = t("errors.school_years.not_found").html_safe
 - else

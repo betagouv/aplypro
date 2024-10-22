@@ -1,0 +1,6 @@
+.fr-callout.fr-icon-information-line
+  %h3.fr-callout__title Accès à la nouvelle année scolaire
+  %p.fr-callout__text
+    = "Vous pouvez désormais commencer à saisir de nouvelles PFMPs pour l'année scolaire #{SchoolYear.current} en cliquant ci-dessous mais aussi dès à présent en sélectionnant l'année choisie dans le bandeau de navigation. Vous pouvez à tout moment rebasculer vers l'année précédente pour saisir d'éventuelles PFMPs manquantes. Par défaut l'année scolaire la plus récente est sélectionnée."
+  %button.fr-btn
+    =link_to "Changer d'année scolaire", select_school_years_path
