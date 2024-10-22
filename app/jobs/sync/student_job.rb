@@ -7,7 +7,6 @@ module Sync
     def perform(schooling)
       student = schooling.student
 
-      return true if schooling.establishment.provided_by?(:sygne) && Rails.env.production?
       return true if student.ine_not_found || schooling.closed?
 
       fetch_student_data(schooling)
