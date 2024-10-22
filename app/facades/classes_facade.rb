@@ -43,10 +43,11 @@ class ClassesFacade
     pfmps_by_classe_and_state.dig(class_id, state.to_s) || 0
   end
 
-  def nb_payment_requests(class_id, states)
+  def nb_payment_requests(classe, states)
     count = 0
-    states.each do |state|
-      count += payments_requests_by_classe_and_state.dig(class_id, state.to_s) || 0
+    classe.pfmps.each do |pfmp|
+      p_r = pfmp.latest_payment_request
+      count += 1 if p_r.present? && states.include?(p_r.current_state.to_sym)
     end
     count
   end
@@ -55,10 +56,6 @@ class ClassesFacade
 
   def pfmps_by_classe_and_state
     @pfmps_by_classe_and_state ||= group_pfmps_by_classe_and_state
-  end
-
-  def payments_requests_by_classe_and_state
-    @payments_requests_by_classe_and_state ||= group_payments_requests_by_classe_and_state
   end
 
   def group_pfmps_by_classe_and_state
@@ -70,22 +67,6 @@ class ClassesFacade
         .group("schoolings.classe_id", "COALESCE(pfmp_transitions.to_state, 'pending')")
         .count
         .each do |(class_id, state), count|
-      counts[class_id] ||= {}
-      counts[class_id][state.presence || "pending"] = count
-    end
-
-    counts
-  end
-
-  def group_payments_requests_by_classe_and_state
-    counts = {}
-
-    ASP::PaymentRequest.joins(:schooling)
-                       .joins("LEFT JOIN asp_payment_request_transitions ON asp_payment_request_transitions.asp_payment_request_id = asp_payment_requests.id AND asp_payment_request_transitions.most_recent = true") # rubocop:disable Layout/LineLength
-                       .where(schoolings: { classe_id: @classes.pluck(:id) })
-                       .group("schoolings.classe_id", "COALESCE(asp_payment_request_transitions.to_state, 'pending')")
-                       .count
-                       .each do |(class_id, state), count|
       counts[class_id] ||= {}
       counts[class_id][state.presence || "pending"] = count
     end
