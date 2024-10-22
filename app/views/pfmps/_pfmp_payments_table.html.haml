@@ -1,0 +1,8 @@
+- schooling = pfmp.schooling
+- classe = schooling.classe
+.fr-grid-row
+  .fr-col-md-7
+    = link_to_if(classe.establishment.eql?(current_establishment), pfmp.listing_to_s, school_year_class_schooling_pfmp_path(selected_school_year, classe, schooling, pfmp), title: "Voir la PFMP #{pfmp.full_dates}")
+  .fr-col-md-5
+    -if pfmp.latest_payment_request.present?
+      = pfmp.latest_payment_request.status_badge
