@@ -47,6 +47,4 @@
               %p= dsfr_badge(status: :error) { "Non saisies" }
               = dsfr_link_to "Saisir les coordonnées bancaires", new_student_rib_path(student)
           %td
-            - schooling.pfmps.each do |pfmp|
-              = render partial: "pfmps/pfmp_payments_table", locals: { pfmp: pfmp }
-            = dsfr_link_to "Ajouter une PFMP individuelle", new_school_year_class_schooling_pfmp_path(selected_school_year, @classe, schooling)
+            = render partial: "pfmps_payments_table", locals: { schooling: schooling }

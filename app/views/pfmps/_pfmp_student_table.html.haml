@@ -14,13 +14,17 @@
         %table
           %caption Liste des PFMPs de l'élève
           %thead
-            %th{scope: "col"} PFMP et Paiements
+            %th{scope: "col"} PFMP
+            %th{scope: "col"} Paiements
             %th{scope: "col"} Nombre de jours
             %th{scope: "col"} Montant
           %tbody
             - pfmps.each do |pfmp|
               %tr
-                %td= render partial: "pfmps/pfmp_payments_table", locals: { pfmp: pfmp }
+                %td= link_to_if(classe.establishment.eql?(current_establishment), pfmp.listing_to_s.html_safe, school_year_class_schooling_pfmp_path(classe.school_year, classe, schooling, pfmp), title: "Voir la PFMP #{pfmp.full_dates}")
+                %td
+                  -if pfmp.latest_payment_request.present?
+                    = pfmp.latest_payment_request.status_badge
                 %td= pfmp.day_count
                 %td
                   %strong= number_to_currency(pfmp.amount)
