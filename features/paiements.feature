@@ -59,3 +59,15 @@ Fonctionnalité: Gestion des paiements
     Quand je consulte la dernière PFMP
     Alors je peux voir une demande de paiement "échoué" de 90 euros
     Et je peux changer le nombre de jours de la PFMP à 8
+
+  Scénario: Seule la dernière demande de paiement d'une PFMP est affichée
+    Sachant que la dernière PFMP de "Marie Curie" en classe de "A1" a une requête de paiement rejetée
+    Et que je consulte la liste des classes
+    Alors la page contient "Bloquées"
+    Quand je consulte le profil de "Marie Curie" dans la classe de "A1"
+    Quand je consulte la dernière PFMP
+    Et que je coche la case de responsable légal
+    Et que je clique sur "Relancer une demande de paiement"
+    Lorsque je consulte la liste des classes
+    Alors la page contient "En attente"
+    Et la page ne contient pas "Bloquées"
