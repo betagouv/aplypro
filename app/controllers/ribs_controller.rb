@@ -152,7 +152,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
 
   def retry_rejected_or_unpaid_payment_request!
     @student.pfmps.in_state(:validated).each do |pfmp|
-      if pfmp.latest_payment_request&.eligible_for_rejected_or_unpaid_auto_retry?
+      if pfmp.latest_payment_request&.eligible_for_rejected_or_unpaid_auto_retry?(%w[RIB BIC PAIEMENT])
         p_r = PfmpManager.new(pfmp).create_new_payment_request!
         p_r.mark_ready!
       end

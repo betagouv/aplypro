@@ -170,7 +170,7 @@ RSpec.describe ASP::PaymentRequest do
       let(:p_r) { create(:asp_payment_request, :rejected, reason: "Blabla") }
 
       it "returns false" do
-        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?).to be false
+        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?(%w[RIB BIC PAIEMENT])).to be false
       end
     end
 
@@ -180,7 +180,7 @@ RSpec.describe ASP::PaymentRequest do
       end
 
       it "returns true" do
-        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?).to be true
+        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?(%w[RIB BIC PAIEMENT])).to be true
       end
     end
 
@@ -188,7 +188,7 @@ RSpec.describe ASP::PaymentRequest do
       let(:p_r) { create(:asp_payment_request, :unpaid, reason: "Blabla") }
 
       it "returns false" do
-        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?).to be false
+        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?(%w[RIB BIC PAIEMENT])).to be false
       end
     end
 
@@ -198,7 +198,7 @@ RSpec.describe ASP::PaymentRequest do
       end
 
       it "returns true" do
-        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?).to be true
+        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?(%w[RIB BIC PAIEMENT])).to be true
       end
     end
   end

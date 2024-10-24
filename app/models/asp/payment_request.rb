@@ -126,12 +126,12 @@ module ASP
       last_transition.metadata["incomplete_reasons"]["ready_state_validation"].intersect?(retryable_messages)
     end
 
-    def eligible_for_rejected_or_unpaid_auto_retry?
-      return false unless in_state?(:rejected, :unpaid)
+    def eligible_for_rejected_or_unpaid_auto_retry?(reasons)
+      return false unless in_state?(:rejected) || in_state?(:unpaid)
 
       decorator = ActiveDecorator::Decorator.instance.decorate(self)
       message = in_state?(:rejected) ? decorator.rejected_reason : decorator.unpaid_reason
-      %w[RIB BIC PAIEMENT].any? { |word| message.upcase.include?(word) }
+      reasons.any? { |word| message.upcase.include?(word) }
     end
 
     def reconstructed_iban
