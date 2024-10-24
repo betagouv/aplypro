@@ -2,7 +2,7 @@ default:
   - --publish-quiet
   - --strict
   - --color
-  - --fail-fast
+  - --random
 
 wip:
   - --profile=default
