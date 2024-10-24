@@ -2,7 +2,6 @@ default:
   - --publish-quiet
   - --strict
   - --color
-  - --random
 
 wip:
   - --profile=default
