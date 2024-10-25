@@ -185,7 +185,7 @@ RSpec.describe ASP::PaymentRequest do
     end
 
     context "when the payment request is in 'unpaid' state without a RIB reason" do
-      let(:p_r) { create(:asp_payment_request, :unpaid) }
+      let(:p_r) { create(:asp_payment_request, :unpaid, reason: "Blabla") }
 
       it "returns false" do
         expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?).to be false
@@ -199,6 +199,41 @@ RSpec.describe ASP::PaymentRequest do
 
       it "returns true" do
         expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?).to be true
+      end
+    end
+  end
+
+  describe "#reconstructed_iban" do
+    let(:payment_request) { create(:asp_payment_request, :paid) }
+    let(:metadata) do
+      {
+        "PAIEMENT" => {
+          "COORDPAIE" => {
+            "ZONEBBAN" => "20041010180452191K015",
+            "CLECONTROL" => "51",
+            "CODEISOPAYS" => "FR"
+          }
+        }
+      }
+    end
+
+    before do
+      allow(payment_request).to receive(:last_transition).and_return(
+        instance_double(ASP::PaymentRequestTransition, metadata: metadata)
+      )
+    end
+
+    context "when the payment request is in 'paid' state" do
+      it "returns the reconstructed IBAN" do
+        expect(payment_request.reconstructed_iban).to eq "FR5120041010180452191K015"
+      end
+    end
+
+    context "when the payment request is not in 'paid' state" do
+      let(:payment_request) { create(:asp_payment_request, :pending) }
+
+      it "returns nil" do
+        expect(payment_request.reconstructed_iban).to be_nil
       end
     end
   end

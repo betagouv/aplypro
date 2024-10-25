@@ -3,9 +3,13 @@
     = render partial: "payment_requests/badges", locals: { payment_request: payment_request }
     .fr-mt-1w
       = payment_request.status_explanation
+    - if payment_request.in_state?(:paid)
+      .fr-mt-2w.gray-text
+        Montant réellement versé :
+        = number_to_currency(payment_request.last_transition.metadata['PAIEMENT']['MTNET'].to_f)
     .fr-mt-2w.gray-text
       Coordonnées bancaires utilisées :
-      = payment_request.rib&.iban || payment_request.student.rib&.iban || "manquantes"
+      = payment_request.rib&.iban || payment_request.reconstructed_iban || payment_request.student.rib(current_establishment)&.iban || "manquantes"
     .fr-mt-2w.gray-text
       Dernière mise à jour le
       = l(payment_request.last_transition&.updated_at || payment_request.updated_at, format: :long)
