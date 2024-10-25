@@ -43,13 +43,12 @@ class ClassesFacade
     pfmps_by_classe_and_state.dig(class_id, state.to_s) || 0
   end
 
-  def nb_payment_requests(classe, states)
-    count = 0
-    classe.pfmps.each do |pfmp|
-      p_r = pfmp.latest_payment_request
-      count += 1 if p_r.present? && states.include?(p_r.current_state.to_sym)
-    end
-    count
+  def nb_payment_requests(class_id, states)
+    ASP::PaymentRequest.latest_per_pfmp
+                       .joins(pfmp: { schooling: :classe })
+                       .where(classes: { id: class_id })
+                       .in_state(states)
+                       .count
   end
 
   private
