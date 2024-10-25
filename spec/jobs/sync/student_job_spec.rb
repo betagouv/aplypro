@@ -53,6 +53,25 @@ RSpec.describe Sync::StudentJob, :student_api do
       end
     end
 
+    context "when the addresses informations change and have a payment request rejected" do
+      let(:payment_request) { create(:asp_payment_request, :rejected, reason: "L'adresse ne correspond pas.") }
+      let(:pfmp) { payment_request.pfmp }
+
+      before { described_class.perform_now(student.current_schooling) }
+
+      it "does not create a new payment request" do
+        expect(pfmp.latest_payment_request).to eq(payment_request)
+      end
+
+      it "creates a new payment request" do
+        student.update!(address_line1: Faker::Address.street_name)
+        student.current_schooling.pfmps << pfmp
+        described_class.perform_now(student.current_schooling)
+
+        expect(pfmp.latest_payment_request).not_to eq(payment_request)
+      end
+    end
+
     context "when the API responds with a 404" do
       before do
         WebMock
