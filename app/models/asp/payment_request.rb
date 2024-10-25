@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ASP
-  class PaymentRequest < ApplicationRecord
+  class PaymentRequest < ApplicationRecord # rubocop:disable Metrics/ClassLength
     TRANSITION_CLASS = ASP::PaymentRequestTransition
     STATE_MACHINE_CLASS = ASP::PaymentRequestStateMachine
 
@@ -127,7 +127,7 @@ module ASP
     end
 
     def eligible_for_rejected_or_unpaid_auto_retry?
-      return false unless in_state?(:rejected) || in_state?(:unpaid)
+      return false unless in_state?(:rejected, :unpaid)
 
       decorator = ActiveDecorator::Decorator.instance.decorate(self)
       message = in_state?(:rejected) ? decorator.rejected_reason : decorator.unpaid_reason
