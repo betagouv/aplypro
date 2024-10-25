@@ -185,7 +185,7 @@ RSpec.describe ASP::PaymentRequest do
     end
 
     context "when the payment request is in 'unpaid' state without a RIB reason" do
-      let(:p_r) { create(:asp_payment_request, :unpaid) }
+      let(:p_r) { create(:asp_payment_request, :unpaid, reason: "Blabla") }
 
       it "returns false" do
         expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?).to be false
