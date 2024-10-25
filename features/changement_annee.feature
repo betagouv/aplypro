@@ -13,19 +13,19 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Et que le bandeau informatif contient "2024-2025"
 
   Scénario: Le personnel de direction change d'année scolaire
-    Quand je clique sur "Changer d'année scolaire"
+    Quand je clique sur le premier "Changer d'année scolaire"
     Et que je clique sur "2023-2024"
     Alors la page contient "Année scolaire 2023-2024"
     Et le bandeau informatif contient "2023-2024"
 
   Scénario: Le personnel de direction change d'année scolaire et conserve l'année scolaire sélectionnée sur une page n'en ayant pas besoin
-    Quand je clique sur "Changer d'année scolaire"
+    Quand je clique sur le premier "Changer d'année scolaire"
     Et que je clique sur "2023-2024"
     Et que je clique sur "F.A.Q."
     Alors le bandeau informatif contient "2023-2024"
 
   Scénario: Le personnel de direction consulte une année scolaire sans élèves
-    Quand je clique sur "Changer d'année scolaire"
+    Quand je clique sur le premier "Changer d'année scolaire"
     Et que je clique sur "2023-2024"
     Alors la page contient "Aucun élève récupéré au cours de l'année scolaire sélectionnée."
 
@@ -35,7 +35,7 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Et que la génération des décisions d'attribution manquantes est complètement finie
     Quand je me rends sur la page d'accueil
     Alors le panneau "Décisions d'attribution" contient "10 / 10"
-    Et que je clique sur "Changer d'année scolaire"
+    Et que je clique sur le premier "Changer d'année scolaire"
     Et que je clique sur "2023-2024"
     Alors le panneau "Décisions d'attribution" contient "0 / 9"
 
@@ -45,7 +45,7 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Alors je peux voir dans le tableau "Liste des classes"
       | Classe | Décisions d'attribution | Coordonnées bancaires | PFMPs |
       | 1MELEC | 0 / 10                  | 0 / 10                |       |
-    Et que je clique sur "Changer d'année scolaire"
+    Et que je clique sur le premier "Changer d'année scolaire"
     Et que je clique sur "2023-2024"
     Et que je clique sur "Classes"
     Alors je peux voir dans le tableau "Liste des classes"
@@ -59,7 +59,7 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Et que la dernière PFMP de "Marie Curie" est validable
     Et que je clique sur "Paiements"
     Alors la page ne contient pas "Il n'y a aucune PFMP à valider pour l'instant."
-    Et que je clique sur "Changer d'année scolaire"
+    Et que je clique sur le premier "Changer d'année scolaire"
     Et que je clique sur "2023-2024"
     Et que je clique sur "Paiements"
     Alors la page contient "Il n'y a aucune PFMP à valider pour l'instant."
@@ -70,6 +70,6 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Et que la génération des décisions d'attribution manquantes est complètement finie
     Quand je me rends sur la page d'accueil
     Alors la page contient "Rééditer les décisions d'attribution"
-    Et que je clique sur "Changer d'année scolaire"
+    Et que je clique sur le premier "Changer d'année scolaire"
     Et que je clique sur "2023-2024"
     Alors la page ne contient pas "Rééditer les décisions d'attribution"

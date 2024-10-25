@@ -8,7 +8,7 @@ RSpec.describe Student do
   let(:end_date) { "#{SchoolYear.current.start_year}-08-27" }
 
   it { is_expected.to have_many(:classes).through(:schoolings) }
-
+  it { is_expected.to validate_length_of(:address_city_insee_code).is_at_most(5) }
   it { is_expected.to validate_presence_of(:first_name) }
   it { is_expected.to validate_presence_of(:last_name) }
   it { is_expected.to validate_presence_of(:birthdate) }

@@ -9,6 +9,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
             presence: true
 
   validates :asp_file_reference, uniqueness: true
+  validates :address_city_insee_code, length: { maximum: 5 }, allow_blank: true
 
   enum :biological_sex, { sex_unknown: 0, male: 1, female: 2 }, validate: { allow_nil: true }, default: :sex_unknown
 
@@ -97,11 +98,11 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def multiple_mefs?
-    classes.joins(:mef).select(:"mefs.id").distinct.count > 1
+    classes.current.joins(:mef).select(:"mefs.id").distinct.count > 1
   end
 
   def multiple_establishments?
-    classes.select(:establishment_id).distinct.count > 1
+    classes.current.select(:establishment_id).distinct.count > 1
   end
 
   def any_classes_in_establishment?(establishment)
