@@ -153,6 +153,15 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     date >= birthdate + 18.years
   end
 
+  def retry_pfmps_payment_requests!(reasons)
+    pfmps.in_state(:validated).each do |pfmp|
+      if pfmp.latest_payment_request&.eligible_for_rejected_or_unpaid_auto_retry?(reasons)
+        p_r = PfmpManager.new(pfmp).create_new_payment_request!
+        p_r.mark_ready!
+      end
+    end
+  end
+
   private
 
   def check_asp_file_reference

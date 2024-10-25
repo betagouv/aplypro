@@ -131,7 +131,7 @@ module ASP
 
       decorator = ActiveDecorator::Decorator.instance.decorate(self)
       message = in_state?(:rejected) ? decorator.rejected_reason : decorator.unpaid_reason
-      reasons.any? { |word| message.upcase.include?(word) }
+      reasons.any? { |word| message.downcase.include?(word) }
     end
 
     def reconstructed_iban

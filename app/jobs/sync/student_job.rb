@@ -24,7 +24,7 @@ module Sync
          .then { |data| map_student_attributes(data, api) }
          .then { |attributes| schooling.student.update!(attributes) }
 
-      retry_rejected_or_unpaid_payment_request!(schooling.student)
+      retry_payment_request_for_addresses_informations!(schooling.student)
     end
 
     def map_student_attributes(data, api)
@@ -37,18 +37,13 @@ module Sync
         .except(:ine)
     end
 
-    def retry_rejected_or_unpaid_payment_request!(student)
+    def retry_payment_request_for_addresses_informations!(student)
       if student.previous_changes.key?("address_line1") ||
          student.previous_changes.key?("address_line2") ||
          student.previous_changes.key?("address_city_insee_code") ||
          student.previous_changes.key?("address_country_code")
 
-        student.pfmps.in_state(:validated).each do |pfmp|
-          if pfmp.latest_payment_request&.eligible_for_rejected_or_unpaid_auto_retry?(%w[ADRESSE PAYS])
-            p_r = PfmpManager.new(pfmp).create_new_payment_request!
-            p_r.mark_ready!
-          end
-        end
+        student.retry_pfmps_payment_requests!(%w[adresse pays postal résidence])
       end
     end
   end

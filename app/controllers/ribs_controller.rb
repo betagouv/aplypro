@@ -33,7 +33,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     @rib = @student.create_new_rib(rib_params)
 
     if @rib.save
-      retry_rejected_or_unpaid_payment_request!
+      @student.retry_pfmps_payment_requests!(%w[rib bic paiement])
 
       redirect_to student_path(@student),
                   notice: t(".success")
@@ -148,14 +148,5 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
 
   def rib_is_readonly
     redirect_to student_path(@student), alert: t("flash.ribs.readonly", name: @student.full_name)
-  end
-
-  def retry_rejected_or_unpaid_payment_request!
-    @student.pfmps.in_state(:validated).each do |pfmp|
-      if pfmp.latest_payment_request&.eligible_for_rejected_or_unpaid_auto_retry?(%w[RIB BIC PAIEMENT])
-        p_r = PfmpManager.new(pfmp).create_new_payment_request!
-        p_r.mark_ready!
-      end
-    end
   end
 end
