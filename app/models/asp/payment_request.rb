@@ -133,5 +133,16 @@ module ASP
       message = in_state?(:rejected) ? decorator.rejected_reason : decorator.unpaid_reason
       %w[RIB BIC PAIEMENT].any? { |word| message.upcase.include?(word) }
     end
+
+    def reconstructed_iban
+      return nil unless in_state?(:paid)
+
+      coordpaie = last_transition.metadata["PAIEMENT"]["COORDPAIE"]
+      zonebban = coordpaie["ZONEBBAN"]
+      cle = coordpaie["CLECONTROL"]
+      code_pays = coordpaie["CODEISOPAYS"]
+
+      "#{code_pays}#{cle}#{zonebban}"
+    end
   end
 end
