@@ -51,7 +51,7 @@ class PfmpManager
   private
 
   def rebalance_following_pfmps!
-    pfmp.following_modifiable_pfmps.each do |following_pfmp|
+    pfmp.following_rebalancable_pfmps.each do |following_pfmp|
       following_pfmp.update!(amount: following_pfmp.calculate_amount)
     end
   end

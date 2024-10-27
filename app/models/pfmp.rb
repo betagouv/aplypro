@@ -121,6 +121,10 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     !latest_payment_request&.ongoing?
   end
 
+  def can_be_rebalanced?
+    !latest_payment_request&.ongoing? && !latest_payment_request&.in_state?(:paid)
+  end
+
   def can_be_destroyed?
     return true if latest_payment_request.blank?
 
