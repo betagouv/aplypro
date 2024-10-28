@@ -13,28 +13,26 @@ module PfmpAmountCalculator
   end
 
   def previously_locked_amount
-    previous_pfmps
+    other_priced_pfmps
       .map(&:amount)
       .compact
       .sum
   end
 
-  def pfmps_for_mef_and_school_year
+  def other_pfmps
     student.pfmps
            .in_state(:completed, :validated)
            .joins(schooling: :classe)
            .where("classes.mef_id": mef.id, "classes.school_year_id": school_year.id)
   end
 
-  def previous_pfmps
-    pfmps_for_mef_and_school_year
-      .before(created_at)
+  def other_priced_pfmps
+    other_pfmps
       .where.not(amount: nil)
   end
 
-  def following_rebalancable_pfmps
-    pfmps_for_mef_and_school_year
-      .after(created_at)
+  def rebalancable_pfmps
+    other_pfmps
       .select(&:can_be_rebalanced?)
   end
 end

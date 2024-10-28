@@ -102,7 +102,7 @@ describe PfmpAmountCalculator do
     end
   end
 
-  describe "#pfmps_for_mef_and_school_year" do
+  describe "#other_pfmps" do
     let(:student) { create(:student, :with_all_asp_info) }
     let(:schooling) { create(:schooling, student: student, classe: classe) }
     let(:pfmp) do
@@ -127,7 +127,7 @@ describe PfmpAmountCalculator do
     end
 
     it "returns the PFMP for the MEF and the current school year" do
-      expect(pfmp.pfmps_for_mef_and_school_year).to contain_exactly(pfmp)
+      expect(pfmp.other_pfmps).to contain_exactly(pfmp)
     end
   end
 end
