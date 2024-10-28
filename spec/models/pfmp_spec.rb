@@ -258,4 +258,30 @@ RSpec.describe Pfmp do
       expect(p.administrative_number).to eq("ENPU#{SchoolYear.current.start_year}001")
     end
   end
+
+  describe "#can_be_rebalanced?" do
+    context "when the latest payment request is not ongoing and not paid" do
+      let(:pfmp) { create(:asp_payment_request, :pending).pfmp }
+
+      it "returns true" do
+        expect(pfmp.can_be_rebalanced?).to be true
+      end
+    end
+
+    context "when the latest payment request is ongoing" do
+      let(:pfmp) { create(:asp_payment_request, :sent).pfmp }
+
+      it "returns false" do
+        expect(pfmp.can_be_rebalanced?).to be false
+      end
+    end
+
+    context "when the latest payment request is paid" do
+      let(:pfmp) { create(:asp_payment_request, :paid).pfmp }
+
+      it "returns false" do
+        expect(pfmp.can_be_rebalanced?).to be false
+      end
+    end
+  end
 end
