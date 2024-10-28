@@ -32,9 +32,9 @@ module PfmpAmountCalculator
       .where.not(amount: nil)
   end
 
-  def following_modifiable_pfmps
+  def following_rebalancable_pfmps
     pfmps_for_mef_and_school_year
       .after(created_at)
-      .select(&:can_be_modified?)
+      .select(&:can_be_rebalanced?)
   end
 end

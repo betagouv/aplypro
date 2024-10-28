@@ -6,15 +6,13 @@
       %em= t("pfmps.state_explanations.#{@pfmp.current_state}").html_safe
     %p
       %strong PFMP du #{l @pfmp.start_date} au #{l @pfmp.end_date}
-
     %p
       - if @pfmp.in_state?(:pending)
         = dsfr_link_to "Nombre de jours à compléter", edit_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp)
       - else
         %strong
           = @pfmp.day_count
-          jours
-        travaillés
+          jours travaillés
 
     - if @pfmp.in_state?(:completed) && current_user.can_validate?
       - disabled = !@pfmp.can_transition_to?(:validated)
@@ -25,7 +23,7 @@
           = render partial: "shared/confirmed_director", locals: { message: t("validations.confirm_director") }
 
     .fr-btns-group.fr-btns-group--inline
-      - if @pfmp.can_be_modified? && !@pfmp.can_transition_to?(:rectified)
+      - if @pfmp.can_be_modified? && !@pfmp.can_transition_to?(:rectified) && !@pfmp.in_state?(:rectified)
         = link_to "Modifier la PFMP", edit_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
       - else
         = button_tag "Modifier la PFMP", disabled: true, class: 'fr-btn fr-btn--secondary', title: "Vous ne pouvez pas modifier une PFMP dont le paiement est en cours de traitement"
@@ -35,9 +33,6 @@
         = button_tag "Supprimer la PFMP", disabled: true, class: 'fr-btn fr-btn--secondary', title: "Vous ne pouvez pas supprimer une PFMP dont le paiement est en cours de traitement"
       - if @pfmp.can_transition_to?(:rectified)
         = link_to "Gérer un indu", confirm_rectification_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
-
-
-
 
   - if @pfmp.payment_due?
     %h2.fr-h3 Paiement

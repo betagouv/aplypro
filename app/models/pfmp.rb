@@ -107,10 +107,6 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     schooling.attributive_decision_number + index
   end
 
-  def locked?
-    latest_payment_request&.ongoing?
-  end
-
   def within_schooling_dates?
     return true if (schooling.open? && start_date >= schooling.start_date) || schooling.no_dates?
 
@@ -122,7 +118,11 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def can_be_modified?
-    !locked?
+    !latest_payment_request&.ongoing?
+  end
+
+  def can_be_rebalanced?
+    !latest_payment_request&.ongoing? && !latest_payment_request&.in_state?(:paid)
   end
 
   def can_be_destroyed?
