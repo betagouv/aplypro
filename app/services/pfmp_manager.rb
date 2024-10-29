@@ -8,7 +8,6 @@ class PfmpManager
   class ExistingActivePaymentRequestError < PfmpManagerError; end
   class PfmpNotModifiableError < PfmpManagerError; end
   class PaymentRequestNotIncompleteError < PfmpManagerError; end
-  class YearlyCapExceededError < PfmpManagerError; end
 
   attr_reader :pfmp
 
@@ -21,9 +20,7 @@ class PfmpManager
 
     ApplicationRecord.transaction do
       pfmp.update!(amount: pfmp.calculate_amount)
-      rebalance_other_pfmps!
-
-      check_yearly_cap!
+      rebalance_following_pfmps!
     end
   end
 
@@ -53,13 +50,9 @@ class PfmpManager
 
   private
 
-  def rebalance_other_pfmps!
-    pfmp.rebalancable_pfmps.each do |pfmp|
-      pfmp.update!(amount: pfmp.calculate_amount)
+  def rebalance_following_pfmps!
+    pfmp.rebalancable_pfmps.each do |following_pfmp|
+      following_pfmp.update!(amount: following_pfmp.calculate_amount)
     end
-  end
-
-  def check_yearly_cap!
-    raise YearlyCapExceededError if pfmp.other_pfmps.sum(:amount) > pfmp.mef.wage.yearly_cap
   end
 end
