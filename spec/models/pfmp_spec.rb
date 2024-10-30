@@ -91,13 +91,14 @@ RSpec.describe Pfmp do
         end
       end
 
-      context "when the total amount exceeds the yearly cap" do
+      context "when the total amount would exceed the yearly cap" do
         before do
           create(:pfmp, :validated, schooling: schooling, day_count: 10)
         end
 
-        it "is not valid" do
-          expect { pfmp.recalculate_amounts_if_needed }.to raise_error ActiveRecord::RecordInvalid
+        it "caps the amount to 0" do
+          pfmp.save!
+          expect(pfmp.amount).to eq 0
         end
       end
     end
@@ -180,16 +181,6 @@ RSpec.describe Pfmp do
       it "can move to validated" do
         pfmps.last.transition_to!(:validated)
         expect(pfmps.last).to be_in_state(:validated)
-      end
-    end
-
-    context "when previous pfmps are not all validated" do
-      let(:pfmps) { create_list(:pfmp, 3, :can_be_validated, schooling: schooling) }
-
-      before { pfmps.first.transition_to!(:validated) }
-
-      it "cannot move to validated" do
-        expect { pfmps.last.transition_to!(:validated) }.to raise_error Statesman::GuardFailedError
       end
     end
   end

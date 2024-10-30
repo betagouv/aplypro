@@ -52,15 +52,13 @@ describe PfmpAmountCalculator do
   it_calculates "the original amount"
 
   context "when the PFMP goes over the yearly cap" do
-    before do
-      pfmp.update!(day_count: 200)
-    end
+    before { pfmp.update!(day_count: 200) }
 
     it_calculates "the yearly-capped amount"
   end
 
-  context "when there is a previous PFMP" do
-    let(:previous) { create(:pfmp, :completed, day_count: 8, created_at: Date.yesterday) }
+  context "when there is another priced PFMP" do
+    let(:previous) { create(:pfmp, :completed, day_count: 8) }
 
     context "with another schooling" do
       let(:schooling) { create(:schooling, :closed, student: pfmp.student) }
@@ -68,9 +66,7 @@ describe PfmpAmountCalculator do
       before { previous.update!(schooling: schooling) }
 
       context "with the same MEF" do
-        before do
-          schooling.classe.update!(mef: mef)
-        end
+        before { schooling.classe.update!(mef: mef) }
 
         it "errors when trying to recalculate" do
           expect { PfmpManager.new(previous.reload).recalculate_amounts! }.to raise_error ActiveRecord::RecordInvalid
@@ -100,7 +96,7 @@ describe PfmpAmountCalculator do
     end
   end
 
-  describe "#pfmps_for_mef_and_school_year" do
+  describe "#other_pfmps_for_mef" do
     let(:student) { create(:student, :with_all_asp_info) }
     let(:schooling) { create(:schooling, student: student, classe: classe) }
     let(:pfmp) do
@@ -112,20 +108,37 @@ describe PfmpAmountCalculator do
              day_count: 3)
     end
 
-    before do
-      old_school_year = create(:school_year, start_year: 2022)
-      old_classe = create(:classe, school_year: old_school_year)
-      old_schooling = create(:schooling, :closed, student: student, classe: old_classe)
-      create(:pfmp,
-             :validated,
-             start_date: "#{old_school_year.start_year}-09-03",
-             end_date: "#{old_school_year.start_year}-09-28",
-             schooling: old_schooling,
-             day_count: 1)
+    context "when there is no other pfmp for that school year and mef" do
+      before do
+        old_school_year = create(:school_year, start_year: 2022)
+        old_classe = create(:classe, school_year: old_school_year)
+        old_schooling = create(:schooling, :closed, student: student, classe: old_classe)
+        create(:pfmp,
+               :validated,
+               start_date: "#{old_school_year.start_year}-09-03",
+               end_date: "#{old_school_year.start_year}-09-28",
+               schooling: old_schooling,
+               day_count: 1)
+      end
+
+      it "returns an empty collection" do
+        expect(pfmp.other_pfmps_for_mef).to be_empty
+      end
     end
 
-    it "returns the PFMP for the MEF and the current school year" do
-      expect(pfmp.pfmps_for_mef_and_school_year).to contain_exactly(pfmp)
+    context "when there is another pfmp for the same mef and school year" do
+      before do
+        create(:pfmp,
+               :validated,
+               start_date: "2024-10-03",
+               end_date: "2024-10-28",
+               schooling: schooling,
+               day_count: 3)
+      end
+
+      it "returns the other PFMP for the MEF and the current school year excluding self" do
+        expect(pfmp.other_pfmps_for_mef.pluck(:day_count)).to contain_exactly(3)
+      end
     end
   end
 end

@@ -72,7 +72,7 @@ describe PfmpManager do
           expect do
             pfmp.update!(day_count: pfmp.day_count + 8)
           end.to change {
-                   [pfmp.amount] + pfmp.following_rebalancable_pfmps.pluck(:amount)
+                   [pfmp.amount] + pfmp.rebalancable_pfmps.pluck(:amount)
                  }.from([40, 120, 80]).to([200, 120, 80])
         end
       end

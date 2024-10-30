@@ -19,8 +19,7 @@ class PfmpStateMachine
   end
 
   guard_transition(to: :validated) do |pfmp|
-    pfmp.previous_pfmps.not_in_state(:validated).empty? &&
-      pfmp.student.rib(pfmp.classe.establishment).present? &&
+    pfmp.student.rib(pfmp.classe.establishment).present? &&
       pfmp.schooling.attributive_decision.attached?
   end
 
