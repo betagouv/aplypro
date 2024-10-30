@@ -85,9 +85,9 @@ module ASP
         when :CREDIT_MUTUEL_ARKEA
           bic.gsub("ARK", "")
         when :BNP_PARIBAS_METZ
-          bic.gsub("MTZ", "XXX")
+          bic.gsub("MTZ", "")
         when :BNP_PARIBAS_LYON
-          bic.gsub("TAS", "XXX")
+          bic.gsub("TAS", "")
         end
       end
     end
