@@ -162,12 +162,9 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     return unless mef
 
     cap = mef.wage.yearly_cap
-    total = student.pfmps
-                   .in_state(:completed, :validated)
-                   .joins(schooling: :classe)
-                   .where("classes.mef_id": mef.id, "classes.school_year_id": school_year.id).sum(:amount)
+    total = all_pfmps_for_mef.sum(:amount)
     return unless total > cap
 
-    errors.add(:amount, "Yearly cap of #{cap} not respected")
+    errors.add(:amount, "Yearly cap of #{cap} not respected for Mef code: #{mef.code}")
   end
 end

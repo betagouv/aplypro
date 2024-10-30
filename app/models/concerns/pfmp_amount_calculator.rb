@@ -20,11 +20,7 @@ module PfmpAmountCalculator
   end
 
   def other_pfmps_for_mef
-    student.pfmps
-           .in_state(:completed, :validated)
-           .joins(schooling: :classe)
-           .where("classes.mef_id": mef.id, "classes.school_year_id": school_year.id)
-           .excluding(self)
+    all_pfmps_for_mef.excluding(self)
   end
 
   def other_priced_pfmps
@@ -35,5 +31,12 @@ module PfmpAmountCalculator
   def rebalancable_pfmps
     other_pfmps_for_mef
       .select(&:can_be_rebalanced?)
+  end
+
+  def all_pfmps_for_mef
+    student.pfmps
+           .in_state(:completed, :validated)
+           .joins(schooling: :classe)
+           .where("classes.mef_id": mef.id, "classes.school_year_id": school_year.id)
   end
 end
