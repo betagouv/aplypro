@@ -70,10 +70,11 @@ describe PfmpAmountCalculator do
       context "with the same MEF" do
         before do
           schooling.classe.update!(mef: mef)
-          PfmpManager.new(previous).recalculate_amounts!
         end
 
-        it_calculates "a limited amount", 2
+        it "errors when trying to recalculate" do
+          expect { PfmpManager.new(previous.reload).recalculate_amounts! }.to raise_error ActiveRecord::RecordInvalid
+        end
 
         context "when the classe is from another year" do
           before do
@@ -93,12 +94,9 @@ describe PfmpAmountCalculator do
     end
 
     context "with that schooling" do
-      before do
-        previous.update!(schooling: pfmp.schooling)
-        PfmpManager.new(previous).recalculate_amounts!
+      it "errors" do
+        expect { previous.update!(schooling: pfmp.schooling) }.to raise_error ActiveRecord::RecordInvalid
       end
-
-      it_calculates "a limited amount", 2
     end
   end
 

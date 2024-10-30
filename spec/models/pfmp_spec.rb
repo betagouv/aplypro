@@ -78,6 +78,29 @@ RSpec.describe Pfmp do
         it { is_expected.to be_valid }
       end
     end
+
+    describe "amounts_yearly_cap" do
+      let(:mef) { create(:mef, daily_rate: 10, yearly_cap: 100) }
+      let(:classe) { create(:classe, mef: mef) }
+      let(:schooling) { create(:schooling, classe: classe) }
+      let(:pfmp) { build(:pfmp, schooling: schooling, day_count: 5) }
+
+      context "when the total amount is within the yearly cap" do
+        it "is valid" do
+          expect(pfmp).to be_valid
+        end
+      end
+
+      context "when the total amount exceeds the yearly cap" do
+        before do
+          create(:pfmp, :validated, schooling: schooling, day_count: 10)
+        end
+
+        it "is not valid" do
+          expect { pfmp.recalculate_amounts_if_needed }.to raise_error ActiveRecord::RecordInvalid
+        end
+      end
+    end
   end
 
   describe "deletion" do

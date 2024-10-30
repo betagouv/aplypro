@@ -32,6 +32,8 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   validates :start_date, :end_date, presence: true
 
+  validate :amounts_yearly_cap
+
   validates :end_date,
             :start_date,
             if: ->(pfmp) { pfmp.schooling.present? },
@@ -154,5 +156,20 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def can_retrigger_payment?
     latest_payment_request.failed?
+  end
+
+  private
+
+  def amounts_yearly_cap
+    return unless mef
+
+    cap = mef.wage.yearly_cap
+    total = student.pfmps
+                   .in_state(:completed, :validated)
+                   .joins(schooling: :classe)
+                   .where("classes.mef_id": mef.id, "classes.school_year_id": school_year.id).sum(:amount)
+    return unless total > cap
+
+    errors.add(:amount, "Yearly cap of #{cap} not respected")
   end
 end
