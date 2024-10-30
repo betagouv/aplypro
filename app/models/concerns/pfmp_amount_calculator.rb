@@ -19,20 +19,21 @@ module PfmpAmountCalculator
       .sum
   end
 
-  def other_pfmps
+  def other_pfmps_for_mef
     student.pfmps
            .in_state(:completed, :validated)
            .joins(schooling: :classe)
            .where("classes.mef_id": mef.id, "classes.school_year_id": school_year.id)
+           .excluding(self)
   end
 
   def other_priced_pfmps
-    other_pfmps
+    other_pfmps_for_mef
       .where.not(amount: nil)
   end
 
   def rebalancable_pfmps
-    other_pfmps
+    other_pfmps_for_mef
       .select(&:can_be_rebalanced?)
   end
 end
