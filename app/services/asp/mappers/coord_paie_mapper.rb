@@ -7,7 +7,9 @@ module ASP
       ASSIMILATED_FRENCH_COUNTRY_CODES = %w[FR GF GP MC MQ NC PF PM RE WF YT].freeze
 
       PARTICULAR_BICS = {
-        CREDIT_MUTUEL_ARKEA: "CMBRFR2BARK"
+        CREDIT_MUTUEL_ARKEA: "CMBRFR2BARK",
+        BNP_PARIBAS_METZ: "BNPAFRPPMTZ",
+        BNP_PARIBAS_LYON: "BNPAFRPPTAS"
       }.freeze
 
       MAPPING = {
@@ -82,6 +84,10 @@ module ASP
         case PARTICULAR_BICS.key(bic)
         when :CREDIT_MUTUEL_ARKEA
           bic.gsub("ARK", "")
+        when :BNP_PARIBAS_METZ
+          bic.gsub("MTZ", "")
+        when :BNP_PARIBAS_LYON
+          bic.gsub("TAS", "")
         end
       end
     end
