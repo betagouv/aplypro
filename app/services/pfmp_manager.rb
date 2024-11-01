@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 # Simple Ruby service to Handle complex actions on PFMPs
-# TODO: refactor PfmpAmountCalculator to be part of this class (requires a lot of spec changes)
 
 class PfmpManager
   class PfmpManagerError < StandardError; end
@@ -18,9 +17,9 @@ class PfmpManager
   def recalculate_amounts!
     raise PfmpNotModifiableError unless pfmp.can_be_modified?
 
-    ApplicationRecord.transaction do
+    Pfmp.transaction do
       pfmp.update!(amount: calculate_amount)
-      rebalance_following_pfmps!
+      rebalance_other_pfmps! if rebalancable_pfmps.any?
     end
   end
 
@@ -41,7 +40,7 @@ class PfmpManager
   end
 
   def rectify_and_update_attributes!(confirmed_pfmp_params, confirmed_address_params)
-    ApplicationRecord.transaction do
+    Pfmp.transaction do
       @pfmp.update!(confirmed_pfmp_params)
       @pfmp.student.update!(confirmed_address_params)
       @pfmp.rectify!
@@ -57,8 +56,6 @@ class PfmpManager
     ].min
   end
 
-  private
-
   def previously_locked_amount
     other_priced_pfmps
       .map(&:amount)
@@ -66,8 +63,10 @@ class PfmpManager
       .sum
   end
 
+  private
+
   def other_pfmps_for_mef
-    all_pfmps_for_mef.excluding(pfmp)
+    pfmp.all_pfmps_for_mef.excluding(pfmp)
   end
 
   def other_priced_pfmps
@@ -76,20 +75,13 @@ class PfmpManager
   end
 
   def rebalancable_pfmps
-    other_pfmps_for_mef
-      .select(&:can_be_rebalanced?)
+    @rebalancable_pfmps ||= other_pfmps_for_mef
+                            .select(&:can_be_rebalanced?)
   end
 
-  def all_pfmps_for_mef
-    pfmp.student.pfmps
-        .in_state(:completed, :validated)
-        .joins(schooling: :classe)
-        .where("classes.mef_id": pfmp.mef.id, "classes.school_year_id": pfmp.school_year.id)
-  end
-
-  def rebalance_following_pfmps!
+  def rebalance_other_pfmps!
     rebalancable_pfmps.each do |pfmp|
-      pfmp.update!(amount: calculate_amount)
+      pfmp.update!(amount: calculate_amount) # TODO: this should not trigger the after save on the other records
     end
   end
 end
