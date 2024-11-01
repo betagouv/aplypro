@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
-  include PfmpAmountCalculator
-
   TRANSITION_CLASS = PfmpTransition
   STATE_MACHINE_CLASS = PfmpStateMachine
   TRANSITION_RELATION_NAME = :transitions
@@ -74,15 +72,9 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
-  after_save :recalculate_amounts_if_needed
-
-  # Recalculate amounts for the current PFMP and all follow up PFMPs that are still modifiable
-  def recalculate_amounts_if_needed
-    changed_day_count = day_count_before_last_save != day_count
-
-    return if !changed_day_count
-
-    PfmpManager.new(self).recalculate_amounts!
+  after_save do
+    day_count_changed = day_count_before_last_save != day_count
+    PfmpManager.new(self).recalculate_amounts! if day_count_changed
   end
 
   def validate!
@@ -154,6 +146,13 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def can_retrigger_payment?
     latest_payment_request.failed?
+  end
+
+  def all_pfmps_for_mef
+    student.pfmps
+           .in_state(:completed, :validated)
+           .joins(schooling: :classe)
+           .where("classes.mef_id": mef.id, "classes.school_year_id": school_year.id)
   end
 
   private

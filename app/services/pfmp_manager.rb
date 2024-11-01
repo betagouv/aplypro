@@ -19,7 +19,7 @@ class PfmpManager
     raise PfmpNotModifiableError unless pfmp.can_be_modified?
 
     ApplicationRecord.transaction do
-      pfmp.update!(amount: pfmp.calculate_amount)
+      pfmp.update!(amount: calculate_amount)
       rebalance_following_pfmps!
     end
   end
@@ -48,11 +48,48 @@ class PfmpManager
     end
   end
 
+  def calculate_amount
+    return 0 if pfmp.day_count.nil?
+
+    [
+      pfmp.day_count * pfmp.wage.daily_rate,
+      pfmp.wage.yearly_cap - previously_locked_amount
+    ].min
+  end
+
   private
 
+  def previously_locked_amount
+    other_priced_pfmps
+      .map(&:amount)
+      .compact
+      .sum
+  end
+
+  def other_pfmps_for_mef
+    all_pfmps_for_mef.excluding(pfmp)
+  end
+
+  def other_priced_pfmps
+    other_pfmps_for_mef
+      .where.not(amount: nil)
+  end
+
+  def rebalancable_pfmps
+    other_pfmps_for_mef
+      .select(&:can_be_rebalanced?)
+  end
+
+  def all_pfmps_for_mef
+    pfmp.student.pfmps
+        .in_state(:completed, :validated)
+        .joins(schooling: :classe)
+        .where("classes.mef_id": pfmp.mef.id, "classes.school_year_id": pfmp.school_year.id)
+  end
+
   def rebalance_following_pfmps!
-    pfmp.rebalancable_pfmps.each do |pfmp|
-      pfmp.update!(amount: pfmp.calculate_amount)
+    rebalancable_pfmps.each do |pfmp|
+      pfmp.update!(amount: calculate_amount)
     end
   end
 end
