@@ -22,8 +22,7 @@ class PfmpsController < ApplicationController
   def create
     @pfmp = Pfmp.new(pfmp_params.merge(schooling: @schooling))
 
-    # TODO: use new API
-    if @pfmp.save
+    if PfmpManager.new(@pfmp).update(pfmp_params)
       redirect_to student_path(@schooling.student),
                   notice: t("pfmps.new.success")
     else
@@ -32,8 +31,7 @@ class PfmpsController < ApplicationController
   end
 
   def update
-    # TODO: use new API
-    if @pfmp.update(pfmp_params)
+    if PfmpManager.new(@pfmp).update(pfmp_params)
       redirect_to school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp),
                   notice: t("pfmps.edit.success")
     else

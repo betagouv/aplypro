@@ -70,7 +70,9 @@ describe PfmpManager do
           let(:pfmp) { create(:asp_payment_request, :sent).pfmp.reload }
 
           it "throws an error" do
-            expect { PfmpManager.new(pfmp).update!(day_count: 15) }.to raise_error(PfmpManager::PfmpNotModifiableError)
+            expect do
+              described_class.new(pfmp).update!(day_count: 15)
+            end.to raise_error(PfmpManager::PfmpNotModifiableError)
           end
         end
       end
@@ -83,7 +85,7 @@ describe PfmpManager do
 
         it "recalculates the other modifiable pfmps amounts" do
           expect do
-            PfmpManager.new(pfmp).update!(day_count: pfmp.day_count + 8)
+            described_class.new(pfmp).update!(day_count: pfmp.day_count + 8)
           end.to change {
                    [pfmp.amount] + described_class.new(pfmp).send(:rebalancable_pfmps).pluck(:amount)
                  }.from([40, 120, 80]).to([200, 120, 80])
@@ -132,7 +134,7 @@ describe PfmpManager do
     end
 
     context "when the PFMP doesn't have a day count" do # rubocop:disable RSpec/MultipleMemoizedHelpers
-      before { PfmpManager.new(pfmp).update!(day_count: nil) }
+      before { described_class.new(pfmp).update!(day_count: nil) }
 
       it { is_expected.to be_zero }
     end
@@ -140,7 +142,7 @@ describe PfmpManager do
     it_behaves_like "the original amount"
 
     context "when the PFMP goes over the yearly cap" do # rubocop:disable RSpec/MultipleMemoizedHelpers
-      before { PfmpManager.new(pfmp).update!(day_count: 200) }
+      before { described_class.new(pfmp).update!(day_count: 200) }
 
       it_behaves_like "the yearly-capped amount"
     end
