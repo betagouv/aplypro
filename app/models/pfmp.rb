@@ -72,11 +72,6 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
-  after_save do
-    day_count_changed = day_count_before_last_save != day_count
-    PfmpManager.new(self).recalculate_amounts! if day_count_changed
-  end
-
   def validate!
     transition_to!(:validated)
   end

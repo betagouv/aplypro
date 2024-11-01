@@ -14,6 +14,10 @@ class PfmpManager
     @pfmp = pfmp
   end
 
+  def update!(new_day_count:)
+    recalculate_amounts! if pfmp.day_count != new_day_count
+  end
+
   def recalculate_amounts!
     raise PfmpNotModifiableError unless pfmp.can_be_modified?
 
@@ -81,7 +85,7 @@ class PfmpManager
 
   def rebalance_other_pfmps!
     rebalancable_pfmps.each do |pfmp|
-      pfmp.update!(amount: calculate_amount) # TODO: this should not trigger the after save on the other records
+      pfmp.update!(amount: calculate_amount)
     end
   end
 end

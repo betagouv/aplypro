@@ -131,7 +131,7 @@ RSpec.describe Pfmp do
 
     context "when a day count is set" do
       it "is moved to completed" do
-        expect { pfmp.update!(day_count: 10) }
+        expect { PfmpManager.new(pfmp).update!(day_count: 10) }
           .to change(pfmp, :current_state)
           .from("pending")
           .to("completed")
@@ -160,7 +160,7 @@ RSpec.describe Pfmp do
       subject(:pfmp) { create(:pfmp, :completed) }
 
       it "moves back to pending" do
-        expect { pfmp.update!(day_count: nil) }
+        expect { PfmpManager.new(pfmp).update!(day_count: nil) }
           .to change(pfmp, :current_state)
           .from("completed")
           .to("pending")
