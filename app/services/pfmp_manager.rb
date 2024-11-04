@@ -48,6 +48,13 @@ class PfmpManager
     end
   end
 
+  def retry_payment_request!(reasons)
+    if @pfmp.latest_payment_request&.eligible_for_rejected_or_unpaid_auto_retry?(reasons)
+      p_r = create_new_payment_request!
+      p_r.mark_ready!
+    end
+  end
+
   private
 
   def rebalance_following_pfmps!
