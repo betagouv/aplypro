@@ -11,7 +11,11 @@ FactoryBot.define do
     end
 
     trait :completed do
-      day_count { rand(1..6) } # lovely roll dice
+      transient do
+        day_count { 4 }
+      end
+
+      after(:create) { |pfmp, eval| PfmpManager.new(pfmp).update!(day_count: eval.day_count) }
     end
 
     trait :can_be_validated do

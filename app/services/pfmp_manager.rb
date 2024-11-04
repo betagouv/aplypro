@@ -72,6 +72,13 @@ class PfmpManager
       .sum
   end
 
+  def retry_payment_request!(reasons)
+    return unless @pfmp.latest_payment_request&.eligible_for_rejected_or_unpaid_auto_retry?(reasons)
+
+    p_r = create_new_payment_request!
+    p_r.mark_ready!
+  end
+
   private
 
   def other_pfmps_for_mef
