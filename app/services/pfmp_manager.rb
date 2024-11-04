@@ -15,11 +15,12 @@ class PfmpManager
   end
 
   def update(params)
-    pfmp.update(params.except(:day_count))
+    # TODO: implement
+    update!(params)
   end
 
   def update!(params)
-    recalculate_amounts! if pfmp.day_count != params[:day_count]
+    recalculate_amounts! if params[:day_count].present? && params[:day_count] != pfmp.day_count
     pfmp.update!(params)
   end
 
@@ -96,8 +97,8 @@ class PfmpManager
   end
 
   def rebalance_other_pfmps!
-    rebalancable_pfmps.each do |pfmp|
-      pfmp.update!(amount: calculate_amount)
+    rebalancable_pfmps.each do |rebalancable_pfmp|
+      rebalancable_pfmp.update!(amount: PfmpManager.new(rebalancable_pfmp).calculate_amount)
     end
   end
 end

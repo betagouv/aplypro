@@ -12,7 +12,7 @@ FactoryBot.define do
 
     trait :completed do
       transient do
-        day_count { 4 }
+        day_count { 3 }
       end
 
       after(:create) { |pfmp, eval| PfmpManager.new(pfmp).update!(day_count: eval.day_count) }

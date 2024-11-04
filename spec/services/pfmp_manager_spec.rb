@@ -85,10 +85,12 @@ describe PfmpManager do
 
         it "recalculates the other modifiable pfmps amounts" do
           expect do
-            described_class.new(pfmp).update!(day_count: pfmp.day_count + 8)
+            described_class.new(pfmp).update!(day_count: 12)
           end.to change {
-                   [pfmp.amount] + described_class.new(pfmp).send(:rebalancable_pfmps).pluck(:amount)
-                 }.from([40, 120, 80]).to([200, 120, 80])
+                   Pfmp.order(created_at: :asc).map do |p|
+                     p.reload.amount
+                   end
+                 }.from([120, 80]).to([120, 80, 200])
         end
       end
     end
