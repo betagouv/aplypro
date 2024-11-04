@@ -42,6 +42,11 @@ RSpec.describe Pfmp do
         .only_integer.is_greater_than(0)
     end
 
+    it "validates numericality of day amount" do
+      expect(pfmp).to validate_numericality_of(:amount)
+        .only_integer.is_greater_than_or_equal_to(0)
+    end
+
     context "when the end date is before the start" do
       before do
         pfmp.start_date = Time.zone.now

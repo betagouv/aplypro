@@ -48,6 +48,8 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
             comparison: { greater_than_or_equal_to: :start_date },
             if: -> { start_date && end_date }
 
+  validates :amount, numericality: { only_integer: true, allow_nil: true, greater_than_or_equal_to: 0 }
+
   validates :day_count,
             numericality: {
               only_integer: true,
