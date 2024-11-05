@@ -15,13 +15,16 @@ class PfmpManager
   end
 
   def update(params)
-    # TODO: implement
     update!(params)
+    true
+  rescue ActiveRecord::RecordInvalid
+    false
   end
 
   def update!(params)
-    recalculate_amounts! if params[:day_count].present? && params[:day_count] != pfmp.day_count
+    old_day_count = pfmp.day_count
     pfmp.update!(params)
+    recalculate_amounts! if params[:day_count].present? && old_day_count != params[:day_count]
   end
 
   def recalculate_amounts!

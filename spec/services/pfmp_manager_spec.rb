@@ -79,17 +79,15 @@ describe PfmpManager do
 
       context "with existing other modifiable pfmps" do
         before do
-          create(:pfmp, :completed, schooling: schooling, day_count: 6)
-          create(:pfmp, :completed, schooling: schooling, day_count: 4)
+          create(:pfmp, schooling: schooling, day_count: 6)
+          create(:pfmp, schooling: schooling, day_count: 4)
         end
 
         it "recalculates the other modifiable pfmps amounts" do
           expect do
             described_class.new(pfmp).update!(day_count: 12)
           end.to change {
-                   Pfmp.order(created_at: :asc).map do |p|
-                     p.reload.amount
-                   end
+                   Pfmp.order(created_at: :asc).pluck(:amount)
                  }.from([120, 80]).to([120, 80, 200])
         end
       end
