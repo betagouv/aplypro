@@ -128,9 +128,7 @@ module Users
 
     def delete_roles!
       # Supprime les accès qui ne sont plus présents dans KeyCloak.
-      establishments_authorised = @mapper.establishments_authorised_for(@user.email)
-      establishments_in_responsibility = @mapper.establishments_in_responsibility
-      combined_establishments = establishments_authorised + establishments_in_responsibility
+      combined_establishments = @mapper.establishments_delegated + @mapper.establishments_in_responsibility
 
       # Ne garde que les élements distincts entre les rôles d'APLyPro et ceux de KeyCloak.
       EstablishmentUserRole.where(user: @user).find_each do |access|

@@ -121,6 +121,19 @@ Sachantque("je suis un personnel MENJ directeur de l'établissement {string}") d
   )
 end
 
+Sachantque("je suis un personnel MENJ directeur de l'établissement {string} avec l'email {string}") do |uai_list, email|
+  uais = uai_list.split(", ")
+
+  OmniAuth.config.mock_auth[:fim] = make_fim_hash(
+    name: Faker::Name.name,
+    email: email,
+    raw_info: {
+      FrEduRneResp: uais.map { |u| FactoryBot.build(:fredurneresp, uai: u) },
+      FrEduFonctAdm: "DIR"
+    }
+  )
+end
+
 Sachantque("je suis un personnel MENJ avec un accès spécifique pour l'UAI {string}") do |uai|
   OmniAuth.config.mock_auth[:fim] = make_fim_hash(
     name: Faker::Name.name,

@@ -130,3 +130,19 @@ Fonctionnalité: Le personnel de direction se connecte
     Et que je suis un personnel MASA directeur de l'établissement "DINUM"
     Quand je me connecte en tant que personnel MASA
     Alors je peux voir l'écran d'accueil
+
+  Scénario: Le personnel de direction du MENJ ne peut plus accéder à ses anciens établissements
+    Sachant que je suis un personnel MENJ directeur de l'établissement "ETAB1, ETAB2" avec l'email "marie.curie@education.gouv.fr"
+    Et je me rends sur la page d'accueil
+    Et que je clique sur "Se connecter (MENJ)"
+    Et que je sélectionne "ETAB2" pour "Établissement"
+    Et que je clique sur "Continuez avec cet établissement"
+    Et que je passe l'écran d'accueil
+    Alors la page contient "Changer d'établissement"
+    Et la page contient "ETAB2"
+    Quand je me déconnecte
+    Sachant que je suis un personnel MENJ directeur de l'établissement "ETAB1" avec l'email "marie.curie@education.gouv.fr"
+    Et que je me connecte en tant que personnel MENJ
+    Alors la page ne contient pas "Changer d'établissement"
+    Et la page contient "ETAB1"
+    Et la page ne contient pas "ETAB2"
