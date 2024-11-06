@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_04_214101) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_06_195543) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -53,6 +53,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_04_214101) do
     t.index ["asp_payment_request_id", "most_recent"], name: "idx_on_asp_payment_request_id_most_recent_77301c2812"
     t.index ["asp_payment_request_id", "most_recent"], name: "index_asp_payment_request_transitions_parent_most_recent", unique: true, where: "most_recent"
     t.index ["asp_payment_request_id", "sort_key"], name: "index_asp_payment_request_transitions_parent_sort", unique: true
+    t.index ["to_state"], name: "index_asp_payment_request_transitions_on_to_state"
   end
 
   create_table "asp_payment_requests", force: :cascade do |t|
@@ -185,6 +186,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_04_214101) do
     t.datetime "updated_at", null: false
     t.index ["pfmp_id", "most_recent"], name: "index_pfmp_transitions_parent_most_recent", unique: true, where: "most_recent"
     t.index ["pfmp_id", "sort_key"], name: "index_pfmp_transitions_parent_sort", unique: true
+    t.index ["to_state"], name: "index_pfmp_transitions_on_to_state"
   end
 
   create_table "pfmps", force: :cascade do |t|
