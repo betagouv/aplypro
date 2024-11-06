@@ -6,6 +6,10 @@ class GenerateAttributiveDecisionJob < ApplicationJob
   include DocumentGeneration
   include FregataProof
 
+  before_perform do
+    Schooling.generating_attributive_decision.update_all(generating_attributive_decision: false)
+  end
+
   after_discard do |job|
     self.class.after_discard_callback(job, :generating_attributive_decision)
   end
@@ -16,8 +20,6 @@ class GenerateAttributiveDecisionJob < ApplicationJob
 
   def perform(schooling)
     Sync::StudentJob.new.perform(schooling) if schooling.student.missing_address?
-
-    Schooling.generating_attributive_decision.each { |s| s.update(generating_attributive_decision: false) }
 
     Schooling.transaction do
       generate_document(schooling)
