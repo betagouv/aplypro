@@ -35,7 +35,6 @@ module PfmpAmountCalculator
 
   def all_pfmps_for_mef
     student.pfmps
-           .in_state(:completed, :validated)
            .joins(schooling: :classe)
            .where("classes.mef_id": mef.id, "classes.school_year_id": school_year.id)
   end
