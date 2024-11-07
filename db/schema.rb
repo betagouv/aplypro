@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_14_094756) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_06_195543) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,8 +50,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_14_094756) do
     t.boolean "most_recent", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["asp_payment_request_id", "most_recent"], name: "idx_on_asp_payment_request_id_most_recent_77301c2812"
     t.index ["asp_payment_request_id", "most_recent"], name: "index_asp_payment_request_transitions_parent_most_recent", unique: true, where: "most_recent"
     t.index ["asp_payment_request_id", "sort_key"], name: "index_asp_payment_request_transitions_parent_sort", unique: true
+    t.index ["to_state"], name: "index_asp_payment_request_transitions_on_to_state"
   end
 
   create_table "asp_payment_requests", force: :cascade do |t|
@@ -63,6 +65,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_14_094756) do
     t.bigint "rib_id"
     t.index ["asp_payment_return_id"], name: "index_asp_payment_requests_on_asp_payment_return_id"
     t.index ["asp_request_id"], name: "index_asp_payment_requests_on_asp_request_id"
+    t.index ["pfmp_id", "created_at"], name: "index_asp_payment_requests_on_pfmp_id_and_created_at"
     t.index ["pfmp_id"], name: "index_asp_payment_requests_on_pfmp_id"
     t.index ["rib_id"], name: "index_asp_payment_requests_on_rib_id"
   end
@@ -97,6 +100,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_14_094756) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "school_year_id", null: false
+    t.index ["establishment_id", "school_year_id"], name: "index_classes_on_establishment_id_and_school_year_id"
     t.index ["establishment_id"], name: "index_classes_on_establishment_id"
     t.index ["mef_id"], name: "index_classes_on_mef_id"
     t.index ["school_year_id"], name: "index_classes_on_school_year_id"
@@ -182,6 +186,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_14_094756) do
     t.datetime "updated_at", null: false
     t.index ["pfmp_id", "most_recent"], name: "index_pfmp_transitions_parent_most_recent", unique: true, where: "most_recent"
     t.index ["pfmp_id", "sort_key"], name: "index_pfmp_transitions_parent_sort", unique: true
+    t.index ["to_state"], name: "index_pfmp_transitions_on_to_state"
   end
 
   create_table "pfmps", force: :cascade do |t|
@@ -239,6 +244,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_14_094756) do
     t.index ["asp_dossier_id"], name: "index_schoolings_on_asp_dossier_id", unique: true
     t.index ["classe_id"], name: "index_schoolings_on_classe_id"
     t.index ["student_id", "classe_id"], name: "one_schooling_per_class_student", unique: true
+    t.index ["student_id", "end_date", "removed_at"], name: "index_schoolings_on_student_id_and_end_date_and_removed_at"
     t.index ["student_id"], name: "index_schoolings_on_student_id"
     t.index ["student_id"], name: "one_active_schooling_per_student", unique: true, where: "(end_date IS NULL)"
   end
