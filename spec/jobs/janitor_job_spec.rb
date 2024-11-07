@@ -24,4 +24,21 @@ RSpec.describe JanitorJob do
       expect(schooling_above_nine.reload.attributive_decision_version).to eq(9)
     end
   end
+
+  describe "#reset_generating_attributive_decision_overflow" do
+    let!(:schooling_generating_true) { create(:schooling, generating_attributive_decision: true) }
+    let!(:schooling_generating_false) { create(:schooling, generating_attributive_decision: false) }
+
+    before do
+      described_class.new.send(:reset_generating_attributive_decision_overflow)
+    end
+
+    it "does not change the generating_attributive_decision" do
+      expect(schooling_generating_false.reload.generating_attributive_decision).to be false
+    end
+
+    it "changes the generating_attributive_decision to false" do
+      expect(schooling_generating_true.reload.generating_attributive_decision).to be false
+    end
+  end
 end
