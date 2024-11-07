@@ -5,6 +5,7 @@ class JanitorJob < ApplicationJob
 
   def perform
     reset_attributive_decision_version_overflow
+    reset_generating_attributive_decision_overflow
   end
 
   private
@@ -14,6 +15,12 @@ class JanitorJob < ApplicationJob
       schooling.update!(attributive_decision_version: 9)
     end
     true
+  end
+
+  def reset_generating_attributive_decision_overflow
+    Schooling.generating_attributive_decision.each do |schooling|
+      schooling.update(generating_attributive_decision: false)
+    end
   end
 
   def squish_codes_above_five
