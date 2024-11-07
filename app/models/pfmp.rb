@@ -32,6 +32,8 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   validates :start_date, :end_date, presence: true
 
+  validate :amounts_yearly_cap
+
   validates :end_date,
             :start_date,
             if: ->(pfmp) { pfmp.schooling.present? },
@@ -59,8 +61,6 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   after_create -> { self.administrative_number = administrative_number }
 
   scope :finished, -> { where("pfmps.end_date <= (?)", Time.zone.today) }
-  scope :before, ->(date) { where("pfmps.created_at < (?)", date) }
-  scope :after, ->(date) { where("pfmps.created_at > (?)", date) }
 
   delegate :wage, to: :mef
 
@@ -107,10 +107,6 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     schooling.attributive_decision_number + index
   end
 
-  def locked?
-    latest_payment_request&.ongoing?
-  end
-
   def within_schooling_dates?
     return true if (schooling.open? && start_date >= schooling.start_date) || schooling.no_dates?
 
@@ -122,7 +118,11 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def can_be_modified?
-    !locked?
+    !latest_payment_request&.ongoing?
+  end
+
+  def can_be_rebalanced?
+    !latest_payment_request&.ongoing? && !latest_payment_request&.in_state?(:paid)
   end
 
   def can_be_destroyed?
@@ -154,5 +154,17 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def can_retrigger_payment?
     latest_payment_request.failed?
+  end
+
+  private
+
+  def amounts_yearly_cap
+    return unless mef
+
+    cap = mef.wage.yearly_cap
+    total = all_pfmps_for_mef.sum(:amount)
+    return unless total > cap
+
+    errors.add(:amount, "Yearly cap of #{cap} not respected for Mef code: #{mef.code}")
   end
 end

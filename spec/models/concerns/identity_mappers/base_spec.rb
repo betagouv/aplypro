@@ -61,6 +61,16 @@ RSpec.describe IdentityMappers::Base do
         expect(result).to contain_exactly "Z"
       end
     end
+
+    context "when some establishments are added in the perimeter" do
+      let(:fredurne) { build(:fredurne, uai: "9760167C", tty_code: "CLG") }
+      let(:fredurneresp) { build(:fredurneresp, uai: "1234", tty_code: "CLG") }
+      let(:freduresdel) { build(:freduresdel, uai: "C", tty_code: "CLG") }
+
+      it "filters them in" do
+        expect(result).to contain_exactly "9760167C"
+      end
+    end
   end
 
   describe "#establishments_authorised_for" do

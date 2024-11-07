@@ -68,12 +68,12 @@ describe PfmpManager do
           create(:pfmp, :completed, schooling: schooling, day_count: 4, created_at: pfmp.created_at + 3.days)
         end
 
-        it "recalculates the follow up modifiable pfmps amounts and caps the last one" do
+        it "recalculates the follow up modifiable pfmps amounts" do
           expect do
-            pfmp.update!(day_count: pfmp.day_count + 11)
+            pfmp.update!(day_count: pfmp.day_count + 8)
           end.to change {
-                   [pfmp.amount] + pfmp.following_modifiable_pfmps.pluck(:amount)
-                 }.from([40, 120, 80]).to([260, 120, 20])
+                   [pfmp.amount] + pfmp.rebalancable_pfmps.pluck(:amount)
+                 }.from([40, 120, 80]).to([200, 120, 80])
         end
       end
     end

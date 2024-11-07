@@ -7,7 +7,6 @@ module Sync
     def perform(schooling)
       student = schooling.student
 
-      return true if schooling.establishment.provided_by?(:sygne) && Rails.env.production?
       return true if student.ine_not_found || schooling.closed?
 
       fetch_student_data(schooling)
@@ -24,6 +23,8 @@ module Sync
       api.fetch_resource(:student, ine: schooling.student.ine)
          .then { |data| map_student_attributes(data, api) }
          .then { |attributes| schooling.student.update!(attributes) }
+
+      retry_payment_request_for_addresses_informations!(schooling.student)
     end
 
     def map_student_attributes(data, api)
@@ -34,6 +35,16 @@ module Sync
         .merge(address_attributes)
         .slice(*Student.updatable_attributes)
         .except(:ine)
+    end
+
+    def retry_payment_request_for_addresses_informations!(student)
+      if student.previous_changes.key?("address_line1") ||
+         student.previous_changes.key?("address_line2") ||
+         student.previous_changes.key?("address_city_insee_code") ||
+         student.previous_changes.key?("address_country_code")
+
+        student.retry_pfmps_payment_requests!(%w[adresse pays postal résidence])
+      end
     end
   end
 end

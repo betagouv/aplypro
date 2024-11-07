@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Wage < ApplicationRecord
+  belongs_to :school_year
+
   enum :ministry, Mef.ministries.keys
 
   validates :mefstat4, :ministry, :daily_rate, :yearly_cap, presence: true

@@ -30,12 +30,10 @@ class ExclusionSeeder
   def self.seed
     logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
 
-    logger.info { "[seeds] inserting exclusion" }
-
     EXCLUSIONS.each do |uai, mef_code|
       Exclusion.find_or_create_by!(uai: uai, mef_code: mef_code)
     end
 
-    logger.info { "[seeds] done inserting #{Exclusion.count} exclusions" }
+    logger.info { "[seeds] upserted #{Exclusion.count} exclusions" }
   end
 end

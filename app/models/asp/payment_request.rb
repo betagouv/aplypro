@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ASP
-  class PaymentRequest < ApplicationRecord
+  class PaymentRequest < ApplicationRecord # rubocop:disable Metrics/ClassLength
     TRANSITION_CLASS = ASP::PaymentRequestTransition
     STATE_MACHINE_CLASS = ASP::PaymentRequestStateMachine
 
@@ -117,13 +117,32 @@ module ASP
       !terminated?
     end
 
-    def eligible_for_auto_retry?
+    def eligible_for_incomplete_retry?
       return false unless in_state?(:incomplete)
 
       retryable_messages = RETRYABLE_INCOMPLETE_VALIDATION_TYPES.map do |r|
         I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.#{r}")
       end
       last_transition.metadata["incomplete_reasons"]["ready_state_validation"].intersect?(retryable_messages)
+    end
+
+    def eligible_for_rejected_or_unpaid_auto_retry?(reasons)
+      return false unless in_state?(:rejected, :unpaid)
+
+      decorator = ActiveDecorator::Decorator.instance.decorate(self)
+      message = in_state?(:rejected) ? decorator.rejected_reason : decorator.unpaid_reason
+      reasons.any? { |word| message.downcase.include?(word) }
+    end
+
+    def reconstructed_iban
+      return nil unless in_state?(:paid)
+
+      coordpaie = last_transition.metadata["PAIEMENT"]["COORDPAIE"]
+      zonebban = coordpaie["ZONEBBAN"]
+      cle = coordpaie["CLECONTROL"]
+      code_pays = coordpaie["CODEISOPAYS"]
+
+      "#{code_pays}#{cle}#{zonebban}"
     end
   end
 end

@@ -2,6 +2,9 @@
 
 require "csv"
 
+# For the introduction of a new SchoolYear
+# First create the new SchoolYear so that SchoolYear.current returns the latest one
+# Then run MefSeeder.seed
 class MefSeeder
   MAPPING = {
     code: "MEF",
@@ -12,10 +15,26 @@ class MefSeeder
   }.freeze
 
   def self.seed
-    logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
-    logger.info "[seeds] inserting MEF codes..."
+    @@logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
 
-    data = CSV.read(Rails.root.join("data/mefs.csv"), headers: true)
+    Mef.transaction do
+      Dir.glob(Rails.root.join("data/mefs/*.csv")).each do |file_path|
+        process_file(file_path)
+      end
+    end
+
+    @@logger.info "[seeds] upserted #{Mef.count} total MEFs"
+  end
+
+  private
+
+  def self.process_file(file_path)
+    file_name = File.basename(file_path, ".csv")
+    start_year = file_name.split("_").first.to_i
+
+    school_year = SchoolYear.find_by!(start_year: start_year)
+
+    data = CSV.read(file_path, headers: true)
 
     mefs = data.map do |entry|
       attributes = MAPPING.transform_values do |value|
@@ -26,11 +45,21 @@ class MefSeeder
         end
       end
 
-      attributes.merge("school_year_id" => SchoolYear.current.id)
+      attributes.merge(school_year_id: school_year.id)
     end
 
-    Mef.upsert_all(mefs, unique_by: :code) # rubocop:disable Rails/SkipsModelValidations
+    duplicates = mefs.group_by { |mef| [mef[:code], mef[:school_year_id]] }
+                   .select { |_, group| group.size > 1 }
 
-    logger.info "[seeds] done inserting MEF codes."
+    if duplicates.any?
+      @@logger.warn "[seeds] found duplicates in MEF data for school year #{school_year}"
+      duplicates.each do |key, group|
+        @@logger.warn "[seeds] duplicate found for code: #{key[0]} and school_year_id: #{key[1]}"
+      end
+    end
+
+    Mef.upsert_all(mefs, unique_by: [:code, :school_year_id]) # rubocop:disable Rails/SkipsModelValidations
+
+    @@logger.info "[seeds] upserted #{mefs.size} MEFs for school year: #{school_year}"
   end
 end

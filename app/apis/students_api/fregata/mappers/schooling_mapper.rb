@@ -14,7 +14,8 @@ module StudentsApi
           unwrap :apprenant
 
           rename_keys(
-            code: :status
+            code: :status,
+            start_date: :dateEntreeFormation
           )
 
           # Seul le MAPPING "2501" est encore utilisé, les autres statuts ne sont plus retournés par SYGNE
