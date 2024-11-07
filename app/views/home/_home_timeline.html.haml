@@ -1,7 +1,9 @@
-%h1= "Année scolaire #{selected_school_year}"
+.row
+  %h1= "Année scolaire #{selected_school_year}"
 
 - if @establishment_facade.students_count <= 0
-  = t("errors.school_years.not_found").html_safe
+  .row
+    = t("errors.school_years.not_found").html_safe
 - else
   - dsfr_colors = { blue: "#000091", light_blue: "#bccdff", green: "#88fdaa", red: "#ffbdbd" } # https://www.systeme-de-design.gouv.fr/fondamentaux/couleurs-palette
   .fr-grid-row.timeline-row

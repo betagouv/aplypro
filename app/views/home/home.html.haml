@@ -4,4 +4,5 @@
       = dsfr_alert(type: :info, title: "Récupération des élèves en cours") do
         %p Nous sommes en train de récupérer les données de vos élèves, veuillez rafraichir la page dans quelques minutes.
     - else
-      = render partial: "home_timeline"
+      .container
+        = render partial: "home_timeline"
