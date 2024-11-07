@@ -24,7 +24,10 @@ class PfmpManager
   def update!(params)
     old_day_count = pfmp.day_count
     pfmp.update!(params)
+
     recalculate_amounts! if params[:day_count].present? && old_day_count != params[:day_count]
+
+    transition!
   end
 
   def recalculate_amounts!
@@ -102,6 +105,14 @@ class PfmpManager
   def rebalance_other_pfmps!
     rebalancable_pfmps.each do |rebalancable_pfmp|
       rebalancable_pfmp.update!(amount: PfmpManager.new(rebalancable_pfmp).calculate_amount)
+    end
+  end
+
+  def transition!
+    if pfmp.day_count.present?
+      pfmp.transition_to!(:completed) if pfmp.in_state?(:pending)
+    elsif pfmp.in_state?(:completed, :validated)
+      pfmp.transition_to!(:pending)
     end
   end
 end

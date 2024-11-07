@@ -66,14 +66,6 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   before_destroy :ensure_destroyable?, prepend: true
 
-  after_save do
-    if day_count.present?
-      transition_to!(:completed) if in_state?(:pending)
-    elsif in_state?(:completed, :validated)
-      transition_to!(:pending)
-    end
-  end
-
   def validate!
     transition_to!(:validated)
   end

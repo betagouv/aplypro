@@ -14,8 +14,9 @@ FactoryBot.define do
       transient do
         day_count { 3 }
       end
-
-      after(:create) { |pfmp, eval| PfmpManager.new(pfmp).update!(day_count: eval.day_count) }
+      after(:create) do |pfmp, eval|
+        PfmpManager.new(pfmp).update!(day_count: eval.day_count)
+      end
     end
 
     trait :can_be_validated do
@@ -47,6 +48,10 @@ FactoryBot.define do
         create(:asp_payment_request, :paid, pfmp: pfmp)
         pfmp.reload.rectify!
       end
+    end
+
+    after(:build) do |pfmp, _|
+      PfmpManager.new(pfmp).update!(day_count: pfmp.day_count)
     end
   end
 end

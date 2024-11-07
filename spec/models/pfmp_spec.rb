@@ -102,7 +102,6 @@ RSpec.describe Pfmp do
         end
 
         it "caps the amount to 0" do
-          pfmp.save!
           expect(pfmp.amount).to eq 0
         end
       end
