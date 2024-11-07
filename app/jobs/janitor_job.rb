@@ -4,20 +4,20 @@ class JanitorJob < ApplicationJob
   sidekiq_options retry: false
 
   def perform
-    reset_attributive_decision_version_overflow
-    reset_generating_attributive_decision_overflow
+    reset_attributive_decision_version_attribute
+    reset_generating_attributive_decision_attribute
   end
 
   private
 
-  def reset_attributive_decision_version_overflow
+  def reset_attributive_decision_version_attribute
     Schooling.where("attributive_decision_version > ?", 9).find_each do |schooling|
       schooling.update!(attributive_decision_version: 9)
     end
     true
   end
 
-  def reset_generating_attributive_decision_overflow
+  def reset_generating_attributive_decision_attribute
     Schooling.generating_attributive_decision.each do |schooling|
       schooling.update(generating_attributive_decision: false)
     end
