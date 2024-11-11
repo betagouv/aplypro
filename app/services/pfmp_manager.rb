@@ -34,6 +34,7 @@ class PfmpManager
     raise PfmpNotModifiableError unless pfmp.can_be_modified?
 
     Pfmp.transaction do
+      pfmp.all_pfmps_for_mef.lock!
       pfmp.update!(amount: calculate_amount)
       rebalance_other_pfmps!
     end
