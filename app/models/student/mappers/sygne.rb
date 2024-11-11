@@ -16,8 +16,6 @@ class Student
 
       def map_schooling_attributes(entry)
         schooling_mapper.new.call(entry).slice(:status, :start_date, :end_date)
-      rescue StandardError => e
-        raise SchoolingParsingError.new, "Schooling parsing failure for #{uai}: #{e.message}"
       end
     end
   end
