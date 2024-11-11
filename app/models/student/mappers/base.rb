@@ -40,7 +40,7 @@ class Student
 
               Sentry.capture_exception(
                 SchoolingParsingError.new(
-                  "Schooling parsing failed for #{uai}: #{e.message}"
+                  "Schooling parsing failed for entry: #{entry} , for UAI: #{uai} with message: #{e.message}"
                 )
               )
             end
