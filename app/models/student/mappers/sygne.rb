@@ -9,7 +9,7 @@ class Student
                     .find_or_initialize_by(classe: classe, student: student)
                     .tap { |sc| sc.assign_attributes(attributes) }
 
-        student.close_current_schooling! if schooling != student.current_schooling
+        student.close_current_schooling! if schooling.open? && student.current_schooling != schooling
 
         schooling.save!
       end
