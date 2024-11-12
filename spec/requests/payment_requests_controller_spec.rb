@@ -17,6 +17,7 @@ RSpec.describe PaymentRequestsController do
 
     before do
       allow(PfmpManager).to receive(:new).and_return(pfmp_manager)
+      allow(pfmp_manager).to receive(:update!)
       allow(pfmp_manager).to receive(:create_new_payment_request!)
     end
 
@@ -46,6 +47,7 @@ RSpec.describe PaymentRequestsController do
 
     before do
       allow(PfmpManager).to receive(:new).and_return(pfmp_manager)
+      allow(pfmp_manager).to receive(:update!)
       allow(pfmp_manager).to receive(:retry_incomplete_payment_request!)
     end
 

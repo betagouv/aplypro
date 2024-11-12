@@ -42,6 +42,11 @@ RSpec.describe Pfmp do
         .only_integer.is_greater_than(0)
     end
 
+    it "validates numericality of day amount" do
+      expect(pfmp).to validate_numericality_of(:amount)
+        .only_integer.is_greater_than_or_equal_to(0)
+    end
+
     context "when the end date is before the start" do
       before do
         pfmp.start_date = Time.zone.now
@@ -97,7 +102,6 @@ RSpec.describe Pfmp do
         end
 
         it "caps the amount to 0" do
-          pfmp.save!
           expect(pfmp.amount).to eq 0
         end
       end
@@ -131,7 +135,7 @@ RSpec.describe Pfmp do
 
     context "when a day count is set" do
       it "is moved to completed" do
-        expect { pfmp.update!(day_count: 10) }
+        expect { PfmpManager.new(pfmp).update!(day_count: 10) }
           .to change(pfmp, :current_state)
           .from("pending")
           .to("completed")
@@ -160,7 +164,7 @@ RSpec.describe Pfmp do
       subject(:pfmp) { create(:pfmp, :completed) }
 
       it "moves back to pending" do
-        expect { pfmp.update!(day_count: nil) }
+        expect { PfmpManager.new(pfmp).update!(day_count: nil) }
           .to change(pfmp, :current_state)
           .from("completed")
           .to("pending")
