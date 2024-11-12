@@ -33,10 +33,6 @@ class PfmpStateMachine
     new_payment_request.mark_ready!
   end
 
-  after_transition(to: :completed) do |pfmp|
-    PfmpManager.new(pfmp).recalculate_amounts!
-  end
-
   after_transition(to: :validated) do |pfmp|
     PfmpManager.new(pfmp).create_new_payment_request!
   end

@@ -22,12 +22,10 @@ class PfmpManager
   end
 
   def update!(params)
-    old_day_count = pfmp.day_count
     pfmp.update!(params)
-
-    recalculate_amounts! if params[:day_count].present? && old_day_count != params[:day_count]
-
     transition!
+
+    recalculate_amounts! if params[:day_count].present?
   end
 
   def recalculate_amounts!
@@ -58,9 +56,9 @@ class PfmpManager
 
   def rectify_and_update_attributes!(confirmed_pfmp_params, confirmed_address_params)
     Pfmp.transaction do
-      @pfmp.update!(confirmed_pfmp_params)
-      @pfmp.student.update!(confirmed_address_params)
-      @pfmp.rectify!
+      pfmp.update!(confirmed_pfmp_params)
+      pfmp.student.update!(confirmed_address_params)
+      pfmp.rectify!
     end
   end
 

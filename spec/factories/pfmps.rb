@@ -51,7 +51,7 @@ FactoryBot.define do
     end
 
     after(:build) do |pfmp, _|
-      PfmpManager.new(pfmp).update!(day_count: pfmp.day_count)
+      PfmpManager.new(pfmp).update!(day_count: pfmp.day_count) if pfmp.day_count.present?
     end
   end
 end
