@@ -138,7 +138,8 @@ Fonctionnalité: Le personnel de direction se connecte
     Et que je sélectionne "ETAB2" pour "Établissement"
     Et que je clique sur "Continuez avec cet établissement"
     Et que je passe l'écran d'accueil
-    Alors la page contient "Changer d'établissement"
+    Et que je clique sur "Changer d'établissement"
+    Alors la page contient "ETAB1"
     Et la page contient "ETAB2"
     Quand je me déconnecte
     Sachant que je suis un personnel MENJ directeur de l'établissement "ETAB1" avec l'email "marie.curie@education.gouv.fr"
