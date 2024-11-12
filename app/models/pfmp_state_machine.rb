@@ -28,7 +28,6 @@ class PfmpStateMachine
   end
 
   after_transition(to: :rectified) do |pfmp|
-    PfmpManager.new(pfmp).recalculate_amounts!
     new_payment_request = PfmpManager.new(pfmp).create_new_payment_request!
     new_payment_request.mark_ready!
   end

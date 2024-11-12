@@ -22,19 +22,10 @@ class PfmpManager
   end
 
   def update!(params)
-    pfmp.update!(params)
-    transition!
-
-    recalculate_amounts! if params[:day_count].present?
-  end
-
-  def recalculate_amounts!
-    raise PfmpNotModifiableError unless pfmp.can_be_modified?
-
     Pfmp.transaction do
-      pfmp.all_pfmps_for_mef.lock!
-      pfmp.update!(amount: calculate_amount)
-      rebalance_other_pfmps!
+      pfmp.update!(params)
+      transition!
+      recalculate_amounts! if params[:day_count].present?
     end
   end
 
@@ -56,7 +47,7 @@ class PfmpManager
 
   def rectify_and_update_attributes!(confirmed_pfmp_params, confirmed_address_params)
     Pfmp.transaction do
-      pfmp.update!(confirmed_pfmp_params)
+      PfmpManager.new(pfmp).update!(confirmed_pfmp_params)
       pfmp.student.update!(confirmed_address_params)
       pfmp.rectify!
     end
@@ -86,6 +77,14 @@ class PfmpManager
   end
 
   private
+
+  def recalculate_amounts!
+    raise PfmpNotModifiableError unless pfmp.can_be_modified?
+
+    pfmp.all_pfmps_for_mef.lock!
+    pfmp.update!(amount: calculate_amount)
+    rebalance_other_pfmps!
+  end
 
   def other_pfmps_for_mef
     pfmp.all_pfmps_for_mef.excluding(pfmp)

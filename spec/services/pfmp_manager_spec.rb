@@ -159,7 +159,7 @@ describe PfmpManager do
           before { schooling.classe.update!(mef: mef) }
 
           it "errors when trying to recalculate" do
-            expect { described_class.new(previous.reload).recalculate_amounts! }
+            expect { described_class.new(previous.reload).update!(day_count: previous.day_count) }
               .to raise_error ActiveRecord::RecordInvalid
           end
 
