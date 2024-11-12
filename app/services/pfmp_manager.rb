@@ -22,10 +22,12 @@ class PfmpManager
   end
 
   def update!(params)
+    params = params.to_h.with_indifferent_access
+
     Pfmp.transaction do
       pfmp.update!(params)
-      transition!
       recalculate_amounts! if params[:day_count].present?
+      transition!
     end
   end
 
@@ -47,23 +49,14 @@ class PfmpManager
 
   def rectify_and_update_attributes!(confirmed_pfmp_params, confirmed_address_params)
     Pfmp.transaction do
-      PfmpManager.new(pfmp).update!(confirmed_pfmp_params)
+      update!(confirmed_pfmp_params)
       pfmp.student.update!(confirmed_address_params)
       pfmp.rectify!
     end
   end
 
-  def calculate_amount
-    return 0 if pfmp.day_count.nil?
-
-    [
-      pfmp.day_count * pfmp.wage.daily_rate,
-      pfmp.wage.yearly_cap - previously_locked_amount
-    ].min
-  end
-
-  def previously_locked_amount
-    other_priced_pfmps
+  def previously_locked_amount(pfmp)
+    other_priced_pfmps(pfmp)
       .map(&:amount)
       .compact
       .sum
@@ -78,31 +71,40 @@ class PfmpManager
 
   private
 
+  def calculate_amount(target_pfmp)
+    return 0 if target_pfmp.day_count.nil?
+
+    [
+      target_pfmp.day_count * target_pfmp.wage.daily_rate,
+      target_pfmp.wage.yearly_cap - previously_locked_amount(target_pfmp)
+    ].min
+  end
+
   def recalculate_amounts!
     raise PfmpNotModifiableError unless pfmp.can_be_modified?
 
     pfmp.all_pfmps_for_mef.lock!
-    pfmp.update!(amount: calculate_amount)
+    pfmp.update!(amount: calculate_amount(pfmp))
     rebalance_other_pfmps!
   end
 
-  def other_pfmps_for_mef
-    pfmp.all_pfmps_for_mef.excluding(pfmp)
+  def other_pfmps_for_mef(excluded_pfmp)
+    pfmp.all_pfmps_for_mef.excluding(excluded_pfmp)
   end
 
-  def other_priced_pfmps
-    other_pfmps_for_mef
+  def other_priced_pfmps(pfmp)
+    other_pfmps_for_mef(pfmp)
       .where.not(amount: nil)
   end
 
   def rebalancable_pfmps
-    @rebalancable_pfmps ||= other_pfmps_for_mef
+    @rebalancable_pfmps ||= other_pfmps_for_mef(pfmp)
                             .select(&:can_be_rebalanced?)
   end
 
   def rebalance_other_pfmps!
     rebalancable_pfmps.each do |rebalancable_pfmp|
-      rebalancable_pfmp.update!(amount: PfmpManager.new(rebalancable_pfmp).calculate_amount)
+      rebalancable_pfmp.update!(amount: calculate_amount(rebalancable_pfmp))
     end
   end
 

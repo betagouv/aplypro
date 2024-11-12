@@ -13,5 +13,5 @@
     = number_to_currency pfmp.wage.yearly_cap
     de plafond maximum par an
   %div.fr-mb-1w
-    = number_to_currency PfmpManager.new(pfmp).previously_locked_amount
+    = number_to_currency PfmpManager.new(pfmp).previously_locked_amount(pfmp)
     déjà engagés par d'autres PFMPs sur cette scolarité.

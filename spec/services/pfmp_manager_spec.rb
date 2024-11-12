@@ -113,7 +113,7 @@ describe PfmpManager do
   end
 
   describe "#calculate_amount" do # rubocop:disable RSpec/MultipleMemoizedHelpers
-    subject(:amount) { described_class.new(pfmp.reload).calculate_amount }
+    subject(:amount) { described_class.new(pfmp.reload).send(:calculate_amount, pfmp) }
 
     let(:establishment) { create(:establishment) }
     let(:pfmp) do
@@ -202,7 +202,7 @@ describe PfmpManager do
     end
 
     def other_pfmps_for_mef
-      manager.send(:other_pfmps_for_mef)
+      manager.send(:other_pfmps_for_mef, pfmp)
     end
 
     context "when there is no other pfmp for that school year and mef" do

@@ -20,9 +20,9 @@ class PfmpsController < ApplicationController
   def edit; end
 
   def create
-    @pfmp = Pfmp.new(pfmp_params.merge(schooling: @schooling))
+    @pfmp = Pfmp.new
 
-    if PfmpManager.new(@pfmp).update(pfmp_params)
+    if PfmpManager.new(@pfmp).update(pfmp_params.merge(schooling: @schooling))
       redirect_to student_path(@schooling.student),
                   notice: t("pfmps.new.success")
     else
