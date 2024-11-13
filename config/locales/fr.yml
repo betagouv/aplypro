@@ -148,7 +148,7 @@ fr:
       pfmp: "de la PFMP"
       rib: "du RIB"
   menu:
-    home: Tableau de bord
+    home: Accueil
     classes: Classes
     new_rib: Saisir des coord. bancaires
     new_pfmp: Saisir une PFMP
