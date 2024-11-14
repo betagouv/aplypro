@@ -14,21 +14,3 @@
  *= require_self
  *= require utility/icons/icons.css
  */
-
-.timeline-row {
-  margin-bottom: 2rem;
-}
-
-.timeline-section, .chart-container {
-  min-height: 300px;
-  display: flex;
-  flex-direction: column;
-}
-
-.gray-panel {
-  height: 100%;
-}
-
-.chart-container {
-  justify-content: center;
-}
