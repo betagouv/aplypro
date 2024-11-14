@@ -70,7 +70,7 @@ class Student
         label, mef_code, year = map_classe_attributes(entry)
 
         school_year = if year.nil?
-                        SchoolYear.current
+                        SchoolYear.current # TODO: Pourquoi faire ?
                       else
                         SchoolYear.find_by(start_year: year)
                       end
