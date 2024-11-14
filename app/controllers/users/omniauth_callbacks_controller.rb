@@ -36,6 +36,7 @@ module Users
       add_auth_breadcrumb(data: { user_uais: @mapper.all_indicated_uais }, message: "Found establishments")
 
       log_user_in!
+      delete_old_roles!
       save_roles!
       fetch_establishments!
       choose_redirect_page!
@@ -123,6 +124,12 @@ module Users
       EstablishmentUserRole
         .find_or_create_by(user: @user, establishment: establishment)
         .update(role: role)
+    end
+
+    def delete_old_roles!
+      EstablishmentUserRole.where(user: @user).find_each do |access|
+        access.destroy! unless @mapper.establishments_in_responsibility_and_delegated.include?(access.establishment)
+      end
     end
 
     def log_user_in!
