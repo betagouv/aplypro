@@ -35,7 +35,7 @@ module ASP
 
       def individu_attrs
         if known_record?
-          { idIndividu: id_individu, **ASP_NO_MODIFICATION }
+          { idIndividu: id_individu, **ASP_MODIFICATION }
         else
           {}
         end

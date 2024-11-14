@@ -28,7 +28,7 @@ describe ASP::Entities::Enregistrement, type: :model do
         end
 
         it "includes the modification flag to false" do
-          expect(attributes["modification"]).to have_attributes value: "N"
+          expect(attributes["modification"]).to have_attributes value: "O"
         end
 
         %w[persphysique adressesindividu coordpaiesindividu].each do |entity|
