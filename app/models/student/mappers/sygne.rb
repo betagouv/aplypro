@@ -11,8 +11,8 @@ class Student
 
         if schooling.open?
           student.close_current_schooling! if student.current_schooling != schooling
-        else
-          schooling.reopen! if attributes[:end_date].nil?
+        elsif attributes[:end_date].nil?
+          schooling.reopen!
         end
 
         schooling.save!
