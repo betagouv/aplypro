@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
-  include PfmpAmountCalculator
-
   TRANSITION_CLASS = PfmpTransition
   STATE_MACHINE_CLASS = PfmpStateMachine
   TRANSITION_RELATION_NAME = :transitions
@@ -32,6 +30,8 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   validates :start_date, :end_date, presence: true
 
+  validate :amounts_yearly_cap
+
   validates :end_date,
             :start_date,
             if: ->(pfmp) { pfmp.schooling.present? },
@@ -48,6 +48,8 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
             comparison: { greater_than_or_equal_to: :start_date },
             if: -> { start_date && end_date }
 
+  validates :amount, numericality: { only_integer: true, allow_nil: true, greater_than_or_equal_to: 0 }
+
   validates :day_count,
             numericality: {
               only_integer: true,
@@ -59,31 +61,10 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   after_create -> { self.administrative_number = administrative_number }
 
   scope :finished, -> { where("pfmps.end_date <= (?)", Time.zone.today) }
-  scope :before, ->(date) { where("pfmps.created_at < (?)", date) }
-  scope :after, ->(date) { where("pfmps.created_at > (?)", date) }
 
   delegate :wage, to: :mef
 
   before_destroy :ensure_destroyable?, prepend: true
-
-  after_save do
-    if day_count.present?
-      transition_to!(:completed) if in_state?(:pending)
-    elsif in_state?(:completed, :validated)
-      transition_to!(:pending)
-    end
-  end
-
-  after_save :recalculate_amounts_if_needed
-
-  # Recalculate amounts for the current PFMP and all follow up PFMPs that are still modifiable
-  def recalculate_amounts_if_needed
-    changed_day_count = day_count_before_last_save != day_count
-
-    return if !changed_day_count
-
-    PfmpManager.new(self).recalculate_amounts!
-  end
 
   def validate!
     transition_to!(:validated)
@@ -107,10 +88,6 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     schooling.attributive_decision_number + index
   end
 
-  def locked?
-    latest_payment_request&.ongoing?
-  end
-
   def within_schooling_dates?
     return true if (schooling.open? && start_date >= schooling.start_date) || schooling.no_dates?
 
@@ -122,7 +99,11 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def can_be_modified?
-    !locked?
+    !latest_payment_request&.ongoing?
+  end
+
+  def can_be_rebalanced?
+    !latest_payment_request&.ongoing? && !latest_payment_request&.in_state?(:paid)
   end
 
   def can_be_destroyed?
@@ -154,5 +135,26 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def can_retrigger_payment?
     latest_payment_request.failed?
+  end
+
+  def all_pfmps_for_mef
+    student.pfmps
+           .joins(schooling: :classe)
+           .where("classes.mef_id": mef.id, "classes.school_year_id": school_year.id)
+  end
+
+  private
+
+  def amounts_yearly_cap
+    return unless mef
+
+    pfmps = all_pfmps_for_mef
+    cap = mef.wage.yearly_cap
+    total = pfmps.sum(:amount)
+    return unless total > cap
+
+    errors.add(:amount,
+               "Yearly cap of #{cap} not respected for Mef code: #{mef.code} \\
+               -> #{total}/#{cap} with #{pfmps.count} PFMPs")
   end
 end

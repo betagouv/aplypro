@@ -127,14 +127,9 @@ module Users
     end
 
     def delete_roles!
-      # Supprime les accès qui ne sont plus présents dans KeyCloak.
-      establishments_authorised = @mapper.establishments_authorised_for(@user.email)
-      establishments_in_responsibility = @mapper.establishments_in_responsibility
-      combined_establishments = establishments_authorised + establishments_in_responsibility
-
       # Ne garde que les élements distincts entre les rôles d'APLyPro et ceux de KeyCloak.
       EstablishmentUserRole.where(user: @user).find_each do |access|
-        access.destroy unless combined_establishments.include?(access.establishment)
+        access.destroy unless @mapper.establishments_in_responsibility_and_delegated.include?(access.establishment)
       end
     end
 
@@ -168,7 +163,7 @@ module Users
     end
 
     def fetch_students_for!(establishments)
-      ActiveJob.perform_all_later(establishments.map { |e| Sync::ClassesJob.new(e) })
+      ActiveJob.perform_all_later(establishments.map { |e| Sync::ClassesJob.new(e, selected_school_year) })
     end
 
     def fetch_establishments!

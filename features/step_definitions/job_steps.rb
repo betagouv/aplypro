@@ -18,7 +18,7 @@ Quand("toutes les tâches de fond et leurs sous-tâches sont terminées") do
 end
 
 Quand("la liste des élèves de l'établissement {string} est rafraîchie") do |uai|
-  Sync::ClassesJob.perform_later(Establishment.find_by(uai: uai))
+  Sync::ClassesJob.perform_later(Establishment.find_by(uai: uai), SchoolYear.current)
 end
 
 # NOTE: pas très élégant mais comme le job parent

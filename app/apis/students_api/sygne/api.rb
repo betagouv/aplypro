@@ -5,9 +5,9 @@ module StudentsApi
     class Api < StudentsApi::Base
       class << self
         def establishment_students_endpoint(params)
-          base_url +
-            format("etablissements/%s/eleves?statut=ST&annee-scolaire=#{SchoolYear.current.start_year}&etat-scolarisation=true", # rubocop:disable Layout/LineLength
-                   params[:uai])
+          query = { statut: "ST", "annee-scolaire": params[:school_year], "etat-scolarisation": true }.to_query
+
+          base_url + format("etablissements/%s/eleves?#{query}", params[:uai])
         end
 
         def student_endpoint(params)

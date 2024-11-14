@@ -133,7 +133,7 @@ RSpec.describe ASP::PaymentRequest do
     end
   end
 
-  describe "eligible_for_auto_retry?" do
+  describe "eligible_for_incomplete_retry?" do
     let(:p_r_incomplete_for_abrogation) do
       create(:asp_payment_request, :incomplete, incomplete_reason: :needs_abrogated_attributive_decision)
     end
@@ -148,19 +148,94 @@ RSpec.describe ASP::PaymentRequest do
 
     context "when the payment request is in 'incomplete' state with the abrogation specific error message" do
       it "returns true" do
-        expect(p_r_incomplete_for_abrogation.eligible_for_auto_retry?).to be true
+        expect(p_r_incomplete_for_abrogation.eligible_for_incomplete_retry?).to be true
       end
     end
 
     context "when the payment request is in 'incomplete' state with the missing DA specific error message" do
       it "returns true" do
-        expect(p_r_incomplete_for_missing_da.eligible_for_auto_retry?).to be true
+        expect(p_r_incomplete_for_missing_da.eligible_for_incomplete_retry?).to be true
       end
     end
 
     context "when the payment request is not in 'incomplete' state" do
       it "returns false" do
-        expect(p_r_ready.eligible_for_auto_retry?).to be false
+        expect(p_r_ready.eligible_for_incomplete_retry?).to be false
+      end
+    end
+  end
+
+  describe "eligible_for_rejected_or_unpaid_auto_retry?" do
+    let(:reasons) { %w[rib bic paiement] }
+
+    context "when the payment request is in 'rejected' state without a RIB reason" do
+      let(:p_r) { create(:asp_payment_request, :rejected, reason: "Blabla") }
+
+      it "returns false" do
+        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?(reasons)).to be false
+      end
+    end
+
+    context "when the payment request is in 'rejected' state with a RIB reason" do
+      let(:p_r) do
+        create(:asp_payment_request, :rejected, reason: "Test d'une raison de blocage d'un paiement bancaire")
+      end
+
+      it "returns true" do
+        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?(reasons)).to be true
+      end
+    end
+
+    context "when the payment request is in 'unpaid' state without a RIB reason" do
+      let(:p_r) { create(:asp_payment_request, :unpaid, reason: "Blabla") }
+
+      it "returns false" do
+        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?(reasons)).to be false
+      end
+    end
+
+    context "when the payment request is in 'unpaid' state with a RIB reason" do
+      let(:p_r) do
+        create(:asp_payment_request, :unpaid, reason: "Test d'une raison de blocage d'un paiement bancaire")
+      end
+
+      it "returns true" do
+        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?(reasons)).to be true
+      end
+    end
+  end
+
+  describe "#reconstructed_iban" do
+    let(:payment_request) { create(:asp_payment_request, :paid) }
+    let(:metadata) do
+      {
+        "PAIEMENT" => {
+          "COORDPAIE" => {
+            "ZONEBBAN" => "20041010180452191K015",
+            "CLECONTROL" => "51",
+            "CODEISOPAYS" => "FR"
+          }
+        }
+      }
+    end
+
+    before do
+      allow(payment_request).to receive(:last_transition).and_return(
+        instance_double(ASP::PaymentRequestTransition, metadata: metadata)
+      )
+    end
+
+    context "when the payment request is in 'paid' state" do
+      it "returns the reconstructed IBAN" do
+        expect(payment_request.reconstructed_iban).to eq "FR5120041010180452191K015"
+      end
+    end
+
+    context "when the payment request is not in 'paid' state" do
+      let(:payment_request) { create(:asp_payment_request, :pending) }
+
+      it "returns nil" do
+        expect(payment_request.reconstructed_iban).to be_nil
       end
     end
   end

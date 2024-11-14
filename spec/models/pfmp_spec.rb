@@ -42,6 +42,11 @@ RSpec.describe Pfmp do
         .only_integer.is_greater_than(0)
     end
 
+    it "validates numericality of day amount" do
+      expect(pfmp).to validate_numericality_of(:amount)
+        .only_integer.is_greater_than_or_equal_to(0)
+    end
+
     context "when the end date is before the start" do
       before do
         pfmp.start_date = Time.zone.now
@@ -78,6 +83,29 @@ RSpec.describe Pfmp do
         it { is_expected.to be_valid }
       end
     end
+
+    describe "amounts_yearly_cap" do
+      let(:mef) { create(:mef, daily_rate: 10, yearly_cap: 100) }
+      let(:classe) { create(:classe, mef: mef) }
+      let(:schooling) { create(:schooling, classe: classe) }
+      let(:pfmp) { build(:pfmp, schooling: schooling, day_count: 5) }
+
+      context "when the total amount is within the yearly cap" do
+        it "is valid" do
+          expect(pfmp).to be_valid
+        end
+      end
+
+      context "when the total amount would exceed the yearly cap" do
+        before do
+          create(:pfmp, :validated, schooling: schooling, day_count: 10)
+        end
+
+        it "caps the amount to 0" do
+          expect(pfmp.amount).to eq 0
+        end
+      end
+    end
   end
 
   describe "deletion" do
@@ -107,7 +135,7 @@ RSpec.describe Pfmp do
 
     context "when a day count is set" do
       it "is moved to completed" do
-        expect { pfmp.update!(day_count: 10) }
+        expect { PfmpManager.new(pfmp).update!(day_count: 10) }
           .to change(pfmp, :current_state)
           .from("pending")
           .to("completed")
@@ -136,7 +164,7 @@ RSpec.describe Pfmp do
       subject(:pfmp) { create(:pfmp, :completed) }
 
       it "moves back to pending" do
-        expect { pfmp.update!(day_count: nil) }
+        expect { PfmpManager.new(pfmp).update!(day_count: nil) }
           .to change(pfmp, :current_state)
           .from("completed")
           .to("pending")
@@ -157,16 +185,6 @@ RSpec.describe Pfmp do
       it "can move to validated" do
         pfmps.last.transition_to!(:validated)
         expect(pfmps.last).to be_in_state(:validated)
-      end
-    end
-
-    context "when previous pfmps are not all validated" do
-      let(:pfmps) { create_list(:pfmp, 3, :can_be_validated, schooling: schooling) }
-
-      before { pfmps.first.transition_to!(:validated) }
-
-      it "cannot move to validated" do
-        expect { pfmps.last.transition_to!(:validated) }.to raise_error Statesman::GuardFailedError
       end
     end
   end
@@ -256,6 +274,32 @@ RSpec.describe Pfmp do
     it "correctly sets the administrative_number" do
       p = create(:pfmp)
       expect(p.administrative_number).to eq("ENPU#{SchoolYear.current.start_year}001")
+    end
+  end
+
+  describe "#can_be_rebalanced?" do
+    context "when the latest payment request is not ongoing and not paid" do
+      let(:pfmp) { create(:asp_payment_request, :pending).pfmp }
+
+      it "returns true" do
+        expect(pfmp.can_be_rebalanced?).to be true
+      end
+    end
+
+    context "when the latest payment request is ongoing" do
+      let(:pfmp) { create(:asp_payment_request, :sent).pfmp }
+
+      it "returns false" do
+        expect(pfmp.can_be_rebalanced?).to be false
+      end
+    end
+
+    context "when the latest payment request is paid" do
+      let(:pfmp) { create(:asp_payment_request, :paid).pfmp }
+
+      it "returns false" do
+        expect(pfmp.can_be_rebalanced?).to be false
+      end
     end
   end
 end

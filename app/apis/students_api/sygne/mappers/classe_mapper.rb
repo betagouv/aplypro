@@ -9,13 +9,13 @@ module StudentsApi
         define! do
           deep_symbolize_keys
 
-          rename_keys(codeMefRatt: :mef_code, classe: :label)
+          rename_keys(codeMefRatt: :mef_code, classe: :label, anneeScolaire: :year)
 
           map_value(:mef_code, Dry::Transformer::Coercions[:to_string])
 
           map_value :mef_code, ->(value) { value.chop }
 
-          accept_keys %i[label mef_code]
+          accept_keys %i[label mef_code year]
         end
       end
     end

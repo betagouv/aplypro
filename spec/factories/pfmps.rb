@@ -11,7 +11,12 @@ FactoryBot.define do
     end
 
     trait :completed do
-      day_count { rand(1..6) } # lovely roll dice
+      transient do
+        day_count { 3 }
+      end
+      after(:create) do |pfmp, eval|
+        PfmpManager.new(pfmp).update!(day_count: eval.day_count)
+      end
     end
 
     trait :can_be_validated do
@@ -43,6 +48,10 @@ FactoryBot.define do
         create(:asp_payment_request, :paid, pfmp: pfmp)
         pfmp.reload.rectify!
       end
+    end
+
+    after(:build) do |pfmp, _|
+      PfmpManager.new(pfmp).update!(day_count: pfmp.day_count) if pfmp.day_count.present?
     end
   end
 end

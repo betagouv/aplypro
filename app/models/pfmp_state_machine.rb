@@ -19,8 +19,7 @@ class PfmpStateMachine
   end
 
   guard_transition(to: :validated) do |pfmp|
-    pfmp.previous_pfmps.not_in_state(:validated).empty? &&
-      pfmp.student.rib(pfmp.classe.establishment).present? &&
+    pfmp.student.rib(pfmp.classe.establishment).present? &&
       pfmp.schooling.attributive_decision.attached?
   end
 
@@ -29,13 +28,8 @@ class PfmpStateMachine
   end
 
   after_transition(to: :rectified) do |pfmp|
-    PfmpManager.new(pfmp).recalculate_amounts!
     new_payment_request = PfmpManager.new(pfmp).create_new_payment_request!
     new_payment_request.mark_ready!
-  end
-
-  after_transition(to: :completed) do |pfmp|
-    PfmpManager.new(pfmp).recalculate_amounts!
   end
 
   after_transition(to: :validated) do |pfmp|

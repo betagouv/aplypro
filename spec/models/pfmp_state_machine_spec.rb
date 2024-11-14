@@ -13,7 +13,7 @@ describe PfmpStateMachine do
 
   describe "transitions" do
     it "can transition from pending to completed" do
-      expect { pfmp.update(day_count: 5) }.to change(state_machine, :current_state)
+      expect { PfmpManager.new(pfmp).update!(day_count: 5) }.to change(state_machine, :current_state)
         .from("pending")
         .to("completed")
     end

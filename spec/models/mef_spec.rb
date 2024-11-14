@@ -11,6 +11,7 @@ RSpec.describe Mef do
   it { is_expected.to validate_presence_of(:mefstat11) }
   it { is_expected.to validate_presence_of(:label) }
   it { is_expected.to validate_presence_of(:short) }
+  it { is_expected.to belong_to(:school_year).class_name("SchoolYear") }
 
   describe "bop" do
     subject(:code) { mef.bop(establishment) }

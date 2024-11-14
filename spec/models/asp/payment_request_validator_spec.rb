@@ -216,18 +216,33 @@ RSpec.describe ASP::PaymentRequestValidator do
   end
 
   describe "#check_da_abrogation" do
-    context "when student transferred and schooling needs abrogated attributive decision" do
+    context "when student is transferred and schooling needs abrogated attributive decision" do
+      let(:other_schooling) { instance_double(Schooling, abrogated?: false) }
+      let(:other_classe) { instance_double(Classe, school_year: SchoolYear.current) }
+
       before do
         allow(student).to receive(:transferred?).and_return(true)
         allow(schooling).to receive(:abrogated?).and_return(false)
         allow(pfmp).to receive(:within_schooling_dates?).and_return(true)
-        allow(student).to receive_message_chain(:schoolings, :excluding, :all?).and_return(false)
+        allow(student).to receive_message_chain(:schoolings, :excluding).and_return([other_schooling])
+        allow(other_schooling).to receive(:classe).and_return(other_classe)
       end
 
       it "adds an error" do
         expect { validator.send(:check_da_abrogation) }
           .to change { payment_request.errors.details[:ready_state_validation] }
           .to include(a_hash_including(error: :needs_abrogated_attributive_decision))
+      end
+    end
+
+    context "when conditions for abrogation are not met" do
+      before do
+        allow(student).to receive(:transferred?).and_return(false)
+      end
+
+      it "does not add an error" do
+        expect { validator.send(:check_da_abrogation) }
+          .not_to change { payment_request.errors.details[:ready_state_validation] }
       end
     end
   end

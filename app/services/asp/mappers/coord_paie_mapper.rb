@@ -6,9 +6,7 @@ module ASP
       PRINCIPAL_ADDRESS_TYPE = "PRINCIPALE"
       ASSIMILATED_FRENCH_COUNTRY_CODES = %w[FR GF GP MC MQ NC PF PM RE WF YT].freeze
 
-      PARTICULAR_BICS = {
-        CREDIT_MUTUEL_ARKEA: "CMBRFR2BARK"
-      }.freeze
+      PARTICULAR_BICS = %w[CMBRFR2BARK BNPAFRPPMTZ BNPAFRPPTAS BNPAFRPPETI].freeze
 
       MAPPING = {
         bic: :bic
@@ -58,7 +56,7 @@ module ASP
         bic = rib.bic
 
         if particular_bic?
-          particular_rib_treatment(bic)
+          bic[0..-4]
         elsif french_rib?
           bic.delete_suffix("XXX")
         elsif bic.length == 8
@@ -75,14 +73,7 @@ module ASP
       end
 
       def particular_bic?
-        PARTICULAR_BICS.values.include?(rib.bic)
-      end
-
-      def particular_rib_treatment(bic)
-        case PARTICULAR_BICS.key(bic)
-        when :CREDIT_MUTUEL_ARKEA
-          bic.gsub("ARK", "")
-        end
+        PARTICULAR_BICS.include?(rib.bic)
       end
     end
   end

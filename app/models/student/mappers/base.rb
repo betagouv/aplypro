@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Service object that leverages pre-defined API mappers to fetch students from classes
+# It uses the ClasseMapper, StudentMapper and SchoolingMapper to extract information from
+# the aggregate call for all 3 different models
 class Student
   module Mappers
     class Base
@@ -33,9 +36,11 @@ class Student
             begin
               map_schooling!(classe, student, entry)
             rescue StandardError => e
+              raise e unless Rails.env.production?
+
               Sentry.capture_exception(
                 SchoolingParsingError.new(
-                  "Schooling parsing failed for #{uai}: #{e.message}"
+                  "Schooling parsing failed for entry: #{entry} , for UAI: #{uai} with message: #{e.message}"
                 )
               )
             end
