@@ -55,17 +55,30 @@ describe Student::Mappers::Sygne do
       end
     end
 
-    context "when processing closed schoolings" do
+    # rubocop:disable RSpec/MultipleMemoizedHelpers
+    context "when there is a schooling for that classe that was closed" do
       let(:closed_payload) { build_list(:sygne_student, 3, :closed, classe: "1MELEC") }
-
       let(:mapper) { described_class.new(closed_payload, uai) }
-      let(:student) { Student.find_by(ine: closed_payload.last["ine"]) }
+
+      let(:ine) { closed_payload.last["ine"] }
+      let(:student) { Student.find_by(ine: ine) }
+
+      before { mapper.parse! }
 
       it "sets the end_date for closed schoolings" do
-        mapper.parse!
-
         expect(student.schoolings.last.end_date.to_s).to eq closed_payload.last["dateFinSco"]
       end
+
+      it "reopens the schooling" do
+        opened_payload = build_list(:sygne_student, 3, classe: "1MELEC")
+        opened_payload.last.update(ine: ine)
+
+        opened_mapper = described_class.new(opened_payload, uai)
+        opened_mapper.parse!
+
+        expect(student.schoolings.last.open?).to be true
+      end
     end
+    # rubocop:enable RSpec/MultipleMemoizedHelpers
   end
 end
