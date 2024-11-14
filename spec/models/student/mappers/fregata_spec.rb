@@ -92,15 +92,21 @@ describe Student::Mappers::Fregata do
     end
   end
 
-  context "when a student has already left on the first parse" do
-    let(:data) { [build(:fregata_student, :left_establishment)] }
+  context "when there is a schooling for that classe that was closed" do
+    let(:closed_payload) { [build(:fregata_student, :left_establishment, ine_value: "1234")] }
+    let(:student) { Student.find_by(ine: "1234") }
 
-    it "parses the student" do
-      expect { mapper.new(data, uai).parse! }.to change(Student, :count).by(1)
+    before { mapper.new(closed_payload, uai).parse! }
+
+    it "sets the end_date for closed schoolings" do
+      expect(student.schoolings.last.end_date.to_s).to eq closed_payload.last["dateSortieEtablissement"]
     end
 
-    it "closes the schooling straight away" do
-      expect { mapper.new(data, uai).parse! }.not_to change(Schooling.current, :count)
+    it "reopens the schooling" do
+      opened_payload = [build(:fregata_student, ine_value: "1234")]
+      mapper.new(opened_payload, uai).parse!
+
+      expect(student.schoolings.last.open?).to be true
     end
   end
 end

@@ -69,12 +69,7 @@ class Student
       def map_classe!(entry)
         label, mef_code, year = map_classe_attributes(entry)
 
-        school_year = if year.nil?
-                        SchoolYear.current
-                      else
-                        SchoolYear.find_by(start_year: year)
-                      end
-
+        school_year = SchoolYear.find_by(start_year: year)
         mef = Mef.find_by(code: mef_code, school_year: school_year)
 
         return if label.nil? || mef.nil? || school_year.nil?
