@@ -36,7 +36,7 @@ module Users
       add_auth_breadcrumb(data: { user_uais: @mapper.all_indicated_uais }, message: "Found establishments")
 
       log_user_in!
-      delete_roles!
+      delete_old_roles!
       save_roles!
       fetch_establishments!
       choose_redirect_page!
@@ -126,10 +126,9 @@ module Users
         .update(role: role)
     end
 
-    def delete_roles!
-      # Ne garde que les élements distincts entre les rôles d'APLyPro et ceux de KeyCloak.
+    def delete_old_roles!
       EstablishmentUserRole.where(user: @user).find_each do |access|
-        access.destroy unless @mapper.establishments_in_responsibility_and_delegated.include?(access.establishment)
+        access.destroy! unless @mapper.establishments_in_responsibility_and_delegated.include?(access.establishment)
       end
     end
 
