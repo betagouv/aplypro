@@ -27,7 +27,7 @@ describe ASP::Entities::Enregistrement, type: :model do
           expect(attributes["idIndividu"]).to have_attributes value: "foobar"
         end
 
-        it "includes the modification flag to false" do
+        it "includes the modification = 'O' flag" do
           expect(attributes["modification"]).to have_attributes value: "O"
         end
 
