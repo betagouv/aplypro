@@ -28,7 +28,7 @@ fr:
       extension_failure: La décision d'attribution de %{name} n'a pas pu être modifiée
     schooling:
       removed: L'élève %{name} a bien été retiré de la classe %{classe}
-      unremoved: L'élève %{name} a bien été réintégré dans la classe %{classe}
+      reintegrated: L'élève %{name} a bien été réintégré dans la classe %{classe}
   helpers:
     submit:
       rib:
@@ -213,10 +213,10 @@ fr:
         show: Envoyer en paiement les PFMPs de %{name}
       schoolings:
         confirm_da_extension: "Autoriser un report de décision d'attribution"
-        confirm_removed:
+        confirm_removal:
           title: "Retrait de l'élève de la classe"
           breadcrumb: "Retrait de l'élève de la classe"
-        confirm_unremoved:
+        confirm_removal_cancellation:
           title: "Réintégration de l'élève dans la classe"
           breadcrumb: "Réintégration de l'élève dans la classe"
 
