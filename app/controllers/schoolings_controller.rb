@@ -26,10 +26,11 @@ class SchoolingsController < ApplicationController
   def confirm_removal_cancellation; end
 
   def remove
-    @schooling.update!(removed_at: params[:value])
+    @schooling.update!(removed_at: params[:removed_at])
 
-    redirect_to school_year_class_path(selected_school_year, @classe),
-                notice: t("flash.schooling.removed", name: @schooling.student, classe: @schooling.classe.label)
+    redirect_to school_year_class_path(selected_school_year, @classe), notice: t("flash.schooling.#{params[:notice]}",
+                                                                                 name: @schooling.student,
+                                                                                 classe: @schooling.classe.label)
   end
 
   def update # rubocop:disable Metrics/AbcSize

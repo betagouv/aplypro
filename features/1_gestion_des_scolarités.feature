@@ -12,7 +12,8 @@ Fonctionnalité: Gestion des scolarités de l'élève
   Scénario: Le personnel veut réintégrer un élève retiré manuellement de la classe
     Quand je clique sur "Retirer l'élève de la classe"
     Et que je clique sur "Confirmer le retrait de l'élève de la classe"
-    Alors je peux voir dans le tableau "Élèves retirés manuellement de la classe"
+    Alors la page contient "L'élève Jean Dupuis a bien été retiré de la classe 1MELEC"
+    Et je peux voir dans le tableau "Élèves retirés manuellement de la classe"
       | Élèves (1)    | Réintégration de l'élève dans la classe |
       | Dupuis Jean   | Réintégrer Jean Dupuis dans la classe 1MELEC |
     Quand je consulte le profil de "Jean Dupuis" dans la classe de "1MELEC"
