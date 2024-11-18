@@ -9,7 +9,6 @@ module ASP
 
       attr_reader :payment_request
 
-      ASP_NO_MODIFICATION = { modification: "N" }.freeze
       ASP_MODIFICATION = { modification: "O" }.freeze
 
       class << self
