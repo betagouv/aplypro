@@ -31,9 +31,9 @@ describe ASP::Entities::Enregistrement, type: :model do
           expect(attributes["modification"]).to have_attributes value: "O"
         end
 
-        %w[persphysique adressesindividu coordpaiesindividu].each do |entity|
-          it "does not reinclude the #{entity} entity" do
-            expect(document.at(entity)).to be_nil
+        %w[persphysique adressesindividu].each do |entity|
+          it "does include the #{entity} entity" do
+            expect(document.at(entity)).not_to be_nil
           end
         end
       end
