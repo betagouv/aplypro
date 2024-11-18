@@ -157,6 +157,10 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     pfmps.in_state(:validated).each { |pfmp| PfmpManager.new(pfmp).retry_payment_request!(reasons) }
   end
 
+  def not_to_be_synced?
+    ine_not_found || current_schooling&.removed? || establishment.blank?
+  end
+
   private
 
   def check_asp_file_reference

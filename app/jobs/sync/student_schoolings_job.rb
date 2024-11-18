@@ -12,9 +12,7 @@ module Sync
     retry_on Faraday::TooManyRequestsError, wait: 1.hour, attempts: 3
 
     def perform(student)
-      # NOTE: There are students with no schoolings at all
-      # Student.where.missing(:schoolings).count
-      return true if student.establishment.blank? || student.current_schooling.removed?
+      return true if student.not_to_be_synced?
 
       Updaters::StudentSchoolingsUpdater.call(student)
     end
