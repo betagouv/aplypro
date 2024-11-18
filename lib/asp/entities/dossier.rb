@@ -18,7 +18,7 @@ module ASP
 
       def xml_root_args
         if known_record?
-          { idDoss: id_dossier, **ASP_MODIFICATION }
+          { idDoss: id_dossier, **ASP_NO_MODIFICATION }
         else
           {}
         end
