@@ -2,4 +2,4 @@
 
 .fr-btns-group.fr-btns-group--inline.fr-mt-3w
   = link_to "Annuler", school_year_class_path(selected_school_year, @schooling.classe), class: 'fr-btn fr-btn--secondary'
-  = button_to "Confirmer le retrait de l'élève de la classe", remove_school_year_class_schooling_path(selected_school_year, @schooling.classe, @schooling.student, value: Time.zone.today), method: :post, class: 'fr-btn fr-btn--danger fr-btn--secondary'
+  = button_to "Confirmer le retrait de l'élève de la classe", remove_school_year_class_schooling_path(selected_school_year, @schooling.classe, @schooling, value: Time.zone.today), method: :post, class: 'fr-btn fr-btn--danger fr-btn--secondary'
