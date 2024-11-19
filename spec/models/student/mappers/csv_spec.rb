@@ -21,6 +21,6 @@ describe Student::Mappers::CSV do
   end
 
   it "assumes students have the right status" do
-    expect { mapper.new(normal_payload, establishment.uai).parse! }.to change(Schooling.student, :count)
+    expect { mapper.new(normal_payload, establishment.uai).parse! }.to change(Schooling.where(status: 0), :count)
   end
 end
