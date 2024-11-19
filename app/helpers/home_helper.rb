@@ -29,13 +29,10 @@ module HomeHelper
     )
   end
 
-  def attributive_decisions_reissue_button
+  def attributive_decisions_reissue_generation_form
     return unless current_establishment.with_attributive_decisions?(selected_school_year)
 
-    button_to "Rééditer les décisions d'attribution",
-              school_year_establishment_reissue_attributive_decisions_path(selected_school_year, current_establishment),
-              method: :post,
-              class: "fr-btn fr-btn--tertiary"
+    render partial: "home/attributive_decision_reissue_form"
   end
 
   def attributive_decisions_generation_form

@@ -1,0 +1,7 @@
+= form_with method: :post, url: school_year_establishment_reissue_attributive_decisions_path(selected_school_year, current_establishment) do |form|
+  .fr-checkbox-group
+    = form.check_box :confirmed_director, checked: current_user.confirmed_director?
+    = form.label :confirmed_director, class: "fr-label" do
+      = t("panels.attributive_decisions.confirm_director").html_safe
+      .fr-text--sm.fr-mt-1w= confirmed_director_information
+  = form.submit "Rééditer les décisions d'attribution", class: "fr-btn fr-btn--secondary"
