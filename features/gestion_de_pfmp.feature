@@ -25,7 +25,7 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
   Scénario: Le personnel peut voir les PFMPs d'autres établissements et ne peut pas les modifier
     Sachant que l'élève "Marie Curie" a une PFMP dans la classe "A2" dans un autre établissement
     Et que je rafraîchis la page
-    Alors la section pour la classe "A2" contient un bouton "Ajouter une PFMP" désactivé
+    Alors la section pour la classe "A2" ne contient pas de bouton "Ajouter une PFMP"
     Et la section pour la classe "A2" ne contient pas de lien sur "Voir la PFMP"
 
   Scénario: Le personnel de direction peut ajouter une PFMP pour toute la classe

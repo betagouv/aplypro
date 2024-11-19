@@ -96,8 +96,8 @@ Alors("la section pour la classe {string} contient le tableau {string}") do |tit
   expect(page.find("section", text: title)).to have_table(caption, with_rows: table.rows)
 end
 
-Alors("la section pour la classe {string} contient un bouton {string} désactivé") do |title, content|
-  expect(page.find("section", text: title)).to have_button(content, disabled: true)
+Alors("la section pour la classe {string} ne contient pas de bouton {string}") do |title, content|
+  expect(page.find("section", text: title)).to have_no_button(content)
 end
 
 Alors("la section pour la classe {string} contient un lien sur {string}") do |title, content|
