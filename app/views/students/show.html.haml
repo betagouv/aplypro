@@ -1,8 +1,4 @@
 %section.fr-pb-3w
-  -if !@student.current_schooling.nil? && !@student.current_schooling.removed?
-    .fr-btns-group.fr-btns-group--inline.fr-mt-3w
-      = button_to "Retirer l'élève de la classe",  confirm_removal_school_year_class_schooling_path(selected_school_year, @student.current_schooling.classe, @student.current_schooling), class: 'fr-btn fr-btn--danger', method: :get
-
   %h2.fr-h4 Coordonnées bancaires
   - if @student.rib(current_establishment).nil?
     %p Aucune coordonnée bancaire enregistrée pour le moment.
