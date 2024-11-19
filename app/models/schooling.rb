@@ -4,7 +4,7 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_one_attached :attributive_decision
   has_one_attached :abrogation_decision
 
-  enum :status, { student: 0, apprentice: 1, other: 2 }, validate: { allow_nil: true }
+  enum :status, { student: 0, apprentice: 1, other: 2 }, scopes: false, validate: { allow_nil: true }
 
   belongs_to :student
   belongs_to :classe
