@@ -73,8 +73,8 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
                             :birthplace_country_insee_code,
                             :biological_sex
 
-  def rib(etab = establishment)
-    ribs.find_by(establishment: etab || schoolings.last.establishment, archived_at: nil)
+  def rib(etab_id = establishment&.id)
+    ribs.find_by(establishment_id: etab_id, archived_at: nil)
   end
 
   # NOTE: used in stats for column "Données d'élèves nécessaires présentes"
@@ -143,7 +143,8 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def create_new_rib(rib_params)
-    rib.archive! if rib.present? && rib.archivable?
+    current_rib = rib(rib_params.fetch("establishment_id"))
+    current_rib.archive! if current_rib.present? && current_rib.archivable?
     ribs.create(rib_params)
   end
 
