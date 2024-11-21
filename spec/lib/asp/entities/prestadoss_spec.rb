@@ -48,7 +48,7 @@ describe ASP::Entities::Prestadoss, type: :model do
           expect(attributes["idPrestaDoss"]).to have_attributes value: "foobar"
         end
 
-        it "includes the modification flag to true" do
+        it "includes the modification = 'O' flag" do
           expect(attributes["modification"]).to have_attributes value: "O"
         end
       end

@@ -143,10 +143,8 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def create_new_rib(rib_params)
-    transaction do
-      rib.archive! if rib.present? && rib.archivable?
-      ribs.create(rib_params)
-    end
+    rib.archive! if rib.present? && rib.archivable?
+    ribs.create(rib_params)
   end
 
   def adult_at?(date)

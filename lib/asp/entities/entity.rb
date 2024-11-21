@@ -9,8 +9,8 @@ module ASP
 
       attr_reader :payment_request
 
-      ASP_NO_MODIFICATION = { modification: "N" }.freeze
       ASP_MODIFICATION = { modification: "O" }.freeze
+      ASP_NO_MODIFICATION = { modification: "N" }.freeze
 
       class << self
         def payment_mapper_class
