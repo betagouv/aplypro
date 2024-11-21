@@ -97,3 +97,7 @@ Correspondances entre leurs modèles et les notres :
 
 - `rails c`
 - `load 'support/overrides.rb'`
+
+# Licence
+
+Le code source de ce dépôt est publié sous [licence MIT](LICENSE.md).
