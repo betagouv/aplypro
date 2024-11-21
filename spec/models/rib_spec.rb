@@ -31,9 +31,12 @@ RSpec.describe Rib do
       let(:establishment1) { create(:establishment) } # rubocop:disable RSpec/IndexedLet
       let(:establishment2) { create(:establishment) } # rubocop:disable RSpec/IndexedLet
 
+      let(:classe) { create(:classe, :with_students, establishment: establishment1) }
+
       before do
         create(:rib, student: student, establishment: establishment1)
         create(:rib, student: student, establishment: establishment2)
+        create(:schooling, student: student, classe: classe)
       end
 
       it "allows multiple active RIBs for different establishments" do
@@ -47,10 +50,12 @@ RSpec.describe Rib do
         expect(new_rib.errors[:student_id]).to include(I18n.t("activerecord.errors.models.rib.attributes.student_id.unarchivable_rib")) # rubocop:disable Layout/LineLength
       end
 
-      it "allows a new RIB for an establishment if the previous one is archived" do
-        student.ribs.find_by(establishment: establishment1).archive!
-        new_rib = build(:rib, student: student, establishment: establishment1)
-        expect(new_rib).to be_valid
+      it "allows a new RIB for an establishment if the previous one is archived" do # rubocop:disable RSpec/MultipleExpectations
+        old_rib = student.ribs.first
+        new_rib_attrs = build(:rib, student: student, establishment: establishment1).attributes
+        rib = student.create_new_rib(new_rib_attrs)
+        expect(old_rib.reload).to be_archived
+        expect(rib).to be_valid
       end
     end
 
