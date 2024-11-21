@@ -74,7 +74,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
                             :biological_sex
 
   def rib(etab = establishment)
-    ribs.find_by(establishment: etab, archived_at: nil)
+    ribs.find_by(establishment: etab || schoolings.last.establishment, archived_at: nil)
   end
 
   # NOTE: used in stats for column "Données d'élèves nécessaires présentes"
