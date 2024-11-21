@@ -27,7 +27,7 @@ describe ASP::Entities::Dossier, type: :model do
         expect(attributes["idDoss"]).to have_attributes value: "foobar"
       end
 
-      it "passes the modification false to flag" do
+      it "passes the modification = 'N' (Non)" do
         expect(attributes["modification"]).to have_attributes value: "N"
       end
     end

@@ -23,19 +23,16 @@ module ASP
       end
 
       def individu(xml)
-        if new_record?
-          xml.natureindividu("P")
-          PersPhysique.from_payment_request(payment_request).to_xml(xml)
-          xml.adressesindividu { Adresse.from_payment_request(payment_request).to_xml(xml) }
-          xml.coordpaiesindividu { CoordPaie.from_payment_request(payment_request).to_xml(xml) }
-        end
+        xml.natureindividu("P")
+        PersPhysique.from_payment_request(payment_request).to_xml(xml)
+        xml.adressesindividu { Adresse.from_payment_request(payment_request).to_xml(xml) }
 
         xml.listedossier { Dossier.from_payment_request(payment_request).to_xml(xml) }
       end
 
       def individu_attrs
         if known_record?
-          { idIndividu: id_individu, **ASP_NO_MODIFICATION }
+          { idIndividu: id_individu, **ASP_MODIFICATION }
         else
           {}
         end
