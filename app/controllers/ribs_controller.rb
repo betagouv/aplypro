@@ -77,7 +77,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
       :bic,
       :name,
       :owner_type
-    ).with_defaults(student: @student, establishment_id: current_establishment.id)
+    ).with_defaults(student: @student, establishment: current_establishment)
   end
 
   def bulk_ribs_params
