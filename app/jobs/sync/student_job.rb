@@ -7,7 +7,7 @@ module Sync
     def perform(schooling)
       student = schooling.student
 
-      return true if student.not_to_be_synced?
+      return true if student.unsyncable?
 
       fetch_student_data(schooling)
 

@@ -12,7 +12,7 @@ module Sync
     retry_on Faraday::TooManyRequestsError, wait: 1.hour, attempts: 3
 
     def perform(student)
-      return true if student.not_to_be_synced?
+      return true if student.unsyncable?
 
       Updaters::StudentSchoolingsUpdater.call(student)
     end
