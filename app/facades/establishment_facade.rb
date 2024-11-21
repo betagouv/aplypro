@@ -23,6 +23,13 @@ class EstablishmentFacade
                                      .count
   end
 
+  def without_attributive_decisions_count
+    @without_attributive_decisions_count ||= selected_classes
+                                             .joins(:schoolings)
+                                             .merge(Schooling.without_attributive_decisions)
+                                             .count
+  end
+
   def students_count
     @students_count ||= selected_classes
                         .joins(:students)
@@ -36,6 +43,10 @@ class EstablishmentFacade
                     .where(ribs: { archived_at: nil })
                     .distinct(:"students.id")
                     .count(:"students.id")
+  end
+
+  def students_without_rib_count
+    @students_without_rib_count ||= students_count - ribs_count
   end
 
   def pfmps_counts
