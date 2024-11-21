@@ -134,7 +134,7 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     schoolings_for_school_year(school_year).without_attributive_decisions.any?
   end
 
-  def with_attributive_decisions?(school_year)
+  def some_attributive_decisions?(school_year)
     schoolings_for_school_year(school_year).with_attributive_decisions.any?
   end
 

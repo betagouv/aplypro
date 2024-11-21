@@ -13,7 +13,7 @@ module HomeHelper
   end
 
   def attributive_decisions_download_button
-    return unless current_establishment.with_attributive_decisions?(selected_school_year)
+    return unless current_establishment.some_attributive_decisions?(selected_school_year)
 
     count = current_establishment.schoolings.with_attributive_decisions
                                  .joins(:classe)
@@ -29,15 +29,7 @@ module HomeHelper
     )
   end
 
-  def attributive_decisions_reissue_generation_form
-    return unless current_establishment.with_attributive_decisions?(selected_school_year)
-
-    render partial: "home/attributive_decision_reissue_form"
-  end
-
   def attributive_decisions_generation_form
-    return cannot_generate_attributive_decisions_button unless current_user.can_try_to_generate_attributive_decisions?
-
     count = current_establishment.schoolings.without_attributive_decisions
                                  .joins(:classe)
                                  .where(classe: { school_year: selected_school_year })
