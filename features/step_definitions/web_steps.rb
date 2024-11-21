@@ -61,7 +61,8 @@ Quand("je décoche {string}") do |label|
 end
 
 Quand("je coche {string}") do |label|
-  check label
+  # TODO: prevent ambiguity match with reissue checkbox
+  first(:checkbox, label).set(true)
 end
 
 Quand("je clique sur {string} dans la rangée {string}") do |link, row|
