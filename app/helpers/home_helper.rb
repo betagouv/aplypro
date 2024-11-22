@@ -13,8 +13,6 @@ module HomeHelper
   end
 
   def attributive_decisions_download_button
-    return unless current_establishment.some_attributive_decisions?(selected_school_year)
-
     count = current_establishment.schoolings.with_attributive_decisions
                                  .joins(:classe)
                                  .where(classe: { school_year: selected_school_year })

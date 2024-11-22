@@ -38,8 +38,8 @@ module UserAuthorisation
       !can_validate?
     end
 
-    def can_generate_attributive_decisions?
-      confirmed_director?
+    def can_try_to_generate_attributive_decisions?
+      director?
     end
   end
 end
