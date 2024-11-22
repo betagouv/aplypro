@@ -10,8 +10,8 @@ RSpec.describe Establishment do
   it { is_expected.to validate_uniqueness_of(:uai) }
   it { is_expected.to have_many(:ribs) }
 
-  describe "with_attributive_decisions?" do
-    subject { establishment.with_attributive_decisions?(SchoolYear.current) }
+  describe "some_attributive_decisions?" do
+    subject { establishment.some_attributive_decisions?(SchoolYear.current) }
 
     context "when there are some attributive decisions" do
       before { create(:schooling, :with_attributive_decision, establishment: establishment) }

@@ -3,7 +3,7 @@
 module UserAuthorisation
   extend ActiveSupport::Concern
 
-  included do # rubocop:disable Metrics/BlockLength
+  included do
     def current_role
       return if selected_establishment.blank?
 
@@ -40,10 +40,6 @@ module UserAuthorisation
 
     def can_try_to_generate_attributive_decisions?
       director?
-    end
-
-    def can_generate_attributive_decisions?
-      confirmed_director?
     end
   end
 end
