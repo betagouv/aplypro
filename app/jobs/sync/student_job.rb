@@ -7,7 +7,7 @@ module Sync
     def perform(schooling)
       student = schooling.student
 
-      return true if student.ine_not_found || schooling.closed?
+      return true if student.unsyncable?
 
       fetch_student_data(schooling)
 
