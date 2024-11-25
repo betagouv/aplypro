@@ -25,7 +25,8 @@ class PfmpManager
     params = params.to_h.with_indifferent_access
 
     Pfmp.transaction do
-      pfmp.lock!
+      pfmp.schooling&.lock! if # prevent race condition using pessimistic locking (blocks r+w)
+
       pfmp.update!(params)
       recalculate_amounts! if params[:day_count].present?
       transition!
