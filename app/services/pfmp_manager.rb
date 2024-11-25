@@ -25,6 +25,7 @@ class PfmpManager
     params = params.to_h.with_indifferent_access
 
     Pfmp.transaction do
+      pfmp.lock!
       pfmp.update!(params)
       recalculate_amounts! if params[:day_count].present?
       transition!
@@ -83,7 +84,6 @@ class PfmpManager
   def recalculate_amounts!
     raise PfmpNotModifiableError unless pfmp.can_be_modified?
 
-    pfmp.all_pfmps_for_mef.lock!
     pfmp.update!(amount: calculate_amount(pfmp))
     rebalance_other_pfmps!
   end
