@@ -3,8 +3,9 @@
 .actions.fr-btns-group.fr-btns-group--inline
   - if @classe_facade.nb_missing_ribs > 0
     = link_to @classe_facade.missing_ribs_button_text, missing_school_year_class_ribs_path(selected_school_year, @classe), class: 'fr-btn fr-btn--primary'
-  
-  = link_to 'Saisir une PFMP pour toute la classe', bulk_pfmp_school_year_class_path(selected_school_year, @classe), class: 'fr-btn fr-btn--primary'
+
+  - if @classe_facade.nb_active_schoolings > 0
+    = link_to 'Saisir une PFMP pour toute la classe', bulk_pfmp_school_year_class_path(selected_school_year, @classe), class: 'fr-btn fr-btn--primary'
 
 .actions.fr-btns-group.fr-btns-group--inline
   - if @classe_facade.nb_pending_pfmps > 0

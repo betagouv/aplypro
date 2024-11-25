@@ -6,17 +6,22 @@ class ClasseFacade
   end
 
   def nb_pending_pfmps
-    @nb_pending_pfmps ||= @classe.pfmps.in_state(:pending).count
+    @nb_pending_pfmps ||= @classe.active_pfmps.in_state(:pending).count
   end
 
   def nb_can_transition_to_validated_pfmps
-    @nb_can_transition_to_validated_pfmps ||= @classe.pfmps.in_state(:completed)
+    @nb_can_transition_to_validated_pfmps ||= @classe.active_pfmps
+                                                     .in_state(:completed)
                                                      .filter { |pfmp| pfmp.can_transition_to?(:validated) }
                                                      .count
   end
 
   def nb_missing_ribs
-    @nb_missing_ribs ||= @classe.students.without_ribs.count
+    @nb_missing_ribs ||= @classe.active_students.without_ribs.count
+  end
+
+  def nb_active_schoolings
+    @nb_active_schoolings ||= @classe.active_students.count
   end
 
   def schoolings
