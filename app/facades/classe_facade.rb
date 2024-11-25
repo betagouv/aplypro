@@ -6,11 +6,11 @@ class ClasseFacade
   end
 
   def nb_pending_pfmps
-    @nb_pending_pfmps ||= @classe.active_pfmps.in_state(:pending).count
+    @nb_pending_pfmps ||= @classe.pfmps.in_state(:pending).count
   end
 
   def nb_can_transition_to_validated_pfmps
-    @nb_can_transition_to_validated_pfmps ||= @classe.active_pfmps
+    @nb_can_transition_to_validated_pfmps ||= @classe.pfmps
                                                      .in_state(:completed)
                                                      .filter { |pfmp| pfmp.can_transition_to?(:validated) }
                                                      .count

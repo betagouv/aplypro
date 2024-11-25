@@ -64,6 +64,7 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
     Alors je peux voir dans le tableau "Élèves sortis de la classe"
       | Élèves (1)  | Décisions d'attribution | Coordonnées Bancaires (1/1) | PFMPs (0) |
       | Dupuis Jean |                         | Saisies                     |           |
+    Et la page contient "Saisir 9 coordonnées bancaires"
 
   Scénario: Le personnel peut créer une PFMP pour un ancien élève
     Quand je consulte la classe de "1MELEC"
