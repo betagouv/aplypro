@@ -8,7 +8,6 @@ class AddAdministrativeNumberToSchoolings < ActiveRecord::Migration[7.1]
                .merge(Schooling.with_attributive_decisions)
                .group(:id)
                .having("count(schoolings.id) = 1")
-               .pluck(:id, :asp_file_reference)
                .to_h
 
     Schooling

@@ -191,7 +191,7 @@ RSpec.describe Schooling do
 
     before do
       schooling.classe.update!(label: "1ERE APEX TEST")
-      schooling.student.update!(first_name: "Jeanne", last_name: "DUPONT", asp_file_reference: "ref123")
+      schooling.student.update!(first_name: "Jeanne", last_name: "DUPONT")
     end
 
     it "creates a sane filename" do

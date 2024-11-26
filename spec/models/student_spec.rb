@@ -13,7 +13,6 @@ RSpec.describe Student do
   it { is_expected.to validate_presence_of(:last_name) }
   it { is_expected.to validate_presence_of(:birthdate) }
   it { is_expected.to validate_presence_of(:ine) }
-  it { is_expected.to validate_uniqueness_of(:asp_file_reference) }
 
   describe "#rib" do
     subject(:student) { classe.students.first }
@@ -50,36 +49,6 @@ RSpec.describe Student do
     it "cannot be a random value" do
       expect(build(:student, biological_sex: 3)).not_to be_valid
     end
-  end
-
-  describe "asp_file_reference" do
-    subject(:student) { build(:student, asp_file_reference: nil) }
-
-    it "is generated before_save" do
-      expect { student.save! }.to change(student, :asp_file_reference)
-    end
-
-    # rubocop:disable RSpec/SubjectStub
-    context "when there is a collision" do
-      let(:used_values) { %w[A B C] }
-
-      before do
-        used_values.each { |value| create(:student, asp_file_reference: value) }
-
-        allow(student)
-          .to receive(:generate_asp_file_reference)
-          .and_return(*used_values, "D")
-      end
-
-      it "tries until it is unique" do
-        student.save!
-
-        expect(student)
-          .to have_received(:generate_asp_file_reference)
-          .exactly(4).times
-      end
-    end
-    # rubocop:enable RSpec/SubjectStub
   end
 
   describe "current_schooling" do
