@@ -20,8 +20,8 @@ class ClasseFacade
     @nb_missing_ribs ||= @classe.active_students.without_ribs.count
   end
 
-  def nb_active_schoolings
-    @nb_active_schoolings ||= @classe.active_students.count
+  def any_active_schoolings?
+    @any_active_schoolings ||= @classe.active_students.any?
   end
 
   def schoolings
