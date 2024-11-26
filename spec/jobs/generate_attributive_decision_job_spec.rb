@@ -37,12 +37,17 @@ RSpec.describe GenerateAttributiveDecisionJob, :student_api do
   end
 
   context "when the student already has an address" do
-    before { student.update!(address_line1: "some address") }
-
-    it "does not call the api" do
+    before do
+      student.update!(address_line1: "some address")
       job.perform_now
+    end
 
-      expect(a_request(:get, /#{ENV.fetch('APLYPRO_SYGNE_URL')}/)).not_to have_been_made
+    it "call the api" do
+      expect(a_request(:get, /#{ENV.fetch('APLYPRO_SYGNE_URL')}/)).to have_been_made
+    end
+
+    it "update the address" do
+      expect(student.address_line1).not_to eq "some address"
     end
   end
 

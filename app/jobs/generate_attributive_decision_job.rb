@@ -15,7 +15,7 @@ class GenerateAttributiveDecisionJob < ApplicationJob
   end
 
   def perform(schooling)
-    Sync::StudentJob.new.perform(schooling) if schooling.student.missing_address?
+    Sync::StudentJob.new.perform(schooling)
 
     Schooling.transaction do
       generate_document(schooling)
