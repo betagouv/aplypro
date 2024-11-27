@@ -24,6 +24,41 @@ describe PfmpManager do
   let(:student) { create(:student, :with_all_asp_info) }
   let(:schooling) { create(:schooling, student: student, classe: classe) }
 
+  describe "concurrent updates" do
+    let(:pfmp1) { create(:pfmp, schooling: schooling, day_count: 2) } # rubocop:disable RSpec/IndexedLet
+    let(:pfmp2) { create(:pfmp, schooling: schooling, day_count: 3) } # rubocop:disable RSpec/IndexedLet
+    let(:manager1) { described_class.new(pfmp1) } # rubocop:disable RSpec/IndexedLet
+    let(:manager2) { described_class.new(pfmp2) } # rubocop:disable RSpec/IndexedLet
+
+    it "prevents concurrent updates on the same schooling" do # rubocop:disable RSpec/ExampleLength,RSpec/MultipleExpectations
+      execution_order = []
+
+      thread1 = Thread.new do
+        Pfmp.transaction do
+          execution_order << 1
+          manager1.update!(day_count: 5)
+          sleep(0.2)
+          execution_order << 2
+        end
+      end
+
+      sleep(0.1)
+      execution_order << 3
+
+      thread2 = Thread.new do
+        manager2.update!(day_count: 7)
+        execution_order << 4
+      end
+
+      thread1.join
+      thread2.join
+
+      expect(execution_order).to eq [1, 3, 2, 4]
+      expect(pfmp1.reload.day_count).to eq 5
+      expect(pfmp2.reload.day_count).to eq 7
+    end
+  end
+
   describe "#create_new_payment_request!" do
     context "when previous payment requests are inactive" do
       let(:pfmp) { create(:asp_payment_request, :rejected).pfmp }
