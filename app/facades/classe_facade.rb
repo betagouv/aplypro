@@ -10,13 +10,18 @@ class ClasseFacade
   end
 
   def nb_can_transition_to_validated_pfmps
-    @nb_can_transition_to_validated_pfmps ||= @classe.pfmps.in_state(:completed)
+    @nb_can_transition_to_validated_pfmps ||= @classe.pfmps
+                                                     .in_state(:completed)
                                                      .filter { |pfmp| pfmp.can_transition_to?(:validated) }
                                                      .count
   end
 
   def nb_missing_ribs
-    @nb_missing_ribs ||= @classe.students.without_ribs.count
+    @nb_missing_ribs ||= @classe.active_students.without_ribs.count
+  end
+
+  def any_active_schoolings?
+    @any_active_schoolings ||= @classe.active_students.any?
   end
 
   def schoolings

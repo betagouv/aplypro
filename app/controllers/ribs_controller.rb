@@ -51,7 +51,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
 
   def missing
     @ribs = @classe
-            .students
+            .active_students
             .without_ribs
             .map { |student| Rib.new(student: student, owner_type: :personal, name: student.full_name) }
   end
