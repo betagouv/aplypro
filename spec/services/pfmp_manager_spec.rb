@@ -86,8 +86,8 @@ describe PfmpManager do
           :pfmp,
           :validated,
           start_date: start_date,
-          end_date: start_date >> 4,
-          day_count: 100,
+          end_date: start_date >> 1,
+          day_count: 30,
           schooling: schooling
         )
       end

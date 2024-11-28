@@ -86,8 +86,8 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
     Lorsque je clique sur "Enregistrer 1 PFMP"
     Alors la page contient "Les PFMPs ont bien été modifiées"
     Et je peux voir dans le tableau "Élèves sortis de la classe"
-      | Élèves (1)    | Décisions d'attribution | Coordonnées Bancaires | PFMPs (1)                  |
-      | Dupuis Jean   |                         |                       | Saisie à valider mars 2025 |
+      | Élèves (1)    | Décisions d'attribution | Coordonnées Bancaires | PFMPs (1)                   |
+      | Dupuis Jean   |                         |                       | Saisie à valider sept. 2024 |
 
   Scénario: Le personnel peut voir les PFMPs à valider des anciens élèves
     Quand je consulte la classe de "1MELEC"
@@ -97,8 +97,8 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
     Alors je peux voir 1 PFMP "Saisies à valider" pour la classe "1MELEC"
     Quand je clique sur "1MELEC"
     Alors je peux voir dans le tableau "Liste des pfmps à valider"
-      | Élève       | PFMP      | Nombre de jours | Montant |
-      | Dupuis Jean | mars 2025 | 3 jours         |         |
+      | Élève       | PFMP       | Nombre de jours | Montant |
+      | Dupuis Jean | sept. 2024 | 3 jours         |         |
     Et la rangée "Dupuis Jean" contient "Sorti(e) de la classe"
 
   Scénario: Le personnel peut valider les PFMPs des anciens élèves
@@ -113,8 +113,8 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
     Lorsque je clique sur "Classes"
     Et que je clique sur "1MELEC"
     Alors je peux voir dans le tableau "Élèves sortis de la classe"
-      | Élèves      | Décisions d'attribution | Coordonnées bancaires | PFMPs             |
-      | Dupuis Jean |                         |                       | Validée mars 2025 |
+      | Élèves      | Décisions d'attribution | Coordonnées bancaires | PFMPs              |
+      | Dupuis Jean |                         |                       | Validée sept. 2024 |
 
   Scénario: Le personnel peut consulter le profil des anciens élèves
     Quand je consulte la classe de "1MELEC"

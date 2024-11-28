@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Quand("je renseigne une PFMP de {int} jours") do |days|
-  start_date = Date.parse("#{SchoolYear.current.end_year}-03-17")
+  start_date = Date.parse("#{SchoolYear.current.start_year}-09-17")
   end_date   = start_date + days.days
 
   steps %(
@@ -14,7 +14,7 @@ Quand("je renseigne une PFMP de {int} jours") do |days|
 end
 
 Quand("je renseigne une PFMP de {int} jours pour la classe {string}") do |days, classe|
-  start_date = Date.parse("#{SchoolYear.current.end_year}-03-17")
+  start_date = Date.parse("#{SchoolYear.current.start_year}-09-17")
   end_date   = start_date + days.days
 
   steps %(
@@ -64,7 +64,7 @@ Quand("je renseigne et valide une PFMP de {int} jours pour {string}") do |days, 
 end
 
 Quand("je renseigne une PFMP provisoire") do
-  start_date = Date.parse("#{SchoolYear.current.end_year}-03-17")
+  start_date = Date.parse("#{SchoolYear.current.start_year}-09-17")
   end_date = start_date + 3.days
 
   steps %(
@@ -89,7 +89,7 @@ Quand("je renseigne une PFMP provisoire dans la période de report pour l'élèv
 end
 
 Quand("je renseigne {int} jours pour la dernière PFMP de {string} dans la classe de {string}") do |days, name, classe|
-  new_end_date = Date.parse("#{SchoolYear.current.end_year}-03-17") + days.days
+  new_end_date = Date.parse("#{SchoolYear.current.start_year}-09-17") + days.days
 
   steps %(
     Quand je consulte le profil de "#{name}" dans la classe de "#{classe}"
