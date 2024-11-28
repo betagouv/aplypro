@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_06_195543) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_26_140427) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -256,7 +256,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_06_195543) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "birthdate", null: false
-    t.string "asp_file_reference", null: false
     t.string "address_line1"
     t.string "address_line2"
     t.string "address_postal_code"
@@ -268,7 +267,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_06_195543) do
     t.integer "biological_sex", default: 0
     t.string "asp_individu_id"
     t.boolean "ine_not_found", default: false, null: false
-    t.index ["asp_file_reference"], name: "index_students_on_asp_file_reference", unique: true
     t.index ["asp_individu_id"], name: "index_students_on_asp_individu_id", unique: true
     t.index ["ine"], name: "index_students_on_ine", unique: true
   end

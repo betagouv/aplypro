@@ -5,10 +5,8 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
             :first_name,
             :last_name,
             :birthdate,
-            :asp_file_reference,
             presence: true
 
-  validates :asp_file_reference, uniqueness: true
   validates :address_city_insee_code, length: { maximum: 5 }, allow_blank: true
 
   enum :biological_sex, { sex_unknown: 0, male: 1, female: 2 }, validate: { allow_nil: true }, default: :sex_unknown
@@ -85,8 +83,6 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
       .with_valid_address
   end
 
-  before_validation :check_asp_file_reference
-
   def lives_in_france?
     InseeCodes.in_france?(address_country_code)
   rescue InseeCountryCodeMapper::UnusableCountryCode
@@ -158,21 +154,5 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def unsyncable?
     ine_not_found || current_schooling&.removed? || establishment.blank?
-  end
-
-  private
-
-  def check_asp_file_reference
-    return if asp_file_reference.present?
-
-    loop do
-      self.asp_file_reference = generate_asp_file_reference
-
-      break unless Student.exists?(asp_file_reference: asp_file_reference)
-    end
-  end
-
-  def generate_asp_file_reference
-    SecureRandom.alphanumeric(10).upcase
   end
 end
