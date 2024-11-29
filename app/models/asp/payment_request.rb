@@ -44,6 +44,12 @@ module ASP
       from("(#{subquery}) as asp_payment_requests")
     }
 
+    scope :for_year, lambda { |start_year|
+                       joins(pfmp: { schooling: { classe: :school_year } })
+                         .where(school_years: { start_year: start_year })
+                         .distinct
+                     }
+
     class << self
       # NOTE: to_consider is a temporary scope to do some basic
       # pre-filtering on the payment requests we're trying to mark

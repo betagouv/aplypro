@@ -5,7 +5,7 @@ module Stats
     class Schoolings < Count
       def initialize
         super(
-          all: Schooling.all
+          all: Schooling.for_year($school_year).all
         )
       end
 

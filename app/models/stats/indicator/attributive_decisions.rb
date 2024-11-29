@@ -4,9 +4,10 @@ module Stats
   module Indicator
     class AttributiveDecisions < Ratio
       def initialize
+        schoolings = Schooling.for_year($start_year)
         super(
-          subset: Schooling.with_attributive_decisions,
-          all: Schooling.all
+          subset: schoolings.with_attributive_decisions,
+          all: schoolings.all
         )
       end
 

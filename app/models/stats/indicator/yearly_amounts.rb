@@ -6,7 +6,7 @@ module Stats
       def initialize
         super(
           column: :yearly_cap,
-          all: Schooling.joins(classe: :mef)
+          all: Schooling.for_year($start_year).joins(classe: :mef)
                         .merge(Mef.with_wages)
         )
       end

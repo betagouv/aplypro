@@ -7,10 +7,10 @@ module Stats
         super(
           column: :amount,
           all: Pfmp.joins(schooling: { student: :ribs })
-                   .merge(Pfmp.finished)
-                   .merge(Pfmp.in_state(:validated))
-                   .merge(Schooling.with_attributive_decisions)
-                   .merge(Student.asp_ready)
+                   .merge(Pfmp.for_year($start_year).finished)
+                   .merge(Pfmp.for_year($start_year).in_state(:validated))
+                   .merge(Schooling.for_year($start_year).with_attributive_decisions)
+                   .merge(Student.for_year($start_year).asp_ready)
         )
       end
 

@@ -4,7 +4,9 @@ module Stats
   class Main
     attr_reader :indicators
 
-    def initialize
+    def initialize(start_year)
+      $start_year = start_year
+
       @indicators = [
         Indicator::AttributiveDecisions,
         Indicator::Ribs,

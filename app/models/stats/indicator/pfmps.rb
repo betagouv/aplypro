@@ -5,7 +5,7 @@ module Stats
     class Pfmps < Count
       def initialize
         super(
-          all: Pfmp.all
+          all: Pfmp.for_year($start_year)
         )
       end
 

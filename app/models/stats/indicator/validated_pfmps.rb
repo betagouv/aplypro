@@ -4,7 +4,7 @@ module Stats
   module Indicator
     class ValidatedPfmps < Ratio
       def initialize
-        finished_pfmps = Pfmp.finished
+        finished_pfmps = Pfmp.for_year($start_year).finished
 
         super(
           subset: finished_pfmps.in_state(:validated),
