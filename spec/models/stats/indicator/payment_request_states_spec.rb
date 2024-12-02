@@ -5,7 +5,7 @@ require "./spec/models/stats/shared_contexts"
 
 describe Stats::Indicator::PaymentRequestStates do
   describe "#global_data" do
-    subject { described_class.new(:sent).global_data }
+    subject { described_class.new(SchoolYear.current.start_year, :sent).global_data }
 
     include_context "when there is data for global stats"
 
@@ -13,7 +13,7 @@ describe Stats::Indicator::PaymentRequestStates do
   end
 
   describe "#bops_data" do
-    subject { described_class.new(:integrated).bops_data }
+    subject { described_class.new(SchoolYear.current.start_year, :integrated).bops_data }
 
     include_context "when there is data for stats per bops"
 
@@ -21,7 +21,7 @@ describe Stats::Indicator::PaymentRequestStates do
   end
 
   describe "#menj_academies_data" do
-    subject { described_class.new(:paid).menj_academies_data }
+    subject { described_class.new(SchoolYear.current.start_year, :paid).menj_academies_data }
 
     include_context "when there is data for stats per MENJ academies"
 
@@ -29,7 +29,7 @@ describe Stats::Indicator::PaymentRequestStates do
   end
 
   describe "#establishments_data" do
-    subject { described_class.new(:sent).establishments_data }
+    subject { described_class.new(SchoolYear.current.start_year, :sent).establishments_data }
 
     include_context "when there is data for stats per establishments"
 

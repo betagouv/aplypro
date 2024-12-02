@@ -26,7 +26,11 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope :generating_attributive_decision, -> { where(generating_attributive_decision: true) }
   scope :with_administrative_number, -> { where.not(administrative_number: nil) }
 
-  scope :for_year, ->(school_year) { joins(:classe).where("classe.school_year": school_year) }
+  scope :for_year, lambda { |start_year|
+    joins(classe: :school_year)
+      .where(school_years: { start_year: start_year })
+      .distinct
+  }
 
   # https://github.com/betagouv/aplypro/issues/792
   scope :with_one_character_attributive_decision_version, -> { where("schoolings.attributive_decision_version < 10") }

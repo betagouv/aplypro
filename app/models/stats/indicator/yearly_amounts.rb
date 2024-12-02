@@ -3,10 +3,10 @@
 module Stats
   module Indicator
     class YearlyAmounts < Sum
-      def initialize
+      def initialize(start_year)
         super(
           column: :yearly_cap,
-          all: Schooling.for_year($start_year).joins(classe: :mef)
+          all: Schooling.for_year(start_year).joins(classe: :mef)
                         .merge(Mef.with_wages)
         )
       end

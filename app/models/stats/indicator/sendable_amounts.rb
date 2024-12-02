@@ -3,14 +3,14 @@
 module Stats
   module Indicator
     class SendableAmounts < Sum
-      def initialize
+      def initialize(start_year)
         super(
           column: :amount,
           all: Pfmp.joins(schooling: { student: :ribs })
-                   .merge(Pfmp.for_year($start_year).finished)
-                   .merge(Pfmp.for_year($start_year).in_state(:validated))
-                   .merge(Schooling.for_year($start_year).with_attributive_decisions)
-                   .merge(Student.for_year($start_year).asp_ready)
+                   .merge(Pfmp.for_year(start_year).finished)
+                   .merge(Pfmp.for_year(start_year).in_state(:validated))
+                   .merge(Schooling.for_year(start_year).with_attributive_decisions)
+                   .merge(Student.for_year(start_year).asp_ready)
         )
       end
 

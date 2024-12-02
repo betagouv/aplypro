@@ -3,8 +3,8 @@
 module Stats
   module Indicator
     class StudentsData < Ratio
-      def initialize
-        students = Student.for_year($start_year)
+      def initialize(start_year)
+        students = Student.for_year(start_year)
 
         super(
           subset: students.asp_ready,
