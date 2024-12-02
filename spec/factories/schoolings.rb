@@ -4,7 +4,6 @@ FactoryBot.define do
   factory :schooling do
     student
     classe
-    start_date { Date.yesterday - 1.month }
     status { :student }
 
     after(:build) do |schooling|
@@ -33,11 +32,11 @@ FactoryBot.define do
     end
 
     trait :closed do
-      end_date { Date.yesterday }
+      end_date { Date.parse("#{SchoolYear.current.start_year}-12-01") }
     end
 
     trait :extended do
-      extended_end_date { Date.tomorrow + 10.days }
+      extended_end_date { Date.parse("#{SchoolYear.current.start_year + 1}-09-30") }
     end
   end
 end
