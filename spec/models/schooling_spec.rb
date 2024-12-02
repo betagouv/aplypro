@@ -89,7 +89,7 @@ RSpec.describe Schooling do
     end
 
     describe ".for_year" do
-      before { schooling.update!(classe: classe) }
+      before { schooling.update!(classe: classe, start_date: Date.parse("2020-09-01")) }
 
       let(:school_year) { create(:school_year, start_year: 2020) }
       let(:classe) { create(:classe, school_year: school_year) }
@@ -104,7 +104,7 @@ RSpec.describe Schooling do
         let!(:schooling) { create(:schooling) }
 
         context "with an end date" do
-          before { schooling.student.close_current_schooling!("#{SchoolYear.current.start_year}-08-27") }
+          before { schooling.student.close_current_schooling!("#{SchoolYear.current.start_year + 1}-08-27") }
 
           it "can create a new one" do
             expect { create(:schooling, student: schooling.student) }.to change(described_class, :count).by(1)
