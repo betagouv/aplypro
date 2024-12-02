@@ -9,7 +9,8 @@ RSpec.describe Pfmp do
     mef = create(:mef)
     classe = create(:classe, mef: mef)
     student = create(:student, :with_all_asp_info)
-    create(:schooling, student: student, classe: classe)
+    create(:schooling, student: student, classe: classe,
+                       start_date: Date.parse("#{SchoolYear.current.start_year}-10-01"))
   end
 
   describe "associations" do
@@ -25,14 +26,14 @@ RSpec.describe Pfmp do
 
     it {
       expect(pfmp).to validate_inclusion_of(:start_date)
-        .in_range(pfmp.establishment.school_year_range)
+        .in_range(pfmp.schooling.start_date..pfmp.schooling.max_end_date)
         .with_low_message(/ne peut pas précéder/)
         .allow_blank
     }
 
     it {
       expect(pfmp).to validate_inclusion_of(:end_date)
-        .in_range(pfmp.establishment.school_year_range)
+        .in_range(pfmp.schooling.start_date..pfmp.schooling.max_end_date)
         .with_high_message(/ne peut pas excéder/)
         .allow_blank
     }
@@ -58,11 +59,7 @@ RSpec.describe Pfmp do
 
     describe "day count" do
       subject(:pfmp) do
-        create(
-          :pfmp,
-          start_date: Date.parse("#{SchoolYear.current.start_year}-10-08"),
-          end_date: Date.parse("#{SchoolYear.current.start_year}-10-13")
-        )
+        create(:pfmp, start_date: schooling.start_date + 8.days, end_date: schooling.start_date + 13.days)
       end
 
       context "when the number of days doesn't fit in the date range" do
@@ -232,41 +229,28 @@ RSpec.describe Pfmp do
       it "returns true" do
         expect(pfmp.within_schooling_dates?).to be true
       end
-
-      context "when the start date of the pfmp is inferior to start_date of schooling" do
-        before do
-          pfmp.schooling.update!(start_date: "#{SchoolYear.current.start_year}-10-10")
-          pfmp.update!(start_date: pfmp.schooling.start_date - 1.day, end_date: pfmp.schooling.start_date + 30.days)
-        end
-
-        it "returns false" do
-          expect(pfmp.within_schooling_dates?).to be false
-        end
-      end
     end
 
     context "when schooling is closed" do
       before do
-        pfmp.schooling.update!(end_date: "#{SchoolYear.current.start_year}-09-29")
+        pfmp.schooling.update!(end_date: "#{SchoolYear.current.start_year}-12-01")
       end
 
       it "returns true" do
         expect(pfmp.within_schooling_dates?).to be true
       end
+    end
+  end
 
-      context "when the dates of the schooling dont cover the pfmp" do
-        before do
-          pfmp.schooling.update!(
-            start_date: "#{SchoolYear.current.start_year + 1}-03-01",
-            end_date: "#{SchoolYear.current.start_year + 1}-04-01"
-          )
-          pfmp.update!(start_date: pfmp.schooling.start_date - 1.day, end_date: pfmp.schooling.start_date + 30.days)
-        end
+  context "when the start date of the pfmp is inferior to start_date of schooling" do
+    it "raise error" do
+      expect { pfmp.update!(start_date: schooling.start_date - 3.days) }.to raise_error ActiveRecord::RecordInvalid
+    end
+  end
 
-        it "returns false" do
-          expect(pfmp.within_schooling_dates?).to be false
-        end
-      end
+  context "when the dates of the schooling dont cover the pfmp" do
+    it "raise error" do
+      expect { schooling.update!(start_date: schooling.start_date + 1.year) }.to raise_error ActiveRecord::RecordInvalid
     end
   end
 
