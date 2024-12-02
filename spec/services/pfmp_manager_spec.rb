@@ -138,12 +138,11 @@ describe PfmpManager do
     end
   end
 
-  describe "#calculate_amount" do # rubocop:disable RSpec/MultipleMemoizedHelpers
+  describe "#calculate_amount" do
     subject(:amount) { described_class.new(pfmp.reload).send(:calculate_amount, pfmp) }
 
-    let(:establishment) { create(:establishment) }
     let(:pfmp) do
-      start_date = establishment.school_year_range.first
+      start_date = Date.parse("#{SchoolYear.current.start_year}-09-10")
       end_date = start_date >> 10
       create(:pfmp, start_date: start_date, end_date: end_date, day_count: 3)
     end
@@ -154,7 +153,7 @@ describe PfmpManager do
       pfmp.schooling.update!(classe: classe)
     end
 
-    context "when the PFMP doesn't have a day count" do # rubocop:disable RSpec/MultipleMemoizedHelpers
+    context "when the PFMP doesn't have a day count" do
       before { described_class.new(pfmp).update!(day_count: nil) }
 
       it { is_expected.to be_zero }
@@ -162,19 +161,17 @@ describe PfmpManager do
 
     it_behaves_like "the original amount"
 
-    context "when the PFMP goes over the yearly cap" do # rubocop:disable RSpec/MultipleMemoizedHelpers
+    context "when the PFMP goes over the yearly cap" do
       before { described_class.new(pfmp).update!(day_count: 200) }
 
       it_behaves_like "the yearly-capped amount"
     end
 
     context "when there is another priced PFMP" do
-      let(:previous) { create(:pfmp, :completed, day_count: 8) }
+      let(:previous) { create(:pfmp, :completed, day_count: 8, schooling: schooling) }
 
       context "with another schooling" do
-        let(:schooling) { create(:schooling, :closed, student: pfmp.student) }
-
-        before { previous.update!(schooling: schooling) }
+        let(:schooling) { create(:schooling, end_date: pfmp.end_date + 1.day, student: pfmp.student) }
 
         context "with the same MEF" do
           before { schooling.classe.update!(mef: mef) }
@@ -188,8 +185,7 @@ describe PfmpManager do
             before do
               old_school_year = create(:school_year, start_year: 2022)
               old_classe = create(:classe, school_year: old_school_year)
-
-              schooling.update!(classe: old_classe)
+              create(:schooling, classe: old_classe)
             end
 
             it_behaves_like "the original amount"
