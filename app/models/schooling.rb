@@ -43,7 +43,8 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
                   schooling.extended_end_date
                 )
               }
-            }
+            },
+            allow_nil: true
 
   validates :end_date,
             comparison: { greater_than_or_equal_to: :start_date },
