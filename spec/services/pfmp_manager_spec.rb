@@ -80,16 +80,7 @@ describe PfmpManager do
       let(:pfmp) { create(:pfmp, schooling: schooling, day_count: 10) }
 
       before do
-        start_date = Date.parse("#{SchoolYear.current.start_year}-09-03")
-
-        create(
-          :pfmp,
-          :validated,
-          start_date: start_date,
-          end_date: start_date >> 1,
-          day_count: 30,
-          schooling: schooling
-        )
+        create(:pfmp, :validated, end_date: schooling.start_date >> 1, day_count: 30, schooling: schooling)
       end
 
       it "does not create a payment" do
@@ -154,12 +145,7 @@ describe PfmpManager do
     let(:pfmp) do
       start_date = establishment.school_year_range.first
       end_date = start_date >> 10
-      create(
-        :pfmp,
-        start_date: start_date,
-        end_date: end_date,
-        day_count: 3
-      )
+      create(:pfmp, start_date: start_date, end_date: end_date, day_count: 3)
     end
     let(:mef) { create(:mef, daily_rate: 1, yearly_cap: 10, school_year: SchoolYear.current) }
     let(:classe) { create(:classe, school_year: SchoolYear.current, mef: mef) }
@@ -228,12 +214,7 @@ describe PfmpManager do
     let(:student) { create(:student, :with_all_asp_info) }
     let(:schooling) { create(:schooling, student: student, classe: classe) }
     let(:pfmp) do
-      create(:pfmp,
-             :validated,
-             start_date: "2024-09-03",
-             end_date: "2024-09-28",
-             schooling: schooling,
-             day_count: 3)
+      create(:pfmp, :validated, schooling: schooling, day_count: 3)
     end
 
     def other_pfmps_for_mef
@@ -245,12 +226,7 @@ describe PfmpManager do
         old_school_year = create(:school_year, start_year: 2022)
         old_classe = create(:classe, school_year: old_school_year)
         old_schooling = create(:schooling, :closed, student: student, classe: old_classe)
-        create(:pfmp,
-               :validated,
-               start_date: "#{old_school_year.start_year}-09-03",
-               end_date: "#{old_school_year.start_year}-09-28",
-               schooling: old_schooling,
-               day_count: 1)
+        create(:pfmp, :validated, schooling: old_schooling, day_count: 1)
       end
 
       it "returns an empty collection" do
@@ -260,12 +236,7 @@ describe PfmpManager do
 
     context "when there is another pfmp for the same mef and school year" do
       before do
-        create(:pfmp,
-               :validated,
-               start_date: "2024-10-03",
-               end_date: "2024-10-28",
-               schooling: schooling,
-               day_count: 3)
+        create(:pfmp, :validated, schooling: schooling, day_count: 3)
       end
 
       it "returns the other PFMP for the MEF and the current school year excluding self" do
