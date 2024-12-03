@@ -36,6 +36,7 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   validates :end_date,
             :start_date,
+            if: ->(schooling) { schooling.classe.present? },
             inclusion: {
               in: lambda { |schooling|
                 schooling.establishment.school_year_range(

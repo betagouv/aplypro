@@ -16,12 +16,6 @@ RSpec.describe SchoolingsController do
     sign_in(user)
     schooling.pfmps = [payment_request.pfmp]
     schooling.save!
-    Timecop.safe_mode = false
-    Timecop.freeze(Date.new(2024, 6, 21))
-  end
-
-  after do
-    Timecop.return
   end
 
   describe "DEL /abrogate_decision" do
