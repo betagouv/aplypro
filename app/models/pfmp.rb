@@ -64,8 +64,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   scope :for_year, lambda { |start_year|
                      joins(schooling: { classe: :school_year })
-                       .where(school_years: { start_year: start_year })
-                       .distinct
+                       .where(school_year: { start_year: start_year })
                    }
 
   delegate :wage, to: :mef

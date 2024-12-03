@@ -66,8 +66,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   scope :for_year, lambda { |start_year|
                      joins(schoolings: { classe: :school_year })
-                       .where(school_years: { start_year: start_year })
-                       .distinct
+                       .where(school_year: { start_year: start_year })
                    }
 
   sourced_from_external_api :birthdate,
