@@ -15,7 +15,7 @@ module Stats
       end
 
       def title
-        "Somme des PFMPs terminées validées avec RIB, DA & données élèves"
+        "Somme des PFMPs terminées validées avec RIB, DA & données élèves (prêtes à l'envoi)"
       end
 
       def with_mef_and_establishment
