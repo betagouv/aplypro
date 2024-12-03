@@ -21,7 +21,7 @@ RSpec.describe GenerateAttributiveDecisionsJob do
   end
 
   context "when a student is inactive" do
-    before { schooling.update!(end_date: "#{SchoolYear.current.start_year + 1}-08-27") }
+    before { schooling.update!(end_date: "#{SchoolYear.current.end_year}-08-27") }
 
     it "enqueues a job for it anyway" do
       expect { job.perform_now }.to have_enqueued_job.with(schooling)
