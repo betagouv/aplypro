@@ -11,11 +11,37 @@ describe StudentsApi::Fregata::Api do
     mock_fregata_students_with(uai, "")
   end
 
+  describe "student_endpoint" do
+    let(:student) { create(:schooling).student }
+    let(:uai) { student.current_schooling.establishment.uai }
+
+    context "when uai is provided directly" do
+      it "returns the establishment_students_endpoint with that uai" do
+        endpoint = api.student_endpoint(uai: uai)
+        expect(endpoint).to eq api.establishment_students_endpoint(uai: uai)
+      end
+    end
+
+    context "when only ine is provided" do
+      it "finds the student's establishment uai and returns the corresponding endpoint" do
+        endpoint = api.student_endpoint(ine: student.ine)
+        expect(endpoint).to eq api.establishment_students_endpoint(uai: uai)
+      end
+    end
+
+    context "when student ine is not found" do
+      it "raises ActiveRecord::RecordNotFound" do
+        expect { api.student_endpoint(ine: "invalid_ine") }
+          .to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
   describe "fetch_establishment_students!" do
     it "queries the right endpoint with the right parameters" do
       api.fetch_resource(:establishment_students, uai: uai)
 
-      # this will break whenever we add a year in the school_year_seeder
+      # TODO: this will break whenever we add a year in the school_year_seeder
       expect(WebMock)
         .to have_requested(:get, api.establishment_students_endpoint(uai: uai))
         .with(query: { rne: uai, anneeScolaireId: 28 })

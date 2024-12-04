@@ -37,6 +37,8 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
             if: ->(pfmp) { pfmp.schooling.present? },
             inclusion: {
               in: lambda { |pfmp|
+                # La condition `(pfmp.schooling.start_date..pfmp.schooling.max_end_date)` aurait été mieux,
+                # mais les PFMPs fantômes empêchent cela (Saisie d'une date de fin de scolarité inférieure à une PFMP)
                 pfmp.schooling.establishment.school_year_range(
                   pfmp.school_year.start_year,
                   pfmp.schooling.extended_end_date

@@ -183,12 +183,10 @@ describe PfmpManager do
     end
 
     context "when there is another priced PFMP" do
-      let(:previous) { create(:pfmp, :completed, day_count: 8) }
+      let(:previous) { create(:pfmp, :completed, day_count: 8, schooling: schooling) }
 
       context "with another schooling" do
-        let(:schooling) { create(:schooling, :closed, student: pfmp.student) }
-
-        before { previous.update!(schooling: schooling) }
+        let(:schooling) { create(:schooling, end_date: pfmp.end_date + 1.day, student: pfmp.student) }
 
         context "with the same MEF" do
           before { schooling.classe.update!(mef: mef) }
@@ -202,8 +200,7 @@ describe PfmpManager do
             before do
               old_school_year = create(:school_year, start_year: 2022)
               old_classe = create(:classe, school_year: old_school_year)
-
-              schooling.update!(classe: old_classe)
+              create(:schooling, classe: old_classe)
             end
 
             it_behaves_like "the original amount"

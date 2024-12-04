@@ -52,7 +52,7 @@ RSpec.describe Classe do
       it "does not include them" do
         student = classe.students.last
 
-        student.close_current_schooling!("#{SchoolYear.current.start_year}-08-27")
+        student.close_current_schooling!("#{SchoolYear.current.end_year}-08-27")
 
         expect { classe.create_bulk_pfmp(params) }.not_to change(student, :pfmps)
       end

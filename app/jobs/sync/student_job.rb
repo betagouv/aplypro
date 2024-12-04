@@ -20,7 +20,7 @@ module Sync
 
     def fetch_student_data(schooling)
       api = schooling.establishment.students_api
-      api.fetch_resource(:student, ine: schooling.student.ine)
+      api.fetch_resource(:student, ine: schooling.student.ine, uai: schooling.establishment.uai)
          .then { |data| map_student_attributes(data, api) }
          .then { |attributes| schooling.student.update!(attributes) }
 

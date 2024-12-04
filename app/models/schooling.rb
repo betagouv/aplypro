@@ -38,6 +38,19 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validates :student, uniqueness: { scope: :classe }, if: :closed?
 
   validates :end_date,
+            :start_date,
+            if: ->(schooling) { schooling.classe.present? },
+            inclusion: {
+              in: lambda { |schooling|
+                schooling.establishment.school_year_range(
+                  schooling.classe.school_year.start_year,
+                  schooling.extended_end_date
+                )
+              }
+            },
+            allow_nil: true
+
+  validates :end_date,
             comparison: { greater_than_or_equal_to: :start_date },
             if: -> { start_date && end_date }
 
