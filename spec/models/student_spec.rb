@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Student do
   subject(:student) { create(:student) }
 
-  let(:end_date) { "#{SchoolYear.current.start_year}-08-27" }
+  let(:end_date) { "#{SchoolYear.current.end_year}-08-27" }
 
   it { is_expected.to have_many(:classes).through(:schoolings) }
   it { is_expected.to validate_length_of(:address_city_insee_code).is_at_most(5) }

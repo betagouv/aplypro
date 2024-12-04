@@ -257,8 +257,8 @@ RSpec.describe Pfmp do
       context "when the dates of the schooling dont cover the pfmp" do
         before do
           pfmp.schooling.update!(
-            start_date: "#{SchoolYear.current.start_year + 1}-03-01",
-            end_date: "#{SchoolYear.current.start_year + 1}-04-01"
+            start_date: "#{SchoolYear.current.end_year}-03-01",
+            end_date: "#{SchoolYear.current.end_year}-04-01"
           )
           pfmp.update!(start_date: pfmp.schooling.start_date - 1.day, end_date: pfmp.schooling.start_date + 30.days)
         end

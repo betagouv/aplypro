@@ -11,7 +11,7 @@ Sachantque(
   @classe = Classe.find_by(mef: @mef, establishment: @etab) ||
             FactoryBot.create(:classe, establishment: @etab, label: classe, mef: @mef)
   @student = FactoryBot.create(:student, first_name:, last_name:)
-  @student.schoolings.create!(classe: @classe)
+  @schooling = FactoryBot.create(:schooling, classe: @classe, student: @student)
 end
 
 Sachantque(
