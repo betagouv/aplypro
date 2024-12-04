@@ -39,7 +39,7 @@ module StudentsApi
         def student_endpoint(params)
           schooling = Student.find_by!(ine: params.fetch(:ine)).current_schooling
           uai = params[:uai] || schooling.establishment.uai
-          school_year = schooling.classe.school_year
+          school_year = schooling.classe.school_year.start_year
 
           establishment_students_endpoint(uai: uai, school_year: school_year)
         end
