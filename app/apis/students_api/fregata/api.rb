@@ -25,8 +25,9 @@ module StudentsApi
         end
 
         def establishment_students_endpoint(params)
-          query = { rne: params[:uai], anneeScolaireId: fregata_year(params[:school_year]), idStatutApprenant: 2 }
-                    .to_query
+          query = { rne: params[:uai],
+                    anneeScolaireId: params[:school_year].nil? ? fregata_year : fregata_year(params[:school_year]),
+                    idStatutApprenant: 2 }.to_query
 
           "#{base_url}/inscriptions/?#{query}"
         end
