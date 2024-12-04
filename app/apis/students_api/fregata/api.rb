@@ -25,7 +25,8 @@ module StudentsApi
         end
 
         def establishment_students_endpoint(params)
-          query = { rne: params[:uai], anneeScolaireId: fregata_year(params[:school_year]), idStatutApprenant: 2 }.to_query
+          query = { rne: params[:uai], anneeScolaireId: fregata_year(params[:school_year]), idStatutApprenant: 2 }
+                    .to_query
 
           "#{base_url}/inscriptions/?#{query}"
         end
@@ -35,13 +36,11 @@ module StudentsApi
         end
 
         def student_endpoint(params)
-          uai = params[:uai] || Student
-                .find_by!(ine: params.fetch(:ine))
-                .current_schooling
-                .establishment
-                .uai
+          schooling = Student.find_by!(ine: params.fetch(:ine)).current_schooling
+          uai = params[:uai] || schooling.establishment.uai
+          school_year = schooling.classe.school_year
 
-          establishment_students_endpoint(uai: uai)
+          establishment_students_endpoint(uai: uai, school_year: school_year)
         end
 
         private
