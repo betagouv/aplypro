@@ -21,7 +21,12 @@
         - if !disabled
           = render partial: "shared/confirmed_director", locals: { message: t("validations.confirm_director") }
         - else
-          %em= t("pfmps.not_validatable")
+          -if @pfmp.schooling.attributive_decision.attached?
+            %em= t("pfmps.not_validatable.da")
+          -elsif @pfmp.student.rib(@pfmp.classe.establishment).present?
+            %em= t("pfmps.not_validatable.rib")
+          -elsif @pfmp.end_date <= DateTime.now
+            %em= t("pfmps.not_validatable.date")
 
 
     .fr-btns-group.fr-btns-group--inline

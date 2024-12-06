@@ -269,7 +269,10 @@ fr:
     update:
       success: Coordonnées bancaires mises à jour
   pfmps:
-    not_validatable: "Vous ne pouvez pas valider cette PFMP car elle ne respecte pas toutes les conditions d'envoi (date de fin de la PFMP supérieure à la date du jour, décision d'attribution ou coordonnées bancaires manquantes)."
+    not_validatable:
+      da: Vous ne pouvez pas valider cette PFMP car la décision d'attribution est manquante.
+      rib: Vous ne pouvez pas valider cette PFMP car les coordonnées bancaires sont manquantes
+      date: Vous ne pouvez pas valider cette PFMP car la date de fin de la PFMP est supérieure à la date du jour.
     edit:
       success: La PFMP a bien été mise à jour
     new:
