@@ -16,11 +16,13 @@
 
     - if @pfmp.in_state?(:completed) && current_user.can_validate?
       - disabled = !@pfmp.can_transition_to?(:validated)
-      - title = disabled ? t("pfmps.not_validatable") : ""
       = form_with method: :post, url: validate_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp) do |form|
-        = form.submit "Valider", class: "fr-btn fr-btn--primary fr-mb-2w", disabled: disabled, title: title
+        = form.submit "Valider", class: "fr-btn fr-btn--primary fr-mb-2w", disabled: disabled
         - if !disabled
           = render partial: "shared/confirmed_director", locals: { message: t("validations.confirm_director") }
+        - else
+          %em= t("pfmps.not_validatable")
+
 
     .fr-btns-group.fr-btns-group--inline
       - if @pfmp.can_be_modified? && !@pfmp.can_transition_to?(:rectified) && !@pfmp.in_state?(:rectified)
