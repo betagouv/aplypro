@@ -10,7 +10,9 @@ FactoryBot.define do
       schooling.start_date = if schooling.end_date.present?
                                schooling.end_date - 1.month
                              else
-                               Date.parse("#{schooling.classe.school_year.start_year}-09-01")
+                               schooling.classe.establishment.school_year_range(
+                                 schooling.classe.school_year.start_year
+                               ).first
                              end
     end
 

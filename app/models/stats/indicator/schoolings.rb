@@ -3,9 +3,9 @@
 module Stats
   module Indicator
     class Schoolings < Count
-      def initialize
+      def initialize(start_year)
         super(
-          all: Schooling.all
+          all: Schooling.for_year(start_year).all
         )
       end
 

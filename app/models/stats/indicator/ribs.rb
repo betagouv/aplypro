@@ -3,10 +3,11 @@
 module Stats
   module Indicator
     class Ribs < Ratio
-      def initialize
+      def initialize(start_year)
+        students = Student.for_year(start_year)
         super(
-          subset: Student.with_rib,
-          all: Student.all
+          subset: students.with_rib,
+          all: students.all
         )
       end
 

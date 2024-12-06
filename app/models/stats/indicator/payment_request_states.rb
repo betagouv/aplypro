@@ -9,11 +9,12 @@ module Stats
         paid: "payées par l'ASP"
       }.freeze
 
-      def initialize(state)
+      def initialize(start_year, state)
         @state = state
 
         super(
           all: ASP::PaymentRequest
+            .for_year(start_year)
             .joins(:asp_payment_request_transitions)
             .where("asp_payment_request_transitions.to_state": state)
         )
