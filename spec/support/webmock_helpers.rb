@@ -62,7 +62,7 @@ module WebmockHelpers
   end
 
   def mock_fregata_students_with(uai, payload)
-    url = StudentsApi::Fregata::Api.establishment_students_endpoint(uai: uai)
+    url = StudentsApi::Fregata::Api.establishment_students_endpoint(uai: uai, start_year: SchoolYear.current.start_year)
 
     WebMock.stub_request(:get, url)
            .with(

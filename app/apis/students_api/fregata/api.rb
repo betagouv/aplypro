@@ -25,8 +25,8 @@ module StudentsApi
         end
 
         def establishment_students_endpoint(params)
-          query = { rne: params[:uai],
-                    anneeScolaireId: params[:school_year].nil? ? fregata_year : fregata_year(params[:school_year]),
+          query = { rne: params.fetch(:uai),
+                    anneeScolaireId: fregata_year(params.fetch(:start_year)),
                     idStatutApprenant: 2 }.to_query
 
           "#{base_url}/inscriptions/?#{query}"
@@ -38,10 +38,14 @@ module StudentsApi
 
         def student_endpoint(params)
           schooling = Student.find_by!(ine: params.fetch(:ine)).current_schooling
-          uai = params[:uai] || schooling.establishment.uai
-          school_year = schooling.classe.school_year.start_year
-
-          establishment_students_endpoint(uai: uai, school_year: school_year)
+          if schooling.present?
+            uai = schooling.establishment.uai
+            start_year = schooling.classe.school_year.start_year
+          else
+            uai = params.fetch(:uai)
+            start_year = SchoolYear.current.start_year
+          end
+          establishment_students_endpoint(uai: uai, start_year: start_year)
         end
 
         private
@@ -83,8 +87,8 @@ module StudentsApi
           "Signature #{sig}"
         end
 
-        def fregata_year(school_year = SchoolYear.current.start_year)
-          school_year - YEAR_OFFSET
+        def fregata_year(start_year)
+          start_year - YEAR_OFFSET
         end
       end
     end

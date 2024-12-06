@@ -5,7 +5,7 @@ module StudentsApi
     class Api < StudentsApi::Base
       class << self
         def establishment_students_endpoint(params)
-          query = { statut: "ST", "annee-scolaire": params[:school_year], "etat-scolarisation": true }.to_query
+          query = { statut: "ST", "annee-scolaire": params[:start_year], "etat-scolarisation": true }.to_query
 
           base_url + format("etablissements/%s/eleves?#{query}", params[:uai])
         end
