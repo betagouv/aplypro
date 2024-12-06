@@ -269,7 +269,7 @@ fr:
     update:
       success: Coordonnées bancaires mises à jour
   pfmps:
-    not_validatable: "Vous ne pouvez pas valider cette PFMP car %{reason}."
+    not_validatable: "Vous ne pouvez pas valider cette PFMP pour les raisons suivantes : %{reason}."
     edit:
       success: La PFMP a bien été mise à jour
     new:

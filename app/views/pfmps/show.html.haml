@@ -20,16 +20,9 @@
         = form.submit "Valider", class: "fr-btn fr-btn--primary fr-mb-2w", disabled: disabled
         - if !disabled
           = render partial: "shared/confirmed_director", locals: { message: t("validations.confirm_director") }
-        - else
-          - reason = ""
-          - if @pfmp.schooling.attributive_decision.attached?
-            - reason = "la décision d'attribution est manquante"
-          - elsif @pfmp.student.rib(@pfmp.classe.establishment).present?
-            - reason = "les coordonnées bancaires sont manquantes"
-          - elsif @pfmp.end_date <= DateTime.now
-            - reason = "la date de fin de la PFMP est supérieure à la date du jour"
+        - elsif @pfmp.errors.any?
           %p
-            %em= t("pfmps.not_validatable", reason: reason)
+            %em= t("pfmps.not_validatable", reason: @pfmp.errors.full_messages.join(", "))
 
 
     .fr-btns-group.fr-btns-group--inline
