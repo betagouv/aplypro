@@ -19,9 +19,9 @@ class PfmpStateMachine
   end
 
   guard_transition(to: :validated) do |pfmp|
-    pfmp.student.rib(pfmp.classe.establishment).present? &&
-      pfmp.schooling.attributive_decision.attached? &&
-      pfmp.end_date <= DateTime.now
+    pfmp.validate
+
+    pfmp.errors.none?
   end
 
   guard_transition(to: :rectified) do |pfmp|
