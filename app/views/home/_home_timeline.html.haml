@@ -25,7 +25,7 @@
             = progress_badge(@establishment_facade.ribs_count, @establishment_facade.students_count, title: "Les coordonnées bancaires sont réutilisées pour un même élève\nà travers toutes les classes qu'il a pu fréquenter.")
           %p Afin de pouvoir verser l'allocation aux lycéens, APLyPro a besoin de leurs coordonnées bancaires, de celles d'un responsable légal ou d'un tiers.
           %ul.fr-btns-group
-            %li= link_to "Choisir une classe pour saisir des coordonnées bancaires", school_year_classes_path(selected_school_year), class: "fr-btn fr-btn--primary fr-mb-0"
+            %li= link_to "Choisir une classe pour saisir des coordonnées bancaires", school_year_classes_path(selected_school_year), class: "fr-btn fr-btn--primary fr-mb-0", data: { turbo_frame: "_top" }
       .fr-col-md-4.fr-ml-4w
         .chart-container
           = pie_chart({ "Élèves avec RIB" => @establishment_facade.ribs_count, "Élèves sans RIB" => @establishment_facade.students_without_rib_count }, colors: [dsfr_colors[:green], dsfr_colors[:red]], donut: true)
@@ -41,7 +41,7 @@
               = pfmps_status_count_badge(state.to_sym, @establishment_facade.pfmps_counts[state.to_sym], display_zero: true)
           %p Pour calculer le montant des allocations à envoyer, APLyPro a besoin de connaître le nombre de jours travaillés des PFMPs de chaque élève.
           %ul.fr-btns-group
-            %li= link_to "Choisir une classe ou un élève pour saisir une PFMP", school_year_classes_path(selected_school_year), class: "fr-btn fr-btn--primary fr-mb-0"
+            %li= link_to "Choisir une classe ou un élève pour saisir une PFMP", school_year_classes_path(selected_school_year), class: "fr-btn fr-btn--primary fr-mb-0", data: { turbo_frame: "_top" }
       .fr-col-md-4.fr-ml-4w
         .chart-container
           = column_chart(@establishment_facade.pfmps_counts.transform_keys { |key| t("pfmps.state.#{key}") },
@@ -62,7 +62,7 @@
           %p La validation du chef d'établissement est nécessaire pour chaque PFMP. Une fois la PFMP validée, une demande de paiement est ensuite envoyée à l'Agence de Services et de Paiement (ASP). Chaque demande de paiement possède un statut affiché dans la page "Paiements".
           %ul.fr-btns-group
             - if current_user.can_validate?
-              %li= link_to "Consulter et gérer les envois en paiement", school_year_validations_path(selected_school_year), class: "fr-btn fr-btn--primary fr-mb-0"
+              %li= link_to "Consulter et gérer les envois en paiement", school_year_validations_path(selected_school_year), class: "fr-btn fr-btn--primary fr-mb-0", data: { turbo_frame: "_top" }
             - else
               %li= button_to "Vous n'avez pas le droit de valider des PFMPs", "#", class: 'fr-btn fr-btn--primary fr-mb-0', disabled: true
       .fr-col-md-4.fr-ml-4w
