@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ClassesFacade
-  def initialize(classes)
+  def initialize(classes, establishment)
     @classes = classes.includes(
       :school_year,
       students: :ribs,
@@ -11,6 +11,7 @@ class ClassesFacade
           { abrogation_decision_attachment: :blob }
         ]
     )
+    @establishment = establishment
   end
 
   def nb_students_per_class
@@ -32,7 +33,7 @@ class ClassesFacade
   def nb_ribs_per_class
     @nb_ribs_per_class ||= @classes
                            .joins(students: :ribs)
-                           .where(ribs: { archived_at: nil, establishment: @classes.first.establishment })
+                           .where(ribs: { archived_at: nil, establishment: @establishment })
                            .reorder(nil)
                            .group(:"classes.id")
                            .distinct

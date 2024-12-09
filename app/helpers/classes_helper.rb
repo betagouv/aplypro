@@ -3,7 +3,7 @@
 module ClassesHelper
   def ribs_progress_badge(schoolings)
     count = schoolings.joins(student: :ribs)
-                      .where(ribs: { archived_at: nil, establishment: schoolings.first.establishment })
+                      .where(ribs: { archived_at: nil, establishment: current_establishment })
                       .distinct(:"students.id")
                       .count(:"students.id")
     total = schoolings.size
