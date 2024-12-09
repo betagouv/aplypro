@@ -7,6 +7,9 @@ class PfmpManager
   class ExistingActivePaymentRequestError < PfmpManagerError; end
   class PfmpNotModifiableError < PfmpManagerError; end
   class PaymentRequestNotIncompleteError < PfmpManagerError; end
+  class RectificationAmountThresholdNotReachedError < PfmpManagerError; end
+
+  EXCESS_AMOUNT_RECTIFICATION_THRESHOLD = 30
 
   attr_reader :pfmp
 
@@ -25,7 +28,7 @@ class PfmpManager
     params = params.to_h.with_indifferent_access
 
     Pfmp.transaction do
-      pfmp.schooling&.lock! if # prevent race condition using pessimistic locking (blocks r+w)
+      pfmp.schooling&.lock! # prevent race condition using pessimistic locking (blocks r+w)
 
       pfmp.update!(params)
       recalculate_amounts! if params[:day_count].present?
@@ -51,7 +54,15 @@ class PfmpManager
 
   def rectify_and_update_attributes!(confirmed_pfmp_params, confirmed_address_params)
     Pfmp.transaction do
+      paid_amount = pfmp.amount
       update!(confirmed_pfmp_params)
+      correct_amount = pfmp.reload.amount
+      delta = paid_amount - correct_amount
+
+      if delta.positive? && delta <= EXCESS_AMOUNT_RECTIFICATION_THRESHOLD
+        raise RectificationAmountThresholdNotReachedError
+      end
+
       pfmp.student.update!(confirmed_address_params)
       pfmp.rectify!
     end

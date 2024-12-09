@@ -132,7 +132,7 @@ describe PfmpManager do
   describe "#rectify_and_update_attributes!" do # rubocop:disable RSpec/MultipleMemoizedHelpers
     let(:pfmp) { create(:asp_payment_request, :paid).pfmp }
     let(:confirmed_pfmp_params) do
-      { day_count: pfmp.day_count + 2, start_date: pfmp.start_date + 2.days, end_date: pfmp.end_date }
+      { day_count: pfmp.day_count + 2, start_date: pfmp.start_date, end_date: pfmp.end_date + 2.days }
     end
     let(:confirmed_address_params) { { address_line1: "123 New St", address_city: "New City" } }
 
@@ -144,6 +144,15 @@ describe PfmpManager do
                                                                               .and change {
                                                                                      pfmp.student.address_line1
                                                                                    }.to(confirmed_address_params[:address_line1]) # rubocop:disable Layout/LineLength
+    end
+
+    it "raises an error when the corrected amount is too small" do # rubocop:disable RSpec/ExampleLength
+      expect do
+        manager.rectify_and_update_attributes!(
+          { day_count: pfmp.day_count - 2, start_date: pfmp.start_date, end_date: pfmp.end_date },
+          confirmed_address_params
+        )
+      end.to raise_error(PfmpManager::RectificationAmountThresholdNotReachedError)
     end
   end
 
