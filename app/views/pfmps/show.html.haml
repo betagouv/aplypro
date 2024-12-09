@@ -1,5 +1,14 @@
 .fr-col-md-6
   .fr-mb-3w
+    - if @pfmp.in_state?(:completed) && current_user.can_validate?
+      - disabled = !@pfmp.can_transition_to?(:validated) # Appel qui génère les erreurs de la validation de la PFMP
+      - if @pfmp.errors.any?
+        .fr-mb-2w
+          = dsfr_alert(type: :warning, title: "Vous ne pouvez pas valider cette PFMP pour les raisons suivantes :") do
+            %ul
+              - @pfmp.errors.each do |error|
+                %li= error.message
+
     .fr-mb-2w= render partial: "pfmp_badges"
 
     %p
@@ -15,10 +24,8 @@
           jours travaillés
 
     - if @pfmp.in_state?(:completed) && current_user.can_validate?
-      - disabled = !@pfmp.can_transition_to?(:validated)
-      - title = disabled ? t("pfmps.not_validatable") : ""
       = form_with method: :post, url: validate_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp) do |form|
-        = form.submit "Valider", class: "fr-btn fr-btn--primary fr-mb-2w", disabled: disabled, title: title
+        = form.submit "Valider", class: "fr-btn fr-btn--primary fr-mb-2w", disabled: disabled
         - if !disabled
           = render partial: "shared/confirmed_director", locals: { message: t("validations.confirm_director") }
 
