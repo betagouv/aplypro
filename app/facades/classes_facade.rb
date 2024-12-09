@@ -32,7 +32,7 @@ class ClassesFacade
   def nb_ribs_per_class
     @nb_ribs_per_class ||= @classes
                            .joins(students: :ribs)
-                           .where(ribs: { archived_at: nil })
+                           .where(ribs: { archived_at: nil, establishment: @classes.first.establishment })
                            .reorder(nil)
                            .group(:"classes.id")
                            .distinct
