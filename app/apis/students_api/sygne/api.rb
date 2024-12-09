@@ -11,11 +11,11 @@ module StudentsApi
         end
 
         def student_endpoint(params)
-          base_url + format("eleves/%s", params[:ine])
+          base_url + format("eleves/%s", params.fetch(:ine))
         end
 
         def student_schoolings_endpoint(params)
-          base_url + format("eleves/%s/scolarites", params[:ine])
+          base_url + format("eleves/%s/scolarites", params.fetch(:ine))
         end
 
         def get(url)

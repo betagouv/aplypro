@@ -15,29 +15,19 @@ describe StudentsApi::Fregata::Api do
   describe "student_endpoint" do
     let(:uai) { student.current_schooling.establishment.uai }
 
-    context "when uai is provided directly" do
-      it "returns the establishment_students_endpoint with that uai" do
-        endpoint = api.student_endpoint(uai: uai, ine: student.ine)
+    context "when uai and start_year are provided" do
+      it "returns the corresponding establishment_students_endpoint" do
+        endpoint = api.student_endpoint(uai: uai, start_year: student.current_schooling.classe.school_year.start_year)
         expect(endpoint).to eq api.establishment_students_endpoint(
           uai: uai, start_year: student.current_schooling.classe.school_year.start_year
         )
       end
     end
 
-    context "when only ine is provided" do
-      it "finds the student's establishment uai and returns the corresponding endpoint" do
-        endpoint = api.student_endpoint(ine: student.ine)
-        expect(endpoint).to eq api.establishment_students_endpoint(
-          uai: uai,
-          start_year: student.current_schooling.classe.school_year.start_year
-        )
-      end
-    end
-
-    context "when student ine is not found" do
+    context "when start_year is not provided" do
       it "raises ActiveRecord::RecordNotFound" do
-        expect { api.student_endpoint(ine: "invalid_ine") }
-          .to raise_error(ActiveRecord::RecordNotFound)
+        expect { api.student_endpoint(uai: uai) }
+          .to raise_error(KeyError)
       end
     end
   end
