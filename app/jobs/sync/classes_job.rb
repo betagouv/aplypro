@@ -23,7 +23,7 @@ module Sync
       api = establishment.students_api
 
       api
-        .fetch_resource(:establishment_students, uai: establishment.uai, school_year: school_year.start_year)
+        .fetch_resource(:establishment_students, uai: establishment.uai, start_year: school_year.start_year)
         .then { |data| api.mapper.new(data, establishment.uai).parse! }
     end
   end
