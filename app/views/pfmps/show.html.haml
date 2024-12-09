@@ -21,11 +21,11 @@
         - if !disabled
           = render partial: "shared/confirmed_director", locals: { message: t("validations.confirm_director") }
         - elsif @pfmp.errors.any?
-          %p
-            %em= t("pfmps.not_validatable", reason: @pfmp.errors.full_messages.join(", "))
+          = dsfr_alert(type: :warning, title: "Vous ne pouvez pas valider cette PFMP pour les raisons suivantes :") do
+            - @pfmp.errors.each do |error|
+              %p= error.message
 
-
-    .fr-btns-group.fr-btns-group--inline
+    .fr-btns-group.fr-btns-group--inline.fr-mt-2w
       - if @pfmp.can_be_modified? && !@pfmp.can_transition_to?(:rectified) && !@pfmp.in_state?(:rectified)
         = link_to "Modifier la PFMP", edit_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
       - else
