@@ -15,7 +15,7 @@ class ClassesController < ApplicationController
     infer_page_title
 
     @classes = current_establishment.classes.where(school_year: selected_school_year)
-    @classes_facade = ClassesFacade.new(@classes)
+    @classes_facade = ClassesFacade.new(@classes, current_establishment)
   end
 
   def show

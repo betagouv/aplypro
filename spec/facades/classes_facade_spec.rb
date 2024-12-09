@@ -3,9 +3,10 @@
 require "rails_helper"
 
 RSpec.describe ClassesFacade do
-  subject(:facade) { described_class.new(Classe.all) }
+  subject(:facade) { described_class.new(Classe.all, establishment) }
 
-  let(:classes) { create_list(:classe, 3) }
+  let(:classes) { create_list(:classe, 3, establishment: establishment) }
+  let(:establishment) { create(:establishment) }
 
   describe "#nb_students_per_class" do
     before do
@@ -35,7 +36,9 @@ RSpec.describe ClassesFacade do
   describe "#nb_ribs_per_class" do
     before do
       classes.each do |classe|
-        create(:schooling, student: create(:student, :with_rib), classe: classe)
+        student = create(:student)
+        create(:schooling, student: student, classe: classe)
+        create(:rib, student: student, establishment: establishment)
         create(:schooling, classe: classe)
       end
     end

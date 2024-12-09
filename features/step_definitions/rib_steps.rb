@@ -71,7 +71,7 @@ end
 
 Quand("l'élève {string} a déjà des coordonnées bancaires pour l'établissement {string}") do |name, uai|
   student = find_student_by_full_name(name)
-  etab = Establishment.find_by!(uai: uai)
+  etab = Establishment.find_or_create_by(uai: uai)
   FactoryBot.create(:rib, :personal, student: student, establishment: etab)
 end
 
