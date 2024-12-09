@@ -37,15 +37,10 @@ module StudentsApi
         end
 
         def student_endpoint(params)
-          schooling = Student.find_by!(ine: params.fetch(:ine)).current_schooling
-          if schooling.present?
-            uai = schooling.establishment.uai
-            start_year = schooling.classe.school_year.start_year
-          else
-            uai = params.fetch(:uai)
-            start_year = SchoolYear.current.start_year
-          end
-          establishment_students_endpoint(uai: uai, start_year: start_year)
+          establishment_students_endpoint(
+            uai: params.fetch(:uai),
+            start_year: params.fetch(:start_year)
+          )
         end
 
         private
