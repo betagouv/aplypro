@@ -36,12 +36,17 @@ module Updaters
     private
 
     def api
-      student.establishment.students_api
+      last_establishment.students_api
+    end
+
+    # NOTE: if the last schooling is closed we student.establishment is nil
+    def last_establishment
+      student.schoolings.last.establishment
     end
 
     def mapped_schooling_data
       api
-        .fetch_resource(:student_schoolings, ine: student.ine)
+        .fetch_resource(:student_schoolings, ine: student.ine, uai: last_establishment.uai)
         .map { |entry| api.schooling_mapper.new.call(entry) }
         .compact
     end
