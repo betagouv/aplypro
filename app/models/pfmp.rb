@@ -145,6 +145,12 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
            .where("classes.mef_id": mef.id, "classes.school_year_id": school_year.id)
   end
 
+  def check_validation_transition
+    errors.add(:rib, "Les coordonnées bancaires sont manquantes") if student.rib(establishment).blank?
+    errors.add(:da, "La décision d'attribution est manquante") unless schooling.attributive_decision.attached?
+    errors.add(:end_date, "La date de fin de la PFMP est supérieure à la date du jour") if end_date > DateTime.now
+  end
+
   private
 
   def amounts_yearly_cap
