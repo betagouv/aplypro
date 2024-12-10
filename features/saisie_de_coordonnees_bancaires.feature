@@ -44,7 +44,7 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
   Scénario: Quand il y a une requête de paiement en cours le personnel ne peut pas modifier un RIB
     Sachant que je consulte la classe "2NDEB"
     Et que je renseigne et valide une PFMP de 3 jours pour "Marie Curie"
-    Et que la dernière PFMP de "Marie Curie" en classe de "2NDEB" a une requête de paiement envoyée
+    Et que la dernière PFMP de "Marie Curie" en classe de "2NDEB" a une requête de paiement prête à l'envoi
     Quand je rafraîchis la page
     Alors la page contient "Ces coordonnées bancaires ne sont pas modifiables"
     Et la page contient un bouton "Modifier les coordonnées bancaires" désactivé
