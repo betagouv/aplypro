@@ -29,7 +29,7 @@ describe Updaters::StudentSchoolingsUpdater do
 
     allow(api_double)
       .to receive(:fetch_resource)
-      .with(:student_schoolings, ine: schooling.student.ine)
+      .with(:student_schoolings, ine: schooling.student.ine, uai: schooling.establishment.uai)
       .and_return(["raw result"])
 
     allow(api_double)
@@ -42,7 +42,9 @@ describe Updaters::StudentSchoolingsUpdater do
   it "asks for the schooling information" do
     updater.call
 
-    expect(api_double).to have_received(:fetch_resource).with(:student_schoolings, ine: schooling.student.ine)
+    expect(api_double).to have_received(:fetch_resource).with(
+      :student_schoolings, ine: schooling.student.ine, uai: schooling.establishment.uai
+    )
   end
 
   context "when there is a matching schooling" do
