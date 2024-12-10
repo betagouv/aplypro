@@ -48,7 +48,8 @@ class Rib < ApplicationRecord
   end
 
   def archivable?
-    payment_requests.empty? || payment_requests.all?(&:terminated?)
+    payment_requests.empty? || payment_requests.all?(&:terminated?) ||
+      payment_requests.each { |p_r| return true if p_r.in_state?(:sent, :integrated) }.empty?
   end
 
   # NOTE: this is used by the framework itself
