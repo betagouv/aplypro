@@ -100,11 +100,19 @@ RSpec.describe Rib do
     end
   end
 
-  context "when there is an ongoing payment request" do
-    let(:rib) { create(:asp_payment_request, :sent).student.rib }
+  context "when there is an 'ready' payment request" do
+    let(:rib) { create(:asp_payment_request, :ready).student.rib }
 
     it "is marked as readonly" do
       expect(rib).to be_readonly
+    end
+  end
+
+  context "when there is an 'sent' payment request" do
+    let(:rib) { create(:asp_payment_request, :sent).student.rib }
+
+    it "is marked as readonly" do
+      expect(rib).not_to be_readonly
     end
   end
 end
