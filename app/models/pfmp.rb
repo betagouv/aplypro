@@ -60,8 +60,6 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
               less_than_or_equal_to: ->(pfmp) { (pfmp.end_date - pfmp.start_date).to_i + 1 }
             }
 
-  after_create -> { self.administrative_number = administrative_number }
-
   scope :finished, -> { where("pfmps.end_date <= (?)", Time.zone.today) }
 
   delegate :wage, to: :mef

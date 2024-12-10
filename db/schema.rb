@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_26_140427) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_10_080930) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -198,7 +198,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_26_140427) do
     t.bigint "schooling_id", null: false
     t.string "asp_prestation_dossier_id"
     t.integer "amount"
-    t.string "administrative_number"
     t.index ["asp_prestation_dossier_id"], name: "index_pfmps_on_asp_prestation_dossier_id", unique: true
     t.index ["schooling_id"], name: "index_pfmps_on_schooling_id"
   end
