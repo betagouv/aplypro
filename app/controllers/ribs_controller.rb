@@ -22,21 +22,20 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     @rib = @student.create_new_rib(rib_params)
 
     if @rib.save
-      redirect_to student_path(@student),
-                  notice: t(".success")
+      redirect_to student_path(@student), notice: t(".success")
     else
       render :new, status: :unprocessable_entity
     end
   end
 
   def update
+    old_rib = @student.ribs.last
     @rib = @student.create_new_rib(rib_params)
 
     if @rib.save
-      @student.retry_pfmps_payment_requests!(%w[rib bic paiement])
+      @student.retry_pfmps_payment_requests!(%w[rib bic paiement]) if rib_has_changed?(old_rib, rib_params)
 
-      redirect_to student_path(@student),
-                  notice: t(".success")
+      redirect_to student_path(@student), notice: t(".success")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -45,8 +44,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   def destroy
     @rib.destroy
 
-    redirect_to student_path(@student),
-                notice: t("flash.ribs.destroyed", name: @student.full_name)
+    redirect_to student_path(@student), notice: t("flash.ribs.destroyed", name: @student.full_name)
   end
 
   def missing
@@ -148,5 +146,12 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
 
   def rib_is_readonly
     redirect_to student_path(@student), alert: t("flash.ribs.readonly", name: @student.full_name)
+  end
+
+  def rib_has_changed?(rib, rib_params)
+    !(rib.iban.eql?(rib_params[:iban]) &&
+      rib.bic.eql?(rib_params[:bic]) &&
+      rib.name.eql?(rib_params[:name]) &&
+      rib.owner_type.eql?(rib_params[:owner_type]))
   end
 end
