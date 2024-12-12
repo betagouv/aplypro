@@ -40,7 +40,7 @@ module ASP
         end
       end
 
-      def process!
+      def process! # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
         each do |node|
           request =
             find_payment_request!(node.asp_prestation_dossier_id)

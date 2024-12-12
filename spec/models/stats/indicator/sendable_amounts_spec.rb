@@ -29,8 +29,8 @@ describe Stats::Indicator::SendableAmounts do
         create(:pfmp, :validated,
                day_count: 5,
                schooling: current_schooling,
-               start_date: current_classe.establishment.school_year_range(current_classe.school_year.start_year).first + 1.day,
-               end_date: current_classe.establishment.school_year_range(current_classe.school_year.start_year).first + 6.days)
+               start_date: current_classe.establishment.school_year_range(current_classe.school_year.start_year).first + 1.day, # rubocop:disable Layout/LineLength
+               end_date: current_classe.establishment.school_year_range(current_classe.school_year.start_year).first + 6.days) # rubocop:disable Layout/LineLength
 
         previous_classe = create(:classe, school_year: previous_school_year)
         previous_schooling = create(:schooling, :with_attributive_decision, :closed, student: student,
@@ -38,8 +38,8 @@ describe Stats::Indicator::SendableAmounts do
         create(:pfmp, :validated,
                day_count: 10,
                schooling: previous_schooling,
-               start_date: previous_classe.establishment.school_year_range(previous_classe.school_year.start_year).first + 1.day,
-               end_date: previous_classe.establishment.school_year_range(previous_classe.school_year.start_year).first + 11.days)
+               start_date: previous_classe.establishment.school_year_range(previous_classe.school_year.start_year).first + 1.day, # rubocop:disable Layout/LineLength
+               end_date: previous_classe.establishment.school_year_range(previous_classe.school_year.start_year).first + 11.days) # rubocop:disable Layout/LineLength
       end
 
       it "only counts PFMPs from the selected school year" do
