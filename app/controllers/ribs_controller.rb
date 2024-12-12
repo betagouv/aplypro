@@ -29,13 +29,8 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   end
 
   def update
-    old_rib = @student.ribs.last
-    @rib = @student.create_new_rib(rib_params)
-
-    if @rib.save
-      @student.retry_pfmps_payment_requests!(%w[rib bic paiement]) if rib_has_changed?(old_rib, rib_params)
-
-      redirect_to student_path(@student), notice: t(".success")
+    if rib_has_changed?(@student.rib(current_establishment.id), rib_params)
+      create
     else
       render :edit, status: :unprocessable_entity
     end
