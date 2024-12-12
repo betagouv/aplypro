@@ -6,11 +6,10 @@ module Stats
       def initialize(start_year)
         super(
           column: :amount,
-          all: Pfmp.joins(schooling: { student: :ribs })
-                   .merge(Pfmp.for_year(start_year).finished)
-                   .merge(Pfmp.for_year(start_year).in_state(:validated))
-                   .merge(Schooling.for_year(start_year).with_attributive_decisions)
-                   .merge(Student.for_year(start_year).asp_ready)
+          all: Pfmp.for_year(start_year).in_state(:validated).finished.distinct
+                   .joins(schooling: { student: :ribs })
+                   .merge(Schooling.with_attributive_decisions)
+                   .merge(Student.asp_ready)
         )
       end
 
@@ -24,6 +23,10 @@ module Stats
 
       def with_establishment
         Pfmp.joins(schooling: { classe: :establishment })
+      end
+
+      def global_data
+        all.to_a.map { |e| e.send(column) }.sum
       end
     end
   end
