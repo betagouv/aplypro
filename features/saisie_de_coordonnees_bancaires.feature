@@ -59,6 +59,7 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
     Quand je clique sur "Modifier les coordonnées bancaires"
     Et que je clique sur "Modifier les coordonnées bancaires"
     Alors la page ne contient pas "Ces coordonnées bancaires ne sont pas modifiables"
+    Et la page contient "Les nouvelles coordonnées bancaires ne peuvent pas être enregistrées car aucune information n'a été modifiée"
     Quand je clique sur "Modifier les coordonnées bancaires"
     Et que je remplis "Titulaire du compte" avec "Luigi Curie"
     Et que je clique sur "Modifier les coordonnées bancaires"

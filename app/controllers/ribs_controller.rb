@@ -32,7 +32,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     if rib_has_changed?(@student.rib(current_establishment.id), rib_params)
       create
     else
-      render :edit, status: :unprocessable_entity
+      redirect_to edit_student_rib_path(@student, @rib), alert: t("flash.ribs.cannot_create")
     end
   end
 
