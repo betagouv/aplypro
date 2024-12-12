@@ -18,9 +18,12 @@ module Sync
 
     private
 
-    def fetch_student_data(schooling)
+    def fetch_student_data(schooling) # rubocop:disable Metrics/AbcSize
       api = schooling.establishment.students_api
-      api.fetch_resource(:student, ine: schooling.student.ine, uai: schooling.establishment.uai)
+      api.fetch_resource(:student,
+                         ine: schooling.student.ine,
+                         uai: schooling.establishment.uai,
+                         start_year: schooling.classe.school_year.start_year)
          .then { |data| map_student_attributes(data, api) }
          .then { |attributes| schooling.student.update!(attributes) }
 

@@ -25,6 +25,6 @@ class ValidationsFacade
   end
 
   def classes_facade
-    ClassesFacade.new(validatable_classes)
+    ClassesFacade.new(validatable_classes, @establishment)
   end
 end

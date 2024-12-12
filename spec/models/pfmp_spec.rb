@@ -56,10 +56,29 @@ RSpec.describe Pfmp do
       it { is_expected.not_to be_valid }
     end
 
+    describe "check_validation_transition" do
+      let(:pfmp) { create(:pfmp, start_date: Time.zone.today, end_date: Time.zone.today + 3.days) }
+
+      before { pfmp.check_validation_transition }
+
+      it "has no RIB" do
+        expect(pfmp.errors).to include(:rib)
+      end
+
+      it "has no DA" do
+        expect(pfmp.errors).to include(:da)
+      end
+
+      it "has a end date greater than today" do
+        expect(pfmp.errors).to include(:end_date)
+      end
+    end
+
     describe "day count" do
       subject(:pfmp) do
         create(
           :pfmp,
+          :can_be_validated,
           start_date: Date.parse("#{SchoolYear.current.start_year}-10-08"),
           end_date: Date.parse("#{SchoolYear.current.start_year}-10-13")
         )
@@ -273,7 +292,7 @@ RSpec.describe Pfmp do
   describe "after_create callback" do
     it "correctly sets the administrative_number" do
       p = create(:pfmp)
-      expect(p.administrative_number).to eq("ENPU#{SchoolYear.current.start_year}001")
+      expect(p.attributes["administrative_number"]).to eq("ENPU#{SchoolYear.current.start_year}001")
     end
   end
 
