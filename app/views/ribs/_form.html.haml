@@ -1,6 +1,11 @@
 = form_with model: [@student, @rib], builder: DsfrFormBuilder do |form|
   = form.dsfr_error_summary
 
+  %button.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-owner_type", type: "button"}
+    %span.fr-tooltip.fr-placement{id: "tooltip-owner_type", role: "tooltip", "aria-hidden" => "true"}
+      %em= "Pour un élève majeur qui ne peut pas ouvrir de compte et souhaite que son allocation soit versée sur le compte d'un tiers dans le cadre de la procédure du mandat sous seing privé (comme indiqué dans la FàQ EduScol), l'option à sélectionner est : "
+      %strong= t("activerecord.attributes.missing.owner_type_mandate")
+
   = form.dsfr_radio_buttons(:owner_type,  %i[personal other_person moral_person mandate])
 
   = form.dsfr_text_field(:name, width: 'md-4')

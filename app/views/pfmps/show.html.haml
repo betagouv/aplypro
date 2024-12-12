@@ -40,7 +40,7 @@
         = button_tag "Supprimer la PFMP", disabled: true, class: 'fr-btn fr-btn--secondary', title: "Vous ne pouvez pas supprimer une PFMP dont le paiement est en cours de traitement"
       - if @pfmp.can_transition_to?(:rectified)
         = link_to "Gérer un indu", confirm_rectification_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
-        %button.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-rectification"}
+        %button.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-rectification", type: "button"}
         %span.fr-tooltip.fr-placement{id: "tooltip-rectification", role: "tooltip", "aria-hidden" => "true"}
           %em= "La déclaration d'un indu ne doit se faire que si le montant payé n'est pas conforme au montant réellement dû au titre de la PFMP."
           %ul

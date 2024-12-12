@@ -34,6 +34,10 @@
               - if schooling.end_date.present?
                 %p
                 = dsfr_link_to (schooling.extended_end_date.present? ? "Annuler le report" : "Autoriser un report"), confirm_da_extension_school_year_class_schooling_path(selected_school_year, @classe, schooling)
+                - if schooling.extended_end_date.blank?
+                  %button.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-da_extension-#{student.id}", type: "button"}
+                    %span.fr-tooltip.fr-placement{id: "tooltip-da_extension-#{student.id}", role: "tooltip", "aria-hidden" => "true"}
+                      %em= "Autoriser un report permet de saisir une date jusqu'à laquelle prolonger la durée de la Décision d'Attribution associée à cette scolarité. Il devient ensuite possible de saisir des PFMPs pour l'année scolaire terminée. Cette option est à utiliser pour les élèves qui n'aurait pas pu réaliser leur PFMP au cours de l'année scolaire passée (raisons de santé, fermeture de l'entreprise d'accueil, problèmes liés à la météo....) et la rattrape sur l'année scolaire suivante"
             - else
               - if schooling.abrogation_decision.present?
                 = dsfr_badge(status: :error) { "Abrogée" }
