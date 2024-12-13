@@ -29,8 +29,9 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   end
 
   def update
-    if rib_has_changed?(@student.rib(current_establishment.id), rib_params)
-
+    if @student.rib(current_establishment.id) == Rib.new(rib_params)
+      redirect_to edit_student_rib_path(@student, @rib), alert: t("flash.ribs.cannot_create")
+    else
       @rib = @student.create_new_rib(rib_params)
 
       if @rib.save
@@ -40,8 +41,6 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
       else
         render :edit, status: :unprocessable_entity
       end
-    else
-      redirect_to edit_student_rib_path(@student, @rib), alert: t("flash.ribs.cannot_create")
     end
   end
 
@@ -150,12 +149,5 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
 
   def rib_is_readonly
     redirect_to student_path(@student), alert: t("flash.ribs.readonly", name: @student.full_name)
-  end
-
-  def rib_has_changed?(rib, rib_params)
-    !(rib.iban.eql?(rib_params[:iban]) &&
-      rib.bic.eql?(rib_params[:bic]) &&
-      rib.name.eql?(rib_params[:name]) &&
-      rib.owner_type.eql?(rib_params[:owner_type]))
   end
 end
