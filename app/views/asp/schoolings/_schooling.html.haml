@@ -23,18 +23,10 @@
         %td= l @schooling.student.birthdate
       %tr
         %td Code INSEE de la ville de naissance
-        %td
-          - if @schooling.student.birthplace_city_insee_code.present?
-            = InseeCountryCodeMapper.call @schooling.student.birthplace_city_insee_code
-          - else
-            Aucun code renseigné
+        %td= display_insee_code(@schooling.student.birthplace_city_insee_code)
       %tr
         %td Code INSEE du pays de naissance
-        %td
-          - if @schooling.student.birthplace_country_insee_code.present?
-            = InseeCountryCodeMapper.call @schooling.student.birthplace_country_insee_code
-          - else
-            Aucun code renseigné
+        %td= display_insee_code(@schooling.student.birthplace_country_insee_code)
 
 .fr-table
   %table
