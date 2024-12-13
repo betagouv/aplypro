@@ -29,7 +29,10 @@ describe Updaters::StudentSchoolingsUpdater do
 
     allow(api_double)
       .to receive(:fetch_resource)
-      .with(:student_schoolings, ine: schooling.student.ine, uai: schooling.establishment.uai)
+      .with(:student_schoolings,
+            ine: schooling.student.ine,
+            uai: schooling.establishment.uai,
+            start_year: schooling.classe.school_year.start_year)
       .and_return(["raw result"])
 
     allow(api_double)
@@ -39,11 +42,13 @@ describe Updaters::StudentSchoolingsUpdater do
     allow(mapper_double).to receive(:call).and_return(mapped_schooling_attributes)
   end
 
-  it "asks for the schooling information" do
+  it "asks for the schooling information" do # rubocop:disable RSpec/ExampleLength
     updater.call
 
     expect(api_double).to have_received(:fetch_resource).with(
-      :student_schoolings, ine: schooling.student.ine, uai: schooling.establishment.uai
+      :student_schoolings, ine: schooling.student.ine,
+                           uai: schooling.establishment.uai,
+                           start_year: schooling.classe.school_year.start_year
     )
   end
 
