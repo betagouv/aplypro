@@ -63,7 +63,6 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
     Quand je clique sur "Modifier les coordonnées bancaires"
     Et que je remplis "Titulaire du compte" avec "Luigi Curie"
     Et que je clique sur "Modifier les coordonnées bancaires"
-    Et print the page
     Alors la page contient "Ces coordonnées bancaires ne sont pas modifiables"
     Et la page contient un bouton "Modifier les coordonnées bancaires" désactivé
     Et la page contient un bouton "Supprimer les coordonnées bancaires" désactivé
