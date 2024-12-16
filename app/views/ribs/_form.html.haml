@@ -1,29 +1,12 @@
 = form_with model: [@student, @rib], builder: DsfrFormBuilder do |form|
-  %fieldset.fr-fieldset.fr-m-0.fr-p-0
-    .gray-panel.fr-mb-3w.fr-container.fr-p-3w
-      .fr-grid-row
-        .fr-col-md-7.fr-col-12
-          .fr-mb-2w
-            = form.label :name, "Titulaire du compte", class: "hidden"
-            = form.text_field :name, class: "fr-input", placeholder: "Titulaire du compte"
-            - @rib.errors.full_messages_for(:name).each do |error_message|
-              %p.fr-error-text= error_message
+  = form.dsfr_error_summary
 
-          .fr-grid-row.fr-grid-row--middle.fr-grid-row--gutters
-            .fr-col-sm-8.fr-col-12
-              = form.label :iban, "IBAN", class: "hidden"
-              = form.text_field :iban, class: "fr-input fr-input--code", placeholder: "IBAN"
-              - @rib.errors.full_messages_for(:iban).each do |error_message|
-                %p.fr-error-text= error_message
+  = form.dsfr_text_field(:name, width: 'md-4')
 
-            .fr-col-sm-4.fr-col-12
-              = form.label :bic, "BIC", class: "hidden"
-              = form.text_field :bic, class: "fr-input fr-input--code", placeholder: "BIC"
-              - @rib.errors.full_messages_for(:bic).each do |error_message|
-                %p.fr-error-text= error_message
-          .fr-grid-row.fr-grid-row--middle.fr-grid-row--gutters
-            .fr-col-md-12.fr-col-12
-              .fr-mb-2w
-                = render partial: 'ribs/owner_type', locals: { student_id: @student.id, field_name: "rib[owner_type]", current_value: @rib.owner_type }
+  = form.dsfr_text_field(:iban, code: true, width: 'md-6')
+
+  = form.dsfr_text_field(:bic, code: true, width: 'md-3')
+
+  = render partial: 'ribs/owner_type', locals: { student_id: @student.id, field_name: "rib[owner_type]", current_value: @rib.owner_type }
 
   = form.submit nil, { class: 'fr-btn' }

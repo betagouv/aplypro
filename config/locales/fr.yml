@@ -125,6 +125,10 @@ fr:
         start_date: "Date de début"
         end_date: "Date de fin"
         day_count: "Nombre de jours effectués"
+      rib:
+        name: "Titulaire du compte"
+        iban: "IBAN"
+        bic: "BIC"
       missing :
           owner_type: "Les coordonnées bancaires appartiennent à :"
           owner_type_personal: "L'élève"
