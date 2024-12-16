@@ -13,14 +13,14 @@ end
 Quand("je saisis les coordonnées bancaires de l'élève") do
   steps %(
     Quand je remplis des coordonnées bancaires
-    Et que je choisis "Les coordonnées bancaires appartiennent à l'élève"
+    Et que je choisis "L'élève"
   )
 end
 
 Quand("je saisis les coordonnées bancaires d'un tiers") do
   steps %(
     Quand je remplis des coordonnées bancaires
-    Et que je choisis "Les coordonnées bancaires appartiennent à un représentant légal ou à un tiers"
+    Et que je choisis "Un représentant légal ou à un tiers"
   )
 end
 
