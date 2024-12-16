@@ -64,6 +64,11 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   scope :finished, -> { where("pfmps.end_date <= (?)", Time.zone.today) }
 
+  scope :for_year, lambda { |start_year|
+                     joins(schooling: { classe: :school_year })
+                       .where(school_year: { start_year: start_year })
+                   }
+
   delegate :wage, to: :mef
 
   before_destroy :ensure_destroyable?, prepend: true

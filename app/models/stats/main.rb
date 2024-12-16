@@ -4,7 +4,7 @@ module Stats
   class Main
     attr_reader :indicators
 
-    def initialize
+    def initialize(start_year)
       @indicators = [
         Indicator::AttributiveDecisions,
         Indicator::Ribs,
@@ -14,13 +14,13 @@ module Stats
         Indicator::YearlyAmounts,
         Indicator::Schoolings,
         Indicator::Pfmps
-      ].map(&:new)
+      ].map { |indicator_class| indicator_class.new(start_year) }
 
       %i[sent integrated paid].each do |state|
-        @indicators.push Indicator::PaymentRequestStates.new(state)
+        @indicators.push Indicator::PaymentRequestStates.new(start_year, state)
       end
 
-      @indicators.push Indicator::PaymentRequestStateAmounts.new(:paid)
+      @indicators.push Indicator::PaymentRequestStateAmounts.new(start_year, :paid)
     end
 
     def indicators_titles

@@ -95,7 +95,7 @@ RSpec.describe Schooling do
       let(:classe) { create(:classe, school_year: school_year) }
 
       it "returns the schoolings of the current school year" do
-        expect(described_class.for_year(school_year)).to contain_exactly(schooling)
+        expect(described_class.for_year(2020)).to contain_exactly(schooling)
       end
     end
 

@@ -4,10 +4,12 @@ require "rails_helper"
 require "./spec/models/stats/shared_contexts"
 
 RSpec.describe Stats::Main do
-  let(:indicators_titles) { described_class.new.indicators_titles }
+  let(:main) { described_class.new(SchoolYear.current.start_year) }
+
+  let(:indicators_titles) { main.indicators_titles }
 
   describe "#global_data" do
-    subject(:data) { described_class.new.global_data }
+    subject(:data) { main.global_data }
 
     include_context "when there is data for global stats"
 
@@ -20,7 +22,7 @@ RSpec.describe Stats::Main do
   end
 
   describe "#bops_data" do
-    subject(:data) { described_class.new.bops_data }
+    subject(:data) { main.bops_data }
 
     include_context "when there is data for stats per bops"
 
@@ -38,7 +40,7 @@ RSpec.describe Stats::Main do
   end
 
   describe "#menj_academies_data" do
-    subject(:data) { described_class.new.menj_academies_data }
+    subject(:data) { main.menj_academies_data }
 
     include_context "when there is data for stats per MENJ academies"
 
@@ -55,7 +57,7 @@ RSpec.describe Stats::Main do
   end
 
   describe "#establishments_data" do
-    subject(:data) { described_class.new.establishments_data }
+    subject(:data) { main.establishments_data }
 
     include_context "when there is data for stats per establishments"
 
@@ -74,7 +76,7 @@ RSpec.describe Stats::Main do
   end
 
   describe "#csv_of" do
-    subject(:csv_string) { described_class.new.csv_of(data) }
+    subject(:csv_string) { main.csv_of(data) }
 
     let(:data) do
       [

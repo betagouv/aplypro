@@ -63,6 +63,6 @@ class EstablishmentsController < ApplicationController
   end
 
   def schoolings_for_selected_school_year
-    current_establishment.schoolings.for_year(selected_school_year)
+    current_establishment.schoolings.for_year(selected_school_year.start_year)
   end
 end
