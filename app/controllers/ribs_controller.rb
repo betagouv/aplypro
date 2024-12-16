@@ -22,31 +22,32 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     @rib = @student.create_new_rib(rib_params)
 
     if @rib.save
-      redirect_to student_path(@student),
-                  notice: t(".success")
+      redirect_to student_path(@student), notice: t(".success")
     else
       render :new, status: :unprocessable_entity
     end
   end
 
   def update
-    @rib = @student.create_new_rib(rib_params)
-
-    if @rib.save
-      @student.retry_pfmps_payment_requests!(%w[rib bic paiement])
-
-      redirect_to student_path(@student),
-                  notice: t(".success")
+    if @student.rib(current_establishment.id) == Rib.new(rib_params)
+      redirect_to edit_student_rib_path(@student, @rib), alert: t("flash.ribs.cannot_create")
     else
-      render :edit, status: :unprocessable_entity
+      @rib = @student.create_new_rib(rib_params)
+
+      if @rib.save
+        @student.retry_pfmps_payment_requests!(%w[rib bic paiement])
+
+        redirect_to student_path(@student), notice: t(".success")
+      else
+        render :edit, status: :unprocessable_entity
+      end
     end
   end
 
   def destroy
     @rib.destroy
 
-    redirect_to student_path(@student),
-                notice: t("flash.ribs.destroyed", name: @student.full_name)
+    redirect_to student_path(@student), notice: t("flash.ribs.destroyed", name: @student.full_name)
   end
 
   def missing

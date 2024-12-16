@@ -56,4 +56,8 @@ class Rib < ApplicationRecord
   def readonly?
     !archivable?
   end
+
+  def ==(other)
+    iban.eql?(other.iban) && bic.eql?(other.bic) && name.eql?(other.name) && owner_type.eql?(other.owner_type)
+  end
 end
