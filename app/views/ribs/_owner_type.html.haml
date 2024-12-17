@@ -7,7 +7,7 @@
     = t("activerecord.attributes.missing.owner_type")
     %button.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-owner_type-#{student_id}", type: "button"}
     %span.fr-tooltip.fr-placement{id: "tooltip-owner_type-#{student_id}", role: "tooltip", "aria-hidden" => "true"}
-      %em= "Pour un élève majeur qui ne peut pas ouvrir de compte et souhaite que son allocation soit versée sur le compte d'un tiers dans le cadre de la procédure du mandat sous seing privé (comme indiqué dans la FàQ EduScol), l'option à sélectionner est : "
+      %em= t("activerecord.tooltips.rib")
       %strong= t("activerecord.attributes.missing.owner_type_mandate")
 
   .fr-fieldset__element.fr-fieldset__element--inline
