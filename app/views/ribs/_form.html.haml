@@ -1,11 +1,11 @@
 = form_with model: [@student, @rib], builder: DsfrFormBuilder do |form|
   = form.dsfr_error_summary
 
+  = render partial: 'ribs/owner_type/owner_type_vertical', locals: { current_value: @rib.owner_type }
+
   = form.dsfr_text_field(:name, width: 'md-4')
 
   = form.dsfr_text_field(:iban, code: true, width: 'md-6')
   = form.dsfr_text_field(:bic, code: true, width: 'md-3')
-
-  = render partial: 'ribs/owner_type', locals: { student_id: @student.id, field_name: "rib[owner_type]", current_value: @rib.owner_type }
 
   = form.submit nil, { class: 'fr-btn' }
