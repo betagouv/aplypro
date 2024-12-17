@@ -1,7 +1,7 @@
 = form_with model: [@student, @rib], builder: DsfrFormBuilder do |form|
   = form.dsfr_error_summary
 
-  = form.dsfr_radio_buttons(:owner_type,  %i[personal other_person moral_person mandate])
+  = render partial: 'ribs/owner_type/owner_type_vertical', locals: { current_value: @rib.owner_type }
 
   = form.dsfr_text_field(:name, width: 'md-4')
 

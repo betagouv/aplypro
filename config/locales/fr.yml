@@ -112,6 +112,9 @@ fr:
               overlaps: "Une autre PFMP existe avec des dates intersectantes de fin et de début. Veuillez supprimer ou modifier l'une des deux."
               cannot_extend_attributive_decision_with_pfmps: "Les élèves ayant changé de formation, de statut ou d'établissement doivent avoir une abrogation de leur décision d'attribution passée. Ce document peut être généré dans la liste des élèves."
 
+    tooltips:
+      report: "Autoriser un report permet de saisir une date jusqu'à laquelle prolonger la durée de la Décision d'Attribution associée à cette scolarité. Il devient ensuite possible de saisir des PFMPs pour l'année scolaire terminée. Cette option est à utiliser pour les élèves qui n'aurait pas pu réaliser leur PFMP au cours de l'année scolaire passée (raisons de santé, fermeture de l'entreprise d'accueil, problèmes liés à la météo....) et la rattrape sur l'année scolaire suivante"
+      rib: "Pour un élève majeur qui ne peut pas ouvrir de compte et souhaite que son allocation soit versée sur le compte d'un tiers dans le cadre de la procédure du mandat sous seing privé (comme indiqué dans la FàQ EduScol), l'option à sélectionner est : "
     hints:
       rib:
         name: "Noms et prénoms du titulaire du compte"
@@ -130,11 +133,6 @@ fr:
         name: "Titulaire du compte"
         iban: "IBAN"
         bic: "BIC"
-        owner_type: "Propriété des coordonnées bancaires"
-        owner_type_personal: "Les coordonnées bancaires appartiennent à l'élève"
-        owner_type_other_person: "Les coordonnées bancaires appartiennent à un représentant légal ou à un tiers"
-        owner_type_moral_person: "Les coordonnées bancaires appartiennent à une personne morale (ex : association)"
-        owner_type_mandate: "Les coordonnées bancaires appartiennent à un élève majeur payé sur le compte d'un tiers"
       missing :
           owner_type: "Les coordonnées bancaires appartiennent à :"
           owner_type_personal: "L'élève"
