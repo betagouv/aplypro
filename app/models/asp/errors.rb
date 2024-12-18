@@ -12,5 +12,6 @@ module ASP
     class IncompletePaymentRequestError < Error; end
     class MissingEstablishmentCommuneCodeError < Error; end
     class MissingEstablishmentPostalCodeError < Error; end
+    class IntegrationError < Error; end
   end
 end
