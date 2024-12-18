@@ -5,7 +5,7 @@ Quand("toutes les tâches de fond sont terminées") do
 end
 
 # NOTE: il arrive qu'une tâche déclence d'autres tâches, comme
-# GenerateAttributiveDecisionJob qui appelle
+# Generate::AttributiveDecisionJob qui appelle
 # Sync::StudentJob ou bien ConsiderPaymentRequestsJob qui
 # appelle PreparePaymentRequestJob, etc. Dans ces cas là il faut
 # épuiser la file de tâches deux fois pour lancer d'abord la tâche
@@ -22,7 +22,7 @@ Quand("la liste des élèves de l'établissement {string} est rafraîchie") do |
 end
 
 # NOTE: pas très élégant mais comme le job parent
-# (GenerateAttributiveDecisionsJob) déclenche un job par DA, il
+# (Generate::AttributiveDecisionsJob) déclenche un job par DA, il
 # faut perform non pas une mais deux fois la liste des tâches pour que
 # tout soit vraiment fini.
 Quand("la génération des décisions d'attribution manquantes est complètement finie") do
