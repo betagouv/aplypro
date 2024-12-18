@@ -58,7 +58,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
               allow_nil: true,
               greater_than: 0,
               less_than_or_equal_to: ->(pfmp) { (pfmp.end_date - pfmp.start_date).to_i + 1 }
-            }
+            }, unless: :rectified? # NOTE: a rectification with a 0 day count can be created to cancel a payment
 
   after_create -> { self.administrative_number = administrative_number }
 
@@ -79,6 +79,10 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def rectify!
     transition_to!(:rectified)
+  end
+
+  def rectified?
+    in_state?(:rectified?)
   end
 
   def relative_index
