@@ -146,13 +146,22 @@ describe PfmpManager do
                                                                                    }.to(confirmed_address_params[:address_line1]) # rubocop:disable Layout/LineLength
     end
 
-    it "raises an error when the corrected amount is too small" do # rubocop:disable RSpec/ExampleLength
+    it "raises an error when the corrected amount is below threshold" do # rubocop:disable RSpec/ExampleLength
       expect do
         manager.rectify_and_update_attributes!(
           { day_count: pfmp.day_count - 2, start_date: pfmp.start_date, end_date: pfmp.end_date },
           confirmed_address_params
         )
       end.to raise_error(PfmpManager::RectificationAmountThresholdNotReachedError)
+    end
+
+    it "raises an error when the corrected amount is zero" do # rubocop:disable RSpec/ExampleLength
+      expect do
+        manager.rectify_and_update_attributes!(
+          { day_count: pfmp.day_count, start_date: pfmp.start_date, end_date: pfmp.end_date },
+          confirmed_address_params
+        )
+      end.to raise_error(PfmpManager::RectificationAmountZeroError)
     end
   end
 

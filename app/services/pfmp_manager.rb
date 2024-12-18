@@ -8,6 +8,7 @@ class PfmpManager
   class PfmpNotModifiableError < PfmpManagerError; end
   class PaymentRequestNotIncompleteError < PfmpManagerError; end
   class RectificationAmountThresholdNotReachedError < PfmpManagerError; end
+  class RectificationAmountZeroError < PfmpManagerError; end
 
   EXCESS_AMOUNT_RECTIFICATION_THRESHOLD = 30
 
@@ -57,12 +58,7 @@ class PfmpManager
       paid_amount = pfmp.amount
       update!(confirmed_pfmp_params)
       correct_amount = pfmp.reload.amount
-      delta = paid_amount - correct_amount
-
-      if delta.positive? && delta <= EXCESS_AMOUNT_RECTIFICATION_THRESHOLD
-        raise RectificationAmountThresholdNotReachedError
-      end
-
+      check_rectification_delta(paid_amount - correct_amount)
       pfmp.student.update!(confirmed_address_params)
       pfmp.rectify!
     end
@@ -126,5 +122,13 @@ class PfmpManager
     elsif pfmp.in_state?(:completed, :validated)
       pfmp.transition_to!(:pending)
     end
+  end
+
+  def check_rectification_delta(delta)
+    if delta.positive? && delta <= EXCESS_AMOUNT_RECTIFICATION_THRESHOLD
+      raise RectificationAmountThresholdNotReachedError
+    end
+
+    raise RectificationAmountZeroError if delta.zero?
   end
 end
