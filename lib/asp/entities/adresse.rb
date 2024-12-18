@@ -26,9 +26,7 @@ module ASP
       end
 
       def self.from_payment_request(payment_request) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-        # TODO: what about the case of a rectified pfmp for a student abroad
-        # what should be sent for cpltdistribution & pointremise
-        if payment_request.pfmp.in_state?(:rectified)
+        if payment_request.pfmp.rectified?
           return new(
             pointremise: payment_request.student.address_line1.slice(0, 38), # Max 38 characters
             cpltdistribution: payment_request.student.address_line2&.slice(0, 38), # Max 38 characters

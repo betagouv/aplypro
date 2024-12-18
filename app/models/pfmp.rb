@@ -82,7 +82,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def rectified?
-    in_state?(:rectified?)
+    in_state?(:rectified)
   end
 
   def relative_index
