@@ -149,7 +149,15 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def attach_attributive_document(output, attachment_name)
     raise "Unsupported attachment type" unless %i[attributive_decision abrogation_decision cancellation_decision].include?(attachment_name)
 
-    description = attachment_name == :attributive_decision ? "décision-d-attribution" : "décision-d-abrogation"
+    description = case(attachment_name)
+                  when :attributive_decision
+                    "décision-d-attribution"
+                  when :abrogation_decision
+                    "décision-d-abrogation"
+                  when :cancellation_decision
+                    "décision-de-retrait"
+                  end
+
     name = attachment_file_name(description)
 
     attachment = public_send(attachment_name)

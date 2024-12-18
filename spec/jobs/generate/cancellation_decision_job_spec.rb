@@ -9,7 +9,7 @@ RSpec.describe Generate::CancellationDecisionJob do
 
   describe "#perform" do
     it "generates one abrogation decision per schooling" do
-      expect { job.perform_now }.to change { schooling.abrogation_decision.attached? }.from(false).to(true)
+      expect { job.perform_now }.to change { schooling.cancellation_decision.attached? }.from(false).to(true)
     end
 
 =begin
