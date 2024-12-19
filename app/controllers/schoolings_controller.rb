@@ -6,7 +6,10 @@ class SchoolingsController < ApplicationController
   before_action :authenticate_user!, :set_classe, :set_schooling
   before_action :check_director, :update_confirmed_director!, :check_confirmed_director,
                 only: %i[abrogate_decision update]
-  before_action :set_student_breadcrumbs, only: %i[confirm_removal confirm_removal_cancellation confirm_da_extension]
+  before_action :set_student_breadcrumbs, only: %i[confirm_removal
+                                                   confirm_removal_cancellation
+                                                   confirm_da_extension
+                                                   confirm_cancellation_decision]
 
   def abrogate_decision
     Generate::AbrogationDecisionJob.perform_now(@schooling)
@@ -24,7 +27,7 @@ class SchoolingsController < ApplicationController
     redirect_to student_path(@schooling.student), notice: t("flash.da.cancellation", name: @schooling.student.full_name)
   end
 
-  def confirm_cancellation; end
+  def confirm_cancellation_decision; end
 
   def confirm_da_extension; end
 
