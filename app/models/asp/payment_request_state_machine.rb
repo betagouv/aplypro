@@ -33,6 +33,13 @@ module ASP
       payment_request.student.update!(asp_individu_id: attrs["idIndDoss"])
       payment_request.schooling.update!(asp_dossier_id: attrs["idDoss"])
       payment_request.pfmp.update!(asp_prestation_dossier_id: attrs["idPretaDoss"])
+    rescue ActiveRecord::RecordNotUnique => e
+      Sentry.capture_exception(
+        ASP::Errors::IntegrationError.new(
+          "Integration error for p_r #{payment_request.id} for data #{transition.metadata} with message: #{e.message}"
+        )
+      )
+      raise e
     end
 
     after_transition(from: :pending, to: :ready) do |payment_request, _|
