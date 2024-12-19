@@ -12,11 +12,9 @@ RSpec.describe Generate::CancellationDecisionJob do
       expect { job.perform_now }.to change { schooling.cancellation_decision.attached? }.from(false).to(true)
     end
 
-=begin
-    it "bumps the version" do
-      expect { job.perform_now }.to change(schooling, :abrogation_decision_version).from(0).to(1)
-    end
-=end
+    # it "bumps the version" do
+    #   expect { job.perform_now }.to change(schooling, :abrogation_decision_version).from(0).to(1)
+    # end
 
     it "executes within a transaction" do
       expect(Schooling).to receive(:transaction) # rubocop:disable RSpec/MessageSpies
