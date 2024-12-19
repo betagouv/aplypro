@@ -20,7 +20,7 @@ RSpec.describe SchoolingsController do
 
   describe "DEL /abrogate_decision" do
     it "enqueues a job to generate the abrogation document" do
-      expect(GenerateAbrogationDecisionJob).to receive(:perform_now).with(schooling) # rubocop:disable RSpec/MessageSpies
+      expect(Generate::AbrogationDecisionJob).to receive(:perform_now).with(schooling) # rubocop:disable RSpec/MessageSpies
       delete abrogate_decision_school_year_class_schooling_path(SchoolYear.current,
                                                                 class_id: schooling.classe.id,
                                                                 id: schooling.id),
