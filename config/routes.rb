@@ -72,6 +72,8 @@ Rails.application.routes.draw do
         member do
           get "confirm_abrogation"
           delete "abrogate_decision"
+          get "confirm_cancellation_decision"
+          get "cancellation_decision"
           get "confirm_da_extension"
           get "confirm_removal"
           get "confirm_removal_cancellation"

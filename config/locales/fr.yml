@@ -27,6 +27,7 @@ fr:
     da:
       abrogated: La décision d'attribution de %{name} a bien été abrogée
       extended: La décision d'attribution de %{name} a bien été prolongée
+      cancellation: La décision d'attribution de %{name} a bien été retirée
       extension_removed: Le report de la décision d'attribution de %{name} a bien été supprimé
       cant_remove_extension: Le report de la décision d'attribution de %{name} n'a pas pu être supprimé car celui ci contient une PFMP
       extension_failure: La décision d'attribution de %{name} n'a pas pu être modifiée

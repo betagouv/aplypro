@@ -13,11 +13,18 @@ class SchoolingsController < ApplicationController
 
     retry_incomplete_payment_request!
 
-    redirect_to student_path(@schooling.student),
-                notice: t("flash.da.abrogated", name: @schooling.student.full_name)
+    redirect_to student_path(@schooling.student), notice: t("flash.da.abrogated", name: @schooling.student.full_name)
   end
 
   def confirm_abrogation; end
+
+  def cancellation_decision
+    Generate::CancellationDecisionJob.perform_now(@schooling)
+
+    redirect_to student_path(@schooling.student), notice: t("flash.da.cancellation", name: @schooling.student.full_name)
+  end
+
+  def confirm_cancellation; end
 
   def confirm_da_extension; end
 
