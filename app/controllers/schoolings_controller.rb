@@ -9,15 +9,22 @@ class SchoolingsController < ApplicationController
   before_action :set_student_breadcrumbs, only: %i[confirm_removal confirm_removal_cancellation confirm_da_extension]
 
   def abrogate_decision
-    GenerateAbrogationDecisionJob.perform_now(@schooling)
+    Generate::AbrogationDecisionJob.perform_now(@schooling)
 
     retry_incomplete_payment_request!
 
-    redirect_to student_path(@schooling.student),
-                notice: t("flash.da.abrogated", name: @schooling.student.full_name)
+    redirect_to student_path(@schooling.student), notice: t("flash.da.abrogated", name: @schooling.student.full_name)
   end
 
   def confirm_abrogation; end
+
+  def cancellation_decision
+    Generate::CancellationDecisionJob.perform_now(@schooling)
+
+    redirect_to student_path(@schooling.student), notice: t("flash.da.cancellation", name: @schooling.student.full_name)
+  end
+
+  def confirm_cancellation; end
 
   def confirm_da_extension; end
 
