@@ -60,7 +60,7 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     private_allowed: %w[30 31 40 41 60 20 10]
   }.freeze
 
-  AUTHORISED_CLG_UAIS = %w[9760371Z 9760379H 9760274U 9760167C 9760369X 9730570G].freeze
+  AUTHORISED_CLG_UAIS = %w[9760371Z 9760379H 9760274U 9760167C 9760369X 9730570G 0601551K].freeze
 
   class << self
     def accepted_type?(type)
