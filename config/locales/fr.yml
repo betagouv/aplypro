@@ -222,6 +222,9 @@ fr:
         confirm_removal_cancellation:
           title: "Réintégration de l'élève dans la classe"
           breadcrumb: "Réintégration de l'élève dans la classe"
+        confirm_cancellation_decision:
+          title: "Retrait des décisions d'attribution"
+          breadcrumb: "Retrait des décisions d'attribution"
 
   global:
     sponsor: "Direction\nInterministérielle\ndu Numérique"
