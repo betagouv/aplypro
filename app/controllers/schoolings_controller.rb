@@ -9,7 +9,7 @@ class SchoolingsController < ApplicationController
   before_action :set_student_breadcrumbs, only: %i[confirm_removal confirm_removal_cancellation confirm_da_extension]
 
   def abrogate_decision
-    GenerateAbrogationDecisionJob.perform_now(@schooling)
+    Generate::AbrogationDecisionJob.perform_now(@schooling)
 
     retry_incomplete_payment_request!
 
