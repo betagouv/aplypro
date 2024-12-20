@@ -10,18 +10,18 @@ Fonctionnalité: Gestion des scolarités de l'élève
     Et que je consulte le profil de "Jean Dupuis" dans la classe de "1MELEC"
 
   Scénario: Le personnel veut réintégrer un élève retiré manuellement de la classe
-    Quand je clique sur "Retirer l'élève de la classe"
-    Et que je clique sur "Confirmer le retrait de l'élève de la classe"
+    Quand je clique sur "Masquer l'élève de la classe"
+    Et que je clique sur "Confirmer le masquage de l'élève de la classe"
     Alors la page contient "L'élève Jean Dupuis a bien été retiré de la classe 1MELEC"
-    Et je peux voir dans le tableau "Élèves retirés manuellement de la classe"
+    Et je peux voir dans le tableau "Élèves masqués manuellement de la classe"
       | Élèves (1)    | Réintégration de l'élève dans la classe      |
       | Dupuis Jean   | Réintégrer Jean Dupuis dans la classe 1MELEC |
     Et la page contient "Saisir 9 coordonnées bancaires"
     Quand je consulte le profil de "Jean Dupuis" dans la classe de "1MELEC"
-    Alors la page contient "Retiré(e) manuellement de la classe"
+    Alors la page contient "Masqué(e) manuellement de la classe"
     Quand je consulte la classe "1MELEC"
     Et que je clique sur "Réintégrer Jean Dupuis dans la classe 1MELEC"
     Et que je clique sur "Confirmer la réintégration de l'élève dans la classe"
-    Alors la page ne contient pas "Élèves retirés manuellement de la classe"
+    Alors la page ne contient pas "Élèves masqués manuellement de la classe"
     Quand je consulte le profil de "Jean Dupuis" dans la classe de "1MELEC"
-    Alors la page contient "Retirer l'élève de la classe"
+    Alors la page contient "Masquer l'élève de la classe"

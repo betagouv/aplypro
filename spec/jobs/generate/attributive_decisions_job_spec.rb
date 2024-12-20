@@ -3,7 +3,7 @@
 require "rails_helper"
 require "support/webmock_helpers"
 
-RSpec.describe GenerateAttributiveDecisionsJob do
+RSpec.describe Generate::AttributiveDecisionsJob do
   subject(:job) { described_class.new(establishment.schoolings) }
 
   let(:establishment) { create(:establishment, :with_fim_user) }
@@ -16,7 +16,7 @@ RSpec.describe GenerateAttributiveDecisionsJob do
 
   context "when there are no attributive decisions" do
     it "generates one for each student" do
-      expect { job.perform_now }.to have_enqueued_job(GenerateAttributiveDecisionJob).exactly(students.count)
+      expect { job.perform_now }.to have_enqueued_job(Generate::AttributiveDecisionJob).exactly(students.count)
     end
   end
 

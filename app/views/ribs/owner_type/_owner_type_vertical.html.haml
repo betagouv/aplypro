@@ -3,11 +3,7 @@
 %fieldset.fr-fieldset.fr-input-group{id: "radio", "aria-labelledby": "radio-legend radio-messages"}
   %legend.fr-fieldset__legend--regular.fr-fieldset__legend{id: "radio-legend"}
     = t("activerecord.attributes.missing.owner_type")
-
-    %button.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-owner_type", type: "button"}
-    %span.fr-tooltip.fr-placement{id: "tooltip-owner_type", role: "tooltip", "aria-hidden" => "true"}
-      %em= t("activerecord.tooltips.rib")
-      %strong= t("activerecord.attributes.missing.owner_type_mandate")
+    = render partial: "shared/tooltip", locals: { message: "owner_type", id: 1 }
 
   .fr-fieldset__element
     .fr-radio-group
