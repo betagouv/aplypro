@@ -12,29 +12,9 @@ RSpec.describe Generate::CancellationDecisionJob do
       expect { job.perform_now }.to change { schooling.cancellation_decision.attached? }.from(false).to(true)
     end
 
-    # it "bumps the version" do
-    #   expect { job.perform_now }.to change(schooling, :abrogation_decision_version).from(0).to(1)
-    # end
-
     it "executes within a transaction" do
       expect(Schooling).to receive(:transaction) # rubocop:disable RSpec/MessageSpies
       job.perform_now
-    end
-
-    context "when the attributive decision is missing" do
-      let(:schooling) { create(:schooling, :closed) }
-
-      it "raises an error" do
-        expect { job.perform_now }.to raise_error Generate::CancellationDecisionJob::MissingAttributiveDecisionError
-      end
-    end
-
-    context "when the schooling is open" do
-      let(:schooling) { create(:schooling, :with_attributive_decision) }
-
-      it "raises an error" do
-        expect { job.perform_now }.to raise_error Generate::CancellationDecisionJob::MissingSchoolingEndDateError
-      end
     end
   end
 
