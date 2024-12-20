@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe GenerateAbrogationDecisionJob do
+RSpec.describe Generate::AbrogationDecisionJob do
   subject(:job) { described_class.new(schooling) }
 
   let(:schooling) { create(:schooling, :with_attributive_decision, :closed) }
@@ -25,7 +25,7 @@ RSpec.describe GenerateAbrogationDecisionJob do
       let(:schooling) { create(:schooling, :closed) }
 
       it "raises an error" do
-        expect { job.perform_now }.to raise_error GenerateAbrogationDecisionJob::MissingAttributiveDecisionError
+        expect { job.perform_now }.to raise_error Generate::AbrogationDecisionJob::MissingAttributiveDecisionError
       end
     end
 
@@ -33,7 +33,7 @@ RSpec.describe GenerateAbrogationDecisionJob do
       let(:schooling) { create(:schooling, :with_attributive_decision) }
 
       it "raises an error" do
-        expect { job.perform_now }.to raise_error GenerateAbrogationDecisionJob::MissingSchoolingEndDateError
+        expect { job.perform_now }.to raise_error Generate::AbrogationDecisionJob::MissingSchoolingEndDateError
       end
     end
   end
