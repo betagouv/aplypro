@@ -217,14 +217,14 @@ fr:
       schoolings:
         confirm_da_extension: "Autoriser un report de décision d'attribution"
         confirm_removal:
-          title: "Retrait de l'élève de la classe"
-          breadcrumb: "Retrait de l'élève de la classe"
+          title: "Masquer l'élève de la classe"
+          breadcrumb: "Masquer l'élève de la classe"
         confirm_removal_cancellation:
           title: "Réintégration de l'élève dans la classe"
           breadcrumb: "Réintégration de l'élève dans la classe"
         confirm_cancellation_decision:
-          title: "Retrait des décisions d'attribution"
-          breadcrumb: "Retrait des décisions d'attribution"
+          title: "Retrait de la décision d'attribution"
+          breadcrumb: "Retrait de la décision d'attribution"
 
   global:
     sponsor: "Direction\nInterministérielle\ndu Numérique"

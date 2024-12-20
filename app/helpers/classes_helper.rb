@@ -28,7 +28,7 @@ module ClassesHelper
     if schooling.removed?
       content_tag(
         :div,
-        "Retiré(e) manuellement de la classe",
+        "Masqué(e) manuellement de la classe",
         class: "fr-badge fr-badge--sm fr-badge--warning #{args[:class]}"
       )
     elsif schooling.closed?
