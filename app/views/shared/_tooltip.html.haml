@@ -1,0 +1,6 @@
+- unless defined? id
+  - id = "1"
+
+%button.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-#{message}-#{id}", type: "button"}
+  %span.fr-tooltip.fr-placement{id: "tooltip-#{message}-#{id}", role: "tooltip", "aria-hidden" => "true"}
+    %em= t("activerecord.tooltips.#{message}")
