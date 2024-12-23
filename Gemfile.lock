@@ -599,7 +599,7 @@ DEPENDENCIES
   devise
   devise-i18n
   dry-transformer
-  dsfr-view-components (= 1.5.1)
+  dsfr-view-components
   factory_bot_rails
   faker
   faraday

@@ -36,7 +36,7 @@ gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 gem "bootsnap", require: false
 
 # saves the DSFR boilerplate
-gem "dsfr-view-components", "1.5.1"
+gem "dsfr-view-components"
 
 # nicer templates
 gem "haml-rails"
