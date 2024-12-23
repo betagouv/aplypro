@@ -178,7 +178,7 @@ GEM
     drb (2.2.1)
     dry-transformer (1.0.1)
       zeitwerk (~> 2.6)
-    dsfr-view-components (1.5.3)
+    dsfr-view-components (1.5.1)
       html-attributes-utils (~> 1)
       pagy (~> 6)
       view_component (~> 2)
@@ -599,7 +599,7 @@ DEPENDENCIES
   devise
   devise-i18n
   dry-transformer
-  dsfr-view-components
+  dsfr-view-components (= 1.5.1)
   factory_bot_rails
   faker
   faraday
