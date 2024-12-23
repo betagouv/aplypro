@@ -35,6 +35,7 @@ class EstablishmentsController < ApplicationController
                 .filter(&:attached?)
                 .map { |d| [d, d.key] }
 
+    Rails.logger.info documents
     # zipline(documents, attributive_decisions_archive_name)
   end
 
