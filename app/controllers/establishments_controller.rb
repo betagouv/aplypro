@@ -8,7 +8,7 @@ class EstablishmentsController < ApplicationController
                 :check_confirmed_director_for_attributive_decision,
                 only: :create_attributive_decisions
 
-  include Zipline
+  # include Zipline
 
   def create_attributive_decisions
     mark_attributive_decision_generation!
@@ -35,7 +35,7 @@ class EstablishmentsController < ApplicationController
                 .filter(&:attached?)
                 .map { |d| [d, d.key] }
 
-    zipline(documents, attributive_decisions_archive_name)
+    # zipline(documents, attributive_decisions_archive_name)
   end
 
   private
