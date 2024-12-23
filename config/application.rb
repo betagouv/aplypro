@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative "boot"
 
 require "rails"
@@ -26,10 +24,13 @@ Bundler.require(*Rails.groups)
 module Aplypro
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.1
+    config.load_defaults 8.0
 
-    config.i18n.default_locale = :fr
-    config.i18n.fallbacks = [:en]
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    config.autoload_lib(ignore: %w[assets tasks])
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
@@ -40,12 +41,10 @@ module Aplypro
 
     # Don't generate system test files.
     config.generators.system_tests = nil
-
-    config.active_job.queue_adapter = :sidekiq
-
-    config.autoload_lib(ignore: %w[assets tasks])
-
     config.active_model.i18n_customize_full_message = true
     config.i18n.raise_on_missing_translations = true
+    config.i18n.default_locale = :fr
+    config.i18n.fallbacks = [:en]
+    config.active_job.queue_adapter = :sidekiq
   end
 end
