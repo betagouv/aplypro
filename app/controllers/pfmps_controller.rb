@@ -4,6 +4,18 @@ class PfmpsController < ApplicationController
   include RoleCheck
   include PfmpResource
 
+  rescue_from PfmpManager::AmountThresholdNotReachedError do
+    @student = @pfmp.student
+    flash.now[:alert] = t("flash.pfmps.rectification.threshold_not_reached", threshold: PfmpManager::EXCESS_AMOUNT_RECTIFICATION_THRESHOLD)
+    render :confirm_rectification, status: :unprocessable_entity
+  end
+
+  rescue_from PfmpManager::AmountZeroError do
+    @student = @pfmp.student
+    flash.now[:alert] = t("flash.pfmps.rectification.zero_difference")
+    render :confirm_rectification, status: :unprocessable_entity
+  end
+
   before_action :check_director, :update_confirmed_director!, :check_confirmed_director,
                 only: %i[validate rectify]
 
@@ -68,7 +80,7 @@ class PfmpsController < ApplicationController
       render :confirm_rectification
     else
       redirect_to school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp),
-                  alert: t("flash.pfmps.cannot_rectify")
+                  alert: t("flash.pfmps.rectification.cannot_rectify")
     end
   end
 
@@ -77,10 +89,10 @@ class PfmpsController < ApplicationController
       @student = @pfmp.student
       PfmpManager.new(@pfmp).rectify_and_update_attributes!(pfmp_params, address_params)
       redirect_to school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp),
-                  notice: t("flash.pfmps.rectified")
+                  notice: t("flash.pfmps.rectification.rectified")
     else
       redirect_to school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp),
-                  alert: t("flash.pfmps.cannot_rectify")
+                  alert: t("flash.pfmps.rectification.cannot_rectify")
     end
   rescue ActiveRecord::RecordInvalid
     render :confirm_rectification, status: :unprocessable_entity

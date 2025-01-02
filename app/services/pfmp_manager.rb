@@ -7,8 +7,9 @@ class PfmpManager
   class ExistingActivePaymentRequestError < PfmpManagerError; end
   class PfmpNotModifiableError < PfmpManagerError; end
   class PaymentRequestNotIncompleteError < PfmpManagerError; end
-  class RectificationAmountThresholdNotReachedError < PfmpManagerError; end
-  class RectificationAmountZeroError < PfmpManagerError; end
+  class RectificationError < PfmpManagerError; end
+  class AmountThresholdNotReachedError < RectificationError; end
+  class AmountZeroError < RectificationError; end
 
   EXCESS_AMOUNT_RECTIFICATION_THRESHOLD = 30
 
