@@ -57,11 +57,11 @@ class PfmpManager
   def rectify_and_update_attributes!(confirmed_pfmp_params, confirmed_address_params)
     Pfmp.transaction do
       paid_amount = pfmp.amount
+      pfmp.rectify!
       update!(confirmed_pfmp_params)
       correct_amount = pfmp.reload.amount
       check_rectification_delta(paid_amount - correct_amount)
       pfmp.student.update!(confirmed_address_params)
-      pfmp.rectify!
     end
   end
 
