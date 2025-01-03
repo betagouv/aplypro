@@ -48,7 +48,7 @@ class Rib < ApplicationRecord
   end
 
   def archivable?
-    payment_requests.empty? || payment_requests.all?(&:terminated?)
+    payment_requests.empty? || payment_requests.all? { |pr| pr.rib.present? }
   end
 
   # NOTE: this is used by the framework itself
