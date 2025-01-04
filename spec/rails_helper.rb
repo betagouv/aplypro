@@ -33,24 +33,6 @@ rescue ActiveRecord::PendingMigrationError => e
   exit 1
 end
 
-module Helpers
-  module ReadOnlyBypass
-    # sometimes we need setup our test data by modifying things that
-    # aren't supposed to be modified: the RIBs are marked `readonly?`
-    # whilst there's an active payment request. This helper allows
-    # bypassing the constraint for the sake of nicer tests.
-    def with_readonly_bypass(model)
-      model.instance_eval do
-        def readonly?
-          false
-        end
-
-        yield(model) if block_given?
-      end
-    end
-  end
-end
-
 RSpec.configure do |config|
   require "./mock/factories/asp"
 
@@ -60,8 +42,6 @@ RSpec.configure do |config|
   config.before(:suite) do
     Rails.application.load_seed if missing_seeds?
   end
-
-  config.include Helpers::ReadOnlyBypass
 
   config.include FactoryBot::Syntax::Methods
 

@@ -22,7 +22,7 @@
           %p Ces coordonnées bancaires ne sont pas modifiables car elles sont actuellement utilisées dans une ou plusieurs requêtes de paiement.
 
       .fr-btns-group.fr-btns-group--inline
-        %li= button_to "Modifier les coordonnées bancaires", edit_student_rib_path(@student, @student.rib(current_establishment)), class: 'fr-btn fr-btn--secondary', disabled: @student.rib(current_establishment).readonly?, method: :get
-        %li= button_to "Supprimer les coordonnées bancaires", confirm_deletion_student_rib_path(@student, @student.rib(current_establishment)), class: 'fr-btn fr-btn--secondary', disabled: @student.rib(current_establishment).readonly?, method: :get
+        %li= button_to "Modifier les coordonnées bancaires", edit_student_rib_path(@student, @student.rib(current_establishment)), class: 'fr-btn fr-btn--secondary', method: :get
+        %li= button_to "Supprimer les coordonnées bancaires", confirm_deletion_student_rib_path(@student, @student.rib(current_establishment)), class: 'fr-btn fr-btn--secondary', method: :get
 
 = render partial: 'pfmps/pfmp_student_table', locals: { schoolings: @schoolings }

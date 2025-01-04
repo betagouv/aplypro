@@ -145,7 +145,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def create_new_rib(rib_params)
     current_rib = rib(rib_params.fetch("establishment_id"))
-    current_rib.archive! if current_rib.present? && current_rib.archivable?
+    current_rib.archive! if current_rib.present?
     ribs.create(rib_params)
   end
 

@@ -47,16 +47,6 @@ class Rib < ApplicationRecord
     update!(archived_at: DateTime.now)
   end
 
-  def archivable?
-    payment_requests.empty? || payment_requests.all? { |pr| pr.rib.present? }
-  end
-
-  # NOTE: this is used by the framework itself
-  # https://devdocs.io/rails~7.1/activerecord/core#method-i-readonly-3F
-  def readonly?
-    !archivable?
-  end
-
   def ==(other)
     iban.eql?(other.iban) && bic.eql?(other.bic) && name.eql?(other.name) && owner_type.eql?(other.owner_type)
   end
