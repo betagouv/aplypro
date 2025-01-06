@@ -6,6 +6,9 @@ module Generate
   class CancellationDecisionJob < ApplicationJob
     include DocumentGeneration
 
+    class MissingAttributiveDecisionError < StandardError
+    end
+
     after_discard do |job|
       self.class.after_discard_callback(job, :generating_attributive_decision)
     end
@@ -15,6 +18,8 @@ module Generate
     end
 
     def perform(schooling)
+      raise MissingAttributiveDecisionError if schooling.attributive_decision.blank?
+
       Schooling.transaction do
         generate_document(schooling)
         schooling.save!

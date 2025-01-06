@@ -24,6 +24,8 @@ class SchoolingsController < ApplicationController
   def cancellation_decision
     Generate::CancellationDecisionJob.perform_now(@schooling)
 
+    @schooling.attributive_decision.detach
+
     redirect_to student_path(@schooling.student), notice: t("flash.da.cancellation", name: @schooling.student.full_name)
   end
 

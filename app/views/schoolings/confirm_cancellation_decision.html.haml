@@ -2,7 +2,7 @@
   = dsfr_alert(type: :warning, title: "Êtes-vous certain(e) de vouloir retirer cette décision d'attribution ?")
 
 .fr-col-md-6.fr-mt-3w
-= form_with url: cancellation_decision_school_year_class_schooling_path(selected_school_year, @classe, @schooling), method: :delete do |form|
+= form_with url: cancellation_decision_school_year_class_schooling_path(selected_school_year, @classe, @schooling), method: :get do |form|
   %ul
     %li
       Etudiant :
