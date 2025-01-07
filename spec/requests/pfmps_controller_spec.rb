@@ -143,7 +143,7 @@ RSpec.describe PfmpsController do
                                                            id: pfmp.id),
              params: { pfmp: pfmp_params, addresse: addresse_params, confirmed_director: "1" }
 
-        expect(flash[:notice]).to eq(I18n.t("flash.pfmps.rectified"))
+        expect(flash[:notice]).to eq(I18n.t("flash.pfmps.rectification.rectified"))
         expect(pfmp.reload.attributes.slice("start_date", "end_date", "day_count", "current_state"))
           .to eq("start_date" => new_start_date, "end_date" => pfmp_params[:end_date], "day_count" => 5)
         expect(pfmp).to be_in_state(:rectified)
@@ -158,7 +158,7 @@ RSpec.describe PfmpsController do
           school_year, class_id: pfmp.classe.id, schooling_id: pfmp.schooling.id, id: pfmp.id
         ), params: { pfmp: pfmp_params, addresse: addresse_params, confirmed_director: "1" }
 
-        expect(flash[:alert]).to eq(I18n.t("flash.pfmps.cannot_rectify"))
+        expect(flash[:alert]).to eq(I18n.t("flash.pfmps.rectification.cannot_rectify"))
         expect(pfmp).to be_in_state(:validated)
       end
     end

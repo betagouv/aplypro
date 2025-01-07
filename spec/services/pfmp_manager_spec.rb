@@ -163,6 +163,16 @@ describe PfmpManager do
         )
       end.to raise_error(PfmpManager::RectificationAmountZeroError)
     end
+
+    it "allows rectification when setting day count to zero" do # rubocop:disable RSpec/ExampleLength
+      expect do
+        manager.rectify_and_update_attributes!(
+          { day_count: 0, start_date: pfmp.start_date, end_date: pfmp.end_date },
+          confirmed_address_params
+        )
+      end.to change { pfmp.reload.current_state }.from("validated").to("rectified")
+                                                 .and change(pfmp, :day_count).to(0)
+    end
   end
 
   describe "#calculate_amount" do # rubocop:disable RSpec/MultipleMemoizedHelpers

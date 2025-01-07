@@ -10,8 +10,11 @@ fr:
       destroyed: La PFMP de %{name} a bien été supprimée
       not_destroyed: La PFMP ne peut pas être supprimée car son paiement est en cours de traitement
       validated: La PFMP de %{name} a bien été validée
-      cannot_rectify: La correction des données n'est pas correcte
-      rectified: La PFMP a bien été corrigée et relancée pour un nouveau paiement
+      rectification:
+        cannot_rectify: La correction des données n'est pas correcte
+        rectified: La PFMP a bien été corrigée et relancée pour un nouveau paiement
+        threshold_not_reached: "La différence de montant n'est pas suffisante pour générer un indu (montant minimum: %{threshold}€)"
+        zero_difference: La différence de montant est nulle.
     payment_requests:
       create: Une nouvelle demande de paiement a été créée pour %{name}
       mark_ready:
