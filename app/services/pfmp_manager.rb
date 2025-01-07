@@ -5,6 +5,7 @@
 class PfmpManager
   class PfmpManagerError < StandardError; end
   class ExistingActivePaymentRequestError < PfmpManagerError; end
+  class PaidPfmpError < PfmpManagerError; end
   class PfmpNotModifiableError < PfmpManagerError; end
   class PaymentRequestNotIncompleteError < PfmpManagerError; end
   class RectificationError < PfmpManagerError; end
@@ -40,8 +41,9 @@ class PfmpManager
 
   def create_new_payment_request!
     raise ExistingActivePaymentRequestError if pfmp.latest_payment_request&.active?
+    raise PaidPfmpError if pfmp.paid? && !pfmp.rectified?
 
-    pfmp.payment_requests.create! if pfmp.amount.positive? || (pfmp.rectified? && pfmp.amount.zero?)
+    pfmp.payment_requests.create! if pfmp.payable?
   end
 
   def retry_incomplete_payment_request!
