@@ -158,6 +158,6 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def unsyncable?
-    ine_not_found || current_schooling&.removed? || establishment&.students_provider.blank?
+    ine_not_found || current_schooling&.removed? || (establishment.present? && establishment.students_provider.blank?)
   end
 end
