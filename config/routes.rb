@@ -20,6 +20,8 @@ Rails.application.routes.draw do
 
   delete "asp/logout", to: "asp/application#logout", as: :destroy_asp_user_session
 
+  get 'search_student', to: "search#search_student"
+
   resources :users, only: :update do
     get "select_establishment"
   end
