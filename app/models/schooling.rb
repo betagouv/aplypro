@@ -3,6 +3,7 @@
 class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_one_attached :attributive_decision
   has_one_attached :abrogation_decision
+  has_one_attached :cancellation_decision
 
   enum :status, { student: 0, apprentice: 1, other: 2 }, scopes: false, validate: { allow_nil: true }
 
@@ -146,10 +147,15 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def attach_attributive_document(output, attachment_name)
-    raise "Unsupported attachment type" unless %i[attributive_decision abrogation_decision].include?(attachment_name)
+    descriptions = {
+      attributive_decision: "décision-d-attribution",
+      abrogation_decision: "décision-d-abrogation",
+      cancellation_decision: "décision-de-retrait"
+    }
 
-    description = attachment_name == :attributive_decision ? "décision-d-attribution" : "décision-d-abrogation"
-    name = attachment_file_name(description)
+    raise "Unsupported attachment type" unless descriptions.keys.include?(attachment_name)
+
+    name = attachment_file_name(descriptions[attachment_name])
 
     attachment = public_send(attachment_name)
     attachment.purge if attachment.present?

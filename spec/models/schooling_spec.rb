@@ -344,6 +344,15 @@ RSpec.describe Schooling do
         expect(schooling.abrogation_decision.content_type).to eq("application/pdf")
       end
 
+      it "attaches the cancellation decision" do # rubocop:disable RSpec/MultipleExpectations
+        expect do
+          schooling.attach_attributive_document(output, :cancellation_decision)
+        end.to change { schooling.cancellation_decision.attached? }.from(false).to(true)
+
+        expect(schooling.cancellation_decision.filename.to_s).to match(/d\u00E9cision-de-retrait/)
+        expect(schooling.cancellation_decision.content_type).to eq("application/pdf")
+      end
+
       it "purges the existing attachment before attaching a new one" do # rubocop:disable RSpec/ExampleLength
         schooling.attributive_decision.attach(
           io: StringIO.new("existing attachment"),
