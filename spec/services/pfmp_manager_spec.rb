@@ -68,6 +68,14 @@ describe PfmpManager do
       end
     end
 
+    context "when pfmp is paid" do
+      let(:pfmp) { create(:asp_payment_request, :paid).pfmp }
+
+      it "raises an error" do
+        expect { manager.create_new_payment_request! }.to raise_error(PfmpManager::PaidPfmpError)
+      end
+    end
+
     context "when previous active payment request exists" do
       let(:pfmp) { create(:pfmp, :validated).reload }
 
