@@ -8,7 +8,7 @@ module DsfrHelper
         return "" if @elements.one?
 
         @elements.map do |element|
-          component.breadcrumb(href: element.path, label: element.name)
+          component.with_breadcrumb(href: element.path, label: element.name)
         end
       end
       # rubocop:enable Rails/HelperInstanceVariable
