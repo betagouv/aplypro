@@ -5,9 +5,11 @@ class SearchController < ApplicationController
                 :set_students_result
 
   def search_student
-    # TODO: Ajouter des "notice" s'il n'y a pas de résultat ou + de 1 résultat
-    return if @search.blank?
-    return if @students.count > 1
+    if @students.blank?
+      redirect_to request.referer, alert: t("errors.search.students.not_found", search: @search) and return
+    elsif @students.count > 1
+      redirect_to request.referer, alert: t("errors.search.students.not_unique", search: @search) and return
+    end
 
     redirect_to student_path(@students.first)
   end
