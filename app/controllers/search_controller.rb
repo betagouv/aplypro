@@ -21,10 +21,10 @@ class SearchController < ApplicationController
 
     @students = []
     Student.find_each do |student|
-      first_name = student.first_name.upcase
-      last_name = student.last_name.upcase
-      full_name1 = student.full_name.upcase
-      full_name2 = (last_name + first_name).upcase
+      first_name = unify(student.first_name)
+      last_name = unify(student.last_name)
+      full_name1 = unify(student.full_name)
+      full_name2 = unify((last_name + first_name))
 
       if first_name.include?(@search) ||
          last_name.include?(@search) ||
@@ -38,6 +38,10 @@ class SearchController < ApplicationController
   def sanitize_search
     return if params[:search].blank?
 
-    @search = params[:search].upcase
+    @search = unify(params[:search])
+  end
+
+  def unify(string)
+    I18n.transliterate(string.tr("-", " ").upcase, locale: :fr)
   end
 end
