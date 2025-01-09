@@ -16,22 +16,22 @@ class SearchController < ApplicationController
 
   private
 
-  def set_students_result
+  def set_students_result # rubocop:disable Metrics/AbcSize
     return if @search.blank?
 
     @students = []
-    Student.find_each do |student|
+    current_establishment.students.each do |student|
       first_name = unify(student.first_name)
       last_name = unify(student.last_name)
       full_name1 = unify(student.full_name)
-      full_name2 = unify((last_name + first_name))
+      full_name2 = unify(last_name + first_name)
 
-      if first_name.include?(@search) ||
-         last_name.include?(@search) ||
-         full_name1.include?(@search) ||
-         full_name2.include?(@search)
-        @students << student
-      end
+      next unless first_name.include?(@search) ||
+                  last_name.include?(@search) ||
+                  full_name1.include?(@search) ||
+                  full_name2.include?(@search)
+
+      @students << student
     end
   end
 
