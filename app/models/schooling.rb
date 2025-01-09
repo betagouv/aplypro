@@ -104,6 +104,10 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
     removed_at.present?
   end
 
+  def syncable?
+    student.ine_not_found || removed? || establishment.students_provider.present?
+  end
+
   def attachment_file_name(description)
     [
       student.last_name,

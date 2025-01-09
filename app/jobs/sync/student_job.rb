@@ -5,9 +5,9 @@ module Sync
     queue_as :default
 
     def perform(schooling)
-      student = schooling.student
+      return true unless schooling.syncable?
 
-      return true if student.unsyncable?
+      student = schooling.student
 
       fetch_student_data(schooling)
 
