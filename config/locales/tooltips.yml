@@ -1,18 +1,18 @@
 fr:
   tooltips:
     report: |
-      <em>Autoriser un report permet de saisir une date jusqu'à laquelle prolonger la durée de la Décision d'Attribution associée à cette scolarité. Il devient ensuite possible de saisir des PFMPs pour l'année scolaire terminée. Cette option est à utiliser pour les élèves qui n'aurait pas pu réaliser leur PFMP au cours de l'année scolaire passée (raisons de santé, fermeture de l'entreprise d'accueil, problèmes liés à la météo....) et la rattrape sur l'année scolaire suivante</em>
+      Autoriser un report permet de saisir une date jusqu'à laquelle prolonger la durée de la Décision d'Attribution associée à cette scolarité. Il devient ensuite possible de saisir des PFMPs pour l'année scolaire terminée. Cette option est à utiliser pour les élèves qui n'aurait pas pu réaliser leur PFMP au cours de l'année scolaire passée (raisons de santé, fermeture de l'entreprise d'accueil, problèmes liés à la météo....) et la rattrape sur l'année scolaire suivante
     owner_type: |
-      <em>Pour un élève majeur qui ne peut pas ouvrir de compte et souhaite que son allocation soit versée sur le compte d'un tiers dans le cadre de la procédure du mandat sous seing privé (comme indiqué dans la FàQ EduScol), l'option à sélectionner est :</em> 
+      Pour un élève majeur qui ne peut pas ouvrir de compte et souhaite que son allocation soit versée sur le compte d'un tiers dans le cadre de la procédure du mandat sous seing privé (comme indiqué dans la FàQ EduScol), l'option à sélectionner est : 
       <strong>Un élève majeur payé sur le compte d'un tiers</strong>
     remove_student: |
-      <em>Utilisez ce bouton pour un élève qui est inscrit dans la classe mais ne s'est jamais présenté dans l'établissement. Si cet élève est toujours présent dans la Base Elèves Etablissement (BEE) ou dans Colentagri, cela permettra de ne plus le voir affiché dans les effectifs APLyPro.</em>
+      Utilisez ce bouton pour un élève qui est inscrit dans la classe mais ne s'est jamais présenté dans l'établissement. Si cet élève est toujours présent dans la Base Elèves Etablissement (BEE) ou dans Colentagri, cela permettra de ne plus le voir affiché dans les effectifs APLyPro.
     cancellation_decision: |
-      <em>Utilisez ce bouton pour supprimer le droit à l'allocation pour les lycéens professionnels avec effet rétroactif. Cela peut concerner des élèves qui ont le statut d'apprenti ou qui s'avèrent ne pas être éligibles au dispositif. Attention! Les PFMP saisies deviennent de fait invalides et celles éventuellement payées feront l'objet d'une déclaration d'indu automatiquement, l'élève recevra un (des) ordre(s) de reversement pour rendre les sommes indument perçues.</em>
+      Utilisez ce bouton pour supprimer le droit à l'allocation pour les lycéens professionnels avec effet rétroactif. Cela peut concerner des élèves qui ont le statut d'apprenti ou qui s'avèrent ne pas être éligibles au dispositif. Attention! Les PFMP saisies deviennent de fait invalides et celles éventuellement payées feront l'objet d'une déclaration d'indu automatiquement, l'élève recevra un (des) ordre(s) de reversement pour rendre les sommes indument perçues.
     rectification: |
-      <em>La déclaration d’un indu ne doit se faire que si le montant payé n’est pas conforme au montant réellement dû au titre de la PFMP (dans le cas d’un trop perçu ou d’un moins perçu).</em>
-        <ul>
-          <strong>Ne sont pas considérés comme des indus :</strong>
-          <li>> Les erreurs de RIB : quand le paiement dû à un élève est versé sur le mauvais compte bancaire. Un formulaire de déclaration à l'ASP est disponible, vous pouvez le récupérer auprès du support de votre DSI académique (communication faite aux ADSI le 9 juillet 2024).</li>
-          <li>> Les rejets bancaires : quand un paiement est marqué comme envoyé mais que la banque du destinataire l'a rejeté. L'ASP contacte alors directement l'établissement scolaire (communication faite aux ADSI le 2 juillet 2024).</li>
-        </ul>
+      La déclaration d’un indu ne doit se faire que si le montant payé n’est pas conforme au montant réellement dû au titre de la PFMP (dans le cas d’un trop perçu ou d’un moins perçu).
+      <ul>
+        <strong>Ne sont pas considérés comme des indus :</strong>
+        <li>> Les erreurs de RIB : quand le paiement dû à un élève est versé sur le mauvais compte bancaire. Un formulaire de déclaration à l'ASP est disponible, vous pouvez le récupérer auprès du support de votre DSI académique (communication faite aux ADSI le 9 juillet 2024).</li>
+        <li>> Les rejets bancaires : quand un paiement est marqué comme envoyé mais que la banque du destinataire l'a rejeté. L'ASP contacte alors directement l'établissement scolaire (communication faite aux ADSI le 2 juillet 2024).</li>
+      </ul>
