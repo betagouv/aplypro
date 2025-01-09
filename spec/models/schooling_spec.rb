@@ -220,6 +220,40 @@ RSpec.describe Schooling do
     end
   end
 
+  describe "#syncable?" do
+    let(:schooling) { create(:schooling) }
+    let(:establishment) { schooling.establishment }
+    let(:student) { schooling.student }
+
+    context "when student has ine_not_found" do
+      before { student.update!(ine_not_found: true) }
+
+      it { expect(schooling).to be_syncable }
+    end
+
+    context "when schooling is removed" do
+      before { schooling.update!(removed_at: Time.zone.now) }
+
+      it { expect(schooling).to be_syncable }
+    end
+
+    context "when establishment has a students_provider" do
+      before { establishment.update!(students_provider: "sygne") }
+
+      it { expect(schooling).to be_syncable }
+    end
+
+    context "when none of the conditions are met" do
+      before do
+        student.update!(ine_not_found: false)
+        schooling.update!(removed_at: nil)
+        establishment.update!(students_provider: nil)
+      end
+
+      it { expect(schooling).not_to be_syncable }
+    end
+  end
+
   describe ".former" do
     subject { described_class.former }
 

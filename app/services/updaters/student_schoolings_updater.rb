@@ -6,6 +6,8 @@ module Updaters
 
     class << self
       def call(student)
+        return true unless last_schooling.syncable?
+
         new(student).call
       end
     end
@@ -39,9 +41,13 @@ module Updaters
       last_establishment.students_api
     end
 
-    # NOTE: if the last schooling is closed we student.establishment is nil
+    # NOTE: if the last schooling is closed then student.establishment is nil
     def last_establishment
-      student.schoolings.last.establishment
+      last_schooling.establishment
+    end
+
+    def last_schooling
+      student.schoolings.last
     end
 
     def mapped_schooling_data # rubocop:disable Metrics/AbcSize

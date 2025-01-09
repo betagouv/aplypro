@@ -156,8 +156,4 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def retry_pfmps_payment_requests!(reasons)
     pfmps.in_state(:validated).each { |pfmp| PfmpManager.new(pfmp).retry_payment_request!(reasons) }
   end
-
-  def unsyncable?
-    ine_not_found || current_schooling&.removed? || (establishment.present? && establishment.students_provider.blank?)
-  end
 end
