@@ -56,6 +56,13 @@ Quand("je remplis le champ {string} avec {string} dans les champs de {string}") 
   end
 end
 
+Quand("je recherche l'élève {string}") do |name|
+  steps %(
+    Quand je remplis "Recherche" avec "#{name}"
+    Et que je clique sur "Rechercher"
+  )
+end
+
 Quand("je décoche {string}") do |label|
   uncheck label
 end
