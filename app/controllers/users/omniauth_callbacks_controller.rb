@@ -128,7 +128,11 @@ module Users
 
     def delete_old_roles!
       EstablishmentUserRole.where(user: @user).find_each do |access|
-        access.destroy! unless @mapper.establishments_in_responsibility_and_delegated.include?(access.establishment)
+        unless @mapper.establishments_in_responsibility_and_delegated.include?(access.establishment)
+          current_dir = access.establishment.confirmed_director
+          access.establishment.update!(confirmed_director: nil) if @user.eql?(current_dir)
+          access.destroy!
+        end
       end
     end
 

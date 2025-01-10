@@ -5,10 +5,12 @@
 class PfmpManager
   class PfmpManagerError < StandardError; end
   class ExistingActivePaymentRequestError < PfmpManagerError; end
+  class PaidPfmpError < PfmpManagerError; end
   class PfmpNotModifiableError < PfmpManagerError; end
   class PaymentRequestNotIncompleteError < PfmpManagerError; end
-  class RectificationAmountThresholdNotReachedError < PfmpManagerError; end
-  class RectificationAmountZeroError < PfmpManagerError; end
+  class RectificationError < PfmpManagerError; end
+  class RectificationAmountThresholdNotReachedError < RectificationError; end
+  class RectificationAmountZeroError < RectificationError; end
 
   EXCESS_AMOUNT_RECTIFICATION_THRESHOLD = 30
 
@@ -39,8 +41,9 @@ class PfmpManager
 
   def create_new_payment_request!
     raise ExistingActivePaymentRequestError if pfmp.latest_payment_request&.active?
+    raise PaidPfmpError if pfmp.paid? && !pfmp.rectified?
 
-    pfmp.payment_requests.create! if pfmp.amount.positive? || (pfmp.rectified? && pfmp.amount.zero?)
+    pfmp.payment_requests.create! if pfmp.payable?
   end
 
   def retry_incomplete_payment_request!
@@ -56,11 +59,11 @@ class PfmpManager
   def rectify_and_update_attributes!(confirmed_pfmp_params, confirmed_address_params)
     Pfmp.transaction do
       paid_amount = pfmp.amount
+      pfmp.rectify!
       update!(confirmed_pfmp_params)
       correct_amount = pfmp.reload.amount
       check_rectification_delta(paid_amount - correct_amount)
       pfmp.student.update!(confirmed_address_params)
-      pfmp.rectify!
     end
   end
 

@@ -62,7 +62,7 @@ RSpec.describe EstablishmentsController do
       end
 
       it "queues the document creation job" do
-        expect { create_attributive_decisions }.to have_enqueued_job(GenerateAttributiveDecisionsJob)
+        expect { create_attributive_decisions }.to have_enqueued_job(Generate::AttributiveDecisionsJob)
       end
     end
 
@@ -80,7 +80,7 @@ RSpec.describe EstablishmentsController do
       end
 
       it "does not create any documents" do
-        expect { create_attributive_decisions }.not_to have_enqueued_job(GenerateAttributiveDecisionsJob)
+        expect { create_attributive_decisions }.not_to have_enqueued_job(Generate::AttributiveDecisionsJob)
       end
     end
   end
@@ -96,7 +96,7 @@ RSpec.describe EstablishmentsController do
       end
 
       it "queues the document creation job" do
-        expect { reissue_attributive_decisions }.to have_enqueued_job(GenerateAttributiveDecisionsJob)
+        expect { reissue_attributive_decisions }.to have_enqueued_job(Generate::AttributiveDecisionsJob)
       end
     end
   end

@@ -109,6 +109,10 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     payment_requests.in_state(:paid).any?
   end
 
+  def payable?
+    amount.positive? || (rectified? && amount.zero?)
+  end
+
   def can_be_modified?
     !latest_payment_request&.ongoing?
   end

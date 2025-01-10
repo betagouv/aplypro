@@ -145,7 +145,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def create_new_rib(rib_params)
     current_rib = rib(rib_params.fetch("establishment_id"))
-    current_rib.archive! if current_rib.present? && current_rib.archivable?
+    current_rib.archive! if current_rib.present?
     ribs.create(rib_params)
   end
 
@@ -155,9 +155,5 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def retry_pfmps_payment_requests!(reasons)
     pfmps.in_state(:validated).each { |pfmp| PfmpManager.new(pfmp).retry_payment_request!(reasons) }
-  end
-
-  def unsyncable?
-    ine_not_found || current_schooling&.removed? || establishment&.students_provider.blank?
   end
 end

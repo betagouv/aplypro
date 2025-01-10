@@ -68,6 +68,14 @@ describe PfmpManager do
       end
     end
 
+    context "when pfmp is paid" do
+      let(:pfmp) { create(:asp_payment_request, :paid).pfmp }
+
+      it "raises an error" do
+        expect { manager.create_new_payment_request! }.to raise_error(PfmpManager::PaidPfmpError)
+      end
+    end
+
     context "when previous active payment request exists" do
       let(:pfmp) { create(:pfmp, :validated).reload }
 
@@ -162,6 +170,16 @@ describe PfmpManager do
           confirmed_address_params
         )
       end.to raise_error(PfmpManager::RectificationAmountZeroError)
+    end
+
+    it "allows rectification when setting day count to zero" do # rubocop:disable RSpec/ExampleLength
+      expect do
+        manager.rectify_and_update_attributes!(
+          { day_count: 0, start_date: pfmp.start_date, end_date: pfmp.end_date },
+          confirmed_address_params
+        )
+      end.to change { pfmp.reload.current_state }.from("validated").to("rectified")
+                                                 .and change(pfmp, :day_count).to(0)
     end
   end
 

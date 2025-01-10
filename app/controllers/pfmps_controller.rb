@@ -3,6 +3,7 @@
 class PfmpsController < ApplicationController
   include RoleCheck
   include PfmpResource
+  include Rectifiable
 
   before_action :check_director, :update_confirmed_director!, :check_confirmed_director,
                 only: %i[validate rectify]
@@ -60,30 +61,6 @@ class PfmpsController < ApplicationController
     return unless @pfmp.nil?
 
     redirect_to student_path(@schooling.student)
-  end
-
-  def confirm_rectification
-    if @pfmp.can_transition_to?(:rectified)
-      @student = @pfmp.student
-      render :confirm_rectification
-    else
-      redirect_to school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp),
-                  alert: t("flash.pfmps.cannot_rectify")
-    end
-  end
-
-  def rectify
-    if @pfmp.can_transition_to?(:rectified)
-      @student = @pfmp.student
-      PfmpManager.new(@pfmp).rectify_and_update_attributes!(pfmp_params, address_params)
-      redirect_to school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp),
-                  notice: t("flash.pfmps.rectified")
-    else
-      redirect_to school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp),
-                  alert: t("flash.pfmps.cannot_rectify")
-    end
-  rescue ActiveRecord::RecordInvalid
-    render :confirm_rectification, status: :unprocessable_entity
   end
 
   def destroy

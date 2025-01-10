@@ -9,4 +9,8 @@ class AttributiveDecisionHelpers
   def self.generate_fake_abrogation_decision(schooling)
     schooling.attach_attributive_document(StringIO.new("hello"), :abrogation_decision)
   end
+
+  def self.generate_fake_cancellation_decision(schooling)
+    schooling.attach_attributive_document(StringIO.new("hello"), :cancellation_decision)
+  end
 end
