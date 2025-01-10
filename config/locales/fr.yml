@@ -48,10 +48,6 @@ fr:
     students:
       show: "Voir le profil de %{name}"
   errors:
-    search:
-      students:
-        not_found: "Aucun résultat trouvé pour la recherche : %{search}"
-        not_unique: "Plusieurs résultats trouvés pour la recherche : %{search}"
     classes:
       not_found: "La classe que vous avez demandée n'existe pas."
     students:
@@ -161,6 +157,9 @@ fr:
     faq: F.A.Q.
   pages:
     titles:
+      search:
+        # TODO: Ce titre ne fonctionne pas
+        index: Recherche d'un élève
       stats:
         index: Statistiques
       school_years:

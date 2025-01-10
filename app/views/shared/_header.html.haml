@@ -51,8 +51,8 @@
 
             .fr-header__tools
               .fr-header__search
-                = form_with method: :get, url: search_student_path do |form|
+                = form_with method: :get, url: search_path do |form|
                   .fr-search-bar{id: "header-search", role: "search"}
                     = form.label :search, "Recherche", class: "fr-label"
                     = form.text_field :search, placeholder: "Rechercher un élève...", value: @search, class: "fr-input"
-                    = form.button "Rechercher", type: "submit", class: "fr-btn"
+                    = form.button "Rechercher", type: "submit", class: "fr-btn", name: nil

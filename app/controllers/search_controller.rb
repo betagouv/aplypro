@@ -4,15 +4,7 @@ class SearchController < ApplicationController
   before_action :sanitize_search,
                 :set_students_result
 
-  def search_student
-    if @students.blank?
-      redirect_to request.referer, alert: t("errors.search.students.not_found", search: @search) and return
-    elsif @students.count > 1
-      redirect_to request.referer, alert: t("errors.search.students.not_unique", search: @search) and return
-    end
-
-    redirect_to student_path(@students.first)
-  end
+  def index; end
 
   private
 
