@@ -11,8 +11,8 @@
       Coordonnées bancaires utilisées :
       %strong= payment_request.rib&.iban || payment_request.reconstructed_iban || payment_request.student.rib(current_establishment)&.iban || "manquantes"
     .fr-mt-2w.gray-text
-      Numéro de décision attributive :
-      %strong= payment_request.schooling.attributive_decision_number
+      Numéro de prestation dossier :
+      %strong= @pfmp.administrative_number
     .fr-mt-2w.gray-text
       Dernière mise à jour le
       = l(payment_request.last_transition&.updated_at || payment_request.updated_at, format: :long)
