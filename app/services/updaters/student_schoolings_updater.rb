@@ -6,7 +6,7 @@ module Updaters
 
     class << self
       def call(student)
-        return true unless last_schooling.syncable?
+        return true unless student.schoolings.last.syncable?
 
         new(student).call
       end
