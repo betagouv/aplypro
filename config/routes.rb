@@ -28,6 +28,10 @@ Rails.application.routes.draw do
     resources :invitations
   end
 
+  resource :students do
+    get "search"
+  end
+
   resources :students, only: %i[show] do
     resources :ribs, only: %i[new create destroy update edit] do
       member do
@@ -119,8 +123,6 @@ Rails.application.routes.draw do
   get "/maintenance", to: "home#maintenance"
   get "/legal", to: "home#legal"
   get "/faq", to: "home#faq"
-
-  get "/search", to: "search#index"
 
   resources :stats, only: [:index] do
     collection do

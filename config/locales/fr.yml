@@ -157,9 +157,6 @@ fr:
     faq: F.A.Q.
   pages:
     titles:
-      search:
-        # TODO: Ce titre ne fonctionne pas
-        index: Recherche d'un élève
       stats:
         index: Statistiques
       school_years:
@@ -186,6 +183,7 @@ fr:
         update_bulk_pfmp: *bulk_pfmp_completion_title
       students:
         show: "%{name}"
+        search: Recherche d'un élève
       pfmps:
         new: &new_pfmp_title
           title: "Ajouter une PFMP individuelle pour %{name}"
