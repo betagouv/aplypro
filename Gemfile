@@ -76,7 +76,7 @@ gem "sidekiq"
 
 gem "dry-transformer"
 
-# gem "zipline"
+gem "zipline", git: "https://github.com/alhajrahmoun/zipline.git", branch: "support-rails-8.0"
 
 gem "csv"
 

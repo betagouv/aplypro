@@ -1,3 +1,13 @@
+GIT
+  remote: https://github.com/alhajrahmoun/zipline.git
+  revision: 3fcbe12b01e6399a0a4db5292addecdb267cfa03
+  branch: support-rails-8.0
+  specs:
+    zipline (2.0.0)
+      actionpack (>= 6.0, < 8.1)
+      content_disposition (~> 1.0)
+      zip_kit (~> 6, >= 6.2.0, < 7)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -124,6 +134,7 @@ GEM
     coderay (1.1.3)
     concurrent-ruby (1.3.4)
     connection_pool (2.5.0)
+    content_disposition (1.0.0)
     crack (1.0.0)
       bigdecimal
       rexml
@@ -578,6 +589,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.7.1)
+    zip_kit (6.3.1)
 
 PLATFORMS
   aarch64-linux
@@ -652,6 +664,7 @@ DEPENDENCIES
   web-console
   webmock
   whenever
+  zipline!
 
 RUBY VERSION
    ruby 3.3.6p108
