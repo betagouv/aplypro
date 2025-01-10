@@ -8,7 +8,7 @@ class EstablishmentsController < ApplicationController
                 :check_confirmed_director_for_attributive_decision,
                 only: :create_attributive_decisions
 
-  # include Zipline
+  include Zipline
 
   def create_attributive_decisions
     mark_attributive_decision_generation!
