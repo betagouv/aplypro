@@ -61,6 +61,11 @@ RSpec.configure do |config|
     Rails.application.load_seed if missing_seeds?
   end
 
+  # TODO: Remove when Devise fixes https://github.com/heartcombo/devise/issues/5705
+  config.before(:each, type: :request) do
+    Rails.application.reload_routes_unless_loaded
+  end
+
   config.include Helpers::ReadOnlyBypass
 
   config.include FactoryBot::Syntax::Methods
