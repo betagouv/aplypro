@@ -1,0 +1,3 @@
+%button.fr-ml-0.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-#{message}-#{id}", type: "button"}
+  %span.fr-tooltip.fr-placement{id: "tooltip-#{message}-#{id}", role: "tooltip", "aria-hidden" => "true"}
+    = t("tooltips.#{message}").html_safe

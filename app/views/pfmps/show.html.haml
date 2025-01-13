@@ -40,13 +40,7 @@
         = button_tag "Supprimer la PFMP", disabled: true, class: 'fr-btn fr-btn--secondary', title: "Vous ne pouvez pas supprimer une PFMP dont le paiement est en cours de traitement"
       - if @pfmp.can_transition_to?(:rectified)
         = link_to "Gérer un indu", confirm_rectification_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
-        %button.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-rectification", type: "button"}
-        %span.fr-tooltip.fr-placement{id: "tooltip-rectification", role: "tooltip", "aria-hidden" => "true"}
-          %em= "La déclaration d’un indu ne doit se faire que si le montant payé n’est pas conforme au montant réellement dû au titre de la PFMP (dans le cas d’un trop perçu ou d’un moins perçu)."
-          %ul
-            %strong= "Ne sont pas considérés comme des indus :"
-            %li= "> Les erreurs de RIB : quand le paiement dû à un élève est versé sur le mauvais compte bancaire. Un formulaire de déclaration à l'ASP est disponible, vous pouvez le récupérer auprès du support de votre DSI académique (communication faite aux ADSI le 9 juillet 2024)."
-            %li= "> Les rejets bancaires : quand un paiement est marqué comme envoyé mais que la banque du destinataire l'a rejeté. L'ASP contacte alors directement l'établissement scolaire (communication faite aux ADSI le 2 juillet 2024)."
+        = render partial: "shared/tooltip", locals: { message: "rectification", id: 1 }
 
   - if @pfmp.payment_due?
     %h2.fr-h3 Paiement

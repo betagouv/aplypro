@@ -27,6 +27,7 @@ fr:
     da:
       abrogated: La décision d'attribution de %{name} a bien été abrogée
       extended: La décision d'attribution de %{name} a bien été prolongée
+      cancellation: La décision d'attribution de %{name} a bien été retirée
       extension_removed: Le report de la décision d'attribution de %{name} a bien été supprimé
       cant_remove_extension: Le report de la décision d'attribution de %{name} n'a pas pu être supprimé car celui ci contient une PFMP
       extension_failure: La décision d'attribution de %{name} n'a pas pu être modifiée
@@ -115,9 +116,6 @@ fr:
               overlaps: "Une autre PFMP existe avec des dates intersectantes de fin et de début. Veuillez supprimer ou modifier l'une des deux."
               cannot_extend_attributive_decision_with_pfmps: "Les élèves ayant changé de formation, de statut ou d'établissement doivent avoir une abrogation de leur décision d'attribution passée. Ce document peut être généré dans la liste des élèves."
 
-    tooltips:
-      report: "Autoriser un report permet de saisir une date jusqu'à laquelle prolonger la durée de la Décision d'Attribution associée à cette scolarité. Il devient ensuite possible de saisir des PFMPs pour l'année scolaire terminée. Cette option est à utiliser pour les élèves qui n'aurait pas pu réaliser leur PFMP au cours de l'année scolaire passée (raisons de santé, fermeture de l'entreprise d'accueil, problèmes liés à la météo....) et la rattrape sur l'année scolaire suivante"
-      rib: "Pour un élève majeur qui ne peut pas ouvrir de compte et souhaite que son allocation soit versée sur le compte d'un tiers dans le cadre de la procédure du mandat sous seing privé (comme indiqué dans la FàQ EduScol), l'option à sélectionner est : "
     hints:
       rib:
         name: "Noms et prénoms du titulaire du compte"
@@ -216,11 +214,14 @@ fr:
       schoolings:
         confirm_da_extension: "Autoriser un report de décision d'attribution"
         confirm_removal:
-          title: "Retrait de l'élève de la classe"
-          breadcrumb: "Retrait de l'élève de la classe"
+          title: "Masquer l'élève manuellement de la classe"
+          breadcrumb: "Masquer l'élève manuellement de la classe"
         confirm_removal_cancellation:
           title: "Réintégration de l'élève dans la classe"
           breadcrumb: "Réintégration de l'élève dans la classe"
+        confirm_cancellation_decision:
+          title: "Retrait de la décision d'attribution"
+          breadcrumb: "Retrait de la décision d'attribution"
 
   global:
     sponsor: "Direction\nInterministérielle\ndu Numérique"
