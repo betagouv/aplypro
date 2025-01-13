@@ -8,7 +8,7 @@ Fonctionnalité: Recherche
     Et que toutes les tâches de fond sont terminées
 
   Scénario: Le personnel veut rechercher un élève
-    # Le test peut ne pas passer si aucun nom de famille ou prénom contenant un 'A' n'a pas été généré
+    # TODO: Le test peut ne pas passer si aucun nom de famille ou prénom contenant un 'A' n'a pas été généré
     Quand je recherche l'élève "a"
     Alors la page contient "Recherche d'un élève"
     Et la page contient "résultats trouvés pour la recherche : A"
