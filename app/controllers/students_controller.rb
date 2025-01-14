@@ -35,10 +35,8 @@ class StudentsController < ApplicationController
 
     search_pattern = Regexp.new(@name, "i")
     @students = current_establishment.students
-                                     .where("unaccent(last_name) ~* ? OR unaccent(first_name) ~* ? OR " \
-                                            "unaccent(concat(first_name, ' ', last_name)) ~* ? OR " \
-                                            "unaccent(concat(last_name, ' ', first_name)) ~* ?",
-                                            search_pattern, search_pattern, search_pattern, search_pattern)
+                                     .where("unaccent(last_name) ~* ? OR unaccent(first_name) ~* ?",
+                                            search_pattern, search_pattern)
                                      .distinct
   end
 
