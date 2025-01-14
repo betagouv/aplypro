@@ -48,3 +48,11 @@
             %li.fr-nav__item
               %a.fr-nav__link{ href: faq_path, target: "_self", "aria-current" => current_path?(faq_path) ? "page" : nil }
                 = t("menu.faq")
+
+            .fr-header__tools
+              .fr-header__search
+                = form_with method: :get, url: search_results_students_path do |form|
+                  .fr-search-bar{id: "header-search", role: "search"}
+                    = form.label :name, "Recherche", class: "fr-label"
+                    = form.text_field :name, placeholder: "Rechercher un élève...", value: @name, class: "fr-input"
+                    = form.button "Rechercher", type: "submit", class: "fr-btn", name: nil
