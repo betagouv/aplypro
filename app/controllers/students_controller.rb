@@ -2,7 +2,7 @@
 
 class StudentsController < ApplicationController
   before_action :set_student, :check_student!, only: :show
-  before_action :sanitize_search, :set_search_result, only: :search
+  before_action :sanitize_search, :set_search_result, only: :search_results
 
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_class
 
@@ -12,7 +12,7 @@ class StudentsController < ApplicationController
     infer_page_title(name: @student.full_name)
   end
 
-  def search
+  def search_results
     infer_page_title
   end
 
@@ -32,7 +32,7 @@ class StudentsController < ApplicationController
 
   # rubocop:disable Layout/LineLength
   def set_search_result
-    search_str = "%#{@search}%"
+    search_str = "%#{@name}%"
     @students = current_establishment.students.where(
       "
         TRANSLATE(TRANSLATE(UNACCENT(last_name), $$',$$, ''), '-', ' ') ILIKE TRANSLATE(TRANSLATE(UNACCENT(:search_str), $$',$$, ''), '-', ' ') OR
@@ -50,8 +50,8 @@ class StudentsController < ApplicationController
   # rubocop:enable Layout/LineLength
 
   def sanitize_search
-    return if params[:search].blank?
+    return if params[:name].blank?
 
-    @search = params[:search]
+    @name = params[:name]
   end
 end

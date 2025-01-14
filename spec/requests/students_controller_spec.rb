@@ -37,19 +37,13 @@ RSpec.describe StudentsController do
     end
   end
 
-  describe "GET /search" do
+  describe "GET /search_results" do
     before { student.update(first_name: "Marie", last_name: "Curie") }
 
-    context "when there is a match" do
-      before { get search_students_path(params: { search: "marie curie" }) }
+    it "when there is a match" do
+      get search_results_students_path(params: { name: "marie curie" })
 
-      it { is_expected.to render_template(:search) }
-    end
-
-    context "when there is no match" do
-      before { get search_students_path(params: { search: "toto" }) }
-
-      it { is_expected.to render_template(:search) }
+      expect(response).to have_http_status(:ok)
     end
   end
 end

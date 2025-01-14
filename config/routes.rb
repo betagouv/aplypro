@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   end
 
   resource :students do
-    get "search"
+    get "search_results"
   end
 
   resources :students, only: %i[show] do

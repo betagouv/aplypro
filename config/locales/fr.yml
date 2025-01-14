@@ -183,7 +183,7 @@ fr:
         update_bulk_pfmp: *bulk_pfmp_completion_title
       students:
         show: "%{name}"
-        search: Recherche d'un élève
+        search_results: Recherche d'un élève
       pfmps:
         new: &new_pfmp_title
           title: "Ajouter une PFMP individuelle pour %{name}"
