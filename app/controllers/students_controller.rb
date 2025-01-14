@@ -30,17 +30,16 @@ class StudentsController < ApplicationController
     redirect_to school_year_classes_path(selected_school_year), alert: t("errors.students.not_found")
   end
 
-  # rubocop:disable Layout/LineLength
   def set_search_result
-    search_str = "%#{@name}%"
-    @students = current_establishment.students.where(
-      "
-        TRANSLATE(TRANSLATE(UNACCENT(last_name), $$',$$, ''), '-', ' ') ILIKE TRANSLATE(TRANSLATE(UNACCENT(:search_str), $$',$$, ''), '-', ' ') OR
-        TRANSLATE(TRANSLATE(UNACCENT(first_name), $$',$$, ''), '-', ' ') ILIKE TRANSLATE(TRANSLATE(UNACCENT(:search_str), $$',$$, ''), '-', ' ') OR
-        TRANSLATE(TRANSLATE(UNACCENT(CONCAT(last_name, ' ', first_name)), $$',$$, ''), '-', ' ') ILIKE TRANSLATE(TRANSLATE(UNACCENT(:search_str), $$',$$, ''), '-', ' ') OR
-        TRANSLATE(TRANSLATE(UNACCENT(CONCAT(first_name, ' ', last_name)), $$',$$, ''), '-', ' ') ILIKE TRANSLATE(TRANSLATE(UNACCENT(:search_str), $$',$$, ''), '-', ' ')
-      ", search_str:
-    ).uniq
+    return if @name.nil?
+
+    search_pattern = Regexp.new(@name, "i")
+    @students = current_establishment.students
+                                     .where("unaccent(last_name) ~* ? OR unaccent(first_name) ~* ? OR " \
+                                            "unaccent(concat(first_name, ' ', last_name)) ~* ? OR " \
+                                            "unaccent(concat(last_name, ' ', first_name)) ~* ?",
+                                            search_pattern, search_pattern, search_pattern, search_pattern)
+                                     .distinct
   end
 
   def sanitize_search
