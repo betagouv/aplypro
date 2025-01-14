@@ -36,4 +36,20 @@ RSpec.describe StudentsController do
       it { is_expected.to render_template(:show) }
     end
   end
+
+  describe "GET /search" do
+    before { student.update(first_name: "Marie", last_name: "Curie") }
+
+    context "when there is a match" do
+      before { get search_students_path(params: { search: "marie curie" }) }
+
+      it { is_expected.to render_template(:search) }
+    end
+
+    context "when there is no match" do
+      before { get search_students_path(params: { search: "toto" }) }
+
+      it { is_expected.to render_template(:search) }
+    end
+  end
 end
