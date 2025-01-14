@@ -41,17 +41,10 @@ class StudentsController < ApplicationController
         TRANSLATE(TRANSLATE(UNACCENT(CONCAT(first_name, ' ', last_name)), $$',$$, ''), '-', ' ') ILIKE TRANSLATE(TRANSLATE(UNACCENT(:search_str), $$',$$, ''), '-', ' ')
       ", search_str:
     ).uniq
-    # Dans l'idéal, utiliser la REGEX '%' :
-    # TRANSLATE(UNACCENT(last_name), $$-', $$, $$%$$) ILIKE TRANSLATE(UNACCENT(:search_str), $$-', $$, $$%$$) OR
-    # TRANSLATE(UNACCENT(first_name), $$-', $$, $$%$$) ILIKE TRANSLATE(UNACCENT(:search_str), $$-', $$, $$%$$) OR
-    # TRANSLATE(UNACCENT(CONCAT(last_name, '%', first_name)), $$-', $$, $$%$$) ILIKE TRANSLATE(UNACCENT(:search_str), $$-', $$, $$%$$) OR
-    # TRANSLATE(UNACCENT(CONCAT(first_name, '%', last_name)), $$-', $$, $$%$$) ILIKE TRANSLATE(UNACCENT(:search_str), $$-', $$, $$%$$)
   end
-  # rubocop:enable Layout/LineLength
 
   def sanitize_search
-    return if params[:name].blank?
-
-    @name = params[:name]
+    @name = params[:name].strip
+    @name = nil if @name.empty?
   end
 end
