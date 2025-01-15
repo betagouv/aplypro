@@ -33,10 +33,11 @@ class StudentsController < ApplicationController
   def set_search_result
     return if @name.nil?
 
-    search_pattern = Regexp.new(@name, "i")
+    search_pattern = "%#{ActiveRecord::Base.sanitize_sql_like(@name)}%"
     @students = current_establishment.students
-                                     .where("unaccent(last_name) ~* ? OR unaccent(first_name) ~* ?",
-                                            search_pattern, search_pattern)
+                                     .includes(current_schooling: :classe)
+                                     .where("unaccent(last_name) ILIKE :pattern OR unaccent(first_name) ILIKE :pattern",
+                                            pattern: search_pattern)
                                      .distinct
   end
 
