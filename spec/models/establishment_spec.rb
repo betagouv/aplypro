@@ -111,5 +111,9 @@ RSpec.describe Establishment do
     it "finds students with partial names" do
       expect(etab.find_students("ibal")).to contain_exactly(Student.find_by!(first_name: "Tibal"))
     end
+
+    it "returns empty when search string is blank?" do
+      expect(etab.find_students("   ")).to be_empty
+    end
   end
 end

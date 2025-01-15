@@ -90,6 +90,8 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def find_students(name)
+    return [] if name.blank?
+
     search_terms = name
                    .strip
                    .gsub(/[^[:alnum:]\s]/, "")
