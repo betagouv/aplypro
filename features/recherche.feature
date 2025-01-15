@@ -15,4 +15,3 @@ Fonctionnalité: Recherche
     Alors la page contient "Aucun résultat trouvé pour la recherche : XRTEZEDE"
     Quand je recherche l'élève "juan francois michael dest"
     Alors la page contient "Jüãn-Frânçois Mîchäèl-d'Estaing"
-    
