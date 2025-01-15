@@ -33,11 +33,14 @@ class StudentsController < ApplicationController
   def set_search_result
     return if @name.nil?
 
-    search_pattern = "%#{ActiveRecord::Base.sanitize_sql_like(@name)}%"
     @students = current_establishment.students
                                      .includes(current_schooling: :classe)
-                                     .where("unaccent(first_name) ILIKE :pattern OR unaccent(last_name) ILIKE :pattern",
-                                            pattern: search_pattern)
+                                     .where(
+                                       @search_terms.map do
+                                         "(unaccent(first_name) ILIKE ? OR unaccent(last_name) ILIKE ?)"
+                                       end.join(" OR "),
+                                       *@search_terms.flat_map { |term| [term, term] }
+                                     )
                                      .unscope(:order)
                                      .distinct
   end
@@ -45,5 +48,6 @@ class StudentsController < ApplicationController
   def sanitize_search
     @name = params[:name].strip
     @name = nil if @name.empty?
+    @search_terms = @name.split.map { |term| "%#{Student.sanitize_sql_like(term)}%" }
   end
 end
