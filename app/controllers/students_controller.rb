@@ -36,8 +36,9 @@ class StudentsController < ApplicationController
     search_pattern = "%#{ActiveRecord::Base.sanitize_sql_like(@name)}%"
     @students = current_establishment.students
                                      .includes(current_schooling: :classe)
-                                     .where("unaccent(last_name) ILIKE :pattern OR unaccent(first_name) ILIKE :pattern",
+                                     .where("unaccent(first_name) ILIKE :pattern OR unaccent(last_name) ILIKE :pattern",
                                             pattern: search_pattern)
+                                     .unscope(:order)
                                      .distinct
   end
 
