@@ -89,6 +89,26 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     invitations.exists?(email: email)
   end
 
+  def find_students(name)
+    search_terms = name
+                   .strip
+                   .gsub(/[^[:alnum:]\s]/, "")
+                   .split
+                   .map { |term| "%#{Student.sanitize_sql_like(term)}%" }
+
+    students
+      .includes(current_schooling: :classe)
+      .where(
+        search_terms.map do
+          "(regexp_replace(unaccent(first_name), '[^[:alnum:]]', '', 'g') ILIKE ? OR " \
+            "regexp_replace(unaccent(last_name), '[^[:alnum:]]', '', 'g') ILIKE ?)"
+        end.join(" OR "),
+        *search_terms.flat_map { |term| [term, term] }
+      )
+      .unscope(:order)
+      .distinct
+  end
+
   def select_label
     [uai, name].compact.join(" - ")
   end

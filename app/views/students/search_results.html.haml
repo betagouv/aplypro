@@ -12,7 +12,6 @@
           %tr
             %td= dsfr_link_to student.full_name, student_path(student)
             %td
-              // TODO: Risque de N+1 ?
               -if student.current_schooling.nil?
                 Aucune scolarité active
               -else
