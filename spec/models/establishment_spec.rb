@@ -96,4 +96,20 @@ RSpec.describe Establishment do
       end
     end
   end
+
+  describe "#find_students" do
+    let(:etab) { create(:classe, :with_students, students_count: 5).establishment }
+
+    before do
+      etab.students.first.update!(first_name: "Tibal", last_name: "N'Guy-ôme")
+    end
+
+    it "strips apostrophes" do
+      expect(etab.find_students("nguyom")).to contain_exactly(Student.find_by!(last_name: "N'Guy-ôme"))
+    end
+
+    it "finds students with partial names" do
+      expect(etab.find_students("ibal")).to contain_exactly(Student.find_by!(first_name: "Tibal"))
+    end
+  end
 end
