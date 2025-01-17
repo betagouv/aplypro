@@ -11,10 +11,10 @@
       Coordonnées bancaires utilisées :
       %strong= payment_request.rib&.iban || payment_request.reconstructed_iban || payment_request.student.rib(current_establishment)&.iban || "manquantes"
     .fr-mt-2w.gray-text
-      - administrative_number = @pfmp.administrative_number_with_num_adm_presta_doss
-      - if !administrative_number.nil?
+      - num_presta_doss = @pfmp.num_presta_doss
+      - if !num_presta_doss.nil?
         Numéro de prestation dossier :
-        %strong= administrative_number
+        %strong= num_presta_doss
     .fr-mt-2w.gray-text
       Dernière mise à jour le
       = l(payment_request.last_transition&.updated_at || payment_request.updated_at, format: :long)
