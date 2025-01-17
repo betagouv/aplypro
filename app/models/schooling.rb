@@ -80,6 +80,10 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
     closed? && abrogation_decision.attached?
   end
 
+  def cancelled?
+    cancellation_decision.attached?
+  end
+
   def reopen!
     update!(end_date: nil)
   end

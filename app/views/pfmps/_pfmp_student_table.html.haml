@@ -37,12 +37,12 @@
           - if schooling.attributive_decision.attached?
             = button_to "Télécharger la décision d'attribution", url_for(schooling.attributive_decision), class: 'fr-btn fr-btn--secondary', target: :download, method: :get
             - if !schooling.cancellation_decision.attached?
-              = button_to "Retirer la décision d'attribution", confirm_cancellation_decision_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get, disabled: true
+              = button_to "Retirer la décision d'attribution", confirm_cancellation_decision_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get
               = render partial: "shared/tooltip", locals: { message: "cancellation_decision", id: 1 }
           - if schooling.abrogation_decision.attached?
             = button_to "Télécharger la décision d'abrogation", url_for(schooling.abrogation_decision), class: 'fr-btn fr-btn--secondary', target: :download, method: :get
           - if schooling.cancellation_decision.attached?
-            = button_to "Télécharger la décision de retrait", url_for(schooling.cancellation_decision), class: 'fr-btn fr-btn--secondary', target: :download, method: :get, disabled: true
+            = button_to "Télécharger la décision de retrait", url_for(schooling.cancellation_decision), class: 'fr-btn fr-btn--secondary', target: :download, method: :get
           - if !@student.current_schooling.nil? && @student.current_schooling.eql?(schooling) && !schooling.removed?
             = button_to "Masquer l'élève de la classe",  confirm_removal_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get
             = render partial: "shared/tooltip", locals: { message: "remove_student", id: 1 }

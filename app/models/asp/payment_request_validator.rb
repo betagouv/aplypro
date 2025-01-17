@@ -16,6 +16,7 @@ module ASP
       check_address
       check_da_attribution
       check_da_abrogation
+      check_da_cancellation
       check_rib
       check_pfmp
       check_pfmp_overlaps
@@ -58,6 +59,10 @@ module ASP
 
     def check_da_attribution
       add_error(:missing_attributive_decision) if !payment_request.schooling.attributive_decision.attached?
+    end
+
+    def check_da_cancellation
+      add_error(:attributive_decision_cancelled) if payment_request.schooling.cancelled?
     end
 
     def check_da_abrogation # rubocop:disable Metrics/AbcSize
