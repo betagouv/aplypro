@@ -99,6 +99,14 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     schooling.attributive_decision_number + index
   end
 
+  def num_presta_doss
+    transition = latest_payment_request.last_transition_to(:integrated)
+
+    return nil if transition.nil?
+
+    transition.metadata["numAdmPrestaDoss"]
+  end
+
   def within_schooling_dates?
     return true if (schooling.open? && start_date >= schooling.start_date) || schooling.no_dates?
 
