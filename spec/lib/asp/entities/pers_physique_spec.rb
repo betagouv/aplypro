@@ -39,7 +39,7 @@ describe ASP::Entities::PersPhysique, type: :model do
     let(:entity) { described_class.from_payment_request(payment_request) }
     let(:probe) { ["persphysique/prenom", "Marie"] }
 
-    context "when the student is born abrod" do
+    context "when the student is born abroad" do
       let(:student) { create(:student, :with_all_asp_info, :born_abroad) }
 
       it "does not include the <codeinseecommune> tag" do
