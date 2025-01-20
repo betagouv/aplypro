@@ -22,7 +22,8 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope :without_removed_students, -> { where(removed_at: nil) }
   scope :with_removed_students, -> { where.not(removed_at: nil) }
 
-  scope :with_attributive_decisions, -> { joins(:attributive_decision_attachment) }
+  scope :without_cancellation_decisions, -> { where.missing(:cancellation_decision_attachment) }
+  scope :with_attributive_decisions, -> { without_cancellation_decisions.joins(:attributive_decision_attachment) }
   scope :without_attributive_decisions, -> { where.missing(:attributive_decision_attachment) }
   scope :generating_attributive_decision, -> { where(generating_attributive_decision: true) }
   scope :with_administrative_number, -> { where.not(administrative_number: nil) }

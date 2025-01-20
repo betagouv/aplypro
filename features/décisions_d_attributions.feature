@@ -100,3 +100,20 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Et que je coche la case de responsable légal
     Lorsque je clique sur "Supprimer le report"
     Alors la page contient "Le report de la décision d'attribution de Marie Curie n'a pas pu être supprimé car celui ci contient une PFMP"
+
+  Scénario: Le personnel peut retirer une décision d'attribution
+    Lorsque je suis responsable légal et que je génère les décisions d'attribution manquantes
+    Et que la génération des décisions d'attribution manquantes est complètement finie
+    Et que je consulte le profil de "Marie Curie" dans la classe de "1MELEC"
+    Alors la page contient "Retirer la décision d'attribution"
+    Et la page ne contient pas "Télécharger la décision de retrait"
+    Quand je clique sur "Retirer la décision d'attribution"
+    Et que je coche la case de responsable légal
+    Et que je clique sur "Confirmer le retrait"
+    Alors la page contient "La décision d'attribution de Marie Curie a bien été retirée"
+    Et la page ne contient pas "Retirer la décision d'attribution"
+    Et la page contient "Télécharger la décision de retrait"
+    Quand je consulte la classe de "1MELEC"
+    Alors je peux voir dans le tableau "Liste des élèves"
+      | Élèves (10) | Décisions d'attribution (9/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
+      |             | Manquante                      |                              |           |
