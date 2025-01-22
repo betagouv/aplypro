@@ -3,18 +3,32 @@
 module ASP
   module Entities
     module Adresse
-      class Etranger < Base
-        # NOTE: for students living outside of France we take address attributes from the establishment
+      class Etranger < Entity
+        attribute :codetypeadr, :string
+        attribute :codecominsee, :string
+        attribute :codeinseepays, :string
+        attribute :codepostalcedex, :string
+
+        validates_presence_of %i[
+          codetypeadr
+          codeinseepays
+          codepostalcedex
+          codecominsee
+        ]
+
+        def self.payment_mapper_class
+          Mappers::Adresse::EtrangerMapper
+        end
+
+        def root_node_name
+          "adresse"
+        end
+
         def fragment(xml)
-          establishment = payment_request.pfmp.establishment
-
-          raise ASP::Errors::MissingEstablishmentCommuneCodeError if establishment.commune_code.blank?
-          raise ASP::Errors::MissingEstablishmentPostalCodeError if establishment.postal_code.blank?
-
-          xml.codetypeadr(Mappers::Adresse::BaseMapper::PRINCIPAL_ADDRESS_TYPE)
-          xml.codecominsee(establishment.commune_code)
-          xml.codepostalcedex(establishment.postal_code)
-          xml.codeinseepays(InseeCodes::FRANCE_INSEE_COUNTRY_CODE)
+          xml.codetypeadr(codetypeadr)
+          xml.codecominsee(codecominsee)
+          xml.codepostalcedex(codepostalcedex)
+          xml.codeinseepays(codeinseepays)
         end
       end
     end
