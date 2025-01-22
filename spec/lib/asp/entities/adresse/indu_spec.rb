@@ -15,8 +15,6 @@ describe ASP::Entities::Adresse::Indu, type: :model do
 
     describe "validation" do
       it { is_expected.to validate_presence_of(:pointremise) }
-      it { is_expected.to validate_presence_of(:cpltdistribution) }
-
       it { is_expected.to validate_presence_of(:codepostalcedex) }
       it { is_expected.to validate_presence_of(:codecominsee) }
       it { is_expected.to validate_presence_of(:codeinseepays) }

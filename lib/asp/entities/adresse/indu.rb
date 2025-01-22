@@ -4,8 +4,10 @@ module ASP
   module Entities
     module Adresse
       class Indu < Entity
-        attribute :pointremise, :string
-        attribute :cpltdistribution, :string
+        ADRESSE_ATTR_MAX_LENGTH = 38
+
+        attribute :pointremise, :string, limit: ADRESSE_ATTR_MAX_LENGTH
+        attribute :cpltdistribution, :string, limit: ADRESSE_ATTR_MAX_LENGTH
         attribute :codetypeadr, :string
         attribute :codecominsee, :string
         attribute :codeinseepays, :string
@@ -13,7 +15,6 @@ module ASP
 
         validates_presence_of %i[
           pointremise
-          cpltdistribution
           codetypeadr
           codeinseepays
           codepostalcedex
