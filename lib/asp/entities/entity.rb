@@ -65,7 +65,7 @@ module ASP
         if payment_request.pfmp.rectified?
           Adresse::Indu
         else
-          payment_request.student.lives_in_france? ? Adresse::Base : Adresse::Etranger
+          payment_request.student.lives_in_france? ? Adresse::France : Adresse::Etranger
         end
       end
     end

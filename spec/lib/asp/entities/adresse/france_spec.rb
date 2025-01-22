@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe ASP::Entities::Adresse::Base, type: :model do
+describe ASP::Entities::Adresse::France, type: :model do
   subject(:model) { described_class.from_payment_request(request) }
 
   let(:request) { create(:asp_payment_request, :ready) }

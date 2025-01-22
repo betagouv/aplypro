@@ -3,7 +3,7 @@
 module ASP
   module Entities
     module Adresse
-      class Base < Entity
+      class France < Entity
         attribute :codetypeadr, :string
         attribute :codecominsee, :string
         attribute :codeinseepays, :string
@@ -16,19 +16,19 @@ module ASP
           codecominsee
         ]
 
+        def self.payment_mapper_class
+          Mappers::Adresse::FranceMapper
+        end
+
+        def root_node_name
+          "adresse"
+        end
+
         def fragment(xml)
           xml.codetypeadr(codetypeadr)
           xml.codeinseepays(codeinseepays)
           xml.codepostalcedex(codepostalcedex)
           xml.codecominsee(codecominsee)
-        end
-
-        def self.payment_mapper_class
-          ASP::Mappers::Adresse::BaseMapper
-        end
-
-        def root_node_name
-          "adresse"
         end
       end
     end

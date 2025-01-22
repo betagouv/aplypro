@@ -7,7 +7,7 @@ describe ASP::Entities::Prestadoss, type: :model do
   let(:schooling) { payment_request.schooling }
 
   before do
-    mock_entity("Adresse::Base")
+    mock_entity("Adresse::France")
     mock_entity("CoordPaie")
     mock_entity("ElementPaiement")
   end

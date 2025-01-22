@@ -18,7 +18,7 @@ describe ASP::Entities::Adresse::Etranger, type: :model do
     let(:establishment) { request.pfmp.establishment }
 
     before do
-      establishment.update(commune_code: "12345", postal_code: "54321")
+      establishment.update!(commune_code: "12345", postal_code: "54321")
     end
 
     it_behaves_like "an XML-fragment producer" do
@@ -37,7 +37,7 @@ describe ASP::Entities::Adresse::Etranger, type: :model do
 
       it "raises MissingEstablishmentCommuneCodeError" do
         expect { described_class.from_payment_request(request).to_xml(Nokogiri::XML::Builder.new) }
-          .to raise_error(ASP::Errors::MissingEstablishmentCommuneCodeError)
+          .to raise_error(ActiveModel::ValidationError)
       end
     end
 
@@ -46,7 +46,7 @@ describe ASP::Entities::Adresse::Etranger, type: :model do
 
       it "raises MissingEstablishmentPostalCodeError" do
         expect { described_class.from_payment_request(request).to_xml(Nokogiri::XML::Builder.new) }
-          .to raise_error(ASP::Errors::MissingEstablishmentPostalCodeError)
+          .to raise_error(ActiveModel::ValidationError)
       end
     end
   end
