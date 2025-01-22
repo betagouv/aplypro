@@ -13,7 +13,6 @@ module ASP
 
         validates_presence_of %i[
           pointremise
-          cpltdistribution
           codetypeadr
           codeinseepays
           codepostalcedex
