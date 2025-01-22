@@ -100,11 +100,9 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def num_presta_doss
-    transition = latest_payment_request.last_transition_to(:integrated)
+    return nil if latest_payment_request.nil? || latest_payment_request.last_transition_to(:integrated).nil?
 
-    return nil if transition.nil?
-
-    transition.metadata["numAdmPrestaDoss"]
+    latest_payment_request.last_transition_to(:integrated).metadata["numAdmPrestaDoss"]
   end
 
   def within_schooling_dates?
