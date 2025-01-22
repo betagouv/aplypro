@@ -31,7 +31,7 @@ module ASP
 
         def fragment(xml)
           xml.pointremise(pointremise)
-          xml.cpltdistribution(cpltdistribution)
+          xml.cpltdistribution(cpltdistribution) if cpltdistribution.present?
           xml.codetypeadr(codetypeadr)
           xml.codeinseepays(codeinseepays)
           xml.codepostalcedex(codepostalcedex)
