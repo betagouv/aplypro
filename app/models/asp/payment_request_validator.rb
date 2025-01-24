@@ -66,7 +66,7 @@ module ASP
       end
 
       other_schoolings = student.schoolings.excluding(payment_request.schooling).to_a.select do |sc|
-        sc.classe.school_year == SchoolYear.current
+        sc.classe.school_year == payment_request.schooling.classe.school_year
       end
 
       return if other_schoolings.all?(&:abrogated?)
