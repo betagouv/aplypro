@@ -4,14 +4,20 @@ module ASP
   class SchoolingsController < ApplicationController
     layout "application"
 
-    before_action :set_pfmps, only: :show
+    before_action :set_schooling, :set_pfmps, only: :show
     before_action :set_search_result, :infer_page_title, only: :index
 
     def index; end
 
-    def show; end
+    def show
+      infer_page_title(attributive_decision_number: @schooling.attributive_decision_number)
+    end
 
     private
+
+    def set_schooling
+      @schooling = Schooling.find(params[:id])
+    end
 
     def set_pfmps
       return if @schooling.nil?
@@ -33,7 +39,7 @@ module ASP
     def find_schooling_by_attributive_decision_filename
       Schooling
         .joins(:attributive_decision_blob)
-        .find_by("filename LIKE ?", "%_#{@attributive_decision_number.strip.upcase}.pdf")
+        .where("filename LIKE ?", "%#{@attributive_decision_number.strip.upcase}%")
     end
   end
 end

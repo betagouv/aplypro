@@ -1,9 +1,4 @@
-.fr-mb-3w
-  = form_with method: :get, url: asp_schoolings_path do |form|
-    .fr-search-bar.fr-search-bar--lg.fr-col-md-8{id: "search", role: "search"}
-      = form.label :search, "Numéro de décision d'attribution...", class: "fr-label"
-      = form.text_field :search, placeholder: "Numéro de décision d'attribution", value: @attributive_decision_number, class: "fr-input"
-      = form.button "Rechercher", type: "submit", class: "fr-btn", name: nil
+= render partial: 'search-bar'
 
 - if @attributive_decision_number.blank?
   .fr-mb-5w
@@ -24,7 +19,7 @@
       %tbody
         - @schoolings.each do |schooling|
           %tr
-            %td= dsfr_link_to schooling.attributive_decision_number, asp_schoolings_path(schooling)
+            %td= dsfr_link_to schooling.attributive_decision_number, asp_schooling_path(schooling)
             %td= schooling.student.full_name
             %td= schooling.classe.label
           

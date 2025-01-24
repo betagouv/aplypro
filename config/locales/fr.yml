@@ -163,7 +163,7 @@ fr:
           login: Connexion à APLyPro
         schoolings:
           index: Recherche d'un dossier
-          show: Dossier
+          show: "Dossier %{attributive_decision_number}"
       stats:
         index: Statistiques
       school_years:

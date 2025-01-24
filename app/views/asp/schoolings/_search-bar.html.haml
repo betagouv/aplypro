@@ -1,0 +1,6 @@
+.fr-mb-3w
+  = form_with method: :get, url: asp_schoolings_path do |form|
+    .fr-search-bar.fr-search-bar--lg.fr-col-md-8{id: "search", role: "search"}
+      = form.label :search, "Numéro de décision d'attribution...", class: "fr-label"
+      = form.text_field :search, placeholder: "Numéro de décision d'attribution", value: @attributive_decision_number, class: "fr-input"
+      = form.button "Rechercher", type: "submit", class: "fr-btn", name: nil
