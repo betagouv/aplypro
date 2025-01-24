@@ -218,7 +218,7 @@ RSpec.describe ASP::PaymentRequestValidator do
   describe "#check_da_abrogation" do
     context "when student is transferred and schooling needs abrogated attributive decision" do
       let(:other_schooling) { instance_double(Schooling, abrogated?: false) }
-      let(:other_classe) { instance_double(Classe, school_year: SchoolYear.current) }
+      let(:other_classe) { instance_double(Classe, school_year: classe.school_year) }
 
       before do
         allow(student).to receive(:transferred?).and_return(true)
