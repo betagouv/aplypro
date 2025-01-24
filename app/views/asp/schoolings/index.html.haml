@@ -1,21 +1,30 @@
 .fr-mb-3w
   = form_with method: :get, url: asp_schoolings_path do |form|
-    .fr-search-bar.fr-search-bar--lg.fr-col-md-8#search
-      = form.label :search, "Numéro de décision d'attribution", class: "fr-label"
-      = form.text_field :search, placeholder: "Numéro de décision d'attribution", value: @search, class: "fr-input"
-      = form.button "Rechercher", type: "submit", class: "fr-btn"
+    .fr-search-bar.fr-search-bar--lg.fr-col-md-8{id: "search", role: "search"}
+      = form.label :search, "Numéro de décision d'attribution...", class: "fr-label"
+      = form.text_field :search, placeholder: "Numéro de décision d'attribution", value: @attributive_decision_number, class: "fr-input"
+      = form.button "Rechercher", type: "submit", class: "fr-btn", name: nil
 
-
-
-- if @search.blank?
+- if @attributive_decision_number.blank?
   .fr-mb-5w
     Entrez un numéro de décision d'attribution pour lancer une recherche
 
-- elsif @schooling.blank?
+- elsif @schoolings.none?
   .fr-mb-5w
-    Aucune décision d'attribution trouvée avec le numéro
-    = @search
+    Aucune décision d'attribution trouvée avec le numéro : #{@attributive_decision_number}
 
 - else
-  = render partial: "schooling"
+  .fr-table
+    %table
+      %caption #{@schoolings.count} résultats trouvés pour la recherche : #{@attributive_decision_number}
+      %thead
+        %td{scope: "col"} Dossiers
+        %th{scope: "col"} Élèves
+        %th{scope: "col"} Dernière classe
+      %tbody
+        - @schoolings.each do |schooling|
+          %tr
+            %td= dsfr_link_to schooling.attributive_decision_number, asp_schoolings_path(schooling)
+            %td= schooling.student.full_name
+            %td= schooling.classe.label
           

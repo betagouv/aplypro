@@ -158,6 +158,12 @@ fr:
     faq: F.A.Q.
   pages:
     titles:
+      asp:
+        application:
+          login: Connexion à APLyPro
+        schoolings:
+          index: Recherche d'un dossier
+          show: Dossier
       stats:
         index: Statistiques
       school_years:

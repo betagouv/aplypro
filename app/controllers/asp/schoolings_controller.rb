@@ -4,27 +4,14 @@ module ASP
   class SchoolingsController < ApplicationController
     layout "application"
 
-    before_action :sanitize_search,
-                  :set_schooling_result,
-                  :set_pfmps
+    before_action :set_pfmps, only: :show
+    before_action :set_search_result, :infer_page_title, only: :index
 
-    def index
-      @page_title = "Rechercher un dossier"
+    def index; end
 
-      return if @schooling.nil?
-
-      @inhibit_title = true
-
-      @page_title = "Dossier #{@schooling.asp_dossier_id}"
-    end
+    def show; end
 
     private
-
-    def set_schooling_result
-      return if @search.blank?
-
-      @schooling = find_schooling_by_attributive_decision_filename
-    end
 
     def set_pfmps
       return if @schooling.nil?
@@ -35,16 +22,18 @@ module ASP
                .distinct
     end
 
+    def set_search_result
+      @attributive_decision_number = params[:search]
+
+      return if @attributive_decision_number.blank?
+
+      @schoolings = find_schooling_by_attributive_decision_filename || []
+    end
+
     def find_schooling_by_attributive_decision_filename
       Schooling
         .joins(:attributive_decision_blob)
-        .find_by("filename LIKE ?", "%_#{@search}.pdf")
-    end
-
-    def sanitize_search
-      return if params[:search].blank?
-
-      @search = params[:search].strip.upcase
+        .find_by("filename LIKE ?", "%_#{@attributive_decision_number.strip.upcase}.pdf")
     end
   end
 end
