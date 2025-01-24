@@ -49,6 +49,7 @@
               %a.fr-nav__link{ href: faq_path, target: "_self", "aria-current" => current_path?(faq_path) ? "page" : nil }
                 = t("menu.faq")
 
+          - if current_user and not @inhibit_nav
             .fr-header__tools
               .fr-header__search
                 = form_with method: :get, url: search_results_students_path do |form|
