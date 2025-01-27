@@ -7,7 +7,7 @@ module ASP
         attr_reader :establishment
 
         def initialize(payment_request)
-          @establishment = payment_request.student.establishment
+          @establishment = payment_request.pfmp.establishment
         end
 
         def codecominsee
