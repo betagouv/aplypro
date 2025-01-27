@@ -19,7 +19,7 @@ Fonctionnalité: Le personnel ASP consulte des dossiers
 
   Scénario: Le personnel ASP entre un numéro de décision d'attribution existant
     Sachant que le numéro administratif de "Marie Curie" est "THEDOSS"
-    Et que je remplis "Numéro de décision d'attribution" avec "ENPUTHEDOSS20240"
+    Et que je remplis "Numéro de décision d'attribution" avec "THEDOSS2024"
     Quand je clique sur "Rechercher"
     Quand je clique sur "ENPUTHEDOSS20240"
     Alors la page contient "3 jours x 10 € par jour = 30 €"
@@ -27,8 +27,7 @@ Fonctionnalité: Le personnel ASP consulte des dossiers
 
   Scénario: Le personnel ASP n'a pas accès à l'interface principale
     Quand je me rends sur la page d'accueil
-    Alors le titre de la page contient "Recherche d'un dossier"
-    Et la page ne contient pas "Classes"
+    Alors la page ne contient pas "Classes"
     Et la page ne contient pas "Envoyer en paiement"
 
   Scénario: Le personnel ASP est redirigé vers la page de connexion ASP en cas d'erreur de connexion

@@ -3,6 +3,7 @@
 module ASP
   class ApplicationController < ActionController::Base
     include UserLogger
+    include PageTitle
 
     layout "application"
 
@@ -38,30 +39,6 @@ module ASP
     def set_overrides
       @inhibit_nav = true
       @logout_path = :destroy_asp_user_session
-    end
-
-    def infer_page_title(attrs = {})
-      key = page_title_key
-
-      return unless I18n.exists?(key)
-
-      title, breadcrumb = extract_title_data(I18n.t(key, deep_interpolation: true, **attrs))
-
-      @page_title = title
-
-      add_breadcrumb(breadcrumb)
-    end
-
-    def page_title_key
-      ["pages", "titles", "asp", controller_name, action_name].join(".")
-    end
-
-    def extract_title_data(data)
-      if data.is_a? Hash
-        [data[:title], data[:breadcrumb]]
-      else
-        [data, data]
-      end
     end
   end
 end
