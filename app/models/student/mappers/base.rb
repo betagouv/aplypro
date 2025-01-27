@@ -74,7 +74,7 @@ class Student
 
         return if label.nil? || mef.nil? || school_year.nil?
 
-        return if Exclusion.excluded?(uai, mef_code)
+        return if Exclusion.excluded?(uai, mef_code, school_year.start_year)
 
         Classe.find_or_create_by!(
           label:,

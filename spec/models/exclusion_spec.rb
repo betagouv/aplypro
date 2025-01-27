@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Exclusion do
   describe "validation" do
     it { is_expected.to validate_presence_of(:uai) }
-    it { is_expected.to validate_uniqueness_of(:mef_code).scoped_to(:uai) }
+    it { is_expected.to validate_uniqueness_of(:uai).scoped_to(%i[mef_code year]) }
 
     it "cannot be equally the whole establishment and a specific diploma" do
       create(:exclusion, :whole_establishment, uai: "FOO")

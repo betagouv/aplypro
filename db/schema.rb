@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_13_111229) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_27_092313) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "unaccent"
@@ -149,7 +149,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_13_111229) do
     t.string "mef_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["uai", "mef_code"], name: "index_exclusions_on_uai_and_mef_code", unique: true
+    t.integer "year"
+    t.index ["uai", "mef_code", "year"], name: "index_exclusions_on_uai_and_mef_code_and_year", unique: true
   end
 
   create_table "invitations", force: :cascade do |t|

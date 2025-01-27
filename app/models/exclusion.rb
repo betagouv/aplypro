@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 class Exclusion < ApplicationRecord
-  validates :uai, presence: true
-
-  validates :mef_code, uniqueness: { scope: :uai }
+  validates :uai, presence: true, uniqueness: { scope: %i[mef_code year] }
 
   validate :specific_mef_or_whole_establishment
 
@@ -11,16 +9,16 @@ class Exclusion < ApplicationRecord
   scope :outside_contract, -> { where.not(mef_code: nil) }
 
   class << self
-    def outside_contract?(uai, mef_code)
-      exists?(uai: uai, mef_code: mef_code)
+    def outside_contract?(uai, mef_code, year = nil)
+      exists?(uai:, mef_code:, year:)
     end
 
-    def establishment_excluded?(uai)
-      whole_establishment.exists?(uai: uai)
+    def establishment_excluded?(uai, year = nil)
+      whole_establishment.exists?(uai:, year:)
     end
 
-    def excluded?(uai, mef_code)
-      establishment_excluded?(uai) || outside_contract?(uai, mef_code)
+    def excluded?(uai, mef_code, year = nil)
+      establishment_excluded?(uai, year) || outside_contract?(uai, mef_code, year)
     end
   end
 
