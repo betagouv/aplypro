@@ -6,7 +6,7 @@ module ASP
 
     layout "application"
 
-    # TODO: Remettre l'authentification !
+    before_action :authenticate_asp_user!, except: :login
     before_action :log_user,
                   :set_overrides,
                   :infer_page_title
