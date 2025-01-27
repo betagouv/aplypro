@@ -14,32 +14,6 @@ class ClassesFacade
     @establishment = establishment
   end
 
-  def nb_students_per_class
-    @nb_students_per_class ||= @classes
-                               .joins(:students)
-                               .reorder(nil)
-                               .group(:"classes.id")
-                               .count
-  end
-
-  def nb_attributive_decisions_per_class
-    @nb_attributive_decisions_per_class ||= @classes
-                                            .joins(:schoolings)
-                                            .merge(Schooling.with_attributive_decisions)
-                                            .group(:"classes.id")
-                                            .count
-  end
-
-  def nb_ribs_per_class
-    @nb_ribs_per_class ||= @classes
-                           .joins(students: :ribs)
-                           .where(ribs: { archived_at: nil, establishment: @establishment })
-                           .reorder(nil)
-                           .group(:"classes.id")
-                           .distinct
-                           .count(:"students.id")
-  end
-
   def nb_pfmps(class_id, state)
     pfmps_by_classe_and_state.dig(class_id, state.to_s) || 0
   end
@@ -62,7 +36,7 @@ class ClassesFacade
 
     Pfmp.joins(:schooling)
         .joins("LEFT JOIN pfmp_transitions ON pfmp_transitions.pfmp_id = pfmps.id AND pfmp_transitions.most_recent = true") # rubocop:disable Layout/LineLength
-        .where(schoolings: { classe_id: @classes.pluck(:id) })
+        .where(schoolings: { classe_id: @classes.pluck(:id), removed_at: nil })
         .group("schoolings.classe_id", "COALESCE(pfmp_transitions.to_state, 'pending')")
         .count
         .each do |(class_id, state), count|

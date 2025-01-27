@@ -105,6 +105,10 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
     Exclusion.excluded?(establishment.uai, mef.code)
   end
 
+  def remove!(date = Date.current)
+    update!(removed_at: date)
+  end
+
   def removed?
     removed_at.present?
   end

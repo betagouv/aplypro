@@ -20,9 +20,12 @@ module Generate
     def perform(schooling)
       raise MissingAttributiveDecisionError if schooling.attributive_decision.blank?
 
+      Sync::StudentJob.new.perform(schooling)
+
       Schooling.transaction do
         generate_document(schooling)
         rectify_pfmp_if_necessary(schooling)
+        schooling.remove!
         schooling.save!
       end
     end

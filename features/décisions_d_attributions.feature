@@ -114,6 +114,6 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Et la page ne contient pas "Retirer la décision d'attribution"
     Et la page contient "Télécharger la décision de retrait"
     Quand je consulte la classe de "1MELEC"
-    Alors je peux voir dans le tableau "Liste des élèves"
-      | Élèves (10) | Décisions d'attribution (9/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
-      |             | Manquante                      |                              |           |
+    Alors je peux voir dans le tableau "Élèves masqués manuellement de la classe"
+      | Élèves (1)    | Réintégration de l'élève dans la classe      |
+      | Curie Marie   | Réintégrer Marie Curie dans la classe 1MELEC |
