@@ -9,7 +9,7 @@ class Exclusion < ApplicationRecord
   scope :outside_contract, -> { where.not(mef_code: nil) }
 
   class << self
-    def outside_contract?(uai, mef_code, year = nil)
+    def outside_contract?(uai, mef_code, year)
       exists?(uai:, mef_code:, year:)
     end
 
@@ -17,7 +17,7 @@ class Exclusion < ApplicationRecord
       whole_establishment.exists?(uai:, year:)
     end
 
-    def excluded?(uai, mef_code, year = nil)
+    def excluded?(uai, mef_code, year)
       establishment_excluded?(uai, year) || outside_contract?(uai, mef_code, year)
     end
   end

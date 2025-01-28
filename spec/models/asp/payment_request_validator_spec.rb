@@ -12,6 +12,7 @@ RSpec.describe ASP::PaymentRequestValidator do
   let(:establishment) { Establishment.new(uai: "0123456X") }
   let(:mef) { Mef.new(code: "12345678") }
   let(:classe) { Classe.new }
+  let(:school_year) { SchoolYear.new }
 
   before do
     allow(payment_request).to receive(:student).and_return(student)
@@ -24,6 +25,7 @@ RSpec.describe ASP::PaymentRequestValidator do
     allow(schooling).to receive(:classe).and_return(classe)
     allow(classe).to receive(:establishment).and_return(establishment)
     allow(classe).to receive(:mef).and_return(mef)
+    allow(classe).to receive(:school_year).and_return(school_year)
   end
 
   describe "#check_student" do
@@ -190,7 +192,9 @@ RSpec.describe ASP::PaymentRequestValidator do
 
     context "when schooling is excluded" do
       before do
-        allow(Exclusion).to receive(:excluded?).with(establishment.uai, mef.code).and_return(true)
+        allow(Exclusion).to receive(:excluded?).with(establishment.uai,
+                                                     mef.code,
+                                                     school_year.start_year).and_return(true)
       end
 
       it "adds an error" do
@@ -218,7 +222,7 @@ RSpec.describe ASP::PaymentRequestValidator do
   describe "#check_da_abrogation" do
     context "when student is transferred and schooling needs abrogated attributive decision" do
       let(:other_schooling) { instance_double(Schooling, abrogated?: false) }
-      let(:other_classe) { instance_double(Classe, school_year: classe.school_year) }
+      let(:other_classe) { instance_double(Classe, school_year:) }
 
       before do
         allow(student).to receive(:transferred?).and_return(true)
