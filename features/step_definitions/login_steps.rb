@@ -101,7 +101,7 @@ Sachantque("je me déconnecte") do
 end
 
 Sachantqu("il existe un établissement {string}") do |uai|
-  Establishment.find_or_create_by!(uai: uai)
+  Establishment.find_or_create_by(uai: uai, students_provider: "sygne")
 end
 
 Sachantque("je suis un personnel MENJ directeur de l'établissement {string}") do |uai_list|

@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
+  PROVIDERS = %w[sygne fregata csv].freeze
+
   validates :uai, presence: true, uniqueness: true, format: { with: -> { uai_regex } }
+  validates :students_provider, inclusion: { in: PROVIDERS }
 
   has_many :invitations, dependent: :nullify
   has_many :ribs, dependent: :nullify
@@ -61,7 +64,6 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
   }.freeze
 
   AUTHORISED_CLG_UAIS = %w[9760371Z 9760379H 9760274U 9760167C 9760369X 9730570G 9730193X 0601551K].freeze
-
   class << self
     def accepted_type?(type)
       ACCEPTED_ESTABLISHMENT_TYPES.include?(type)
