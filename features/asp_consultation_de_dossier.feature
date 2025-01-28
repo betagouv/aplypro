@@ -4,8 +4,6 @@ Fonctionnalité: Le personnel ASP consulte des dossiers
   Contexte:
     Sachant qu'une PFMP de 30 euros a été saisie, validée et envoyée en paiement pour l'élève "Marie Curie"
     Et que je suis un agent de l'ASP
-    Et que je me rend sur la page de recherche de dossier
-    Alors la page contient "Vous devez vous connecter ou vous enregistrer pour continuer."
     Et que je me connecte au portail ASP
     Et que je me rend sur la page de recherche de dossier
 
@@ -27,12 +25,15 @@ Fonctionnalité: Le personnel ASP consulte des dossiers
 
   Scénario: Le personnel ASP n'a pas accès à l'interface principale
     Quand je me rends sur la page d'accueil
+    Alors le titre de la page contient "Recherche d'un dossier"
     Alors la page ne contient pas "Classes"
     Et la page ne contient pas "Envoyer en paiement"
 
   Scénario: Le personnel ASP est redirigé vers la page de connexion ASP en cas d'erreur de connexion
     Sachant que je me déconnecte
-    Et que je suis un agent de l'ASP avec l'email "foobar@gmail.com"
-    Quand je me connecte au portail ASP
+    Et que je me rend sur la page de recherche de dossier
+    Alors la page contient "Vous devez vous connecter ou vous enregistrer pour continuer."
+    Sachant que je suis un agent de l'ASP avec l'email "foobar@gmail.com"
+    Et que je me connecte au portail ASP
     Alors la page contient "Erreur lors du traitement de votre profil"
     Et la page contient "Vous êtes un agent de l'ASP"
