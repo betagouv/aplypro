@@ -1,6 +1,6 @@
-%h1
-  Dossier
-  = @schooling.attributive_decision_number
+= render partial: 'search-bar'
+
+%h1.fr-mb-5w= @page_title
 
 .fr-my-3w
   - if @schooling.attributive_decision.present?
@@ -8,9 +8,10 @@
   - else
     Aucune décision d'attribution éditée
 
-.fr-table
+.fr-table.fr-table--no-caption
   %table
-    %caption.fr-h2 Élève
+    %thead
+      %th{colspan: 2} Élève
     %tbody
       %tr
         %td Nom
@@ -28,9 +29,10 @@
         %td Code INSEE du pays de naissance
         %td= display_insee_code(@schooling.student.birthplace_country_insee_code)
 
-.fr-table
+.fr-table.fr-table--no-caption
   %table
-    %caption.fr-h2 Établissement
+    %thead
+      %th{colspan: 2} Établissement
     %tbody
       %tr
         %td UAI
@@ -41,9 +43,10 @@
       %tr
         %td Email
         %td= @schooling.establishment.email
-.fr-table
+.fr-table.fr-table--no-caption
   %table
-    %caption.fr-h2 Formation
+    %thead
+      %th{colspan: 2} Formation
     %tbody
       %tr
         %td Forfait journalier
@@ -53,9 +56,10 @@
         %td= number_to_currency @schooling.mef.wage.yearly_cap
 
 
-.fr-table
+.fr-table.fr-table--no-caption
   %table
-    %caption.fr-h2 Coordonnées bancaires
+    %thead
+      %th{colspan: 2} Coordonnées bancaires
     %tbody
       - rib = @schooling.student.rib(@schooling.establishment)
       - if rib.blank?

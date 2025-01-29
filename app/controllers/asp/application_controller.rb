@@ -3,12 +3,14 @@
 module ASP
   class ApplicationController < ActionController::Base
     include UserLogger
+    include PageTitle
 
     layout "application"
 
     before_action :authenticate_asp_user!, except: :login
     before_action :log_user,
-                  :set_overrides
+                  :set_overrides,
+                  :infer_page_title
 
     helper_method :current_user, :current_establishment
 

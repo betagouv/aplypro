@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::Base
   include UserLogger
+  include PageTitle
 
   before_action :authenticate_user!,
                 :log_user,
@@ -45,30 +46,6 @@ class ApplicationController < ActionController::Base
       SchoolYear.find_by(start_year: params[:school_year_id]) ||
       SchoolYear.find_by(start_year: session[:start_year]) ||
       SchoolYear.current
-  end
-
-  def infer_page_title(attrs = {})
-    key = page_title_key
-
-    return unless I18n.exists?(key)
-
-    title, breadcrumb = extract_title_data(I18n.t(key, deep_interpolation: true, **attrs))
-
-    @page_title = title
-
-    add_breadcrumb(breadcrumb)
-  end
-
-  def extract_title_data(data)
-    if data.is_a? Hash
-      [data[:title], data[:breadcrumb]]
-    else
-      [data, data]
-    end
-  end
-
-  def page_title_key
-    ["pages", "titles", controller_name, action_name].join(".")
   end
 
   def redirect_asp_users!

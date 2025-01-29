@@ -5,7 +5,7 @@ require "sidekiq/web"
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
   namespace :asp do
-    resources :schoolings, only: :index
+    resources :schoolings, only: %i[index show]
 
     devise_for :users, skip: :all, class_name: "ASP::User"
   end
