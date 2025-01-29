@@ -28,6 +28,14 @@ module ASP
         xml.adressesindividu { adresse_entity_class.from_payment_request(payment_request).to_xml(xml) }
 
         xml.listedossier { Dossier.from_payment_request(payment_request).to_xml(xml) }
+      rescue ActiveModel::ValidationError => e
+        Sentry.capture_exception(
+          ASP::Errors::PaymentFileValidationError.new(
+            "Payment file validation failed for p_r: #{payment_request.id}" \
+            "with message #{e.message}"
+          )
+        )
+        raise e
       end
 
       def individu_attrs

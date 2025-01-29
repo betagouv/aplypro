@@ -13,5 +13,6 @@ module ASP
     class MissingEstablishmentCommuneCodeError < Error; end
     class MissingEstablishmentPostalCodeError < Error; end
     class IntegrationError < Error; end
+    class PaymentFileValidationError < Error; end
   end
 end
