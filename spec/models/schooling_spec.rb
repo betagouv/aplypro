@@ -247,7 +247,7 @@ RSpec.describe Schooling do
       before do
         student.update!(ine_not_found: false)
         schooling.update!(removed_at: nil)
-        establishment.update!(students_provider: nil)
+        establishment.update!(students_provider: "csv")
       end
 
       it { expect(schooling).not_to be_syncable }

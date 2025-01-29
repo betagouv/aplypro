@@ -13,7 +13,7 @@ FactoryBot.define do
     private_contract_type_code { "99" }
     academy_code { "10" }
     academy_label { "Marseille" }
-    students_provider { nil }
+    students_provider { "csv" }
     ministry { "MINISTERE DE L'EDUCATION NATIONALE" }
     confirmed_director { nil }
     department_code { "034" }
