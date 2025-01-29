@@ -192,9 +192,7 @@ RSpec.describe ASP::PaymentRequestValidator do
 
     context "when schooling is excluded" do
       before do
-        allow(Exclusion).to receive(:excluded?).with(establishment.uai,
-                                                     mef.code,
-                                                     school_year.start_year).and_return(true)
+        allow(Exclusion).to receive(:excluded?).with(establishment.uai, mef.code, school_year).and_return(true)
       end
 
       it "adds an error" do

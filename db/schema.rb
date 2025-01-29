@@ -149,8 +149,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_27_092313) do
     t.string "mef_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "year"
-    t.index ["uai", "mef_code", "year"], name: "index_exclusions_on_uai_and_mef_code_and_year", unique: true
+    t.bigint "school_year_id"
+    t.index ["school_year_id"], name: "index_exclusions_on_school_year_id"
+    t.index ["uai", "mef_code", "school_year_id"], name: "index_exclusions_on_uai_and_mef_code_and_school_year_id", unique: true
   end
 
   create_table "invitations", force: :cascade do |t|
@@ -320,6 +321,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_27_092313) do
   add_foreign_key "establishment_user_roles", "users"
   add_foreign_key "establishment_user_roles", "users", column: "granted_by_id"
   add_foreign_key "establishments", "users", column: "confirmed_director_id"
+  add_foreign_key "exclusions", "school_years"
   add_foreign_key "invitations", "establishments"
   add_foreign_key "invitations", "users"
   add_foreign_key "mefs", "school_years"

@@ -4,8 +4,9 @@ require "rails_helper"
 
 RSpec.describe Exclusion do
   describe "validation" do
+    it { is_expected.to belong_to(:school_year).class_name("SchoolYear").optional }
     it { is_expected.to validate_presence_of(:uai) }
-    it { is_expected.to validate_uniqueness_of(:uai).scoped_to(%i[mef_code year]) }
+    it { is_expected.to validate_uniqueness_of(:uai).scoped_to(%i[mef_code school_year_id]) }
 
     it "cannot be equally the whole establishment and a specific diploma" do
       create(:exclusion, :whole_establishment, uai: "FOO")
@@ -15,23 +16,23 @@ RSpec.describe Exclusion do
   end
 
   describe "excluded?" do
-    subject { described_class.excluded?(uai, mef_code, year) }
+    subject { described_class.excluded?(uai, mef_code, school_year) }
 
     let(:mef_code) { nil }
     let(:uai) { nil }
-    let(:year) { nil }
+    let(:school_year) { nil }
 
     context "when the whole establishment is excluded" do
       let(:exclusion) { create(:exclusion, :whole_establishment) }
 
       let(:uai) { exclusion.uai }
-      let(:year) { exclusion.year }
+      let(:school_year) { exclusion.school_year_id }
 
       it { is_expected.to be true }
     end
 
     context "when the establishment and that specific MEF is excluded" do
-      let(:exclusion) { create(:exclusion, year: nil) }
+      let(:exclusion) { create(:exclusion, school_year: nil) }
 
       let(:uai) { exclusion.uai }
       let(:mef_code) { exclusion.mef_code }
@@ -39,12 +40,12 @@ RSpec.describe Exclusion do
       it { is_expected.to be true }
     end
 
-    context "when the establishment, that specific MEF and that specific year is excluded" do
+    context "when the establishment, that specific MEF and that specific school year is excluded" do
       let(:exclusion) { create(:exclusion) }
 
       let(:uai) { exclusion.uai }
       let(:mef_code) { exclusion.mef_code }
-      let(:year) { exclusion.year }
+      let(:school_year) { exclusion.school_year }
 
       it { is_expected.to be true }
     end

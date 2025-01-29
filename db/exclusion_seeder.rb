@@ -24,14 +24,14 @@ class ExclusionSeeder
     %w[0442083A 2473121333],
     %w[0910838S 2473000433],
     %w[0910838S 2473121432],
-    %w[0442227G 2403320511 2023]
+    %w[0442227G 2403320511 1]
   ].freeze
 
   def self.seed
     logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
 
-    EXCLUSIONS.each do |uai, mef_code, year|
-      Exclusion.find_or_create_by!(uai:, mef_code:, year:)
+    EXCLUSIONS.each do |uai, mef_code, school_year_id|
+      Exclusion.find_or_create_by!(uai:, mef_code:, school_year_id:)
     end
 
     logger.info { "[seeds] upserted #{Exclusion.count} exclusions" }
