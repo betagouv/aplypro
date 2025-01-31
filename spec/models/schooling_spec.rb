@@ -231,8 +231,8 @@ RSpec.describe Schooling do
       it { expect(schooling).to be_syncable }
     end
 
-    context "when schooling is removed" do
-      before { schooling.update!(removed_at: Time.zone.now) }
+    context "when schooling is hidden" do
+      before { schooling.update!(hidden_at: Time.zone.now) }
 
       it { expect(schooling).to be_syncable }
     end
@@ -246,7 +246,7 @@ RSpec.describe Schooling do
     context "when none of the conditions are met" do
       before do
         student.update!(ine_not_found: false)
-        schooling.update!(removed_at: nil)
+        schooling.update!(hidden_at: nil)
         establishment.update!(students_provider: "csv")
       end
 
@@ -316,14 +316,14 @@ RSpec.describe Schooling do
     end
   end
 
-  describe "removed?" do
+  describe "hidden?" do
     it "returns false" do
-      expect(schooling.removed?).to be false
+      expect(schooling.hidden?).to be false
     end
 
     it "returns true" do
-      schooling.removed_at = Time.zone.today
-      expect(schooling.removed?).to be true
+      schooling.hidden_at = Time.zone.today
+      expect(schooling.hidden?).to be true
     end
   end
 

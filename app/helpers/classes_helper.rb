@@ -2,7 +2,7 @@
 
 module ClassesHelper
   def ribs_progress_badge(schoolings, **args)
-    schoolings = schoolings.without_removed_students
+    schoolings = schoolings.without_hidden_students
 
     count = schoolings.joins(student: :ribs)
                       .where(ribs: { archived_at: nil, establishment: current_establishment })
@@ -16,7 +16,7 @@ module ClassesHelper
 
   def attributive_decisions_progress_badge(schoolings, **args)
     count = schoolings.with_attributive_decisions.count
-    total = schoolings.without_removed_students.size
+    total = schoolings.without_hidden_students.size
 
     progress_badge(count, total, **args)
   end
@@ -28,7 +28,7 @@ module ClassesHelper
   def closed_schooling_information_tag(schooling, **args)
     return if schooling.blank?
 
-    if schooling.removed?
+    if schooling.hidden?
       content_tag(
         :div,
         "Masqué(e) manuellement de la classe",

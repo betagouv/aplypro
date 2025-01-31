@@ -18,18 +18,18 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   scope :former, -> { where.not(end_date: nil).where(end_date: ..Date.current) }
   scope :active, -> { where("schoolings.end_date IS NULL OR schoolings.end_date > ?", Date.current) }
-  scope :current, -> { active.without_removed_students }
-  scope :without_removed_students, -> { where(removed_at: nil) }
-  scope :with_removed_students, -> { where.not(removed_at: nil) }
+  scope :current, -> { active.without_hidden_students }
+  scope :without_hidden_students, -> { where(hidden_at: nil) }
+  scope :with_hidden_students, -> { where.not(hidden_at: nil) }
 
   scope :with_attributive_decisions, lambda {
-    without_cancellation_decisions.without_removed_students.joins(:attributive_decision_attachment)
+    without_cancellation_decisions.without_hidden_students.joins(:attributive_decision_attachment)
   }
   scope :without_attributive_decisions, lambda {
-    without_removed_students.where.missing(:attributive_decision_attachment)
+    without_hidden_students.where.missing(:attributive_decision_attachment)
   }
   scope :generating_attributive_decision, lambda {
-    without_removed_students.where(generating_attributive_decision: true)
+    without_hidden_students.where(generating_attributive_decision: true)
   }
 
   scope :without_cancellation_decisions, -> { where.missing(:cancellation_decision_attachment) }
@@ -112,16 +112,16 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
     Exclusion.excluded?(establishment.uai, mef.code)
   end
 
-  def remove!(date = Date.current)
-    update!(removed_at: date)
+  def hidden!(date = Date.current)
+    update!(hidden_at: date)
   end
 
-  def removed?
-    removed_at.present?
+  def hidden?
+    hidden_at.present?
   end
 
   def syncable?
-    student.ine_not_found || removed? || establishment.students_provider != "csv"
+    student.ine_not_found || hidden? || establishment.students_provider != "csv"
   end
 
   def attachment_file_name(description)

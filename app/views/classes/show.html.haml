@@ -26,6 +26,6 @@
   %h2 Élèves sortis de la classe
   = render partial: "students_table", locals: { schoolings: @classe_facade.schoolings.former, caption: "Élèves sortis de la classe" }
 
-- if @classe.removed_students.any?
+- if @classe.hidden_students.any?
   %h2 Élèves masqués manuellement de la classe
-  = render partial: "students_removed_table", locals: { schoolings: @classe_facade.schoolings.with_removed_students }
+  = render partial: "students_hidden_table", locals: { schoolings: @classe_facade.schoolings.with_hidden_students }

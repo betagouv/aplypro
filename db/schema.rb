@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_13_111229) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_31_093456) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "unaccent"
@@ -149,6 +149,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_13_111229) do
     t.string "mef_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "school_year_id"
     t.index ["uai", "mef_code"], name: "index_exclusions_on_uai_and_mef_code", unique: true
   end
 
@@ -240,12 +241,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_13_111229) do
     t.integer "status"
     t.integer "abrogation_decision_version", default: 0
     t.date "extended_end_date"
-    t.datetime "removed_at", precision: nil
+    t.datetime "hidden_at", precision: nil
     t.index ["administrative_number"], name: "index_schoolings_on_administrative_number", unique: true
     t.index ["asp_dossier_id"], name: "index_schoolings_on_asp_dossier_id", unique: true
     t.index ["classe_id"], name: "index_schoolings_on_classe_id"
     t.index ["student_id", "classe_id"], name: "one_schooling_per_class_student", unique: true
-    t.index ["student_id", "end_date", "removed_at"], name: "index_schoolings_on_student_id_and_end_date_and_removed_at"
+    t.index ["student_id", "end_date", "hidden_at"], name: "index_schoolings_on_student_id_and_end_date_and_hidden_at"
     t.index ["student_id"], name: "index_schoolings_on_student_id"
     t.index ["student_id"], name: "one_active_schooling_per_student", unique: true, where: "(end_date IS NULL)"
   end
@@ -319,6 +320,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_13_111229) do
   add_foreign_key "establishment_user_roles", "users"
   add_foreign_key "establishment_user_roles", "users", column: "granted_by_id"
   add_foreign_key "establishments", "users", column: "confirmed_director_id"
+  add_foreign_key "exclusions", "school_years"
   add_foreign_key "invitations", "establishments"
   add_foreign_key "invitations", "users"
   add_foreign_key "mefs", "school_years"

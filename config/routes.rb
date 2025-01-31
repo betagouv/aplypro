@@ -79,9 +79,9 @@ Rails.application.routes.draw do
           get "confirm_cancellation_decision"
           get "cancellation_decision"
           get "confirm_da_extension"
-          get "confirm_removal"
-          get "confirm_removal_cancellation"
-          post "remove"
+          get "confirm_hidden"
+          get "confirm_hidden_cancellation"
+          post "hidden"
         end
 
         resources :pfmps, except: :index do

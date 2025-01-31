@@ -6,8 +6,8 @@ class SchoolingsController < ApplicationController
   before_action :authenticate_user!, :set_classe, :set_schooling
   before_action :check_director, :update_confirmed_director!, :check_confirmed_director,
                 only: %i[abrogate_decision update]
-  before_action :set_student_breadcrumbs, only: %i[confirm_removal
-                                                   confirm_removal_cancellation
+  before_action :set_student_breadcrumbs, only: %i[confirm_hidden
+                                                   confirm_hidden_cancellation
                                                    confirm_da_extension
                                                    confirm_cancellation_decision]
 
@@ -31,12 +31,12 @@ class SchoolingsController < ApplicationController
 
   def confirm_da_extension; end
 
-  def confirm_removal; end
+  def confirm_hidden; end
 
-  def confirm_removal_cancellation; end
+  def confirm_hidden_cancellation; end
 
-  def remove
-    @schooling.remove!(params[:removed_at])
+  def hidden
+    @schooling.hidden!(params[:hidden_at])
 
     redirect_to school_year_class_path(selected_school_year, @classe), notice: t("flash.schooling.#{params[:notice]}",
                                                                                  name: @schooling.student,
