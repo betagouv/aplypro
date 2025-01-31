@@ -221,10 +221,10 @@ fr:
         show: Envoyer en paiement les PFMPs de %{name}
       schoolings:
         confirm_da_extension: "Autoriser un report de décision d'attribution"
-        confirm_hidden:
+        confirm_removal:
           title: "Masquer l'élève manuellement de la classe"
           breadcrumb: "Masquer l'élève manuellement de la classe"
-        confirm_hidden_cancellation:
+        confirm_removal_cancellation:
           title: "Réintégration de l'élève dans la classe"
           breadcrumb: "Réintégration de l'élève dans la classe"
         confirm_cancellation_decision:

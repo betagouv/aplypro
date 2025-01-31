@@ -36,7 +36,7 @@ class ClassesFacade
 
     Pfmp.joins(:schooling)
         .joins("LEFT JOIN pfmp_transitions ON pfmp_transitions.pfmp_id = pfmps.id AND pfmp_transitions.most_recent = true") # rubocop:disable Layout/LineLength
-        .where(schoolings: { classe_id: @classes.pluck(:id), hidden_at: nil })
+        .where(schoolings: { classe_id: @classes.pluck(:id), removed_at: nil })
         .group("schoolings.classe_id", "COALESCE(pfmp_transitions.to_state, 'pending')")
         .count
         .each do |(class_id, state), count|

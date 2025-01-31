@@ -5,7 +5,7 @@ fr:
     owner_type: |
       Pour un élève majeur qui ne peut pas ouvrir de compte et souhaite que son allocation soit versée sur le compte d'un tiers dans le cadre de la procédure du mandat sous seing privé (comme indiqué dans la FàQ EduScol), l'option à sélectionner est : 
       <strong>Un élève majeur payé sur le compte d'un tiers</strong>
-    hidden_student: |
+    remove_student: |
       Utilisez ce bouton pour un élève qui est inscrit dans la classe mais ne s'est jamais présenté dans l'établissement. Si cet élève est toujours présent dans la Base Elèves Etablissement (BEE) ou dans Colentagri, cela permettra de ne plus le voir affiché dans les effectifs APLyPro.
     cancellation_decision: |
       Utilisez ce bouton pour supprimer le droit à l'allocation pour les lycéens professionnels avec effet rétroactif. Cela peut concerner des élèves qui ont le statut d'apprenti ou qui s'avèrent ne pas être éligibles au dispositif. Attention! Les PFMP saisies deviennent de fait invalides et celles éventuellement payées feront l'objet d'une déclaration d'indu automatiquement, l'élève recevra un (des) ordre(s) de reversement pour rendre les sommes indument perçues.
