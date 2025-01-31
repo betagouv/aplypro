@@ -20,8 +20,12 @@ module Generate
     def perform(schooling)
       raise MissingAttributiveDecisionError if schooling.attributive_decision.blank?
 
+      Sync::StudentJob.new.perform(schooling)
+
       Schooling.transaction do
         generate_document(schooling)
+        rectify_pfmp_if_necessary(schooling)
+        schooling.remove!
         schooling.save!
       end
     end
@@ -29,9 +33,25 @@ module Generate
     private
 
     def generate_document(schooling)
-      # schooling.increment(:abrogation_decision_version)
       io = AttributeDecision::Cancellation.new(schooling).write
       schooling.attach_attributive_document(io, :cancellation_decision)
+    end
+
+    def rectify_pfmp_if_necessary(schooling)
+      schooling.pfmps.each do |pfmp|
+        next unless pfmp.paid?
+
+        PfmpManager.new(pfmp).rectify_and_update_attributes!({ day_count: 0 }, address_params)
+      end
+    end
+
+    def address_params
+      schooling.student.attributes.slice(:address_line1,
+                                         :address_line2,
+                                         :address_postal_code,
+                                         :address_city,
+                                         :address_city_insee_code,
+                                         :address_country_code)
     end
   end
 end

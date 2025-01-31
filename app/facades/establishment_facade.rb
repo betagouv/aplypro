@@ -12,8 +12,8 @@ class EstablishmentFacade
     @school_year = school_year
   end
 
-  def schoolings_count
-    @schoolings_count ||= selected_classes.joins(:schoolings).count
+  def selected_schoolings
+    @selected_schoolings ||= establishment.schoolings.for_year(school_year.start_year)
   end
 
   def attributive_decisions_count

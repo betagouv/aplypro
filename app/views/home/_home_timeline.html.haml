@@ -22,7 +22,7 @@
         .gray-panel.timeline-section
           .fr-grid-row.fr-grid-row--top
             %h2.fr-col 2. Coordonnées bancaires
-            = progress_badge(@establishment_facade.ribs_count, @establishment_facade.students_count, title: "Les coordonnées bancaires sont réutilisées pour un même élève\nà travers toutes les classes qu'il a pu fréquenter.")
+            = ribs_progress_badge(current_establishment.schoolings, title: "Les coordonnées bancaires sont réutilisées pour un même élève\nà travers toutes les classes qu'il a pu fréquenter.")
           %p Afin de pouvoir verser l'allocation aux lycéens, APLyPro a besoin de leurs coordonnées bancaires, de celles d'un responsable légal ou d'un tiers.
           %ul.fr-btns-group
             %li= link_to "Choisir une classe pour saisir des coordonnées bancaires", school_year_classes_path(selected_school_year), class: "fr-btn fr-btn--primary fr-mb-0", data: { turbo_frame: "_top" }

@@ -22,9 +22,17 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope :without_removed_students, -> { where(removed_at: nil) }
   scope :with_removed_students, -> { where.not(removed_at: nil) }
 
-  scope :with_attributive_decisions, -> { joins(:attributive_decision_attachment) }
-  scope :without_attributive_decisions, -> { where.missing(:attributive_decision_attachment) }
-  scope :generating_attributive_decision, -> { where(generating_attributive_decision: true) }
+  scope :with_attributive_decisions, lambda {
+    without_cancellation_decisions.without_removed_students.joins(:attributive_decision_attachment)
+  }
+  scope :without_attributive_decisions, lambda {
+    without_removed_students.where.missing(:attributive_decision_attachment)
+  }
+  scope :generating_attributive_decision, lambda {
+    without_removed_students.where(generating_attributive_decision: true)
+  }
+
+  scope :without_cancellation_decisions, -> { where.missing(:cancellation_decision_attachment) }
   scope :with_administrative_number, -> { where.not(administrative_number: nil) }
 
   scope :for_year, lambda { |start_year|
@@ -80,6 +88,10 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
     closed? && abrogation_decision.attached?
   end
 
+  def cancelled?
+    cancellation_decision.attached?
+  end
+
   def reopen!
     update!(end_date: nil)
   end
@@ -98,6 +110,10 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def excluded?
     Exclusion.excluded?(establishment.uai, mef.code, classe.school_year)
+  end
+
+  def remove!(date = Date.current)
+    update!(removed_at: date)
   end
 
   def removed?

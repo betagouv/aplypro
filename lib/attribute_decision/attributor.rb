@@ -70,9 +70,9 @@ module AttributeDecision
 
       composer.text("En cas de contestation de la décision, le bénéficiaire peut exercer un recours gracieux ou hiérarchique auprès du recteur dans un délai de 2 mois à compter de la notification de cette présente décision.")
 
-      composer.text("Dans le même délai de deux mois à compter de la notification de cette décision, le bénéficiaire peut exercer un recours contentieux devant le tribunal administratif de l’établissement.")
+      composer.text("Dans le même délai de deux mois à compter de la notification de cette décision, le bénéficiaire peut exercer un recours contentieux devant le tribunal administratif compétant pour l’établissement.")
 
-      composer.text("Si un recours gracieux ou hiérarchique a été exercé, le bénéficiaire peut exercer un recours contentieux devant le tribunal administratif de l’établissement dans un délai de deux mois à compter de la réponse ou du rejet implicite du recours gracieux ou hiérarchique par l’autorité compétente.")
+      composer.text("Si un recours gracieux ou hiérarchique a été exercé, le bénéficiaire peut exercer un recours contentieux devant le tribunal administratif compétant pour l’établissement dans un délai de deux mois à compter de la réponse ou du rejet implicite du recours gracieux ou hiérarchique par l’autorité compétente.")
 
       composer.text("Article 9 : Reversement", style: :paragraph_title)
 
@@ -145,7 +145,7 @@ module AttributeDecision
       director = establishment.confirmed_director || establishment.users.directors.first
 
       composer.text("Numéro de dossier administratif : #{schooling.administrative_number}")
-      composer.text("Numéro de décision attributive : #{schooling.attributive_decision_number}")
+      composer.text("Numéro de décision attributive annuelle : #{schooling.attributive_decision_number}")
       composer.text("Bénéficiaire : #{student}")
       composer.text("Adresse email de l'établissement : #{establishment.email}")
       composer.text("Téléphone de l'établissement : #{establishment.telephone}")
