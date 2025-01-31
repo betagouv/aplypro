@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_13_111229) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_27_092313) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "unaccent"
@@ -149,7 +149,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_13_111229) do
     t.string "mef_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["uai", "mef_code"], name: "index_exclusions_on_uai_and_mef_code", unique: true
+    t.bigint "school_year_id"
+    t.index ["school_year_id"], name: "index_exclusions_on_school_year_id"
+    t.index ["uai", "mef_code", "school_year_id"], name: "index_exclusions_on_uai_and_mef_code_and_school_year_id", unique: true
   end
 
   create_table "invitations", force: :cascade do |t|
@@ -319,6 +321,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_13_111229) do
   add_foreign_key "establishment_user_roles", "users"
   add_foreign_key "establishment_user_roles", "users", column: "granted_by_id"
   add_foreign_key "establishments", "users", column: "confirmed_director_id"
+  add_foreign_key "exclusions", "school_years"
   add_foreign_key "invitations", "establishments"
   add_foreign_key "invitations", "users"
   add_foreign_key "mefs", "school_years"

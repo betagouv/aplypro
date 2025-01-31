@@ -97,7 +97,7 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def excluded?
-    Exclusion.excluded?(establishment.uai, mef.code)
+    Exclusion.excluded?(establishment.uai, mef.code, classe.school_year)
   end
 
   def removed?

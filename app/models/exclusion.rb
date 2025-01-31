@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Exclusion < ApplicationRecord
-  validates :uai, presence: true
+  belongs_to :school_year, optional: true
 
-  validates :mef_code, uniqueness: { scope: :uai }
+  validates :uai, presence: true, uniqueness: { scope: %i[mef_code school_year_id] }
 
   validate :specific_mef_or_whole_establishment
 
@@ -11,24 +11,19 @@ class Exclusion < ApplicationRecord
   scope :outside_contract, -> { where.not(mef_code: nil) }
 
   class << self
-    def outside_contract?(uai, mef_code)
-      exists?(uai: uai, mef_code: mef_code)
-    end
-
     def establishment_excluded?(uai)
-      whole_establishment.exists?(uai: uai)
+      whole_establishment.exists?(uai:)
     end
 
-    def excluded?(uai, mef_code)
-      establishment_excluded?(uai) || outside_contract?(uai, mef_code)
+    def excluded?(uai, mef_code, school_year)
+      exists?(uai:, mef_code: [nil, mef_code], school_year: [nil, school_year])
     end
   end
 
   def specific_mef_or_whole_establishment
     return if mef_code.blank?
+    return unless Exclusion.whole_establishment.excluding(self).exists?(uai: uai)
 
-    if Exclusion.whole_establishment.excluding(self).where(uai: uai).any? # rubocop:disable Style/GuardClause
-      errors.add(:base, :specific_mef_or_whole_establishment)
-    end
+    errors.add(:base, :specific_mef_or_whole_establishment)
   end
 end

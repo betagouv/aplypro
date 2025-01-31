@@ -305,10 +305,12 @@ RSpec.describe Schooling do
       allow(Exclusion).to receive(:excluded?).and_return "a fake result"
     end
 
-    it "forwards its UAI and MEF code to Exclusion.excluded?" do
+    it "forwards its UAI, MEF code and school year to Exclusion.excluded?" do
       schooling.excluded?
 
-      expect(Exclusion).to have_received(:excluded?).with(schooling.establishment.uai, schooling.mef.code)
+      expect(Exclusion).to have_received(:excluded?).with(schooling.establishment.uai,
+                                                          schooling.mef.code,
+                                                          schooling.classe.school_year)
     end
 
     it "returns the result" do
