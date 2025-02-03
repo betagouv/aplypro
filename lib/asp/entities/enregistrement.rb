@@ -31,7 +31,7 @@ module ASP
       rescue ActiveModel::ValidationError => e
         Sentry.capture_exception(
           ASP::Errors::PaymentFileValidationError.new(
-            "Payment file validation failed for p_r: #{payment_request.id}" \
+            "Payment file validation failed for p_r: #{payment_request.id} " \
             "with message #{e.message}"
           )
         )
