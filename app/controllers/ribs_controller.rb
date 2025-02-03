@@ -8,15 +8,13 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   before_action :set_classe, :set_bulk_rib_breadcrumbs, only: %i[missing bulk_create]
   before_action :set_student, :check_establishment!, :set_rib_breadcrumbs, except: %i[missing bulk_create]
   before_action :check_classes, only: :bulk_create
-  before_action :set_rib, only: %i[edit update confirm_deletion]
+  before_action :set_rib, only: %i[edit update]
 
   def new
     @rib = Rib.new
   end
 
   def edit; end
-
-  def confirm_deletion; end
 
   def create
     @rib = @student.create_new_rib(rib_params)
