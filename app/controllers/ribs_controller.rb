@@ -44,12 +44,6 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     end
   end
 
-  def destroy
-    @rib.destroy
-
-    redirect_to student_path(@student), notice: t("flash.ribs.destroyed", name: @student.full_name)
-  end
-
   def missing
     @ribs = @classe
             .active_students

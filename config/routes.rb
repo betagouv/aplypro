@@ -33,7 +33,7 @@ Rails.application.routes.draw do
   end
 
   resources :students, only: %i[show] do
-    resources :ribs, only: %i[new create destroy update edit] do
+    resources :ribs, only: %i[new create update edit] do
       member do
         get "confirm_deletion"
       end
