@@ -18,14 +18,14 @@ RSpec.describe PollPaymentsServerJob do
 
     allow(saver_double).to receive(:persist_file!)
 
-    allow(server_double).to receive(:get_all_files!).and_return(File.dirname(mock_file))
+    allow(server_double).to receive(:fetch_all_files!).and_return(File.dirname(mock_file))
     allow(server_double).to receive(:remove_file!)
   end
 
-  it "calls the get_all_files! ASP::Server method" do
+  it "calls the fetch_all_files! ASP::Server method" do
     perform_enqueued_jobs(only: described_class) { described_class.perform_later }
 
-    expect(server_double).to have_received(:get_all_files!)
+    expect(server_double).to have_received(:fetch_all_files!)
   end
 
   it "feeds each file to an ASP::FileSaver" do

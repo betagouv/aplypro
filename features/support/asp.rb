@@ -9,7 +9,7 @@ class FakeServer
   class << self
     def upload_file!(io:, path:); end
 
-    def get_all_files!
+    def fetch_all_files!
       TEMP_ASP_DIR
     end
 
