@@ -139,10 +139,6 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     )
   end
 
-  def excluded?
-    Exclusion.establishment_excluded?(uai)
-  end
-
   def contract_type
     case private_contract_type_code
     when *CONTRACTS_STATUS[:private_allowed]

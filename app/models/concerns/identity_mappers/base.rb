@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module IdentityMappers
+  # rubocop:disable Metrics/ClassLength
   class Base
     attr_accessor :attributes
 
@@ -43,8 +44,9 @@ module IdentityMappers
     end
 
     def relevant?(attrs)
-      (Establishment.accepted_type?(attrs[:tty_code]) && !Exclusion.establishment_excluded?(attrs[:uai])) ||
-        Establishment::AUTHORISED_CLG_UAIS.include?(attrs[:uai])
+      (Establishment.accepted_type?(attrs[:tty_code]) &&
+        !Exclusion.establishment_excluded?(attrs[:uai], nil)
+      ) || Establishment::AUTHORISED_CLG_UAIS.include?(attrs[:uai])
     end
 
     def no_responsibilities?
@@ -128,4 +130,5 @@ module IdentityMappers
       responsibility_uais | normal_uais | delegated_uais
     end
   end
+  # rubocop:enable Metrics/ClassLength
 end
