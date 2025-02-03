@@ -20,6 +20,16 @@ Rails.application.routes.draw do
 
   delete "asp/logout", to: "asp/application#logout", as: :destroy_asp_user_session
 
+  namespace :insider do
+    get "home"
+
+    devise_for :users, skip: :all, class_name: "Insider::User"
+  end
+
+  get "insider/login", to: "insider/application#login", as: :new_insider_user_session
+
+  delete "insider/logout", to: "insider/application#logout", as: :destroy_insider_user_session
+
   resources :users, only: :update do
     get "select_establishment"
   end
@@ -101,6 +111,10 @@ Rails.application.routes.draw do
 
   devise_scope :asp_user do
     get "/auth/asp/callback" => "users/omniauth_callbacks#asp", as: :asp_login
+  end
+
+  devise_scope :insider_user do
+    get "/auth/insider/callback" => "users/omniauth_callbacks#insider", as: :insider_login
   end
 
   devise_for :users

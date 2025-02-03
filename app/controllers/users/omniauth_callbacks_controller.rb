@@ -18,6 +18,17 @@ module Users
       redirect_to asp_schoolings_path
     end
 
+    def insider
+      @insider_login = true
+      @insider_user = Insider::User.from_oidc(auth_hash).tap(&:save!)
+
+      # Check limited access to this part ?
+
+      sign_in(:insider_user, @insider_user)
+
+      redirect_to insider_home_path
+    end
+
     def developer
       oidcize_dev_hash(auth_hash)
 
@@ -25,6 +36,8 @@ module Users
     end
 
     def oidc
+      return insider if params[:callback].eql?("insider") # TODO: Modifier ou compléter
+
       parse_identity
 
       @user.save!
@@ -63,6 +76,8 @@ module Users
 
       if defined? @asp_login
         fail_asp_user
+      elsif defined? @insider_login
+        fail_insider_user
       else
         fail_user
       end
@@ -76,6 +91,10 @@ module Users
 
     def fail_asp_user
       redirect_to new_asp_user_session_path
+    end
+
+    def fail_insider_user
+      redirect_to new_insider_user_session_path
     end
 
     private
