@@ -48,9 +48,9 @@ RSpec.describe IdentityMappers::Base do
 
     context "when some establishments are not included in the perimeter" do
       before do
-        %w[A B C].each { |uai| allow(Exclusion).to receive(:establishment_excluded?).with(uai).and_return true }
+        %w[A B C].each { |uai| allow(Exclusion).to receive(:establishment_excluded?).with(uai, nil).and_return true }
 
-        allow(Exclusion).to receive(:establishment_excluded?).with("Z").and_return false
+        allow(Exclusion).to receive(:establishment_excluded?).with("Z", nil).and_return false
       end
 
       let(:fredurne) { [build(:fredurne, uai: "A"), build(:fredurne, uai: "Z")] }

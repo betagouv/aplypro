@@ -5,6 +5,8 @@ module Stats
     attr_reader :indicators
 
     def initialize(start_year)
+      @school_year = SchoolYear.find_by!(start_year:)
+
       @indicators = [
         Indicator::AttributiveDecisions,
         Indicator::Ribs,
@@ -75,7 +77,10 @@ module Stats
 
     def menj_academies_data
       titles = ["Académie", *indicators_titles]
-      academies = Establishment.distinct.order(:academy_label).reject(&:excluded?).map(&:academy_label).uniq
+      academies = Establishment.distinct
+                               .order(:academy_label)
+                               .reject { |e| Exclusion.establishment_excluded?(e.uai, school_year: @school_year) }
+                               .map(&:academy_label).uniq
 
       academy_lines = academies.map do |academy|
         [
@@ -92,7 +97,7 @@ module Stats
       establishments = Establishment
                        .distinct
                        .order(:uai)
-                       .reject(&:excluded?)
+                       .reject { |e| Exclusion.establishment_excluded?(e.uai, school_year: @school_year) }
                        .map { |e| [e.uai, e.name, e.academy_label, e.private_contract_type_code, e.ministry] }
 
       establishment_lines = establishments.map do |uai, name, academy, private_code, ministry|

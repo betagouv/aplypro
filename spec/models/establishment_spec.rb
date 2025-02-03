@@ -51,22 +51,6 @@ RSpec.describe Establishment do
     end
   end
 
-  describe "excluded?" do
-    before do
-      allow(Exclusion).to receive(:establishment_excluded?).and_return "a fake result"
-    end
-
-    it "forwards its UAI" do
-      establishment.excluded?
-
-      expect(Exclusion).to have_received(:establishment_excluded?).with(establishment.uai)
-    end
-
-    it "returns the result" do
-      expect(establishment.excluded?).to eq "a fake result"
-    end
-  end
-
   describe "#school_year_range" do
     subject(:establishment) { create(:establishment, academy_code: academy_code) }
 
