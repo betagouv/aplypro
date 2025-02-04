@@ -104,6 +104,7 @@ fr:
               missing_biological_sex: "La civilité de l'élève n'est pas renseignée (Homme / Femme). Veuillez faire le nécessaire dans BEE ou COLENTAGRI (Fregata) pour que cette information soit renseignée."
               missing_birthplace_city_insee_code: "La commune de naissance de l'élève né en France n'est pas renseignée. Veuillez faire le nécessaire dans BEE ou COLENTAGRI (Fregata) pour que cette information soit renseignée."
               missing_birthplace_country_insee_code: "Le pays de naissance de l'élève né à l'étranger n'est pas renseigné. Veuillez faire le nécessaire dans BEE ou COLENTAGRI (Fregata) pour que cette information soit renseignée."
+              birthplace_country_insee_code: "Le code du pays de naissance n'est pas utilisable."
               student_type: "L'élève doit avoir un statut scolaire. Causes possibles de blocage : l'élève a un statut d'apprenti, un autre statut, ou le statut n'est pas renseigné."
               excluded_schooling: "La scolarité mentionnée est exclue de la procédure"
               missing_rib: "Les coordonnées bancaires sont manquantes"
