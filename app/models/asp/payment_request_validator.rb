@@ -85,7 +85,7 @@ module ASP
       return unless student.born_in_france? && student.birthplace_city_insee_code.blank?
 
       add_error(:missing_birthplace_city_insee_code)
-    rescue InseeCountryCodeMapper::UnusableCountryCode => e
+    rescue InseeCountryCodeMapper::UnusableCountryCode
       add_error(:unusable_birthplace_country_insee_code)
     end
 
