@@ -36,5 +36,6 @@ class PfmpStateMachine
 
   after_transition(to: :validated) do |pfmp|
     PfmpManager.new(pfmp).create_new_payment_request!
+    Sync::StudentJob.perform_later(pfmp.schooling)
   end
 end
