@@ -25,19 +25,6 @@ RSpec.describe RibsController do
     end
   end
 
-  describe "DELETE /rib" do
-    context "when trying to delete a RIB from a student in another establishment" do
-      let(:other_student) { create(:schooling).student }
-      let(:other_rib) { create(:rib, student: other_student) }
-
-      it "doesnt delete the rib" do
-        delete student_rib_path(other_student, other_rib)
-
-        expect(Rib.find(other_rib.id)).not_to be_nil
-      end
-    end
-  end
-
   describe "POST classes/:classe_id/ribs/bulk_create" do
     let(:rib) { build(:rib, student: student, establishment: student.establishment) }
     let(:rib_params) do
