@@ -14,6 +14,8 @@ module Insider
 
     helper_method :current_user, :current_establishment
 
+    def home; end
+
     def login; end
 
     def logout

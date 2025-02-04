@@ -167,6 +167,7 @@ fr:
       insider:
         application:
           login: Connexion à APLyPro
+          home : Accueil
       stats:
         index: Statistiques
       school_years:

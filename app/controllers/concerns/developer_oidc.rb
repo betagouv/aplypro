@@ -35,19 +35,20 @@ module DeveloperOidc
 
   def static_info(attrs)
     {
-      "credentials" => {
-        "token" => "dev token"
+      credentials: {
+        token: "dev token"
       },
-      "uid" => attrs["info"]["email"],
-      "info" => {
-        "name" => "Developer Account",
-        "email" => attrs["info"]["email"]
-      }
+      uid: attrs["info"]["email"],
+      info: {
+        name: "Developer Account",
+        email: attrs["info"]["email"]
+      },
+      callback: attrs["info"]["insider"]
     }
   end
 
   def provider_info(attrs)
-    { "provider" => provider(attrs) }
+    { provider: provider(attrs) }
   end
 
   def extra_info(attrs)

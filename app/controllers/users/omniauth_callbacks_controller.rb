@@ -18,26 +18,29 @@ module Users
       redirect_to asp_schoolings_path
     end
 
-    def insider
-      @insider_login = true
-      @insider_user = Insider::User.from_oidc(auth_hash).tap(&:save!)
-
-      # Check limited access to this part ?
-
-      sign_in(:insider_user, @insider_user)
-
-      redirect_to insider_home_path
-    end
-
     def developer
       oidcize_dev_hash(auth_hash)
 
       oidc
     end
 
-    def oidc
-      return insider if params[:callback].eql?("insider") # TODO: Modifier ou compléter
+    def masa
+      oidc
+    end
 
+    def fim
+      oidc
+    end
+
+    def oidc
+      if auth_hash.info.callback&.to_sym.eql?(:insider)
+        oidc_insider
+      else
+        oidc_aplypro
+      end
+    end
+
+    def oidc_aplypro
       parse_identity
 
       @user.save!
@@ -55,12 +58,15 @@ module Users
       choose_redirect_page!
     end
 
-    def masa
-      oidc
-    end
+    def oidc_insider
+      @insider_login = true
+      @insider_user = Insider::User.from_oidc(auth_hash).tap(&:save!)
 
-    def fim
-      oidc
+      # TODO: Check limited access to this part ?
+
+      sign_in(:insider_user, @insider_user)
+
+      redirect_to insider_home_path
     end
 
     def failure

@@ -15,7 +15,8 @@ Rails.application.config.middleware.use OmniAuth::Builder do
                :uai,
                :email,
                { "Portail de connexion" => portals },
-               { "Role assumé" => ["Personnel de direction", "Personnel autorisé"] }
+               { "Role assumé" => ["Personnel de direction", "Personnel autorisé"] },
+               { callback: %w[aplypro insider] }
              ]
   end
 

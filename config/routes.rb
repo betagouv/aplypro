@@ -21,7 +21,7 @@ Rails.application.routes.draw do
   delete "asp/logout", to: "asp/application#logout", as: :destroy_asp_user_session
 
   namespace :insider do
-    get "home"
+    get "home", to: "application#home"
 
     devise_for :users, skip: :all, class_name: "Insider::User"
   end
