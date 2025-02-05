@@ -31,5 +31,5 @@
                 %td
                   %strong= number_to_currency(pfmp.amount)
 
-      - if classe.establishment.eql?(current_establishment)
-        = render "pfmps/schooling_buttons", schooling: schooling, school_year: school_year, classe: classe, student: @student
+    - if classe.establishment.eql?(current_establishment)
+      = render "pfmps/schooling_buttons", schooling: schooling, school_year: school_year, classe: classe, student: @student
