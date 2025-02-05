@@ -4,7 +4,12 @@
 module AttributeDecision
   # Generate "Décision de retrait"
   class Cancellation < DocumentGenerator
+
     private
+
+    def margin
+      34
+    end
 
     def articles
       composer.text("Décide :", style: :paragraph_title)
