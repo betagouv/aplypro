@@ -43,7 +43,7 @@ module DeveloperOidc
         name: "Developer Account",
         email: attrs["info"]["email"]
       },
-      callback: attrs["info"]["insider"]
+      callback: attrs["info"]["academic"]
     }
   end
 

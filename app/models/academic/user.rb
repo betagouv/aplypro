@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Insider
+module Academic
   class User < ApplicationRecord
     devise :authenticatable
 

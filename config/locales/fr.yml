@@ -164,7 +164,7 @@ fr:
         schoolings:
           index: Recherche d'un dossier
           show: "Dossier %{attributive_decision_number}"
-      insider:
+      academic:
         application:
           login: Connexion à APLyPro
           home : Accueil

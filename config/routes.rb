@@ -20,15 +20,15 @@ Rails.application.routes.draw do
 
   delete "asp/logout", to: "asp/application#logout", as: :destroy_asp_user_session
 
-  namespace :insider do
+  namespace :academic do
     get "home", to: "application#home"
 
-    devise_for :users, skip: :all, class_name: "Insider::User"
+    devise_for :users, skip: :all, class_name: "Academic::User"
   end
 
-  get "insider/login", to: "insider/application#login", as: :new_insider_user_session
+  get "academic/login", to: "academic/application#login", as: :new_academic_user_session
 
-  delete "insider/logout", to: "insider/application#logout", as: :destroy_insider_user_session
+  delete "academic/logout", to: "academic/application#logout", as: :destroy_academic_user_session
 
   resources :users, only: :update do
     get "select_establishment"
@@ -113,8 +113,8 @@ Rails.application.routes.draw do
     get "/auth/asp/callback" => "users/omniauth_callbacks#asp", as: :asp_login
   end
 
-  devise_scope :insider_user do
-    get "/auth/insider/callback" => "users/omniauth_callbacks#insider", as: :insider_login
+  devise_scope :academic_user do
+    get "/auth/academic/callback" => "users/omniauth_callbacks#academic", as: :academic_login
   end
 
   devise_for :users

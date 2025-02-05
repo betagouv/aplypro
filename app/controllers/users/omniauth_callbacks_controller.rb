@@ -33,8 +33,8 @@ module Users
     end
 
     def oidc
-      if auth_hash.info.callback&.to_sym.eql?(:insider)
-        oidc_insider
+      if auth_hash.info.callback&.to_sym.eql?(:academic)
+        oidc_academic
       else
         oidc_aplypro
       end
@@ -58,15 +58,15 @@ module Users
       choose_redirect_page!
     end
 
-    def oidc_insider
-      @insider_login = true
-      @insider_user = Insider::User.from_oidc(auth_hash).tap(&:save!)
+    def oidc_academic
+      @academic_login = true
+      @academic_user = Academic::User.from_oidc(auth_hash).tap(&:save!)
 
       # TODO: Check limited access to this part ?
 
-      sign_in(:insider_user, @insider_user)
+      sign_in(:academic_user, @academic_user)
 
-      redirect_to insider_home_path
+      redirect_to academic_home_path
     end
 
     def failure
@@ -82,8 +82,8 @@ module Users
 
       if defined? @asp_login
         fail_asp_user
-      elsif defined? @insider_login
-        fail_insider_user
+      elsif defined? @academic_login
+        fail_academic_user
       else
         fail_user
       end
@@ -99,8 +99,8 @@ module Users
       redirect_to new_asp_user_session_path
     end
 
-    def fail_insider_user
-      redirect_to new_insider_user_session_path
+    def fail_academic_user
+      redirect_to new_academic_user_session_path
     end
 
     private
