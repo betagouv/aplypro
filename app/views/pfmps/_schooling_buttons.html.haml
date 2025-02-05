@@ -10,7 +10,7 @@
             %li
               = button_to "Masquer l'élève de la classe", confirm_removal_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get
               = render partial: "shared/tooltip", locals: { message: "remove_student", id: 1 }
-          - if schooling.attributive_decision.attached? && !schooling.cancellation_decision.attached? && !Rails.env.production?
+          - if schooling.attributive_decision.attached? && !schooling.cancellation_decision.attached?
             %li
               = button_to "Retirer la décision d'attribution", confirm_cancellation_decision_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get
               = render partial: "shared/tooltip", locals: { message: "cancellation_decision", id: 2 }
@@ -27,7 +27,7 @@
           %li
             = link_to url_for(schooling.abrogation_decision), class: 'fr-link fr-link--download', download: true do
               Télécharger la décision d'abrogation
-        - if schooling.cancellation_decision.attached? && !Rails.env.production?
+        - if schooling.cancellation_decision.attached?
           %li
             = link_to url_for(schooling.cancellation_decision), class: 'fr-link fr-link--download', download: true do
               Télécharger la décision de retrait
