@@ -9,21 +9,6 @@ module Users
 
     rescue_from IdentityMappers::Errors::Error, ActiveRecord::RecordInvalid, with: :authentication_failure
 
-    def asp
-      @asp_login = true
-      @asp_user = ASP::User.from_oidc(auth_hash).tap(&:save!)
-
-      sign_in(:asp_user, @asp_user)
-
-      redirect_to asp_schoolings_path
-    end
-
-    def developer
-      oidcize_dev_hash(auth_hash)
-
-      oidc
-    end
-
     def masa
       oidc
     end
@@ -33,14 +18,6 @@ module Users
     end
 
     def oidc
-      if auth_hash.info.callback&.to_sym.eql?(:academic)
-        oidc_academic
-      else
-        oidc_aplypro
-      end
-    end
-
-    def oidc_aplypro
       parse_identity
 
       @user.save!
@@ -58,7 +35,19 @@ module Users
       choose_redirect_page!
     end
 
-    def oidc_academic
+    def developer
+      oidcize_dev_hash(auth_hash)
+
+      oidc
+    end
+
+    def academic_developer
+      oidcize_dev_hash(auth_hash)
+
+      academic
+    end
+
+    def academic
       @academic_login = true
       @academic_user = Academic::User.from_oidc(auth_hash).tap(&:save!)
 
@@ -67,6 +56,15 @@ module Users
       sign_in(:academic_user, @academic_user)
 
       redirect_to academic_home_path
+    end
+
+    def asp
+      @asp_login = true
+      @asp_user = ASP::User.from_oidc(auth_hash).tap(&:save!)
+
+      sign_in(:asp_user, @asp_user)
+
+      redirect_to asp_schoolings_path
     end
 
     def failure

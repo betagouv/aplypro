@@ -15,9 +15,13 @@ Rails.application.config.middleware.use OmniAuth::Builder do
                :uai,
                :email,
                { "Portail de connexion" => portals },
-               { "Role assumé" => ["Personnel de direction", "Personnel autorisé"] },
-               { callback: %w[aplypro academic] }
+               { "Role assumé" => ["Personnel de direction", "Personnel autorisé"] }
              ]
+
+    provider :developer,
+             name: :academic_developer,
+             path_prefix: "/auth",
+             fields: %i[uai email]
   end
 
   provider :openid_connect, {
@@ -35,18 +39,16 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     }
   }
 
-  provider :cas, ENV.fetch("APLYPRO_CAS_CLIENT_ID"), ENV.fetch("APLYPRO_CAS_CLIENT_SECRET"), {
-    name: :masa,
-    path_prefix: "/users/auth",
-    token_params: {
-      redirect_uri: ENV.fetch("APLYPRO_CAS_REDIRECT_URI")
-    },
+  provider :openid_connect, {
+    name: :academic,
+    scope: ENV.fetch("APLYPRO_ACADEMIC_OIDC_SCOPE"),
+    discovery: true,
+    issuer: ENV.fetch("APLYPRO_ACADEMIC_OIDC_ISSUER"),
     client_options: {
-      site: ENV.fetch("APLYPRO_CAS_SITE_ROOT"),
-      authorize_url: "authorize",
-      token_url: "accessToken",
-      auth_scheme: :request_body,
-      redirect_uri: ENV.fetch("APLYPRO_CAS_REDIRECT_URI")
+      host: ENV.fetch("APLYPRO_ACADEMIC_OIDC_HOST"),
+      redirect_uri: ENV.fetch("APLYPRO_ACADEMIC_OIDC_REDIRECT_URI"),
+      identifier: ENV.fetch("APLYPRO_ACADEMIC_OIDC_CLIENT_ID"),
+      secret: ENV.fetch("APLYPRO_ACADEMIC_OIDC_CLIENT_SECRET")
     }
   }
 
@@ -60,6 +62,21 @@ Rails.application.config.middleware.use OmniAuth::Builder do
       redirect_uri: ENV.fetch("APLYPRO_ASP_OIDC_REDIRECT_URI"),
       identifier: ENV.fetch("APLYPRO_ASP_OIDC_CLIENT_ID"),
       secret: ENV.fetch("APLYPRO_ASP_OIDC_CLIENT_SECRET")
+    }
+  }
+
+  provider :cas, ENV.fetch("APLYPRO_CAS_CLIENT_ID"), ENV.fetch("APLYPRO_CAS_CLIENT_SECRET"), {
+    name: :masa,
+    path_prefix: "/users/auth",
+    token_params: {
+      redirect_uri: ENV.fetch("APLYPRO_CAS_REDIRECT_URI")
+    },
+    client_options: {
+      site: ENV.fetch("APLYPRO_CAS_SITE_ROOT"),
+      authorize_url: "authorize",
+      token_url: "accessToken",
+      auth_scheme: :request_body,
+      redirect_uri: ENV.fetch("APLYPRO_CAS_REDIRECT_URI")
     }
   }
 end

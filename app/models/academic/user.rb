@@ -6,12 +6,6 @@ module Academic
 
     validates :uid, :provider, :name, :email, presence: true
 
-    OMNIAUTH_PROVIDERS = if Rails.env.production?
-                           :fim
-                         else
-                           %i[fim developer]
-                         end
-
     class << self
       # ideally all these methods would live in some OIDC-factory but I
       # can't figure out a pattern I like quite yet

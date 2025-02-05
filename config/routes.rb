@@ -114,7 +114,9 @@ Rails.application.routes.draw do
   end
 
   devise_scope :academic_user do
-    get "/auth/academic/callback" => "users/omniauth_callbacks#academic", as: :academic_login
+    %w[academic academic_developer].each do |action|
+      match "/auth/#{action}/callback", to: "users/omniauth_callbacks##{action}", via: %i[get post]
+    end
   end
 
   devise_for :users

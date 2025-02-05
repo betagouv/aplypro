@@ -1,9 +1,14 @@
 .fr-grid-row.fr-grid-row--gutters#login-page
-  - User::OMNIAUTH_PROVIDERS.each do |provider|
-    .fr-col-md-6.fr-col-12
-      = render 'shared/connection_panel',
-        name: t("omniauth.#{provider}.title"),
-        description: t("omniauth.#{provider}.description"),
-        button: t("omniauth.#{provider}.button"),
-        path: "/users/auth/#{provider}",
-        callback: :academic
+  .fr-col-md-6.fr-col-12
+    = render 'shared/connection_panel',
+      name: t("omniauth.fim.title"),
+      description: t("omniauth.fim.description"),
+      button: t("omniauth.fim.button"),
+      path: "/auth/academic"
+
+  .fr-col-md-6.fr-col-12
+    = render 'shared/connection_panel',
+      name: t("omniauth.developer.title"),
+      description: t("omniauth.developer.description"),
+      button: t("omniauth.developer.button"),
+      path: "/auth/academic_developer"
