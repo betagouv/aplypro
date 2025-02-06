@@ -36,5 +36,21 @@ RSpec.describe StudentMerger do
         expect { merger.merge! }.to raise_error(StudentMerger::ActiveSchoolingError)
       end
     end
+
+    context "when transferring asp_individu_id" do
+      let(:source_student) { create(:schooling, :closed).student }
+      let(:target_student) { create(:schooling, :closed).student }
+
+      before do
+        source_student.update!(asp_individu_id: "123ABC")
+        target_student.update!(asp_individu_id: nil)
+      end
+
+      it "transfers asp_individu_id from source to target student" do
+        merger.merge!
+
+        expect(target_student.reload.asp_individu_id).to eq("123ABC")
+      end
+    end
   end
 end

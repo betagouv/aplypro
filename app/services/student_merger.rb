@@ -52,10 +52,10 @@ class StudentMerger
   end
 
   def transfer_asp_individu_id!
-    return if @student_to_merge.asp_individu_id.blank?
+    id = @student_to_merge.asp_individu_id || @target_student.asp_individu_id
 
     @student_to_merge.update!(asp_individu_id: nil)
-    @target_student.update!(asp_individu_id: @student_to_merge.asp_individu_id)
+    @target_student.update!(asp_individu_id: id)
   end
 
   def transfer_schoolings!
