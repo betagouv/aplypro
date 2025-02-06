@@ -1,5 +1,5 @@
+%h2.fr-h4 Scolarités
 - schoolings.sort_by{ |schooling| schooling.classe.school_year.start_year}.reverse.each do |schooling|
-  %h2 Scolarités
   - pfmps = schooling.pfmps
   - classe = schooling.classe
   - school_year = classe.school_year
