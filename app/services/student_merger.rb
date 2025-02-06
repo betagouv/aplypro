@@ -59,6 +59,6 @@ class StudentMerger
   end
 
   def transfer_schoolings!
-    @student_to_merge.schoolings.update_all(student_id: @target_student.id)
+    @student_to_merge.schoolings.update!(student_id: @target_student.id)
   end
 end
