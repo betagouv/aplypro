@@ -41,9 +41,11 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 
   provider :openid_connect, {
     name: :academic,
+    path_prefix: "/auth",
     scope: ENV.fetch("APLYPRO_ACADEMIC_OIDC_SCOPE"),
-    discovery: true,
+    response_type: :code,
     issuer: ENV.fetch("APLYPRO_ACADEMIC_OIDC_ISSUER"),
+    discovery: true,
     client_options: {
       host: ENV.fetch("APLYPRO_ACADEMIC_OIDC_HOST"),
       redirect_uri: ENV.fetch("APLYPRO_ACADEMIC_OIDC_REDIRECT_URI"),
