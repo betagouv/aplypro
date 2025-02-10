@@ -5,7 +5,7 @@ module Keycloak
     attr_reader :url, :username, :password
 
     def initialize(url:, username:, password:)
-      @url = url.chomp('/')
+      @url = url.chomp("/")
       @username = username
       @password = password
       @token = nil
@@ -13,7 +13,7 @@ module Keycloak
 
     def list_realms
       response = authenticated_request do |conn|
-        conn.get('/admin/realms')
+        conn.get("/admin/realms")
       end
 
       return [] unless response.success?
@@ -34,7 +34,7 @@ module Keycloak
         f.adapter Faraday.default_adapter
       end
 
-      conn.headers['Authorization'] = "Bearer #{access_token}"
+      conn.headers["Authorization"] = "Bearer #{access_token}"
       yield(conn)
     end
 
@@ -50,25 +50,23 @@ module Keycloak
       response = conn.post(
         "/realms/master/protocol/openid-connect/token",
         {
-          grant_type: 'password',
-          client_id: 'admin-cli',
+          grant_type: "password",
+          client_id: "admin-cli",
           username: @username,
           password: @password
         }
       )
 
-      if response.success?
-        token_data = response.body
-        @token = token_data['access_token']
-        @token_expiry = Time.now + token_data['expires_in'].to_i
-        @token
-      else
-        raise "Failed to obtain access token: #{response.status} - #{response.body}"
-      end
+      raise "Failed to obtain access token: #{response.status} - #{response.body}" unless response.success?
+
+      token_data = response.body
+      @token = token_data["access_token"]
+      @token_expiry = Time.zone.now + token_data["expires_in"].to_i
+      @token
     end
 
     def token_expired?
-      @token_expiry.nil? || Time.now >= @token_expiry
+      @token_expiry.nil? || Time.zone.now >= @token_expiry
     end
   end
 end
