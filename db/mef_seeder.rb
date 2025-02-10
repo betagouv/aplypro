@@ -46,6 +46,8 @@ class MefSeeder
       end
 
       attributes.merge(school_year_id: school_year.id)
+    rescue StandardError => e
+      raise "Problem at line #{entry}"
     end
 
     duplicates = mefs.group_by { |mef| [mef[:code], mef[:school_year_id]] }
