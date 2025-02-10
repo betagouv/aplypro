@@ -41,28 +41,42 @@ module Keycloak
     def access_token
       return @token if @token && !token_expired?
 
-      conn = Faraday.new(url: @url) do |f|
-        f.request :url_encoded
-        f.response :json
-        f.adapter Faraday.default_adapter
-      end
+      token_data = fetch_new_token
+      update_token_data(token_data)
+      @token
+    end
 
-      response = conn.post(
+    def fetch_new_token
+      response = token_connection.post(
         "/realms/master/protocol/openid-connect/token",
-        {
-          grant_type: "password",
-          client_id: "admin-cli",
-          username: @username,
-          password: @password
-        }
+        token_request_params
       )
 
       raise "Failed to obtain access token: #{response.status} - #{response.body}" unless response.success?
 
-      token_data = response.body
+      response.body
+    end
+
+    def token_connection
+      Faraday.new(url: @url) do |f|
+        f.request :url_encoded
+        f.response :json
+        f.adapter Faraday.default_adapter
+      end
+    end
+
+    def token_request_params
+      {
+        grant_type: "password",
+        client_id: "admin-cli",
+        username: @username,
+        password: @password
+      }
+    end
+
+    def update_token_data(token_data)
       @token = token_data["access_token"]
       @token_expiry = Time.zone.now + token_data["expires_in"].to_i
-      @token
     end
 
     def token_expired?
