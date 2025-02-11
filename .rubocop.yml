@@ -31,3 +31,6 @@ RSpec/NestedGroups:
 
 Style/HashSyntax:
   EnforcedShorthandSyntax: either
+
+Rails/StrongParametersExpect:
+  Enabled: false

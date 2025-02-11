@@ -27,6 +27,7 @@ module ASP
 
     def check_mef
       # NOTE: to be removed once the cancellation feature is shipped
+      # NOTE2: Since the wage for this mef has been updated this can be removed asap
       add_error(:ineligible_mef) if payment_request.pfmp.classe.mef.code == "7429990111"
     end
 
