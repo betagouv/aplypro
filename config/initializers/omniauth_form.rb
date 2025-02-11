@@ -36,7 +36,6 @@ module OmniAuth
         form.to_response
       end
 
-      # NOTE: Compose les champs de `auth_hash` utilisé dans `omniauth_callbacks_controller`
       info do
         options.fields.each_with_object({}) do |field, hash|
           if field.is_a? Hash

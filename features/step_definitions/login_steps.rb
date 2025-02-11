@@ -72,6 +72,16 @@ Sachantque("je me connecte au portail ASP") do
   click_link_or_button "Se connecter"
 end
 
+Sachantque("je suis un personnel académique de l'établissement {string}") do |uai|
+  OmniAuth.config.mock_auth[:academic] = make_fim_hash(
+    name: Faker::Name.name,
+    email: Faker::Internet.email,
+    raw_info: {
+      FrEduRne: FactoryBot.build(:fredurne, uai: uai)
+    }
+  )
+end
+
 Sachantque("je suis un personnel MENJ de l'établissement {string}") do |uai|
   OmniAuth.config.mock_auth[:fim] = make_fim_hash(
     name: Faker::Name.name,
@@ -169,6 +179,13 @@ Sachantque("je suis un personnel MASA de l'établissement {string} avec l'email 
     raw_info: {
       fr_edu_rne: FactoryBot.build(:fredurne, uai:)
     }
+  )
+end
+
+Sachantque("je me connecte en tant que personnel académique") do
+  steps %(
+    Et que je me rend sur la page d'accueil du personnel académique
+    Et que je clique sur "Se connecter (MENJ)"
   )
 end
 

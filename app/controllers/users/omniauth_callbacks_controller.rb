@@ -9,6 +9,18 @@ module Users
 
     rescue_from IdentityMappers::Errors::Error, ActiveRecord::RecordInvalid, with: :authentication_failure
 
+    def developer
+      oidcize_dev_hash(auth_hash)
+
+      oidc
+    end
+
+    def academic_developer
+      oidcize_dev_hash(auth_hash)
+
+      academic
+    end
+
     def masa
       oidc
     end
@@ -20,7 +32,7 @@ module Users
     def oidc
       parse_identity
 
-      @user.save!
+      @user = User.from_oidc(auth_hash).tap(&:save!)
 
       add_auth_breadcrumb(data: { user_id: @user.id }, message: "Successfully parsed user")
 
@@ -35,21 +47,13 @@ module Users
       choose_redirect_page!
     end
 
-    def developer
-      oidcize_dev_hash(auth_hash)
-
-      oidc
-    end
-
-    def academic_developer
-      oidcize_dev_hash(auth_hash)
-
-      academic
-    end
-
     def academic
+      parse_identity
+
       @academic_login = true
       @academic_user = Academic::User.from_oidc(auth_hash).tap(&:save!)
+
+      add_auth_breadcrumb(data: { user_id: @academic_user.id }, message: "Successfully parsed academic user")
 
       # TODO: Check limited access to this part ?
 
@@ -118,8 +122,6 @@ module Users
     def parse_identity
       data = auth_hash
       raw = data.extra.raw_info
-
-      @user = User.from_oidc(data)
 
       @mapper = case data.provider.to_sym
                 when :fim
