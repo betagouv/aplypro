@@ -38,8 +38,7 @@ class InvitationsController < ApplicationController
 
   def invitation_params
     params
-      .require(:invitation)
-      .permit(:email)
+      .expect(invitation: [:email])
       .with_defaults(user: current_user, establishment: current_establishment)
   end
 

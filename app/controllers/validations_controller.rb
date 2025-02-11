@@ -66,7 +66,7 @@ class ValidationsController < ApplicationController
   end
 
   def validation_params
-    params.require(:validation).permit(pfmp_ids: [])
+    params.expect(validation: [pfmp_ids: []])
   rescue ActionController::ParameterMissing
     {}
   end

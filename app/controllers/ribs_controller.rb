@@ -65,11 +65,11 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   private
 
   def rib_params
-    params.require(:rib).permit(
-      :iban,
-      :bic,
-      :name,
-      :owner_type
+    params.expect(
+      rib: %i[iban
+              bic
+              name
+              owner_type]
     ).with_defaults(student_id: @student.id, establishment_id: current_establishment.id)
   end
 

@@ -67,7 +67,7 @@ class SchoolingsController < ApplicationController
   end
 
   def schooling_params
-    params.require(:schooling).permit(:extended_end_date)
+    params.expect(schooling: [:extended_end_date])
   end
 
   def set_classe

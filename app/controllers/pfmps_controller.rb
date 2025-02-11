@@ -87,10 +87,10 @@ class PfmpsController < ApplicationController
   end
 
   def pfmp_params
-    params.require(:pfmp).permit(
-      :start_date,
-      :end_date,
-      :day_count
+    params.expect(
+      pfmp: %i[start_date
+               end_date
+               day_count]
     )
   end
 end

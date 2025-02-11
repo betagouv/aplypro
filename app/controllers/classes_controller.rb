@@ -68,15 +68,15 @@ class ClassesController < ApplicationController
   private
 
   def pfmp_params
-    params.require(:pfmp).permit(
-      :start_date,
-      :end_date
+    params.expect(
+      pfmp: %i[start_date
+               end_date]
     )
   end
 
   def bulk_pfmp_completion_params
-    params.require(:classe).permit(
-      pfmps: %i[id day_count]
+    params.expect(
+      classe: [pfmps: %i[id day_count]]
     )
   end
 
