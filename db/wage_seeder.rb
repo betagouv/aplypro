@@ -10,11 +10,13 @@ class WageSeeder
     ministry: "BOP"
   }.freeze
 
-  def self.seed
+  def self.seed(file_paths = nil)
     @@logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
 
+    paths = file_paths || Dir.glob(Rails.root.join("data/wages/*.csv"))
+
     Wage.transaction do
-      Dir.glob(Rails.root.join("data/wages/*.csv")).each do |file_path|
+      paths.each do |file_path|
         process_file(file_path)
       end
     end
@@ -46,7 +48,8 @@ class WageSeeder
     end
 
     Wage.upsert_all(
-      wages
+      wages,
+      unique_by: [:mefstat4, :ministry, :daily_rate, :yearly_cap, :school_year_id, :mef_codes]
     )
 
     @@logger.info "[seeds] upserted wages for school year #{school_year.start_year}-#{school_year.start_year + 1}"
