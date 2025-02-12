@@ -9,7 +9,6 @@ class Wage < ApplicationRecord
   validates :daily_rate, :yearly_cap, numericality: { only_integer: true, greater_than: 0 }
 
   validates :mefstat4, uniqueness: {
-    scope: [:ministry, :daily_rate, :yearly_cap, :school_year_id],
-    message: 'already exists for this ministry, rates and school year'
+    scope: %i[ministry daily_rate yearly_cap school_year_id]
   }
 end
