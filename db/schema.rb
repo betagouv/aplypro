@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_27_092313) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_12_163347) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "unaccent"
@@ -306,6 +306,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_27_092313) do
     t.integer "ministry", null: false
     t.jsonb "mef_codes"
     t.bigint "school_year_id"
+    t.index ["mefstat4", "ministry", "daily_rate", "yearly_cap", "school_year_id"], name: "index_wages_on_core_attributes", unique: true
     t.index ["school_year_id"], name: "index_wages_on_school_year_id"
   end
 
