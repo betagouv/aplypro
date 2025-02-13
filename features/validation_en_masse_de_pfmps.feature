@@ -29,6 +29,7 @@ Fonctionnalité: Complétion des PFMPs d'une classe
     Alors la page contient "Envoyer en paiement les PFMPs de 2NDEB"
     Et la page contient "1 € par jour travaillé"
     Et la page contient "100 € de plafond annuel"
+    Et la page contient "16 € à valider"
     Et je peux voir dans le tableau "Liste des pfmps à valider"
       | Élève         | PFMP       | Nombre de jours | Montant |
       | Curie Marie   | oct. 2024  | 12 jours        | 12 €    |

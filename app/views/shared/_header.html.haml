@@ -41,15 +41,14 @@
             %li.fr-nav__item
               %a.fr-nav__link{ href: school_year_validations_path(selected_school_year), target: "_self", "aria-current" => (current_path_is_validation? ? "page" : nil) }
                 = t("menu.validate_all_pfmps")
-          - if current_establishment.present? && current_user.can_invite?
-            %li.fr-nav__item
-              %a.fr-nav__link{ href: establishment_invitations_path(current_establishment), target: "_self", "aria-current" => current_path?(establishment_invitations_path(current_establishment)) ? "page" : nil }
-                = t("menu.invitations")
+            - if current_establishment.present? && current_user.can_invite?
+              %li.fr-nav__item
+                %a.fr-nav__link{ href: establishment_invitations_path(current_establishment), target: "_self", "aria-current" => current_path?(establishment_invitations_path(current_establishment)) ? "page" : nil }
+                  = t("menu.invitations")
             %li.fr-nav__item
               %a.fr-nav__link{ href: faq_path, target: "_self", "aria-current" => current_path?(faq_path) ? "page" : nil }
                 = t("menu.faq")
 
-          - if current_user and not @inhibit_nav
             .fr-header__tools
               .fr-header__search
                 = form_with method: :get, url: search_results_students_path do |form|
