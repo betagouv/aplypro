@@ -12,3 +12,9 @@ Fonctionnalité: Gestion du personnel académique
     Sachant que je me déconnecte
     Et que je me rend sur la page d'accueil du personnel académique
     Alors la page contient "Vous devez vous connecter ou vous enregistrer pour continuer."
+
+  Scénario: Le personnel académique ne peut pas accéder aux pages pour l'ASP ou les chefs d'établissement
+    Quand je me rends sur la page d'accueil
+    Alors la page contient "Vous devez vous connecter ou vous enregistrer pour continuer."
+    Quand je me rend sur la page de recherche de dossier
+    Alors la page contient "Vous devez vous connecter ou vous enregistrer pour continuer."
