@@ -7,8 +7,8 @@ require_relative "../../db/wage_seeder"
 # rubocop:disable RSpec/ExampleLength, RSpec/MultipleExpectations
 RSpec.describe WageSeeder do
   describe ".seed" do
-    let(:school_year) { SchoolYear.find_by!(start_year: 2023) }
-    let(:csv_path) { ["dummy.csv"] }
+    let!(:school_year) { SchoolYear.create!(start_year: 2022) }
+    let(:csv_path) { ["2022_2023.csv"] }
 
     context "when seeding wages" do
       let(:csv_data) do

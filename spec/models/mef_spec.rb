@@ -49,10 +49,13 @@ RSpec.describe Mef do
     end
 
     context "when there are several wages with same mefstat4 & ministry" do
-      let!(:correct_wage) { create(:wage, mefstat4: mef.mefstat4, ministry: mef.ministry, mef_codes: [mef.code]) }
+      before { create(:wage, mefstat4: mef.mefstat4, ministry: mef.ministry, mef_codes: [mef.code]) }
 
       it "returns the correct wage" do
-        expect { create(:wage, mefstat4: mef.mefstat4, ministry: mef.ministry, mef_codes: %w[many codes]) }.to raise_error ActiveRecord::RecordInvalid
+        expect do
+          create(:wage, mefstat4: mef.mefstat4, ministry: mef.ministry,
+                        mef_codes: %w[many codes])
+        end.to raise_error ActiveRecord::RecordInvalid
       end
     end
   end
