@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+# rubocop:disable all
 require "csv"
 
 class WageSeeder
@@ -10,19 +10,19 @@ class WageSeeder
     ministry: "BOP"
   }.freeze
 
-  def self.seed
+  def self.seed(file_paths = nil)
     @@logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
 
+    paths = file_paths || Rails.root.glob("data/wages/*.csv")
+
     Wage.transaction do
-      Dir.glob(Rails.root.join("data/wages/*.csv")).each do |file_path|
+      paths.each do |file_path|
         process_file(file_path)
       end
     end
 
     @@logger.info "[seeds] upserted #{Wage.count} total wages"
   end
-
-  private
 
   def self.process_file(file_path)
     file_name = File.basename(file_path, ".csv")
@@ -46,7 +46,8 @@ class WageSeeder
     end
 
     Wage.upsert_all(
-      wages
+      wages,
+      unique_by: %i[mefstat4 ministry daily_rate yearly_cap school_year_id]
     )
 
     @@logger.info "[seeds] upserted wages for school year #{school_year.start_year}-#{school_year.start_year + 1}"
