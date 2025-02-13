@@ -47,7 +47,7 @@ class WageSeeder
 
     Wage.upsert_all(
       wages,
-      unique_by: %i[mefstat4 ministry daily_rate yearly_cap school_year_id mef_codes]
+      unique_by: %i[mefstat4 ministry daily_rate yearly_cap school_year_id]
     )
 
     @@logger.info "[seeds] upserted wages for school year #{school_year.start_year}-#{school_year.start_year + 1}"

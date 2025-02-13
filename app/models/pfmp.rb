@@ -177,7 +177,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
     pfmps = all_pfmps_for_mef
     cap = mef.wage.yearly_cap
-    total = pfmps.sum(&:amount)
+    total = pfmps.sum(:amount)
     return unless total > cap
 
     errors.add(:amount,
