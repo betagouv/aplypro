@@ -55,7 +55,7 @@ module Users
 
       add_auth_breadcrumb(data: { user_id: @academic_user.id }, message: "Successfully parsed academic user")
 
-      # TODO: Check limited access to this part ?
+      raise IdentityMappers::Errors::NoLimitedAccessError if @mapper.attributes["AplyproAcademieResp"].nil?
 
       sign_in(:academic_user, @academic_user)
 

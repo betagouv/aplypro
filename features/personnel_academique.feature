@@ -18,3 +18,9 @@ Fonctionnalité: Gestion du personnel académique
     Alors la page contient "Vous devez vous connecter ou vous enregistrer pour continuer."
     Quand je me rend sur la page de recherche de dossier
     Alors la page contient "Vous devez vous connecter ou vous enregistrer pour continuer."
+
+  Scénario: Le personnel académique n'est pas encore validé
+    Sachant que je me déconnecte
+    Et que je suis un personnel académique sans validation
+    Et que je me connecte en tant que personnel académique
+    Alors la page contient "Accès restreint"
