@@ -29,7 +29,7 @@ class ValidationsController < ApplicationController
                                   .includes(student: :ribs)
                                   .order(:"students.last_name", :"pfmps.start_date")
 
-    @total_amount = @pfmps.sum(:amount)
+    @total_amount = @pfmps.sum(&:amount)
   end
 
   # Validate all Pfmps for a given classe
