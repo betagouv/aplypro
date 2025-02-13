@@ -24,9 +24,13 @@ class ValidationsController < ApplicationController
     infer_page_title(name: @classe.label)
 
     @pfmps = current_establishment.validatable_pfmps
-                                  .includes(schooling: :attributive_decision_attachment)
+                                  .includes(
+                                    schooling: [
+                                      :attributive_decision_attachment,
+                                      { student: :ribs }
+                                    ]
+                                  )
                                   .where(schoolings: { classe: @classe })
-                                  .includes(student: :ribs)
                                   .order(:"students.last_name", :"pfmps.start_date")
 
     @total_amount = @pfmps.sum(&:amount)
