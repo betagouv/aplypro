@@ -124,7 +124,7 @@ module Users
       raw = data.extra.raw_info
 
       @mapper = case data.provider.to_sym
-                when :fim
+                when :fim, :academic
                   IdentityMappers::Fim.new(raw)
                 when :masa
                   IdentityMappers::Cas.new(raw)
