@@ -17,5 +17,9 @@ module IdentityMappers
     def aplypro_responsibilities
       Array(attributes["AplyproResp"]).compact
     end
+
+    def aplypro_academies
+      Array(attributes["AplyproAcademieResp"]).compact
+    end
   end
 end

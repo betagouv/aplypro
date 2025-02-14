@@ -21,7 +21,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     provider :developer,
              name: :academic_developer,
              path_prefix: "/auth",
-             fields: %i[uai email]
+             fields: %i[academy_code email]
   end
 
   provider :openid_connect, {

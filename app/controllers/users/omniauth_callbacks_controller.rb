@@ -47,7 +47,7 @@ module Users
       choose_redirect_page!
     end
 
-    def academic
+    def academic # rubocop:disable Metrics/AbcSize
       parse_identity
 
       @academic_login = true
@@ -55,11 +55,19 @@ module Users
 
       add_auth_breadcrumb(data: { user_id: @academic_user.id }, message: "Successfully parsed academic user")
 
-      raise IdentityMappers::Errors::NoLimitedAccessError if @mapper.attributes["AplyproAcademieResp"].nil?
+      @academies = @mapper.aplypro_academies
+
+      raise IdentityMappers::Errors::NoLimitedAccessError if @academies.empty?
 
       sign_in(:academic_user, @academic_user)
 
-      redirect_to academic_home_path
+      if @academies.many?
+        redirect_to academic_user_select_academy_path(@academic_user)
+      else
+        @academic_user.update!(selected_academy: @academies.first)
+
+        redirect_to academic_home_path, notice: t("auth.success")
+      end
     end
 
     def asp

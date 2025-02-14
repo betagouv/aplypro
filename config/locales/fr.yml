@@ -168,6 +168,8 @@ fr:
         application:
           login: Connexion à APLyPro
           home : Accueil
+        users:
+          select_academy: Choix de l'académie
       stats:
         index: Statistiques
       school_years:

@@ -23,6 +23,10 @@ Rails.application.routes.draw do
   namespace :academic do
     get "home", to: "application#home"
 
+    resources :users, only: [] do
+      get "select_academy"
+    end
+
     devise_for :users, skip: :all, class_name: "Academic::User"
   end
 

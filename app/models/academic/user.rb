@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Academic
-  class User < ApplicationRecord
+  class User < User
     devise :authenticatable
 
     validates :uid, :provider, :name, :email, presence: true
@@ -19,6 +19,10 @@ module Academic
           user.oidc_attributes = attrs
         end
       end
+    end
+
+    def academies
+      establishments.distinct.pluck(:academy_code)
     end
 
     def to_s
