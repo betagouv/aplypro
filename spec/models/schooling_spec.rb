@@ -243,11 +243,11 @@ RSpec.describe Schooling do
       it { expect(schooling).to be_syncable }
     end
 
-    context "when none of the conditions are met" do
+    context "when none of the conditions are not met" do
       before do
         student.update!(ine_not_found: true)
-        schooling.update!(removed_at: Time.zone.now)
-        establishment.update!(students_provider: "csv")
+        schooling.update!(removed_at: nil)
+        establishment.update!(students_provider: "sygne")
       end
 
       it { expect(schooling).not_to be_syncable }
