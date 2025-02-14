@@ -121,7 +121,7 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def syncable?
-    student.ine_not_found || removed? || establishment.students_provider != "csv"
+    !student.ine_not_found || !removed? || establishment.students_provider != "csv"
   end
 
   def attachment_file_name(description)
