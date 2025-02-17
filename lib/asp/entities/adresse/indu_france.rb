@@ -3,7 +3,7 @@
 module ASP
   module Entities
     module Adresse
-      class Indu < Entity
+      class InduFrance < Entity
         ADRESSE_ATTR_MAX_LENGTH = 38
 
         attribute :pointremise, :string, limit: ADRESSE_ATTR_MAX_LENGTH
@@ -22,7 +22,7 @@ module ASP
         ]
 
         def self.payment_mapper_class
-          Mappers::Adresse::InduMapper
+          Mappers::Adresse::InduFranceMapper
         end
 
         def root_node_name

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe ASP::Entities::Adresse::Indu, type: :model do
+describe ASP::Entities::Adresse::InduEtranger, type: :model do
   describe "fragment" do
     let(:pfmp) { create(:pfmp, :rectified) }
 
@@ -14,10 +14,8 @@ describe ASP::Entities::Adresse::Indu, type: :model do
     end
 
     describe "validation" do
-      it { is_expected.to validate_presence_of(:pointremise) }
-      it { is_expected.to validate_presence_of(:codepostalcedex) }
-      it { is_expected.to validate_presence_of(:codecominsee) }
-      it { is_expected.to validate_presence_of(:codeinseepays) }
+      it { is_expected.to validate_presence_of(:localiteetranger) }
+      it { is_expected.to validate_presence_of(:bureaudistribetranger) }
       it { is_expected.to validate_presence_of(:codetypeadr) }
     end
 
@@ -26,8 +24,8 @@ describe ASP::Entities::Adresse::Indu, type: :model do
       let(:probe) { %w[codetypeadr PRINCIPALE] }
 
       it "uses the establishment details for the address" do # rubocop:disable RSpec/MultipleExpectations
-        expect(document.at("pointremise").text).to eq "A" * 38
-        expect(document.at("cpltdistribution").text).to eq  "B" * 38
+        expect(document.at("localiteetranger").text).to eq "A" * 38
+        expect(document.at("bureaudistribetranger").text).to eq  "B" * 38
       end
     end
   end
