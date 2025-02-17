@@ -122,6 +122,13 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     [last_name, first_name].join(" ")
   end
 
+  def ==(other)
+    last_name.eql?(other.last_name) &&
+      first_name.eql?(other.first_name) &&
+      birthplace_city_insee_code.eql?(other.birthplace_city_insee_code) &&
+      birthdate.eql?(other.birthdate)
+  end
+
   def close_current_schooling!(date = Time.zone.today)
     current_schooling&.update!(end_date: date)
   end

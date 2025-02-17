@@ -5,6 +5,7 @@ class StudentMerger
   class StudentMergerError < StandardError; end
   class InvalidStudentsArrayError < StudentMergerError; end
   class ActiveSchoolingError < StudentMergerError; end
+  class StudentNotIdenticalError < StudentMergerError; end
 
   attr_reader :students
 
@@ -33,6 +34,7 @@ class StudentMerger
 
   def validate_students!
     raise InvalidStudentsArrayError unless students.is_a?(Array) && students.length == 2
+    raise StudentNotIdenticalError unless students[0] == students[1]
   end
 
   def determine_target_and_merge_student!
