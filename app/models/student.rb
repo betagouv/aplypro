@@ -71,6 +71,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
                             :address_line1,
                             :address_postal_code,
                             :address_city_insee_code,
+                            :address_city,
                             :address_country_code,
                             :birthplace_city_insee_code,
                             :birthplace_country_insee_code,
