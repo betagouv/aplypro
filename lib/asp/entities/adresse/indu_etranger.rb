@@ -6,11 +6,11 @@ module ASP
       class InduEtranger < Entity
         ADRESSE_ATTR_MAX_LENGTH = 38
 
-        attribute :localiteetranger, :string, limit: ADRESSE_ATTR_MAX_LENGTH
-        attribute :bureaudistribetranger, :string, limit: ADRESSE_ATTR_MAX_LENGTH
-        attribute :voiepointgeoetranger, :string, limit: ADRESSE_ATTR_MAX_LENGTH
-        attribute :districtetranger, :string, limit: ADRESSE_ATTR_MAX_LENGTH
-        attribute :regionetranger, :string, limit: ADRESSE_ATTR_MAX_LENGTH
+        attribute :localiteetranger, :string
+        attribute :bureaudistribetranger, :string
+        attribute :voiepointgeoetranger, :string
+        attribute :districtetranger, :string
+        attribute :regionetranger, :string
         attribute :codetypeadr, :string
         attribute :codeinseepays, :string
 
@@ -20,6 +20,13 @@ module ASP
           codetypeadr
           codeinseepays
         ]
+
+        validates_length_of :localiteetranger, maximum: ADRESSE_ATTR_MAX_LENGTH
+        validates_length_of :bureaudistribetranger, maximum: ADRESSE_ATTR_MAX_LENGTH
+
+        validates_length_of :voiepointgeoetranger, maximum: ADRESSE_ATTR_MAX_LENGTH, allow_nil: true
+        validates_length_of :districtetranger, maximum: ADRESSE_ATTR_MAX_LENGTH, allow_nil: true
+        validates_length_of :regionetranger, maximum: ADRESSE_ATTR_MAX_LENGTH, allow_nil: true
 
         def self.payment_mapper_class
           Mappers::Adresse::InduEtrangerMapper

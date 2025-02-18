@@ -8,10 +8,10 @@ describe ASP::Entities::Adresse::InduEtranger, type: :model do
 
     before do
       pfmp.student.update(
-        address_line1: "A" * 50,
-        address_line2: "B" * 50,
+        address_line1: "A" * 38,
+        address_line2: "B" * 38,
         address_city: "Cool City",
-        address_postal_code: 66666
+        address_postal_code: 66_666
       )
     end
 
@@ -27,7 +27,19 @@ describe ASP::Entities::Adresse::InduEtranger, type: :model do
 
       it "uses the establishment details for the address" do # rubocop:disable RSpec/MultipleExpectations
         expect(document.at("localiteetranger").text).to eq "Cool City"
-        expect(document.at("bureaudistribetranger").text).to eq  66666.to_s
+        expect(document.at("bureaudistribetranger").text).to eq  66_666.to_s
+      end
+
+      context "when the addresse is too long" do
+        before do
+          pfmp.student.update(
+            address_city: "A" * 50
+          )
+        end
+
+        it "errors" do
+          expect { document.to_s }.to raise_error ActiveModel::ValidationError
+        end
       end
     end
   end

@@ -6,8 +6,8 @@ module ASP
       class InduFrance < Entity
         ADRESSE_ATTR_MAX_LENGTH = 38
 
-        attribute :pointremise, :string, limit: ADRESSE_ATTR_MAX_LENGTH
-        attribute :cpltdistribution, :string, limit: ADRESSE_ATTR_MAX_LENGTH
+        attribute :pointremise, :string
+        attribute :cpltdistribution, :string
         attribute :codetypeadr, :string
         attribute :codecominsee, :string
         attribute :codeinseepays, :string
@@ -20,6 +20,9 @@ module ASP
           codepostalcedex
           codecominsee
         ]
+
+        validates_length_of :pointremise, maximum: ADRESSE_ATTR_MAX_LENGTH
+        validates_length_of :cpltdistribution, maximum: ADRESSE_ATTR_MAX_LENGTH, allow_nil: true
 
         def self.payment_mapper_class
           Mappers::Adresse::InduFranceMapper
