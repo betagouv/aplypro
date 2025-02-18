@@ -9,6 +9,19 @@ RSpec.describe StudentMerger do
     let(:students) { [source_student, target_student] }
     let(:merger) { described_class.new(students) }
 
+    context "when students are not identical" do
+      before do
+        target_student.update!(
+          first_name: "#{source_student.first_name}XXXX"
+        )
+      end
+
+      it "raises an error" do
+        merger = described_class.new([source_student, target_student])
+        expect { merger.merge! }.to raise_error(StudentMerger::StudentNotIdenticalError)
+      end
+    end
+
     context "when students are identical" do
       before do
         target_student.update!(
