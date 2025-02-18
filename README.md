@@ -96,7 +96,6 @@ Correspondances entre leurs modèles et les notres :
 ### Démarrage de la console en mode support
 
 - `rails c`
-- `load 'support/overrides.rb'`
 
 # Licence
 
