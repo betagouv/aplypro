@@ -3,7 +3,7 @@
 module ASP
   module Mappers
     module Adresse
-      class InduMapper < FranceMapper
+      class InduFranceMapper < FranceMapper
         def pointremise
           student.address_line1
         end
