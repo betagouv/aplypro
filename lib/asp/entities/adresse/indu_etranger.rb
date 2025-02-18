@@ -30,13 +30,15 @@ module ASP
         end
 
         def fragment(xml) # rubocop:disable Metrics/AbcSize
+          xml.codetypeadr(codetypeadr)
+          xml.codeinseepays(codeinseepays)
+
           xml.localiteetranger(localiteetranger)
           xml.bureaudistribetranger(bureaudistribetranger)
+
           xml.voiepointgeoetranger(voiepointgeoetranger) if voiepointgeoetranger.present?
           xml.districtetranger(districtetranger) if districtetranger.present?
           xml.regionetranger(regionetranger) if regionetranger.present?
-          xml.codetypeadr(codetypeadr)
-          xml.codeinseepays(codeinseepays)
         end
       end
     end

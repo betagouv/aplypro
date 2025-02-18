@@ -9,7 +9,9 @@ describe ASP::Entities::Adresse::InduEtranger, type: :model do
     before do
       pfmp.student.update(
         address_line1: "A" * 50,
-        address_line2: "B" * 50
+        address_line2: "B" * 50,
+        address_city: "Cool City",
+        address_postal_code: 66666
       )
     end
 
@@ -24,8 +26,8 @@ describe ASP::Entities::Adresse::InduEtranger, type: :model do
       let(:probe) { %w[codetypeadr PRINCIPALE] }
 
       it "uses the establishment details for the address" do # rubocop:disable RSpec/MultipleExpectations
-        expect(document.at("localiteetranger").text).to eq "A" * 38
-        expect(document.at("bureaudistribetranger").text).to eq  "B" * 38
+        expect(document.at("localiteetranger").text).to eq "Cool City"
+        expect(document.at("bureaudistribetranger").text).to eq  66666.to_s
       end
     end
   end

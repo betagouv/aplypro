@@ -5,15 +5,15 @@ module ASP
     module Adresse
       class InduEtrangerMapper < FranceMapper
         def localiteetranger
-          student.address_line1
+          student.address_city
         end
 
         def bureaudistribetranger
-          student.address_line2
+          student.address_postal_code
         end
 
         def voiepointgeoetranger
-          student.address_line2
+          student.address_line1
         end
 
         def districtetranger
