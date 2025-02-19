@@ -23,7 +23,7 @@ module StudentsApi
 
           nest :address_line1, %i[adresseLigne1 adresseLigne2 adresseLigne3 adresseLigne4]
 
-          map_value :address_line1, ->(hash) { hash.values.compact.join(" ") }
+          map_value :address_line1, ->(hash) { hash.values.compact.join(" | ") }
 
           accept_keys %i[
             address_postal_code
