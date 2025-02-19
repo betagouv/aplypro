@@ -20,20 +20,19 @@ Rails.application.routes.draw do
 
   delete "asp/logout", to: "asp/application#logout", as: :destroy_asp_user_session
 
-  if !Rails.env.production?
-    namespace :academic do
-      get "home", to: "application#home"
+  namespace :academic do
+    get "home", to: "application#home"
 
-      resources :users, only: [] do
-        get "select_academy"
-      end
-
-      devise_for :users, skip: :all, class_name: "Academic::User"
-
-      get "login", to: "academic/application#login", as: :new_academic_user_session
-      delete "logout", to: "academic/application#logout", as: :destroy_academic_user_session
+    resources :users, only: [] do
+      get "select_academy"
     end
+
+    devise_for :users, skip: :all, class_name: "Academic::User"
   end
+
+  get "academic/login", to: "academic/application#login", as: :new_academic_user_session
+
+  delete "academic/logout", to: "academic/application#logout", as: :destroy_academic_user_session
 
   resources :users, only: :update do
     get "select_establishment"
