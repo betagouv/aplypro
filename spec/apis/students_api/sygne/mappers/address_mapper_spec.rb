@@ -10,7 +10,7 @@ describe StudentsApi::Sygne::Mappers::AddressMapper do
   let(:expected) do
     {
       address_line1: [data["adrResidenceEle"]["adresseLigne1"], data["adrResidenceEle"]["adresseLigne2"],
-                      data["adrResidenceEle"]["adresseLigne3"], data["adrResidenceEle"]["adresseLigne4"]].join(" "),
+                      data["adrResidenceEle"]["adresseLigne3"], data["adrResidenceEle"]["adresseLigne4"]].join(" | "),
       address_postal_code: data["adrResidenceEle"]["codePostal"],
       address_city: data["adrResidenceEle"]["libelleCommune"],
       address_city_insee_code: data["adrResidenceEle"]["codeCommuneInsee"],
@@ -28,9 +28,9 @@ describe StudentsApi::Sygne::Mappers::AddressMapper do
     before { data["adrResidenceEle"]["adresseLigne2"] = nil }
 
     it "maps addresses correctly" do
-      expect(mapper.call(data)[:address_line1]).to eq [data["adrResidenceEle"]["adresseLigne1"],
-                                                       data["adrResidenceEle"]["adresseLigne3"],
-                                                       data["adrResidenceEle"]["adresseLigne4"]].join(" ")
+      expect(mapper.call(data)[:address_line1].split(" | ").join(" ")).to eq [data["adrResidenceEle"]["adresseLigne1"],
+                                                                              data["adrResidenceEle"]["adresseLigne3"],
+                                                                              data["adrResidenceEle"]["adresseLigne4"]].join(" ")
     end
   end
 end

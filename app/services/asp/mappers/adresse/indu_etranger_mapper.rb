@@ -13,7 +13,7 @@ module ASP
         end
 
         def voiepointgeoetranger
-          student.address_line1
+          student.address_line1.split(" | ").join(" ")
         end
 
         def districtetranger

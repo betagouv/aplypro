@@ -5,7 +5,7 @@ module ASP
     module Adresse
       class InduFranceMapper < FranceMapper
         def pointremise
-          student.address_line1
+          student.address_line1.split(" | ").join(" ")
         end
 
         def cpltdistribution
