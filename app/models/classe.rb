@@ -59,7 +59,6 @@ class Classe < ApplicationRecord
 
   scope :current, -> { where(school_year: SchoolYear.current) }
   scope :for_year, ->(start_year) { joins(:school_year).where("school_year.start_year" => start_year) }
-  scope :with_attributive_decisions, -> { joins(schoolings: :attributive_decision_attachment) }
 
   def create_bulk_pfmp(pfmp_params)
     Pfmp.transaction do

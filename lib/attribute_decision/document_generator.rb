@@ -9,7 +9,7 @@ module AttributeDecision
     attr_reader :composer, :schooling, :student, :school_year
 
     def initialize(schooling)
-      @composer = HexaPDF::Composer.new(page_size: :A4, margin: 48)
+      @composer = HexaPDF::Composer.new(page_size: :A4, margin: margin)
       @schooling = schooling
       @student = schooling.student
       @school_year = schooling.classe.school_year
@@ -24,6 +24,10 @@ module AttributeDecision
     end
 
     private
+
+    def margin
+      48
+    end
 
     def render
       setup_styles

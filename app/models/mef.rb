@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Mef < ApplicationRecord
-  enum :ministry, %i[menj masa armee mer]
+  enum :ministry, { menj: 0, masa: 1, armee: 2, mer: 3 }
 
   belongs_to :school_year
 

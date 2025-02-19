@@ -61,6 +61,19 @@ RSpec.describe ASP::PaymentRequestValidator do
       end
     end
 
+    context "when birthplace country INSEE code is unusable" do
+      before do
+        allow(student).to receive(:birthplace_country_insee_code)
+          .and_raise(InseeCountryCodeMapper::UnusableCountryCode)
+      end
+
+      it "adds an error" do
+        expect { validator.send(:check_insee_code) }
+          .to change { payment_request.errors.details[:ready_state_validation] }
+          .to include(a_hash_including(error: :unusable_birthplace_country_insee_code))
+      end
+    end
+
     context "when born in France and birthplace city INSEE code is blank" do
       before do
         allow(student).to receive(:born_in_france?).and_return(true)

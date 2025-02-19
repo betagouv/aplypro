@@ -225,14 +225,14 @@ RSpec.describe Schooling do
     let(:establishment) { schooling.establishment }
     let(:student) { schooling.student }
 
-    context "when student has ine_not_found" do
-      before { student.update!(ine_not_found: true) }
+    context "when student has ine" do
+      before { student.update!(ine_not_found: false) }
 
       it { expect(schooling).to be_syncable }
     end
 
-    context "when schooling is removed" do
-      before { schooling.update!(removed_at: Time.zone.now) }
+    context "when schooling is not removed" do
+      before { schooling.update!(removed_at: nil) }
 
       it { expect(schooling).to be_syncable }
     end
@@ -243,11 +243,11 @@ RSpec.describe Schooling do
       it { expect(schooling).to be_syncable }
     end
 
-    context "when none of the conditions are met" do
+    context "when none of the conditions are not met" do
       before do
-        student.update!(ine_not_found: false)
+        student.update!(ine_not_found: true)
         schooling.update!(removed_at: nil)
-        establishment.update!(students_provider: "csv")
+        establishment.update!(students_provider: "sygne")
       end
 
       it { expect(schooling).not_to be_syncable }

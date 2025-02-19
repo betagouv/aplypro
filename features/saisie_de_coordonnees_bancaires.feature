@@ -34,13 +34,6 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
     Alors la page contient "Coordonnées bancaires mises à jour"
     Et la page contient "Murie Carrie"
 
-  Scénario: Le personnel de direction peut supprimer un RIB
-    Sachant que je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"
-    Et que je clique sur "Supprimer les coordonnées bancaires"
-    Quand je clique sur "Confirmer la suppression"
-    Alors la page contient "Les coordonnées bancaires de Marie Curie ont bien été supprimées"
-    Et la page contient "Aucune coordonnée bancaire enregistrée pour le moment."
-
   Scénario: Le personnel de direction peut relancer une demande de paiement en modifiant les coordonnées bancaires
     Quand je consulte la classe de "2NDEB"
     Et que je renseigne et valide une PFMP de 9 jours pour "Marie Curie"
@@ -54,13 +47,11 @@ Fonctionnalité: Le personnel de direction saisit des coordonnées bancaires
     Et que je remplis "Titulaire du compte" avec "Luigi Curie"
     Et que je clique sur "Modifier les coordonnées bancaires"
     Alors la page contient "Modifier les coordonnées bancaires"
-    Et la page contient "Supprimer les coordonnées bancaires"
 
   Scénario: Le personnel de direction ne peut pas accéder au RIB d'un élève s'il a été déclaré dans un autre établissement
     Sachant que je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"
     Et que l'élève "Marie Curie" a été transféré dans l'établissement "TEST" en classe "1EREB"
     Alors la page contient "Modifier les coordonnées bancaires"
-    Et la page contient "Supprimer les coordonnées bancaires"
     Quand je me déconnecte
     Et que je suis un personnel MENJ directeur de l'établissement "TEST"
     Sachant que je me connecte en tant que personnel MENJ

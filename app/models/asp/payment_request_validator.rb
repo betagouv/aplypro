@@ -27,6 +27,7 @@ module ASP
 
     def check_mef
       # NOTE: to be removed once the cancellation feature is shipped
+      # NOTE2: Since the wage for this mef has been updated this can be removed asap
       add_error(:ineligible_mef) if payment_request.pfmp.classe.mef.code == "7429990111"
     end
 
@@ -85,6 +86,8 @@ module ASP
       return unless student.born_in_france? && student.birthplace_city_insee_code.blank?
 
       add_error(:missing_birthplace_city_insee_code)
+    rescue InseeCountryCodeMapper::UnusableCountryCode
+      add_error(:unusable_birthplace_country_insee_code)
     end
 
     def check_pfmp_overlaps

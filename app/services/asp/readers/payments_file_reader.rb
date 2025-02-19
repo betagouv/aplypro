@@ -54,8 +54,8 @@ module ASP
           end
         rescue ActiveRecord::RecordNotFound => e
           Sentry.capture_exception(
-            ReadingFileError.new(
-              "Payment file reading failed for asp_prestation_dossier_id: #{node.asp_prestation_dossier_id}" \
+            ASP::Errors::ReadingFileError.new(
+              "Payment file reading failed for asp_prestation_dossier_id: #{node.asp_prestation_dossier_id} " \
               "with message #{e.message}, Node contents: #{node.to_h}"
             )
           )

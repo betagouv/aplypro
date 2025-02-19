@@ -14,5 +14,6 @@ module ASP
     class MissingEstablishmentPostalCodeError < Error; end
     class IntegrationError < Error; end
     class PaymentFileValidationError < Error; end
+    class ReadingFileError < Error; end
   end
 end

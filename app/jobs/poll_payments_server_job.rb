@@ -6,7 +6,7 @@ class PollPaymentsServerJob < ApplicationJob
   sidekiq_options retry: false
 
   def perform
-    dir = ASP::Server.get_all_files!
+    dir = ASP::Server.fetch_all_files!
 
     Dir.each_child(dir) do |filename|
       next if filename == ".keep" # these are the Git-keep files of our local dev
