@@ -25,39 +25,4 @@
           = column_chart paid_pfmps_per_month_stats_path, label: "nombre de stages payés"
 
   .fr-col-12.fr-col-md-6
-    .stat
-      %h2 Répartition géographique des PFMPs
-      #map-container{style: "width: 100%; height: 600px;"}
-
-:javascript
-  document.addEventListener('DOMContentLoaded', function() {
-    const width = document.getElementById('map-container').offsetWidth;
-    const height = 600;
-
-    const svg = d3.select("#map-container")
-      .append("svg")
-      .attr("width", width)
-      .attr("height", height);
-
-    const projection = d3.geoMercator()
-      .center([2.454071, 46.279229])
-      .scale(2000)
-      .translate([width / 2, height / 2]);
-
-    const path = d3.geoPath()
-      .projection(projection);
-
-    d3.json("/data/academies.geojson").then(function(geojson) {
-      svg.selectAll("path")
-        .data(geojson.features)
-        .enter()
-        .append("path")
-        .attr("d", path)
-        .attr("fill", "#000091")
-        .attr("stroke", "#fff")
-        .attr("stroke-width", 0.5)
-        .attr("opacity", 0.7);
-    }).catch(function(error) {
-      console.error("Error loading the geo file:", error);
-    });
-  });
+    = render 'map'

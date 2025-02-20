@@ -1,0 +1,99 @@
+.stat
+  %h2 Répartition géographique des PFMPs
+  #map-container{style: "width: 100%; height: 600px;", data: {controller: "map"}}
+
+:javascript
+  const initMap = () => {
+    const container = document.getElementById('map-container');
+    if (!container || container.hasAttribute('data-initialized')) return;
+
+    container.setAttribute('data-initialized', 'true');
+    container.innerHTML = '';
+
+    const width = container.offsetWidth;
+    const height = 600;
+
+    const svg = d3.select("#map-container")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+    const g = svg.append("g");
+
+    const tooltip = d3.select("#map-container")
+      .append("div")
+      .attr("class", "tooltip")
+      .style("position", "absolute")
+      .style("background", "white")
+      .style("padding", "5px")
+      .style("border-radius", "5px")
+      .style("pointer-events", "none")
+      .style("display", "none")
+      .style("z-index", "1000")
+      .style("box-shadow", "0 2px 4px rgba(0,0,0,0.2)");
+
+    const projection = d3.geoMercator()
+      .center([2.454071, 46.279229])
+      .scale(2000)
+      .translate([width / 2, height / 2]);
+
+    const path = d3.geoPath()
+      .projection(projection);
+
+    d3.json("/data/academies.geojson").then(function(geojson) {
+      const nbScoExtent = d3.extent(geojson.features, d => d.properties.NB_SCO);
+      const colorScale = d3.scaleLinear()
+        .domain(nbScoExtent)
+        .range(["#bccdff", "#000091"]);
+
+      g.selectAll("path")
+        .data(geojson.features)
+        .enter()
+        .append("path")
+        .attr("d", path)
+        .attr("fill", d => colorScale(d.properties.NB_SCO))
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 0.5)
+        .attr("opacity", 0.7)
+        .on("mouseover", function(event, d) {
+          d3.select(this)
+            .transition()
+            .duration(200)
+            .attr("fill", "#88fdaa")
+            .attr("opacity", 1);
+
+          tooltip
+            .style("left", (event.pageX + 10) + "px")
+            .style("top", (event.pageY - 10) + "px")
+            .style("display", "block")
+            .html(`${d.properties.LIBL_ACAD} (${d.properties.CODE_ACAD})`);
+        })
+        .on("mouseout", function(event, d) {
+          d3.select(this)
+            .transition()
+            .duration(200)
+            .attr("fill", colorScale(d.properties.NB_SCO))
+            .attr("opacity", 0.7);
+
+          tooltip.style("display", "none");
+        })
+        .on("mousemove", function(event, d) {
+          tooltip
+            .style("left", (event.pageX + 10) + "px")
+            .style("top", (event.pageY - 10) + "px");
+        });
+    }).catch(function(error) {
+      console.error("Error loading the geo file:", error);
+    });
+  };
+
+  document.addEventListener('turbo:load', initMap);
+  document.addEventListener('DOMContentLoaded', initMap);
+
+  document.addEventListener('turbo:before-cache', function() {
+    const container = document.getElementById('map-container');
+    if (container) {
+      container.removeAttribute('data-initialized');
+      container.innerHTML = '';
+    }
+  });
