@@ -1,6 +1,6 @@
 .stat
-  %h2 Répartition géographique des PFMPs
-  #map-container{style: "width: 100%; height: 600px;", data: {controller: "map"}}
+  %h2 Répartition géographique des PFMPs validées
+  #map-container{style: "width: 100%; height: 600px;", data: {controller: "map", validated_pfmps: @validated_pfmps_per_academy.to_json}}
 
 :javascript
   const initMap = () => {
@@ -12,6 +12,13 @@
 
     const width = container.offsetWidth;
     const height = 600;
+
+    const validatedPfmps = JSON.parse(container.dataset.validatedPfmps);
+    const maxCount = Math.max(...Object.values(validatedPfmps));
+
+    const colorScale = d3.scaleLinear()
+      .domain([0, maxCount])
+      .range(["#bccdff", "#000091"]);
 
     const svg = d3.select("#map-container")
       .append("svg")
@@ -41,47 +48,55 @@
       .projection(projection);
 
     d3.json("/data/academies.geojson").then(function(geojson) {
-      const nbScoExtent = d3.extent(geojson.features, d => d.properties.NB_SCO);
-      const colorScale = d3.scaleLinear()
-        .domain(nbScoExtent)
-        .range(["#bccdff", "#000091"]);
-
       g.selectAll("path")
         .data(geojson.features)
         .enter()
         .append("path")
         .attr("d", path)
-        .attr("fill", d => colorScale(d.properties.NB_SCO))
+        .attr("fill", d => {
+          const count = validatedPfmps[d.properties.CODE_ACAD] || 0;
+          return colorScale(count);
+        })
         .attr("stroke", "#fff")
         .attr("stroke-width", 0.5)
         .attr("opacity", 0.7)
-        .on("mouseover", function(event, d) {
-          d3.select(this)
-            .transition()
-            .duration(200)
-            .attr("fill", "#88fdaa")
-            .attr("opacity", 1);
+        .on("mouseover", mouseOver)
+        .on("mouseout", mouseOut)
+        .on("mousemove", mouseMove);
 
-          tooltip
-            .style("left", (event.pageX + 10) + "px")
-            .style("top", (event.pageY - 10) + "px")
-            .style("display", "block")
-            .html(`${d.properties.LIBL_ACAD} (${d.properties.CODE_ACAD})`);
-        })
-        .on("mouseout", function(event, d) {
-          d3.select(this)
-            .transition()
-            .duration(200)
-            .attr("fill", colorScale(d.properties.NB_SCO))
-            .attr("opacity", 0.7);
+      function mouseOver(event, d) {
+        const count = validatedPfmps[d.properties.CODE_ACAD] || 0;
 
-          tooltip.style("display", "none");
-        })
-        .on("mousemove", function(event, d) {
-          tooltip
-            .style("left", (event.pageX + 10) + "px")
-            .style("top", (event.pageY - 10) + "px");
-        });
+        d3.select(this)
+          .transition()
+          .duration(200)
+          .attr("fill", "#88fdaa")
+          .attr("opacity", 1);
+
+        tooltip
+          .style("left", (event.pageX + 10) + "px")
+          .style("top", (event.pageY - 10) + "px")
+          .style("display", "block")
+          .html(`${d.properties.LIBL_ACAD} (${d.properties.CODE_ACAD})<br>${count} PFMPs validées`);
+      }
+
+      function mouseOut(event, d) {
+        const count = validatedPfmps[d.properties.CODE_ACAD] || 0;
+
+        d3.select(this)
+          .transition()
+          .duration(200)
+          .attr("fill", colorScale(count))
+          .attr("opacity", 0.7);
+
+        tooltip.style("display", "none");
+      }
+
+      function mouseMove(event, d) {
+        tooltip
+          .style("left", (event.pageX + 10) + "px")
+          .style("top", (event.pageY - 10) + "px");
+      }
     }).catch(function(error) {
       console.error("Error loading the geo file:", error);
     });
