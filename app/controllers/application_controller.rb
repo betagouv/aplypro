@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!,
                 :log_user,
                 :redirect_asp_users!,
+                :redirect_academic_users!,
                 :check_maintenance,
                 :check_current_establishment
 
@@ -24,6 +25,8 @@ class ApplicationController < ActionController::Base
       new_user_session_path
     when :asp_user
       new_asp_user_session_path
+    when :academic_user
+      new_academic_user_session_path
     end
   end
 
@@ -50,6 +53,10 @@ class ApplicationController < ActionController::Base
 
   def redirect_asp_users!
     redirect_to asp_schoolings_path and return if asp_user_signed_in?
+  end
+
+  def redirect_academic_users!
+    redirect_to academic_home_path and return if academic_user_signed_in?
   end
 
   private
