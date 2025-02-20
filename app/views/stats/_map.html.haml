@@ -47,7 +47,7 @@
     const path = d3.geoPath()
       .projection(projection);
 
-    d3.json("/data/academies.geojson").then(function(geojson) {
+    d3.json("/data/metropole.geojson").then(function(geojson) {
       g.selectAll("path")
         .data(geojson.features)
         .enter()
