@@ -1,6 +1,6 @@
 .stat
-  %h2 Répartition géographique des PFMPs validées
-  #map-container{style: "width: 100%; height: 600px;", data: {controller: "map", validated_pfmps: @validated_pfmps_per_academy.to_json}}
+  %h2 Répartition géographique des montants des PFMPs
+  #map-container{style: "width: 100%; height: 600px;", data: {controller: "map", amounts: @amounts_per_academy.to_json, schoolings: @schoolings_per_academy.to_json}}
 
 :javascript
   const initMap = () => {
@@ -13,12 +13,22 @@
     const width = container.offsetWidth;
     const height = 600;
 
-    const validatedPfmps = JSON.parse(container.dataset.validatedPfmps);
-    const maxCount = Math.max(...Object.values(validatedPfmps));
+    const amounts = JSON.parse(container.dataset.amounts);
+    const schoolings = JSON.parse(container.dataset.schoolings);
+    const maxAmount = Math.max(...Object.values(amounts));
+    const maxSchoolings = Math.max(...Object.values(schoolings));
 
     const colorScale = d3.scaleLinear()
-      .domain([0, maxCount])
+      .domain([0, maxAmount])
       .range(["#bccdff", "#000091"]);
+
+    const strokeScale = d3.scaleLinear()
+      .domain([0, maxSchoolings])
+      .range([0.5, 2]);
+
+    const strokeColorScale = d3.scaleLinear()
+      .domain([0, maxSchoolings])
+      .range(["#ffbdbd", "#cd0000"]);
 
     const svg = d3.select("#map-container")
       .append("svg")
@@ -54,18 +64,25 @@
         .append("path")
         .attr("d", path)
         .attr("fill", d => {
-          const count = validatedPfmps[d.properties.CODE_ACAD] || 0;
-          return colorScale(count);
+          const amount = amounts[d.properties.CODE_ACAD] || 0;
+          return colorScale(amount);
         })
-        .attr("stroke", "#fff")
-        .attr("stroke-width", 0.5)
+        .attr("stroke", d => {
+          const schoolingCount = schoolings[d.properties.CODE_ACAD] || 0;
+          return strokeColorScale(schoolingCount);
+        })
+        .attr("stroke-width", d => {
+          const schoolingCount = schoolings[d.properties.CODE_ACAD] || 0;
+          return strokeScale(schoolingCount);
+        })
         .attr("opacity", 0.7)
         .on("mouseover", mouseOver)
         .on("mouseout", mouseOut)
         .on("mousemove", mouseMove);
 
       function mouseOver(event, d) {
-        const count = validatedPfmps[d.properties.CODE_ACAD] || 0;
+        const amount = amounts[d.properties.CODE_ACAD] || 0;
+        const schoolingCount = schoolings[d.properties.CODE_ACAD] || 0;
 
         d3.select(this)
           .transition()
@@ -77,16 +94,16 @@
           .style("left", (event.pageX + 10) + "px")
           .style("top", (event.pageY - 10) + "px")
           .style("display", "block")
-          .html(`${d.properties.LIBL_ACAD} (${d.properties.CODE_ACAD})<br>${count} PFMPs validées`);
+          .html(`${d.properties.LIBL_ACAD} (${d.properties.CODE_ACAD})<br>${amount.toLocaleString('fr-FR')} €<br>${schoolingCount} scolarités`);
       }
 
       function mouseOut(event, d) {
-        const count = validatedPfmps[d.properties.CODE_ACAD] || 0;
+        const amount = amounts[d.properties.CODE_ACAD] || 0;
 
         d3.select(this)
           .transition()
           .duration(200)
-          .attr("fill", colorScale(count))
+          .attr("fill", colorScale(amount))
           .attr("opacity", 0.7);
 
         tooltip.style("display", "none");
