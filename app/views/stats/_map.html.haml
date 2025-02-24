@@ -1,8 +1,131 @@
 .stat
   %h2 Répartition géographique des montants des PFMPs
   #map-container{style: "width: 100%; height: 600px;", data: {controller: "map", amounts: @amounts_per_academy.to_json, schoolings: @schoolings_per_academy.to_json}}
+  .overseas-maps-grid{style: "display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px;"}
+    #map-guadeloupe.overseas-map
+    #map-martinique.overseas-map
+    #map-guyane.overseas-map
+    #map-reunion.overseas-map
+    #map-mayotte.overseas-map
+    #map-saint-pierre.overseas-map
 
 :javascript
+  const createOverseasMap = (containerId, geoJsonPath, centerCoords, scale) => {
+    const container = document.getElementById(containerId);
+    if (!container || container.hasAttribute('data-initialized')) return;
+
+    container.setAttribute('data-initialized', 'true');
+    container.innerHTML = '';
+
+    const width = container.offsetWidth;
+    const height = 140;
+
+    const amounts = JSON.parse(document.getElementById('map-container').dataset.amounts);
+    const schoolings = JSON.parse(document.getElementById('map-container').dataset.schoolings);
+    const maxAmount = Math.max(...Object.values(amounts));
+    const maxSchoolings = Math.max(...Object.values(schoolings));
+
+    const colorScale = d3.scaleLinear()
+      .domain([0, maxAmount])
+      .range(["#bccdff", "#000091"]);
+
+    const strokeScale = d3.scaleLinear()
+      .domain([0, maxSchoolings])
+      .range([0.5, 2]);
+
+    const strokeColorScale = d3.scaleLinear()
+      .domain([0, maxSchoolings])
+      .range(["#ffbdbd", "#cd0000"]);
+
+    const svg = d3.select("#" + containerId)
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+    const g = svg.append("g");
+
+    const tooltip = d3.select("#" + containerId)
+      .append("div")
+      .attr("class", "tooltip")
+      .style("position", "absolute")
+      .style("background", "white")
+      .style("padding", "5px")
+      .style("border-radius", "5px")
+      .style("pointer-events", "none")
+      .style("display", "none")
+      .style("z-index", "1000")
+      .style("box-shadow", "0 2px 4px rgba(0,0,0,0.2)");
+
+    const projection = d3.geoMercator()
+      .center(centerCoords)
+      .scale(scale)
+      .translate([width / 2, height / 2]);
+
+    const path = d3.geoPath()
+      .projection(projection);
+
+    d3.json(geoJsonPath).then(function(geojson) {
+      g.selectAll("path")
+        .data(geojson.features)
+        .enter()
+        .append("path")
+        .attr("d", path)
+        .attr("fill", d => {
+          const amount = amounts[d.properties.CODE_ACAD] || 0;
+          return colorScale(amount);
+        })
+        .attr("stroke", d => {
+          const schoolingCount = schoolings[d.properties.CODE_ACAD] || 0;
+          return strokeColorScale(schoolingCount);
+        })
+        .attr("stroke-width", d => {
+          const schoolingCount = schoolings[d.properties.CODE_ACAD] || 0;
+          return strokeScale(schoolingCount);
+        })
+        .attr("opacity", 0.7)
+        .on("mouseover", mouseOver)
+        .on("mouseout", mouseOut)
+        .on("mousemove", mouseMove);
+
+      function mouseOver(event, d) {
+        const amount = amounts[d.properties.CODE_ACAD] || 0;
+        const schoolingCount = schoolings[d.properties.CODE_ACAD] || 0;
+
+        d3.select(this)
+          .transition()
+          .duration(200)
+          .attr("fill", "#88fdaa")
+          .attr("opacity", 1);
+
+        tooltip
+          .style("left", (event.pageX + 10) + "px")
+          .style("top", (event.pageY - 10) + "px")
+          .style("display", "block")
+          .html(d.properties.LIBL_ACAD + " (" + d.properties.CODE_ACAD + ")<br>" + amount.toLocaleString('fr-FR') + " €<br>" + schoolingCount + " scolarités");
+      }
+
+      function mouseOut(event, d) {
+        const amount = amounts[d.properties.CODE_ACAD] || 0;
+
+        d3.select(this)
+          .transition()
+          .duration(200)
+          .attr("fill", colorScale(amount))
+          .attr("opacity", 0.7);
+
+        tooltip.style("display", "none");
+      }
+
+      function mouseMove(event, d) {
+        tooltip
+          .style("left", (event.pageX + 10) + "px")
+          .style("top", (event.pageY - 10) + "px");
+      }
+    }).catch(function(error) {
+      console.error("Error loading the geo file for " + containerId + ":", error);
+    });
+  };
+
   const initMap = () => {
     const container = document.getElementById('map-container');
     if (!container || container.hasAttribute('data-initialized')) return;
@@ -94,7 +217,7 @@
           .style("left", (event.pageX + 10) + "px")
           .style("top", (event.pageY - 10) + "px")
           .style("display", "block")
-          .html(`${d.properties.LIBL_ACAD} (${d.properties.CODE_ACAD})<br>${amount.toLocaleString('fr-FR')} €<br>${schoolingCount} scolarités`);
+          .html(d.properties.LIBL_ACAD + " (" + d.properties.CODE_ACAD + ")<br>" + amount.toLocaleString('fr-FR') + " €<br>" + schoolingCount + " scolarités");
       }
 
       function mouseOut(event, d) {
@@ -119,8 +242,25 @@
     });
   };
 
-  document.addEventListener('turbo:load', initMap);
-  document.addEventListener('DOMContentLoaded', initMap);
+  const initAllMaps = () => {
+    initMap();
+
+    const overseasMaps = [
+      { id: 'map-guadeloupe', path: '/data/guadeloupe.geojson', center: [-61.5, 16.25], scale: 10000 },
+      { id: 'map-martinique', path: '/data/martinique.geojson', center: [-61.0, 14.6], scale: 10000 },
+      { id: 'map-guyane', path: '/data/guyane.geojson', center: [-53.0, 4.0], scale: 1000 },
+      { id: 'map-reunion', path: '/data/reunion.geojson', center: [55.5, -21.1], scale: 10000 },
+      { id: 'map-mayotte', path: '/data/mayotte.geojson', center: [45.2, -12.8], scale: 15000 },
+      { id: 'map-saint-pierre', path: '/data/saint_pierre.geojson', center: [-56.3, 47.0], scale: 10000 }
+    ];
+
+    overseasMaps.forEach(map => {
+      createOverseasMap(map.id, map.path, map.center, map.scale);
+    });
+  };
+
+  document.addEventListener('turbo:load', initAllMaps);
+  document.addEventListener('DOMContentLoaded', initAllMaps);
 
   document.addEventListener('turbo:before-cache', function() {
     const container = document.getElementById('map-container');
@@ -128,4 +268,9 @@
       container.removeAttribute('data-initialized');
       container.innerHTML = '';
     }
+
+    document.querySelectorAll('.overseas-map').forEach(map => {
+      map.removeAttribute('data-initialized');
+      map.innerHTML = '';
+    });
   });
