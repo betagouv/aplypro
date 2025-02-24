@@ -1,13 +1,27 @@
 .stat
   %h2 Répartition géographique des montants des PFMPs
-  #map-container{style: "width: 100%; height: 600px;", data: {controller: "map", amounts: @amounts_per_academy.to_json, schoolings: @schoolings_per_academy.to_json}}
-  .overseas-maps-grid{style: "display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px;"}
-    #map-guadeloupe.overseas-map
-    #map-martinique.overseas-map
-    #map-guyane.overseas-map
-    #map-reunion.overseas-map
-    #map-mayotte.overseas-map
-    #map-saint-pierre.overseas-map
+  .map-section
+    %h5.text-center Métropole
+    #map-container{style: "width: 100%; height: 540px;", data: {controller: "map", amounts: @amounts_per_academy.to_json, schoolings: @schoolings_per_academy.to_json}}
+  .overseas-maps-grid{style: "display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; max-width: 800px; margin-left: auto; margin-right: auto;"}
+    .map-section
+      %h5.text-center Guadeloupe
+      #map-guadeloupe.overseas-map
+    .map-section
+      %h5.text-center Martinique
+      #map-martinique.overseas-map
+    .map-section
+      %h5.text-center Guyane
+      #map-guyane.overseas-map
+    .map-section
+      %h5.text-center Réunion
+      #map-reunion.overseas-map
+    .map-section
+      %h5.text-center Mayotte
+      #map-mayotte.overseas-map
+    .map-section
+      %h5.text-center Saint-Pierre-et-Miquelon
+      #map-saint-pierre.overseas-map
 
 :javascript
   const createOverseasMap = (containerId, geoJsonPath, centerCoords, scale) => {
