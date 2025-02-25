@@ -45,10 +45,8 @@ class ClassesController < ApplicationController
   def bulk_pfmp_completion
     @pfmps = @classe
              .pfmps
-             .includes(schooling: :student)
              .in_state(:pending)
-             .joins(:student)
-             .order(:last_name, :first_name, :start_date)
+             .sort_by { |pfmp| [pfmp.schooling.student.last_name, pfmp.schooling.student.first_name, pfmp.start_date] }
   end
 
   def update_bulk_pfmp
