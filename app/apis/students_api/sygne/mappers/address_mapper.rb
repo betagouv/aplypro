@@ -21,9 +21,11 @@ module StudentsApi
             inseePaysNaissance: :birthplace_country_insee_code
           )
 
-          nest :address_line1, %i[adresseLigne1 adresseLigne2 adresseLigne3 adresseLigne4]
+          nest :address_line1, %i[adresseLigne1 adresseLigne2]
+          nest :address_line2, %i[adresseLigne3 adresseLigne4]
 
           map_value :address_line1, ->(hash) { hash.values.compact.join(" ") }
+          map_value :address_line2, ->(hash) { hash.values.compact.join(" ") }
 
           accept_keys %i[
             address_postal_code
@@ -31,6 +33,7 @@ module StudentsApi
             address_city
             address_city_insee_code
             address_line1
+            address_line2
             biological_sex
             birthplace_city_insee_code
             birthplace_country_insee_code
