@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_14_124041) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_12_163347) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "unaccent"
@@ -292,7 +292,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_14_124041) do
     t.bigint "selected_establishment_id"
     t.boolean "welcomed", default: false, null: false
     t.jsonb "oidc_attributes"
-    t.string "selected_academy"
     t.index ["email", "provider"], name: "index_users_on_email_and_provider", unique: true
     t.index ["selected_establishment_id"], name: "index_users_on_selected_establishment_id"
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true

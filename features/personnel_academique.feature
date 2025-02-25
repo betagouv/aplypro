@@ -6,7 +6,7 @@ Fonctionnalité: Gestion du personnel académique
     Et que je me connecte en tant que personnel académique
 
   Scénario: Le personnel académique a accès à la page d'accueil
-    Alors la page contient "Bonjour"
+    Alors la page contient "Code académique sélectionné : DINUM"
 
   Scénario: Le personnel académique est redirigé vers la page de connexion académique en cas d'erreur de connexion
     Sachant que je me déconnecte

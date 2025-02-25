@@ -25,11 +25,12 @@ Rails.application.routes.draw do
     namespace :academic do
       get "home", to: "application#home"
 
-      resources :users, only: [] do
+      resource :users, only: [] do
         get "select_academy"
+        post "selected_academy"
       end
 
-      devise_for :users, skip: :all, class_name: "Academic::User"
+      devise_for :users, class_name: "Academic::User"
     end
 
     get "academic/login", to: "academic/application#login", as: :new_academic_user_session

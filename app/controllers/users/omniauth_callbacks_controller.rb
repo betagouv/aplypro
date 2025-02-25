@@ -64,7 +64,7 @@ module Users
       if @academies.many?
         redirect_to academic_user_select_academy_path(@academic_user)
       else
-        @academic_user.update!(selected_academy: @academies.first)
+        session[:selected_academy] = @academies.first
 
         redirect_to academic_home_path, notice: t("auth.success")
       end
