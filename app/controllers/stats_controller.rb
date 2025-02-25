@@ -5,24 +5,19 @@ class StatsController < ApplicationController
 
   skip_before_action :authenticate_user!
 
-  def index
+  def index # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @total_paid = PaidPfmp.paid.sum(:amount)
     @total_paid_students = PaidPfmp.paid.distinct.count(:student_id)
     @total_paid_pfmps = PaidPfmp.paid.count
-    @validated_pfmps_per_academy = Pfmp
-                                   .in_state(:validated)
-                                   .joins(schooling: { classe: :establishment })
-                                   .group("establishments.academy_code")
-                                   .count
-    @amounts_per_academy = Pfmp
-                           .in_state(:validated)
-                           .joins({ schooling: { classe: :establishment } })
-                           .group("establishments.academy_code")
-                           .sum(:amount)
-    @schoolings_per_academy = Schooling
-                              .joins(classe: :establishment)
-                              .group("establishments.academy_code")
-                              .count
+
+    current_year = SchoolYear.current.start_year
+
+    schoolings_stats = Stats::Indicator::Schoolings.new(current_year)
+    @schoolings_per_academy = academies_data(schoolings_stats, :count)
+
+    sendable_amounts_stats = Stats::Indicator::SendableAmounts.new(current_year)
+    @amounts_per_academy = academies_data(sendable_amounts_stats, :sum)
+
     @schoolings_per_academy = { "01" => 30_364,
                                 "02" => 68_005,
                                 "03" => 28_603,
@@ -57,6 +52,7 @@ class StatsController < ApplicationController
                                 "43" => 14_597,
                                 "44" => 195,
                                 "70" => 77_195 }
+
     @amounts_per_academy = { "01" => 8_182_195,
                              "02" => 17_760_710,
                              "03" => 7_453_000,
@@ -88,9 +84,28 @@ class StatsController < ApplicationController
                              "43" => 2_716_880,
                              "44" => 51_785,
                              "70" => 20_503_580 }
+
+    @validated_pfmps_per_academy = Pfmp
+                                   .in_state(:validated)
+                                   .joins(schooling: { classe: :establishment })
+                                   .group("establishments.academy_code")
+                                   .count
   end
 
   def paid_pfmps_per_month
     render json: PaidPfmp.group_by_month(:paid_at, format: "%B %Y").count
+  end
+
+  private
+
+  def academies_data(stats_indicator, operation_type)
+    collection = stats_indicator.with_mef_and_establishment
+                                .where("mefs.ministry": :menj)
+
+    if operation_type == :count
+      collection.group("establishments.academy_code").count
+    else
+      collection.group("establishments.academy_code").sum(:amount)
+    end
   end
 end
