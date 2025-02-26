@@ -7,10 +7,7 @@ module Academic
     before_action :infer_page_title
 
     def select_academy
-      @academies = current_user.establishments
-                               .select(:academy_code, :academy_label)
-                               .distinct
-                               .map { |e| ["#{e.academy_code} - #{e.academy_label}", e.academy_code] }
+      @academies = session[:academy_codes]
     end
 
     def selected_academy

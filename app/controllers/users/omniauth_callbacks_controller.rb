@@ -60,9 +60,10 @@ module Users
       raise IdentityMappers::Errors::NoLimitedAccessError if @academies.empty?
 
       sign_in(:academic_user, @academic_user)
+      session[:academy_codes] = @academies
 
       if @academies.many?
-        redirect_to academic_user_select_academy_path(@academic_user)
+        redirect_to select_academy_academic_users_path(@academic_user)
       else
         session[:selected_academy] = @academies.first
 

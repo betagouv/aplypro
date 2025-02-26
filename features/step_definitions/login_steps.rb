@@ -72,12 +72,24 @@ Sachantque("je me connecte au portail ASP") do
   click_link_or_button "Se connecter"
 end
 
-Sachantque("je suis un personnel académique de l'établissement {string}") do |uai|
+Sachantque("je suis un personnel académique de {string}") do |academy|
   OmniAuth.config.mock_auth[:academic] = make_fim_hash(
     name: Faker::Name.name,
     email: Faker::Internet.email,
     raw_info: {
-      AplyproAcademieResp: uai
+      AplyproAcademieResp: academy
+    }
+  )
+end
+
+Sachantque("je suis un personnel académique des académies de {string}") do |academies_list|
+  academies = academies_list.split(", ")
+
+  OmniAuth.config.mock_auth[:academic] = make_fim_hash(
+    name: Faker::Name.name,
+    email: Faker::Internet.email,
+    raw_info: {
+      AplyproAcademieResp: academies
     }
   )
 end
