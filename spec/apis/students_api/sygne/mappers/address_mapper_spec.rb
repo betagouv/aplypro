@@ -33,4 +33,23 @@ describe StudentsApi::Sygne::Mappers::AddressMapper do
                                                        data["adrResidenceEle"]["adresseLigne4"]].join(" ")
     end
   end
+
+  context "when only adresseLigne3 is present" do
+    before do
+      data["adrResidenceEle"] = {
+        "codeCommuneInsee" => data["adrResidenceEle"]["codeCommuneInsee"],
+        "codePostal" => data["adrResidenceEle"]["codePostal"],
+        "codePays" => data["adrResidenceEle"]["codePays"],
+        "adresseLigne3" => "13 RUE DE LA FONTAINE",
+        "libelleCommune" => data["adrResidenceEle"]["libelleCommune"]
+      }
+    end
+
+    it "correctly maps adresseLigne3 to address_line2" do # rubocop:disable RSpec/MultipleExpectations
+      result = mapper.call(data)
+      expect(result[:address_line1]).to eq ""
+      expect(result[:address_line2]).to eq "13 RUE DE LA FONTAINE"
+      expect(result[:address_city]).to eq data["adrResidenceEle"]["libelleCommune"]
+    end
+  end
 end
