@@ -5,11 +5,11 @@ module ASP
     module Adresse
       class InduFranceMapper < FranceMapper
         def pointremise
-          student.address_line1
+          student.address_line1.presence || student.address_line2
         end
 
         def cpltdistribution
-          student.address_line2
+          student.address_line1.present? ? student.address_line2 : nil
         end
       end
     end
