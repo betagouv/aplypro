@@ -15,6 +15,9 @@
       %li
         BIC :
         %code= @student.rib(current_establishment).bic
+      %li
+        Dernière modification :
+        %span= @student.rib(current_establishment).updated_at.strftime("%d/%m/%Y")
 
     .fr-col-md-7
       - if @student.rib(current_establishment).readonly?
