@@ -20,24 +20,6 @@ Rails.application.routes.draw do
 
   delete "asp/logout", to: "asp/application#logout", as: :destroy_asp_user_session
 
-  # TODO: remove condition once academic feature is released
-  if !Rails.env.production?
-    namespace :academic do
-      get "home", to: "application#home"
-
-      resource :users, only: [] do
-        get "select_academy"
-        post "selected_academy"
-      end
-
-      devise_for :users, class_name: "Academic::User"
-    end
-
-    get "academic/login", to: "academic/application#login", as: :new_academic_user_session
-
-    delete "academic/logout", to: "academic/application#logout", as: :destroy_academic_user_session
-  end
-
   resources :users, only: :update do
     get "select_establishment"
   end
@@ -115,15 +97,6 @@ Rails.application.routes.draw do
 
   devise_scope :asp_user do
     get "/auth/asp/callback" => "users/omniauth_callbacks#asp", as: :asp_login
-  end
-
-  # TODO: remove condition once acadamic feature is released
-  if !Rails.env.production?
-    devise_scope :academic_user do
-      %w[academic academic_developer].each do |action|
-        match "/auth/#{action}/callback", to: "users/omniauth_callbacks##{action}", via: %i[get post]
-      end
-    end
   end
 
   devise_for :users

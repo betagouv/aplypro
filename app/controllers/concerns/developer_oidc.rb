@@ -35,28 +35,25 @@ module DeveloperOidc
 
   def static_info(attrs)
     {
-      credentials: {
-        token: "dev token"
+      "credentials" => {
+        "token" => "dev token"
       },
-      uid: attrs["info"]["email"],
-      info: {
-        name: "Developer Account",
-        email: attrs["info"]["email"]
+      "uid" => attrs["info"]["email"],
+      "info" => {
+        "name" => "Developer Account",
+        "email" => attrs["info"]["email"]
       }
     }
   end
 
   def provider_info(attrs)
-    { provider: provider(attrs) }
+    { "provider" => provider(attrs) }
   end
 
   def extra_info(attrs)
-    if attrs["info"]["uai"].nil?
-      info = { AplyproAcademieResp: attrs["info"]["academy_code"] }
-    else
-      uai = attrs["info"]["uai"]
-      info = role(attrs) == :dir ? responsibility_hash(attrs, uai) : authorised_hash(attrs, uai)
-    end
+    uai = attrs["info"]["uai"]
+
+    info = role(attrs) == :dir ? responsibility_hash(attrs, uai) : authorised_hash(attrs, uai)
 
     {
       extra: {
