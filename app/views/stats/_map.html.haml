@@ -1,0 +1,31 @@
+.stat
+  %h2 Répartition géographique des montants des PFMPs
+  .map-section
+    %h5.text-center Métropole
+    #map-container{
+      data: {
+        controller: "map",
+        map_amounts_value: @amounts_per_academy.to_json.html_safe,
+        map_schoolings_value: @schoolings_per_academy.to_json.html_safe
+      },
+      style: "width: 100%; height: 540px;"
+    }
+  .overseas-maps-grid{style: "display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; max-width: 800px; margin-left: auto; margin-right: auto;"}
+    .map-section
+      %h5.text-center Guadeloupe
+      #map-guadeloupe.overseas-map
+    .map-section
+      %h5.text-center Martinique
+      #map-martinique.overseas-map
+    .map-section
+      %h5.text-center Guyane
+      #map-guyane.overseas-map
+    .map-section
+      %h5.text-center Réunion
+      #map-reunion.overseas-map
+    .map-section
+      %h5.text-center Mayotte
+      #map-mayotte.overseas-map
+    .map-section
+      %h5.text-center Saint-Pierre-et-Miquelon
+      #map-saint-pierre.overseas-map
