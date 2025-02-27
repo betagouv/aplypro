@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Quand("je me rends sur la page d'accueil") do
-  visit "/home"
+  visit "/"
 end
 
 Quand("print the page") do

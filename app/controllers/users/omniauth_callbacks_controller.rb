@@ -9,30 +9,25 @@ module Users
 
     rescue_from IdentityMappers::Errors::Error, ActiveRecord::RecordInvalid, with: :authentication_failure
 
+    def asp
+      @asp_login = true
+      @asp_user = ASP::User.from_oidc(auth_hash).tap(&:save!)
+
+      sign_in(:asp_user, @asp_user)
+
+      redirect_to asp_schoolings_path
+    end
+
     def developer
       oidcize_dev_hash(auth_hash)
 
       oidc
     end
 
-    def academic_developer
-      oidcize_dev_hash(auth_hash)
-
-      academic
-    end
-
-    def masa
-      oidc
-    end
-
-    def fim
-      oidc
-    end
-
     def oidc
       parse_identity
 
-      @user = User.from_oidc(auth_hash).tap(&:save!)
+      @user.save!
 
       add_auth_breadcrumb(data: { user_id: @user.id }, message: "Successfully parsed user")
 
@@ -47,37 +42,12 @@ module Users
       choose_redirect_page!
     end
 
-    def academic # rubocop:disable Metrics/AbcSize
-      parse_identity
-
-      @academic_login = true
-      @academic_user = Academic::User.from_oidc(auth_hash).tap(&:save!)
-
-      add_auth_breadcrumb(data: { user_id: @academic_user.id }, message: "Successfully parsed academic user")
-
-      @academies = @mapper.aplypro_academies
-
-      raise IdentityMappers::Errors::NoLimitedAccessError if @academies.empty?
-
-      sign_in(:academic_user, @academic_user)
-      session[:academy_codes] = @academies
-
-      if @academies.many?
-        redirect_to select_academy_academic_users_path(@academic_user)
-      else
-        session[:selected_academy] = @academies.first
-
-        redirect_to academic_home_path, notice: t("auth.success")
-      end
+    def masa
+      oidc
     end
 
-    def asp
-      @asp_login = true
-      @asp_user = ASP::User.from_oidc(auth_hash).tap(&:save!)
-
-      sign_in(:asp_user, @asp_user)
-
-      redirect_to asp_schoolings_path
+    def fim
+      oidc
     end
 
     def failure
@@ -93,8 +63,6 @@ module Users
 
       if defined? @asp_login
         fail_asp_user
-      elsif defined? @academic_login
-        fail_academic_user
       else
         fail_user
       end
@@ -108,10 +76,6 @@ module Users
 
     def fail_asp_user
       redirect_to new_asp_user_session_path
-    end
-
-    def fail_academic_user
-      redirect_to new_academic_user_session_path
     end
 
     private
@@ -132,8 +96,10 @@ module Users
       data = auth_hash
       raw = data.extra.raw_info
 
+      @user = User.from_oidc(data)
+
       @mapper = case data.provider.to_sym
-                when :fim, :academic
+                when :fim
                   IdentityMappers::Fim.new(raw)
                 when :masa
                   IdentityMappers::Cas.new(raw)
