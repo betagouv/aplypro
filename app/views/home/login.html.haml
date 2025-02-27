@@ -1,14 +1,14 @@
 .fr-grid-row.fr-grid-row--gutters#login-page
   - User::OMNIAUTH_PROVIDERS.each do |provider|
     .fr-col-md-6.fr-col-12
-      = render 'connection_panel',
+      = render 'shared/connection_panel',
         name: t("omniauth.#{provider}.title"),
         description: t("omniauth.#{provider}.description"),
         button: t("omniauth.#{provider}.button"),
         path: "/users/auth/#{provider}"
 
   .fr-col-md-6.fr-col-12
-    = render 'connection_panel',
+    = render 'shared/connection_panel',
       name: t("omniauth.mer.title"),
       description: t("omniauth.mer.description"),
       button: t("omniauth.mer.button"),

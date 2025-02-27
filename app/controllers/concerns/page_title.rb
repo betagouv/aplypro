@@ -18,8 +18,8 @@ module PageTitle
   private
 
   def page_title_key
-    asp = "asp" if controller_path.include?("asp/")
-    ["pages", "titles", asp, controller_name, action_name].join(".")
+    namespace = controller_path.split("/").first if controller_path.include?("/")
+    ["pages", "titles", namespace, controller_name, action_name].join(".")
   end
 
   def extract_title_data(data)

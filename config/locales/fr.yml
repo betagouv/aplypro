@@ -165,6 +165,12 @@ fr:
         schoolings:
           index: Recherche d'un dossier
           show: "Dossier %{attributive_decision_number}"
+      academic:
+        application:
+          login: Connexion à APLyPro
+          home : Accueil
+        users:
+          select_academy: Choix de l'académie
       stats:
         index: Statistiques
       school_years:
