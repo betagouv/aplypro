@@ -20,6 +20,8 @@ module Sync
     end
 
     def perform(establishment, school_year)
+      return true if establishment.students_provider == "csv"
+
       api = establishment.students_api
 
       api
