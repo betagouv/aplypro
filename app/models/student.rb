@@ -131,6 +131,11 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
       birthdate.eql?(other.birthdate)
   end
 
+  def duplicates
+    Student.where(first_name: first_name, last_name: last_name, birthdate: birthdate,
+                  birthplace_city_insee_code: birthplace_city_insee_code)
+  end
+
   def close_current_schooling!(date = Time.zone.today)
     current_schooling&.update!(end_date: date)
   end
