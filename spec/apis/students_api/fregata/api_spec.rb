@@ -12,6 +12,25 @@ describe StudentsApi::Fregata::Api do
     mock_fregata_students_with(uai, "")
   end
 
+  describe "find_student_in_payload" do
+    let(:ine) { "123456789AB" }
+    let(:fregata_student) { build(:fregata_student, ine_value: ine).to_h }
+    let(:en_student) { build(:fregata_student, :national_education, ine_value: ine).to_h }
+
+    before do
+      allow_any_instance_of(StudentsApi::Fregata::Mappers::StudentMapper).to receive(:call) do |_, entry| # rubocop:disable RSpec/AnyInstance
+        { ine: entry.dig("apprenant", "ine") }
+      end
+    end
+
+    it "filters out students with estEN set to true" do
+      payload = [en_student, fregata_student]
+
+      result = api.send(:find_student_in_payload, payload, ine)
+      expect(result).to eq(fregata_student)
+    end
+  end
+
   describe "student_endpoint" do
     let(:uai) { student.current_schooling.establishment.uai }
 
