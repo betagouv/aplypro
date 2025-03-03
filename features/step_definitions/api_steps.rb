@@ -18,7 +18,7 @@ Sachantque(
 
   @sygne_results = []
 
-  first_name, last_name = name.split
+  last_name, first_name = name.split
 
   payload = FactoryBot.build_list(:sygne_student, count, classe: classe).tap do |students|
     students.last["prenom"] = first_name
@@ -39,7 +39,7 @@ Sachantque(
 
   @sygne_results = []
 
-  first_name, last_name = name.split
+  last_name, first_name = name.split
 
   mef = Mef.find_by!(label: mef)
 
