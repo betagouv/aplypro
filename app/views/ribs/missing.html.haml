@@ -2,7 +2,7 @@
   - @ribs.each do |rib|
     = f.fields_for rib.student_id.to_s, rib do |form|
       %fieldset.fr-fieldset.fr-m-0.fr-p-0
-        %legend.hidden= rib.student.index_name
+        %legend.hidden= rib.student.full_name
 
         .gray-panel.fr-mb-3w.fr-container.fr-p-3w
           .fr-grid-row
@@ -10,7 +10,7 @@
 
               .fr-grid-md-row.fr-grid-row--middle
                 .fr-col.fr-mb-3w
-                  %h2.fr-mb-1w= dsfr_link_to rib.student.index_name, student_path(rib.student), title: t("links.students.show", name: rib.student), tabindex: "1", class: 'fr-h3'
+                  %h2.fr-mb-1w= dsfr_link_to rib.student.full_name, student_path(rib.student), title: t("links.students.show", name: rib.student), tabindex: "1", class: 'fr-h3'
                   = closed_schooling_information_tag(@classe.closed_schooling_of rib.student_id)
                   = form.hidden_field :student_id
 

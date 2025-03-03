@@ -15,6 +15,6 @@
         - student = schooling.student
         %tr
           %td
-            = dsfr_link_to student.index_name, student_path(student), title: t("links.students.show", name: student)
+            = dsfr_link_to student.full_name, student_path(student), title: t("links.students.show", name: student)
           %td
             = link_to "Réintégrer #{student} dans la classe #{@classe.label}", confirm_removal_cancellation_school_year_class_schooling_path(selected_school_year, @classe, schooling), class: 'fr-btn fr-btn--primary'

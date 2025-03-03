@@ -117,10 +117,6 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def full_name
-    [first_name, last_name].join(" ")
-  end
-
-  def index_name
     [last_name, first_name].join(" ")
   end
 
