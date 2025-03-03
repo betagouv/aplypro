@@ -39,7 +39,7 @@
           Montant
 
       %tbody
-        = form.collection_check_boxes "pfmp_ids", @pfmps, :id, :student_index_name, include_hidden: false do |f|
+        = form.collection_check_boxes "pfmp_ids", @pfmps, :id, :student_full_name, include_hidden: false do |f|
           - pfmp = f.object
           %tr
             %td

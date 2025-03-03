@@ -5,7 +5,7 @@ Sachantque(
 ) do |name, classe, mef|
   @etab ||= User.last.selected_establishment
 
-  first_name, last_name = name.split # not great
+  last_name, first_name = name.split
   @mef = Mef.find_by(label: mef) ||
          FactoryBot.create(:mef, label: mef)
   @classe = Classe.find_by(mef: @mef, establishment: @etab) ||
