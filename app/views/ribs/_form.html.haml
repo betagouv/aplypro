@@ -1,7 +1,15 @@
 = form_with model: [@student, @rib], builder: DsfrFormBuilder do |form|
   = form.dsfr_error_summary
 
-  = render partial: 'ribs/owner_type/owner_type_vertical', locals: { current_value: @rib.owner_type }
+  - current_value = @rib.owner_type
+
+  - if (current_value.eql?("other_person") || current_value.eql?("moral_person")) && @student.adult_at?(Time.zone.today)
+    .fr-col-md-6.fr-mb-3w
+      = dsfr_alert(type: :warning, title: "L'élève est actuellement majeur") do
+        %p Important : Un élève majeur doit obligatoirement être payé sur ses coordonnées bancaires ou celles d'un tiers.
+        %p= "Nous avons détecté que l'élève est majeur depuis le #{I18n.l(@student.birthdate + 18.years)}, veuillez donc vérifier que l'option sélectionnée est bien la bonne."
+
+  = render partial: 'ribs/owner_type/owner_type_vertical', locals: { current_value: current_value }
 
   = form.dsfr_text_field(:name, width: 'md-4')
 
