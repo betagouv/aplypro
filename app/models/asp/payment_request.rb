@@ -142,7 +142,11 @@ module ASP
     def reconstructed_iban
       return nil unless in_state?(:paid)
 
-      coordpaie = last_transition.metadata["PAIEMENT"]["COORDPAIE"]
+      metadata = last_transition.metadata
+
+      return nil if metadata["PAIEMENT"].nil?
+
+      coordpaie = metadata["PAIEMENT"]["COORDPAIE"]
       zonebban = coordpaie["ZONEBBAN"]
       cle = coordpaie["CLECONTROL"]
       code_pays = coordpaie["CODEISOPAYS"]
