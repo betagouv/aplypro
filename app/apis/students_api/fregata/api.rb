@@ -52,7 +52,11 @@ module StudentsApi
         end
 
         def find_student_in_payload(data, ine)
-          data.find { |entry| student_mapper.new.call(entry)[:ine].eql?(ine) && !entry["estEN"] }
+          data.find do |entry|
+            student_mapper.new.call(entry)[:ine].eql?(ine) &&
+              !entry["estEN"] &&
+              entry["dateEntreeFormation"].present?
+          end
         end
 
         def client
