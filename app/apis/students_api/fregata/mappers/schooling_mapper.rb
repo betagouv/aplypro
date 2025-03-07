@@ -5,7 +5,6 @@ module StudentsApi
     module Mappers
       class SchoolingMapper < Dry::Transformer::Pipe
         import Dry::Transformer::HashTransformations
-        import Dry::Transformer::ArrayTransformations
 
         define! do
           deep_symbolize_keys
@@ -15,7 +14,7 @@ module StudentsApi
 
           rename_keys(
             code: :status,
-            start_date: :dateEntreeFormation
+            dateEntreeFormation: :start_date
           )
 
           # Seul le MAPPING "2501" est encore utilisé, les autres statuts ne sont plus retournés par SYGNE
@@ -30,7 +29,7 @@ module StudentsApi
             end
           }
 
-          accept_keys %i[status ine]
+          accept_keys %i[ine status start_date]
         end
       end
     end
