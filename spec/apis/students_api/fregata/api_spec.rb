@@ -12,12 +12,10 @@ describe StudentsApi::Fregata::Api do
     mock_fregata_students_with(uai, "")
   end
 
-  # rubocop:disable RSpec/MultipleMemoizedHelpers
   describe "find_student_in_payload" do
     let(:ine) { "123456789AB" }
     let(:fregata_student) { build(:fregata_student, ine_value: ine).to_h }
-    let(:payload) { [unwanted_student, fregata_student] }
-    let(:result) { api.send(:find_student_in_payload, payload, ine) }
+    let(:en_student) { build(:fregata_student, :national_education, ine_value: ine).to_h }
 
     before do
       allow_any_instance_of(StudentsApi::Fregata::Mappers::StudentMapper).to receive(:call) do |_, entry| # rubocop:disable RSpec/AnyInstance
@@ -25,19 +23,13 @@ describe StudentsApi::Fregata::Api do
       end
     end
 
-    context "when students have estEN set to true" do
-      let(:unwanted_student) { build(:fregata_student, :national_education, ine_value: ine).to_h }
+    it "filters out students with estEN set to true" do
+      payload = [en_student, fregata_student]
 
-      it { expect(result).to eq(fregata_student) }
-    end
-
-    context "when students have dateEntreeFormation blank" do
-      let(:unwanted_student) { build(:fregata_student, ine_value: ine, dateEntreeFormation: nil).to_h }
-
-      it { expect(result).to eq(fregata_student) }
+      result = api.send(:find_student_in_payload, payload, ine)
+      expect(result).to eq(fregata_student)
     end
   end
-  # rubocop:enable RSpec/MultipleMemoizedHelpers
 
   describe "student_endpoint" do
     let(:uai) { student.current_schooling.establishment.uai }
