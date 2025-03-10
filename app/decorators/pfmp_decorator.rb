@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module PfmpDecorator
-  delegate :full_name, to: :student, prefix: true
-
   PFMP_STATE_MAPPING = {
     pending: :new,
     completed: :info,
