@@ -16,9 +16,8 @@ describe StudentsApi::Fregata::Mappers::SchoolingMapper do
     )
   end
 
-  it "maps the data correctly" do # rubocop:disable RSpec/ExampleLength, just being nice
+  it "maps the data correctly" do
     expected = {
-      ine: "123456",
       start_date: "2024-05-25",
       status: :student
     }

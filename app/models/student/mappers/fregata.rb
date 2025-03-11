@@ -14,14 +14,12 @@ class Student
       end
 
       def map_schooling!(classe, student, entry)
+        attributes = schooling_mapper.new.call(entry)
         schooling = Schooling.find_or_initialize_by(classe: classe, student: student)
+                             .tap { |sc| sc.assign_attributes(attributes) }
 
-        schooling_attributes = schooling_mapper.new.call(entry)
-
-        # TODO: shouldnt this be mapped in schooling_attributes instead to be consistent?
+        # TODO: This should be mapped in 'SchoolingMapper' to be consistent (Tried, but failed)
         schooling.end_date = left_classe_at(entry)
-
-        schooling.status = schooling_attributes[:status]
 
         student.close_current_schooling! if schooling.open? && student.current_schooling != schooling
 
