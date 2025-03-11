@@ -69,6 +69,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   sourced_from_external_api :birthdate,
                             :address_line1,
+                            :address_line2,
                             :address_postal_code,
                             :address_city_insee_code,
                             :address_city,
@@ -116,10 +117,6 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def full_name
-    [first_name, last_name].join(" ")
-  end
-
-  def index_name
     [last_name, first_name].join(" ")
   end
 
@@ -128,6 +125,11 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
       first_name.eql?(other.first_name) &&
       birthplace_city_insee_code.eql?(other.birthplace_city_insee_code) &&
       birthdate.eql?(other.birthdate)
+  end
+
+  def duplicates
+    Student.where(first_name: first_name, last_name: last_name, birthdate: birthdate,
+                  birthplace_city_insee_code: birthplace_city_insee_code)
   end
 
   def close_current_schooling!(date = Time.zone.today)

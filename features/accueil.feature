@@ -7,7 +7,7 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
   Contexte:
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que je me connecte en tant que personnel MENJ
-    Et qu'il y a une élève "Marie Curie" au sein de la classe "2NDEB" pour une formation "Développement"
+    Et qu'il y a une élève "Curie Marie" au sein de la classe "2NDEB" pour une formation "Développement"
 
   Scénario: Le personnel de direction voit un écran d'accueil la première fois
     Sachant que je peux voir l'écran d'accueil
@@ -26,7 +26,7 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
 
   Scénario: Le personnel voit un aperçu des données sur la page d'accueil
     Quand je clique sur "Continuer"
-    Et que je renseigne les coordonnées bancaires de l'élève "Marie Curie" de la classe "2NDEB"
+    Et que je renseigne les coordonnées bancaires de l'élève "Curie Marie" de la classe "2NDEB"
     Et que je me rends sur la page d'accueil
     Alors le panneau "Décisions d'attribution" contient "0 / 1"
     Et le panneau "Coordonnées bancaires" contient "1 / 1"
@@ -38,9 +38,9 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Et l'indicateur de demandes de paiements "Paiements envoyés" affiche 0
 
   Scénario: Le personnel de direction voit le nom du directeur confirmé existant dans le panel de décision d'attribution
-    Sachant que mon établissement a un directeur confirmé nommé "Jean Dupuis"
+    Sachant que mon établissement a un directeur confirmé nommé "Dupuis Jean"
     Et que je me rends sur la page d'accueil
-    Alors le panneau "Décisions d'attribution" contient "Vous remplacerez Jean Dupuis"
+    Alors le panneau "Décisions d'attribution" contient "Vous remplacerez Dupuis Jean"
 
   Scénario: Le personnel ne voit pas de bandeau de support si son établissement n'est pas enlicé
     Quand je rafraîchis la page

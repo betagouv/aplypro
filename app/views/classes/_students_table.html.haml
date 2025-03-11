@@ -23,7 +23,7 @@
         - student = schooling.student
         %tr
           %td
-            = dsfr_link_to student.index_name, student_path(student), title: t("links.students.show", name: student)
+            = dsfr_link_to student.full_name, student_path(student), title: t("links.students.show", name: student)
           %td
             - if schooling.attributive_decision.present? && !schooling.abrogation_decision.present? && !schooling.cancellation_decision.present?
               %p= dsfr_badge(status: :success) { "Éditée" }

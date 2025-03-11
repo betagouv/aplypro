@@ -20,15 +20,18 @@ module StudentsApi
             communeCodeInsee: :address_city_insee_code
           )
 
-          nest :address_line1, %i[ligne2 ligne3 ligne4 ligne5 ligne6 ligne7]
+          nest :address_line1, %i[ligne2 ligne3 ligne4]
+          nest :address_line2, %i[ligne5 ligne6 ligne7]
 
           map_value :address_line1, ->(hash) { hash.values.compact.join(" ") }
+          map_value :address_line2, ->(hash) { hash.values.compact.join(" ") }
 
           accept_keys %i[
             address_postal_code
             address_country_code
             address_city_insee_code
             address_line1
+            address_line2
           ]
 
           catch_empty_address
