@@ -17,6 +17,10 @@ module StudentsApi
             dateEntreeFormation: :start_date
           )
 
+          nest :end_date, %i[dateSortieFormation dateSortieEtablissement]
+
+          map_value :end_date, ->(hash) { hash[:dateSortieFormation] || hash[:dateSortieEtablissement] }
+
           # Seul le MAPPING "2501" est encore utilisé, les autres statuts ne sont plus retournés par SYGNE
           map_value :status, lambda { |value|
             case value
@@ -29,7 +33,7 @@ module StudentsApi
             end
           }
 
-          accept_keys %i[ine status start_date]
+          accept_keys %i[status start_date end_date]
         end
       end
     end
