@@ -18,20 +18,13 @@ class Student
         schooling = Schooling.find_or_initialize_by(classe: classe, student: student)
                              .tap { |sc| sc.assign_attributes(attributes) }
 
-        # TODO: This should be mapped in 'SchoolingMapper' to be consistent (Tried, but failed)
-        schooling.end_date = left_classe_at(entry)
-
         student.close_current_schooling! if schooling.open? && student.current_schooling != schooling
 
         schooling.save!
       end
 
-      def left_classe_at(entry)
-        entry["dateSortieFormation"] || entry["dateSortieEtablissement"]
-      end
-
       def map_schooling_attributes(entry)
-        schooling_mapper.new.call(entry).slice(:status, :start_date)
+        schooling_mapper.new.call(entry)
       end
     end
   end
