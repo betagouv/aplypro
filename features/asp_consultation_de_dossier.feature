@@ -2,7 +2,7 @@
 
 Fonctionnalité: Le personnel ASP consulte des dossiers
   Contexte:
-    Sachant qu'une PFMP de 30 euros a été saisie, validée et envoyée en paiement pour l'élève "Marie Curie"
+    Sachant qu'une PFMP de 30 euros a été saisie, validée et envoyée en paiement pour l'élève "Curie Marie"
     Et que je suis un agent de l'ASP
     Et que je me connecte au portail ASP
     Et que je me rend sur la page de recherche de dossier
@@ -16,7 +16,7 @@ Fonctionnalité: Le personnel ASP consulte des dossiers
     Alors la page contient "Aucune décision d'attribution trouvée"
 
   Scénario: Le personnel ASP entre un numéro de décision d'attribution existant
-    Sachant que le numéro administratif de "Marie Curie" est "THEDOSS"
+    Sachant que le numéro administratif de "Curie Marie" est "THEDOSS"
     Et que je remplis "Numéro de décision d'attribution" avec "THEDOSS2024"
     Quand je clique sur "Rechercher"
     Quand je clique sur "ENPUTHEDOSS20240"

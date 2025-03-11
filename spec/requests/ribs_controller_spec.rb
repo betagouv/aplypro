@@ -28,7 +28,7 @@ RSpec.describe RibsController do
   describe "POST classes/:classe_id/ribs/bulk_create" do
     let(:rib) { build(:rib, student: student, establishment: student.establishment) }
     let(:rib_params) do
-      { name: rib.student.index_name, iban: rib.iban, bic: rib.bic, student_id: rib.student.id }
+      { name: rib.student.full_name, iban: rib.iban, bic: rib.bic, student_id: rib.student.id }
     end
 
     context "with a correct request" do

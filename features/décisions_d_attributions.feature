@@ -3,7 +3,7 @@
 Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribution
   Contexte:
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
-    Et que l'API SYGNE renvoie 10 élèves dans une classe "1MELEC" dont "Marie Curie" pour l'établissement "DINUM"
+    Et que l'API SYGNE renvoie 10 élèves dans une classe "1MELEC" dont "Curie Marie" pour l'établissement "DINUM"
     Et que je me connecte en tant que personnel MENJ
     Et que toutes les tâches de fond sont terminées
     Et que je passe l'écran d'accueil
@@ -55,7 +55,7 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Alors je peux voir dans le tableau "Liste des élèves"
       | Élèves (10) | Décisions d'attribution (10/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
       |             | Éditée                          |                              |           |
-    Quand l'élève "Marie Curie" a une scolarité fermée
+    Quand l'élève "Curie Marie" a une scolarité fermée
     Et je consulte la classe de "1MELEC"
     Lorsque je clique sur "Abroger"
     Alors la page contient "Êtes-vous certain(e) de vouloir abroger cette décision d'attribution ?"
@@ -63,8 +63,8 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Alors la page contient "Télécharger la décision d'abrogation"
 
   Scénario: Le personnel peut reporter une décision d'attribution
-    Quand l'élève "Marie Curie" a une date de début et une date de fin de scolarité
-    Et que l'élève "Marie Curie" a une décision d'attribution
+    Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité
+    Et que l'élève "Curie Marie" a une décision d'attribution
     Et que je consulte la classe de "1MELEC"
     Alors je peux voir dans le tableau "Liste des élèves"
       | Élèves (10) | Décisions d'attribution (0/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
@@ -78,42 +78,42 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Alors la page contient "a bien été prolongée"
 
   Scénario: Le personnel peut annuler la saisie d'un report de décision d'attribution
-    Quand l'élève "Marie Curie" a une date de début et une date de fin de scolarité
-    Et que l'élève "Marie Curie" a une décision d'attribution
-    Et que l'élève "Marie Curie" a un report de décision d'attribution
+    Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité
+    Et que l'élève "Curie Marie" a une décision d'attribution
+    Et que l'élève "Curie Marie" a un report de décision d'attribution
     Et que je consulte la classe de "1MELEC"
     Quand je clique sur le premier "Annuler le report"
     Alors la page contient "Êtes-vous certain(e) de vouloir supprimer le report de cette décision d'attribution ?"
     Et que je coche la case de responsable légal
     Lorsque je clique sur "Supprimer le report"
-    Alors la page contient "Le report de la décision d'attribution de Marie Curie a bien été supprimé"
+    Alors la page contient "Le report de la décision d'attribution de Curie Marie a bien été supprimé"
 
   Scénario: Le personnel ne peut pas annuler la saisie d'un report de décision d'attribution si une pfmp est saisie
-    Quand l'élève "Marie Curie" a une date de début et une date de fin de scolarité
-    Et que je consulte le profil de "Marie Curie" dans la classe de "1MELEC"
-    Et que je renseigne une PFMP provisoire dans la période de report pour l'élève "Marie Curie"
-    Et que l'élève "Marie Curie" a une décision d'attribution
-    Et que l'élève "Marie Curie" a un report de décision d'attribution
+    Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité
+    Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
+    Et que je renseigne une PFMP provisoire dans la période de report pour l'élève "Curie Marie"
+    Et que l'élève "Curie Marie" a une décision d'attribution
+    Et que l'élève "Curie Marie" a un report de décision d'attribution
     Et que je consulte la classe de "1MELEC"
     Quand je clique sur le premier "Annuler le report"
     Alors la page contient "Êtes-vous certain(e) de vouloir supprimer le report de cette décision d'attribution ?"
     Et que je coche la case de responsable légal
     Lorsque je clique sur "Supprimer le report"
-    Alors la page contient "Le report de la décision d'attribution de Marie Curie n'a pas pu être supprimé car celui ci contient une PFMP"
+    Alors la page contient "Le report de la décision d'attribution de Curie Marie n'a pas pu être supprimé car celui ci contient une PFMP"
 
   Scénario: Le personnel peut retirer une décision d'attribution
     Lorsque je suis responsable légal et que je génère les décisions d'attribution manquantes
     Et que la génération des décisions d'attribution manquantes est complètement finie
-    Et que je consulte le profil de "Marie Curie" dans la classe de "1MELEC"
+    Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
     Alors la page contient "Retirer la décision d'attribution"
     Et la page ne contient pas "Télécharger la décision de retrait"
     Quand je clique sur "Retirer la décision d'attribution"
     Et que je coche la case de responsable légal
     Et que je clique sur "Confirmer le retrait"
-    Alors la page contient "La décision d'attribution de Marie Curie a bien été retirée"
+    Alors la page contient "La décision d'attribution de Curie Marie a bien été retirée"
     Et la page ne contient pas "Retirer la décision d'attribution"
     Et la page contient "Télécharger la décision de retrait"
     Quand je consulte la classe de "1MELEC"
     Alors je peux voir dans le tableau "Élèves masqués manuellement de la classe"
       | Élèves (1)    | Réintégration de l'élève dans la classe      |
-      | Curie Marie   | Réintégrer Marie Curie dans la classe 1MELEC |
+      | Curie Marie   | Réintégrer Curie Marie dans la classe 1MELEC |
