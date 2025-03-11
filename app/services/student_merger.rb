@@ -4,7 +4,7 @@
 class StudentMerger
   class StudentMergerError < StandardError; end
   class InvalidStudentsArrayError < StudentMergerError; end
-  class ActiveSchoolingError < StudentMergerError; end
+  class BothActiveSchoolingsError < StudentMergerError; end
   class StudentNotIdenticalError < StudentMergerError; end
 
   attr_reader :students
@@ -17,7 +17,6 @@ class StudentMerger
     ActiveRecord::Base.transaction do
       validate_students!
       determine_target_and_merge_student!
-      validate_schoolings!
       transfer_asp_individu_id!
       transfer_schoolings!
 
@@ -37,7 +36,20 @@ class StudentMerger
     raise StudentNotIdenticalError unless students[0] == students[1]
   end
 
-  def determine_target_and_merge_student!
+  def determine_target_and_merge_student! # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    active_students = students.select { |s| s.schoolings.exists?(end_date: nil) }
+
+    if active_students.size == 2
+      raise BothActiveSchoolingsError,
+            "Cannot merge when both students have active schoolings"
+    end
+
+    if active_students.any?
+      @target_student = active_students.first
+      @student_to_merge = (students - active_students).first
+      return
+    end
+
     sorted_students = students.sort_by do |student|
       latest_payment_request = student.pfmps.map(&:latest_payment_request).compact.max_by(&:created_at)
       latest_payment_request&.created_at || Time.zone.at(0)
@@ -45,12 +57,6 @@ class StudentMerger
 
     @target_student = sorted_students.last
     @student_to_merge = sorted_students.first
-  end
-
-  def validate_schoolings!
-    return unless @student_to_merge.schoolings.exists?(end_date: nil)
-
-    raise ActiveSchoolingError, "Cannot merge students with active schoolings"
   end
 
   def transfer_asp_individu_id!
