@@ -29,7 +29,7 @@ module StudentsApi
             end
           }
 
-          accept_keys %i[status start_date]
+          accept_keys %i[ine status start_date]
         end
       end
     end

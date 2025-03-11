@@ -14,7 +14,7 @@ class Student
       end
 
       def map_schooling!(classe, student, entry)
-        attributes = schooling_mapper.new.call(entry)
+        attributes = map_schooling_attributes(entry)
         schooling = Schooling.find_or_initialize_by(classe: classe, student: student)
                              .tap { |sc| sc.assign_attributes(attributes) }
 
@@ -28,6 +28,10 @@ class Student
 
       def left_classe_at(entry)
         entry["dateSortieFormation"] || entry["dateSortieEtablissement"]
+      end
+
+      def map_schooling_attributes(entry)
+        schooling_mapper.new.call(entry).slice(:status, :start_date)
       end
     end
   end
