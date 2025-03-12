@@ -56,7 +56,7 @@ RSpec.describe StudentMerger do
 
         it "raises error when trying to transfer active schoolings" do
           create(:schooling, student: source_student)
-          expect { merger.merge! }.to raise_error(StudentMerger::ActiveSchoolingError)
+          expect { merger.merge! }.to raise_error(StudentMerger::BothActiveSchoolingsError)
         end
       end
 
