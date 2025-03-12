@@ -56,8 +56,8 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
       | Élèves (10) | Décisions d'attribution (10/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
       |             | Éditée                          |                              |           |
     Quand l'élève "Curie Marie" a une scolarité fermée
-    Et je consulte la classe de "1MELEC"
-    Lorsque je clique sur "Abroger"
+    Et je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
+    Lorsque je clique sur "Abroger la décision d'attribution"
     Alors la page contient "Êtes-vous certain(e) de vouloir abroger cette décision d'attribution ?"
     Lorsque je clique sur "Confirmer l'abrogation"
     Alors la page contient "Télécharger la décision d'abrogation"
