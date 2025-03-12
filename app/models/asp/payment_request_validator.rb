@@ -10,7 +10,6 @@ module ASP
     end
 
     def validate
-      check_mef
       check_student
       check_insee_code
       check_address
@@ -24,12 +23,6 @@ module ASP
     end
 
     private
-
-    def check_mef
-      # NOTE: to be removed once the cancellation feature is shipped
-      # NOTE2: Since the wage for this mef has been updated this can be removed asap
-      add_error(:ineligible_mef) if payment_request.pfmp.classe.mef.code == "7429990111"
-    end
 
     def check_student
       add_error(:missing_biological_sex) if student.sex_unknown?
