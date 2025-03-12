@@ -55,9 +55,10 @@ module ASP
       t("payment_requests.state.#{current_state}")
     end
 
-    def status_explanation
-      if last_transition.present? && last_transition.metadata["ORDREREVERSEMENT"].present?
-        return t("payment_requests.state_explanations.recovery", date: last_transition.metadata["ORDREREVERSEMENT"]["DATEOREFFECTIF"])
+    def status_explanation # rubocop:disable Metrics/AbcSize
+      if recovery?
+        return t("payment_requests.state_explanations.recovery",
+                 date: last_transition.metadata["ORDREREVERSEMENT"]["DATEOREFFECTIF"])
       end
 
       args = status_explanation_args.values.first

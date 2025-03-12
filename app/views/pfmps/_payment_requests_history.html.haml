@@ -7,14 +7,13 @@
 
     - if payment_request.in_state?(:paid)
       - metadata = payment_request.last_transition.metadata
-      - state = metadata["ORDREREVERSEMENT"] || metadata["PAIEMENT"]
       .fr-mt-2w.gray-text
-        - if state["MTNET"].present?
-          Montant réellement versé :
-          %strong= number_to_currency(state["MTNET"].to_f)
-        - if state["MTDEMANDEOR"].present?
+        - if payment_request.recovery?
           Montant réclamé :
-          %strong= number_to_currency(state["MTDEMANDEOR"].to_f.abs)
+          %strong= number_to_currency(metadata["ORDREREVERSEMENT"]["MTDEMANDEOR"].to_f.abs)
+        - else
+          Montant réellement versé :
+          %strong= number_to_currency(metadata["PAIEMENT"]["MTNET"].to_f)
 
     .fr-mt-2w.gray-text
       Coordonnées bancaires utilisées :
