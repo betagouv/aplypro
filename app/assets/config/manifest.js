@@ -9,3 +9,7 @@
 
 //= link_tree ../../javascript .js
 //= link_tree ../../../vendor/javascript .js
+
+//= link controllers.js
+//= link controllers/index.js
+//= link controllers/application.js

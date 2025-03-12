@@ -16,6 +16,8 @@ module ASP
 
       def initialize(payment_request)
         @rib = payment_request.rib_with_fallback
+        raise "No Rib currently on record for p_r #{payment_request.id}" if @rib.blank?
+
         @iban = Bank::IBAN.new(rib.iban)
       end
 
