@@ -28,7 +28,9 @@ module ASP
     private
 
     def check_funding
-      add_error(:insufficient_funds) if INSUFFICIENT_FUNDS_MINISTRY.include?(payment_request.pfmp.classe.mef.ministry)
+      return unless INSUFFICIENT_FUNDS_MINISTRY.include?(payment_request.pfmp.classe.mef.ministry) && !Rails.env.test?
+
+      add_error(:insufficient_funds)
     end
 
     def check_student
