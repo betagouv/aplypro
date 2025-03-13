@@ -19,9 +19,7 @@ module Academic
 
     def home; end
 
-    def login
-      raise "Academic namespace not available yet" if Rails.env.production?
-    end
+    def login; end
 
     def logout
       sign_out(current_academic_user)
