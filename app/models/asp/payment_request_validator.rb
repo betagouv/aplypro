@@ -2,6 +2,8 @@
 
 module ASP
   class PaymentRequestValidator < ActiveModel::Validator
+    INSUFFICIENT_FUNDS_MINISTRY = ["masa"].freeze
+
     attr_reader :payment_request
 
     def initialize(payment_request)
@@ -10,6 +12,7 @@ module ASP
     end
 
     def validate
+      check_funding
       check_student
       check_insee_code
       check_address
@@ -23,6 +26,10 @@ module ASP
     end
 
     private
+
+    def check_funding
+      add_error(:insufficient_funds) if INSUFFICIENT_FUNDS_MINISTRY.include?(payment_request.pfmp.classe.mef.ministy)
+    end
 
     def check_student
       add_error(:missing_biological_sex) if student.sex_unknown?
