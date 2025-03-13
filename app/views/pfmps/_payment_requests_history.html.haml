@@ -1,20 +1,30 @@
 - @pfmp.payment_requests.order(created_at: :desc).each do |payment_request|
   .gray-panel.fr-p-3w.fr-mb-3w
     = render partial: "payment_requests/badges", locals: { payment_request: payment_request }
+
     .fr-mt-1w
       = payment_request.status_explanation
+
     - if payment_request.in_state?(:paid)
+      - metadata = payment_request.last_transition.metadata
       .fr-mt-2w.gray-text
-        Montant réellement versé :
-        %strong= number_to_currency(payment_request.last_transition.metadata['PAIEMENT']['MTNET'].to_f)
+        - if payment_request.recovery?
+          Montant réclamé :
+          %strong= number_to_currency(metadata["ORDREREVERSEMENT"]["MTDEMANDEOR"].to_f.abs)
+        - else
+          Montant réellement versé :
+          %strong= number_to_currency(metadata["PAIEMENT"]["MTNET"].to_f)
+
     .fr-mt-2w.gray-text
       Coordonnées bancaires utilisées :
       %strong= payment_request.rib&.iban || payment_request.reconstructed_iban || payment_request.student.rib(current_establishment)&.iban || "manquantes"
+
     .fr-mt-2w.gray-text
       - num_presta_doss = @pfmp.num_presta_doss
       - if !num_presta_doss.nil?
         Numéro de prestation dossier :
         %strong= num_presta_doss
+
     .fr-mt-2w.gray-text
       Dernière mise à jour le
       = l(payment_request.last_transition&.updated_at || payment_request.updated_at, format: :long)

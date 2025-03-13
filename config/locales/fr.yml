@@ -356,6 +356,7 @@ fr:
       rejected: "La demande a été rejetée : %{rejected_reason}."
       paid: Le paiement a été envoyé par l'agence comptable, et sera effectif dans un délai de un à trois jours ouvrables.
       unpaid: "Le paiement a été refusé par l'agence comptable : %{unpaid_reason}."
+      recovery: "Un ordre de reversement a été envoyé par pli postal à l'élève le %{date}."
   ministries:
     masa: Ministère de l'Agriculture et de la Souveraineté Alimentaire (MASA)
     menj: Ministère de l'Éducation Nationale et de la Jeunesse (MENJ)

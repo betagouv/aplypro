@@ -122,6 +122,10 @@ module ASP
       !terminated?
     end
 
+    def recovery?
+      last_transition.present? && last_transition.metadata["ORDREREVERSEMENT"].present?
+    end
+
     def eligible_for_incomplete_retry?
       return false unless in_state?(:incomplete)
 
@@ -140,7 +144,7 @@ module ASP
     end
 
     def reconstructed_iban
-      return nil unless in_state?(:paid)
+      return nil if !in_state?(:paid) || recovery?
 
       coordpaie = last_transition.metadata["PAIEMENT"]["COORDPAIE"]
       zonebban = coordpaie["ZONEBBAN"]
