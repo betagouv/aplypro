@@ -28,6 +28,31 @@ RSpec.describe ASP::PaymentRequestValidator do
     allow(classe).to receive(:school_year).and_return(school_year)
   end
 
+  describe "#check_funding" do
+    context "when ministry is in the insufficient funds list" do
+      before do
+        allow(pfmp).to receive_message_chain(:classe, :mef, :ministry).and_return("masa")
+      end
+
+      it "adds an error" do
+        expect { validator.send(:check_funding) }
+          .to change { payment_request.errors.details[:ready_state_validation] }
+          .to include(a_hash_including(error: :insufficient_funds))
+      end
+    end
+
+    context "when ministry is not in the insufficient funds list" do
+      before do
+        allow(pfmp).to receive_message_chain(:classe, :mef, :ministry).and_return("mer")
+      end
+
+      it "does not add an error" do
+        expect { validator.send(:check_funding) }
+          .not_to change { payment_request.errors.details[:ready_state_validation] }
+      end
+    end
+  end
+
   describe "#check_student" do
     context "when biological sex is unknown" do
       before { allow(student).to receive(:sex_unknown?).and_return(true) }

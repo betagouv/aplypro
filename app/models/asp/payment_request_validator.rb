@@ -28,7 +28,7 @@ module ASP
     private
 
     def check_funding
-      add_error(:insufficient_funds) if INSUFFICIENT_FUNDS_MINISTRY.include?(payment_request.pfmp.classe.mef.ministy)
+      add_error(:insufficient_funds) if INSUFFICIENT_FUNDS_MINISTRY.include?(payment_request.pfmp.classe.mef.ministry)
     end
 
     def check_student
