@@ -66,12 +66,22 @@ class EstablishmentFacade
   private
 
   def payment_requests_all_status_counts
-    @payment_requests_all_status_counts ||=
-      selected_payment_requests
-      .joins(ASP::PaymentRequest.most_recent_transition_join)
-      .group(:to_state)
-      .count
-      .transform_keys { |state| state.nil? ? initial_state : state.to_sym }
+    @payment_requests_all_status_counts ||= begin
+      cache_key = [
+        "establishment_facade",
+        "payment_requests_all_status_counts",
+        establishment.id,
+        school_year.id
+      ]
+
+      Rails.cache.fetch(cache_key, expires_in: 1.hour) do
+        selected_payment_requests
+          .joins(ASP::PaymentRequest.most_recent_transition_join)
+          .group(:to_state)
+          .count
+          .transform_keys { |state| state.nil? ? initial_state : state.to_sym }
+      end
+    end
   end
 
   def pfmps
