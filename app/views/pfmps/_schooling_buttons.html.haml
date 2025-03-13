@@ -15,13 +15,18 @@
                   = button_to "Masquer l'élève de la classe", confirm_removal_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get
                 .fr-col-2
                   = render partial: "shared/tooltip", locals: { message: "remove_student", id: 1 }
-          - if !Rails.env.production? && schooling.attributive_decision.attached? && !schooling.cancellation_decision.attached?
+          - if schooling.attributive_decision.attached? && !schooling.cancellation_decision.attached?
             %li
               .fr-grid-row.fr-grid-row--middle
                 .fr-col-10
                   = button_to "Retirer la décision d'attribution", confirm_cancellation_decision_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get
                 .fr-col-2
                   = render partial: "shared/tooltip", locals: { message: "cancellation_decision", id: 2 }
+            - if !schooling.abrogation_decision.present? && schooling.closed?
+              %li
+                .fr-grid-row.fr-grid-row--middle
+                  .fr-col-10
+                    = button_to "Abroger la décision d'attribution", confirm_abrogation_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get
 
   - if schooling.attributive_decision.attached? || schooling.abrogation_decision.attached? || schooling.cancellation_decision.attached?
     .fr-col-md-6

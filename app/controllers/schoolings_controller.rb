@@ -9,7 +9,8 @@ class SchoolingsController < ApplicationController
   before_action :set_student_breadcrumbs, only: %i[confirm_removal
                                                    confirm_removal_cancellation
                                                    confirm_da_extension
-                                                   confirm_cancellation_decision]
+                                                   confirm_cancellation_decision
+                                                   confirm_abrogation]
 
   def abrogate_decision
     Generate::AbrogationDecisionJob.perform_now(@schooling)
