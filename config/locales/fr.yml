@@ -250,12 +250,6 @@ fr:
         content: |
           Une erreur inconnue a eu lieu pendant la connexion. L'équipe
           technique a été notifiée du problème.
-      no_limited_access_error:
-        title: Accès restreint
-        content: |
-          APLyPro est actuellement en test avec une sélection
-          d'établissements pilotes. Le lancement national aura lieu
-          prochainement.
       not_authorised_error:
         title: "Erreur d'authentification"
         content: |
@@ -264,10 +258,8 @@ fr:
       empty_responsibilities_error:
         title: "Erreur d'authentification"
         content: |
-          Le guichet d'authentification n'indique aucun établissement sous
-          votre direction. APLyPro n'est ouvert qu'aux personnels de
-          direction pour le moment. Il peut s'agir d'une erreur dans la
-          configuration de votre profil.
+          Le guichet d'authentification n'indique aucun établissement ou aucune académie à laquelle vous êtes rattaché(e). 
+          Il peut d'agir d'une erreur dans la configuration de votre profil.
       no_access_found:
         title: "Erreur d'authentification"
         content: |

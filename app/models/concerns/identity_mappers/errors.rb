@@ -13,7 +13,7 @@ module IdentityMappers
     class EmptyResponsibilitiesError < Error
       attr_reader :attributes
 
-      def initialize(msg = "No responsibilites indicated", attributes = {})
+      def initialize(msg = "No responsibilities indicated", attributes = {})
         @attributes = attributes
 
         super(msg)
@@ -32,14 +32,6 @@ module IdentityMappers
       attr_reader :attributes
 
       def initialize(msg = "No access conclusion")
-        super
-      end
-    end
-
-    class NoLimitedAccessError < Error
-      attr_reader :attributes
-
-      def initialize(msg = "Not allowed in the private beta")
         super
       end
     end

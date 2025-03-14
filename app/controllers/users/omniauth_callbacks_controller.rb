@@ -57,7 +57,7 @@ module Users
 
       @academies = @mapper.aplypro_academies
 
-      raise IdentityMappers::Errors::NoLimitedAccessError if @academies.empty?
+      raise IdentityMappers::Errors::EmptyResponsibilitiesError if @academies.empty?
 
       sign_in(:academic_user, @academic_user)
       session[:academy_codes] = @academies
@@ -117,9 +117,7 @@ module Users
     private
 
     def check_access!
-      check_limited_access!
-
-      check_responsibilites!
+      check_responsibilities!
     rescue IdentityMappers::Errors::EmptyResponsibilitiesError
       begin
         check_access_list!
@@ -175,7 +173,7 @@ module Users
       Sentry.set_user(id: @user.id)
     end
 
-    def check_responsibilites!
+    def check_responsibilities!
       raise(IdentityMappers::Errors::EmptyResponsibilitiesError, nil) if @mapper.no_responsibilities?
     end
 
@@ -205,19 +203,6 @@ module Users
 
     def fetch_establishments!
       @mapper.establishments_in_responsibility_and_delegated.each { |e| Sync::EstablishmentJob.perform_now(e) }
-    end
-
-    def check_limited_access!
-      allowed_uais = ENV
-                     .fetch("APLYPRO_RESTRICTED_ACCESS", "")
-                     .split(",")
-                     .map(&:strip)
-
-      return if allowed_uais.blank?
-
-      allowed = allowed_uais.intersect?(@mapper.all_indicated_uais)
-
-      raise IdentityMappers::Errors::NoLimitedAccessError unless allowed
     end
 
     def auth_hash
