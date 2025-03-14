@@ -249,12 +249,6 @@ fr:
         content: |
           Une erreur inconnue a eu lieu pendant la connexion. L'équipe
           technique a été notifiée du problème.
-      no_limited_access_error:
-        title: Accès restreint
-        content: |
-          APLyPro est actuellement en test avec une sélection
-          d'établissements pilotes. Le lancement national aura lieu
-          prochainement.
       not_authorised_error:
         title: "Erreur d'authentification"
         content: |

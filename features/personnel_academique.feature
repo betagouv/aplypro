@@ -31,4 +31,4 @@ Fonctionnalité: Gestion du personnel académique
     Sachant que je me déconnecte
     Et que je suis un personnel académique sans validation
     Et que je me connecte en tant que personnel académique
-    Alors la page contient "Accès restreint"
+    Alors la page contient "Erreur d'authentification"
