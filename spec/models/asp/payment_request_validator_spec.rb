@@ -269,6 +269,7 @@ RSpec.describe ASP::PaymentRequestValidator do
       expect(validator).to receive(:check_insee_code)
       expect(validator).to receive(:check_address)
       expect(validator).to receive(:check_da_attribution)
+      expect(validator).to receive(:check_da_cancellation)
       expect(validator).to receive(:check_da_abrogation)
       expect(validator).to receive(:check_rib)
       expect(validator).to receive(:check_pfmp)
