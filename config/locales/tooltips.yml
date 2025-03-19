@@ -1,7 +1,7 @@
 fr:
   tooltips:
     report: |
-      Autoriser un report permet de saisir une date jusqu'à laquelle prolonger la durée de la Décision d'Attribution associée à cette scolarité. Il devient ensuite possible de saisir des PFMPs pour l'année scolaire terminée. Cette option est à utiliser pour les élèves qui n'aurait pas pu réaliser leur PFMP au cours de l'année scolaire passée (raisons de santé, fermeture de l'entreprise d'accueil, problèmes liés à la météo....) et la rattrape sur l'année scolaire suivante
+      Un report permet de saisir une date jusqu'à laquelle prolonger la durée de la Décision d'Attribution associée à cette scolarité. Il devient ensuite possible de saisir des PFMPs pour l'année scolaire terminée. Cette option est à utiliser pour les élèves qui n'aurait pas pu réaliser leur PFMP au cours de l'année scolaire passée (raisons de santé, fermeture de l'entreprise d'accueil, problèmes liés à la météo....) et la rattrape sur l'année scolaire suivante
     owner_type: |
       Pour un élève majeur qui ne peut pas ouvrir de compte et souhaite que son allocation soit versée sur le compte d'un tiers dans le cadre de la procédure du mandat sous seing privé (comme indiqué dans la FàQ EduScol), l'option à sélectionner est : 
       <strong>Un élève majeur payé sur le compte d'un tiers</strong>
