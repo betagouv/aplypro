@@ -1,13 +1,14 @@
-%h2.fr-h4 Scolarités
+%h2.fr-mt-4w.fr-h4 Scolarités
 - schoolings.sort_by{ |schooling| schooling.classe.school_year.start_year}.reverse.each do |schooling|
   - pfmps = schooling.pfmps
   - classe = schooling.classe
   - school_year = classe.school_year
-  %section.fr-my-6w
+  %section.fr-my-4w
     %h2.fr-h4
       = link_to "#{school_year} - #{classe.label} - #{classe.establishment}", school_year_class_path(school_year, classe)
 
     = closed_schooling_information_tag(schooling, class: "fr-mb-2w")
+    = extended_end_date_information_tag(schooling, class: "fr-mb-2w")
 
     - if pfmps.none?
       %p Aucune PFMP enregistrée pour le moment.

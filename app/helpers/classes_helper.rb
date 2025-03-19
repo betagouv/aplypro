@@ -43,6 +43,16 @@ module ClassesHelper
     end
   end
 
+  def extended_end_date_information_tag(schooling, **args)
+    return if schooling.blank? || schooling.extended_end_date.blank?
+
+    content_tag(
+      :div,
+      "Date de report : #{schooling.extended_end_date.strftime('%d/%m/%Y')}",
+      class: "fr-badge fr-badge--sm fr-badge--info #{args[:class]}"
+    )
+  end
+
   private
 
   def progress_badge(count, total, **args)
