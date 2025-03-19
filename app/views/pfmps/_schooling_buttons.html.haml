@@ -1,6 +1,6 @@
 .fr-grid-row.fr-grid-row--gutters
-  .fr-col-md-6
-    %h3.fr-h6 Actions
+  .fr-col-md-4
+    %h3.fr-h6 Actions générales
     .fr-grid-row
       .fr-col-10
         %ul.fr-btns-group.fr-btns-group--sm
@@ -15,11 +15,18 @@
                   = button_to "Masquer l'élève de la classe", confirm_removal_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get
                 .fr-col-2
                   = render partial: "shared/tooltip", locals: { message: "remove_student", id: 1 }
+
+  .fr-col-md-4
+    - disabled = !current_user.can_retry_payment?
+    %h3.fr-h6 Actions réservées au chef d'établissement
+    .fr-grid-row
+      .fr-col-10
+        %ul.fr-btns-group.fr-btns-group--sm
           - if schooling.attributive_decision.attached? && !schooling.cancellation_decision.attached?
             %li
               .fr-grid-row.fr-grid-row--middle
                 .fr-col-10
-                  = button_to "Retirer la décision d'attribution", confirm_cancellation_decision_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get
+                  = button_to "Retirer la décision d'attribution", confirm_cancellation_decision_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get, disabled: disabled
                 .fr-col-2
                   = render partial: "shared/tooltip", locals: { message: "cancellation_decision", id: 2 }
             - if !schooling.abrogation_decision.present?
@@ -27,17 +34,18 @@
                 %li
                   .fr-grid-row.fr-grid-row--middle
                     .fr-col-10
-                      = button_to (schooling.extended_end_date.present? ? "Annuler le report" : "Autoriser un report"), confirm_da_extension_school_year_class_schooling_path(selected_school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get
+                      = button_to (schooling.extended_end_date.present? ? "Annuler le report" : "Autoriser un report"), confirm_da_extension_school_year_class_schooling_path(selected_school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get, disabled: disabled
                     .fr-col-2
                       = render partial: "shared/tooltip", locals: { message: "report", id: "#{student.id}" }
               - if schooling.closed?
                 %li
                   .fr-grid-row.fr-grid-row--middle
                     .fr-col-10
-                      = button_to "Abroger la décision d'attribution", confirm_abrogation_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get
+                      = button_to "Abroger la décision d'attribution", confirm_abrogation_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get, disabled: disabled
+
 
   - if schooling.attributive_decision.attached? || schooling.abrogation_decision.attached? || schooling.cancellation_decision.attached?
-    .fr-col-md-6
+    .fr-col-md-4
       %h3.fr-h6 Documents administratifs
       %ul.fr-links-group
         - if schooling.attributive_decision.attached?
