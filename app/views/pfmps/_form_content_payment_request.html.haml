@@ -1,5 +1,5 @@
 = t("payment_requests.actions.#{action}.warning")
-- if current_user.can_retry_payment?
+- if current_user.director?
   = t("payment_requests.actions.#{action}.warning")
   = render partial: "shared/confirmed_director", locals: { message: t("validations.confirm_director") }
   - disabled = false

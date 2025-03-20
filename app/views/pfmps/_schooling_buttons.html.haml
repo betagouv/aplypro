@@ -17,7 +17,7 @@
                   = render partial: "shared/tooltip", locals: { message: "remove_student", id: 1 }
 
   .fr-col-md-4
-    - disabled = !current_user.can_retry_payment?
+    - disabled = !current_user.director?
     %h3.fr-h6 Actions réservées au chef d'établissement
     .fr-grid-row
       .fr-col-10
@@ -26,7 +26,7 @@
             %li
               .fr-grid-row.fr-grid-row--middle
                 .fr-col-10
-                  = button_to "Retirer la décision d'attribution", confirm_cancellation_decision_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get, disabled: disabled
+                  = button_to "Révoquer la décision d'attribution", confirm_cancellation_decision_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get, disabled: disabled
                 .fr-col-2
                   = render partial: "shared/tooltip", locals: { message: "cancellation_decision", id: 2 }
             - if !schooling.abrogation_decision.present?
