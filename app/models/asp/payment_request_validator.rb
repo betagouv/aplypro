@@ -2,8 +2,6 @@
 
 module ASP
   class PaymentRequestValidator < ActiveModel::Validator
-    INSUFFICIENT_FUNDS_MINISTRY = ["masa"].freeze
-
     attr_reader :payment_request
 
     def initialize(payment_request)
@@ -28,9 +26,13 @@ module ASP
     private
 
     def check_funding
-      return unless INSUFFICIENT_FUNDS_MINISTRY.include?(payment_request.pfmp.classe.mef.ministry) && !Rails.env.test?
+      classe = payment_request.pfmp.classe
+      ministry = classe.mef.ministry
+      contract_type_code = classe.establishment.private_contract_type_code
 
-      add_error(:insufficient_funds)
+      if (ministry.eql?("masa") || (ministry.eql?("menj") && !contract_type_code.eql?(99))) && !Rails.env.test?
+        add_error(:insufficient_funds)
+      end
     end
 
     def check_student

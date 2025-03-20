@@ -98,7 +98,7 @@ fr:
               taken: "Une requête de paiement est déjà active pour cette PFMP"
             ready_state_validation:
               attributive_decision_cancelled: "La décision d'attribution sur cette scolarité a été retiré."
-              insufficient_funds: "Un problème de trésorerie au niveau du ministère empêche temporairement le traitement de la demande, veuillez réessayer ultérieurement."
+              insufficient_funds: "L’adoption tardive du budget présenté par le Gouvernement a une conséquence sur sa déclinaison dans les crédits alloués à l’ASP. Les conventions budgétaires engageant la ventilation des fonds sont en cours de signature entre l'ASP et les ministères concernés. Les mises en paiement reprendront très prochainement leur rythme habituel."
               missing_address_country_code: "Le code pays de l'adresse est manquant. Veuillez faire le nécessaire dans BEE ou COLENTAGRI (Fregata) pour que cette information soit renseignée."
               missing_address_postal_code: "Le code postal de l'élève n'est pas renseigné. Veuillez faire le nécessaire dans BEE ou COLENTAGRI (Fregata) pour que cette information soit renseignée."
               missing_address_city_insee_code: "La commune de résidence de l'élève n'est pas renseignée. Veuillez faire le nécessaire dans BEE ou COLENTAGRI (Fregata) pour que cette information soit renseignée."
