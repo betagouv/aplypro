@@ -233,8 +233,8 @@ fr:
           title: "Réintégration de l'élève dans la classe"
           breadcrumb: "Réintégration de l'élève dans la classe"
         confirm_cancellation_decision:
-          title: "Retrait de la décision d'attribution"
-          breadcrumb: "Retrait de la décision d'attribution"
+          title: "Révocation de la décision d'attribution"
+          breadcrumb: "Révocation de la décision d'attribution"
         confirm_abrogation:
           title: "Abrogation de la décision d'attribution"
           breadcrumb: "Abrogation de la décision d'attribution"
