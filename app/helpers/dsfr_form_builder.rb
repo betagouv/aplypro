@@ -8,7 +8,7 @@
 # It takes inspiration from the GOV.UK Form Builder API
 # (https://govuk-form-builder.netlify.app/form-elements/text-input/)
 
-# rubocop:disable Metrics/ClassLength, it's a WIP
+# rubocop:disable Metrics/ClassLength
 class DsfrFormBuilder < ActionView::Helpers::FormBuilder
   include TranslationHelper
 

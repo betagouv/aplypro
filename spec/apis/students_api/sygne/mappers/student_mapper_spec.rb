@@ -16,7 +16,7 @@ describe StudentsApi::Sygne::Mappers::StudentMapper do
     )
   end
 
-  it "maps correctly" do # rubocop:disable RSpec/ExampleLength, just being nice
+  it "maps correctly" do # rubocop:disable RSpec/ExampleLength
     expected = {
       first_name: "Marie",
       biological_sex: :male,
