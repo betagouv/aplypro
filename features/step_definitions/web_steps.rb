@@ -34,7 +34,7 @@ end
 
 Alors("il y a un titre de premier niveau contenant {string}") do |text|
   # le titre est soit le premier h1 ou la légende du premier tableau
-  element = page.all("h1").first || page.all("table caption").first
+  element = page.first("h1") || page.first("table caption")
 
   expect(element.text).to include(text)
 end
