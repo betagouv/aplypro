@@ -41,11 +41,11 @@ module Generate
       schooling.pfmps.each do |pfmp|
         next unless pfmp.paid?
 
-        PfmpManager.new(pfmp).rectify_and_update_attributes!({ day_count: 0 }, address_params)
+        PfmpManager.new(pfmp).rectify_and_update_attributes!({ day_count: 0 }, address_params(schooling))
       end
     end
 
-    def address_params
+    def address_params(schooling)
       schooling.student.attributes.slice(:address_line1,
                                          :address_line2,
                                          :address_postal_code,
