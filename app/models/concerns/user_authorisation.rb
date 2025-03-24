@@ -30,6 +30,10 @@ module UserAuthorisation
       director?
     end
 
+    def can_retry_payment?
+      director?
+    end
+
     def cannot_validate?
       !can_validate?
     end

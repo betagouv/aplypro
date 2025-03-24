@@ -17,7 +17,7 @@
                   = render partial: "shared/tooltip", locals: { message: "remove_student", id: 1 }
 
   .fr-col-md-4
-    - disabled = !current_user.director?
+    - disabled = !current_user.can_validate?
     %h3.fr-h6 Actions réservées au chef d'établissement
     .fr-grid-row
       .fr-col-10
