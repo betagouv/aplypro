@@ -15,8 +15,7 @@ module ASP
       check_insee_code
       check_address
       check_da_attribution
-      check_da_abrogation
-      check_da_cancellation
+      check_da_abrogation_and_cancellation
       check_rib
       check_pfmp
       check_pfmp_overlaps
@@ -66,22 +65,23 @@ module ASP
       add_error(:missing_attributive_decision) if !payment_request.schooling.attributive_decision.attached?
     end
 
-    def check_da_cancellation
-      add_error(:attributive_decision_cancelled) if payment_request.schooling.cancelled?
-    end
+    def check_da_abrogation_and_cancellation # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+      schooling = payment_request.schooling
 
-    def check_da_abrogation # rubocop:disable Metrics/AbcSize
-      if !student.transferred? || (payment_request.schooling.abrogated? && payment_request.pfmp.within_schooling_dates?)
+      add_error(:attributive_decision_cancelled) if schooling.cancelled?
+
+      if !student.transferred? || (payment_request.pfmp.within_schooling_dates? && (schooling.abrogated? ||
+                                                                                    schooling.cancelled?))
         return
       end
 
-      other_schoolings = student.schoolings.excluding(payment_request.schooling).to_a.select do |sc|
-        sc.classe.school_year == payment_request.schooling.classe.school_year
+      other_schoolings = student.schoolings.excluding(schooling).to_a.select do |sc|
+        sc.classe.school_year == schooling.classe.school_year
       end
 
-      return if other_schoolings.all?(&:abrogated?)
+      return if other_schoolings.all? { |sc| sc.abrogated? || sc.cancelled? }
 
-      add_error(:needs_abrogated_attributive_decision)
+      add_error(:needs_abrogated_or_cancelled_attributive_decision)
     end
 
     def check_insee_code

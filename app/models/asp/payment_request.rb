@@ -8,7 +8,7 @@ module ASP
     TRANSITION_RELATION_NAME = :asp_payment_request_transitions
 
     RETRYABLE_INCOMPLETE_VALIDATION_TYPES = %i[
-      needs_abrogated_attributive_decision
+      needs_abrogated_or_cancelled_attributive_decision
       missing_attributive_decision
     ].freeze
 

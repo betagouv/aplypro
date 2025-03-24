@@ -230,8 +230,8 @@ RSpec.describe ASP::PaymentRequestValidator do
     end
   end
 
-  describe "#check_da_abrogation" do
-    context "when student is transferred and schooling needs abrogated attributive decision" do
+  describe "#check_da_abrogation_and_cancellation" do
+    context "when student is transferred and schooling needs abrogated or cancelled attributive decision" do
       let(:other_schooling) { instance_double(Schooling, abrogated?: false) }
       let(:other_classe) { instance_double(Classe, school_year:) }
 
@@ -244,9 +244,18 @@ RSpec.describe ASP::PaymentRequestValidator do
       end
 
       it "adds an error" do
-        expect { validator.send(:check_da_abrogation) }
+        allow(other_schooling).to receive(:cancelled?).and_return(false)
+
+        expect { validator.send(:check_da_abrogation_and_cancellation) }
           .to change { payment_request.errors.details[:ready_state_validation] }
-          .to include(a_hash_including(error: :needs_abrogated_attributive_decision))
+          .to include(a_hash_including(error: :needs_abrogated_or_cancelled_attributive_decision))
+      end
+
+      it "does not add an error" do
+        allow(other_schooling).to receive(:cancelled?).and_return(true)
+
+        expect { validator.send(:check_da_abrogation_and_cancellation) }
+          .not_to change { payment_request.errors.details[:ready_state_validation] }
       end
     end
 
@@ -256,8 +265,20 @@ RSpec.describe ASP::PaymentRequestValidator do
       end
 
       it "does not add an error" do
-        expect { validator.send(:check_da_abrogation) }
+        expect { validator.send(:check_da_abrogation_and_cancellation) }
           .not_to change { payment_request.errors.details[:ready_state_validation] }
+      end
+    end
+
+    context "when conditions for cancellation are not met" do
+      before do
+        allow(schooling).to receive(:cancelled?).and_return(true)
+      end
+
+      it "adds an error" do
+        expect { validator.send(:check_da_abrogation_and_cancellation) }
+          .to change { payment_request.errors.details[:ready_state_validation] }
+          .to include(a_hash_including(error: :attributive_decision_cancelled))
       end
     end
   end
@@ -269,8 +290,7 @@ RSpec.describe ASP::PaymentRequestValidator do
       expect(validator).to receive(:check_insee_code)
       expect(validator).to receive(:check_address)
       expect(validator).to receive(:check_da_attribution)
-      expect(validator).to receive(:check_da_cancellation)
-      expect(validator).to receive(:check_da_abrogation)
+      expect(validator).to receive(:check_da_abrogation_and_cancellation)
       expect(validator).to receive(:check_rib)
       expect(validator).to receive(:check_pfmp)
       expect(validator).to receive(:check_pfmp_overlaps)

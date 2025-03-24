@@ -135,7 +135,7 @@ RSpec.describe ASP::PaymentRequest do
 
   describe "eligible_for_incomplete_retry?" do
     let(:p_r_incomplete_for_abrogation) do
-      create(:asp_payment_request, :incomplete, incomplete_reason: :needs_abrogated_attributive_decision)
+      create(:asp_payment_request, :incomplete, incomplete_reason: :needs_abrogated_or_cancelled_attributive_decision)
     end
     let(:p_r_incomplete_for_missing_da) do
       create(:asp_payment_request, :incomplete, incomplete_reason: :missing_attributive_decision)

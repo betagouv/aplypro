@@ -97,7 +97,7 @@ fr:
             pfmp:
               taken: "Une requête de paiement est déjà active pour cette PFMP"
             ready_state_validation:
-              attributive_decision_cancelled: "La décision d'attribution sur cette scolarité a été retiré."
+              attributive_decision_cancelled: "La décision d'attribution sur cette scolarité a été révoquée."
               insufficient_funds: "L’adoption tardive du budget présenté par le Gouvernement a une conséquence sur sa déclinaison dans les crédits alloués à l’ASP. Les conventions budgétaires engageant la ventilation des fonds sont en cours de signature entre l'ASP et les ministères concernés. Les mises en paiement reprendront très prochainement leur rythme habituel."
               missing_address_country_code: "Le code pays de l'adresse est manquant. Veuillez faire le nécessaire dans BEE ou COLENTAGRI (Fregata) pour que cette information soit renseignée."
               missing_address_postal_code: "Le code postal de l'élève n'est pas renseigné. Veuillez faire le nécessaire dans BEE ou COLENTAGRI (Fregata) pour que cette information soit renseignée."
@@ -115,7 +115,7 @@ fr:
               adult_wrong_owner_type: "Les étudiants majeurs doivent être payés sur leurs propres coordonnées bancaires ou posséder un mandat sous seing privé"
               pfmp_amount: "La PFMP associée doit avoir un montant positif"
               missing_attributive_decision: "Il manque une décision attributive"
-              needs_abrogated_attributive_decision: "Les élèves ayant changés de formation, de statut ou d'établissement doivent avoir une abrogation de leur décision d'attribution passée. Ce document peut être généré dans la liste des élèves."
+              needs_abrogated_or_cancelled_attributive_decision: "Les élèves ayant changés de formation, de statut ou d'établissement doivent avoir une abrogation ou une révocation de leur décision d'attribution passée. Ces documents peuvent être générés dans le détail de l'élève."
               overlaps: "Une autre PFMP existe avec des dates intersectantes de fin et de début. Veuillez supprimer ou modifier l'une des deux."
               cannot_extend_attributive_decision_with_pfmps: "Les élèves ayant changé de formation, de statut ou d'établissement doivent avoir une abrogation de leur décision d'attribution passée. Ce document peut être généré dans la liste des élèves."
 
