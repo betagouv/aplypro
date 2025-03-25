@@ -4,9 +4,12 @@ import "controllers";
 import "chartkick";
 import "Chart.bundle";
 
+let hasRefreshedHomeCharts = false;
+
 document.addEventListener("turbo:load", () => {
   const homeCharts = document.getElementById("home_charts");
-  if (homeCharts) {
+  if (homeCharts && !hasRefreshedHomeCharts) {
+    hasRefreshedHomeCharts = true;
     Turbo.visit(window.location.href, { frame: "home_charts" });
   }
 });
