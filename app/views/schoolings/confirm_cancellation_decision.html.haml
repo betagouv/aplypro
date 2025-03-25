@@ -1,5 +1,6 @@
-.fr-col-md-6
-  = dsfr_alert(type: :warning, title: "Êtes-vous certain(e) de vouloir retirer cette décision d'attribution ?")
+.fr-col-md-8
+  = dsfr_alert(type: :warning, title: "Cette action est IRRÉVERSIBLE !")
+  = dsfr_alert(type: :warning, title: t("tooltips.cancellation_decision"))
 
 .fr-col-md-6.fr-mt-3w
 = form_with url: cancellation_decision_school_year_class_schooling_path(selected_school_year, @classe, @schooling), method: :get do |form|
@@ -11,9 +12,11 @@
     %li
       Classe :
       %span= @schooling.classe.to_long_s
-    %li
-      Fin de scolarité :
-      %span= @schooling.end_date.to_s
+
+    - if @schooling.end_date.present?
+      %li
+        Fin de scolarité :
+        %span= @schooling.end_date.strftime("%d/%m/%Y")
 
   .fr-col-md-6.fr-mt-3w
     = render partial: "shared/confirmed_director", locals: { message: t("panels.attributive_decisions.confirm_director") }

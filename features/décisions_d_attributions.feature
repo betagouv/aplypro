@@ -65,11 +65,8 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
   Scénario: Le personnel peut reporter une décision d'attribution
     Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité
     Et que l'élève "Curie Marie" a une décision d'attribution
-    Et que je consulte la classe de "1MELEC"
-    Alors je peux voir dans le tableau "Liste des élèves"
-      | Élèves (10) | Décisions d'attribution (0/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
-      |             | Autoriser un report            |                              |           |
-    Quand je clique sur le premier "Autoriser un report"
+    Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
+    Quand je clique sur "Autoriser un report"
     Alors la page contient "Date de report"
     Quand je remplis "Date de report" avec "#{Date.parse('#{SchoolYear.current.end_date}-12-31')}"
     Et que je coche la case de responsable légal
@@ -81,8 +78,8 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité
     Et que l'élève "Curie Marie" a une décision d'attribution
     Et que l'élève "Curie Marie" a un report de décision d'attribution
-    Et que je consulte la classe de "1MELEC"
-    Quand je clique sur le premier "Annuler le report"
+    Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
+    Quand je clique sur "Annuler le report"
     Alors la page contient "Êtes-vous certain(e) de vouloir supprimer le report de cette décision d'attribution ?"
     Et que je coche la case de responsable légal
     Lorsque je clique sur "Supprimer le report"
@@ -94,26 +91,34 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Et que je renseigne une PFMP provisoire dans la période de report pour l'élève "Curie Marie"
     Et que l'élève "Curie Marie" a une décision d'attribution
     Et que l'élève "Curie Marie" a un report de décision d'attribution
-    Et que je consulte la classe de "1MELEC"
-    Quand je clique sur le premier "Annuler le report"
+    Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
+    Quand je clique sur "Annuler le report"
     Alors la page contient "Êtes-vous certain(e) de vouloir supprimer le report de cette décision d'attribution ?"
     Et que je coche la case de responsable légal
     Lorsque je clique sur "Supprimer le report"
     Alors la page contient "Le report de la décision d'attribution de Curie Marie n'a pas pu être supprimé car celui ci contient une PFMP"
 
-  Scénario: Le personnel peut retirer une décision d'attribution
+  Scénario: Le personnel peut révoquer une décision d'attribution
     Lorsque je suis responsable légal et que je génère les décisions d'attribution manquantes
     Et que la génération des décisions d'attribution manquantes est complètement finie
     Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
-    Alors la page contient "Retirer la décision d'attribution"
-    Et la page ne contient pas "Télécharger la décision de retrait"
-    Quand je clique sur "Retirer la décision d'attribution"
+    Alors la page ne contient pas "Télécharger la décision de retrait"
+    Quand je clique sur "Révoquer la décision d'attribution"
     Et que je coche la case de responsable légal
     Et que je clique sur "Confirmer le retrait"
     Alors la page contient "La décision d'attribution de Curie Marie a bien été retirée"
-    Et la page ne contient pas "Retirer la décision d'attribution"
+    Et la page ne contient pas "Révoquer la décision d'attribution"
     Et la page contient "Télécharger la décision de retrait"
     Quand je consulte la classe de "1MELEC"
     Alors je peux voir dans le tableau "Élèves masqués manuellement de la classe"
       | Élèves (1)    | Réintégration de l'élève dans la classe      |
       | Curie Marie   | Réintégrer Curie Marie dans la classe 1MELEC |
+
+  Scénario: Seul le chef d'établissement a accès à certaines actions
+    Lorsque je suis responsable légal et que je génère les décisions d'attribution manquantes
+    Et que la génération des décisions d'attribution manquantes est complètement finie
+    Sachant que je me déconnecte
+    Et que je me connecte en tant que personnel autorisé de l'établissement "DINUM"
+    Et que je passe l'écran d'accueil
+    Quand je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
+    Alors la page contient un bouton "Révoquer la décision d'attribution" désactivé
