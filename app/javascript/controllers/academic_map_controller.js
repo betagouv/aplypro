@@ -51,12 +51,12 @@ export default class extends Controller {
       { id: 'map-24', path: '/data/24_CRETEIL.geojson' },
       { id: 'map-25', path: '/data/25_VERSAILLES.geojson' },
       { id: 'map-27', path: '/data/27_CORSE.geojson' },
-      { id: 'map-28', path: '/data/28_REUNION.geojson', center: [55.5, -21.1], scale: 10000 },
-      { id: 'map-31', path: '/data/31_MARTINIQUE.geojson', center: [-61.0, 14.6], scale: 10000 },
-      { id: 'map-32', path: '/data/32_GUADELOUPE.geojson', center: [-61.5, 16.25], scale: 10000 },
-      { id: 'map-33', path: '/data/33_GUYANE.geojson', center: [-53.0, 4.0], scale: 1000 },
-      { id: 'map-43', path: '/data/43_MAYOTTE.geojson', center: [45.2, -12.8], scale: 15000 },
-      { id: 'map-44', path: '/data/44_SAINT_PIERRE_ET_MIQUELON.geojson', center: [-56.3, 47.0], scale: 10000 },
+      { id: 'map-28', path: '/data/28_REUNION.geojson' },
+      { id: 'map-31', path: '/data/31_MARTINIQUE.geojson' },
+      { id: 'map-32', path: '/data/32_GUADELOUPE.geojson' },
+      { id: 'map-33', path: '/data/33_GUYANE.geojson' },
+      { id: 'map-43', path: '/data/43_MAYOTTE.geojson' },
+      { id: 'map-44', path: '/data/44_SAINT_PIERRE_ET_MIQUELON.geojson' },
       { id: 'map-70', path: '/data/70_NORMANDIE.geojson' }
     ]
 
@@ -67,7 +67,7 @@ export default class extends Controller {
     })
   }
 
-  createMap(geoJsonPath, centerCoords, scale) {
+  createMap(geoJsonPath) {
     const d3 = this.d3
     const container = document.getElementById('map-container')
 
@@ -80,7 +80,7 @@ export default class extends Controller {
     container.innerHTML = ''
 
     const width = container.offsetWidth
-    const height = 140
+    const height = 540
 
     const svg = d3.select("#map-container")
       .append("svg")
@@ -89,15 +89,11 @@ export default class extends Controller {
 
     const g = svg.append("g")
 
-    const projection = d3.geoMercator()
-      .center(centerCoords)
-      .scale(scale)
-      .translate([width / 2, height / 2])
-
-    const path = d3.geoPath()
-      .projection(projection)
-
     d3.json(geoJsonPath).then((geojson) => {
+      const projection = d3.geoMercator().fitSize([width, height], geojson)
+
+      const path = d3.geoPath().projection(projection)
+
       g.selectAll("path")
         .data(geojson.features)
         .enter()
