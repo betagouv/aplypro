@@ -35,7 +35,9 @@ module ASP
       payment_request.pfmp.update!(asp_prestation_dossier_id: attrs["idPretaDoss"])
     rescue ActiveRecord::RecordNotUnique => e
       # Attempt automatic resolution of unique constraint violation using merger service object
-      Student::Merger.new(payment_request.student.duplicates) if e.message.include?("index_students_on_asp_individu_id")
+      if e.message.include?("index_students_on_asp_individu_id")
+        StudentMerger.new(payment_request.student.duplicates.to_a).merge!
+      end
 
       raise ASP::Errors::IntegrationError,
             "CSV Integration error for p_r #{payment_request.id} for data" \
