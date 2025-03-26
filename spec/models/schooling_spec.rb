@@ -409,4 +409,110 @@ RSpec.describe Schooling do
       end
     end
   end
+
+  describe "#nullified?" do
+    context "when schooling is abrogated" do
+      let(:schooling) { create(:schooling, :closed, :with_abrogation_decision) }
+
+      it "returns true" do
+        expect(schooling.nullified?).to be true
+      end
+    end
+
+    context "when schooling is cancelled" do
+      let(:schooling) { create(:schooling) }
+
+      before do
+        schooling.cancellation_decision.attach(
+          io: StringIO.new("cancellation document"),
+          filename: "cancellation.pdf",
+          content_type: "application/pdf"
+        )
+      end
+
+      it "returns true" do
+        expect(schooling.nullified?).to be true
+      end
+    end
+
+    context "when schooling is neither abrogated nor cancelled" do
+      let(:schooling) { create(:schooling) }
+
+      it "returns false" do
+        expect(schooling.nullified?).to be false
+      end
+    end
+  end
+
+  describe "#abrogated?" do
+    context "when schooling is closed with abrogation decision attached" do
+      let(:schooling) { create(:schooling, :closed, :with_abrogation_decision) }
+
+      it "returns true" do
+        expect(schooling.abrogated?).to be true
+      end
+    end
+
+    context "when schooling is closed but without abrogation" do
+      let(:schooling) { create(:schooling, :closed) }
+
+      it "returns false" do
+        expect(schooling.abrogated?).to be false
+      end
+    end
+
+    context "when schooling is not closed but has abrogation" do
+      let(:schooling) { create(:schooling, :with_abrogation_decision) }
+
+      before do
+        schooling.update!(end_date: nil)
+      end
+
+      it "returns false" do
+        expect(schooling.abrogated?).to be false
+      end
+    end
+
+    context "when schooling is neither closed nor has abrogation" do
+      let(:schooling) { create(:schooling) }
+
+      it "returns false" do
+        expect(schooling.abrogated?).to be false
+      end
+    end
+  end
+
+  describe "#cancelled?" do
+    context "when schooling has cancellation attached" do
+      let(:schooling) { create(:schooling) }
+
+      before do
+        schooling.cancellation_decision.attach(
+          io: StringIO.new("cancellation document"),
+          filename: "cancellation.pdf",
+          content_type: "application/pdf"
+        )
+      end
+
+      it "returns true" do
+        expect(schooling.cancelled?).to be true
+      end
+    end
+
+    context "when schooling does not have cancellation attached" do
+      let(:schooling) { create(:schooling) }
+
+      it "returns false" do
+        expect(schooling.cancelled?).to be false
+      end
+    end
+
+    context "when schooling has other decisions but not cancellation" do
+      let(:schooling) { create(:schooling, :with_attributive_decision) }
+
+      it "returns false" do
+        expect(schooling.cancelled?).to be false
+      end
+    end
+  end
 end
