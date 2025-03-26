@@ -84,6 +84,10 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end_date.present? && end_date <= Date.current
   end
 
+  def nullified?
+    abrogated? || cancelled?
+  end
+
   def abrogated?
     closed? && abrogation_decision.attached?
   end
