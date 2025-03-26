@@ -34,12 +34,14 @@ module ASP
       payment_request.schooling.update!(asp_dossier_id: attrs["idDoss"])
       payment_request.pfmp.update!(asp_prestation_dossier_id: attrs["idPretaDoss"])
     rescue ActiveRecord::RecordNotUnique => e
-      Sentry.capture_exception(
-        ASP::Errors::IntegrationError.new(
-          "Integration error for p_r #{payment_request.id} for data #{transition.metadata} with message: #{e.message}"
-        )
-      )
-      raise e
+      # Attempt automatic resolution of unique constraint violation using merger service object
+      if e.message.include?("index_students_on_asp_individu_id")
+        StudentMerger.new(payment_request.student.duplicates.to_a).merge!
+      end
+
+      raise ASP::Errors::IntegrationError,
+            "CSV Integration error for p_r #{payment_request.id} for data" \
+            "#{transition.metadata} with message: #{e.message}"
     end
 
     after_transition(from: :pending, to: :ready) do |payment_request, _|
