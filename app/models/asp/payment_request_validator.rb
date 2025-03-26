@@ -79,7 +79,7 @@ module ASP
         sc.classe.school_year == payment_request.schooling.classe.school_year
       end
 
-      return if other_schoolings.all?(&:abrogated?)
+      return if other_schoolings.all?(&:nullified?)
 
       add_error(:needs_abrogated_attributive_decision)
     end
