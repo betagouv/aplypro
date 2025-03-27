@@ -6,7 +6,7 @@ export default class extends Controller {
 
     try {
       this.selectedAcademy = parseInt(this.element.dataset.selectedAcademyValue)
-      this.establishments = JSON.parse(this.element.dataset.establishmentsForAcademy)
+      this.parsedEstablishments = JSON.parse(this.element.dataset.establishmentsForAcademy)
       this.initMap()
     } catch (error) {
       console.error("Error parsing data:", error)
@@ -110,8 +110,20 @@ export default class extends Controller {
     const d3 = this.d3
 
     d3.json("/data/ETABLISSEMENTS_FRANCE.geojson").then((geojson) => {
+      const tooltip = d3.select("#map-container")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("position", "absolute")
+        .style("background", "white")
+        .style("padding", "5px")
+        .style("border-radius", "5px")
+        .style("pointer-events", "none")
+        .style("display", "none")
+        .style("z-index", "1000")
+        .style("box-shadow", "0 2px 4px rgba(0,0,0,0.2)")
+
       g.selectAll("circle")
-        .data(geojson.features.filter(d => this.establishments.includes(d.properties.Code_UAI)))
+        .data(geojson.features.filter(d => this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)))
         .enter()
         .append("circle")
         .filter(d => d.geometry && d.geometry.coordinates)
@@ -121,9 +133,41 @@ export default class extends Controller {
         .attr("fill", "red")
         .attr("stroke", "black")
         .attr("stroke-width", 1)
-        .attr("opacity", 0.8)
+        .on("mouseover", (event, d) => this.mouseOver(event, d, tooltip))
+        .on("mouseout", (event, d) => this.mouseOut(event, tooltip))
+        .on("mousemove", (event, d) => this.mouseMove(event, tooltip))
     }).catch((error) => {
       console.error("Error loading the geo file:", error)
     })
+  }
+
+  mouseOver(event, d, tooltip) {
+    const e = this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI);
+
+    this.d3.select(event.currentTarget)
+      .transition()
+      .duration(200)
+      .attr("fill", "#88fdaa")
+
+    tooltip
+      .style("left", (event.pageX + 10) + "px")
+      .style("top", (event.pageY - 10) + "px")
+      .style("display", "block")
+      .html(`${e.uai}<br>${e.name}<br>${e.address_line1}, ${e.city}, ${e.postal_code}`)
+  }
+
+  mouseOut(event, d, tooltip) {
+    this.d3.select(event.currentTarget)
+      .transition()
+      .duration(200)
+      .attr("fill", "red")
+
+    tooltip.style("display", "none")
+  }
+
+  mouseMove(event, tooltip) {
+    tooltip
+      .style("left", (event.pageX + 10) + "px")
+      .style("top", (event.pageY - 10) + "px")
   }
 }
