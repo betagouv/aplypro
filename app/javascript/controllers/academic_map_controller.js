@@ -6,6 +6,7 @@ export default class extends Controller {
 
     try {
       this.selectedAcademy = parseInt(this.element.dataset.selectedAcademyValue)
+      this.establishments = JSON.parse(this.element.dataset.establishmentsForAcademy)
       this.initMap()
     } catch (error) {
       console.error("Error parsing data:", error)
@@ -62,7 +63,7 @@ export default class extends Controller {
 
     maps.forEach(map => {
       if(map.id === 'map-' + this.selectedAcademy){
-        return this.createMap(map.path, map.center, map.scale)
+        return this.createMap(map.path)
       }
     })
   }
@@ -92,14 +93,35 @@ export default class extends Controller {
     d3.json(geoJsonPath).then((geojson) => {
       const projection = d3.geoMercator().fitSize([width, height], geojson)
 
-      const path = d3.geoPath().projection(projection)
-
       g.selectAll("path")
         .data(geojson.features)
         .enter()
         .append("path")
-        .attr("d", path)
+        .attr("d", d3.geoPath().projection(projection))
         .attr("opacity", 0.7)
+
+      this.createEstablishmentsPoints(g, projection)
+    }).catch((error) => {
+      console.error("Error loading the geo file:", error)
+    })
+  }
+
+  createEstablishmentsPoints(g, projection) {
+    const d3 = this.d3
+
+    d3.json("/data/ETABLISSEMENTS_FRANCE.geojson").then((geojson) => {
+      g.selectAll("circle")
+        .data(geojson.features.filter(d => this.establishments.includes(d.properties.Code_UAI)))
+        .enter()
+        .append("circle")
+        .filter(d => d.geometry && d.geometry.coordinates)
+        .attr("cx", d => projection(d.geometry.coordinates)[0]) // Longitude → X
+        .attr("cy", d => projection(d.geometry.coordinates)[1]) // Latitude → Y
+        .attr("r", 5) // Taille du point
+        .attr("fill", "red")
+        .attr("stroke", "black")
+        .attr("stroke-width", 1)
+        .attr("opacity", 0.8)
     }).catch((error) => {
       console.error("Error loading the geo file:", error)
     })

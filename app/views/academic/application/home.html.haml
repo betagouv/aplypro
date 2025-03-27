@@ -3,10 +3,11 @@
     .stat
       %h2 Répartition géographique des établissements
       .map-section
-        %h5.text-center Région académique : #{@selected_academy}
+        %h5.text-center Académie : #{@selected_academy}
         #map-container{
           data: {
             controller: "academic_map",
-            selected_academy_value: @selected_academy.html_safe
+            selected_academy_value: @selected_academy.html_safe,
+            establishments_for_academy: @establishments_for_academy.to_json.html_safe
           }
         }

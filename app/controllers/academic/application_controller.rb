@@ -17,7 +17,9 @@ module Academic
 
     helper_method :current_user, :selected_academy
 
-    def home; end
+    def home
+      @establishments_for_academy = Establishment.where(academy_code: @selected_academy).map(&:uai) || []
+    end
 
     def login; end
 
