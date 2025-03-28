@@ -7,6 +7,8 @@ export default class extends Controller {
     try {
       this.selectedAcademy = parseInt(this.element.dataset.selectedAcademyValue)
       this.parsedEstablishments = JSON.parse(this.element.dataset.establishmentsForAcademy)
+      this.parsedNbSchoolings = JSON.parse(this.element.dataset.nbSchoolingsPerEstablishments)
+      console.log(this.parsedNbSchoolings)
       this.initMap()
     } catch (error) {
       console.error("Error parsing data:", error)
@@ -161,7 +163,9 @@ export default class extends Controller {
       .style("left", (event.pageX + 10) + "px")
       .style("top", (event.pageY - 10) + "px")
       .style("display", "block")
-      .html(`${e.uai}<br>${e.name}<br>${e.address_line1}, ${e.city}, ${e.postal_code}`)
+      .html(`${e.uai} - ${e.name}<br>
+             ${e.address_line1}, ${e.city}, ${e.postal_code}<br>
+             Nombre de scolarités : ${this.parsedNbSchoolings[d.properties.Code_UAI]}`)
   }
 
   mouseOut(event, tooltip) {
