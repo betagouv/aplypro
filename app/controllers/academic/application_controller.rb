@@ -22,6 +22,9 @@ module Academic
       @nb_schoolings_per_establishments = @establishments_for_academy.left_joins(:schoolings)
                                                                      .group(:uai)
                                                                      .count(:schoolings)
+      @amounts_per_establishments = @establishments_for_academy.left_joins(:pfmps)
+                                                               .group(:uai)
+                                                               .sum(:amount)
     end
 
     def login; end

@@ -8,6 +8,7 @@ export default class extends Controller {
       this.selectedAcademy = parseInt(this.element.dataset.selectedAcademyValue)
       this.parsedEstablishments = JSON.parse(this.element.dataset.establishmentsForAcademy)
       this.parsedNbSchoolings = JSON.parse(this.element.dataset.nbSchoolingsPerEstablishments)
+      this.parsedAmounts = JSON.parse(this.element.dataset.amountsPerEstablishments)
       console.log(this.parsedNbSchoolings)
       this.initMap()
     } catch (error) {
@@ -165,7 +166,8 @@ export default class extends Controller {
       .style("display", "block")
       .html(`${e.uai} - ${e.name}<br>
              ${e.address_line1}, ${e.city}, ${e.postal_code}<br>
-             Nombre de scolarités : ${this.parsedNbSchoolings[d.properties.Code_UAI]}`)
+             Nombre de scolarités : ${this.parsedNbSchoolings[e.uai]}<br>
+             Montant total payé : ${this.parsedAmounts[e.uai]} €`)
   }
 
   mouseOut(event, tooltip) {
