@@ -9,7 +9,6 @@ export default class extends Controller {
       this.parsedEstablishments = JSON.parse(this.element.dataset.establishmentsForAcademy)
       this.parsedNbSchoolings = JSON.parse(this.element.dataset.nbSchoolingsPerEstablishments)
       this.parsedAmounts = JSON.parse(this.element.dataset.amountsPerEstablishments)
-      console.log(this.parsedNbSchoolings)
       this.initMap()
     } catch (error) {
       console.error("Error parsing data:", error)
@@ -97,6 +96,11 @@ export default class extends Controller {
       .scaleExtent([1, 10]) // Zoom entre 1x et 10x
       .on("zoom", (event) => {
         g.attr("transform", event.transform);
+
+        // Mettre à jour la taille des cercles et du contour en fonction du zoom
+        g.selectAll("circle")
+          .attr("r", d => this.sizeScale(this.parsedNbSchoolings[d.properties.Code_UAI] || 0) / event.transform.k)
+          .attr("stroke-width", 1 / event.transform.k); // Épaisseur du contour adaptative
       });
 
     svg.call(zoom);
@@ -140,10 +144,10 @@ export default class extends Controller {
         .filter(d => d.geometry && d.geometry.coordinates)
         .attr("cx", d => projection(d.geometry.coordinates)[0]) // Longitude → X
         .attr("cy", d => projection(d.geometry.coordinates)[1]) // Latitude → Y
-        .attr("r", 5) // Taille du point
+        .attr("r", d => this.sizeScale(this.parsedNbSchoolings[d.properties.Code_UAI] || 0)) // Taille initiale
         .attr("fill", "red")
         .attr("stroke", "black")
-        .attr("stroke-width", 1)
+        .attr("stroke-width", 1)  // Épaisseur initiale du contour
         .on("mouseover", (event, d) => this.mouseOver(event, d, tooltip))
         .on("mouseout", (event, d) => this.mouseOut(event, tooltip))
         .on("mousemove", (event, d) => this.mouseMove(event, tooltip))
@@ -183,5 +187,12 @@ export default class extends Controller {
     tooltip
       .style("left", (event.pageX + 10) + "px")
       .style("top", (event.pageY - 10) + "px")
+  }
+
+  sizeScale(amount) {
+    const scale = this.d3.scaleSqrt()
+      .domain([0, Math.max(...Object.values(this.parsedNbSchoolings))])
+      .range([3, 15]); // Taille des cercles (min 3px, max 15px)
+    return scale(amount || 0);
   }
 }
