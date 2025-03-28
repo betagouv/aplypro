@@ -90,6 +90,14 @@ export default class extends Controller {
 
     const g = svg.append("g")
 
+    const zoom = d3.zoom()
+      .scaleExtent([1, 10]) // Zoom entre 1x et 10x
+      .on("zoom", (event) => {
+        g.attr("transform", event.transform);
+      });
+
+    svg.call(zoom);
+
     d3.json(geoJsonPath).then((geojson) => {
       const projection = d3.geoMercator().fitSize([width, height], geojson)
 
@@ -156,7 +164,7 @@ export default class extends Controller {
       .html(`${e.uai}<br>${e.name}<br>${e.address_line1}, ${e.city}, ${e.postal_code}`)
   }
 
-  mouseOut(event, d, tooltip) {
+  mouseOut(event, tooltip) {
     this.d3.select(event.currentTarget)
       .transition()
       .duration(200)
