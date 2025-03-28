@@ -1,3 +1,15 @@
 .home.fr-container
   .fr-grid-row.fr-grid-row--center
-    %p= "Code académique sélectionné : #{selected_academy}"
+    .stat
+      %h2 Répartition géographique des établissements
+      .map-section
+        %h5.text-center Académie : #{@selected_academy}
+        #map-container{
+          data: {
+            controller: "academic_map",
+            selected_academy_value: @selected_academy.html_safe,
+            establishments_for_academy: @establishments_for_academy.to_json.html_safe,
+            nb_schoolings_per_establishments: @nb_schoolings_per_establishments.to_json.html_safe,
+            amounts_per_establishments: @amounts_per_establishments.to_json.html_safe,
+          }
+        }

@@ -17,7 +17,15 @@ module Academic
 
     helper_method :current_user, :selected_academy
 
-    def home; end
+    def home
+      @establishments_for_academy = Establishment.where(academy_code: @selected_academy) || []
+      @nb_schoolings_per_establishments = @establishments_for_academy.left_joins(:schoolings)
+                                                                     .group(:uai)
+                                                                     .count(:schoolings)
+      @amounts_per_establishments = @establishments_for_academy.left_joins(:pfmps)
+                                                               .group(:uai)
+                                                               .sum(:amount)
+    end
 
     def login; end
 
