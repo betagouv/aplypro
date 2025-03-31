@@ -9,6 +9,9 @@ export default class extends Controller {
       this.parsedEstablishments = JSON.parse(this.element.dataset.establishmentsForAcademy)
       this.parsedNbSchoolings = JSON.parse(this.element.dataset.nbSchoolingsPerEstablishments)
       this.parsedAmounts = JSON.parse(this.element.dataset.amountsPerEstablishments)
+
+      this.maxNbSchoolings = Math.max(...Object.values(this.parsedNbSchoolings))
+      this.maxAmount = Math.max(...Object.values(this.parsedAmounts))
       this.initMap()
     } catch (error) {
       console.error("Error parsing data:", error)
@@ -99,7 +102,7 @@ export default class extends Controller {
 
         // Mettre à jour la taille des cercles et du contour en fonction du zoom
         g.selectAll("circle")
-          .attr("r", d => this.sizeScale(this.parsedNbSchoolings[d.properties.Code_UAI] || 0) / event.transform.k)
+          .attr("r", d => this.sizeScale(this.parsedNbSchoolings[d.properties.Code_UAI]) / event.transform.k)
           .attr("stroke-width", 1 / event.transform.k); // Épaisseur du contour adaptative
       });
 
@@ -142,14 +145,14 @@ export default class extends Controller {
         .enter()
         .append("circle")
         .filter(d => d.geometry && d.geometry.coordinates)
-        .attr("cx", d => projection(d.geometry.coordinates)[0]) // Longitude → X
-        .attr("cy", d => projection(d.geometry.coordinates)[1]) // Latitude → Y
-        .attr("r", d => this.sizeScale(this.parsedNbSchoolings[d.properties.Code_UAI] || 0)) // Taille initiale
-        .attr("fill", "red")
+        .attr("cx", d => projection(d.geometry.coordinates)[0])
+        .attr("cy", d => projection(d.geometry.coordinates)[1])
+        .attr("r", d => this.sizeScale(this.parsedNbSchoolings[d.properties.Code_UAI]))
+        .attr("fill", d => this.colorScale(this.parsedAmounts[d.properties.Code_UAI]))
         .attr("stroke", "black")
         .attr("stroke-width", 1)  // Épaisseur initiale du contour
         .on("mouseover", (event, d) => this.mouseOver(event, d, tooltip))
-        .on("mouseout", (event, d) => this.mouseOut(event, tooltip))
+        .on("mouseout", (event, d) => this.mouseOut(event, d, tooltip))
         .on("mousemove", (event, d) => this.mouseMove(event, tooltip))
     }).catch((error) => {
       console.error("Error loading the geo file:", error)
@@ -174,11 +177,11 @@ export default class extends Controller {
              Montant total payé : ${this.parsedAmounts[e.uai]} €`)
   }
 
-  mouseOut(event, tooltip) {
+  mouseOut(event, d, tooltip) {
     this.d3.select(event.currentTarget)
       .transition()
       .duration(200)
-      .attr("fill", "red")
+      .attr("fill", this.colorScale(this.parsedAmounts[d.properties.Code_UAI]))
 
     tooltip.style("display", "none")
   }
@@ -189,10 +192,17 @@ export default class extends Controller {
       .style("top", (event.pageY - 10) + "px")
   }
 
-  sizeScale(amount) {
+  sizeScale(nbSchoolings) {
     const scale = this.d3.scaleSqrt()
-      .domain([0, Math.max(...Object.values(this.parsedNbSchoolings))])
+      .domain([0, this.maxNbSchoolings])
       .range([3, 15]); // Taille des cercles (min 3px, max 15px)
-    return scale(amount || 0);
+    return scale(nbSchoolings || 0);
+  }
+
+  colorScale(amount) {
+    const scale = this.d3.scaleLinear()
+      .domain([0, this.maxAmount])
+      .range(["#bccdff", "#000091"])
+    return scale(amount || 0)
   }
 }
