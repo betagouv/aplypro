@@ -2,19 +2,19 @@
 
 Fonctionnalité: Gestion du personnel académique
   Contexte:
-    Sachant que je suis un personnel académique de "Clermont-Ferrand"
+    Sachant que je suis un personnel académique de "06"
     Et que je me connecte en tant que personnel académique
 
   Scénario: Le personnel académique a accès à la page d'accueil
-    Alors la page contient "Code académique sélectionné : Clermont-Ferrand"
+    Alors la page contient "Académie : 06"
 
   Scénario: Le personnel académique a accès à plusieurs académies
     Sachant que je me déconnecte
-    Et que je suis un personnel académique des académies de "Montpellier, Toulouse"
+    Et que je suis un personnel académique des académies de "11, 16"
     Quand je me connecte en tant que personnel académique
-    Et que je sélectionne "Montpellier" pour "Académie"
+    Et que je sélectionne "11" pour "Académie"
     Et que je clique sur "Continuez avec cette académie"
-    Alors la page contient "Code académique sélectionné : Montpellier"
+    Alors la page contient "Académie : 11"
 
   Scénario: Le personnel académique est redirigé vers la page de connexion académique en cas d'erreur de connexion
     Sachant que je me déconnecte
