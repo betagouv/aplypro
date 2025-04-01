@@ -30,9 +30,9 @@ module ASP
       ministry = classe.mef.ministry
       contract_type_code = classe.establishment.private_contract_type_code
 
-      if (ministry.eql?("masa") || (ministry.eql?("menj") && !contract_type_code.eql?(99))) && !Rails.env.test?
-        add_error(:insufficient_funds)
-      end
+      return unless (ministry.eql?("menj") && !contract_type_code.eql?(99)) && !Rails.env.test?
+
+      add_error(:insufficient_funds)
     end
 
     def check_student
