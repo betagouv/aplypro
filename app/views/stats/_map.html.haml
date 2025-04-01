@@ -1,7 +1,7 @@
 .stat
-  %h2 Répartition géographique des montants des PFMPs
+  %h3 Répartition géographique des montants des PFMPs
   .map-section
-    %h5.text-center Métropole
+    %h4.text-center Métropole
     #map-container{
       data: {
         controller: "map",
@@ -10,6 +10,7 @@
       },
       style: "width: 100%; height: 540px;"
     }
+  %h4.text-center DOM-TOM
   .overseas-maps-grid{style: "display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; max-width: 800px; margin-left: auto; margin-right: auto;"}
     .map-section
       %h5.text-center Guadeloupe
