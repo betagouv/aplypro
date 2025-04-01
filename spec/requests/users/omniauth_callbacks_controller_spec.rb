@@ -53,4 +53,47 @@ RSpec.describe Users::OmniauthCallbacksController do
       expect(response).to redirect_to("/users/auth/failure?message=invalid_credentials&strategy=fim")
     end
   end
+
+  describe "GET #fim with existing user" do
+    before do
+      User.create!(
+        provider: "fim",
+        uid: "original_uid",
+        email: "existing@example.com",
+        name: "Original Name",
+        token: "original_token",
+        secret: "nope"
+      )
+
+      OmniAuth.config.mock_auth[:fim] = OmniAuth::AuthHash.new(
+        provider: "fim",
+        uid: "new_uid",
+        info: {
+          email: "existing@example.com",
+          name: "Updated Name"
+        },
+        credentials: {
+          token: "nope2"
+        },
+        extra: {
+          raw_info: {
+            sub: "new_uid",
+            email: "existing@example.com",
+            FrEduRne: ["0123456X$UAJ$PU$ADM$111$T3$LYC$340"]
+          }
+        }
+      )
+    end
+
+    it "updates existing user instead of creating new one" do # rubocop:disable RSpec/MultipleExpectations,RSpec/ExampleLength
+      expect do
+        get "/users/auth/fim/callback"
+      end.not_to change(User, :count)
+
+      user = User.find_by(email: "existing@example.com", provider: "fim")
+      expect(user.token).to eq("nope2")
+      expect(user.name).to eq("Updated Name")
+      expect(user.uid).to eq("new_uid")
+    end
+  end
 end

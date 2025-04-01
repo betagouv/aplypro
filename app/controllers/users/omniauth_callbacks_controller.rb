@@ -32,7 +32,7 @@ module Users
     def oidc
       parse_identity
 
-      @user = User.from_oidc(auth_hash).tap(&:save!)
+      attempt_user_creation
 
       add_auth_breadcrumb(data: { user_id: @user.id }, message: "Successfully parsed user")
 
@@ -217,6 +217,24 @@ module Users
           message: message
         )
       )
+    end
+
+    def attempt_user_creation # rubocop:disable Metrics/AbcSize
+      User.transaction do
+        @user = User.from_oidc(auth_hash)
+
+        if (existing_user = User.find_by(email: @user.email, provider: @user.provider))
+          existing_user.update!(
+            token: auth_hash["credentials"]["token"],
+            uid: auth_hash["uid"],
+            name: auth_hash["info"]["name"],
+            oidc_attributes: auth_hash
+          )
+          @user = existing_user
+        else
+          @user.save!
+        end
+      end
     end
   end
 end
