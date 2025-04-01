@@ -1,4 +1,5 @@
 import {Controller} from "@hotwired/stimulus"
+import L from "leaflet"
 
 export default class extends Controller {
   async connect() {
@@ -12,197 +13,156 @@ export default class extends Controller {
 
       this.maxNbSchoolings = Math.max(...Object.values(this.parsedNbSchoolings))
       this.maxAmount = Math.max(...Object.values(this.parsedAmounts))
-      this.initMap()
+
+      this.createMap()
     } catch (error) {
       console.error("Error parsing data:", error)
     }
   }
 
   disconnect() {
-    const container = document.getElementById('map-container')
-    if (container) {
-      container.removeAttribute('data-initialized')
-      container.innerHTML = ''
-    }
+    this.map.remove()
   }
 
-  initMap() {
-    if (!this.selectedAcademy) {
-      console.error("Missing data values")
-      return
-    }
+  createMap() {
+    this.map = L.map('map-container', {attributionControl: false})
 
-    const maps = [
-      { id: 'map-1', path: '/data/01_PARIS.geojson' },
-      { id: 'map-2', path: '/data/02_AIX_MARSEILLE.geojson' },
-      { id: 'map-3', path: '/data/03_BESANCON.geojson' },
-      { id: 'map-4', path: '/data/04_BORDEAUX.geojson' },
-      { id: 'map-6', path: '/data/06_CLERMONT_FERRAND.geojson' },
-      { id: 'map-7', path: '/data/07_DIJON.geojson' },
-      { id: 'map-8', path: '/data/08_GRENOBLE.geojson' },
-      { id: 'map-9', path: '/data/09_LILLE.geojson' },
-      { id: 'map-10', path: '/data/10_LYON.geojson' },
-      { id: 'map-11', path: '/data/11_MONTPELLIER.geojson' },
-      { id: 'map-12', path: '/data/12_NANCY_METZ.geojson' },
-      { id: 'map-13', path: '/data/13_POITIERS.geojson' },
-      { id: 'map-14', path: '/data/14_RENNES.geojson' },
-      { id: 'map-15', path: '/data/15_STRASBOURG.geojson' },
-      { id: 'map-16', path: '/data/16_TOULOUSE.geojson' },
-      { id: 'map-17', path: '/data/17_NANTES.geojson' },
-      { id: 'map-18', path: '/data/18_ORLEANS_TOURS.geojson' },
-      { id: 'map-19', path: '/data/19_REIMS.geojson' },
-      { id: 'map-20', path: '/data/20_AMIENS.geojson' },
-      { id: 'map-22', path: '/data/22_LIMOGES.geojson' },
-      { id: 'map-23', path: '/data/23_NICE.geojson' },
-      { id: 'map-24', path: '/data/24_CRETEIL.geojson' },
-      { id: 'map-25', path: '/data/25_VERSAILLES.geojson' },
-      { id: 'map-27', path: '/data/27_CORSE.geojson' },
-      { id: 'map-28', path: '/data/28_REUNION.geojson' },
-      { id: 'map-31', path: '/data/31_MARTINIQUE.geojson' },
-      { id: 'map-32', path: '/data/32_GUADELOUPE.geojson' },
-      { id: 'map-33', path: '/data/33_GUYANE.geojson' },
-      { id: 'map-43', path: '/data/43_MAYOTTE.geojson' },
-      { id: 'map-44', path: '/data/44_SAINT_PIERRE_ET_MIQUELON.geojson' },
-      { id: 'map-70', path: '/data/70_NORMANDIE.geojson' }
-    ]
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(this.map);
 
-    maps.forEach(map => {
-      if(map.id === 'map-' + this.selectedAcademy){
-        return this.createMap(map.path)
-      }
-    })
+    this.addAcademyLayer()
+    this.addEstablishmentsLayer()
   }
 
-  createMap(geoJsonPath) {
-    const d3 = this.d3
-    const container = document.getElementById('map-container')
+  addAcademyLayer(){
+    const geoJsonPath = this.getAcademyPath()
+    console.log(geoJsonPath)
 
-    if (!container || container.hasAttribute('data-initialized')) {
-      console.error("Missing data-initialized attribute")
-      return
-    }
+    fetch(geoJsonPath)
+        .then(response => response.json())
+        .then(geoJson => {
+          const geoJsonLayer = L.geoJSON(geoJson, {
+            style: {
+              color: "#333",
+              fillColor: "#afe8c0",
+              fillOpacity: 0.2,
+              weight: 2,
+              interactive: false
+            }
+          }).addTo(this.map)
 
-    container.setAttribute('data-initialized', 'true')
-    container.innerHTML = ''
-
-    const width = container.offsetWidth
-    const height = 540
-
-    const svg = d3.select("#map-container")
-      .append("svg")
-      .attr("width", width)
-      .attr("height", height)
-
-    const g = svg.append("g")
-
-    const zoom = d3.zoom()
-      .scaleExtent([1, 10]) // Zoom entre 1x et 10x
-      .on("zoom", (event) => {
-        g.attr("transform", event.transform);
-
-        // Mettre à jour la taille des cercles et du contour en fonction du zoom
-        g.selectAll("circle")
-          .attr("r", d => this.sizeScale(this.parsedNbSchoolings[d.properties.Code_UAI]) / event.transform.k)
-          .attr("stroke-width", 1 / event.transform.k); // Épaisseur du contour adaptative
-      });
-
-    svg.call(zoom);
-
-    d3.json(geoJsonPath).then((geojson) => {
-      const projection = d3.geoMercator().fitSize([width, height], geojson)
-
-      g.selectAll("path")
-        .data(geojson.features)
-        .enter()
-        .append("path")
-        .attr("d", d3.geoPath().projection(projection))
-        .attr("opacity", 0.7)
-
-      this.createEstablishmentsPoints(g, projection)
-    }).catch((error) => {
-      console.error("Error loading the geo file:", error)
-    })
+          // Adapter le zoom et le centrage sur le GeoJSON
+          this.map.fitBounds(geoJsonLayer.getBounds());
+        }).catch((error) => {
+          console.error("Error loading the academic geo file:", error)
+        })
   }
 
-  createEstablishmentsPoints(g, projection) {
-    const d3 = this.d3
+  addEstablishmentsLayer() {
+    const geoJsonPath = "/data/ETABLISSEMENTS_FRANCE.geojson"
 
-    d3.json("/data/ETABLISSEMENTS_FRANCE.geojson").then((geojson) => {
-      const tooltip = d3.select("#map-container")
-        .append("div")
-        .attr("class", "tooltip")
-        .style("position", "absolute")
-        .style("background", "white")
-        .style("padding", "5px")
-        .style("border-radius", "5px")
-        .style("pointer-events", "none")
-        .style("display", "none")
-        .style("z-index", "1000")
-        .style("box-shadow", "0 2px 4px rgba(0,0,0,0.2)")
-
-      g.selectAll("circle")
-        .data(geojson.features.filter(d => this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)))
-        .enter()
-        .append("circle")
-        .filter(d => d.geometry && d.geometry.coordinates)
-        .attr("cx", d => projection(d.geometry.coordinates)[0])
-        .attr("cy", d => projection(d.geometry.coordinates)[1])
-        .attr("r", d => this.sizeScale(this.parsedNbSchoolings[d.properties.Code_UAI]))
-        .attr("fill", d => this.colorScale(this.parsedAmounts[d.properties.Code_UAI]))
-        .attr("stroke", "black")
-        .attr("stroke-width", 1)  // Épaisseur initiale du contour
-        .on("mouseover", (event, d) => this.mouseOver(event, d, tooltip))
-        .on("mouseout", (event, d) => this.mouseOut(event, d, tooltip))
-        .on("mousemove", (event, d) => this.mouseMove(event, tooltip))
-    }).catch((error) => {
-      console.error("Error loading the geo file:", error)
-    })
+    fetch(geoJsonPath)
+        .then(response => response.json())
+        .then(geoJson => {
+          // Filtrer les points en fonction des établissements de l'académie
+          const filteredFeatures = geoJson.features.filter(d =>
+              this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)
+          );
+          L.geoJSON({ type: "FeatureCollection", features: filteredFeatures }, {
+            pointToLayer: (feature, layer) => this.createPointMarker(feature, layer),
+            onEachFeature: (feature, layer) => this.handleFeatureInteractions(feature, layer)
+          }).addTo(this.map);
+        }).catch((error) => {
+          console.error("Error loading the establishment geo file:", error)
+        })
   }
 
-  mouseOver(event, d, tooltip) {
-    const e = this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI);
 
-    this.d3.select(event.currentTarget)
-      .transition()
-      .duration(200)
-      .attr("fill", "#88fdaa")
 
-    tooltip
-      .style("left", (event.pageX + 10) + "px")
-      .style("top", (event.pageY - 10) + "px")
-      .style("display", "block")
-      .html(`${e.uai} - ${e.name}<br>
-             ${e.address_line1}, ${e.city}, ${e.postal_code}<br>
-             Nombre de scolarités : ${this.parsedNbSchoolings[e.uai]}<br>
-             Montant total payé : ${this.parsedAmounts[e.uai]} €`)
+  handleFeatureInteractions(feature, layer) {
+    const e = this.parsedEstablishments.find(e => e.uai === feature.properties.Code_UAI);
+
+    layer.bindPopup(`
+       ${e.uai} - ${e.name}<br>
+       ${e.address_line1}, ${e.city}, ${e.postal_code}<br>
+       Nombre de scolarités : ${this.parsedNbSchoolings[e.uai]}<br>
+       Montant total payé : ${this.parsedAmounts[e.uai]} €
+    `);
   }
 
-  mouseOut(event, d, tooltip) {
-    this.d3.select(event.currentTarget)
-      .transition()
-      .duration(200)
-      .attr("fill", this.colorScale(this.parsedAmounts[d.properties.Code_UAI]))
-
-    tooltip.style("display", "none")
-  }
-
-  mouseMove(event, tooltip) {
-    tooltip
-      .style("left", (event.pageX + 10) + "px")
-      .style("top", (event.pageY - 10) + "px")
+  createPointMarker(feature, layer) {
+    return L.circleMarker(layer, {
+      radius: this.sizeScale(this.parsedNbSchoolings[feature.properties.Code_UAI]), // Taille dynamique
+      fillColor: this.colorScale(this.parsedAmounts[feature.properties.Code_UAI]), // Couleur dynamique
+      color: "black",
+      weight: 1,
+      fillOpacity: 0.8
+    });
   }
 
   sizeScale(nbSchoolings) {
     const scale = this.d3.scaleSqrt()
       .domain([0, this.maxNbSchoolings])
-      .range([3, 15]); // Taille des cercles (min 3px, max 15px)
+      .range([5, 18]); // Taille des cercles (min 3px, max 15px)
     return scale(nbSchoolings || 0);
   }
 
   colorScale(amount) {
     const scale = this.d3.scaleLinear()
       .domain([0, this.maxAmount])
-      .range(["#bccdff", "#000091"])
+      .range(["#ffbdbd", "#cd0000"])
     return scale(amount || 0)
+  }
+
+
+
+  getAcademyPath() {
+    if (!this.selectedAcademy) {
+      console.error("Missing data values")
+      return
+    }
+
+    const academies = [
+      { id: 'academy-1', path: '/data/01_PARIS.geojson' },
+      { id: 'academy-2', path: '/data/02_AIX_MARSEILLE.geojson' },
+      { id: 'academy-3', path: '/data/03_BESANCON.geojson' },
+      { id: 'academy-4', path: '/data/04_BORDEAUX.geojson' },
+      { id: 'academy-6', path: '/data/06_CLERMONT_FERRAND.geojson' },
+      { id: 'academy-7', path: '/data/07_DIJON.geojson' },
+      { id: 'academy-8', path: '/data/08_GRENOBLE.geojson' },
+      { id: 'academy-9', path: '/data/09_LILLE.geojson' },
+      { id: 'academy-10', path: '/data/10_LYON.geojson' },
+      { id: 'academy-11', path: '/data/11_MONTPELLIER.geojson' },
+      { id: 'academy-12', path: '/data/12_NANCY_METZ.geojson' },
+      { id: 'academy-13', path: '/data/13_POITIERS.geojson' },
+      { id: 'academy-14', path: '/data/14_RENNES.geojson' },
+      { id: 'academy-15', path: '/data/15_STRASBOURG.geojson' },
+      { id: 'academy-16', path: '/data/16_TOULOUSE.geojson' },
+      { id: 'academy-17', path: '/data/17_NANTES.geojson' },
+      { id: 'academy-18', path: '/data/18_ORLEANS_TOURS.geojson' },
+      { id: 'academy-19', path: '/data/19_REIMS.geojson' },
+      { id: 'academy-20', path: '/data/20_AMIENS.geojson' },
+      { id: 'academy-22', path: '/data/22_LIMOGES.geojson' },
+      { id: 'academy-23', path: '/data/23_NICE.geojson' },
+      { id: 'academy-24', path: '/data/24_CRETEIL.geojson' },
+      { id: 'academy-25', path: '/data/25_VERSAILLES.geojson' },
+      { id: 'academy-27', path: '/data/27_CORSE.geojson' },
+      { id: 'academy-28', path: '/data/28_REUNION.geojson' },
+      { id: 'academy-31', path: '/data/31_MARTINIQUE.geojson' },
+      { id: 'academy-32', path: '/data/32_GUADELOUPE.geojson' },
+      { id: 'academy-33', path: '/data/33_GUYANE.geojson' },
+      { id: 'academy-43', path: '/data/43_MAYOTTE.geojson' },
+      { id: 'academy-44', path: '/data/44_SAINT_PIERRE_ET_MIQUELON.geojson' },
+      { id: 'academy-70', path: '/data/70_NORMANDIE.geojson' }
+    ]
+
+    let value;
+    academies.forEach(academy => {
+      if(academy.id === 'academy-' + this.selectedAcademy){
+        value = academy.path;
+      }
+    })
+    return value;
   }
 }
