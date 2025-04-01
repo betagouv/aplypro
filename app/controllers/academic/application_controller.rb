@@ -18,7 +18,7 @@ module Academic
     helper_method :current_user, :selected_academy
 
     def home
-      @establishments_for_academy = Establishment.where(academy_code: @selected_academy) || []
+      @establishments_for_academy = Establishment.where(academy_code: @selected_academy)
       @nb_schoolings_per_establishments = @establishments_for_academy.left_joins(:schoolings)
                                                                      .group(:uai)
                                                                      .count(:schoolings)
