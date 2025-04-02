@@ -37,7 +37,6 @@ export default class extends Controller {
 
   addAcademyLayer(){
     const geoJsonPath = this.getAcademyPath()
-    console.log(geoJsonPath)
 
     fetch(geoJsonPath)
         .then(response => response.json())
@@ -69,10 +68,19 @@ export default class extends Controller {
           const filteredFeatures = geoJson.features.filter(d =>
               this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)
           );
+
+          const markers = {}
+
           L.geoJSON({ type: "FeatureCollection", features: filteredFeatures }, {
-            pointToLayer: (feature, layer) => this.createPointMarker(feature, layer),
+            pointToLayer: (feature, layer) => {
+              const marker = this.createPointMarker(feature, layer)
+              markers[feature.properties.Code_UAI] = marker
+              return marker
+            },
             onEachFeature: (feature, layer) => this.handleFeatureInteractions(feature, layer)
           }).addTo(this.map);
+
+          this.setupTableClickInteraction(markers)
         }).catch((error) => {
           console.error("Error loading the establishment geo file:", error)
         })
@@ -81,6 +89,7 @@ export default class extends Controller {
 
 
   handleFeatureInteractions(feature, layer) {
+    const map = this.map
     const e = this.parsedEstablishments.find(e => e.uai === feature.properties.Code_UAI);
 
     layer.bindPopup(`
@@ -89,6 +98,42 @@ export default class extends Controller {
        Nombre de scolarités : ${this.parsedNbSchoolings[e.uai]}<br>
        Montant total payé : ${this.parsedAmounts[e.uai]} €
     `);
+
+    layer.on("click", function() {
+      map.flyTo(layer.getLatLng(), Math.max(map.getZoom(), 10), {
+        duration: 1,
+        easeLinearity: 0.25
+      });
+
+      document.querySelectorAll("tr.academic-map.selected").forEach(row => row.classList.remove("selected"));
+
+      const row = document.querySelector(`tr[data-uai="${e.uai}"]`)
+      if(row) {
+        row.classList.add("selected")
+        row.scrollIntoView({ behavior: "smooth", block: "center" })
+      }
+    })
+  }
+
+  setupTableClickInteraction(markers) {
+    const map = this.map
+    document.querySelectorAll("tr.academic-map").forEach(row => {
+      row.addEventListener("click", function() {
+        const marker = markers[this.dataset.uai]
+
+        if(marker) {
+          marker.openPopup()
+
+          map.flyTo(marker.getLatLng(), Math.max(map.getZoom(), 10), {
+            duration: 1,
+            easeLinearity: 0.25
+          })
+        }
+
+        document.querySelectorAll("tr.selected").forEach(tr => tr.classList.remove("selected"))
+        this.classList.add("selected")
+      })
+    })
   }
 
   createPointMarker(feature, layer) {

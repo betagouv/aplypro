@@ -28,7 +28,7 @@
             %th{scope: "col"} Montant total payé
           %tbody
             - @establishments_for_academy.each do |establishment|
-              %tr
+              %tr.academic-map{ data: { uai: establishment.uai } }
                 %td= establishment.uai
                 %td= "#{establishment.address_line1}, #{establishment.city}, #{establishment.postal_code}"
                 %td= @nb_schoolings_per_establishments[establishment.uai]
