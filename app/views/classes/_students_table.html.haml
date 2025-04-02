@@ -23,19 +23,12 @@
         - student = schooling.student
         %tr
           %td
-            = dsfr_link_to student.index_name, student_path(student), title: t("links.students.show", name: student)
+            = dsfr_link_to student.full_name, student_path(student), title: t("links.students.show", name: student)
           %td
-            - if schooling.attributive_decision.present? && !schooling.abrogation_decision.present?
+            - if schooling.attributive_decision.present? && !schooling.abrogation_decision.present? && !schooling.cancellation_decision.present?
               %p= dsfr_badge(status: :success) { "Éditée" }
-              - if schooling.closed?
-                = dsfr_link_to "Abroger", confirm_abrogation_school_year_class_schooling_path(selected_school_year, @classe, schooling)
               - if schooling.extended_end_date.present?
                 = dsfr_badge(status: :info) { "Reportée" }
-              - if schooling.end_date.present?
-                %p
-                = dsfr_link_to (schooling.extended_end_date.present? ? "Annuler le report" : "Autoriser un report"), confirm_da_extension_school_year_class_schooling_path(selected_school_year, @classe, schooling)
-                - if schooling.extended_end_date.blank?
-                  = render partial: "shared/tooltip", locals: { message: "report", id: "#{student.id}" }
             - else
               - if schooling.abrogation_decision.present?
                 = dsfr_badge(status: :error) { "Abrogée" }

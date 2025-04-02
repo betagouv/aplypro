@@ -2,10 +2,12 @@
 
 class ApplicationController < ActionController::Base
   include UserLogger
+  include PageTitle
 
   before_action :authenticate_user!,
                 :log_user,
                 :redirect_asp_users!,
+                :redirect_academic_users!,
                 :check_maintenance,
                 :check_current_establishment
 
@@ -23,6 +25,8 @@ class ApplicationController < ActionController::Base
       new_user_session_path
     when :asp_user
       new_asp_user_session_path
+    when :academic_user
+      new_academic_user_session_path
     end
   end
 
@@ -47,32 +51,12 @@ class ApplicationController < ActionController::Base
       SchoolYear.current
   end
 
-  def infer_page_title(attrs = {})
-    key = page_title_key
-
-    return unless I18n.exists?(key)
-
-    title, breadcrumb = extract_title_data(I18n.t(key, deep_interpolation: true, **attrs))
-
-    @page_title = title
-
-    add_breadcrumb(breadcrumb)
-  end
-
-  def extract_title_data(data)
-    if data.is_a? Hash
-      [data[:title], data[:breadcrumb]]
-    else
-      [data, data]
-    end
-  end
-
-  def page_title_key
-    ["pages", "titles", controller_name, action_name].join(".")
-  end
-
   def redirect_asp_users!
     redirect_to asp_schoolings_path and return if asp_user_signed_in?
+  end
+
+  def redirect_academic_users!
+    redirect_to academic_home_path and return if academic_user_signed_in?
   end
 
   private

@@ -20,7 +20,7 @@
 
         %li
           Date de fin initiale :
-          %span= @schooling.end_date.to_s
+          %span= @schooling.end_date.strftime("%d/%m/%Y")
 
       .fr-col-md-6
         = form.dsfr_date_field :extended_end_date, value: @schooling.extended_end_date, disabled: @schooling.extended_end_date.present?

@@ -36,4 +36,14 @@ RSpec.describe StudentsController do
       it { is_expected.to render_template(:show) }
     end
   end
+
+  describe "GET /search_results" do
+    before { student.update(first_name: "Marie", last_name: "Curie") }
+
+    it "when there is a match" do
+      get search_results_students_path(params: { name: "marie curie" })
+
+      expect(response).to have_http_status(:ok)
+    end
+  end
 end

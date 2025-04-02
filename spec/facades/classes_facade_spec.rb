@@ -8,46 +8,6 @@ RSpec.describe ClassesFacade do
   let(:classes) { create_list(:classe, 3, establishment: establishment) }
   let(:establishment) { create(:establishment) }
 
-  describe "#nb_students_per_class" do
-    before do
-      classes.each do |classe|
-        create_list(:schooling, 2, classe: classe)
-      end
-    end
-
-    it "returns the correct number of students per class" do
-      expect(facade.nb_students_per_class).to eq(classes.to_h { |c| [c.id, 2] })
-    end
-  end
-
-  describe "#nb_attributive_decisions_per_class" do
-    before do
-      classes.each do |classe|
-        create(:schooling, :with_attributive_decision, classe: classe)
-        create(:schooling, classe: classe)
-      end
-    end
-
-    it "returns the correct number of attributive decisions per class" do
-      expect(facade.nb_attributive_decisions_per_class).to eq(classes.to_h { |c| [c.id, 1] })
-    end
-  end
-
-  describe "#nb_ribs_per_class" do
-    before do
-      classes.each do |classe|
-        student = create(:student)
-        create(:schooling, student: student, classe: classe)
-        create(:rib, student: student, establishment: establishment)
-        create(:schooling, classe: classe)
-      end
-    end
-
-    it "returns the correct number of RIBs per class" do
-      expect(facade.nb_ribs_per_class).to eq(classes.to_h { |c| [c.id, 1] })
-    end
-  end
-
   describe "#nb_pfmps" do
     let(:classe) { classes.first }
 

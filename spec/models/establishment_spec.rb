@@ -9,6 +9,7 @@ RSpec.describe Establishment do
   it { is_expected.to validate_presence_of(:uai) }
   it { is_expected.to validate_uniqueness_of(:uai) }
   it { is_expected.to have_many(:ribs) }
+  it { is_expected.to validate_inclusion_of(:students_provider).in_array(Establishment::PROVIDERS) }
 
   describe "some_attributive_decisions?" do
     subject { establishment.some_attributive_decisions?(SchoolYear.current) }
@@ -50,22 +51,6 @@ RSpec.describe Establishment do
     end
   end
 
-  describe "excluded?" do
-    before do
-      allow(Exclusion).to receive(:establishment_excluded?).and_return "a fake result"
-    end
-
-    it "forwards its UAI" do
-      establishment.excluded?
-
-      expect(Exclusion).to have_received(:establishment_excluded?).with(establishment.uai)
-    end
-
-    it "returns the result" do
-      expect(establishment.excluded?).to eq "a fake result"
-    end
-  end
-
   describe "#school_year_range" do
     subject(:establishment) { create(:establishment, academy_code: academy_code) }
 
@@ -94,6 +79,26 @@ RSpec.describe Establishment do
       it "returns the school year range based on the exception" do
         expect(establishment.school_year_range).to eq(expected_start_date..expected_start_date >> 12)
       end
+    end
+  end
+
+  describe "#find_students" do
+    let(:etab) { create(:classe, :with_students, students_count: 5).establishment }
+
+    before do
+      etab.students.first.update!(first_name: "Tibal", last_name: "N'Guy-ôme")
+    end
+
+    it "strips apostrophes" do
+      expect(etab.find_students("nguyom")).to contain_exactly(Student.find_by!(last_name: "N'Guy-ôme"))
+    end
+
+    it "finds students with partial names" do
+      expect(etab.find_students("ibal")).to contain_exactly(Student.find_by!(first_name: "Tibal"))
+    end
+
+    it "returns empty when search string is blank?" do
+      expect(etab.find_students("   ")).to be_empty
     end
   end
 end

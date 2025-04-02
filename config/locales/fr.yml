@@ -97,12 +97,15 @@ fr:
             pfmp:
               taken: "Une requête de paiement est déjà active pour cette PFMP"
             ready_state_validation:
+              attributive_decision_cancelled: "La décision d'attribution sur cette scolarité a été retiré."
+              insufficient_funds: "L’adoption tardive du budget présenté par le Gouvernement a une conséquence sur sa déclinaison dans les crédits alloués à l’ASP. Les conventions budgétaires engageant la ventilation des fonds sont en cours de signature entre l'ASP et les ministères concernés. Les mises en paiement reprendront très prochainement leur rythme habituel."
               missing_address_country_code: "Le code pays de l'adresse est manquant. Veuillez faire le nécessaire dans BEE ou COLENTAGRI (Fregata) pour que cette information soit renseignée."
               missing_address_postal_code: "Le code postal de l'élève n'est pas renseigné. Veuillez faire le nécessaire dans BEE ou COLENTAGRI (Fregata) pour que cette information soit renseignée."
               missing_address_city_insee_code: "La commune de résidence de l'élève n'est pas renseignée. Veuillez faire le nécessaire dans BEE ou COLENTAGRI (Fregata) pour que cette information soit renseignée."
               missing_biological_sex: "La civilité de l'élève n'est pas renseignée (Homme / Femme). Veuillez faire le nécessaire dans BEE ou COLENTAGRI (Fregata) pour que cette information soit renseignée."
               missing_birthplace_city_insee_code: "La commune de naissance de l'élève né en France n'est pas renseignée. Veuillez faire le nécessaire dans BEE ou COLENTAGRI (Fregata) pour que cette information soit renseignée."
               missing_birthplace_country_insee_code: "Le pays de naissance de l'élève né à l'étranger n'est pas renseigné. Veuillez faire le nécessaire dans BEE ou COLENTAGRI (Fregata) pour que cette information soit renseignée."
+              unusable_birthplace_country_insee_code: "Le code du pays de naissance n'est pas utilisable. Veuillez vérifier l'information dans BEE ou COLENTAGRI (Fregata)."
               student_type: "L'élève doit avoir un statut scolaire. Causes possibles de blocage : l'élève a un statut d'apprenti, un autre statut, ou le statut n'est pas renseigné."
               excluded_schooling: "La scolarité mentionnée est exclue de la procédure"
               missing_rib: "Les coordonnées bancaires sont manquantes"
@@ -157,6 +160,18 @@ fr:
     faq: F.A.Q.
   pages:
     titles:
+      asp:
+        application:
+          login: Connexion à APLyPro
+        schoolings:
+          index: Recherche d'un dossier
+          show: "Dossier %{attributive_decision_number}"
+      academic:
+        application:
+          login: Connexion à APLyPro
+          home : Accueil
+        users:
+          select_academy: Choix de l'académie
       stats:
         index: Statistiques
       school_years:
@@ -183,6 +198,7 @@ fr:
         update_bulk_pfmp: *bulk_pfmp_completion_title
       students:
         show: "%{name}"
+        search_results: Recherche d'un élève
       pfmps:
         new: &new_pfmp_title
           title: "Ajouter une PFMP individuelle pour %{name}"
@@ -201,9 +217,6 @@ fr:
         edit: &edit_rib_title
           title: "Modification de coordonnées bancaires pour %{name}"
           breadcrumb: "Modification de coordonnées bancaires"
-        confirm_deletion:
-          title: "Suppression de coordonnées bancaires pour %{name}"
-          breadcrumb: "Suppression de coordonnées bancaires"
         update: *edit_rib_title
         missing: &missing_ribs_title Saisir des coordonnées bancaires
         bulk_create: *missing_ribs_title
@@ -220,8 +233,11 @@ fr:
           title: "Réintégration de l'élève dans la classe"
           breadcrumb: "Réintégration de l'élève dans la classe"
         confirm_cancellation_decision:
-          title: "Retrait de la décision d'attribution"
-          breadcrumb: "Retrait de la décision d'attribution"
+          title: "Révocation de la décision d'attribution"
+          breadcrumb: "Révocation de la décision d'attribution"
+        confirm_abrogation:
+          title: "Abrogation de la décision d'attribution"
+          breadcrumb: "Abrogation de la décision d'attribution"
 
   global:
     sponsor: "Direction\nInterministérielle\ndu Numérique"
@@ -234,12 +250,6 @@ fr:
         content: |
           Une erreur inconnue a eu lieu pendant la connexion. L'équipe
           technique a été notifiée du problème.
-      no_limited_access_error:
-        title: Accès restreint
-        content: |
-          APLyPro est actuellement en test avec une sélection
-          d'établissements pilotes. Le lancement national aura lieu
-          prochainement.
       not_authorised_error:
         title: "Erreur d'authentification"
         content: |
@@ -248,10 +258,8 @@ fr:
       empty_responsibilities_error:
         title: "Erreur d'authentification"
         content: |
-          Le guichet d'authentification n'indique aucun établissement sous
-          votre direction. APLyPro n'est ouvert qu'aux personnels de
-          direction pour le moment. Il peut s'agir d'une erreur dans la
-          configuration de votre profil.
+          Le guichet d'authentification n'indique aucun établissement ou aucune académie à laquelle vous êtes rattaché(e). 
+          Il peut d'agir d'une erreur dans la configuration de votre profil.
       no_access_found:
         title: "Erreur d'authentification"
         content: |
@@ -345,6 +353,7 @@ fr:
       rejected: "La demande a été rejetée : %{rejected_reason}."
       paid: Le paiement a été envoyé par l'agence comptable, et sera effectif dans un délai de un à trois jours ouvrables.
       unpaid: "Le paiement a été refusé par l'agence comptable : %{unpaid_reason}."
+      recovery: "Un ordre de reversement a été envoyé par pli postal à l'élève le %{date}."
   ministries:
     masa: Ministère de l'Agriculture et de la Souveraineté Alimentaire (MASA)
     menj: Ministère de l'Éducation Nationale et de la Jeunesse (MENJ)

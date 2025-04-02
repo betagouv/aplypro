@@ -13,11 +13,10 @@
           %th{scope: "col"} PFMPs à valider
         %tbody
           - @validatable_classes.each do |classe|
-            - nb_students = @classes_facade.nb_students_per_class[classe.id]
             %tr
               %td= dsfr_link_to classe.to_long_s, validation_school_year_class_path(selected_school_year, classe), title: t("links.classes.show", label: classe.to_long_s)
-              %td= progress_badge @classes_facade.nb_attributive_decisions_per_class[classe.id], nb_students
-              %td= progress_badge @classes_facade.nb_ribs_per_class[classe.id], nb_students
+              %td= attributive_decisions_progress_badge(classe.schoolings)
+              %td= ribs_progress_badge(classe.schoolings)
               %td= pfmps_status_count_badge :completed, @classes_facade.nb_pfmps(classe.id, :completed)
 
 = render partial: 'pfmps/failed_pfmps', locals: { failed_pfmps_per_payment_request_state: @validations_facade.failed_pfmps_per_payment_request_state }

@@ -1,6 +1,9 @@
 .home.fr-container
   .fr-grid-row.fr-grid-row--center
-    - if current_establishment.fetching_students
+    - if Exclusion.establishment_excluded?(current_establishment.uai, selected_school_year)
+      = dsfr_alert(type: :warning, title: "Impossible de récupérer les élèves") do
+        %p Il est impossible de récupérer les données de vos élèves, cet établissement est exclu pour l'année #{selected_school_year}
+    - elsif current_establishment.fetching_students
       = dsfr_alert(type: :info, title: "Récupération des élèves en cours") do
         %p Nous sommes en train de récupérer les données de vos élèves, veuillez rafraichir la page dans quelques minutes.
     - else

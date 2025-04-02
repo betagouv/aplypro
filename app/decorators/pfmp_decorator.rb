@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module PfmpDecorator
-  delegate :index_name, to: :student, prefix: true
+  delegate :full_name, to: :student, prefix: true
 
   PFMP_STATE_MAPPING = {
     pending: :new,

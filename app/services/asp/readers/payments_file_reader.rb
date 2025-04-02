@@ -40,7 +40,7 @@ module ASP
         end
       end
 
-      def process! # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      def process!
         each do |node|
           request =
             find_payment_request!(node.asp_prestation_dossier_id)
@@ -53,13 +53,9 @@ module ASP
             raise "unknown payment state: #{state}"
           end
         rescue ActiveRecord::RecordNotFound => e
-          Sentry.capture_exception(
-            ReadingFileError.new(
-              "Payment file reading failed for asp_prestation_dossier_id: #{node.asp_prestation_dossier_id}" \
-              "with message #{e.message}, Node contents: #{node.to_h}"
-            )
-          )
-          raise e
+          raise ASP::Errors::ReadingFileError,
+                "Payment file reading failed for asp_prestation_dossier_id: #{node.asp_prestation_dossier_id} " \
+                "with message #{e.message}, Node contents: #{node.to_h}"
         end
       end
 

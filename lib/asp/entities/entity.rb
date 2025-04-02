@@ -46,15 +46,26 @@ module ASP
       end
 
       def to_xml(builder)
-        root_node = self.class.name.demodulize.downcase
         args = xml_root_args
 
         validate!
 
         builder.tap do |xml|
-          xml.send(root_node, args) do |x|
+          xml.send(root_node_name, args) do |x|
             fragment(x)
           end
+        end
+      end
+
+      def root_node_name
+        self.class.name.demodulize.downcase
+      end
+
+      def adresse_entity_class
+        if payment_request.pfmp.rectified?
+          payment_request.student.lives_in_france? ? Adresse::InduFrance : Adresse::InduEtranger
+        else
+          payment_request.student.lives_in_france? ? Adresse::France : Adresse::Etranger
         end
       end
     end

@@ -24,13 +24,6 @@ Quand("je saisis les coordonnées bancaires d'un tiers") do
   )
 end
 
-Quand("je supprime les coordonnées bancaires") do
-  steps %(
-    Quand je clique sur "Supprimer les coordonnées bancaires"
-    Et que je clique sur "Confirmer la suppression"
-  )
-end
-
 Quand("je saisis en masse les coordonnées bancaires d'un tiers pour {string}") do |name|
   within_fieldset(name) do
     steps %(

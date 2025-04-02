@@ -8,15 +8,13 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
   before_action :set_classe, :set_bulk_rib_breadcrumbs, only: %i[missing bulk_create]
   before_action :set_student, :check_establishment!, :set_rib_breadcrumbs, except: %i[missing bulk_create]
   before_action :check_classes, only: :bulk_create
-  before_action :set_rib, only: %i[edit update destroy confirm_deletion]
+  before_action :set_rib, only: %i[edit update]
 
   def new
     @rib = Rib.new
   end
 
   def edit; end
-
-  def confirm_deletion; end
 
   def create
     @rib = @student.create_new_rib(rib_params)
@@ -35,19 +33,13 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
       @rib = @student.create_new_rib(rib_params)
 
       if @rib.save
-        @student.retry_pfmps_payment_requests!(%w[rib bic paiement])
+        @student.retry_pfmps_payment_requests!(%w[rib bic paiement coordonnées bancaires])
 
         redirect_to student_path(@student), notice: t(".success")
       else
         render :edit, status: :unprocessable_entity
       end
     end
-  end
-
-  def destroy
-    @rib.destroy
-
-    redirect_to student_path(@student), notice: t("flash.ribs.destroyed", name: @student.full_name)
   end
 
   def missing

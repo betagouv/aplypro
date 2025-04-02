@@ -49,44 +49,6 @@ Fonctionnalité: Le personnel de direction se connecte
     Quand je me connecte en tant que personnel MENJ
     Alors le titre de la page contient "Accueil"
 
-  Scénario: Un personnel de direction du MENJ hors de la bêta privée ne peut pas rentrer dans l'application
-    Sachant que je suis un personnel MENJ directeur de l'établissement "123"
-    Et que l'accès est limité aux UAIs "456"
-    Quand je me connecte en tant que personnel MENJ
-    Alors la page contient "sélection d'établissements pilotes"
-
-  Scénario: Un personnel MENJ est d'abord averti de la phase pilote
-    Sachant que je suis un personnel MENJ de l'établissement "123"
-    Et que l'accès est limité aux UAIs "456"
-    Quand je me connecte en tant que personnel MENJ
-    Alors la page contient "sélection d'établissements pilotes"
-
-  Scénario: Un personnel directeur MENJ est d'abord averti de la phase pilote
-    Sachant que je suis un personnel MENJ directeur de l'établissement "123"
-    Et que l'accès est limité aux UAIs "456"
-    Quand je me connecte en tant que personnel MENJ
-    Alors la page contient "sélection d'établissements pilotes"
-
-  Scénario: Un personnel du MENJ peut-être invité lors de la bêta privée
-    Sachant que l'accès est limité aux UAIs "123"
-    Et que je suis un personnel MENJ directeur de l'établissement "123"
-    Et que je me connecte en tant que personnel MENJ
-    Et que j'autorise "louis.pasteur@education.gouv.fr" à rejoindre l'application
-    Et que je me déconnecte
-    Et que je suis un personnel MENJ de l'établissement "123" avec l'email "louis.pasteur@education.gouv.fr"
-    Quand je me connecte en tant que personnel MENJ
-    Alors la page contient "Bienvenue sur APLyPro"
-
-  Scénario: Un personnel du MENJ dans un UAI pilote peut-être refusé
-    Sachant que l'accès est limité aux UAIs "123"
-    Et que je suis un personnel MENJ directeur de l'établissement "123"
-    Et que je me connecte en tant que personnel MENJ
-    Et que j'autorise "louis.pasteur@education.gouv.fr" à rejoindre l'application
-    Et que je me déconnecte
-    Et que je suis un personnel MENJ de l'établissement "123" avec l'email "jean.michel@education.gouv.fr"
-    Quand je me connecte en tant que personnel MENJ
-    Alors la page affiche une erreur d'authentification
-
   Scénario: Un personnel du MENJ sans UAI dans son FrEduRne peut se connecter si il a une invitation
     Sachant que je suis un personnel MENJ directeur de l'établissement "123"
     Et que je me connecte en tant que personnel MENJ

@@ -62,6 +62,29 @@ describe ASP::PaymentRequestStateMachine do
         .to change(asp_payment_request.pfmp, :asp_prestation_dossier_id)
         .from(nil).to("prestation")
     end
+
+    context "when there's a unique constraint violation on asp_individu_id" do
+      let(:duplicate_student) { create(:student, asp_individu_id: "individu") }
+      let(:merger) { instance_double(StudentMerger) }
+
+      before do
+        error_message = "Key (asp_individu_id)=(individu) already exists. \
+          Duplicate error on index_students_on_asp_individu_id"
+
+        allow(asp_payment_request.student).to receive(:update!)
+          .and_raise(ActiveRecord::RecordNotUnique.new(error_message))
+
+        allow(asp_payment_request.student).to receive(:duplicates).and_return([duplicate_student])
+        allow(StudentMerger).to receive(:new).with([duplicate_student]).and_return(merger)
+        allow(merger).to receive(:merge!).and_return(true)
+      end
+
+      it "raises an integration error" do
+        expect do
+          asp_payment_request.mark_integrated!(attrs)
+        end.to raise_error(ASP::Errors::IntegrationError, /CSV Integration error/)
+      end
+    end
   end
 
   describe "#mark_ready!" do

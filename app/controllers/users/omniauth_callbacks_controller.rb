@@ -9,25 +9,30 @@ module Users
 
     rescue_from IdentityMappers::Errors::Error, ActiveRecord::RecordInvalid, with: :authentication_failure
 
-    def asp
-      @asp_login = true
-      @asp_user = ASP::User.from_oidc(auth_hash).tap(&:save!)
-
-      sign_in(:asp_user, @asp_user)
-
-      redirect_to asp_schoolings_path
-    end
-
     def developer
       oidcize_dev_hash(auth_hash)
 
       oidc
     end
 
+    def academic_developer
+      oidcize_dev_hash(auth_hash)
+
+      academic
+    end
+
+    def masa
+      oidc
+    end
+
+    def fim
+      oidc
+    end
+
     def oidc
       parse_identity
 
-      @user.save!
+      @user = User.from_oidc(auth_hash).tap(&:save!)
 
       add_auth_breadcrumb(data: { user_id: @user.id }, message: "Successfully parsed user")
 
@@ -42,12 +47,37 @@ module Users
       choose_redirect_page!
     end
 
-    def masa
-      oidc
+    def academic # rubocop:disable Metrics/AbcSize
+      parse_identity
+
+      @academic_login = true
+      @academic_user = Academic::User.from_oidc(auth_hash).tap(&:save!)
+
+      add_auth_breadcrumb(data: { user_id: @academic_user.id }, message: "Successfully parsed academic user")
+
+      @academies = @mapper.aplypro_academies
+
+      raise IdentityMappers::Errors::EmptyResponsibilitiesError if @academies.empty?
+
+      sign_in(:academic_user, @academic_user)
+      session[:academy_codes] = @academies
+
+      if @academies.many?
+        redirect_to select_academy_academic_users_path(@academic_user)
+      else
+        session[:selected_academy] = @academies.first
+
+        redirect_to academic_home_path, notice: t("auth.success")
+      end
     end
 
-    def fim
-      oidc
+    def asp
+      @asp_login = true
+      @asp_user = ASP::User.from_oidc(auth_hash).tap(&:save!)
+
+      sign_in(:asp_user, @asp_user)
+
+      redirect_to asp_schoolings_path
     end
 
     def failure
@@ -63,6 +93,8 @@ module Users
 
       if defined? @asp_login
         fail_asp_user
+      elsif defined? @academic_login
+        fail_academic_user
       else
         fail_user
       end
@@ -78,12 +110,14 @@ module Users
       redirect_to new_asp_user_session_path
     end
 
+    def fail_academic_user
+      redirect_to new_academic_user_session_path
+    end
+
     private
 
     def check_access!
-      check_limited_access!
-
-      check_responsibilites!
+      check_responsibilities!
     rescue IdentityMappers::Errors::EmptyResponsibilitiesError
       begin
         check_access_list!
@@ -96,10 +130,8 @@ module Users
       data = auth_hash
       raw = data.extra.raw_info
 
-      @user = User.from_oidc(data)
-
       @mapper = case data.provider.to_sym
-                when :fim
+                when :fim, :academic
                   IdentityMappers::Fim.new(raw)
                 when :masa
                   IdentityMappers::Cas.new(raw)
@@ -141,7 +173,7 @@ module Users
       Sentry.set_user(id: @user.id)
     end
 
-    def check_responsibilites!
+    def check_responsibilities!
       raise(IdentityMappers::Errors::EmptyResponsibilitiesError, nil) if @mapper.no_responsibilities?
     end
 
@@ -171,19 +203,6 @@ module Users
 
     def fetch_establishments!
       @mapper.establishments_in_responsibility_and_delegated.each { |e| Sync::EstablishmentJob.perform_now(e) }
-    end
-
-    def check_limited_access!
-      allowed_uais = ENV
-                     .fetch("APLYPRO_RESTRICTED_ACCESS", "")
-                     .split(",")
-                     .map(&:strip)
-
-      return if allowed_uais.blank?
-
-      allowed = allowed_uais.intersect?(@mapper.all_indicated_uais)
-
-      raise IdentityMappers::Errors::NoLimitedAccessError unless allowed
     end
 
     def auth_hash

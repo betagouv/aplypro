@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe ASP::Mappers::AdresseMapper do
+describe ASP::Mappers::Adresse::FranceMapper do
   subject(:mapper) { described_class.new(payment_request) }
 
   let(:payment_request) { create(:asp_payment_request) }

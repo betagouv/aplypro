@@ -1,17 +1,6 @@
 # frozen_string_literal: true
 
 module HomeHelper
-  def progress_badge(count, total, **args)
-    count ||= 0
-    status = progress_badge_status(count, total)
-
-    content_tag(:div, title: args[:title]) do
-      dsfr_badge(status: status, classes: ["fr-badge counter"]) do
-        "#{count} / #{total}"
-      end
-    end
-  end
-
   def attributive_decisions_download_button
     count = current_establishment.schoolings.with_attributive_decisions
                                  .joins(:classe)
@@ -43,21 +32,6 @@ module HomeHelper
       class: "fr-btn fr-btn--primary",
       disabled: true
     )
-  end
-
-  def progress_badge_status(count, total)
-    if total.nil? || total.zero?
-      :error
-    else
-      case count / total
-      when 0..0.5
-        :error
-      when 0.51..0.99
-        :warning
-      when 1
-        :success
-      end
-    end
   end
 
   def confirmed_director_information

@@ -5,8 +5,8 @@ Fonctionnalité: Complétion des PFMPs d'une classe
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que je me connecte en tant que personnel MENJ
     Et que je passe l'écran d'accueil
-    Et qu'il y a une élève "Marie Curie" au sein de la classe "2NDEB" pour une formation "Développement"
-    Et qu'il y a un élève "Paul Langevin" au sein de la classe "2NDEB" pour une formation "Développement"
+    Et qu'il y a une élève "Curie Marie" au sein de la classe "2NDEB" pour une formation "Développement"
+    Et qu'il y a un élève "Langevin Paul" au sein de la classe "2NDEB" pour une formation "Développement"
     Et que je saisis une PFMP pour toute la classe "2NDEB" avec les dates "17/03/2025" et "17/04/2025"
     Et que je clique sur "Compléter 2 PFMPs"
 

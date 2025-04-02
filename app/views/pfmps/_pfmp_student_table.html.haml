@@ -1,12 +1,14 @@
+%h2.fr-mt-4w.fr-h4 Scolarités
 - schoolings.sort_by{ |schooling| schooling.classe.school_year.start_year}.reverse.each do |schooling|
   - pfmps = schooling.pfmps
   - classe = schooling.classe
   - school_year = classe.school_year
-  %section.fr-my-6w
+  %section.fr-my-4w
     %h2.fr-h4
       = link_to "#{school_year} - #{classe.label} - #{classe.establishment}", school_year_class_path(school_year, classe)
 
     = closed_schooling_information_tag(schooling, class: "fr-mb-2w")
+    = extended_end_date_information_tag(schooling, class: "fr-mb-2w")
 
     - if pfmps.none?
       %p Aucune PFMP enregistrée pour le moment.
@@ -31,18 +33,4 @@
                   %strong= number_to_currency(pfmp.amount)
 
     - if classe.establishment.eql?(current_establishment)
-      .actions
-        .fr-btns-group.fr-btns-group--inline
-          = button_to "Ajouter une PFMP", new_school_year_class_schooling_pfmp_path(school_year, classe, schooling), class: 'fr-btn', method: :get
-          - if schooling.attributive_decision.attached?
-            = button_to "Télécharger la décision d'attribution", url_for(schooling.attributive_decision), class: 'fr-btn fr-btn--secondary', target: :download, method: :get
-            - if !schooling.cancellation_decision.attached?
-              = button_to "Retirer la décision d'attribution", confirm_cancellation_decision_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get, disabled: true
-              = render partial: "shared/tooltip", locals: { message: "cancellation_decision", id: 1 }
-          - if schooling.abrogation_decision.attached?
-            = button_to "Télécharger la décision d'abrogation", url_for(schooling.abrogation_decision), class: 'fr-btn fr-btn--secondary', target: :download, method: :get
-          - if schooling.cancellation_decision.attached?
-            = button_to "Télécharger la décision de retrait", url_for(schooling.cancellation_decision), class: 'fr-btn fr-btn--secondary', target: :download, method: :get, disabled: true
-          - if !@student.current_schooling.nil? && @student.current_schooling.eql?(schooling) && !schooling.removed?
-            = button_to "Masquer l'élève de la classe",  confirm_removal_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get
-            = render partial: "shared/tooltip", locals: { message: "remove_student", id: 1 }
+      = render "pfmps/schooling_buttons", schooling: schooling, school_year: school_year, classe: classe, student: @student

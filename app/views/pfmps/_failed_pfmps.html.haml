@@ -14,6 +14,7 @@
               %table
                 %thead
                   %th Élève
+                  %th Classe
                   %th PFMP
                   %th Etat
                   %th Motif
@@ -22,10 +23,12 @@
                   - pfmps.sort_by{ |pfmp| pfmp.student.full_name }.each do |pfmp|
                     %tr
                       %td
-                        = pfmp.student.full_name
+                        = link_to pfmp.student.full_name, student_path(pfmp.student), class: "fr-link", title: pfmp.student.full_name
+                      %td
+                        = link_to pfmp.schooling.classe.label, school_year_class_path(selected_school_year, pfmp.schooling.classe), class: "fr-link", title: pfmp.schooling.classe.label
                       %td
                         = link_to pfmp.formatted_dates, school_year_class_schooling_pfmp_path(selected_school_year, pfmp.schooling.classe, pfmp.schooling, pfmp), class: "fr-link", title: pfmp.full_dates
                       %td
                         = pfmp.latest_payment_request.status_badge
-                      %td
+                      %td.fr-col-md-6
                         = pfmp.latest_payment_request.status_explanation

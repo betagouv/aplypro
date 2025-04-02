@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Quand("je me rends sur la page d'accueil") do
-  visit "/"
+  visit "/home"
 end
 
 Quand("print the page") do
@@ -34,7 +34,7 @@ end
 
 Alors("il y a un titre de premier niveau contenant {string}") do |text|
   # le titre est soit le premier h1 ou la légende du premier tableau
-  element = page.all("h1").first || page.all("table caption").first
+  element = page.first("h1") || page.first("table caption")
 
   expect(element.text).to include(text)
 end
@@ -54,6 +54,13 @@ Quand("je remplis le champ {string} avec {string} dans les champs de {string}") 
   within_fieldset(fieldset_legend) do
     fill_in label, with: value
   end
+end
+
+Quand("je recherche l'élève {string}") do |name|
+  steps %(
+    Quand je remplis "Recherche" avec "#{name}"
+    Et que je clique sur "Rechercher"
+  )
 end
 
 Quand("je décoche {string}") do |label|

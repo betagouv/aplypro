@@ -9,7 +9,8 @@ class SchoolingsController < ApplicationController
   before_action :set_student_breadcrumbs, only: %i[confirm_removal
                                                    confirm_removal_cancellation
                                                    confirm_da_extension
-                                                   confirm_cancellation_decision]
+                                                   confirm_cancellation_decision
+                                                   confirm_abrogation]
 
   def abrogate_decision
     Generate::AbrogationDecisionJob.perform_now(@schooling)
@@ -36,7 +37,7 @@ class SchoolingsController < ApplicationController
   def confirm_removal_cancellation; end
 
   def remove
-    @schooling.update!(removed_at: params[:removed_at])
+    @schooling.remove!(params[:removed_at])
 
     redirect_to school_year_class_path(selected_school_year, @classe), notice: t("flash.schooling.#{params[:notice]}",
                                                                                  name: @schooling.student,

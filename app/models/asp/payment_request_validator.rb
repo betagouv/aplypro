@@ -10,11 +10,13 @@ module ASP
     end
 
     def validate
+      check_funding
       check_student
       check_insee_code
       check_address
       check_da_attribution
       check_da_abrogation
+      check_da_cancellation
       check_rib
       check_pfmp
       check_pfmp_overlaps
@@ -22,6 +24,16 @@ module ASP
     end
 
     private
+
+    def check_funding
+      classe = payment_request.pfmp.classe
+      ministry = classe.mef.ministry
+      contract_type_code = classe.establishment.private_contract_type_code
+
+      return unless (ministry.eql?("menj") && !contract_type_code.eql?(99)) && !Rails.env.test?
+
+      add_error(:insufficient_funds)
+    end
 
     def check_student
       add_error(:missing_biological_sex) if student.sex_unknown?
@@ -54,16 +66,20 @@ module ASP
       add_error(:missing_attributive_decision) if !payment_request.schooling.attributive_decision.attached?
     end
 
+    def check_da_cancellation
+      add_error(:attributive_decision_cancelled) if payment_request.schooling.cancelled?
+    end
+
     def check_da_abrogation # rubocop:disable Metrics/AbcSize
       if !student.transferred? || (payment_request.schooling.abrogated? && payment_request.pfmp.within_schooling_dates?)
         return
       end
 
       other_schoolings = student.schoolings.excluding(payment_request.schooling).to_a.select do |sc|
-        sc.classe.school_year == SchoolYear.current
+        sc.classe.school_year == payment_request.schooling.classe.school_year
       end
 
-      return if other_schoolings.all?(&:abrogated?)
+      return if other_schoolings.all?(&:nullified?)
 
       add_error(:needs_abrogated_attributive_decision)
     end
@@ -74,6 +90,8 @@ module ASP
       return unless student.born_in_france? && student.birthplace_city_insee_code.blank?
 
       add_error(:missing_birthplace_city_insee_code)
+    rescue InseeCountryCodeMapper::UnusableCountryCode
+      add_error(:unusable_birthplace_country_insee_code)
     end
 
     def check_pfmp_overlaps

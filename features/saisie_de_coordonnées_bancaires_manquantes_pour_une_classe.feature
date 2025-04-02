@@ -5,13 +5,13 @@ Fonctionnalité: Saisie des coordonnées banquaires manquantes pour une classe
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
     Et que je me connecte en tant que personnel MENJ
     Et que je passe l'écran d'accueil
-    Et qu'il y a une élève "Marie Curie" au sein de la classe "2NDEB" pour une formation "Développement"
-    Et qu'il y a un élève "Paul Langevin" au sein de la classe "2NDEB" pour une formation "Développement"
+    Et qu'il y a une élève "Curie Marie" au sein de la classe "2NDEB" pour une formation "Développement"
+    Et qu'il y a un élève "Langevin Paul" au sein de la classe "2NDEB" pour une formation "Développement"
     Et que je consulte la classe de "2NDEB"
     Et je clique sur "Saisir 2 coordonnées bancaires"
 
   Scénario: Le personnel ne voit que les élèves sans coordonnées bancaires
-    Sachant que l'élève "Marie Curie" a déjà des coordonnées bancaires
+    Sachant que l'élève "Curie Marie" a déjà des coordonnées bancaires
     Et que je rafraîchis la page
     Alors la page ne contient pas "Curie Marie"
     Et la page contient "Langevin Paul"

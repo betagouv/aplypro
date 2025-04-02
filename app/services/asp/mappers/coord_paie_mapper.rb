@@ -6,7 +6,7 @@ module ASP
       PRINCIPAL_ADDRESS_TYPE = "PRINCIPALE"
       ASSIMILATED_FRENCH_COUNTRY_CODES = %w[FR GF GP MC MQ NC PF PM RE WF YT].freeze
 
-      PARTICULAR_BICS = %w[CMBRFR2BARK BNPAFRPPMTZ BNPAFRPPTAS BNPAFRPPETI BNPAFRPPMAR BNPAFRPPENG].freeze
+      PARTICULAR_BICS = %w[BNPAFRPPNIC CMBRFR2BARK BNPAFRPPMTZ BNPAFRPPTAS BNPAFRPPETI BNPAFRPPMAR BNPAFRPPENG].freeze
 
       MAPPING = {
         bic: :bic
@@ -16,6 +16,8 @@ module ASP
 
       def initialize(payment_request)
         @rib = payment_request.rib_with_fallback
+        raise "No Rib currently on record for p_r #{payment_request.id}" if @rib.blank?
+
         @iban = Bank::IBAN.new(rib.iban)
       end
 

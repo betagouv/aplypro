@@ -99,6 +99,12 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     schooling.attributive_decision_number + index
   end
 
+  def num_presta_doss
+    return nil if latest_payment_request.nil? || latest_payment_request.last_transition_to(:integrated).nil?
+
+    latest_payment_request.last_transition_to(:integrated).metadata["numAdmPrestaDoss"]
+  end
+
   def within_schooling_dates?
     return true if (schooling.open? && start_date >= schooling.start_date) || schooling.no_dates?
 
@@ -171,7 +177,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
     pfmps = all_pfmps_for_mef
     cap = mef.wage.yearly_cap
-    total = pfmps.sum(:amount)
+    total = pfmps.to_a.map { |pfmp| pfmp.amount || 0 }.sum
     return unless total > cap
 
     errors.add(:amount,
