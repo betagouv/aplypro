@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Rua
   class Client
     RUA_KC_URL = ENV.fetch("RUA_KC_URL")
-    RUA_KC_GRANT_TYPE = "client_credentials".freeze
+    RUA_KC_GRANT_TYPE = "client_credentials"
     RUA_KC_CLIENT_ID = ENV.fetch("RUA_KC_CLIENT_ID")
     RUA_RESOURCE_BASE_URL = ENV.fetch("RUA_RESOURCE_BASE_URL")
     RUA_KC_CLIENT_SECRET = ENV.fetch("RUA_KC_CLIENT_SECRET")
