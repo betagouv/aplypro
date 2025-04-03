@@ -6,7 +6,7 @@ Fonctionnalité: Gestion du personnel académique
     Et que je me connecte en tant que personnel académique
 
   Scénario: Le personnel académique a accès à la page d'accueil
-    Alors la page contient "Académie : 06"
+    Alors la page contient "Académie 06"
 
   Scénario: Le personnel académique a accès à plusieurs académies
     Sachant que je me déconnecte
@@ -14,7 +14,7 @@ Fonctionnalité: Gestion du personnel académique
     Quand je me connecte en tant que personnel académique
     Et que je sélectionne "11" pour "Académie"
     Et que je clique sur "Continuez avec cette académie"
-    Alors la page contient "Académie : 11"
+    Alors la page contient "Académie 11"
 
   Scénario: Le personnel académique est redirigé vers la page de connexion académique en cas d'erreur de connexion
     Sachant que je me déconnecte
