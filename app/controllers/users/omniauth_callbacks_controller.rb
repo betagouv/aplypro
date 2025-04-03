@@ -5,6 +5,8 @@ module Users
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     include DeveloperOidc
 
+    class UserMailDuplicateError < StandardError; end
+
     skip_before_action :verify_authenticity_token
 
     rescue_from IdentityMappers::Errors::Error, ActiveRecord::RecordInvalid, with: :authentication_failure
@@ -32,7 +34,7 @@ module Users
     def oidc
       parse_identity
 
-      attempt_user_creation
+      inflate_user
 
       add_auth_breadcrumb(data: { user_id: @user.id }, message: "Successfully parsed user")
 
@@ -219,22 +221,34 @@ module Users
       )
     end
 
-    def attempt_user_creation # rubocop:disable Metrics/AbcSize
+    def inflate_user
       User.transaction do
         @user = User.from_oidc(auth_hash)
-
-        if (existing_user = User.find_by(email: @user.email, provider: @user.provider))
-          existing_user.update!(
-            token: auth_hash["credentials"]["token"],
-            uid: auth_hash["uid"],
-            name: auth_hash["info"]["name"],
-            oidc_attributes: auth_hash
-          )
-          @user = existing_user
-        else
-          @user.save!
-        end
+        @user.save!
+      rescue ActiveRecord::RecordInvalid
+        @user = merge_user_attributes
       end
+    end
+
+    def merge_user_attributes
+      existing_user = User.find_by(email: @user.email, provider: @user.provider)
+      existing_user.update!(
+        token: auth_hash["credentials"]["token"],
+        uid: auth_hash["uid"],
+        name: auth_hash["info"]["name"],
+        oidc_attributes: auth_hash
+      )
+      log_merge_event
+      existing_user
+    end
+
+    def log_merge_event
+      Sentry.capture_exception(
+        UserMailDuplicateError.new(
+          "Merged user attributes #{auth_hash} for email #{@user.email} and provider #{@user.provider} \
+          due to unicity constraint"
+        )
+      )
     end
   end
 end

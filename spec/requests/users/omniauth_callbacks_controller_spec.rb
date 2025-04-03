@@ -54,7 +54,7 @@ RSpec.describe Users::OmniauthCallbacksController do
     end
   end
 
-  describe "GET #fim with existing user" do
+  describe "GET #fim with existing user for an email" do
     before do
       User.create!(
         provider: "fim",
