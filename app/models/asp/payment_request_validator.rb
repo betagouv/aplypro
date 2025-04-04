@@ -28,9 +28,8 @@ module ASP
     def check_funding
       classe = payment_request.pfmp.classe
       ministry = classe.mef.ministry
-      contract_type_code = classe.establishment.private_contract_type_code
 
-      return unless (ministry.eql?("menj") && !contract_type_code.eql?("99")) && !Rails.env.test?
+      return unless ministry.eql?("menj") && !Rails.env.test?
 
       add_error(:insufficient_funds)
     end
