@@ -19,6 +19,10 @@ module Rua
       JSON.parse(resource_connection.get("agents", { email: email }).body)
     end
 
+    def synthese_info(email)
+      JSON.parse(resource_connection.get("syntheses", { email: email }).body)
+    end
+
     def auth_connection
       Faraday.new(
         url: RUA_KC_URL,
