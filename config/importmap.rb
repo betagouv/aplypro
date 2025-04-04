@@ -14,3 +14,5 @@ pin "controllers", preload: true
 pin "controllers/index", preload: true
 pin "controllers/application", preload: true
 pin "controllers/map_controller", preload: false
+pin "controllers/academic_map_controller", preload: false
+pin "leaflet", to: "https://ga.jspm.io/npm:leaflet@1.9.4/dist/leaflet.js", preload: false
