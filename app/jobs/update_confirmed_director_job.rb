@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UpdateConfirmedDirector < ApplicationJob
+class UpdateConfirmedDirectorJob < ApplicationJob
   class NoListedDirector < StandardError; end
   class MultipleDirector < StandardError; end
 
