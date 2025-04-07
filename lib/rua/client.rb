@@ -2,6 +2,8 @@
 
 module Rua
   class Client
+    DIR_EMPLOI_TYPE = "D0010"
+
     RUA_KC_URL = ENV.fetch("RUA_KC_URL")
     RUA_KC_GRANT_TYPE = "client_credentials"
     RUA_KC_CLIENT_ID = ENV.fetch("RUA_KC_CLIENT_ID")
@@ -21,6 +23,12 @@ module Rua
 
     def synthese_info(email)
       JSON.parse(resource_connection.get("syntheses", { email: email }).body)
+    end
+
+    def dirs_for_uai(uai)
+      JSON.parse(
+        resource_connection.get("syntheses", { "etablissement[]": [uai], specialite_emploi_type: DIR_EMPLOI_TYPE }).body
+      )
     end
 
     def auth_connection
