@@ -59,11 +59,10 @@ export default class extends Controller {
   }
 
   createMap() {
+    // {attributionControl: false} => Retire le copyright en bas à droite de la carte
     this.map = L.map('map-container', {attributionControl: false})
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(this.map);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(this.map);
 
     this.addAcademyLayer()
     this.addEstablishmentsLayer()

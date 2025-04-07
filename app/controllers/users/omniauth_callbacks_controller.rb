@@ -187,6 +187,7 @@ module Users
       fetch_students_for!(establishments)
 
       if establishments.many?
+        @inhibit_banner = true
         @inhibit_nav = true
 
         render action: :select_etab

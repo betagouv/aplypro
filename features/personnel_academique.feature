@@ -15,6 +15,10 @@ Fonctionnalité: Gestion du personnel académique
     Et que je sélectionne "11" pour "Académie"
     Et que je clique sur "Continuez avec cette académie"
     Alors la page contient "Académie 11"
+    Quand je clique sur "Changer d'académie"
+    Et que je sélectionne "16" pour "Académie"
+    Et que je clique sur "Continuez avec cette académie"
+    Alors la page contient "Académie 16"
 
   Scénario: Le personnel académique est redirigé vers la page de connexion académique en cas d'erreur de connexion
     Sachant que je me déconnecte
