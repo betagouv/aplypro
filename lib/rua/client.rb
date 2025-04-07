@@ -26,9 +26,8 @@ module Rua
     end
 
     def dirs_for_uai(uai)
-      JSON.parse(
-        resource_connection.get("syntheses", { "etablissement[]": [uai], specialite_emploi_type: DIR_EMPLOI_TYPE }).body
-      )
+      JSON.parse(resource_connection.get("syntheses",
+                                         { etablissement: uai, specialite_emploi_type: DIR_EMPLOI_TYPE }).body)
     end
 
     def auth_connection
