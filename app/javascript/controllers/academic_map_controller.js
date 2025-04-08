@@ -1,5 +1,4 @@
 import {Controller} from "@hotwired/stimulus"
-import L from "leaflet"
 
 export default class extends Controller {
   async connect() {
@@ -55,129 +54,118 @@ export default class extends Controller {
   }
 
   disconnect() {
-    this.map.remove()
+    const container = document.getElementById('map-container')
+    if (container) {
+      container.removeAttribute('data-initialized')
+      container.innerHTML = ''
+    }
   }
 
   createMap() {
-    // {attributionControl: false} => Retire le copyright en bas à droite de la carte
-    this.map = L.map('map-container', {attributionControl: false})
+    const d3 = this.d3
+    const containerId = 'map-container'
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(this.map);
+    const container = document.getElementById(containerId)
+    if (!container || container.hasAttribute('data-initialized')) return
 
-    this.addAcademyLayer()
-    this.addEstablishmentsLayer()
-  }
+    container.setAttribute('data-initialized', 'true')
+    container.innerHTML = ''
 
-  addAcademyLayer(){
-    const geoJsonPath = this.academies.get(this.selectedAcademy)
+    const width = container.offsetWidth
+    const height = 540
 
-    fetch(geoJsonPath)
-        .then(response => response.json())
-        .then(geoJson => {
-          const geoJsonLayer = L.geoJSON(geoJson, {
-            style: {
-              color: "#333",
-              fillColor: "#afe8c0",
-              fillOpacity: 0.2,
-              weight: 2,
-              interactive: false
-            }
-          }).addTo(this.map)
+    const svg = d3.select("#" + containerId)
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
 
-          // Adapter le zoom et le centrage sur le GeoJSON
-          this.map.fitBounds(geoJsonLayer.getBounds());
-        }).catch((error) => {
-          console.error("Error loading the academic geo file:", error)
-        })
-  }
+    const g = svg.append("g");
 
-  addEstablishmentsLayer() {
-    const geoJsonPath = "/data/ETABLISSEMENTS_FRANCE.geojson"
+    const zoom = d3.zoom()
+        .scaleExtent([1, 10]) // Zoom entre 1x et 10x
+        .on("zoom", (event) => {
+          g.attr("transform", event.transform);
 
-    fetch(geoJsonPath)
-        .then(response => response.json())
-        .then(geoJson => {
-          // Filtrer les points en fonction des établissements de l'académie
-          const filteredFeatures = geoJson.features.filter(d =>
-              this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)
-          );
+          // Mettre à jour la taille des cercles et du contour en fonction du zoom
+          g.selectAll("circle")
+              .attr("r", d => this.sizeScale(this.parsedNbSchoolings[d.properties.Code_UAI]) / event.transform.k)
+              .attr("stroke-width", 1 / event.transform.k); // Épaisseur du contour adaptative
+        });
 
-          const markers = {}
+    svg.call(zoom);
 
-          L.geoJSON({ type: "FeatureCollection", features: filteredFeatures }, {
-            pointToLayer: (feature, layer) => {
-              const marker = this.createPointMarker(feature, layer)
-              markers[feature.properties.Code_UAI] = marker
-              return marker
-            },
-            onEachFeature: (feature, layer) => this.handleFeatureInteractions(feature, layer)
-          }).addTo(this.map);
+    // Charger les couches vectorielles
+    Promise.all([
+        d3.json(this.academies.get(this.selectedAcademy)),
+        d3.json("/data/ETABLISSEMENTS_FRANCE.geojson")
+    ]).then(([geojson, pointsGeojson]) => {
+      const projection = d3.geoMercator().fitSize([width, height], geojson)
 
-          this.setupTableClickInteraction(markers)
-        }).catch((error) => {
-          console.error("Error loading the establishment geo file:", error)
-        })
-  }
+      //Le contour de la carte
+      g.selectAll("path")
+          .data(geojson.features)
+          .join("path")
+          .attr("d", d3.geoPath().projection(projection))
+          .attr("fill", "none")
+          .attr("stroke", "#333");
 
+      const tooltip = d3.select(containerId)
+          .append("div")
+          .attr("class", "tooltip")
+          .style("position", "absolute")
+          .style("background", "white")
+          .style("padding", "5px")
+          .style("border-radius", "5px")
+          .style("pointer-events", "none")
+          .style("display", "none")
+          .style("z-index", "1000")
+          .style("box-shadow", "0 2px 4px rgba(0,0,0,0.2)")
 
-
-  handleFeatureInteractions(feature, layer) {
-    const map = this.map
-    const e = this.parsedEstablishments.find(e => e.uai === feature.properties.Code_UAI);
-
-    layer.bindPopup(`
-       ${e.uai} - ${e.name}<br>
-       ${e.address_line1}, ${e.city}, ${e.postal_code}<br>
-       Nombre de scolarités : ${this.parsedNbSchoolings[e.uai]}<br>
-       Montant total payé : ${this.parsedAmounts[e.uai]} €
-    `);
-
-    layer.on("click", function() {
-      map.flyTo(layer.getLatLng(), Math.max(map.getZoom(), 10), {
-        duration: 1,
-        easeLinearity: 0.25
-      });
-
-      document.querySelectorAll("tr.academic-map.selected").forEach(row => row.classList.remove("selected"));
-
-      const row = document.querySelector(`tr[data-uai="${e.uai}"]`)
-      if(row) {
-        row.classList.add("selected")
-        row.scrollIntoView({ behavior: "smooth", block: "center" })
-      }
-    })
-  }
-
-  setupTableClickInteraction(markers) {
-    const map = this.map
-    document.querySelectorAll("tr.academic-map").forEach(row => {
-      row.addEventListener("click", function() {
-        const marker = markers[this.dataset.uai]
-
-        if(marker) {
-          marker.openPopup()
-
-          map.flyTo(marker.getLatLng(), Math.max(map.getZoom(), 10), {
-            duration: 1,
-            easeLinearity: 0.25
-          })
-        }
-
-        document.querySelectorAll("tr.selected").forEach(tr => tr.classList.remove("selected"))
-        this.classList.add("selected")
-      })
-    })
-  }
-
-  createPointMarker(feature, layer) {
-    return L.circleMarker(layer, {
-      radius: this.sizeScale(this.parsedNbSchoolings[feature.properties.Code_UAI]), // Taille dynamique
-      fillColor: this.colorScale(this.parsedAmounts[feature.properties.Code_UAI]), // Couleur dynamique
-      color: "black",
-      weight: 1,
-      fillOpacity: 0.8
+      //Les points correspondants aux établissements
+      g.selectAll("circle")
+          .data(pointsGeojson.features.filter(d => this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)))
+          .join("circle")
+          .attr("r", d => this.sizeScale(this.parsedNbSchoolings[d.properties.Code_UAI])) // Taille dynamique
+          .attr("fill", d => this.colorScale(this.parsedAmounts[d.properties.Code_UAI])) // Couleur dynamique
+          .attr("stroke", "#fff")
+          .attr("stroke-width", 1.5)
+          .attr("cx", d => projection(d.geometry.coordinates)[0])
+          .attr("cy", d => projection(d.geometry.coordinates)[1])
+          .on("mouseover", (event, d) => this.mouseOver(event, d, tooltip))
+          .on("mouseout", (event, d) => this.mouseOut(event, d, tooltip))
     });
   }
+
+
+
+  mouseOver(event, d, tooltip) {
+    const e = this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI);
+
+    this.d3.select(event.currentTarget)
+        .transition()
+        .duration(200)
+        .attr("fill", "#88fdaa")
+
+    tooltip
+        .style("left", (event.pageX + 10) + "px")
+        .style("top", (event.pageY - 10) + "px")
+        .style("display", "block")
+        .html(`${e.uai} - ${e.name}<br>
+             ${e.address_line1}, ${e.city}, ${e.postal_code}<br>
+             Nombre de scolarités : ${this.parsedNbSchoolings[e.uai]}<br>
+             Montant total payé : ${this.parsedAmounts[e.uai]} €`)
+  }
+
+  mouseOut(event, d, tooltip) {
+    this.d3.select(event.currentTarget)
+        .transition()
+        .duration(200)
+        .attr("fill", this.colorScale(this.parsedAmounts[d.properties.Code_UAI]))
+
+    tooltip.style("display", "none")
+  }
+
+
 
   sizeScale(nbSchoolings) {
     const scale = this.d3.scaleSqrt()
