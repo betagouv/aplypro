@@ -26,12 +26,14 @@ module ASP
     private
 
     def check_funding
-      classe = payment_request.pfmp.classe
-      ministry = classe.mef.ministry
+      # Enable follow up lines for when ministry doesnt have funding anymore again
+      # classe = payment_request.pfmp.classe
+      # ministry = classe.mef.ministry
 
-      return unless ministry.eql?("menj") && !Rails.env.test?
+      # return unless ministry.eql?("menj") && !Rails.env.test?
+      true
 
-      add_error(:insufficient_funds)
+      # add_error(:insufficient_funds)
     end
 
     def check_student
