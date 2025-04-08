@@ -1,4 +1,5 @@
 import {Controller} from "@hotwired/stimulus"
+import { tile } from "d3-tile"
 
 export default class extends Controller {
   async connect() {
@@ -72,68 +73,34 @@ export default class extends Controller {
     container.innerHTML = ''
 
     const width = container.offsetWidth
-    const height = 540
+    const height = 700
 
     const svg = d3.select("#" + containerId)
         .append("svg")
         .attr("width", width)
         .attr("height", height)
 
-    const g = svg.append("g");
-
     const zoom = d3.zoom()
-        .scaleExtent([1, 10]) // Zoom entre 1x et 10x
-        .on("zoom", (event) => {
-          g.attr("transform", event.transform);
+        .scaleExtent([1 << 11, 1 << 24])
+        .on("zoom", zoomed)
 
-          // Mettre à jour la taille des cercles et du contour en fonction du zoom
-          g.selectAll("circle")
-              .attr("r", d => this.sizeScale(this.parsedNbSchoolings[d.properties.Code_UAI]) / event.transform.k)
-              .attr("stroke-width", 1 / event.transform.k); // Épaisseur du contour adaptative
-        });
+    function zoomed({ transform }) {
+      const tiles = tile()
+          .size([width, height])
+          .scale(transform.k)
+          .translate([transform.x, transform.y])()
 
-    svg.call(zoom);
+      svg.selectAll("image")
+          .data(tiles)
+          .enter().append("image")
+          .attr("xlink:href", function(d) { return "http://" + "abc"[d[1] % 3] + ".tile.openstreetmap.org/" + d[2] + "/" + d[0] + "/" + d[1] + ".png"; })
+          .attr("x", ([x]) => (x + tiles.translate[0]) * tiles.scale)
+          .attr("y", ([, y]) => (y + tiles.translate[1]) * tiles.scale)
+          .attr("width", tiles.scale)
+          .attr("height", tiles.scale);
+    }
 
-    // Charger les couches vectorielles
-    Promise.all([
-        d3.json(this.academies.get(this.selectedAcademy)),
-        d3.json("/data/ETABLISSEMENTS_FRANCE.geojson")
-    ]).then(([geojson, pointsGeojson]) => {
-      const projection = d3.geoMercator().fitSize([width, height], geojson)
-
-      //Le contour de la carte
-      g.selectAll("path")
-          .data(geojson.features)
-          .join("path")
-          .attr("d", d3.geoPath().projection(projection))
-          .attr("fill", "none")
-          .attr("stroke", "#333");
-
-      const tooltip = d3.select(containerId)
-          .append("div")
-          .attr("class", "tooltip")
-          .style("position", "absolute")
-          .style("background", "white")
-          .style("padding", "5px")
-          .style("border-radius", "5px")
-          .style("pointer-events", "none")
-          .style("display", "none")
-          .style("z-index", "1000")
-          .style("box-shadow", "0 2px 4px rgba(0,0,0,0.2)")
-
-      //Les points correspondants aux établissements
-      g.selectAll("circle")
-          .data(pointsGeojson.features.filter(d => this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)))
-          .join("circle")
-          .attr("r", d => this.sizeScale(this.parsedNbSchoolings[d.properties.Code_UAI])) // Taille dynamique
-          .attr("fill", d => this.colorScale(this.parsedAmounts[d.properties.Code_UAI])) // Couleur dynamique
-          .attr("stroke", "#fff")
-          .attr("stroke-width", 1.5)
-          .attr("cx", d => projection(d.geometry.coordinates)[0])
-          .attr("cy", d => projection(d.geometry.coordinates)[1])
-          .on("mouseover", (event, d) => this.mouseOver(event, d, tooltip))
-          .on("mouseout", (event, d) => this.mouseOut(event, d, tooltip))
-    });
+    svg.call(zoom).call(zoom.transform, d3.zoomIdentity.translate(width / 2, height / 2).scale(1 << 12))
   }
 
 
