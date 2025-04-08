@@ -4,8 +4,6 @@ import "leaflet-css"
 
 export default class extends Controller {
   async connect() {
-    this.d3 = await import("d3")
-
     try {
       this.selectedAcademy = parseInt(this.element.dataset.selectedAcademyValue)
       this.parsedEstablishments = JSON.parse(this.element.dataset.establishmentsForAcademy)
@@ -181,16 +179,18 @@ export default class extends Controller {
   }
 
   sizeScale(nbSchoolings) {
-    const scale = this.d3.scaleSqrt()
-      .domain([0, this.maxNbSchoolings])
-      .range([5, 18]); // Taille des cercles (min 3px, max 15px)
-    return scale(nbSchoolings || 0);
+    const normalized = Math.sqrt((nbSchoolings || 0) / (this.maxNbSchoolings || 1))
+    return 5 + normalized * (18 - 5) // Taille des cercles (min 5px, max 18px)
   }
 
   colorScale(amount) {
-    const scale = this.d3.scaleLinear()
-      .domain([0, this.maxAmount])
-      .range(["#ffbdbd", "#cd0000"])
-    return scale(amount || 0)
+    const t = Math.max(0, Math.min(1, (amount || 0) / (this.maxAmount || 1)))
+
+    // Interpolation linéaire entre "#ffbdbd" (255,189,189) et "#cd0000" (205,0,0)
+    const r = Math.round(255 + t * (205 - 255)); // 255 → 205
+    const g = Math.round(189 + t * (0 - 189));   // 189 → 0
+    const b = Math.round(189 + t * (0 - 189));   // 189 → 0
+
+    return `rgb(${r}, ${g}, ${b})`;
   }
 }
