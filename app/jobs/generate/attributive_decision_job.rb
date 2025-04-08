@@ -16,7 +16,7 @@ module Generate
     end
 
     def perform(schooling)
-      Sync::StudentJob.new.perform(schooling)
+      sync_data(schooling)
 
       Schooling.transaction do
         generate_document(schooling)
@@ -31,6 +31,10 @@ module Generate
       schooling.increment(:attributive_decision_version)
       io = AttributeDecision::Attributor.new(schooling).write
       schooling.attach_attributive_document(io, :attributive_decision)
+    end
+
+    def sync_data(schooling)
+      Sync::StudentJob.new.perform(schooling)
     end
   end
 end
