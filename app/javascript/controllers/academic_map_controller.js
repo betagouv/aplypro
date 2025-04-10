@@ -83,31 +83,45 @@ export default class extends Controller {
     const imageLayer = svg.append("g"); // Tuiles OSM
     const pathLayer = svg.append("g");  // Tracés GeoJSON
 
-    const projection = d3.geoMercator();
+    const projection = d3.geoMercator()
+        .scale(1)
+        .translate([0, 0]);
+
     const tileLayout = tile().size([width, height]);
 
     const path = d3.geoPath().projection(projection);
 
-    const zoom = d3.zoom()
-        .scaleExtent([256, 16384]) // Équivalent à zoom level 0-14
-        .on("zoom", zoomed);
+    const zoom = d3.zoom().on("zoom", zoomed);
 
     //Gestion de l'affichage de l'académie
     d3.json(this.academies.get(this.selectedAcademy)).then((geojson) => {
+      const [[x0, y0], [x1, y1]] = d3.geoPath().projection(projection).bounds(geojson);
+
+      const dx = x1 - x0;
+      const dy = y1 - y0;
+      const cx = (x0 + x1) / 2;
+      const cy = (y0 + y1) / 2;
+
+      const scale = 0.95 / Math.max(dx / width, dy / height);
+      const translate = [width / 2 - scale * cx, height / 2 - scale * cy];
+
       projection
-          .scale(1 / (2 * Math.PI))
-          .translate([width / 2, height / 2]);
+          .scale(scale)
+          .translate(translate);
 
       pathLayer.selectAll("path")
           .data(geojson.features)
           .enter()
           .append("path")
-          .attr("opacity", 0.7)
+          .attr("stroke", "#000")
+          .attr("fill", "none")
+          .attr("stroke-width", 2)
           .attr("d", path)
 
       svg.call(zoom).call(zoom.transform, d3.zoomIdentity
-          .translate(width / 2, height / 2)
-          .scale(1024)); // Zoom initial
+          .translate(translate[0], translate[1])
+          .scale(scale * 2 * Math.PI)
+      );
     }).catch((error) => {
       console.error("Error loading the geo file:", error)
     })
