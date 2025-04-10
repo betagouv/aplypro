@@ -80,18 +80,37 @@ export default class extends Controller {
         .attr("width", width)
         .attr("height", height)
 
-    const g = svg.append("g");
+    const imageLayer = svg.append("g"); // Tuiles OSM
+    const pathLayer = svg.append("g");  // Tracés GeoJSON
 
-    const projection = d3.geoMercator()
+    const projection = d3.geoMercator();
     const tileLayout = tile().size([width, height]);
+
+    const path = d3.geoPath().projection(projection);
 
     const zoom = d3.zoom()
         .scaleExtent([256, 16384]) // Équivalent à zoom level 0-14
         .on("zoom", zoomed);
 
-    svg.call(zoom).call(zoom.transform, d3.zoomIdentity
-        .translate(width / 2, height / 2)
-        .scale(1024)); // Zoom initial
+    //Gestion de l'affichage de l'académie
+    d3.json(this.academies.get(this.selectedAcademy)).then((geojson) => {
+      projection
+          .scale(1 / (2 * Math.PI))
+          .translate([width / 2, height / 2]);
+
+      pathLayer.selectAll("path")
+          .data(geojson.features)
+          .enter()
+          .append("path")
+          .attr("opacity", 0.7)
+          .attr("d", path)
+
+      svg.call(zoom).call(zoom.transform, d3.zoomIdentity
+          .translate(width / 2, height / 2)
+          .scale(1024)); // Zoom initial
+    }).catch((error) => {
+      console.error("Error loading the geo file:", error)
+    })
 
     function zoomed({ transform }) {
       projection
@@ -100,7 +119,7 @@ export default class extends Controller {
 
       const tiles = tileLayout(transform)
 
-      g.selectAll("image")
+      imageLayer.selectAll("image")
           .data(tiles, d => d)
           .join("image")
           .attr("xlink:href", d => `https://a.tile.openstreetmap.org/${d[2]}/${d[0]}/${d[1]}.png`)
@@ -108,6 +127,9 @@ export default class extends Controller {
           .attr("y", ([,y]) => (y + tiles.translate[1]) * tiles.scale)
           .attr("width", tiles.scale)
           .attr("height", tiles.scale);
+
+      pathLayer.selectAll("path")
+          .attr("d", path);
     }
   }
 
