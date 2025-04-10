@@ -109,6 +109,7 @@ export default class extends Controller {
           .scale(scale)
           .translate(translate);
 
+      //Contour de la carte
       pathLayer.selectAll("path")
           .data(geojson.features)
           .enter()
@@ -118,6 +119,10 @@ export default class extends Controller {
           .attr("stroke-width", 2)
           .attr("d", path)
 
+      //Points des établissements
+      this.createEstablishmentsPoints(pathLayer, projection);
+
+      //Gestion du zoom et du fond de carte
       svg.call(zoom).call(zoom.transform, d3.zoomIdentity
           .translate(translate[0], translate[1])
           .scale(scale * 2 * Math.PI)
@@ -126,6 +131,7 @@ export default class extends Controller {
       console.error("Error loading the geo file:", error)
     })
 
+    //Met à jour les éléments de la carte
     function zoomed({ transform }) {
       projection
           .scale(transform.k / (2 * Math.PI))
@@ -144,7 +150,44 @@ export default class extends Controller {
 
       pathLayer.selectAll("path")
           .attr("d", path);
+
+      pathLayer.selectAll("circle")
+          .attr("cx", d => projection(d.geometry.coordinates)[0])
+          .attr("cy", d => projection(d.geometry.coordinates)[1])
     }
+  }
+
+  createEstablishmentsPoints(g, projection) {
+    const d3 = this.d3
+    d3.json("/data/ETABLISSEMENTS_FRANCE.geojson").then((geojson) => {
+      const tooltip = d3.select("#map-container")
+          .append("div")
+          .attr("class", "tooltip")
+          .style("position", "absolute")
+          .style("background", "white")
+          .style("padding", "5px")
+          .style("border-radius", "5px")
+          .style("pointer-events", "none")
+          .style("display", "none")
+          .style("z-index", "1000")
+          .style("box-shadow", "0 2px 4px rgba(0,0,0,0.2)")
+
+      g.selectAll("circle")
+          .data(geojson.features.filter(d => this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)))
+          .enter()
+          .append("circle")
+          .filter(d => d.geometry && d.geometry.coordinates)
+          .attr("cx", d => projection(d.geometry.coordinates)[0])
+          .attr("cy", d => projection(d.geometry.coordinates)[1])
+          .attr("r", d => this.sizeScale(this.parsedNbSchoolings[d.properties.Code_UAI]))
+          .attr("fill", d => this.colorScale(this.parsedAmounts[d.properties.Code_UAI]))
+          .attr("stroke", "black")
+          .attr("stroke-width", 1)  // Épaisseur initiale du contour
+          .on("mouseover", (event, d) => this.mouseOver(event, d, tooltip))
+          .on("mouseout", (event, d) => this.mouseOut(event, d, tooltip))
+    }).catch((error) => {
+      console.error("Error loading the geo file:", error)
+    })
   }
 
 
