@@ -80,27 +80,35 @@ export default class extends Controller {
         .attr("width", width)
         .attr("height", height)
 
+    const g = svg.append("g");
+
+    const projection = d3.geoMercator()
+    const tileLayout = tile().size([width, height]);
+
     const zoom = d3.zoom()
-        .scaleExtent([1 << 11, 1 << 24])
-        .on("zoom", zoomed)
+        .scaleExtent([256, 16384]) // Équivalent à zoom level 0-14
+        .on("zoom", zoomed);
+
+    svg.call(zoom).call(zoom.transform, d3.zoomIdentity
+        .translate(width / 2, height / 2)
+        .scale(1024)); // Zoom initial
 
     function zoomed({ transform }) {
-      const tiles = tile()
-          .size([width, height])
-          .scale(transform.k)
-          .translate([transform.x, transform.y])()
+      projection
+          .scale(transform.k / (2 * Math.PI))
+          .translate([transform.x, transform.y]);
 
-      svg.selectAll("image")
-          .data(tiles)
-          .enter().append("image")
-          .attr("xlink:href", function(d) { return "http://" + "abc"[d[1] % 3] + ".tile.openstreetmap.org/" + d[2] + "/" + d[0] + "/" + d[1] + ".png"; })
+      const tiles = tileLayout(transform)
+
+      g.selectAll("image")
+          .data(tiles, d => d)
+          .join("image")
+          .attr("xlink:href", d => `https://a.tile.openstreetmap.org/${d[2]}/${d[0]}/${d[1]}.png`)
           .attr("x", ([x]) => (x + tiles.translate[0]) * tiles.scale)
-          .attr("y", ([, y]) => (y + tiles.translate[1]) * tiles.scale)
+          .attr("y", ([,y]) => (y + tiles.translate[1]) * tiles.scale)
           .attr("width", tiles.scale)
           .attr("height", tiles.scale);
     }
-
-    svg.call(zoom).call(zoom.transform, d3.zoomIdentity.translate(width / 2, height / 2).scale(1 << 12))
   }
 
 
