@@ -95,38 +95,42 @@ export default class extends Controller {
 
     //Gestion de l'affichage de l'académie
     d3.json(this.academies.get(this.selectedAcademy)).then((geojson) => {
-      const [[x0, y0], [x1, y1]] = d3.geoPath().projection(projection).bounds(geojson);
+          const [[x0, y0], [x1, y1]] = d3.geoPath().projection(projection).bounds(geojson);
 
-      const dx = x1 - x0;
-      const dy = y1 - y0;
-      const cx = (x0 + x1) / 2;
-      const cy = (y0 + y1) / 2;
+          const dx = x1 - x0;
+          const dy = y1 - y0;
+          const cx = (x0 + x1) / 2;
+          const cy = (y0 + y1) / 2;
 
-      const scale = 0.95 / Math.max(dx / width, dy / height);
-      const translate = [width / 2 - scale * cx, height / 2 - scale * cy];
+          const scale = 0.95 / Math.max(dx / width, dy / height);
+          const translate = [width / 2 - scale * cx, height / 2 - scale * cy];
 
-      projection
-          .scale(scale)
-          .translate(translate);
+          projection
+              .scale(scale)
+              .translate(translate);
 
-      //Contour de la carte
-      pathLayer.selectAll("path")
-          .data(geojson.features)
-          .enter()
-          .append("path")
-          .attr("stroke", "#000")
-          .attr("fill", "none")
-          .attr("stroke-width", 2)
-          .attr("d", path)
+          //Contour de la carte
+          pathLayer.selectAll("path")
+              .data(geojson.features)
+              .enter()
+              .append("path")
+              .attr("stroke", "#000")
+              .attr("fill", "none")
+              .attr("stroke-width", 2)
+              .attr("d", path)
 
-      //Points des établissements
-      this.createEstablishmentsPoints(pathLayer, projection);
+          //Gestion du zoom et du fond de carte
+          svg.call(zoom).call(zoom.transform, d3.zoomIdentity
+              .translate(translate[0], translate[1])
+              .scale(scale * 2 * Math.PI)
+          );
 
-      //Gestion du zoom et du fond de carte
-      svg.call(zoom).call(zoom.transform, d3.zoomIdentity
-          .translate(translate[0], translate[1])
-          .scale(scale * 2 * Math.PI)
-      );
+        //Points des établissements
+        this.createEstablishmentsPoints(pathLayer, projection);
+
+        //Interaction entre le tableau et la carte
+        this.setupTableClickInteraction(projection, svg, zoom)
+
     }).catch((error) => {
       console.error("Error loading the geo file:", error)
     })
@@ -177,6 +181,7 @@ export default class extends Controller {
           .enter()
           .append("circle")
           .filter(d => d.geometry && d.geometry.coordinates)
+          .attr("id", d => `marker-${d.properties.Code_UAI}`)
           .attr("cx", d => projection(d.geometry.coordinates)[0])
           .attr("cy", d => projection(d.geometry.coordinates)[1])
           .attr("r", d => this.sizeScale(this.parsedNbSchoolings[d.properties.Code_UAI]))
@@ -185,10 +190,45 @@ export default class extends Controller {
           .attr("stroke-width", 1)  // Épaisseur initiale du contour
           .on("mouseover", (event, d) => this.mouseOver(event, d, tooltip))
           .on("mouseout", (event, d) => this.mouseOut(event, d, tooltip))
+          .on("click", (event, d) => {
+              // Surligne la ligne du tableau
+              document.querySelectorAll("tr.selected").forEach(tr => tr.classList.remove("selected"));
+              const row = document.querySelector(`tr.academic-map[data-uai="${d.properties.Code_UAI}"]`)
+              if (row) row.classList.add("selected")
+          })
     }).catch((error) => {
       console.error("Error loading the geo file:", error)
     })
   }
+
+
+
+    setupTableClickInteraction(projection, svg, zoom) {
+        document.querySelectorAll("tr.academic-map").forEach(row => {
+            row.addEventListener("click", () => {
+                const uai = row.dataset.uai;
+                const marker = document.getElementById(`marker-${uai}`)
+
+                if (marker && marker.__data__?.geometry?.coordinates) {
+                    const [x, y] = projection(marker.__data__.geometry.coordinates);
+
+                    // Applique le zoom via d3.zoom
+                    svg.transition()
+                        .duration(750)
+                        .call(
+                            zoom.transform,
+                            this.d3.zoomIdentity
+                                .translate(x, y)
+                                .scale(2048) // Ou un niveau de zoom raisonnable
+                        );
+
+                    // Highlight la ligne
+                    document.querySelectorAll("tr.selected").forEach(tr => tr.classList.remove("selected"));
+                    row.classList.add("selected");
+                }
+            });
+        });
+    }
 
 
 
