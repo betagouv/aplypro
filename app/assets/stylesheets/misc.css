@@ -94,3 +94,8 @@
 .stat {
   margin-bottom: 3rem;
 }
+
+.academic-map.selected {
+  background-color: #ffeb99 !important; /* Jaune clair */
+  font-weight: bold;
+}

@@ -6,8 +6,10 @@ module Academic
 
     before_action :infer_page_title
 
+    helper_method :academies
+
     def select_academy
-      @academies = session[:academy_codes]
+      @inhibit_banner = true
     end
 
     def selected_academy

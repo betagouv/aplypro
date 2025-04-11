@@ -22,9 +22,11 @@
     = render 'shared/skiplinks'
     = render 'shared/analytics' if Rails.env.production?
     = render 'shared/header'
-    - unless @inhibit_nav
-      - if current_establishment
+    - unless @inhibit_banner
+      - if defined?(current_establishment) && current_establishment
         = render 'shared/etab_banner'
+      - elsif defined?(selected_academy) && selected_academy
+        = render 'academic/shared/academy_banner'
     .fr-container
       %main#main.fr-pt-3w.fr-pb-6w
         = render 'shared/flash'

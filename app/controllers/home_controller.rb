@@ -21,6 +21,7 @@ class HomeController < ApplicationController
   end
 
   def welcome
+    @inhibit_banner = true
     @inhibit_nav = true
 
     current_user.update!(welcomed: true)
