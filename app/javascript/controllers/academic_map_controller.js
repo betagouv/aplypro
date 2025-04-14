@@ -59,7 +59,9 @@ export default class extends Controller {
 
     const path = d3.geoPath().projection(projection)
 
-    const zoom = d3.zoom().on("zoom", zoomed)
+    const zoom = d3.zoom()
+        .scaleExtent([1, Infinity])
+        .on("zoom", zoomed)
 
     d3.json(getAcademyGeoJson(this.selectedAcademy)).then((geojson) => {
           const [[x0, y0], [x1, y1]] = d3.geoPath().projection(projection).bounds(geojson)
@@ -85,10 +87,14 @@ export default class extends Controller {
               .attr("stroke-width", 2)
               .attr("d", path)
 
-          svg.call(zoom).call(zoom.transform, d3.zoomIdentity
+          const initialTransform = d3.zoomIdentity
               .translate(translate[0], translate[1])
               .scale(scale * 2 * Math.PI)
-          )
+
+          svg.call(zoom)
+              .call(zoom.transform, initialTransform)
+
+          zoom.scaleExtent([initialTransform.k * 0.8, Infinity])
 
         this.createEstablishmentsPoints(pathLayer, projection)
         this.setupTableClickInteraction(projection, svg, zoom)
