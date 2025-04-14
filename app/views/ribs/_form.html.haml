@@ -13,12 +13,14 @@
 
   = form.dsfr_text_field(:name, width: 'md-4')
 
-  #iban-fields{data: { controller: "iban", iban_initial_value: @rib.iban }}
-    %label IBAN
+  .fr-input-group{data: { controller: "iban", iban_initial_value: @rib.iban }}
+    %label.fr-label.fr-mb-1w{ for: "rib_iban" }
+      IBAN
+      %span.fr-hint-text= t("activerecord.hints.rib.iban").html_safe
     .iban-inputs{ style: "display: flex; gap: 5px;" }
       - 7.times do
-        %input.iban-part{ type: "text", maxlength: "4", class: "fr-input fr-col-md-1", data: { iban_target: "part" } }
-    = form.hidden_field(:iban, id: "iban_hidden", data: { iban_target: "hidden" })
+        %input.fr-input.fr-col-md-1.iban-part{ type: "text", maxlength: "4", data: { iban_target: "part" } }
+    = form.hidden_field(:iban, id: "rib_iban", data: { iban_target: "hidden" })
 
   = form.dsfr_text_field(:bic, code: true, width: 'md-3')
 
