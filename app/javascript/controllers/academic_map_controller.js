@@ -1,11 +1,11 @@
 import { Controller } from "@hotwired/stimulus"
-import { tile } from "d3-tile"
 
 import { etabMarkerScale, etabMarkerColor, getAcademyGeoJson } from "../utils/academies"
 
 export default class extends Controller {
   async connect() {
     this.d3 = await import("d3")
+    this.d3Tile = await import("d3-tile")
 
     try {
       this.selectedAcademy = parseInt(this.element.dataset.selectedAcademyValue)
@@ -55,7 +55,7 @@ export default class extends Controller {
         .scale(1)
         .translate([0, 0])
 
-    const tileLayout = tile().size([width, height])
+    const tileLayout = this.d3Tile.tile().size([width, height])
 
     const path = d3.geoPath().projection(projection)
 
