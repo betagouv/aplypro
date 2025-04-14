@@ -1,5 +1,7 @@
-import {Controller} from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus"
 import { tile } from "d3-tile"
+
+import { etabMarkerScale, etabMarkerColor, getAcademyGeoJson } from "../utils/academies"
 
 export default class extends Controller {
   async connect() {
@@ -13,40 +15,6 @@ export default class extends Controller {
 
       this.maxNbSchoolings = Math.max(...Object.values(this.parsedNbSchoolings))
       this.maxAmount = Math.max(...Object.values(this.parsedAmounts))
-
-      this.academies = new Map([
-        [1, '/data/academies/01_PARIS.geojson'],
-        [2, '/data/academies/02_AIX_MARSEILLE.geojson'],
-        [3, '/data/academies/03_BESANCON.geojson'],
-        [4, '/data/academies/04_BORDEAUX.geojson'],
-        [6, '/data/academies/06_CLERMONT_FERRAND.geojson'],
-        [7, '/data/academies/07_DIJON.geojson'],
-        [8, '/data/academies/08_GRENOBLE.geojson'],
-        [9, '/data/academies/09_LILLE.geojson'],
-        [10, '/data/academies/10_LYON.geojson'],
-        [11, '/data/academies/11_MONTPELLIER.geojson'],
-        [12, '/data/academies/12_NANCY_METZ.geojson'],
-        [13, '/data/academies/13_POITIERS.geojson'],
-        [14, '/data/academies/14_RENNES.geojson'],
-        [15, '/data/academies/15_STRASBOURG.geojson'],
-        [16, '/data/academies/16_TOULOUSE.geojson'],
-        [17, '/data/academies/17_NANTES.geojson'],
-        [18, '/data/academies/18_ORLEANS_TOURS.geojson'],
-        [19, '/data/academies/19_REIMS.geojson'],
-        [20, '/data/academies/20_AMIENS.geojson'],
-        [22, '/data/academies/22_LIMOGES.geojson'],
-        [23, '/data/academies/23_NICE.geojson'],
-        [24, '/data/academies/24_CRETEIL.geojson'],
-        [25, '/data/academies/25_VERSAILLES.geojson'],
-        [27, '/data/academies/27_CORSE.geojson'],
-        [28, '/data/academies/28_REUNION.geojson'],
-        [31, '/data/academies/31_MARTINIQUE.geojson'],
-        [32, '/data/academies/32_GUADELOUPE.geojson'],
-        [33, '/data/academies/33_GUYANE.geojson'],
-        [43, '/data/academies/43_MAYOTTE.geojson'],
-        [44, '/data/academies/44_SAINT_PIERRE_ET_MIQUELON.geojson'],
-        [70, '/data/academies/70_NORMANDIE.geojson']
-      ])
 
       this.createMap()
     } catch (error) {
@@ -80,36 +48,34 @@ export default class extends Controller {
         .attr("width", width)
         .attr("height", height)
 
-    const imageLayer = svg.append("g"); // Tuiles OSM
-    const pathLayer = svg.append("g");  // Tracés GeoJSON
+    const imageLayer = svg.append("g")
+    const pathLayer = svg.append("g")
 
     const projection = d3.geoMercator()
         .scale(1)
-        .translate([0, 0]);
+        .translate([0, 0])
 
-    const tileLayout = tile().size([width, height]);
+    const tileLayout = tile().size([width, height])
 
-    const path = d3.geoPath().projection(projection);
+    const path = d3.geoPath().projection(projection)
 
-    const zoom = d3.zoom().on("zoom", zoomed);
+    const zoom = d3.zoom().on("zoom", zoomed)
 
-    //Gestion de l'affichage de l'académie
-    d3.json(this.academies.get(this.selectedAcademy)).then((geojson) => {
-          const [[x0, y0], [x1, y1]] = d3.geoPath().projection(projection).bounds(geojson);
+    d3.json(getAcademyGeoJson(this.selectedAcademy)).then((geojson) => {
+          const [[x0, y0], [x1, y1]] = d3.geoPath().projection(projection).bounds(geojson)
 
-          const dx = x1 - x0;
-          const dy = y1 - y0;
-          const cx = (x0 + x1) / 2;
-          const cy = (y0 + y1) / 2;
+          const dx = x1 - x0
+          const dy = y1 - y0
+          const cx = (x0 + x1) / 2
+          const cy = (y0 + y1) / 2
 
-          const scale = 0.95 / Math.max(dx / width, dy / height);
-          const translate = [width / 2 - scale * cx, height / 2 - scale * cy];
+          const scale = 0.95 / Math.max(dx / width, dy / height)
+          const translate = [width / 2 - scale * cx, height / 2 - scale * cy]
 
           projection
               .scale(scale)
-              .translate(translate);
+              .translate(translate)
 
-          //Contour de la carte
           pathLayer.selectAll("path")
               .data(geojson.features)
               .enter()
@@ -119,27 +85,22 @@ export default class extends Controller {
               .attr("stroke-width", 2)
               .attr("d", path)
 
-          //Gestion du zoom et du fond de carte
           svg.call(zoom).call(zoom.transform, d3.zoomIdentity
               .translate(translate[0], translate[1])
               .scale(scale * 2 * Math.PI)
-          );
+          )
 
-        //Points des établissements
-        this.createEstablishmentsPoints(pathLayer, projection);
-
-        //Interaction entre le tableau et la carte
+        this.createEstablishmentsPoints(pathLayer, projection)
         this.setupTableClickInteraction(projection, svg, zoom)
 
     }).catch((error) => {
       console.error("Error loading the geo file:", error)
     })
 
-    //Met à jour les éléments de la carte
     function zoomed({ transform }) {
       projection
           .scale(transform.k / (2 * Math.PI))
-          .translate([transform.x, transform.y]);
+          .translate([transform.x, transform.y])
 
       const tiles = tileLayout(transform)
 
@@ -150,10 +111,10 @@ export default class extends Controller {
           .attr("x", ([x]) => (x + tiles.translate[0]) * tiles.scale)
           .attr("y", ([,y]) => (y + tiles.translate[1]) * tiles.scale)
           .attr("width", tiles.scale)
-          .attr("height", tiles.scale);
+          .attr("height", tiles.scale)
 
       pathLayer.selectAll("path")
-          .attr("d", path);
+          .attr("d", path)
 
       pathLayer.selectAll("circle")
           .attr("cx", d => projection(d.geometry.coordinates)[0])
@@ -184,15 +145,14 @@ export default class extends Controller {
           .attr("id", d => `marker-${d.properties.Code_UAI}`)
           .attr("cx", d => projection(d.geometry.coordinates)[0])
           .attr("cy", d => projection(d.geometry.coordinates)[1])
-          .attr("r", d => this.sizeScale(this.parsedNbSchoolings[d.properties.Code_UAI]))
-          .attr("fill", d => this.colorScale(this.parsedAmounts[d.properties.Code_UAI]))
+          .attr("r", d => etabMarkerScale(d3, this.parsedNbSchoolings[d.properties.Code_UAI], this.maxNbSchoolings))
+          .attr("fill", d => etabMarkerColor(d3, this.parsedAmounts[d.properties.Code_UAI], this.maxAmount))
           .attr("stroke", "black")
-          .attr("stroke-width", 1)  // Épaisseur initiale du contour
+          .attr("stroke-width", 1)
           .on("mouseover", (event, d) => this.mouseOver(event, d, tooltip))
           .on("mouseout", (event, d) => this.mouseOut(event, d, tooltip))
           .on("click", (event, d) => {
-              // Surligne la ligne du tableau
-              document.querySelectorAll("tr.selected").forEach(tr => tr.classList.remove("selected"));
+              document.querySelectorAll("tr.selected").forEach(tr => tr.classList.remove("selected"))
               const row = document.querySelector(`tr.academic-map[data-uai="${d.properties.Code_UAI}"]`)
               if (row) row.classList.add("selected")
           })
@@ -201,39 +161,33 @@ export default class extends Controller {
     })
   }
 
+  setupTableClickInteraction(projection, svg, zoom) {
+    document.querySelectorAll("tr.academic-map").forEach(row => {
+      row.addEventListener("click", () => {
+        const uai = row.dataset.uai
+        const marker = document.getElementById(`marker-${uai}`)
 
+        if (marker && marker.__data__?.geometry?.coordinates) {
+          const [x, y] = projection(marker.__data__.geometry.coordinates)
 
-    setupTableClickInteraction(projection, svg, zoom) {
-        document.querySelectorAll("tr.academic-map").forEach(row => {
-            row.addEventListener("click", () => {
-                const uai = row.dataset.uai;
-                const marker = document.getElementById(`marker-${uai}`)
+          svg.transition()
+              .duration(750)
+              .call(
+                  zoom.transform,
+                  this.d3.zoomIdentity
+                      .translate(x, y)
+                      .scale(2048)
+              )
 
-                if (marker && marker.__data__?.geometry?.coordinates) {
-                    const [x, y] = projection(marker.__data__.geometry.coordinates);
-
-                    // Applique le zoom via d3.zoom
-                    svg.transition()
-                        .duration(750)
-                        .call(
-                            zoom.transform,
-                            this.d3.zoomIdentity
-                                .translate(x, y)
-                                .scale(2048) // Ou un niveau de zoom raisonnable
-                        );
-
-                    // Highlight la ligne
-                    document.querySelectorAll("tr.selected").forEach(tr => tr.classList.remove("selected"));
-                    row.classList.add("selected");
-                }
-            });
-        });
-    }
-
-
+          document.querySelectorAll("tr.selected").forEach(tr => tr.classList.remove("selected"))
+          row.classList.add("selected")
+        }
+      })
+    })
+  }
 
   mouseOver(event, d, tooltip) {
-    const e = this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI);
+    const e = this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)
 
     this.d3.select(event.currentTarget)
         .transition()
@@ -254,24 +208,8 @@ export default class extends Controller {
     this.d3.select(event.currentTarget)
         .transition()
         .duration(200)
-        .attr("fill", this.colorScale(this.parsedAmounts[d.properties.Code_UAI]))
+        .attr("fill", etabMarkerColor(this.d3, this.parsedAmounts[d.properties.Code_UAI], this.maxAmount))
 
     tooltip.style("display", "none")
-  }
-
-
-
-  sizeScale(nbSchoolings) {
-    const scale = this.d3.scaleSqrt()
-      .domain([0, this.maxNbSchoolings])
-      .range([5, 18]); // Taille des cercles (min 3px, max 15px)
-    return scale(nbSchoolings || 0);
-  }
-
-  colorScale(amount) {
-    const scale = this.d3.scaleLinear()
-      .domain([0, this.maxAmount])
-      .range(["#ffbdbd", "#cd0000"])
-    return scale(amount || 0)
   }
 }
