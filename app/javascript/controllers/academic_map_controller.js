@@ -30,6 +30,30 @@ export default class extends Controller {
     }
   }
 
+  zoomed({ transform }) {
+    this.projection
+        .scale(transform.k / (2 * Math.PI))
+        .translate([transform.x, transform.y])
+
+    const tiles = this.tileLayout(transform)
+
+    this.tileLayer.selectAll("image")
+        .data(tiles, d => d)
+        .join("image")
+        .attr("xlink:href", d => `https://a.tile.openstreetmap.org/${d[2]}/${d[0]}/${d[1]}.png`)
+        .attr("x", ([x]) => (x + tiles.translate[0]) * tiles.scale)
+        .attr("y", ([,y]) => (y + tiles.translate[1]) * tiles.scale)
+        .attr("width", tiles.scale)
+        .attr("height", tiles.scale)
+
+    this.academyLayer.selectAll("path")
+        .attr("d", this.path)
+
+    this.academyLayer.selectAll("circle")
+        .attr("cx", d => this.projection(d.geometry.coordinates)[0])
+        .attr("cy", d => this.projection(d.geometry.coordinates)[1])
+  }
+
   createMap() {
     const d3 = this.d3
     const containerId = 'map-container'
@@ -51,20 +75,20 @@ export default class extends Controller {
     this.tileLayer = svg.append("g").attr("id", "tile-layer")
     this.academyLayer = svg.append("g").attr("id", "academy-layer")
 
-    const projection = d3.geoMercator()
+    this.projection = d3.geoMercator()
         .scale(1)
         .translate([0, 0])
 
-    const tileLayout = this.d3Tile.tile().size([width, height])
+    this.tileLayout = this.d3Tile.tile().size([width, height])
 
-    const path = d3.geoPath().projection(projection)
+    this.path = d3.geoPath().projection(this.projection)
 
     const zoom = d3.zoom()
         .scaleExtent([1, Infinity])
-        .on("zoom", zoomed.bind(this))
+        .on("zoom", this.zoomed.bind(this))
 
     d3.json(getAcademyGeoJson(this.selectedAcademy)).then((geojson) => {
-          const [[x0, y0], [x1, y1]] = d3.geoPath().projection(projection).bounds(geojson)
+          const [[x0, y0], [x1, y1]] = d3.geoPath().projection(this.projection).bounds(geojson)
 
           const dx = x1 - x0
           const dy = y1 - y0
@@ -74,7 +98,7 @@ export default class extends Controller {
           const scale = 0.95 / Math.max(dx / width, dy / height)
           const translate = [width / 2 - scale * cx, height / 2 - scale * cy]
 
-          projection
+          this.projection
               .scale(scale)
               .translate(translate)
 
@@ -85,7 +109,7 @@ export default class extends Controller {
               .attr("stroke", "#000")
               .attr("fill", "none")
               .attr("stroke-width", 2)
-              .attr("d", path)
+              .attr("d", this.path)
 
           const initialTransform = d3.zoomIdentity
               .translate(translate[0], translate[1])
@@ -96,37 +120,13 @@ export default class extends Controller {
 
           zoom.scaleExtent([initialTransform.k * 0.8, Infinity])
 
-          this.createEtabMarkers(projection)
+          this.createEtabMarkers()
     }).catch((error) => {
       console.error("Error loading the geo file:", error)
     })
-
-    function zoomed({ transform }) {
-      projection
-          .scale(transform.k / (2 * Math.PI))
-          .translate([transform.x, transform.y])
-
-      const tiles = tileLayout(transform)
-
-      this.tileLayer.selectAll("image")
-          .data(tiles, d => d)
-          .join("image")
-          .attr("xlink:href", d => `https://a.tile.openstreetmap.org/${d[2]}/${d[0]}/${d[1]}.png`)
-          .attr("x", ([x]) => (x + tiles.translate[0]) * tiles.scale)
-          .attr("y", ([,y]) => (y + tiles.translate[1]) * tiles.scale)
-          .attr("width", tiles.scale)
-          .attr("height", tiles.scale)
-
-      this.academyLayer.selectAll("path")
-          .attr("d", path)
-
-      this.academyLayer.selectAll("circle")
-          .attr("cx", d => projection(d.geometry.coordinates)[0])
-          .attr("cy", d => projection(d.geometry.coordinates)[1])
-    }
   }
 
-  createEtabMarkers(projection) {
+  createEtabMarkers() {
     const d3 = this.d3
     d3.json("/data/ETABLISSEMENTS_FRANCE.geojson").then((geojson) => {
       const tooltip = d3.select("#map-container")
@@ -147,8 +147,8 @@ export default class extends Controller {
           .append("circle")
           .filter(d => d.geometry && d.geometry.coordinates)
           .attr("id", d => `marker-${d.properties.Code_UAI}`)
-          .attr("cx", d => projection(d.geometry.coordinates)[0])
-          .attr("cy", d => projection(d.geometry.coordinates)[1])
+          .attr("cx", d => this.projection(d.geometry.coordinates)[0])
+          .attr("cy", d => this.projection(d.geometry.coordinates)[1])
           .attr("r", d => etabMarkerScale(d3, this.parsedNbSchoolings[d.properties.Code_UAI], this.maxNbSchoolings))
           .attr("fill", d => etabMarkerColor(d3, this.parsedAmounts[d.properties.Code_UAI], this.maxAmount))
           .attr("stroke", "black")
