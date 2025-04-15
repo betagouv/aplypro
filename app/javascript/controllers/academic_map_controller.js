@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import { mapColors, etabMarkerScale, etabMarkerColor, getAcademyGeoJson, ACADEMIES } from "../utils/map_utils"
+import { mapColors, etabMarkerScale, etabMarkerColor, getAcademyGeoJson, ACADEMIES } from "utils/map_utils"
 
 export default class extends Controller {
   static values = {

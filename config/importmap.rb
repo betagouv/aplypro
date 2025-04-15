@@ -16,3 +16,4 @@ pin "controllers/index", preload: true
 pin "controllers/application", preload: true
 pin "controllers/map_controller", preload: false
 pin "controllers/academic_map_controller", preload: false
+pin "utils/map_utils", preload: false
