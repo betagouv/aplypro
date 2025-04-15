@@ -30,7 +30,9 @@ export default class extends Controller {
     }
   }
 
-  zoomed({ transform }) {
+  zoomed(event) {
+    const transform = event.transform
+
     this.projection
         .scale(transform.k / (2 * Math.PI))
         .translate([transform.x, transform.y])
