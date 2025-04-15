@@ -8,6 +8,7 @@ export default class extends Controller {
         this.partTargets.forEach((input, index) => {
             input.addEventListener("paste", (e) => this.handlePaste(e))
             input.addEventListener("input", () => this.handleInput(index))
+            input.addEventListener("keydown", (e) => this.handleBackspace(e, index))
         })
 
         if (this.hasInitialValue && this.initialValue.length > 0) {
@@ -15,14 +16,6 @@ export default class extends Controller {
         }
 
         this.updateHidden()
-    }
-
-    prefillParts(iban) {
-        const clean = iban.replace(/\s+/g, "").toUpperCase()
-        this.partTargets.forEach((input, i) => {
-            const slice = clean.slice(i * 4, (i + 1) * 4)
-            input.value = slice || ""
-        })
     }
 
     handlePaste(e) {
@@ -40,6 +33,25 @@ export default class extends Controller {
             this.partTargets[index + 1].focus()
         }
         this.updateHidden()
+    }
+
+    handleBackspace(e, index) {
+        const input = this.partTargets[index]
+        if (e.key === "Backspace" && input.value === "" && index > 0) {
+            e.preventDefault()
+            const prevInput = this.partTargets[index - 1]
+            prevInput.focus()
+            prevInput.value = prevInput.value.slice(0, -1)
+            this.updateHidden()
+        }
+    }
+
+    prefillParts(iban) {
+        const clean = iban.replace(/\s+/g, "").toUpperCase()
+        this.partTargets.forEach((input, i) => {
+            const slice = clean.slice(i * 4, (i + 1) * 4)
+            input.value = slice || ""
+        })
     }
 
     updateHidden() {
