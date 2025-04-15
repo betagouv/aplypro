@@ -1,31 +1,36 @@
 .home.fr-container
-  %h2= "Académie #{@selected_academy}"
-  .fr-grid-row.fr-grid-row--gutters
-    .fr-col-12.fr-col-md-6
-      %h5= "Répartition géographique des établissements"
-      #map-container{
-        data: {
-          controller: "academic_map",
-          selected_academy_value: @selected_academy.html_safe,
-          establishments_for_academy: @establishments_for_academy.to_json.html_safe,
-          nb_schoolings_per_establishments: @nb_schoolings_per_establishments.to_json.html_safe,
-          amounts_per_establishments: @amounts_per_establishments.to_json.html_safe,
-        }
-      }
-
-    .fr-col-12.fr-col-md-6
-      %h5= "#{@establishments_for_academy.count} établissements dans cette académie"
-      .fr-table
-        %table
-          %thead
-            %td{scope: "col"} UAI
-            %th{scope: "col"} Adresse
-            %th{scope: "col"} Nombre de scolarités
-            %th{scope: "col"} Montant total payé
-          %tbody
-            - @establishments_for_academy.each do |establishment|
-              %tr.academic-map{ data: { uai: establishment.uai } }
-                %td= establishment.uai
-                %td= "#{establishment.address_line1}, #{establishment.city}, #{establishment.postal_code}"
-                %td= @nb_schoolings_per_establishments[establishment.uai]
-                %td= @amounts_per_establishments[establishment.uai]
+  #academic-map-container{
+      data: {
+        controller: "academic_map",
+        selected_academy_value: @selected_academy.html_safe,
+        establishments_for_academy: @establishments_for_academy.to_json.html_safe,
+        nb_schoolings_per_establishments: @nb_schoolings_per_establishments.to_json.html_safe,
+        amounts_per_establishments: @amounts_per_establishments.to_json.html_safe,
+    }
+  }
+    %h2= "Académie #{@selected_academy}"
+    .fr-grid-row.fr-grid-row--gutters
+      .fr-col-12.fr-col-md-6
+        %h5= "Répartition géographique des établissements"
+        #map-container
+      .fr-col-12.fr-col-md-6
+        %h5= "#{@establishments_for_academy.count} établissements dans cette académie"
+        .fr-table
+          %table
+            %thead
+              %td{scope: "col"} UAI
+              %th{scope: "col"} Adresse
+              %th{scope: "col"} Nombre de scolarités
+              %th{scope: "col"} Montant total payé
+            %tbody
+              - @establishments_for_academy.each do |establishment|
+                %tr.academic-map{
+                  data: {
+                    uai: establishment.uai,
+                    action: "click->academic_map#selectEstablishment"
+                  }
+                }
+                  %td= establishment.uai
+                  %td= "#{establishment.address_line1}, #{establishment.city}, #{establishment.postal_code}"
+                  %td= @nb_schoolings_per_establishments[establishment.uai]
+                  %td= @amounts_per_establishments[establishment.uai]

@@ -97,8 +97,6 @@ export default class extends Controller {
           zoom.scaleExtent([initialTransform.k * 0.8, Infinity])
 
         this.createEstablishmentsPoints(pathLayer, projection)
-        this.setupTableClickInteraction(projection, svg, zoom)
-
     }).catch((error) => {
       console.error("Error loading the geo file:", error)
     })
@@ -167,29 +165,9 @@ export default class extends Controller {
     })
   }
 
-  setupTableClickInteraction(projection, svg, zoom) {
-    document.querySelectorAll("tr.academic-map").forEach(row => {
-      row.addEventListener("click", () => {
-        const uai = row.dataset.uai
-        const marker = document.getElementById(`marker-${uai}`)
-
-        if (marker && marker.__data__?.geometry?.coordinates) {
-          const [x, y] = projection(marker.__data__.geometry.coordinates)
-
-          svg.transition()
-              .duration(750)
-              .call(
-                  zoom.transform,
-                  this.d3.zoomIdentity
-                      .translate(x, y)
-                      .scale(2048)
-              )
-
-          document.querySelectorAll("tr.selected").forEach(tr => tr.classList.remove("selected"))
-          row.classList.add("selected")
-        }
-      })
-    })
+  selectEstablishment(event){
+    const uai = event.currentTarget.dataset.uai
+    console.log(uai)
   }
 
   mouseOver(event, d, tooltip) {
