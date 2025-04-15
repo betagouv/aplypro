@@ -57,6 +57,7 @@ export default class extends Controller {
           .attr("y", ([,y]) => (y + tiles.translate[1]) * tiles.scale)
           .attr("width", tiles.scale)
           .attr("height", tiles.scale)
+          .style("filter", "saturate(0.3)")
 
       this.academyLayer.selectAll("path")
           .attr("d", this.path)
