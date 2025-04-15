@@ -5,9 +5,15 @@ Quand("je remplis des coordonnées bancaires") do
 
   steps %(
     Quand je remplis "Titulaire du compte" avec "#{name}"
-    Et que je remplis les sous-champs de l'IBAN "#{rib.iban}"
+    Et que je remplis le champ de l'IBAN "#{rib.iban}"
     Et que je remplis "BIC" avec "#{rib.bic}"
   )
+end
+
+Quand("je remplis le champ de l'IBAN {string}") do |iban|
+  steps %(Quand je remplis "IBAN" avec "#{iban}")
+rescue Capybara::ElementNotFound
+  steps %(Quand je remplis les sous-champs de l'IBAN "#{iban}")
 end
 
 Quand("je remplis les sous-champs de l'IBAN {string}") do |iban|
