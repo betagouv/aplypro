@@ -3,6 +3,10 @@ import { Controller } from "@hotwired/stimulus"
 import { etabMarkerScale, etabMarkerColor, getAcademyGeoJson } from "../utils/academies"
 
 export default class extends Controller {
+  static values = {
+    highlightColor: { type: String, default: "#88fdaa" }
+  }
+
   async connect() {
     this.d3 = await import("d3")
     this.d3Tile = await import("d3-tile")
@@ -166,9 +170,15 @@ export default class extends Controller {
           .on("mouseover", (event, d) => this.mouseOver(event, d, tooltip))
           .on("mouseout", (event, d) => this.mouseOut(event, d, tooltip))
           .on("click", (event, d) => {
-              document.querySelectorAll("tr.selected").forEach(tr => tr.classList.remove("selected"))
+              document.querySelectorAll("tr.selected").forEach(tr => {
+                tr.classList.remove("selected")
+                tr.style.backgroundColor = ''
+              })
               const row = document.querySelector(`tr.academic-map[data-uai="${d.properties.Code_UAI}"]`)
-              if (row) row.classList.add("selected")
+              if (row) {
+                row.classList.add("selected")
+                row.style.backgroundColor = this.highlightColorValue
+              }
           })
     }).catch((error) => {
       console.error("Error loading the geo file:", error)
@@ -188,10 +198,17 @@ export default class extends Controller {
 
       const originalColor = etabMarkerColor(this.d3, this.parsedAmounts[uai], this.maxAmount)
 
+      document.querySelectorAll("tr.selected").forEach(tr => {
+        tr.classList.remove("selected")
+        tr.style.backgroundColor = ''
+      })
+      event.currentTarget.classList.add("selected")
+      event.currentTarget.style.backgroundColor = this.highlightColorValue
+
       this.d3.select(marker)
           .transition()
           .duration(200)
-          .attr("fill", "#88fdaa")
+          .attr("fill", this.highlightColorValue)
           .transition()
           .duration(200)
           .delay(500)
@@ -205,7 +222,7 @@ export default class extends Controller {
     this.d3.select(event.currentTarget)
         .transition()
         .duration(200)
-        .attr("fill", "#88fdaa")
+        .attr("fill", this.highlightColorValue)
 
     tooltip
         .style("left", (event.pageX + 10) + "px")
