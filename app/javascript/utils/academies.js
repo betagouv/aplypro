@@ -47,6 +47,6 @@ export function etabMarkerScale(d3, nb, maxNbSchoolings) {
 export function etabMarkerColor(d3, amount, maxAmount) {
   const scale = d3.scaleLinear()
     .domain([0, maxAmount])
-    .range(["#ffbdbd", "#cd0000"])
+    .range(["#fcbfbf", "#e1000f"])
   return scale(amount || 0)
 }

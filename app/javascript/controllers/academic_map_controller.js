@@ -1,10 +1,11 @@
 import { Controller } from "@hotwired/stimulus"
-
 import { etabMarkerScale, etabMarkerColor, getAcademyGeoJson } from "../utils/academies"
 
 export default class extends Controller {
   static values = {
-    highlightColor: { type: String, default: "#88fdaa" }
+    highlightColor: { type: String, default: "#cacafb" },
+    panDuration: { type: Number, default: 750 },
+    academyStrokeColor: { type: String, default: "#6a6af4" }
   }
 
   async connect() {
@@ -32,78 +33,84 @@ export default class extends Controller {
       container.removeAttribute('data-initialized')
       container.innerHTML = ''
     }
+    this.svg = null
+    this.width = null
+    this.height = null
+    this.currentTransform = null
+    this.zoom = null
   }
 
   zoomed(event) {
-    const transform = event.transform
+      this.currentTransform = event.transform
 
-    this.projection
-        .scale(transform.k / (2 * Math.PI))
-        .translate([transform.x, transform.y])
+      this.projection
+          .scale(event.transform.k / (2 * Math.PI))
+          .translate([event.transform.x, event.transform.y])
 
-    const tiles = this.tileLayout(transform)
+      const tiles = this.tileLayout(event.transform)
 
-    this.tileLayer.selectAll("image")
-        .data(tiles, d => d)
-        .join("image")
-        .attr("xlink:href", d => `https://a.tile.openstreetmap.org/${d[2]}/${d[0]}/${d[1]}.png`)
-        .attr("x", ([x]) => (x + tiles.translate[0]) * tiles.scale)
-        .attr("y", ([,y]) => (y + tiles.translate[1]) * tiles.scale)
-        .attr("width", tiles.scale)
-        .attr("height", tiles.scale)
+      this.tileLayer.selectAll("image")
+          .data(tiles, d => d)
+          .join("image")
+          .attr("xlink:href", d => `https://a.tile.openstreetmap.org/${d[2]}/${d[0]}/${d[1]}.png`)
+          .attr("x", ([x]) => (x + tiles.translate[0]) * tiles.scale)
+          .attr("y", ([,y]) => (y + tiles.translate[1]) * tiles.scale)
+          .attr("width", tiles.scale)
+          .attr("height", tiles.scale)
 
-    this.academyLayer.selectAll("path")
-        .attr("d", this.path)
+      this.academyLayer.selectAll("path")
+          .attr("d", this.path)
 
-    this.academyLayer.selectAll("circle")
-        .attr("cx", d => this.projection(d.geometry.coordinates)[0])
-        .attr("cy", d => this.projection(d.geometry.coordinates)[1])
+      this.academyLayer.selectAll("circle")
+          .attr("cx", d => this.projection(d.geometry.coordinates)[0])
+          .attr("cy", d => this.projection(d.geometry.coordinates)[1])
   }
 
   createMap() {
-    const d3 = this.d3
     const containerId = 'map-container'
-
     const container = document.getElementById(containerId)
+
     if (!container || container.hasAttribute('data-initialized')) return
 
     container.setAttribute('data-initialized', 'true')
     container.innerHTML = ''
 
-    const width = container.offsetWidth
-    const height = 700
+    this.width = container.offsetWidth
+    this.height = 700
 
-    const svg = d3.select("#" + containerId)
+    this.svg = this.d3.select("#" + containerId)
         .append("svg")
-        .attr("width", width)
-        .attr("height", height)
+        .attr("width", this.width)
+        .attr("height", this.height)
 
-    this.tileLayer = svg.append("g").attr("id", "tile-layer")
-    this.academyLayer = svg.append("g").attr("id", "academy-layer")
+    this.tileLayer = this.svg.append("g").attr("id", "tile-layer")
+    this.academyLayer = this.svg.append("g").attr("id", "academy-layer")
 
-    this.projection = d3.geoMercator()
+    this.projection = this.d3.geoMercator()
         .scale(1)
         .translate([0, 0])
 
-    this.tileLayout = this.d3Tile.tile().size([width, height])
+    this.tileLayout = this.d3Tile.tile().size([this.width, this.height])
 
-    this.path = d3.geoPath().projection(this.projection)
+    this.path = this.d3.geoPath().projection(this.projection)
 
-    this.createAcademyPath(width, height).then(initialTransform => {
-      const zoom = d3.zoom()
+    this.createAcademyPath().then(initialTransform => {
+      this.zoom = this.d3.zoom()
           .scaleExtent([1, Infinity])
           .on("zoom", this.zoomed.bind(this))
 
-      svg.call(zoom)
-          .call(zoom.transform, initialTransform)
+      this.currentTransform = initialTransform
 
-      zoom.scaleExtent([initialTransform.k * 0.8, Infinity])
+      this.svg.call(this.zoom)
+          .call(this.zoom.transform, initialTransform)
+
+      this.zoom.scaleExtent([initialTransform.k * 0.8, Infinity])
 
       this.createEtabMarkers()
     })
   }
 
-  async createAcademyPath(width, height) {
+  async createAcademyPath() {
     try {
       const geojson = await this.d3.json(getAcademyGeoJson(this.selectedAcademy))
 
@@ -114,8 +121,8 @@ export default class extends Controller {
       const cx = (x0 + x1) / 2
       const cy = (y0 + y1) / 2
 
-      const scale = 0.95 / Math.max(dx / width, dy / height)
-      const translate = [width / 2 - scale * cx, height / 2 - scale * cy]
+      const scale = 0.95 / Math.max(dx / this.width, dy / this.height)
+      const translate = [this.width / 2 - scale * cx, this.height / 2 - scale * cy]
 
       this.projection
           .scale(scale)
@@ -125,7 +132,7 @@ export default class extends Controller {
           .data(geojson.features)
           .enter()
           .append("path")
-          .attr("stroke", "#000")
+          .attr("stroke", this.academyStrokeColorValue)
           .attr("fill", "none")
           .attr("stroke-width", 2)
           .attr("d", this.path)
@@ -185,14 +192,34 @@ export default class extends Controller {
     })
   }
 
+  panToMarker(longitude, latitude) {
+    const [x, y] = this.projection([longitude, latitude]);
+
+    const centerX = this.width / 2;
+    const centerY = this.height / 2;
+
+    const dx = centerX - x;
+    const dy = centerY - y;
+
+    const newTransform = this.d3.zoomIdentity
+        .translate(this.currentTransform.x + dx, this.currentTransform.y + dy)
+        .scale(this.currentTransform.k);
+    this.svg
+        .transition()
+        .duration(this.panDurationValue)
+        .call(this.zoom.transform, newTransform);
+  }
+
   selectEstablishment(event) {
     const uai = event.currentTarget.dataset.uai
     const marker = document.querySelector(`#marker-${uai}`)
 
     if (marker) {
-      const longitude = marker.getAttribute("data-longitude")
-      const latitude = marker.getAttribute("data-latitude")
-      console.log(`Selected establishment coordinates: [${longitude}, ${latitude}]`)
+      const longitude = parseFloat(marker.getAttribute("data-longitude"))
+      const latitude = parseFloat(marker.getAttribute("data-latitude"))
+
+      this.panToMarker(longitude, latitude)
+
       this.d3.select(marker)
           .interrupt()
 
