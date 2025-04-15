@@ -83,47 +83,53 @@ export default class extends Controller {
 
     this.path = d3.geoPath().projection(this.projection)
 
-    const zoom = d3.zoom()
-        .scaleExtent([1, Infinity])
-        .on("zoom", this.zoomed.bind(this))
+    this.createAcademyPath(width, height).then(initialTransform => {
+      const zoom = d3.zoom()
+          .scaleExtent([1, Infinity])
+          .on("zoom", this.zoomed.bind(this))
 
-    d3.json(getAcademyGeoJson(this.selectedAcademy)).then((geojson) => {
-          const [[x0, y0], [x1, y1]] = d3.geoPath().projection(this.projection).bounds(geojson)
+      svg.call(zoom)
+          .call(zoom.transform, initialTransform)
 
-          const dx = x1 - x0
-          const dy = y1 - y0
-          const cx = (x0 + x1) / 2
-          const cy = (y0 + y1) / 2
+      zoom.scaleExtent([initialTransform.k * 0.8, Infinity])
 
-          const scale = 0.95 / Math.max(dx / width, dy / height)
-          const translate = [width / 2 - scale * cx, height / 2 - scale * cy]
-
-          this.projection
-              .scale(scale)
-              .translate(translate)
-
-          this.academyLayer.selectAll("path")
-              .data(geojson.features)
-              .enter()
-              .append("path")
-              .attr("stroke", "#000")
-              .attr("fill", "none")
-              .attr("stroke-width", 2)
-              .attr("d", this.path)
-
-          const initialTransform = d3.zoomIdentity
-              .translate(translate[0], translate[1])
-              .scale(scale * 2 * Math.PI)
-
-          svg.call(zoom)
-              .call(zoom.transform, initialTransform)
-
-          zoom.scaleExtent([initialTransform.k * 0.8, Infinity])
-
-          this.createEtabMarkers()
-    }).catch((error) => {
-      console.error("Error loading the geo file:", error)
+      this.createEtabMarkers()
     })
+  }
+
+  async createAcademyPath(width, height) {
+    try {
+      const geojson = await this.d3.json(getAcademyGeoJson(this.selectedAcademy))
+
+      const [[x0, y0], [x1, y1]] = this.d3.geoPath().projection(this.projection).bounds(geojson)
+
+      const dx = x1 - x0
+      const dy = y1 - y0
+      const cx = (x0 + x1) / 2
+      const cy = (y0 + y1) / 2
+
+      const scale = 0.95 / Math.max(dx / width, dy / height)
+      const translate = [width / 2 - scale * cx, height / 2 - scale * cy]
+
+      this.projection
+          .scale(scale)
+          .translate(translate)
+
+      this.academyLayer.selectAll("path")
+          .data(geojson.features)
+          .enter()
+          .append("path")
+          .attr("stroke", "#000")
+          .attr("fill", "none")
+          .attr("stroke-width", 2)
+          .attr("d", this.path)
+
+      return this.d3.zoomIdentity
+          .translate(translate[0], translate[1])
+          .scale(scale * 2 * Math.PI)
+    } catch (error) {
+      console.error("Error loading the geo file:", error)
+    }
   }
 
   createEtabMarkers() {
@@ -171,24 +177,24 @@ export default class extends Controller {
     const uai = event.currentTarget.dataset.uai
     const marker = document.querySelector(`#marker-${uai}`)
 
-      if (marker) {
-        const longitude = marker.getAttribute("data-longitude")
-        const latitude = marker.getAttribute("data-latitude")
-        console.log(`Selected establishment coordinates: [${longitude}, ${latitude}]`)
-        this.d3.select(marker)
-            .interrupt()
+    if (marker) {
+      const longitude = marker.getAttribute("data-longitude")
+      const latitude = marker.getAttribute("data-latitude")
+      console.log(`Selected establishment coordinates: [${longitude}, ${latitude}]`)
+      this.d3.select(marker)
+          .interrupt()
 
-        const originalColor = etabMarkerColor(this.d3, this.parsedAmounts[uai], this.maxAmount)
+      const originalColor = etabMarkerColor(this.d3, this.parsedAmounts[uai], this.maxAmount)
 
-        this.d3.select(marker)
-            .transition()
-            .duration(200)
-            .attr("fill", "#88fdaa")
-            .transition()
-            .duration(200)
-            .delay(500)
-            .attr("fill", originalColor)
-      }
+      this.d3.select(marker)
+          .transition()
+          .duration(200)
+          .attr("fill", "#88fdaa")
+          .transition()
+          .duration(200)
+          .delay(500)
+          .attr("fill", originalColor)
+    }
   }
 
   mouseOver(event, d, tooltip) {
