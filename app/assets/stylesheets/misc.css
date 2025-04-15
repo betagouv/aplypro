@@ -95,6 +95,11 @@
   margin-bottom: 3rem;
 }
 
-#map-container {
-  margin-top: 1rem;
+.establishments-table-container {
+  max-height: 700px;
+  overflow-y: auto;
+
+  .fr-table {
+    margin-top: 0rem;
+  }
 }

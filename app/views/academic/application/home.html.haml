@@ -14,22 +14,23 @@
       .fr-col-12.fr-col-md-6
         #map-container
       .fr-col-12.fr-col-md-6
-        .fr-table
-          %table
-            %thead
-              %td{scope: "col"} UAI
-              %th{scope: "col"} Adresse
-              %th{scope: "col"} Nombre de scolarités
-              %th{scope: "col"} Montant total payé
-            %tbody
-              - @establishments_for_academy.each do |establishment|
-                %tr.academic-map{
-                  data: {
-                    uai: establishment.uai,
-                    action: "click->academic_map#selectEstablishment"
+        .establishments-table-container
+          .fr-table
+            %table.establishments-table
+              %thead
+                %td{scope: "col"} UAI
+                %th{scope: "col"} Adresse
+                %th{scope: "col"} Nombre de scolarités
+                %th{scope: "col"} Montant total payé
+              %tbody
+                - @establishments_for_academy.each do |establishment|
+                  %tr.academic-map{
+                    data: {
+                      uai: establishment.uai,
+                      action: "click->academic_map#selectEstablishment"
+                    }
                   }
-                }
-                  %td= establishment.uai
-                  %td= "#{establishment.address_line1}, #{establishment.city}, #{establishment.postal_code}"
-                  %td= @nb_schoolings_per_establishments[establishment.uai]
-                  %td= @amounts_per_establishments[establishment.uai]
+                    %td= establishment.uai
+                    %td= "#{establishment.address_line1}, #{establishment.city}, #{establishment.postal_code}"
+                    %td= @nb_schoolings_per_establishments[establishment.uai]
+                    %td= @amounts_per_establishments[establishment.uai]

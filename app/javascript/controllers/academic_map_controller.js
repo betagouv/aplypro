@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import { mapColors, etabMarkerScale, etabMarkerColor, getAcademyGeoJson } from "../utils/map_utils"
+import { mapColors, etabMarkerScale, etabMarkerColor, getAcademyGeoJson, ACADEMIES } from "../utils/map_utils"
 
 export default class extends Controller {
   static values = {
@@ -115,6 +115,22 @@ export default class extends Controller {
     try {
       const geojson = await this.d3.json(getAcademyGeoJson(this.selectedAcademy))
 
+      const academyCode = ACADEMIES[this.selectedAcademy]
+      if (academyCode) {
+        const academyName = academyCode
+          .slice(3)
+          .replace(/_/g, ' ')
+          .toLowerCase()
+          .split(' ')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ')
+
+        const h2Element = document.querySelector('h2')
+        if (h2Element) {
+          h2Element.textContent = `Académie ${this.selectedAcademy} : ${academyName}`
+        }
+      }
+
       const [[x0, y0], [x1, y1]] = this.d3.geoPath().projection(this.projection).bounds(geojson)
 
       const dx = x1 - x0
@@ -178,19 +194,25 @@ export default class extends Controller {
           .on("mouseover", (event, d) => this.mouseOver(event, d, tooltip))
           .on("mouseout", (event, d) => this.mouseOut(event, d, tooltip))
           .on("click", (event, d) => {
-              document.querySelectorAll("tr.selected").forEach(tr => {
-                tr.classList.remove("selected")
-                tr.style.backgroundColor = ''
-              })
-              const row = document.querySelector(`tr.academic-map[data-uai="${d.properties.Code_UAI}"]`)
-              if (row) {
-                row.classList.add("selected")
-                row.style.backgroundColor = this.highlightColorValue
-              }
+            this.highlightRow(d.properties.Code_UAI)
           })
     }).catch((error) => {
       console.error("Error loading the geo file:", error)
     })
+  }
+
+  highlightRow(uai) {
+    document.querySelectorAll("tr.selected").forEach(tr => {
+      tr.classList.remove("selected")
+      tr.style.backgroundColor = ''
+    })
+
+    const row = document.querySelector(`tr.academic-map[data-uai="${uai}"]`)
+    if (row) {
+      row.classList.add("selected")
+      row.style.backgroundColor = this.highlightColorValue
+      row.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
   }
 
   panToMarker(longitude, latitude) {
@@ -226,12 +248,7 @@ export default class extends Controller {
 
       const originalColor = etabMarkerColor(this.d3, this.parsedAmounts[uai], this.maxAmount)
 
-      document.querySelectorAll("tr.selected").forEach(tr => {
-        tr.classList.remove("selected")
-        tr.style.backgroundColor = ''
-      })
-      event.currentTarget.classList.add("selected")
-      event.currentTarget.style.backgroundColor = this.highlightColorValue
+      this.highlightRow(uai)
 
       this.d3.select(marker)
           .transition()
