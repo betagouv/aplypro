@@ -48,8 +48,8 @@ export default class extends Controller {
         .attr("width", width)
         .attr("height", height)
 
-    const imageLayer = svg.append("g")
-    const pathLayer = svg.append("g")
+    this.tileLayer = svg.append("g").attr("id", "tile-layer")
+    this.academyLayer = svg.append("g").attr("id", "academy-layer")
 
     const projection = d3.geoMercator()
         .scale(1)
@@ -61,7 +61,7 @@ export default class extends Controller {
 
     const zoom = d3.zoom()
         .scaleExtent([1, Infinity])
-        .on("zoom", zoomed)
+        .on("zoom", zoomed.bind(this))
 
     d3.json(getAcademyGeoJson(this.selectedAcademy)).then((geojson) => {
           const [[x0, y0], [x1, y1]] = d3.geoPath().projection(projection).bounds(geojson)
@@ -78,7 +78,7 @@ export default class extends Controller {
               .scale(scale)
               .translate(translate)
 
-          pathLayer.selectAll("path")
+          this.academyLayer.selectAll("path")
               .data(geojson.features)
               .enter()
               .append("path")
@@ -96,7 +96,7 @@ export default class extends Controller {
 
           zoom.scaleExtent([initialTransform.k * 0.8, Infinity])
 
-        this.createEtabMarkers(pathLayer, projection)
+          this.createEtabMarkers(projection)
     }).catch((error) => {
       console.error("Error loading the geo file:", error)
     })
@@ -108,7 +108,7 @@ export default class extends Controller {
 
       const tiles = tileLayout(transform)
 
-      imageLayer.selectAll("image")
+      this.tileLayer.selectAll("image")
           .data(tiles, d => d)
           .join("image")
           .attr("xlink:href", d => `https://a.tile.openstreetmap.org/${d[2]}/${d[0]}/${d[1]}.png`)
@@ -117,16 +117,16 @@ export default class extends Controller {
           .attr("width", tiles.scale)
           .attr("height", tiles.scale)
 
-      pathLayer.selectAll("path")
+      this.academyLayer.selectAll("path")
           .attr("d", path)
 
-      pathLayer.selectAll("circle")
+      this.academyLayer.selectAll("circle")
           .attr("cx", d => projection(d.geometry.coordinates)[0])
           .attr("cy", d => projection(d.geometry.coordinates)[1])
     }
   }
 
-  createEtabMarkers(g, projection) {
+  createEtabMarkers(projection) {
     const d3 = this.d3
     d3.json("/data/ETABLISSEMENTS_FRANCE.geojson").then((geojson) => {
       const tooltip = d3.select("#map-container")
@@ -141,7 +141,7 @@ export default class extends Controller {
           .style("z-index", "1000")
           .style("box-shadow", "0 2px 4px rgba(0,0,0,0.2)")
 
-      g.selectAll("circle")
+      this.academyLayer.selectAll("circle")
           .data(geojson.features.filter(d => this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)))
           .enter()
           .append("circle")
