@@ -18,8 +18,8 @@
       IBAN
       %span.fr-hint-text= t("activerecord.hints.rib.iban").html_safe
     .iban-inputs{ style: "display: flex; gap: 5px;" }
-      - 7.times do
-        %input.fr-input.fr-col-md-1.iban-part{ type: "text", maxlength: "4", data: { iban_target: "part" } }
+      - 7.times do |i|
+        %input.fr-input.fr-col-md-1.iban-part{ name: "iban_part_#{i}", type: "text", maxlength: "4", data: { iban_target: "part" } }
     = form.hidden_field(:iban, id: "rib_iban", data: { iban_target: "hidden" })
 
   = form.dsfr_text_field(:bic, code: true, width: 'md-3')

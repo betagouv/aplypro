@@ -5,9 +5,18 @@ Quand("je remplis des coordonnées bancaires") do
 
   steps %(
     Quand je remplis "Titulaire du compte" avec "#{name}"
-    Et que je remplis "IBAN" avec "#{rib.iban}"
+    Et que je remplis les sous-champs de l'IBAN "#{rib.iban}"
     Et que je remplis "BIC" avec "#{rib.bic}"
   )
+end
+
+Quand("je remplis les sous-champs de l'IBAN {string}") do |iban|
+  slice = iban.scan(/.{1,4}/)
+  7.times do |i|
+    steps %(
+      Quand je remplis "iban_part_#{i}" avec "#{slice[i]}"
+    )
+  end
 end
 
 Quand("je saisis les coordonnées bancaires de l'élève") do
