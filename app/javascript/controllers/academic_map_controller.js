@@ -96,7 +96,7 @@ export default class extends Controller {
 
           zoom.scaleExtent([initialTransform.k * 0.8, Infinity])
 
-        this.createEstablishmentsPoints(pathLayer, projection)
+        this.createEtabMarkers(pathLayer, projection)
     }).catch((error) => {
       console.error("Error loading the geo file:", error)
     })
@@ -126,7 +126,7 @@ export default class extends Controller {
     }
   }
 
-  createEstablishmentsPoints(g, projection) {
+  createEtabMarkers(g, projection) {
     const d3 = this.d3
     d3.json("/data/ETABLISSEMENTS_FRANCE.geojson").then((geojson) => {
       const tooltip = d3.select("#map-container")
@@ -153,6 +153,8 @@ export default class extends Controller {
           .attr("fill", d => etabMarkerColor(d3, this.parsedAmounts[d.properties.Code_UAI], this.maxAmount))
           .attr("stroke", "black")
           .attr("stroke-width", 1)
+          .attr("data-longitude", d => d.geometry.coordinates[0])
+          .attr("data-latitude", d => d.geometry.coordinates[1])
           .on("mouseover", (event, d) => this.mouseOver(event, d, tooltip))
           .on("mouseout", (event, d) => this.mouseOut(event, d, tooltip))
           .on("click", (event, d) => {
