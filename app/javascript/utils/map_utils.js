@@ -32,6 +32,11 @@ export const ACADEMIES = {
   70: '70_NORMANDIE'
 }
 
+export const mapColors = {
+  lightGreen: "#88fdaa",
+  normalBlue: "#6a6af4"
+}
+
 export function getAcademyGeoJson(academyId) {
   const academyName = ACADEMIES[academyId]
   return academyName ? `/data/academies/${academyName}.geojson` : null

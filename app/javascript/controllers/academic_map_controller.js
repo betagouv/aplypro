@@ -1,11 +1,11 @@
 import { Controller } from "@hotwired/stimulus"
-import { etabMarkerScale, etabMarkerColor, getAcademyGeoJson } from "../utils/academies"
+import { mapColors, etabMarkerScale, etabMarkerColor, getAcademyGeoJson } from "../utils/map_utils"
 
 export default class extends Controller {
   static values = {
-    highlightColor: { type: String, default: "#cacafb" },
+    highlightColor: { type: String, default: mapColors.lightGreen },
     panDuration: { type: Number, default: 750 },
-    academyStrokeColor: { type: String, default: "#6a6af4" }
+    academyStrokeColor: { type: String, default: mapColors.normalBlue }
   }
 
   async connect() {

@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { mapColors } from "../utils/map_utils"
 
 export default class extends Controller {
   static values = {
@@ -221,7 +222,7 @@ export default class extends Controller {
     this.d3.select(event.currentTarget)
       .transition()
       .duration(200)
-      .attr("fill", "#88fdaa")
+      .attr("fill", mapColors.lightGreen)
       .attr("opacity", 1)
 
     tooltip
