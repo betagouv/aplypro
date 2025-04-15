@@ -167,9 +167,28 @@ export default class extends Controller {
     })
   }
 
-  selectEstablishment(event){
+  selectEstablishment(event) {
     const uai = event.currentTarget.dataset.uai
-    console.log(uai)
+    const marker = document.querySelector(`#marker-${uai}`)
+
+      if (marker) {
+        const longitude = marker.getAttribute("data-longitude")
+        const latitude = marker.getAttribute("data-latitude")
+        console.log(`Selected establishment coordinates: [${longitude}, ${latitude}]`)
+        this.d3.select(marker)
+            .interrupt()
+
+        const originalColor = etabMarkerColor(this.d3, this.parsedAmounts[uai], this.maxAmount)
+
+        this.d3.select(marker)
+            .transition()
+            .duration(200)
+            .attr("fill", "#88fdaa")
+            .transition()
+            .duration(200)
+            .delay(500)
+            .attr("fill", originalColor)
+      }
   }
 
   mouseOver(event, d, tooltip) {
