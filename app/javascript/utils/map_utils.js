@@ -1,45 +1,64 @@
-export const ACADEMIES = {
-  1: '01_PARIS',
-  2: '02_AIX_MARSEILLE',
-  3: '03_BESANCON',
-  4: '04_BORDEAUX',
-  6: '06_CLERMONT_FERRAND',
-  7: '07_DIJON',
-  8: '08_GRENOBLE',
-  9: '09_LILLE',
-  10: '10_LYON',
-  11: '11_MONTPELLIER',
-  12: '12_NANCY_METZ',
-  13: '13_POITIERS',
-  14: '14_RENNES',
-  15: '15_STRASBOURG',
-  16: '16_TOULOUSE',
-  17: '17_NANTES',
-  18: '18_ORLEANS_TOURS',
-  19: '19_REIMS',
-  20: '20_AMIENS',
-  22: '22_LIMOGES',
-  23: '23_NICE',
-  24: '24_CRETEIL',
-  25: '25_VERSAILLES',
-  27: '27_CORSE',
-  28: '28_REUNION',
-  31: '31_MARTINIQUE',
-  32: '32_GUADELOUPE',
-  33: '33_GUYANE',
-  43: '43_MAYOTTE',
-  44: '44_SAINT_PIERRE_ET_MIQUELON',
-  70: '70_NORMANDIE'
+function getDsfrColor(cssVar) {
+  const value = getComputedStyle(document.documentElement)
+    .getPropertyValue(cssVar).trim();
+  if (!value) {
+    console.error(`Could not get DSFR color for variable ${cssVar}`);
+  }
+  return value;
 }
 
 export const mapColors = {
-  lightGreen: "#88fdaa",
-  normalBlue: "#6a6af4"
+  lightBlue: getDsfrColor('--blue-france-sun-113-625'),
+  normalBlue: getDsfrColor('--blue-france-main-525'),
+  darkBlue: getDsfrColor('--blue-france-850-200'),
+
+  lightGreen: getDsfrColor('--success-950-100'),
+  normalGreen: getDsfrColor('--success-425-625'),
+  darkGreen: getDsfrColor('--success-425-625'),
+
+  lightRed: getDsfrColor('--red-marianne-950-100'),
+  normalRed: getDsfrColor('--red-marianne-425-625'),
+  darkRed: getDsfrColor('--red-marianne-425-625')
+}
+
+export const ACADEMIES = {
+  1: 'PARIS',
+  2: 'AIX_MARSEILLE',
+  3: 'BESANCON',
+  4: 'BORDEAUX',
+  6: 'CLERMONT_FERRAND',
+  7: 'DIJON',
+  8: 'GRENOBLE',
+  9: 'LILLE',
+  10: 'LYON',
+  11: 'MONTPELLIER',
+  12: 'NANCY_METZ',
+  13: 'POITIERS',
+  14: 'RENNES',
+  15: 'STRASBOURG',
+  16: 'TOULOUSE',
+  17: 'NANTES',
+  18: 'ORLEANS_TOURS',
+  19: 'REIMS',
+  20: 'AMIENS',
+  22: 'LIMOGES',
+  23: 'NICE',
+  24: 'CRETEIL',
+  25: 'VERSAILLES',
+  27: 'CORSE',
+  28: 'REUNION',
+  31: 'MARTINIQUE',
+  32: 'GUADELOUPE',
+  33: 'GUYANE',
+  43: 'MAYOTTE',
+  44: 'SAINT_PIERRE_ET_MIQUELON',
+  70: 'NORMANDIE'
 }
 
 export function getAcademyGeoJson(academyId) {
   const academyName = ACADEMIES[academyId]
-  return academyName ? `/data/academies/${academyName}.geojson` : null
+  const paddedId = academyId.toString().padStart(2, '0')
+  return academyName ? `/data/academies/${paddedId}_${academyName}.geojson` : null
 }
 
 export function etabMarkerScale(d3, nb, maxNbSchoolings) {
@@ -52,6 +71,6 @@ export function etabMarkerScale(d3, nb, maxNbSchoolings) {
 export function etabMarkerColor(d3, amount, maxAmount) {
   const scale = d3.scaleLinear()
     .domain([0, maxAmount])
-    .range(["#fcbfbf", "#e1000f"])
+    .range([mapColors.lightRed, mapColors.darkRed])
   return scale(amount || 0)
 }

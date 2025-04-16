@@ -114,11 +114,9 @@ export default class extends Controller {
   async createAcademyPath() {
     try {
       const geojson = await this.d3.json(getAcademyGeoJson(this.selectedAcademy))
-
       const academyCode = ACADEMIES[this.selectedAcademy]
       if (academyCode) {
         const academyName = academyCode
-          .slice(3)
           .replace(/_/g, ' ')
           .toLowerCase()
           .split(' ')
