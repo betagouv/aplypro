@@ -14,3 +14,4 @@ pin "controllers", preload: true
 pin "controllers/index", preload: true
 pin "controllers/application", preload: true
 pin "controllers/map_controller", preload: false
+pin "controllers/iban_controller", preload: false
