@@ -170,6 +170,8 @@ fr:
         application:
           login: Connexion à APLyPro
           home : Accueil
+        school_years:
+          select: Choix de l'année scolaire
         users:
           select_academy: Choix de l'académie
       stats:

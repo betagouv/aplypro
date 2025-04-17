@@ -37,6 +37,7 @@ module ASP
     end
 
     def set_overrides
+      @inhibit_banner = true
       @inhibit_nav = true
       @logout_path = :destroy_asp_user_session
     end

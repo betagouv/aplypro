@@ -3,6 +3,7 @@
 class ApplicationController < ActionController::Base
   include UserLogger
   include PageTitle
+  include SelectedSchoolYear
 
   before_action :authenticate_user!,
                 :log_user,
@@ -42,13 +43,6 @@ class ApplicationController < ActionController::Base
 
   def current_establishment
     @current_establishment ||= current_user&.selected_establishment
-  end
-
-  def selected_school_year
-    @selected_school_year =
-      SchoolYear.find_by(start_year: params[:school_year_id]) ||
-      SchoolYear.find_by(start_year: session[:start_year]) ||
-      SchoolYear.current
   end
 
   def redirect_asp_users!
