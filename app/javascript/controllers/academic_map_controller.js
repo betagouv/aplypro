@@ -57,7 +57,6 @@ export default class extends Controller {
           .attr("y", ([,y]) => (y + tiles.translate[1]) * tiles.scale)
           .attr("width", tiles.scale)
           .attr("height", tiles.scale)
-          .style("filter", "saturate(0.3)")
 
       this.academyLayer.selectAll("path")
           .attr("d", this.path)
@@ -77,7 +76,13 @@ export default class extends Controller {
     container.innerHTML = ''
 
     this.width = container.offsetWidth
-    this.height = 700
+
+    const tableContainer = document.querySelector('.establishments-table-container')
+    const maxHeight = tableContainer ?
+      parseInt(window.getComputedStyle(tableContainer).maxHeight) :
+      700
+
+    this.height = maxHeight
 
     this.svg = this.d3.select("#" + containerId)
         .append("svg")
@@ -166,14 +171,6 @@ export default class extends Controller {
       const tooltip = d3.select("#map-container")
           .append("div")
           .attr("class", "tooltip")
-          .style("position", "absolute")
-          .style("background", "white")
-          .style("padding", "5px")
-          .style("border-radius", "5px")
-          .style("pointer-events", "none")
-          .style("display", "none")
-          .style("z-index", "1000")
-          .style("box-shadow", "0 2px 4px rgba(0,0,0,0.2)")
 
       this.academyLayer.selectAll("circle")
           .data(geojson.features.filter(d => this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)))
