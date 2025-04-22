@@ -71,7 +71,7 @@ export default class extends Controller {
 
     const colorScale = d3.scaleLinear()
       .domain([0, maxAmount])
-      .range(["#bccdff", "#000091"])
+      .range([mapColors.lightBlue, mapColors.darkBlue])
 
     const strokeScale = d3.scaleLinear()
       .domain([0, maxSchoolings])
@@ -79,7 +79,7 @@ export default class extends Controller {
 
     const strokeColorScale = d3.scaleLinear()
       .domain([0, maxSchoolings])
-      .range(["#ffbdbd", "#cd0000"])
+      .range([mapColors.lightRed, mapColors.darkRed])
 
     const svg = d3.select("#" + containerId)
       .append("svg")
@@ -151,7 +151,7 @@ export default class extends Controller {
 
     const colorScale = d3.scaleLinear()
       .domain([0, maxAmount])
-      .range(["#bccdff", "#000091"])
+      .range([mapColors.lightBlue, mapColors.darkBlue])
 
     const strokeScale = d3.scaleLinear()
       .domain([0, maxSchoolings])
@@ -159,7 +159,7 @@ export default class extends Controller {
 
     const strokeColorScale = d3.scaleLinear()
       .domain([0, maxSchoolings])
-      .range(["#ffbdbd", "#cd0000"])
+      .range([mapColors.lightRed, mapColors.darkRed])
 
     const svg = d3.select("#map-container")
       .append("svg")
