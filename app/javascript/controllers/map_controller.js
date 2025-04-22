@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import { mapColors } from "../utils/map_utils"
+import { mapColors } from "utils/map_utils"
 
 export default class extends Controller {
   static values = {
@@ -42,12 +42,12 @@ export default class extends Controller {
     this.initMap()
 
     const overseasMaps = [
-      { id: 'map-reunion', path: '/data/28_REUNION.geojson', center: [55.5, -21.1], scale: 10000 },
-      { id: 'map-martinique', path: '/data/31_MARTINIQUE.geojson', center: [-61.0, 14.6], scale: 10000 },
-      { id: 'map-guadeloupe', path: '/data/32_GUADELOUPE.geojson', center: [-61.5, 16.25], scale: 10000 },
-      { id: 'map-guyane', path: '/data/33_GUYANE.geojson', center: [-53.0, 4.0], scale: 1000 },
-      { id: 'map-mayotte', path: '/data/43_MAYOTTE.geojson', center: [45.2, -12.8], scale: 15000 },
-      { id: 'map-saint-pierre', path: '/data/44_SAINT_PIERRE_ET_MIQUELON.geojson', center: [-56.3, 47.0], scale: 10000 }
+      { id: 'map-reunion', path: '/data/academies/28_REUNION.geojson', center: [55.5, -21.1], scale: 10000 },
+      { id: 'map-martinique', path: '/data/academies/31_MARTINIQUE.geojson', center: [-61.0, 14.6], scale: 10000 },
+      { id: 'map-guadeloupe', path: '/data/academies/32_GUADELOUPE.geojson', center: [-61.5, 16.25], scale: 10000 },
+      { id: 'map-guyane', path: '/data/academies/33_GUYANE.geojson', center: [-53.0, 4.0], scale: 1000 },
+      { id: 'map-mayotte', path: '/data/academies/43_MAYOTTE.geojson', center: [45.2, -12.8], scale: 15000 },
+      { id: 'map-saint-pierre', path: '/data/academies/44_SAINT_PIERRE_ET_MIQUELON.geojson', center: [-56.3, 47.0], scale: 10000 }
     ]
 
     overseasMaps.forEach(map => {

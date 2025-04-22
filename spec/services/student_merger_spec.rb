@@ -24,6 +24,7 @@ RSpec.describe StudentMerger do
 
     context "when students are identical" do
       before do
+        source_student.update!(birthplace_city_insee_code: Faker::Number.number(digits: 5))
         target_student.update!(
           first_name: source_student.first_name,
           last_name: source_student.last_name,
