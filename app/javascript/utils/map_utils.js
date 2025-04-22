@@ -8,9 +8,9 @@ function getDsfrColor(cssVar) {
 }
 
 export const mapColors = {
-  lightBlue: getDsfrColor('--blue-france-sun-113-625'),
+  darkBlue: getDsfrColor('--blue-france-sun-113-625'),
   normalBlue: getDsfrColor('--blue-france-main-525'),
-  darkBlue: getDsfrColor('--blue-france-850-200'),
+  lightBlue: getDsfrColor('--blue-france-850-200'),
 
   lightGreen: getDsfrColor('--success-950-100'),
   normalGreen: getDsfrColor('--success-425-625'),
