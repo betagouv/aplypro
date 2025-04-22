@@ -4,6 +4,7 @@ module Academic
   class ApplicationController < ActionController::Base
     include UserLogger
     include PageTitle
+    include SelectedSchoolYear
 
     layout "application"
 
@@ -15,11 +16,24 @@ module Academic
                   :set_overrides,
                   :infer_page_title
 
-    helper_method :current_user, :selected_academy
+    helper_method :current_user, :selected_academy, :academies, :selected_school_year
 
-    def home; end
+    def home
+      @establishments_for_academy = Establishment.joins(:classes)
+                                                 .where(academy_code: selected_academy,
+                                                        "classes.school_year": selected_school_year)
+                                                 .distinct
+      @nb_schoolings_per_establishments = @establishments_for_academy.left_joins(:schoolings)
+                                                                     .group(:uai)
+                                                                     .count(:schoolings)
+      @amounts_per_establishments = @establishments_for_academy.left_joins(:pfmps)
+                                                               .group(:uai)
+                                                               .sum(:amount)
+    end
 
-    def login; end
+    def login
+      @inhibit_banner = true
+    end
 
     def logout
       sign_out(current_academic_user)
@@ -40,11 +54,16 @@ module Academic
 
     def set_overrides
       @inhibit_nav = true
+      @inhibit_title = true
       @logout_path = :destroy_academic_user_session
     end
 
     def selected_academy
       @selected_academy ||= session[:selected_academy]
+    end
+
+    def academies
+      @academies ||= session[:academy_codes]
     end
 
     private

@@ -33,7 +33,11 @@ class StudentMerger
 
   def validate_students!
     raise InvalidStudentsArrayError unless students.is_a?(Array) && students.length == 2
-    raise StudentNotIdenticalError unless students[0] == students[1]
+    raise StudentNotIdenticalError unless students_are_duplicates?
+  end
+
+  def students_are_duplicates?
+    students[0].duplicates.include?(students[1])
   end
 
   def determine_target_and_merge_student! # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity

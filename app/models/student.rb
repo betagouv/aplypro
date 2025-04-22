@@ -120,16 +120,14 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     [last_name, first_name].join(" ")
   end
 
-  def ==(other)
-    last_name.eql?(other.last_name) &&
-      first_name.eql?(other.first_name) &&
-      birthplace_city_insee_code.eql?(other.birthplace_city_insee_code) &&
-      birthdate.eql?(other.birthdate)
-  end
-
   def duplicates
-    Student.where(first_name: first_name, last_name: last_name, birthdate: birthdate,
-                  birthplace_city_insee_code: birthplace_city_insee_code)
+    Student.where(
+      "LOWER(UNACCENT(first_name)) = LOWER(UNACCENT(?)) AND
+       LOWER(UNACCENT(last_name)) = LOWER(UNACCENT(?)) AND
+       birthdate = ? AND
+       birthplace_city_insee_code = ?",
+      first_name, last_name, birthdate, birthplace_city_insee_code
+    )
   end
 
   def close_current_schooling!(date = Time.zone.today)

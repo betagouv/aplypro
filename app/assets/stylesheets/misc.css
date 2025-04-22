@@ -94,3 +94,27 @@
 .stat {
   margin-bottom: 3rem;
 }
+
+.establishments-table-container {
+  max-height: 700px;
+  overflow-y: auto;
+
+  .fr-table {
+    margin-top: 0rem;
+  }
+}
+
+.tooltip {
+  position: absolute;
+  background: white;
+  padding: 5px;
+  border-radius: 5px;
+  pointer-events: none;
+  display: none;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+#tile-layer image {
+  filter: saturate(0.3);
+}

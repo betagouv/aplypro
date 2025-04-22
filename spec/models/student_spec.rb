@@ -41,43 +41,6 @@ RSpec.describe Student do
     end
   end
 
-  describe "#==" do
-    let(:original_student) { build(:student) }
-    let(:new_student) do
-      build(
-        :student,
-        last_name: original_student.last_name,
-        first_name: original_student.first_name,
-        birthplace_city_insee_code: original_student.birthplace_city_insee_code,
-        birthdate: original_student.birthdate
-      )
-    end
-
-    it "returns true when all matching attributes are equal" do
-      expect(original_student == new_student).to be true
-    end
-
-    it "returns false when last_name differs" do
-      new_student.last_name = "Different"
-      expect(original_student == new_student).to be false
-    end
-
-    it "returns false when first_name differs" do
-      new_student.first_name = "Different"
-      expect(original_student == new_student).to be false
-    end
-
-    it "returns false when birthplace_city_insee_code differs" do
-      new_student.birthplace_city_insee_code = "99999"
-      expect(original_student == new_student).to be false
-    end
-
-    it "returns false when birthdate differs" do
-      new_student.birthdate = 1.day.ago
-      expect(original_student == new_student).to be false
-    end
-  end
-
   describe "biological_sex" do
     it "can be unknown" do
       expect(build(:student, biological_sex: nil)).to be_valid

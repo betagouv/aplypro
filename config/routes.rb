@@ -23,6 +23,14 @@ Rails.application.routes.draw do
   namespace :academic do
     get "home", to: "application#home"
 
+    resources :school_years, path: :year, only: [] do
+      get "selected"
+
+      collection do
+        get "select"
+      end
+    end
+
     resource :users, only: [] do
       get "select_academy"
       post "selected_academy"

@@ -6,9 +6,10 @@
       button: t("omniauth.fim.button"),
       path: "/auth/academic"
 
-  .fr-col-md-6.fr-col-12
-    = render 'shared/connection_panel',
-      name: t("omniauth.developer.title"),
-      description: t("omniauth.developer.description"),
-      button: t("omniauth.developer.button"),
-      path: "/auth/academic_developer"
+  - unless Rails.env.production?
+    .fr-col-md-6.fr-col-12
+      = render 'shared/connection_panel',
+        name: t("omniauth.developer.title"),
+        description: t("omniauth.developer.description"),
+        button: t("omniauth.developer.button"),
+        path: "/auth/academic_developer"
