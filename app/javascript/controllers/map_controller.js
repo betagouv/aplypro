@@ -42,12 +42,12 @@ export default class extends Controller {
     this.initMap()
 
     const overseasMaps = [
-      { id: 'map-reunion', path: '/data/academies/28_REUNION.geojson', center: [55.5, -21.1], scale: 10000 },
-      { id: 'map-martinique', path: '/data/academies/31_MARTINIQUE.geojson', center: [-61.0, 14.6], scale: 10000 },
-      { id: 'map-guadeloupe', path: '/data/academies/32_GUADELOUPE.geojson', center: [-61.5, 16.25], scale: 10000 },
-      { id: 'map-guyane', path: '/data/academies/33_GUYANE.geojson', center: [-53.0, 4.0], scale: 1000 },
-      { id: 'map-mayotte', path: '/data/academies/43_MAYOTTE.geojson', center: [45.2, -12.8], scale: 15000 },
-      { id: 'map-saint-pierre', path: '/data/academies/44_SAINT_PIERRE_ET_MIQUELON.geojson', center: [-56.3, 47.0], scale: 10000 }
+      { id: 'map-reunion', path: '/data/academies/28.geojson', center: [55.5, -21.1], scale: 10000 },
+      { id: 'map-martinique', path: '/data/academies/31.geojson', center: [-61.0, 14.6], scale: 10000 },
+      { id: 'map-guadeloupe', path: '/data/academies/32.geojson', center: [-61.5, 16.25], scale: 10000 },
+      { id: 'map-guyane', path: '/data/academies/33.geojson', center: [-53.0, 4.0], scale: 1000 },
+      { id: 'map-mayotte', path: '/data/academies/43.geojson', center: [45.2, -12.8], scale: 15000 },
+      { id: 'map-saint-pierre', path: '/data/academies/44.geojson', center: [-56.3, 47.0], scale: 10000 }
     ]
 
     overseasMaps.forEach(map => {
@@ -71,7 +71,7 @@ export default class extends Controller {
 
     const colorScale = d3.scaleLinear()
       .domain([0, maxAmount])
-      .range(["#bccdff", "#000091"])
+      .range([mapColors.lightBlue, mapColors.darkBlue])
 
     const strokeScale = d3.scaleLinear()
       .domain([0, maxSchoolings])
@@ -79,7 +79,7 @@ export default class extends Controller {
 
     const strokeColorScale = d3.scaleLinear()
       .domain([0, maxSchoolings])
-      .range(["#ffbdbd", "#cd0000"])
+      .range([mapColors.lightRed, mapColors.darkRed])
 
     const svg = d3.select("#" + containerId)
       .append("svg")
@@ -91,14 +91,6 @@ export default class extends Controller {
     const tooltip = d3.select("#" + containerId)
       .append("div")
       .attr("class", "tooltip")
-      .style("position", "absolute")
-      .style("background", "white")
-      .style("padding", "5px")
-      .style("border-radius", "5px")
-      .style("pointer-events", "none")
-      .style("display", "none")
-      .style("z-index", "1000")
-      .style("box-shadow", "0 2px 4px rgba(0,0,0,0.2)")
 
     const projection = d3.geoMercator()
       .center(centerCoords)
@@ -151,7 +143,7 @@ export default class extends Controller {
 
     const colorScale = d3.scaleLinear()
       .domain([0, maxAmount])
-      .range(["#bccdff", "#000091"])
+      .range([mapColors.lightBlue, mapColors.darkBlue])
 
     const strokeScale = d3.scaleLinear()
       .domain([0, maxSchoolings])
@@ -159,7 +151,7 @@ export default class extends Controller {
 
     const strokeColorScale = d3.scaleLinear()
       .domain([0, maxSchoolings])
-      .range(["#ffbdbd", "#cd0000"])
+      .range([mapColors.lightRed, mapColors.darkRed])
 
     const svg = d3.select("#map-container")
       .append("svg")
@@ -171,14 +163,6 @@ export default class extends Controller {
     const tooltip = d3.select("#map-container")
       .append("div")
       .attr("class", "tooltip")
-      .style("position", "absolute")
-      .style("background", "white")
-      .style("padding", "5px")
-      .style("border-radius", "5px")
-      .style("pointer-events", "none")
-      .style("display", "none")
-      .style("z-index", "1000")
-      .style("box-shadow", "0 2px 4px rgba(0,0,0,0.2)")
 
     const projection = d3.geoMercator()
       .center([2.454071, 46.279229])
@@ -188,7 +172,7 @@ export default class extends Controller {
     const path = d3.geoPath()
       .projection(projection)
 
-    d3.json("/data/METROPOLE.geojson").then((geojson) => {
+    d3.json("/data/metropole.geojson").then((geojson) => {
       g.selectAll("path")
         .data(geojson.features)
         .enter()
