@@ -4,7 +4,7 @@
       Veuillez sélectionner l'académie que vous désirez piloter dans la liste ci-dessous.
 
     .fr-select-group.fr-col-md-7
-      = form_with url: selected_academy_academic_users_path, builder: DsfrFormBuilder do |form|
+      = form_with url: selected_academy_academic_users_path, builder: DsfrFormBuilder, data: { turbo: false } do |form|
         .fr-input-group
           = form.label :academy, "Académie", class: 'fr-label'
           = form.select :academy, academies, {}, { class: 'fr-select' }

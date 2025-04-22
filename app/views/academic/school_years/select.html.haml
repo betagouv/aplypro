@@ -3,8 +3,7 @@
     %p
       Veuillez sélectionner l'année scolaire que vous désirez consulter dans
       la liste ci-dessous.
-
     %ul
       - SchoolYear.all.each do |school_year|
         %li
-          = link_to(school_year, academic_school_year_selected_path(school_year))
+          = link_to(school_year, academic_school_year_selected_path(school_year), data: { turbo: false })
