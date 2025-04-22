@@ -145,7 +145,7 @@ export default class extends Controller {
 
   createEtabMarkers() {
     const d3 = this.d3
-    d3.json("/data/ETABLISSEMENTS_FRANCE.geojson").then((geojson) => {
+    d3.json("/data/etablissements.geojson").then((geojson) => {
       const tooltip = d3.select("#map-container")
         .append("div")
         .attr("class", "tooltip")

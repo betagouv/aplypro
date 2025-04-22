@@ -1,6 +1,6 @@
 {
 "type": "FeatureCollection",
-"name": "ETABLISSEMENTS_FRANCE",
+"name": "etablissements",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
 "features": [
 { "type": "Feature", "properties": { "Code_UAI": "0010001W" }, "geometry": { "type": "Point", "coordinates": [ 5.35, 45.975 ] } },
