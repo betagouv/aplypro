@@ -17,7 +17,6 @@ export default class extends Controller {
     connect() {
         if (!this.element.querySelector('.iban-container')) {
             this.buildInputs()
-            console.log('Connected IBAN')
         }
     }
 
