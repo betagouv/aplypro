@@ -2,6 +2,10 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
     static targets = ["hiddenInput"]
+    static values = {
+        maxLength: { type: Number, default: 34 },
+        defaultLength: { type: Number, default: 7 }
+    }
 
     connect() {
         if (!this.element.querySelector('.iban-container')) {
@@ -20,7 +24,7 @@ export default class extends Controller {
     buildInputs(valueOverride = null) {
         const hidden = this.hiddenInputTarget
         const value = (valueOverride || hidden.value).replace(/\s+/g, "")
-        const numParts = Math.ceil(value.length / 4) || 7
+        const numParts = Math.ceil(value.length / 4) || this.defaultLengthValue
 
         const existingContainers = this.element.parentElement.querySelectorAll('.iban-container')
         existingContainers.forEach(container => container.remove())
@@ -63,6 +67,11 @@ export default class extends Controller {
                 .replace(/\s+/g, "")
                 .replace(/[^A-Z0-9]/gi, '')
                 .toUpperCase()
+
+            if (pasteData.length > this.maxLengthValue) {
+                console.error(`Pasted IBAN is too long. Maximum length is ${this.maxLengthValue} characters.`)
+                return
+            }
 
             const neededFields = Math.ceil(pasteData.length / 4)
 
