@@ -1,18 +1,24 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ["hiddenInput"]
+    static targets = ["originalInput"]
     static values = {
         maxLength: { type: Number, default: 34 },
         defaultLength: { type: Number, default: 7 }
     }
 
+    initialize() {
+      this.handleInput = this.handleInput.bind(this)
+      this.handleKeydown = this.handleKeydown.bind(this)
+      this.handlePaste = this.handlePaste.bind(this)
+      this.inputFields = []
+    }
+
     connect() {
-        requestAnimationFrame(() => {
-          if (!this.element.querySelector('.iban-container')) {
-              this.buildInputs()
-          }
-      })
+        if (!this.element.querySelector('.iban-container')) {
+            this.buildInputs()
+            console.log('Connected IBAN')
+        }
     }
 
     disconnect() {
@@ -24,7 +30,7 @@ export default class extends Controller {
     }
 
     buildInputs(valueOverride = null) {
-        const hidden = this.hiddenInputTarget
+        const hidden = this.originalInputTarget
         const value = (valueOverride || hidden.value).replace(/\s+/g, "")
         const numParts = Math.ceil(value.length / 4) || this.defaultLengthValue
 
@@ -37,7 +43,6 @@ export default class extends Controller {
         container.setAttribute("aria-label", "IBAN input field group")
 
         const lengthPerPart = 4
-        this.inputFields = []
 
         for (let i = 0; i < numParts; i++) {
             const input = document.createElement("input")
@@ -86,7 +91,7 @@ export default class extends Controller {
                 })
             }
 
-            this.updateHiddenInput()
+            this.updateoriginalInput()
 
             const nextEmpty = this.inputFields.find(i => i.value.length < i.maxLength)
             if (nextEmpty) nextEmpty.focus()
@@ -106,7 +111,7 @@ export default class extends Controller {
                 this.inputFields[index + 1].focus()
             }
 
-            this.updateHiddenInput()
+            this.updateoriginalInput()
         } catch (error) {
             console.error("IBAN Input handling failed:", error)
         }
@@ -146,13 +151,13 @@ export default class extends Controller {
         }
     }
 
-    updateHiddenInput() {
+    updateoriginalInput() {
         try {
             const combinedValue = this.inputFields.map(i => i.value).join("")
-            this.hiddenInputTarget.value = combinedValue
+            this.originalInputTarget.value = combinedValue
 
             const event = new Event('change', { bubbles: true })
-            this.hiddenInputTarget.dispatchEvent(event)
+            this.originalInputTarget.dispatchEvent(event)
         } catch (error) {
             console.error("IBAN Hidden input update failed:", error)
         }

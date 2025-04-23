@@ -14,7 +14,7 @@ pin "d3-tile", to: "https://cdn.jsdelivr.net/npm/d3-tile@1/+esm", preload: false
 pin "controllers", preload: true
 pin "controllers/index", preload: true
 pin "controllers/application", preload: true
-pin "controllers/map_controller", preload: false
 pin "controllers/iban_controller", preload: false
+pin "controllers/map_controller", preload: false
 pin "controllers/academic_map_controller", preload: false
 pin "utils/map_utils", preload: false

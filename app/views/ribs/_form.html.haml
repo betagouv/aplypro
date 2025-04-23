@@ -18,9 +18,8 @@
     = t('activerecord.attributes.rib.iban')
     %span.fr-hint-text
       = t('activerecord.hints.rib.iban').html_safe
-  .fr-input-group
-    %div{data: { controller: "iban" }}
-      = form.text_field :iban, class: "fr-input fr-input--code fr-col-md-6", data: { iban_target: "hiddenInput" }
+  .fr-input-group{data: { controller: "iban" }}
+    = form.text_field :iban, class: "fr-input fr-input--code fr-col-md-6", data: { iban_target: "originalInput" }
 
   = form.dsfr_text_field(:bic, code: true, width: 'md-3')
 
