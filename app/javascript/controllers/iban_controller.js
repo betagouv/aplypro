@@ -17,10 +17,13 @@ export default class extends Controller {
         })
     }
 
-    buildInputs() {
+    buildInputs(valueOverride = null) {
         const hidden = this.hiddenInputTarget
-        const value = hidden.value.replace(/\s+/g, "")
+        const value = (valueOverride || hidden.value).replace(/\s+/g, "")
         const numParts = Math.ceil(value.length / 4) || 7
+
+        const existingContainers = this.element.parentElement.querySelectorAll('.iban-container')
+        existingContainers.forEach(container => container.remove())
 
         const container = document.createElement("div")
         container.classList.add("fr-input-group", "fr-mt-1w", "iban-container")
@@ -61,10 +64,16 @@ export default class extends Controller {
                 .replace(/[^A-Z0-9]/gi, '')
                 .toUpperCase()
 
-            this.inputFields.forEach((input, i) => {
-                const start = i * 4
-                input.value = pasteData.slice(start, start + 4)
-            })
+            const neededFields = Math.ceil(pasteData.length / 4)
+
+            if (neededFields !== this.inputFields.length) {
+                this.buildInputs(pasteData)
+            } else {
+                this.inputFields.forEach((input, i) => {
+                    const start = i * 4
+                    input.value = pasteData.slice(start, start + 4)
+                })
+            }
 
             this.updateHiddenInput()
 
