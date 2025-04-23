@@ -1,10 +1,20 @@
-import {Controller} from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
     static targets = ["hiddenInput"]
 
     connect() {
-        this.buildInputs()
+        if (!this.element.querySelector('.iban-container')) {
+            this.buildInputs()
+        }
+    }
+
+    disconnect() {
+        this.inputFields?.forEach(input => {
+            input.removeEventListener("input", this.handleInput.bind(this))
+            input.removeEventListener("keydown", this.handleBackspace.bind(this))
+            input.removeEventListener("paste", this.handlePaste.bind(this))
+        })
     }
 
     buildInputs() {
@@ -14,6 +24,8 @@ export default class extends Controller {
 
         const container = document.createElement("div")
         container.classList.add("fr-input-group", "fr-mt-1w", "iban-container")
+        container.setAttribute("role", "group")
+        container.setAttribute("aria-label", "IBAN input field group")
 
         const lengthPerPart = 4
         this.inputFields = []
@@ -23,8 +35,9 @@ export default class extends Controller {
             input.type = "text"
             input.inputMode = "numeric"
             input.maxLength = lengthPerPart
-            input.classList.add("iban-part", "fr-input", "fr-col-md-1")
+            input.classList.add("iban-part", "fr-input")
             input.dataset.index = i
+            input.setAttribute("aria-label", `IBAN part ${i + 1} of ${numParts}`)
 
             input.value = value.slice(i * lengthPerPart, (i + 1) * lengthPerPart)
 
@@ -41,41 +54,66 @@ export default class extends Controller {
     }
 
     handlePaste(e) {
-        e.preventDefault()
-        const pasteData = (e.clipboardData || window.clipboardData).getData("text").replace(/\s+/g, "")
+        try {
+            e.preventDefault()
+            const pasteData = (e.clipboardData || window.clipboardData).getData("text")
+                .replace(/\s+/g, "")
+                .replace(/[^A-Z0-9]/gi, '')
+                .toUpperCase()
 
-        this.inputFields.forEach((input, i) => {
-            const start = i * 4
-            input.value = pasteData.slice(start, start + 4)
-        })
+            this.inputFields.forEach((input, i) => {
+                const start = i * 4
+                input.value = pasteData.slice(start, start + 4)
+            })
 
-        this.updateHiddenInput()
+            this.updateHiddenInput()
 
-        const nextEmpty = this.inputFields.find(i => i.value.length < i.maxLength)
-        if (nextEmpty) nextEmpty.focus()
+            const nextEmpty = this.inputFields.find(i => i.value.length < i.maxLength)
+            if (nextEmpty) nextEmpty.focus()
+        } catch (error) {
+            console.error("IBAN Paste failed:", error)
+        }
     }
 
     handleInput(e) {
-        const input = e.target
-        const index = parseInt(input.dataset.index)
+        try {
+            const input = e.target
+            input.value = input.value.replace(/[^A-Z0-9]/gi, '').toUpperCase()
 
-        if (input.value.length === input.maxLength && index < this.inputFields.length - 1) {
-            this.inputFields[index + 1].focus()
+            const index = parseInt(input.dataset.index)
+
+            if (input.value.length === input.maxLength && index < this.inputFields.length - 1) {
+                this.inputFields[index + 1].focus()
+            }
+
+            this.updateHiddenInput()
+        } catch (error) {
+            console.error("IBAN Input handling failed:", error)
         }
-
-        this.updateHiddenInput()
     }
 
     handleBackspace(e) {
-        const input = e.target
-        const index = parseInt(input.dataset.index)
+        try {
+            const input = e.target
+            const index = parseInt(input.dataset.index)
 
-        if (e.key === "Backspace" && input.value === "" && index > 0) {
-            this.inputFields[index - 1].focus()
+            if (e.key === "Backspace" && input.value === "" && index > 0) {
+                this.inputFields[index - 1].focus()
+            }
+        } catch (error) {
+            console.error("IBAN Backspace handling failed:", error)
         }
     }
 
     updateHiddenInput() {
-        this.hiddenInputTarget.value = this.inputFields.map(i => i.value).join("")
+        try {
+            const combinedValue = this.inputFields.map(i => i.value).join("")
+            this.hiddenInputTarget.value = combinedValue
+
+            const event = new Event('change', { bubbles: true })
+            this.hiddenInputTarget.dispatchEvent(event)
+        } catch (error) {
+            console.error("IBAN Hidden input update failed:", error)
+        }
     }
 }
