@@ -2,10 +2,20 @@ import { Controller } from "@hotwired/stimulus"
 import { mapColors, etabMarkerScale, etabMarkerColor, getAcademyGeoJson } from "utils/map_utils"
 
 export default class extends Controller {
+  static targets = ["mapContainer"]
+
   static values = {
     highlightColor: { type: String, default: mapColors.lightGreen },
     panDuration: { type: Number, default: 750 },
     academyStrokeColor: { type: String, default: mapColors.normalBlue }
+  }
+
+  initialize(){
+    this.svg = null
+    this.width = null
+    this.height = null
+    this.currentTransform = null
+    this.zoom = null
   }
 
   async connect() {
@@ -26,16 +36,7 @@ export default class extends Controller {
   }
 
   disconnect() {
-    const container = document.getElementById('map-container')
-    if (container) {
-      container.removeAttribute('data-initialized')
-      container.innerHTML = ''
-    }
-    this.svg = null
-    this.width = null
-    this.height = null
-    this.currentTransform = null
-    this.zoom = null
+    this.mapContainerTarget.innerHTML = ''
   }
 
   zoomed(event) {
@@ -63,21 +64,14 @@ export default class extends Controller {
   }
 
   createMap() {
-    const containerId = 'map-container'
-    const container = document.getElementById(containerId)
-    if (!container || container.hasAttribute('data-initialized')) return
-
-    container.setAttribute('data-initialized', 'true')
-    container.innerHTML = ''
-
-    this.width = container.offsetWidth
+    this.width = this.mapContainerTarget.offsetWidth
     const tableContainer = document.querySelector('.establishments-table-container')
     const maxHeight = tableContainer ?
       parseInt(window.getComputedStyle(tableContainer).maxHeight) :
       700
     this.height = maxHeight
 
-    this.svg = this.d3.select("#" + containerId)
+    this.svg = this.d3.select(this.mapContainerTarget)
       .append("svg")
       .attr("width", this.width)
       .attr("height", this.height)
