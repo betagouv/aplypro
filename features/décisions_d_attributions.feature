@@ -88,9 +88,9 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
   Scénario: Le personnel ne peut pas annuler la saisie d'un report de décision d'attribution si une pfmp est saisie
     Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité
     Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
-    Et que je renseigne une PFMP provisoire dans la période de report pour l'élève "Curie Marie"
     Et que l'élève "Curie Marie" a une décision d'attribution
     Et que l'élève "Curie Marie" a un report de décision d'attribution
+    Et que je renseigne une PFMP provisoire dans la période de report pour l'élève "Curie Marie"
     Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
     Quand je clique sur "Annuler le report"
     Alors la page contient "Êtes-vous certain(e) de vouloir supprimer le report de cette décision d'attribution ?"

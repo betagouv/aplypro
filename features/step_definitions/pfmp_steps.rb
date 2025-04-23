@@ -78,7 +78,7 @@ end
 Quand("je renseigne une PFMP provisoire dans la période de report pour l'élève {string}") do |name|
   schooling = find_schooling_by_student_full_name(name)
   start_date = schooling.end_date - 3.days
-  end_date = schooling.end_date + 3.days
+  end_date = schooling.extended_end_date - 3.days
 
   steps %(
     Et que je clique sur "Ajouter une PFMP"
