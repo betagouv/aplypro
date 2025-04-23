@@ -12,7 +12,7 @@ export default class extends Controller {
     disconnect() {
         this.inputFields?.forEach(input => {
             input.removeEventListener("input", this.handleInput.bind(this))
-            input.removeEventListener("keydown", this.handleBackspace.bind(this))
+            input.removeEventListener("keydown", this.handleKeydown.bind(this))
             input.removeEventListener("paste", this.handlePaste.bind(this))
         })
     }
@@ -45,7 +45,7 @@ export default class extends Controller {
             input.value = value.slice(i * lengthPerPart, (i + 1) * lengthPerPart)
 
             input.addEventListener("input", this.handleInput.bind(this))
-            input.addEventListener("keydown", this.handleBackspace.bind(this))
+            input.addEventListener("keydown", this.handleKeydown.bind(this))
             input.addEventListener("paste", this.handlePaste.bind(this))
 
             this.inputFields.push(input)
@@ -101,16 +101,37 @@ export default class extends Controller {
         }
     }
 
-    handleBackspace(e) {
+    handleKeydown(e) {
         try {
             const input = e.target
             const index = parseInt(input.dataset.index)
+            const cursorPosition = input.selectionStart
 
-            if (e.key === "Backspace" && input.value === "" && index > 0) {
-                this.inputFields[index - 1].focus()
+            switch (e.key) {
+                case "Backspace":
+                    if (input.value === "" && index > 0) {
+                        this.inputFields[index - 1].focus()
+                    }
+                    break
+                case "ArrowLeft":
+                    if (cursorPosition === 0 && index > 0) {
+                        e.preventDefault()
+                        const prevInput = this.inputFields[index - 1]
+                        prevInput.focus()
+                        prevInput.setSelectionRange(prevInput.value.length, prevInput.value.length)
+                    }
+                    break
+                case "ArrowRight":
+                    if (cursorPosition === input.value.length && index < this.inputFields.length - 1) {
+                        e.preventDefault()
+                        const nextInput = this.inputFields[index + 1]
+                        nextInput.focus()
+                        nextInput.setSelectionRange(0, 0)
+                    }
+                    break
             }
         } catch (error) {
-            console.error("IBAN Backspace handling failed:", error)
+            console.error("IBAN Key handling failed:", error)
         }
     }
 
