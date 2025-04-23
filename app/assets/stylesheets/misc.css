@@ -118,3 +118,12 @@
 #tile-layer image {
   filter: saturate(0.3);
 }
+
+.iban-container {
+  display: flex;
+  gap: 5px;
+}
+
+.iban-part {
+  width: 4em;
+}
