@@ -8,9 +8,11 @@ export default class extends Controller {
     }
 
     connect() {
-        if (!this.element.querySelector('.iban-container')) {
-            this.buildInputs()
-        }
+        requestAnimationFrame(() => {
+          if (!this.element.querySelector('.iban-container')) {
+              this.buildInputs()
+          }
+      })
     }
 
     disconnect() {
