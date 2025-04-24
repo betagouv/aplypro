@@ -127,3 +127,14 @@
 .iban-part {
   width: 5em;
 }
+
+.iban-clear-button {
+  padding: 0.25rem;
+  min-height: 0;
+  height: 2rem;
+  width: 2rem;
+}
+
+.iban-clear-button:hover {
+  background-color: var(--blue-france-850-200);
+}

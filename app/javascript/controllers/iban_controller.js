@@ -4,6 +4,7 @@ export default class extends Controller {
     static targets = ["originalInput"]
     static values = {
         maxLength: { type: Number, default: 34 },
+        minLength: { type: Number, default: 15 },
         defaultLength: { type: Number, default: 7 }
     }
 
@@ -62,6 +63,16 @@ export default class extends Controller {
             container.appendChild(input)
         }
 
+        const clearButton = document.createElement("button")
+        clearButton.type = "button"
+        clearButton.classList.add("fr-btn", "fr-btn--tertiary", "fr-btn--sm", "iban-clear-button")
+        clearButton.setAttribute("aria-label", "Clear IBAN")
+        clearButton.innerHTML = '<i class="fr-icon-close-line" aria-hidden="true"></i>'
+        clearButton.setAttribute("data-action", "click->iban#clear")
+        clearButton.style.display = value ? "block" : "none"
+
+        container.appendChild(clearButton)
+
         hidden.type = "hidden"
         hidden.after(container)
     }
@@ -79,6 +90,11 @@ export default class extends Controller {
                 return
             }
 
+            if (pasteData.length < this.minLengthValue) {
+                console.error(`Pasted IBAN is too short. Minimum length is ${this.minLengthValue} characters.`)
+                return
+            }
+
             const neededFields = Math.ceil(pasteData.length / 4)
 
             if (neededFields !== this.inputFields.length) {
@@ -91,6 +107,7 @@ export default class extends Controller {
             }
 
             this.updateoriginalInput()
+            this.toggleClearButton("block")
 
             const nextEmpty = this.inputFields.find(i => i.value.length < i.maxLength)
             if (nextEmpty) nextEmpty.focus()
@@ -111,6 +128,7 @@ export default class extends Controller {
             }
 
             this.updateoriginalInput()
+            this.toggleClearButton(this.hasAnyInput() ? "block" : "none")
         } catch (error) {
             console.error("IBAN Input handling failed:", error)
         }
@@ -150,6 +168,20 @@ export default class extends Controller {
         }
     }
 
+    clear(e) {
+        try {
+            e.preventDefault()
+            this.inputFields.forEach(input => {
+                input.value = ""
+            })
+            this.updateoriginalInput()
+            this.toggleClearButton("none")
+            this.inputFields[0].focus()
+        } catch (error) {
+            console.error("IBAN Clear failed:", error)
+        }
+    }
+
     updateoriginalInput() {
         try {
             const combinedValue = this.inputFields.map(i => i.value).join("")
@@ -159,6 +191,17 @@ export default class extends Controller {
             this.originalInputTarget.dispatchEvent(event)
         } catch (error) {
             console.error("IBAN Hidden input update failed:", error)
+        }
+    }
+
+    hasAnyInput() {
+        return this.inputFields.some(input => input.value.length > 0)
+    }
+
+    toggleClearButton(displayMode) {
+        const clearButton = this.element.querySelector('.iban-clear-button')
+        if (clearButton) {
+            clearButton.style.display = displayMode
         }
     }
 }
