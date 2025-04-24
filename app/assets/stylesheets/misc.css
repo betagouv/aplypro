@@ -98,10 +98,37 @@
 .establishments-table-container {
   max-height: 700px;
   overflow-y: auto;
+  position: relative;
+}
 
-  .fr-table {
-    margin-top: 0rem;
-  }
+.establishments-table-container .fr-table {
+  margin-top: 0;
+}
+
+.establishments-table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.establishments-table thead tr {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.establishments-table thead td,
+.establishments-table thead th {
+  background-color: var(--blue-france-850-200);
+}
+
+.establishments-table tbody {
+  position: relative;
+  top: 0;
+}
+
+.establishments-table-container .fr-table {
+  padding-top: 0;
+  margin-bottom: 0;
 }
 
 .tooltip {
