@@ -5,7 +5,8 @@ export default class extends Controller {
     static values = {
         maxLength: { type: Number, default: 34 },
         minLength: { type: Number, default: 15 },
-        defaultLength: { type: Number, default: 7 }
+        defaultLength: { type: Number, default: 7 },
+        charsPerGroup: { type: Number, default: 4 }
     }
     static classes = ["input", "container", "clearButton", "part"]
 
@@ -27,7 +28,7 @@ export default class extends Controller {
 
     buildInputs(valueOverride = null) {
         const value = this.sanitizeIbanValue(valueOverride || this.originalInputTarget.value)
-        const numParts = Math.ceil(value.length / 4) || this.defaultLengthValue
+        const numParts = Math.ceil(value.length / this.charsPerGroupValue) || this.defaultLengthValue
 
         this.containerTargets.forEach(container => container.remove())
 
@@ -37,18 +38,16 @@ export default class extends Controller {
         container.setAttribute("aria-label", "IBAN input field group")
         container.setAttribute("data-iban-target", "container")
 
-        const lengthPerPart = 4
-
         for (let i = 0; i < numParts; i++) {
             const input = document.createElement("input")
             input.type = "text"
             input.inputMode = "numeric"
-            input.maxLength = lengthPerPart
+            input.maxLength = this.charsPerGroupValue
             input.classList.add(this.partClass, this.inputClass)
             input.dataset.index = i
             input.setAttribute("data-iban-target", "part")
             input.setAttribute("aria-label", `IBAN part ${i + 1} of ${numParts}`)
-            input.value = value.slice(i * lengthPerPart, (i + 1) * lengthPerPart)
+            input.value = value.slice(i * this.charsPerGroupValue, (i + 1) * this.charsPerGroupValue)
 
             input.addEventListener("input", this.handleInput)
             input.addEventListener("keydown", this.handleKeydown)
@@ -80,7 +79,7 @@ export default class extends Controller {
 
             if (!this.isValidIbanLength(pasteData)) return
 
-            const neededFields = Math.ceil(pasteData.length / 4)
+            const neededFields = Math.ceil(pasteData.length / this.charsPerGroupValue)
 
             if (neededFields !== this.partTargets.length) {
                 this.buildInputs(pasteData)
@@ -162,8 +161,8 @@ export default class extends Controller {
 
     distributeValueToParts(value) {
         this.partTargets.forEach((input, i) => {
-            const start = i * 4
-            input.value = value.slice(start, start + 4)
+            const start = i * this.charsPerGroupValue
+            input.value = value.slice(start, start + this.charsPerGroupValue)
         })
     }
 
