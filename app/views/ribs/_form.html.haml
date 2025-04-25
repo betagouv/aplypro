@@ -13,7 +13,22 @@
 
   = form.dsfr_text_field(:name, width: 'md-4')
 
-  = form.dsfr_text_field(:iban, code: true, width: 'md-6')
+  .fr-input-group
+  %label.fr-label{for: "rib_iban"}
+    = t('activerecord.attributes.rib.iban')
+    %span.fr-hint-text
+      = t('activerecord.hints.rib.iban').html_safe
+  .fr-input-group{
+    data: {
+      controller: "iban",
+      iban_input_class: "fr-input",
+      iban_container_class: "iban-container",
+      iban_clear_button_class: "iban-clear-button",
+      iban_part_class: "iban-part"
+    }
+  }
+    = form.text_field :iban, class: "fr-input fr-input--code fr-col-md-6", data: { iban_target: "originalInput" }
+
   = form.dsfr_text_field(:bic, code: true, width: 'md-3')
 
   .fr-btns-group.fr-btns-group--inline.fr-mt-3w
