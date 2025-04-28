@@ -26,11 +26,20 @@ export function getAcademyGeoJson(academyId) {
   return `/data/academies/${paddedId}.geojson`
 }
 
-export function etabMarkerScale(d3, nb, maxNbSchoolings) {
+export function etabMarkerScale(d3, nb, maxNbSchoolings, academyBounds) {
+  const [[x0, y0], [x1, y1]] = academyBounds;
+  const academyArea = Math.abs((x1 - x0) * (y1 - y0));
+
   const scale = d3.scaleSqrt()
     .domain([0, maxNbSchoolings])
-    .range([5, 18])
-  return scale(nb || 0)
+    .range([5, 18]);
+
+  const areaAdjustment = d3.scaleLog()
+    .domain([1, 1000])
+    .range([0.5, 1.2])
+    .clamp(true);
+
+  return scale(nb || 0) * areaAdjustment(academyArea);
 }
 
 export function etabMarkerColor(d3, amount, maxAmount) {
