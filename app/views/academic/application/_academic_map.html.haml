@@ -1,6 +1,6 @@
 #academic-map-container{
     data: {
-      controller: "academic_map",
+      controller: "academic",
       selected_academy_value: @selected_academy.html_safe,
       establishments_for_academy: @establishments_for_academy.to_json.html_safe,
       nb_schoolings_per_establishments: @nb_schoolings_per_establishments.to_json.html_safe,
@@ -11,7 +11,7 @@
   %h5= "Répartition géographique des #{@establishments_for_academy.count} établissements"
   .fr-grid-row
     .fr-col-12.fr-col-md-6
-      #map-container
+      %div{data: { academic_target: "mapContainer" }}
     .fr-col-12.fr-col-md-6
       .establishments-table-container
         .fr-table
@@ -26,7 +26,7 @@
                 %tr.academic-map{
                   data: {
                     uai: establishment.uai,
-                    action: "click->academic_map#selectEstablishment"
+                    action: "click->academic#selectEstablishment"
                   }
                 }
                   %td= establishment.uai
