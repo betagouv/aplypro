@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe PaymentRequestReprocessor do
+RSpec.describe Reprocessor::PaymentRequestIncomplete do
   let(:reason_key) { "ine_not_found" }
   let(:validation_message) do
     I18n.t(
