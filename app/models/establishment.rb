@@ -35,6 +35,7 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     "40" => "Nouvelle-Calédonie",
     "41" => "Polynésie Française",
     "43" => "Mayotte",
+    "44" => "Saint-Pierre-et-Miquelon",
     "70" => "Normandie"
   }.freeze
 

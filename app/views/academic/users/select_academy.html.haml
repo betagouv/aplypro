@@ -7,6 +7,6 @@
       = form_with url: selected_academy_academic_users_path, builder: DsfrFormBuilder, data: { turbo: false } do |form|
         .fr-input-group
           = form.label :academy, "Académie", class: 'fr-label'
-          = form.select :academy, authorised_academy_codes.map { |code| [Establishment::ACADEMY_LABELS[code], code] }, {}, { class: 'fr-select' }
+          = form.select :academy, authorised_academy_codes.map { |code| ["#{Establishment::ACADEMY_LABELS[code]} (#{code})", code] }, {}, { class: 'fr-select' }
 
         = form.submit "Continuez avec cette académie", class: 'fr-btn'
