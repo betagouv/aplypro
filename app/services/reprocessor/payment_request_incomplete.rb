@@ -7,16 +7,12 @@ module Reprocessor
   class PaymentRequestIncomplete < Reprocessor::PaymentRequest
     attr_reader :reason_key, :ministry
 
-    def initialize(reason_key, ministry: nil)
+    def reprocess_all!(reason_key, ministry: nil)
       @reason_key = reason_key
       @ministry = ministry
       validate_reason!
-    end
 
-    def reprocess!
-      results = process_payment_requests
-      log_results(results)
-      results
+      process_payment_requests
     end
 
     private
@@ -28,6 +24,7 @@ module Reprocessor
         process_payment_request(payment_request, results)
       end
 
+      log_results(results)
       results
     end
 

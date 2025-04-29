@@ -2,10 +2,6 @@
 
 module Reprocessor
   class PaymentRequest
-    def reprocess!
-      raise "this method should be overriden"
-    end
-
     private
 
     def process_payment_requests

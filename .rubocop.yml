@@ -14,10 +14,6 @@ AllCops:
     - 'db/**/*'
     - 'bin/**/*'
 
-Lint/MissingSuper:
-  Exclude:
-    - 'app/services/reprocessor/*'
-
 Style/StringLiterals:
   Enabled: true
   EnforcedStyle: "double_quotes"

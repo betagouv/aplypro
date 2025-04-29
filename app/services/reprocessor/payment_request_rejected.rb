@@ -4,14 +4,10 @@ module Reprocessor
   class PaymentRequestRejected < Reprocessor::PaymentRequest
     attr_reader :pfmp_ids
 
-    def initialize(pfmp_ids)
+    def reprocess_ids!(pfmp_ids)
       @pfmp_ids = pfmp_ids
-    end
 
-    def reprocess!
-      results = process_payment_requests
-      log_results(results)
-      results
+      process_payment_requests
     end
 
     private
@@ -25,6 +21,7 @@ module Reprocessor
         process_payment_request(pfmp.latest_payment_request, results)
       end
 
+      log_results(results)
       results
     end
   end
