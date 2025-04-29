@@ -2,6 +2,41 @@
 
 class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
   PROVIDERS = %w[sygne fregata csv].freeze
+  ACADEMY_LABELS = {
+    "01" => "Paris",
+    "02" => "Aix-Marseille",
+    "03" => "Besançon",
+    "04" => "Bordeaux",
+    "05" => "Caen",
+    "06" => "Clermont-Ferrand",
+    "07" => "Dijon",
+    "08" => "Grenoble",
+    "09" => "Lille",
+    "10" => "Lyon",
+    "11" => "Montpellier",
+    "12" => "Nancy-Metz",
+    "13" => "Poitiers",
+    "14" => "Rennes",
+    "15" => "Strasbourg",
+    "16" => "Toulouse",
+    "17" => "Nantes",
+    "18" => "Orléans-Tours",
+    "19" => "Reims",
+    "20" => "Amiens",
+    "22" => "Limoges",
+    "23" => "Nice",
+    "24" => "Créteil",
+    "25" => "Versailles",
+    "27" => "Corse",
+    "28" => "La Réunion",
+    "31" => "Martinique",
+    "32" => "Guadeloupe",
+    "33" => "Guyane",
+    "40" => "Nouvelle-Calédonie",
+    "41" => "Polynésie Française",
+    "43" => "Mayotte",
+    "70" => "Normandie"
+  }.freeze
 
   validates :uai, presence: true, uniqueness: true, format: { with: -> { uai_regex } }
   validates :students_provider, inclusion: { in: PROVIDERS }

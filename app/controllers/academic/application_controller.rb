@@ -16,7 +16,7 @@ module Academic
                   :set_overrides,
                   :infer_page_title
 
-    helper_method :current_user, :selected_academy, :academies, :selected_school_year
+    helper_method :current_user, :selected_academy, :authorised_academy_codes, :selected_school_year
 
     def home
       @establishments_for_academy = Establishment.joins(:classes)
@@ -62,13 +62,14 @@ module Academic
       @selected_academy ||= session[:selected_academy]
     end
 
-    def academies
-      @academies ||= session[:academy_codes]
+    def authorised_academy_codes
+      @authorised_academy_codes ||= session[:academy_codes]
     end
 
     private
 
     def check_selected_academy
+      # TODO: verify that selected academy is authorised
       return unless academic_user_signed_in?
 
       redirect_to select_academy_academic_users_path(current_user) if selected_academy.nil?

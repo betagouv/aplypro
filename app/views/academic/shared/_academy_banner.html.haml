@@ -5,5 +5,5 @@
         = "#{selected_school_year} - Académie #{selected_academy}"
       %div
         = dsfr_link_to "Changer d'année scolaire", select_academic_school_years_path, class: "fr-text--sm"
-        - if academies.many?
+        - if authorised_academy_codes.many?
           = dsfr_link_to "Changer d'académie", select_academy_academic_users_path(current_user), class: "fr-text--sm fr-ml-1w"
