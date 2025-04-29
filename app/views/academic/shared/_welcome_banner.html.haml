@@ -1,0 +1,12 @@
+.fr-notice.fr-notice--info
+  .fr-container
+    .fr-notice__body
+      %p
+        %span.fr-notice__title
+          =t("academic.welcome.title")
+      %p
+        %span.fr-notice__desc
+          =t("academic.welcome.description")
+      %p
+        %a.fr-notice__link{ target: "_blank", href: "mailto:#{t('academic.welcome.email')}" }
+          =t("academic.welcome.email")

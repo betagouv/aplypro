@@ -436,3 +436,12 @@ fr:
     errors:
       bank_coordinates_not_found: Les coordonnées bancaires ne correspondent à aucune agence connue, veuillez vérifier l'IBAN et le BIC saisis
       administrative_number_already_taken: Une erreur technique interne à APLyPro est survenue, merci de patientez le temps que l'équipe identifie et corrige le problème
+  academic:
+    welcome:
+      title: Bonjour et bienvenue sur la page APLyPro dédiée aux utilisateurs qui ne sont pas en établissement !
+      description: |
+        Cette page est dédiée aux correspondants académiques APLyPro et aux ADSI des DSI académiques et elle en cours d'évolution.
+        Elle est donc susceptible de changer fréquemment au cours des prochaines semaines.
+        Dans le cadre de son développement, n'hésitez pas à nous transmettre vos besoins et suggestions qui faciliteraient votre travail !
+        Merci et bonne visite.
+      email: dsi.dev-aplypro-exp@ac-clermont.fr
