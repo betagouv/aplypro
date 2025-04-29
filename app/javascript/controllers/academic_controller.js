@@ -186,6 +186,7 @@ export default class extends Controller {
     if (row) {
       row.classList.add("selected")
       row.style.backgroundColor = this.highlightColorValue
+      row.classList.add('scroll-margin-top')
       row.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
     }
   }

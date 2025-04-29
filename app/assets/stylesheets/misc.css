@@ -59,7 +59,6 @@
   display: none;
 }
 
-/* Manage spacing between buttons for home panel */
 .buttons-group button, .buttons-group input[type="submit"] {
   margin-bottom: 0;
   width: 100%;
@@ -114,6 +113,11 @@
   position: sticky;
   top: 0;
   z-index: 1;
+  height: 48px;
+}
+
+.scroll-margin-top {
+  scroll-margin-top: 48px;
 }
 
 .establishments-table thead td,
