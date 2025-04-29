@@ -29,7 +29,6 @@ export default class extends Controller {
       this.parsedNbSchoolings = JSON.parse(this.element.dataset.nbSchoolingsPerEstablishments)
       this.parsedAmounts = JSON.parse(this.element.dataset.amountsPerEstablishments)
       this.maxNbSchoolings = Math.max(...Object.values(this.parsedNbSchoolings))
-      this.maxAmount = Math.max(...Object.values(this.parsedAmounts))
       this.createMap()
     } catch (error) {
       console.error("Error parsing data:", error)
@@ -161,9 +160,9 @@ export default class extends Controller {
           this.maxNbSchoolings,
           academyBounds
         ))
-        .attr("fill", d => etabMarkerColor(d3, this.parsedAmounts[d.properties.Code_UAI], this.maxAmount))
+        .attr("fill", d => etabMarkerColor(d3, d, this.parsedAmounts[d.properties.Code_UAI]))
         .attr("stroke", "black")
-        .attr("stroke-width", 1)
+        .attr("stroke-width", 2)
         .attr("data-longitude", d => d.geometry.coordinates[0])
         .attr("data-latitude", d => d.geometry.coordinates[1])
         .on("mouseover", (event, d) => this.mouseOver(event, d, tooltip))
@@ -219,42 +218,36 @@ export default class extends Controller {
       this.d3.select(marker)
         .interrupt()
 
-      const originalColor = etabMarkerColor(this.d3, this.parsedAmounts[uai], this.maxAmount)
       this.highlightRow(uai)
 
       this.d3.select(marker)
         .transition()
         .duration(200)
-        .attr("fill", this.highlightColorValue)
+        .attr("stroke", this.highlightColorValue)
         .transition()
         .duration(200)
         .delay(500)
-        .attr("fill", originalColor)
+        .attr("stroke", "black")
     }
   }
 
   mouseOver(event, d, tooltip) {
     const e = this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)
-    this.d3.select(event.currentTarget)
-      .transition()
-      .duration(200)
-      .attr("fill", this.highlightColorValue)
-
+    const amounts = this.parsedAmounts[d.properties.Code_UAI]
     tooltip
-      .style("left", (event.pageX + 10) + "px")
-      .style("top", (event.pageY - 10) + "px")
-      .style("display", "block")
       .html(`${e.uai} - ${e.name}<br>
         ${e.address_line1}, ${e.city}, ${e.postal_code}<br>
         Nombre de scolarités : ${this.parsedNbSchoolings[e.uai]}<br>
-        Montant total payé : ${this.parsedAmounts[e.uai]} €`)
+        Montant payable : ${amounts.payable_amount} €<br>
+        Montant payé : ${amounts.paid_amount} €<br>
+        Ratio : ${((amounts.paid_amount / amounts.payable_amount) * 100).toFixed(1)}%`)
   }
 
   mouseOut(event, d, tooltip) {
     this.d3.select(event.currentTarget)
       .transition()
       .duration(200)
-      .attr("fill", etabMarkerColor(this.d3, this.parsedAmounts[d.properties.Code_UAI], this.maxAmount))
+      .attr("fill", etabMarkerColor(this.d3, d, this.parsedAmounts[d.properties.Code_UAI]))
     tooltip.style("display", "none")
   }
 }

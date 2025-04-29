@@ -32,4 +32,4 @@
                   %td= establishment.uai
                   %td= "#{establishment.address_line1}, #{establishment.city}, #{establishment.postal_code}"
                   %td= @nb_schoolings_per_establishments[establishment.uai]
-                  %td= @amounts_per_establishments[establishment.uai]
+                  %td= @amounts_per_establishments[establishment.uai][:paid_amount]
