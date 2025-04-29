@@ -16,6 +16,7 @@ export default class extends Controller {
     this.height = null
     this.currentTransform = null
     this.zoom = null
+    this.academyGeojson = null
   }
 
   async connect() {
@@ -102,13 +103,13 @@ export default class extends Controller {
 
   async createAcademyPath() {
     try {
-      const geojson = await this.d3.json(getAcademyGeoJson(this.selectedAcademy))
+      this.academyGeojson = await this.d3.json(getAcademyGeoJson(this.selectedAcademy))
       const h2Element = document.querySelector('h2')
-      if (h2Element && geojson.name) {
-        h2Element.textContent = `Académie ${this.selectedAcademy} : ${geojson.name}`
+      if (h2Element && this.academyGeojson.name) {
+        h2Element.textContent = `Académie ${this.selectedAcademy} : ${this.academyGeojson.name}`
       }
 
-      const [[x0, y0], [x1, y1]] = this.d3.geoPath().projection(this.projection).bounds(geojson)
+      const [[x0, y0], [x1, y1]] = this.d3.geoPath().projection(this.projection).bounds(this.academyGeojson)
       const dx = x1 - x0
       const dy = y1 - y0
       const cx = (x0 + x1) / 2
@@ -121,7 +122,7 @@ export default class extends Controller {
         .translate(translate)
 
       this.academyLayer.selectAll("path")
-        .data(geojson.features)
+        .data(this.academyGeojson.features)
         .enter()
         .append("path")
         .attr("stroke", this.academyStrokeColorValue)
@@ -140,9 +141,11 @@ export default class extends Controller {
   createEtabMarkers() {
     const d3 = this.d3
     d3.json("/data/etablissements.geojson").then((geojson) => {
-      const tooltip = d3.select("#map-container")
-        .append("div")
-        .attr("class", "tooltip")
+      const tooltip = d3.select(this.mapContainerTarget)
+              .append("div")
+              .attr("class", "tooltip")
+
+      const academyBounds = this.path.bounds(this.academyGeojson)
 
       this.academyLayer.selectAll("circle")
         .data(geojson.features.filter(d => this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)))
@@ -152,7 +155,12 @@ export default class extends Controller {
         .attr("id", d => `marker-${d.properties.Code_UAI}`)
         .attr("cx", d => this.projection(d.geometry.coordinates)[0])
         .attr("cy", d => this.projection(d.geometry.coordinates)[1])
-        .attr("r", d => etabMarkerScale(d3, this.parsedNbSchoolings[d.properties.Code_UAI], this.maxNbSchoolings))
+        .attr("r", d => etabMarkerScale(
+          d3,
+          this.parsedNbSchoolings[d.properties.Code_UAI],
+          this.maxNbSchoolings,
+          academyBounds
+        ))
         .attr("fill", d => etabMarkerColor(d3, this.parsedAmounts[d.properties.Code_UAI], this.maxAmount))
         .attr("stroke", "black")
         .attr("stroke-width", 1)
