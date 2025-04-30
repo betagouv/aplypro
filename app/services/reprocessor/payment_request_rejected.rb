@@ -17,8 +17,11 @@ module Reprocessor
 
       pfmp_ids.each do |id|
         pfmp = Pfmp.find(id)
-        PfmpManager.new(pfmp).create_new_payment_request!
-        process_payment_request(pfmp.latest_payment_request, results)
+        p_r = PfmpManager.new(pfmp).create_new_payment_request!
+        process_payment_request(p_r, results)
+      rescue PfmpManager::ExistingActivePaymentRequestError, PfmpManager::PaidPfmpError
+        Rails.logger.info("Skipping PFMP: #{id}")
+        next
       end
 
       log_results(results)
