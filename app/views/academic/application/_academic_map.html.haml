@@ -20,7 +20,7 @@
               %td{scope: "col"} UAI
               %th{scope: "col"} Adresse
               %th{scope: "col"} Scolarités
-              %th{scope: "col"} Montant
+              %th{scope: "col"} Montant payé
             %tbody
               - @establishments_for_academy.each do |establishment|
                 %tr.academic-map{
@@ -32,4 +32,4 @@
                   %td= establishment.uai
                   %td= "#{establishment.address_line1}, #{establishment.city}, #{establishment.postal_code}"
                   %td= @nb_schoolings_per_establishments[establishment.uai]
-                  %td= @amounts_per_establishments[establishment.uai]
+                  %td= number_to_currency(@amounts_per_establishments[establishment.uai][:paid_amount], unit: "€", format: "%n %u")

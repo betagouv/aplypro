@@ -59,7 +59,6 @@
   display: none;
 }
 
-/* Manage spacing between buttons for home panel */
 .buttons-group button, .buttons-group input[type="submit"] {
   margin-bottom: 0;
   width: 100%;
@@ -114,6 +113,11 @@
   position: sticky;
   top: 0;
   z-index: 1;
+  height: 48px;
+}
+
+.scroll-margin-top {
+  scroll-margin-top: 48px;
 }
 
 .establishments-table thead td,
@@ -134,12 +138,25 @@
 .tooltip {
   position: absolute;
   background: white;
-  padding: 5px;
+  padding: 10px;
   border-radius: 5px;
   pointer-events: none;
-  display: none;
+  visibility: hidden;
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.tooltip table td {
+  padding: 2px 8px 2px 0;
+}
+
+.tooltip table td:first-child {
+  text-align: right;
+}
+
+.tooltip table td:last-child {
+  text-align: left;
+  font-weight: bold;
 }
 
 #tile-layer image {
