@@ -46,6 +46,8 @@ export function etabMarkerColor(d3, d, amounts) {
   const establishment = amounts[d.properties.Code_UAI]
   if (!establishment) return 'white'
 
+  if (establishment.payable_amount === 0) return mapColors.lightRed
+
   const ratio = establishment.paid_amount / establishment.payable_amount
   const colorScale = d3.scaleLinear()
     .domain([0, 1])

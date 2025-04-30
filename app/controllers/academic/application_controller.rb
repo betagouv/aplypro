@@ -18,7 +18,7 @@ module Academic
 
     helper_method :current_user, :selected_academy, :authorised_academy_codes, :selected_school_year
 
-    def home
+    def home # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       @establishments_for_academy = Establishment.joins(:classes)
                                                  .where(academy_code: selected_academy,
                                                         "classes.school_year_id": selected_school_year)
@@ -48,7 +48,7 @@ module Academic
           payable_amount: validated_amount,
           paid_amount: paid_amount
         }
-      end.index_by { |stats| stats[:uai] }
+      end.index_by { |stats| stats[:uai] } # rubocop:disable Style/MultilineBlockChain
     end
 
     def login

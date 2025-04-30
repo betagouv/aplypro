@@ -160,7 +160,7 @@ export default class extends Controller {
           this.maxNbSchoolings,
           academyBounds
         ))
-        .attr("fill", d => etabMarkerColor(d3, d, this.parsedAmounts[d.properties.Code_UAI]))
+        .attr("fill", d => etabMarkerColor(d3, d, this.parsedAmounts))
         .attr("stroke", "black")
         .attr("stroke-width", 2)
         .attr("data-longitude", d => d.geometry.coordinates[0])
@@ -234,20 +234,32 @@ export default class extends Controller {
   mouseOver(event, d, tooltip) {
     const e = this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)
     const amounts = this.parsedAmounts[d.properties.Code_UAI]
+
+    const ratioHtml = amounts.payable_amount > 0
+      ? `<tr><td>Ratio :</td><td>${((amounts.paid_amount / amounts.payable_amount) * 100).toFixed(1)}%</td></tr>`
+      : '';
+
     tooltip
-      .html(`${e.uai} - ${e.name}<br>
-        ${e.address_line1}, ${e.city}, ${e.postal_code}<br>
-        Nombre de scolarités : ${this.parsedNbSchoolings[e.uai]}<br>
-        Montant payable : ${amounts.payable_amount} €<br>
-        Montant payé : ${amounts.paid_amount} €<br>
-        Ratio : ${((amounts.paid_amount / amounts.payable_amount) * 100).toFixed(1)}%`)
+      .style("visibility", "visible")
+      .style("left", (event.pageX + 10) + "px")
+      .style("top", (event.pageY + 10) + "px")
+      .html(`
+        <strong>${e.uai} - ${e.name}</strong><br>
+        ${e.address_line1}, ${e.city}, ${e.postal_code}<br><br>
+        <table>
+          <tr><td>Nombre de scolarités :</td><td>${this.parsedNbSchoolings[e.uai]}</td></tr>
+          <tr><td>Montant payable :</td><td>${amounts.payable_amount} €</td></tr>
+          <tr><td>Montant payé :</td><td>${amounts.paid_amount} €</td></tr>
+          ${ratioHtml}
+        </table>
+      `)
   }
 
   mouseOut(event, d, tooltip) {
     this.d3.select(event.currentTarget)
       .transition()
       .duration(200)
-      .attr("fill", etabMarkerColor(this.d3, d, this.parsedAmounts[d.properties.Code_UAI]))
-    tooltip.style("display", "none")
+      .attr("fill", etabMarkerColor(this.d3, d, this.parsedAmounts))
+    tooltip.style("visibility", "hidden")
   }
 }
