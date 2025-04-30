@@ -240,7 +240,7 @@ export default class extends Controller {
       : '';
 
     tooltip
-      .style("visibility", "visible")
+      .style("display", "block")
       .style("left", (event.pageX + 10) + "px")
       .style("top", (event.pageY + 10) + "px")
       .html(`
@@ -260,6 +260,6 @@ export default class extends Controller {
       .transition()
       .duration(200)
       .attr("fill", etabMarkerColor(this.d3, d, this.parsedAmounts))
-    tooltip.style("visibility", "hidden")
+    tooltip.style("display", "none")
   }
 }
