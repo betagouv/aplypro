@@ -11,18 +11,12 @@ module Reprocessor
     def process_payment_request(payment_request, results)
       Rails.logger.info("processing p_r #{payment_request.id}")
 
-      if attempt_ready_transition(payment_request)
+      if payment_request.mark_ready!
         results[:success] += 1
         results[:ready] += 1 if payment_request.reload.in_state?(:ready)
       else
         results[:failure] += 1
       end
-    end
-
-    def attempt_ready_transition(payment_request)
-      payment_request.mark_ready!
-    rescue Statesman::TransitionFailedError
-      false
     end
 
     def log_results(results)
