@@ -11,14 +11,13 @@ export const mapColors = {
   darkBlue: getDsfrColor('--blue-france-sun-113-625'),
   normalBlue: getDsfrColor('--blue-france-main-525'),
   lightBlue: getDsfrColor('--blue-france-850-200'),
-
   lightGreen: getDsfrColor('--success-950-100'),
   normalGreen: getDsfrColor('--success-425-625'),
   darkGreen: getDsfrColor('--success-425-625'),
-
   lightRed: getDsfrColor('--red-marianne-950-100'),
   normalRed: getDsfrColor('--red-marianne-425-625'),
-  darkRed: getDsfrColor('--red-marianne-425-625')
+  darkRed: getDsfrColor('--red-marianne-425-625'),
+  normalYellow: getDsfrColor('--yellow-tournesol-975-75')
 }
 
 export function getAcademyGeoJson(academyId) {
@@ -32,7 +31,7 @@ export function etabMarkerScale(d3, nb, maxNbSchoolings, academyBounds) {
 
   const scale = d3.scaleSqrt()
     .domain([0, maxNbSchoolings])
-    .range([5, 18]);
+    .range([2, 14]);
 
   const areaAdjustment = d3.scaleLog()
     .domain([1, 1000])
@@ -46,12 +45,12 @@ export function etabMarkerColor(d3, d, amounts) {
   const establishment = amounts[d.properties.Code_UAI]
   if (!establishment) return 'white'
 
-  if (establishment.payable_amount === 0) return mapColors.lightRed
+  if (establishment.payable_amount === 0) return mapColors.normalRed
 
   const ratio = establishment.paid_amount / establishment.payable_amount
   const colorScale = d3.scaleLinear()
-    .domain([0, 1])
-    .range([mapColors.lightRed, mapColors.lightGreen])
+    .domain([0, 0.5, 1])
+    .range([mapColors.normalRed, mapColors.normalYellow, mapColors.normalGreen])
 
   return colorScale(ratio)
 }
