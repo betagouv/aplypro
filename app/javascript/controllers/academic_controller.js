@@ -7,7 +7,9 @@ export default class extends Controller {
   static values = {
     highlightColor: { type: String, default: mapColors.lightGreen },
     panDuration: { type: Number, default: 750 },
-    academyStrokeColor: { type: String, default: mapColors.normalBlue }
+    academyStrokeColor: { type: String, default: mapColors.normalBlue },
+    agricultureIcon: { type: String, default: "fr-icon-seedling-fill" },
+    defaultIcon: { type: String, default: "fr-icon-git-repository-fill" }
   }
 
   initialize(){
@@ -30,6 +32,7 @@ export default class extends Controller {
       this.parsedAmounts = JSON.parse(this.element.dataset.amountsPerEstablishments)
       this.maxNbSchoolings = Math.max(...Object.values(this.parsedNbSchoolings))
       this.createMap()
+      this.createLegend()
     } catch (error) {
       console.error("Error parsing data:", error)
     }
@@ -37,6 +40,39 @@ export default class extends Controller {
 
   disconnect() {
     this.mapContainerTarget.innerHTML = ''
+  }
+
+  createLegend() {
+    const legend = this.svg.append("g")
+      .attr("class", "legend")
+      .attr("transform", `translate(10, ${this.height - 40})`)
+
+    const legendBackground = legend.append("rect")
+      .attr("width", 200)
+      .attr("height", 30)
+      .attr("fill", "white")
+
+    const legendItems = [
+      { icon: this.agricultureIconValue, text: "MASA", x: 20 },
+      { icon: this.defaultIconValue, text: "MENJ", x: 110 }
+    ]
+
+    legendItems.forEach(item => {
+      const group = legend.append("g")
+        .attr("transform", `translate(${item.x}, 5)`)
+
+      const foreignObject = group.append("foreignObject")
+        .attr("width", 30)
+        .attr("height", 20)
+
+      foreignObject.html(`<i class="${item.icon}" style="font-size: 16px;"></i>`)
+
+      group.append("text")
+        .attr("x", 25)
+        .attr("y", 15)
+        .text(item.text)
+        .style("font-size", "14px")
+    })
   }
 
   zoomed(event) {
@@ -168,7 +204,11 @@ export default class extends Controller {
         .attr("y", d => this.projection(d.geometry.coordinates)[1])
         .attr("data-longitude", d => d.geometry.coordinates[0])
         .attr("data-latitude", d => d.geometry.coordinates[1])
-        .html(d => `<i class="fr-icon-seedling-fill" style="color: ${etabMarkerColor(d3, d, this.parsedAmounts)}"></i>`)
+        .html(d => {
+          const etab = this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)
+          const iconClass = etab.ministry === "AGRICULTURE" ? this.agricultureIconValue : this.defaultIconValue
+          return `<i class="${iconClass}" style="color: ${etabMarkerColor(d3, d, this.parsedAmounts)}"></i>`
+        })
         .on("mouseover", (event, d) => this.mouseOver(event, d, tooltip))
         .on("mouseout", (event, d) => this.mouseOut(event, d, tooltip))
         .on("click", (event, d) => {
@@ -219,19 +259,19 @@ export default class extends Controller {
       const latitude = parseFloat(marker.getAttribute("data-latitude"))
       this.panToMarker(longitude, latitude)
 
-      this.d3.select(marker)
+      this.d3.select(marker).select("i")
         .interrupt()
 
       this.highlightRow(uai)
 
-      this.d3.select(marker)
+      this.d3.select(marker).select("i")
         .transition()
         .duration(200)
-        .attr("stroke", this.highlightColorValue)
+        .style("color", this.highlightColorValue)
         .transition()
         .duration(200)
         .delay(500)
-        .attr("stroke", "black")
+        .style("color", d => etabMarkerColor(this.d3, d, this.parsedAmounts))
     }
   }
 
