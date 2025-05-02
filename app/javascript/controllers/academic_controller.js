@@ -58,9 +58,9 @@ export default class extends Controller {
     this.academyLayer.selectAll("path")
       .attr("d", this.path)
 
-    this.academyLayer.selectAll("circle")
-      .attr("cx", d => this.projection(d.geometry.coordinates)[0])
-      .attr("cy", d => this.projection(d.geometry.coordinates)[1])
+    this.academyLayer.selectAll("foreignObject")
+      .attr("x", d => this.projection(d.geometry.coordinates)[0])
+      .attr("y", d => this.projection(d.geometry.coordinates)[1])
   }
 
   createMap() {
@@ -146,25 +146,29 @@ export default class extends Controller {
 
       const academyBounds = this.path.bounds(this.academyGeojson)
 
-      this.academyLayer.selectAll("circle")
+      this.academyLayer.selectAll("foreignObject")
         .data(geojson.features.filter(d => this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)))
         .enter()
-        .append("circle")
+        .append("foreignObject")
         .filter(d => d.geometry && d.geometry.coordinates)
         .attr("id", d => `marker-${d.properties.Code_UAI}`)
-        .attr("cx", d => this.projection(d.geometry.coordinates)[0])
-        .attr("cy", d => this.projection(d.geometry.coordinates)[1])
-        .attr("r", d => etabMarkerScale(
+        .attr("width", d => etabMarkerScale(
           d3,
           this.parsedNbSchoolings[d.properties.Code_UAI],
           this.maxNbSchoolings,
           academyBounds
-        ))
-        .attr("fill", d => etabMarkerColor(d3, d, this.parsedAmounts))
-        .attr("stroke", "black")
-        .attr("stroke-width", 2)
+        ) * 2)
+        .attr("height", d => etabMarkerScale(
+          d3,
+          this.parsedNbSchoolings[d.properties.Code_UAI],
+          this.maxNbSchoolings,
+          academyBounds
+        ) * 2)
+        .attr("x", d => this.projection(d.geometry.coordinates)[0])
+        .attr("y", d => this.projection(d.geometry.coordinates)[1])
         .attr("data-longitude", d => d.geometry.coordinates[0])
         .attr("data-latitude", d => d.geometry.coordinates[1])
+        .html(d => `<i class="fr-icon-seedling-fill" style="color: ${etabMarkerColor(d3, d, this.parsedAmounts)}"></i>`)
         .on("mouseover", (event, d) => this.mouseOver(event, d, tooltip))
         .on("mouseout", (event, d) => this.mouseOut(event, d, tooltip))
         .on("click", (event, d) => {
@@ -191,20 +195,20 @@ export default class extends Controller {
   }
 
   panToMarker(longitude, latitude) {
-    const [x, y] = this.projection([longitude, latitude]);
-    const centerX = this.width / 2;
-    const centerY = this.height / 2;
-    const dx = centerX - x;
-    const dy = centerY - y;
+    const [x, y] = this.projection([longitude, latitude])
+    const centerX = this.width / 2
+    const centerY = this.height / 2
+    const dx = centerX - x
+    const dy = centerY - y
 
     const newTransform = this.d3.zoomIdentity
       .translate(this.currentTransform.x + dx, this.currentTransform.y + dy)
-      .scale(this.currentTransform.k);
+      .scale(this.currentTransform.k)
 
     this.svg
       .transition()
       .duration(this.panDurationValue)
-      .call(this.zoom.transform, newTransform);
+      .call(this.zoom.transform, newTransform)
   }
 
   selectEstablishment(event) {
@@ -237,7 +241,7 @@ export default class extends Controller {
 
     const ratioHtml = amounts.payable_amount > 0
       ? `<tr><td>Ratio :</td><td>${((amounts.paid_amount / amounts.payable_amount) * 100).toFixed(1)}%</td></tr>`
-      : '';
+      : ''
 
     tooltip
       .style("display", "block")
@@ -256,10 +260,10 @@ export default class extends Controller {
   }
 
   mouseOut(event, d, tooltip) {
-    this.d3.select(event.currentTarget)
+    this.d3.select(event.currentTarget).select("i")
       .transition()
       .duration(200)
-      .attr("fill", etabMarkerColor(this.d3, d, this.parsedAmounts))
+      .style("color", etabMarkerColor(this.d3, d, this.parsedAmounts))
     tooltip.style("display", "none")
   }
 }
