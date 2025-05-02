@@ -324,6 +324,7 @@ fr:
       pending: "En attente"
       ready: "En attente"
       incomplete: "Bloquée"
+      waiting: "En attente de prise en charge"
       sent: "En traitement"
       integrated: "En traitement"
       rejected: "Demande rejetée"
