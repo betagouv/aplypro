@@ -278,10 +278,32 @@ export default class extends Controller {
   mouseOver(event, d, tooltip) {
     const e = this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)
     const amounts = this.parsedAmounts[d.properties.Code_UAI]
+    const ratio = amounts.payable_amount > 0 ? amounts.paid_amount / amounts.payable_amount : 0
 
-    const ratioHtml = amounts.payable_amount > 0
-      ? `<tr><td>Ratio :</td><td>${((amounts.paid_amount / amounts.payable_amount) * 100).toFixed(1)}%</td></tr>`
-      : ''
+    const progressBarHtml = amounts.payable_amount > 0 ? `
+      <div style="
+        width: 100%;
+        height: 20px;
+        background: linear-gradient(to right,
+          ${mapColors.normalRed} 0%,
+          ${mapColors.normalYellow} 50%,
+          ${mapColors.normalGreen} 100%
+        );
+        border-radius: 4px;
+        position: relative;
+        margin: 5px 0;
+      ">
+        <div style="
+          position: absolute;
+          left: ${ratio * 100}%;
+          transform: translateX(-50%);
+          width: 3px;
+          height: 20px;
+          background: black;
+        "></div>
+      </div>
+      <div style="text-align: center;">${(ratio * 100).toFixed(1)}%</div>
+    ` : '';
 
     tooltip
       .style("display", "block")
@@ -294,8 +316,8 @@ export default class extends Controller {
           <tr><td>Nombre de scolarités :</td><td>${this.parsedNbSchoolings[e.uai]}</td></tr>
           <tr><td>Montant payable :</td><td>${amounts.payable_amount} €</td></tr>
           <tr><td>Montant payé :</td><td>${amounts.paid_amount} €</td></tr>
-          ${ratioHtml}
         </table>
+        ${progressBarHtml}
       `)
   }
 
