@@ -17,7 +17,8 @@ export const mapColors = {
   lightRed: getDsfrColor('--red-marianne-950-100'),
   normalRed: getDsfrColor('--red-marianne-425-625'),
   darkRed: getDsfrColor('--red-marianne-425-625'),
-  normalYellow: getDsfrColor('--yellow-tournesol-850-200')
+  normalYellow: getDsfrColor('--yellow-tournesol-850-200'),
+  lightYellow: getDsfrColor('--yellow-tournesol-975-75')
 }
 
 export function getAcademyGeoJson(academyId) {

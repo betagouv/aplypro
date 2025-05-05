@@ -5,7 +5,7 @@ export default class extends Controller {
   static targets = ["mapContainer"]
 
   static values = {
-    highlightColor: { type: String, default: mapColors.lightGreen },
+    highlightColor: { type: String, default: mapColors.lightYellow },
     panDuration: { type: Number, default: 750 },
     academyStrokeColor: { type: String, default: mapColors.normalBlue },
     menjIconPath: { type: String },
@@ -26,6 +26,7 @@ export default class extends Controller {
     this.parsedNbSchoolings = JSON.parse(this.element.dataset.nbSchoolingsPerEstablishments)
     this.parsedAmounts = JSON.parse(this.element.dataset.amountsPerEstablishments)
     this.maxNbSchoolings = Math.max(...Object.values(this.parsedNbSchoolings))
+    this.bopVisibleStates = { masa: true, menj: true }
   }
 
   async connect() {
@@ -57,13 +58,16 @@ export default class extends Controller {
       .attr("fill", "white")
 
     const legendItems = [
-      { symbol: "#masa", text: "MASA", x: 20 },
-      { symbol: "#menj", text: "MENJ", x: 110 }
+      { symbol: "#masa", text: "MASA", x: 20, type: "masa" },
+      { symbol: "#menj", text: "MENJ", x: 110, type: "menj" }
     ]
 
     legendItems.forEach(item => {
       const group = legend.append("g")
+        .attr("id", `legend-${item.type}`)
         .attr("transform", `translate(${item.x}, 5)`)
+        .style("cursor", "pointer")
+        .on("click", () => this.toggleBop(item.type))
 
       group.append("use")
         .attr("href", item.symbol)
@@ -78,6 +82,21 @@ export default class extends Controller {
         .text(item.text)
         .style("font-size", "14px")
     })
+  }
+
+  toggleBop(type) {
+    this.bopVisibleStates[type] = !this.bopVisibleStates[type]
+
+    this.academyLayer.selectAll("g.marker")
+      .filter(d => {
+        const etab = this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)
+        return etab.ministry === (type === "masa" ? "AGRICULTURE" : "EDUCATION")
+      })
+      .style("display", this.bopVisibleStates[type] ? "block" : "none")
+
+    this.svg.select(`#legend-${type}`)
+      .selectAll("use, text")
+      .style("fill", this.bopVisibleStates[type] ? "black" : "#999")
   }
 
   createMarkerSymbols() {

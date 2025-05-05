@@ -10,7 +10,9 @@
   }
 }
   %h2= "Académie #{@selected_academy}"
-  %h5= "Répartition géographique des #{@establishments_for_academy.count} établissements"
+  %h5
+    %i.fr-icon-earth-fill
+    = "Répartition géographique des #{@establishments_for_academy.count} établissements"
   .fr-grid-row
     .fr-col-12.fr-col-md-6
       %div{data: { academic_target: "mapContainer" }}
