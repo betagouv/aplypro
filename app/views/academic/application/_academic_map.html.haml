@@ -5,10 +5,14 @@
       establishments_for_academy: @establishments_for_academy.to_json.html_safe,
       nb_schoolings_per_establishments: @nb_schoolings_per_establishments.to_json.html_safe,
       amounts_per_establishments: @amounts_per_establishments.to_json.html_safe,
+      masa_icon_path: asset_path('icons/others/seedling-fill.svg'),
+      menj_icon_path: asset_path('icons/development/git-repository-fill.svg')
   }
 }
   %h2= "Académie #{@selected_academy}"
-  %h5= "Répartition géographique des #{@establishments_for_academy.count} établissements"
+  %h5
+    %i.fr-icon-earth-fill
+    = "Répartition géographique des #{@establishments_for_academy.count} établissements"
   .fr-grid-row
     .fr-col-12.fr-col-md-6
       %div{data: { academic_target: "mapContainer" }}
