@@ -84,10 +84,7 @@ export default class extends Controller {
     const defs = this.svg.append("defs")
 
     const createSymbolFromIcon = async (iconPath, symbolId) => {
-      const response = await fetch(iconPath)
-      const svgText = await response.text()
-      const parser = new DOMParser()
-      const svgDoc = parser.parseFromString(svgText, 'image/svg+xml')
+      const svgDoc = await this.d3.svg(iconPath)
       const pathData = svgDoc.querySelector('path').getAttribute('d')
       defs.append("symbol")
         .attr("id", symbolId)
