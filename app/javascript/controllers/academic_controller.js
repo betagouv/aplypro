@@ -8,17 +8,24 @@ export default class extends Controller {
     highlightColor: { type: String, default: mapColors.lightGreen },
     panDuration: { type: Number, default: 750 },
     academyStrokeColor: { type: String, default: mapColors.normalBlue },
-    agricultureIcon: { type: String, default: "fr-icon-seedling-fill" },
-    defaultIcon: { type: String, default: "fr-icon-git-repository-fill" }
+    menjIconPath: { type: String },
+    masaIconPath: { type: String }
   }
 
-  initialize(){
+  initialize() {
     this.svg = null
     this.width = null
     this.height = null
     this.currentTransform = null
     this.zoom = null
     this.academyGeojson = null
+    this.menjIconPath = this.element.dataset.menjIconPath
+    this.masaIconPath = this.element.dataset.masaIconPath
+    this.selectedAcademy = parseInt(this.element.dataset.selectedAcademyValue)
+    this.parsedEstablishments = JSON.parse(this.element.dataset.establishmentsForAcademy)
+    this.parsedNbSchoolings = JSON.parse(this.element.dataset.nbSchoolingsPerEstablishments)
+    this.parsedAmounts = JSON.parse(this.element.dataset.amountsPerEstablishments)
+    this.maxNbSchoolings = Math.max(...Object.values(this.parsedNbSchoolings))
   }
 
   async connect() {
@@ -26,15 +33,12 @@ export default class extends Controller {
     this.d3Tile = await import("d3-tile")
 
     try {
-      this.selectedAcademy = parseInt(this.element.dataset.selectedAcademyValue)
-      this.parsedEstablishments = JSON.parse(this.element.dataset.establishmentsForAcademy)
-      this.parsedNbSchoolings = JSON.parse(this.element.dataset.nbSchoolingsPerEstablishments)
-      this.parsedAmounts = JSON.parse(this.element.dataset.amountsPerEstablishments)
-      this.maxNbSchoolings = Math.max(...Object.values(this.parsedNbSchoolings))
       this.createMap()
+      await this.createMarkerSymbols()
       this.createLegend()
+      this.createEtabMarkers()
     } catch (error) {
-      console.error("Error parsing data:", error)
+      console.error("Error during initialization:", error)
     }
   }
 
@@ -47,25 +51,26 @@ export default class extends Controller {
       .attr("class", "legend")
       .attr("transform", `translate(10, ${this.height - 40})`)
 
-    const legendBackground = legend.append("rect")
+    legend.append("rect")
       .attr("width", 200)
       .attr("height", 30)
       .attr("fill", "white")
 
     const legendItems = [
-      { icon: this.agricultureIconValue, text: "MASA", x: 20 },
-      { icon: this.defaultIconValue, text: "MENJ", x: 110 }
+      { symbol: "#masa", text: "MASA", x: 20 },
+      { symbol: "#menj", text: "MENJ", x: 110 }
     ]
 
     legendItems.forEach(item => {
       const group = legend.append("g")
         .attr("transform", `translate(${item.x}, 5)`)
 
-      const foreignObject = group.append("foreignObject")
-        .attr("width", 30)
+      group.append("use")
+        .attr("href", item.symbol)
+        .attr("width", 20)
         .attr("height", 20)
-
-      foreignObject.html(`<i class="${item.icon}" style="font-size: 16px;"></i>`)
+        .attr("x", 0)
+        .attr("y", 0)
 
       group.append("text")
         .attr("x", 25)
@@ -73,6 +78,28 @@ export default class extends Controller {
         .text(item.text)
         .style("font-size", "14px")
     })
+  }
+
+  createMarkerSymbols() {
+    const defs = this.svg.append("defs")
+
+    const createSymbolFromIcon = async (iconPath, symbolId) => {
+      const response = await fetch(iconPath)
+      const svgText = await response.text()
+      const parser = new DOMParser()
+      const svgDoc = parser.parseFromString(svgText, 'image/svg+xml')
+      const pathData = svgDoc.querySelector('path').getAttribute('d')
+      defs.append("symbol")
+        .attr("id", symbolId)
+        .attr("viewBox", "0 0 24 24")
+        .append("path")
+        .attr("d", pathData)
+    }
+
+    return Promise.all([
+      createSymbolFromIcon(this.masaIconPath, "masa"),
+      createSymbolFromIcon(this.menjIconPath, "menj")
+    ])
   }
 
   zoomed(event) {
@@ -94,9 +121,11 @@ export default class extends Controller {
     this.academyLayer.selectAll("path")
       .attr("d", this.path)
 
-    this.academyLayer.selectAll("foreignObject")
-      .attr("x", d => this.projection(d.geometry.coordinates)[0])
-      .attr("y", d => this.projection(d.geometry.coordinates)[1])
+    this.academyLayer.selectAll("g.marker")
+      .attr("transform", d => {
+        const [x, y] = this.projection(d.geometry.coordinates)
+        return `translate(${x},${y})`
+      })
   }
 
   createMap() {
@@ -132,7 +161,6 @@ export default class extends Controller {
         .call(this.zoom.transform, initialTransform)
 
       this.zoom.scaleExtent([initialTransform.k * 0.8, Infinity])
-      this.createEtabMarkers()
     })
   }
 
@@ -177,37 +205,36 @@ export default class extends Controller {
     const d3 = this.d3
     d3.json("/data/etablissements.geojson").then((geojson) => {
       const tooltip = d3.select(this.mapContainerTarget)
-              .append("div")
-              .attr("class", "tooltip")
+        .append("div")
+        .attr("class", "tooltip")
 
       const academyBounds = this.path.bounds(this.academyGeojson)
 
-      this.academyLayer.selectAll("foreignObject")
+      this.academyLayer.selectAll("g.marker")
         .data(geojson.features.filter(d => this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)))
         .enter()
-        .append("foreignObject")
+        .append("g")
+        .attr("class", "marker")
         .filter(d => d.geometry && d.geometry.coordinates)
         .attr("id", d => `marker-${d.properties.Code_UAI}`)
-        .attr("width", d => etabMarkerScale(
-          d3,
-          this.parsedNbSchoolings[d.properties.Code_UAI],
-          this.maxNbSchoolings,
-          academyBounds
-        ) * 2)
-        .attr("height", d => etabMarkerScale(
-          d3,
-          this.parsedNbSchoolings[d.properties.Code_UAI],
-          this.maxNbSchoolings,
-          academyBounds
-        ) * 2)
-        .attr("x", d => this.projection(d.geometry.coordinates)[0])
-        .attr("y", d => this.projection(d.geometry.coordinates)[1])
-        .attr("data-longitude", d => d.geometry.coordinates[0])
-        .attr("data-latitude", d => d.geometry.coordinates[1])
-        .html(d => {
+        .attr("transform", d => {
+          const [x, y] = this.projection(d.geometry.coordinates)
+          return `translate(${x},${y})`
+        })
+        .each((d, i, nodes) => {
           const etab = this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)
-          const iconClass = etab.ministry === "AGRICULTURE" ? this.agricultureIconValue : this.defaultIconValue
-          return `<i class="${iconClass}" style="color: ${etabMarkerColor(d3, d, this.parsedAmounts)}"></i>`
+          const size = etabMarkerScale(d3, this.parsedNbSchoolings[d.properties.Code_UAI], this.maxNbSchoolings, academyBounds)
+
+          d3.select(nodes[i])
+            .append("use")
+            .attr("href", etab.ministry === "AGRICULTURE" ? "#masa" : "#menj")
+            .attr("width", size)
+            .attr("height", size)
+            .attr("x", -size/2)
+            .attr("y", -size/2)
+            .attr("fill", etabMarkerColor(d3, d, this.parsedAmounts))
+            .attr("stroke", "black")
+            .attr("stroke-width", "1")
         })
         .on("mouseover", (event, d) => this.mouseOver(event, d, tooltip))
         .on("mouseout", (event, d) => this.mouseOut(event, d, tooltip))
@@ -255,23 +282,21 @@ export default class extends Controller {
     const uai = event.currentTarget.dataset.uai
     const marker = document.querySelector(`#marker-${uai}`)
     if (marker) {
-      const longitude = parseFloat(marker.getAttribute("data-longitude"))
-      const latitude = parseFloat(marker.getAttribute("data-latitude"))
-      this.panToMarker(longitude, latitude)
+      const markerData = this.d3.select(marker).datum()
+      const coordinates = markerData.geometry.coordinates
+      this.panToMarker(coordinates[0], coordinates[1])
 
-      this.d3.select(marker).select("i")
+      this.d3.select(marker).select("use")
         .interrupt()
-
-      this.highlightRow(uai)
-
-      this.d3.select(marker).select("i")
         .transition()
         .duration(200)
-        .style("color", this.highlightColorValue)
+        .attr("stroke", this.highlightColorValue)
         .transition()
         .duration(200)
         .delay(500)
-        .style("color", d => etabMarkerColor(this.d3, d, this.parsedAmounts))
+        .attr("stroke", "black")
+
+      this.highlightRow(uai)
     }
   }
 
@@ -303,7 +328,7 @@ export default class extends Controller {
         "></div>
       </div>
       <div style="text-align: center;">${(ratio * 100).toFixed(1)}%</div>
-    ` : '';
+    ` : ''
 
     tooltip
       .style("display", "block")
@@ -322,10 +347,10 @@ export default class extends Controller {
   }
 
   mouseOut(event, d, tooltip) {
-    this.d3.select(event.currentTarget).select("i")
+    this.d3.select(event.currentTarget).select("use")
       .transition()
       .duration(200)
-      .style("color", etabMarkerColor(this.d3, d, this.parsedAmounts))
+      .attr("fill", etabMarkerColor(this.d3, d, this.parsedAmounts))
     tooltip.style("display", "none")
   }
 }

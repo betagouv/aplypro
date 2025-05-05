@@ -31,7 +31,7 @@ export function etabMarkerScale(d3, nb, maxNbSchoolings, academyBounds) {
 
   const scale = d3.scaleSqrt()
     .domain([0, maxNbSchoolings])
-    .range([2, 14]);
+    .range([10, 30]);
 
   const areaAdjustment = d3.scaleLog()
     .domain([1, 1000])
