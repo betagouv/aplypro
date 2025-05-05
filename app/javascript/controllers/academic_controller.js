@@ -7,7 +7,9 @@ export default class extends Controller {
   static values = {
     highlightColor: { type: String, default: mapColors.lightGreen },
     panDuration: { type: Number, default: 750 },
-    academyStrokeColor: { type: String, default: mapColors.normalBlue }
+    academyStrokeColor: { type: String, default: mapColors.normalBlue },
+    agricultureIcon: { type: String, default: "fr-icon-seedling-fill" },
+    defaultIcon: { type: String, default: "fr-icon-git-repository-fill" }
   }
 
   initialize(){
@@ -30,6 +32,7 @@ export default class extends Controller {
       this.parsedAmounts = JSON.parse(this.element.dataset.amountsPerEstablishments)
       this.maxNbSchoolings = Math.max(...Object.values(this.parsedNbSchoolings))
       this.createMap()
+      this.createLegend()
     } catch (error) {
       console.error("Error parsing data:", error)
     }
@@ -37,6 +40,39 @@ export default class extends Controller {
 
   disconnect() {
     this.mapContainerTarget.innerHTML = ''
+  }
+
+  createLegend() {
+    const legend = this.svg.append("g")
+      .attr("class", "legend")
+      .attr("transform", `translate(10, ${this.height - 40})`)
+
+    const legendBackground = legend.append("rect")
+      .attr("width", 200)
+      .attr("height", 30)
+      .attr("fill", "white")
+
+    const legendItems = [
+      { icon: this.agricultureIconValue, text: "MASA", x: 20 },
+      { icon: this.defaultIconValue, text: "MENJ", x: 110 }
+    ]
+
+    legendItems.forEach(item => {
+      const group = legend.append("g")
+        .attr("transform", `translate(${item.x}, 5)`)
+
+      const foreignObject = group.append("foreignObject")
+        .attr("width", 30)
+        .attr("height", 20)
+
+      foreignObject.html(`<i class="${item.icon}" style="font-size: 16px;"></i>`)
+
+      group.append("text")
+        .attr("x", 25)
+        .attr("y", 15)
+        .text(item.text)
+        .style("font-size", "14px")
+    })
   }
 
   zoomed(event) {
@@ -58,9 +94,9 @@ export default class extends Controller {
     this.academyLayer.selectAll("path")
       .attr("d", this.path)
 
-    this.academyLayer.selectAll("circle")
-      .attr("cx", d => this.projection(d.geometry.coordinates)[0])
-      .attr("cy", d => this.projection(d.geometry.coordinates)[1])
+    this.academyLayer.selectAll("foreignObject")
+      .attr("x", d => this.projection(d.geometry.coordinates)[0])
+      .attr("y", d => this.projection(d.geometry.coordinates)[1])
   }
 
   createMap() {
@@ -146,25 +182,33 @@ export default class extends Controller {
 
       const academyBounds = this.path.bounds(this.academyGeojson)
 
-      this.academyLayer.selectAll("circle")
+      this.academyLayer.selectAll("foreignObject")
         .data(geojson.features.filter(d => this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)))
         .enter()
-        .append("circle")
+        .append("foreignObject")
         .filter(d => d.geometry && d.geometry.coordinates)
         .attr("id", d => `marker-${d.properties.Code_UAI}`)
-        .attr("cx", d => this.projection(d.geometry.coordinates)[0])
-        .attr("cy", d => this.projection(d.geometry.coordinates)[1])
-        .attr("r", d => etabMarkerScale(
+        .attr("width", d => etabMarkerScale(
           d3,
           this.parsedNbSchoolings[d.properties.Code_UAI],
           this.maxNbSchoolings,
           academyBounds
-        ))
-        .attr("fill", d => etabMarkerColor(d3, d, this.parsedAmounts))
-        .attr("stroke", "black")
-        .attr("stroke-width", 2)
+        ) * 2)
+        .attr("height", d => etabMarkerScale(
+          d3,
+          this.parsedNbSchoolings[d.properties.Code_UAI],
+          this.maxNbSchoolings,
+          academyBounds
+        ) * 2)
+        .attr("x", d => this.projection(d.geometry.coordinates)[0])
+        .attr("y", d => this.projection(d.geometry.coordinates)[1])
         .attr("data-longitude", d => d.geometry.coordinates[0])
         .attr("data-latitude", d => d.geometry.coordinates[1])
+        .html(d => {
+          const etab = this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)
+          const iconClass = etab.ministry === "AGRICULTURE" ? this.agricultureIconValue : this.defaultIconValue
+          return `<i class="${iconClass}" style="color: ${etabMarkerColor(d3, d, this.parsedAmounts)}"></i>`
+        })
         .on("mouseover", (event, d) => this.mouseOver(event, d, tooltip))
         .on("mouseout", (event, d) => this.mouseOut(event, d, tooltip))
         .on("click", (event, d) => {
@@ -191,20 +235,20 @@ export default class extends Controller {
   }
 
   panToMarker(longitude, latitude) {
-    const [x, y] = this.projection([longitude, latitude]);
-    const centerX = this.width / 2;
-    const centerY = this.height / 2;
-    const dx = centerX - x;
-    const dy = centerY - y;
+    const [x, y] = this.projection([longitude, latitude])
+    const centerX = this.width / 2
+    const centerY = this.height / 2
+    const dx = centerX - x
+    const dy = centerY - y
 
     const newTransform = this.d3.zoomIdentity
       .translate(this.currentTransform.x + dx, this.currentTransform.y + dy)
-      .scale(this.currentTransform.k);
+      .scale(this.currentTransform.k)
 
     this.svg
       .transition()
       .duration(this.panDurationValue)
-      .call(this.zoom.transform, newTransform);
+      .call(this.zoom.transform, newTransform)
   }
 
   selectEstablishment(event) {
@@ -215,29 +259,51 @@ export default class extends Controller {
       const latitude = parseFloat(marker.getAttribute("data-latitude"))
       this.panToMarker(longitude, latitude)
 
-      this.d3.select(marker)
+      this.d3.select(marker).select("i")
         .interrupt()
 
       this.highlightRow(uai)
 
-      this.d3.select(marker)
+      this.d3.select(marker).select("i")
         .transition()
         .duration(200)
-        .attr("stroke", this.highlightColorValue)
+        .style("color", this.highlightColorValue)
         .transition()
         .duration(200)
         .delay(500)
-        .attr("stroke", "black")
+        .style("color", d => etabMarkerColor(this.d3, d, this.parsedAmounts))
     }
   }
 
   mouseOver(event, d, tooltip) {
     const e = this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)
     const amounts = this.parsedAmounts[d.properties.Code_UAI]
+    const ratio = amounts.payable_amount > 0 ? amounts.paid_amount / amounts.payable_amount : 0
 
-    const ratioHtml = amounts.payable_amount > 0
-      ? `<tr><td>Ratio :</td><td>${((amounts.paid_amount / amounts.payable_amount) * 100).toFixed(1)}%</td></tr>`
-      : '';
+    const progressBarHtml = amounts.payable_amount > 0 ? `
+      <div style="
+        width: 100%;
+        height: 20px;
+        background: linear-gradient(to right,
+          ${mapColors.normalRed} 0%,
+          ${mapColors.normalYellow} 50%,
+          ${mapColors.normalGreen} 100%
+        );
+        border-radius: 4px;
+        position: relative;
+        margin: 5px 0;
+      ">
+        <div style="
+          position: absolute;
+          left: ${ratio * 100}%;
+          transform: translateX(-50%);
+          width: 3px;
+          height: 20px;
+          background: black;
+        "></div>
+      </div>
+      <div style="text-align: center;">${(ratio * 100).toFixed(1)}%</div>
+    ` : '';
 
     tooltip
       .style("display", "block")
@@ -250,16 +316,16 @@ export default class extends Controller {
           <tr><td>Nombre de scolarités :</td><td>${this.parsedNbSchoolings[e.uai]}</td></tr>
           <tr><td>Montant payable :</td><td>${amounts.payable_amount} €</td></tr>
           <tr><td>Montant payé :</td><td>${amounts.paid_amount} €</td></tr>
-          ${ratioHtml}
         </table>
+        ${progressBarHtml}
       `)
   }
 
   mouseOut(event, d, tooltip) {
-    this.d3.select(event.currentTarget)
+    this.d3.select(event.currentTarget).select("i")
       .transition()
       .duration(200)
-      .attr("fill", etabMarkerColor(this.d3, d, this.parsedAmounts))
+      .style("color", etabMarkerColor(this.d3, d, this.parsedAmounts))
     tooltip.style("display", "none")
   }
 }
