@@ -4,8 +4,11 @@
   - classe = schooling.classe
   - school_year = classe.school_year
   %section.fr-my-4w
-    %h2.fr-h4
+    %h2.fr-h4.fr-mb-1w
       = link_to "#{school_year} - #{classe.label} - #{classe.establishment}", school_year_class_path(school_year, classe)
+
+    - string_end_date = schooling.end_date.present? ? " et finie le #{schooling.end_date.strftime('%d/%m/%Y')}" : ""
+    %p.fr-text--xs.fr-mb-1w= "Scolarité débutée le #{schooling.start_date.strftime('%d/%m/%Y')}#{string_end_date}"
 
     = closed_schooling_information_tag(schooling, class: "fr-mb-2w")
     = extended_end_date_information_tag(schooling, class: "fr-mb-2w")
