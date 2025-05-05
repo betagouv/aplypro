@@ -2,10 +2,10 @@
 
 class ProcessASPResponseFileJob < ApplicationJob
   queue_as :payments
-  attr_reader :record
+  attr_reader :record, :filename
 
   def perform(raw_filename)
-    filename = ASP::Filename.new(raw_filename)
+    @filename = ASP::Filename.new(raw_filename)
 
     @record = ActiveStorage::Blob
               .find_by!("active_storage_blobs.filename": filename.to_s)
