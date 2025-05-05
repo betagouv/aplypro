@@ -52,7 +52,7 @@ module ASP
     end
 
     def status(state)
-      state = "waiting" if state.eql?(:incomplete) && eligible_for_incomplete_retry?
+      state = "waiting" if state.eql?(:incomplete) && !eligible_for_incomplete_retry?
 
       t("payment_requests.state.#{state}")
     end
