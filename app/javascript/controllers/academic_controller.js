@@ -1,5 +1,14 @@
 import { Controller } from "@hotwired/stimulus"
-import { mapColors, etabMarkerScale, etabMarkerColor, getAcademyGeoJson } from "utils/map_utils"
+import {
+  mapColors,
+  etabMarkerScale,
+  etabMarkerColor,
+  getAcademyGeoJson,
+  createMapLegend,
+  updateLegendAppearance,
+  toggleBopVisibility,
+  createProgressBarHTML
+} from "utils/map_utils"
 
 export default class extends Controller {
   static targets = ["mapContainer"]
@@ -22,10 +31,8 @@ export default class extends Controller {
     this.menjIconPath = this.element.dataset.menjIconPath
     this.masaIconPath = this.element.dataset.masaIconPath
     this.selectedAcademy = parseInt(this.element.dataset.selectedAcademyValue)
-    this.parsedEstablishments = JSON.parse(this.element.dataset.establishmentsForAcademy)
-    this.parsedNbSchoolings = JSON.parse(this.element.dataset.nbSchoolingsPerEstablishments)
-    this.parsedAmounts = JSON.parse(this.element.dataset.amountsPerEstablishments)
-    this.maxNbSchoolings = Math.max(...Object.values(this.parsedNbSchoolings))
+    this.establishments = JSON.parse(this.element.dataset.establishmentsData)
+    this.maxNbSchoolings = Math.max(...Object.values(this.establishments).map(e => e.schooling_count))
     this.bopVisibleStates = { masa: true, menj: true }
   }
 
@@ -48,55 +55,19 @@ export default class extends Controller {
   }
 
   createLegend() {
-    const legend = this.svg.append("g")
-      .attr("class", "legend")
-      .attr("transform", `translate(10, ${this.height - 40})`)
-
-    legend.append("rect")
-      .attr("width", 200)
-      .attr("height", 30)
-      .attr("fill", "white")
-
-    const legendItems = [
-      { symbol: "#masa", text: "MASA", x: 20, type: "masa" },
-      { symbol: "#menj", text: "MENJ", x: 110, type: "menj" }
-    ]
-
-    legendItems.forEach(item => {
-      const group = legend.append("g")
-        .attr("id", `legend-${item.type}`)
-        .attr("transform", `translate(${item.x}, 5)`)
-        .style("cursor", "pointer")
-        .on("click", () => this.toggleBop(item.type))
-
-      group.append("use")
-        .attr("href", item.symbol)
-        .attr("width", 20)
-        .attr("height", 20)
-        .attr("x", 0)
-        .attr("y", 0)
-
-      group.append("text")
-        .attr("x", 25)
-        .attr("y", 15)
-        .text(item.text)
-        .style("font-size", "14px")
-    })
+    createMapLegend(this.svg, this.height, (type) => this.toggleBop(type))
   }
 
   toggleBop(type) {
-    this.bopVisibleStates[type] = !this.bopVisibleStates[type]
+    this.bopVisibleStates = toggleBopVisibility(
+      this.d3,
+      this.academyLayer,
+      this.bopVisibleStates,
+      type,
+      this.establishments
+    )
 
-    this.academyLayer.selectAll("g.marker")
-      .filter(d => {
-        const etab = this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)
-        return etab.ministry === (type === "masa" ? "AGRICULTURE" : "EDUCATION")
-      })
-      .style("display", this.bopVisibleStates[type] ? "block" : "none")
-
-    this.svg.select(`#legend-${type}`)
-      .selectAll("use, text")
-      .style("fill", this.bopVisibleStates[type] ? "black" : "#999")
+    updateLegendAppearance(this.svg, type, this.bopVisibleStates[type])
   }
 
   createMarkerSymbols() {
@@ -227,7 +198,7 @@ export default class extends Controller {
       const academyBounds = this.path.bounds(this.academyGeojson)
 
       this.academyLayer.selectAll("g.marker")
-        .data(geojson.features.filter(d => this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)))
+        .data(geojson.features.filter(d => this.establishments[d.properties.Code_UAI]))
         .enter()
         .append("g")
         .attr("class", "marker")
@@ -238,8 +209,8 @@ export default class extends Controller {
           return `translate(${x},${y})`
         })
         .each((d, i, nodes) => {
-          const etab = this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)
-          const size = etabMarkerScale(d3, this.parsedNbSchoolings[d.properties.Code_UAI], this.maxNbSchoolings, academyBounds)
+          const etab = this.establishments[d.properties.Code_UAI]
+          const size = etabMarkerScale(d3, etab.schooling_count, this.maxNbSchoolings, academyBounds)
 
           d3.select(nodes[i])
             .append("use")
@@ -248,7 +219,7 @@ export default class extends Controller {
             .attr("height", size)
             .attr("x", -size/2)
             .attr("y", -size/2)
-            .attr("fill", etabMarkerColor(d3, d, this.parsedAmounts))
+            .attr("fill", etabMarkerColor(d3, d, this.establishments))
             .attr("stroke", "black")
             .attr("stroke-width", "1")
         })
@@ -317,34 +288,8 @@ export default class extends Controller {
   }
 
   mouseOver(event, d, tooltip) {
-    const e = this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)
-    const amounts = this.parsedAmounts[d.properties.Code_UAI]
-    const ratio = amounts.payable_amount > 0 ? amounts.paid_amount / amounts.payable_amount : 0
-
-    const progressBarHtml = amounts.payable_amount > 0 ? `
-      <div style="
-        width: 100%;
-        height: 20px;
-        background: linear-gradient(to right,
-          ${mapColors.normalRed} 0%,
-          ${mapColors.normalYellow} 50%,
-          ${mapColors.normalGreen} 100%
-        );
-        border-radius: 4px;
-        position: relative;
-        margin: 5px 0;
-      ">
-        <div style="
-          position: absolute;
-          left: ${ratio * 100}%;
-          transform: translateX(-50%);
-          width: 3px;
-          height: 20px;
-          background: black;
-        "></div>
-      </div>
-      <div style="text-align: center;">${(ratio * 100).toFixed(1)}%</div>
-    ` : ''
+    const e = this.establishments[d.properties.Code_UAI]
+    const ratio = e.payable_amount > 0 ? e.paid_amount / e.payable_amount : 0
 
     tooltip
       .style("display", "block")
@@ -354,11 +299,11 @@ export default class extends Controller {
         <strong>${e.uai} - ${e.name}</strong><br>
         ${e.address_line1}, ${e.city}, ${e.postal_code}<br><br>
         <table>
-          <tr><td>Nombre de scolarités :</td><td>${this.parsedNbSchoolings[e.uai]}</td></tr>
-          <tr><td>Montant payable :</td><td>${amounts.payable_amount} €</td></tr>
-          <tr><td>Montant payé :</td><td>${amounts.paid_amount} €</td></tr>
+          <tr><td>Nombre de scolarités :</td><td>${e.schooling_count}</td></tr>
+          <tr><td>Montant payable :</td><td>${e.payable_amount} €</td></tr>
+          <tr><td>Montant payé :</td><td>${e.paid_amount} €</td></tr>
         </table>
-        ${progressBarHtml}
+        ${createProgressBarHTML(ratio, e.payable_amount, mapColors)}
       `)
   }
 
@@ -366,7 +311,7 @@ export default class extends Controller {
     this.d3.select(event.currentTarget).select("use")
       .transition()
       .duration(200)
-      .attr("fill", etabMarkerColor(this.d3, d, this.parsedAmounts))
+      .attr("fill", etabMarkerColor(this.d3, d, this.establishments))
     tooltip.style("display", "none")
   }
 }

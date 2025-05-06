@@ -19,36 +19,38 @@ module Academic
     helper_method :current_user, :selected_academy, :authorised_academy_codes, :selected_school_year
 
     def home # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-      @establishments_for_academy = Establishment.joins(:classes)
-                                                 .where(academy_code: selected_academy,
-                                                        "classes.school_year_id": selected_school_year)
-                                                 .distinct
+      establishments = Establishment.joins(:classes)
+                                    .where(academy_code: selected_academy,
+                                           "classes.school_year_id": selected_school_year)
+                                    .distinct
 
-      @nb_schoolings_per_establishments = @establishments_for_academy.left_joins(:schoolings)
-                                                                     .group(:uai)
-                                                                     .count(:schoolings)
+      @establishments_data = {}
 
-      @amounts_per_establishments = @establishments_for_academy.map do |establishment|
+      establishments.each do |establishment|
         pfmps = establishment.pfmps
                              .joins(schooling: { classe: :school_year })
                              .where(classes: { school_year_id: selected_school_year })
 
-        validated_amount = pfmps
-                           .joins(:transitions)
-                           .where(pfmp_transitions: { to_state: "validated", most_recent: true })
+        schooling_count = establishment.schoolings.count
+        validated_amount = pfmps.joins(:transitions)
+                                .where(pfmp_transitions: { to_state: "validated", most_recent: true })
+                                .sum(:amount)
+        paid_amount = pfmps.joins(payment_requests: :asp_payment_request_transitions)
+                           .where(asp_payment_request_transitions: { to_state: "paid", most_recent: true })
                            .sum(:amount)
 
-        paid_amount = pfmps
-                      .joins(payment_requests: :asp_payment_request_transitions)
-                      .where(asp_payment_request_transitions: { to_state: "paid", most_recent: true })
-                      .sum(:amount)
-
-        {
+        @establishments_data[establishment.uai] = {
           uai: establishment.uai,
+          name: establishment.name,
+          address_line1: establishment.address_line1,
+          city: establishment.city,
+          postal_code: establishment.postal_code,
+          ministry: establishment.ministry,
+          schooling_count: schooling_count,
           payable_amount: validated_amount,
           paid_amount: paid_amount
         }
-      end.index_by { |stats| stats[:uai] } # rubocop:disable Style/MultilineBlockChain
+      end
     end
 
     def login

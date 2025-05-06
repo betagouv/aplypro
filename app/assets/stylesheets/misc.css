@@ -182,3 +182,34 @@
 .iban-clear-button:hover {
   background-color: var(--blue-france-850-200);
 }
+
+.progress-bar {
+  --progress-value: 0%;
+  --progress-color: var(--blue-france-main-525);
+
+  width: 100%;
+  height: 20px;
+  background: linear-gradient(to right,
+    var(--red-marianne-425-625) 0%,
+    var(--yellow-tournesol-850-200) 50%,
+    var(--success-425-625) 100%
+  );
+  border-radius: 4px;
+  position: relative;
+  margin: 5px 0;
+}
+
+.progress-bar .indicator {
+  position: absolute;
+  left: var(--progress-value);
+  transform: translateX(-50%);
+  width: 3px;
+  height: 20px;
+  background: black;
+}
+
+.progress-percentage {
+  text-align: center;
+  font-size: 0.875rem;
+  margin-top: 2px;
+}
