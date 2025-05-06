@@ -1,4 +1,5 @@
-.fr-logo, #login-page h2 {
+ /* TODO: split this mess into dedicated files */
+ .fr-logo, #login-page h2 {
   white-space: pre-line;
 }
 
@@ -98,41 +99,59 @@
   max-height: 700px;
   overflow-y: auto;
   position: relative;
+  border: 1px solid var(--border-default-grey);
+  border-radius: 4px;
 }
 
 .establishments-table-container .fr-table {
   margin-top: 0;
+  padding-top: 0;
+  margin-bottom: 0;
 }
 
 .establishments-table {
+  width: 100%;
   border-collapse: separate;
   border-spacing: 0;
+  margin: 0;
 }
 
-.establishments-table thead tr {
+.establishments-table thead {
   position: sticky;
   top: 0;
-  z-index: 1;
-  height: 48px;
+  z-index: 2;
+}
+
+.establishments-table thead th,
+.establishments-table thead td {
+  background-color: var(--blue-france-850-200);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  border-bottom: 2px solid var(--border-default-grey);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.establishments-table th,
+.establishments-table td {
+  padding: 0.75rem;
+}
+
+.establishments-table tbody tr {
+  border-bottom: 1px solid var(--border-default-grey);
+}
+
+.establishments-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.establishments-table tbody tr:hover {
+  background-color: var(--background-alt-blue-france);
+  cursor: pointer;
 }
 
 .scroll-margin-top {
   scroll-margin-top: 48px;
-}
-
-.establishments-table thead td,
-.establishments-table thead th {
-  background-color: var(--blue-france-850-200);
-}
-
-.establishments-table tbody {
-  position: relative;
-  top: 0;
-}
-
-.establishments-table-container .fr-table {
-  padding-top: 0;
-  margin-bottom: 0;
 }
 
 .tooltip {
