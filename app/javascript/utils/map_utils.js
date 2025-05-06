@@ -99,14 +99,19 @@ export function updateLegendAppearance(svg, type, isVisible) {
     .style("fill", isVisible ? "black" : "#999")
 }
 
-export function toggleBopVisibility(d3, academyLayer, currentVisibleStates, type, establishments) {
+export function toggleBopVisibility(academyLayer, currentVisibleStates, type, establishments) {
   const newStates = { ...currentVisibleStates }
   newStates[type] = !newStates[type]
 
+  const isAgricultureMinistry = type === "masa"
+
   academyLayer.selectAll("g.marker")
     .filter(d => {
+      if (!d.properties || !d.properties.Code_UAI) return false;
       const etab = establishments[d.properties.Code_UAI]
-      return etab.ministry === (type === "masa" ? "AGRICULTURE" : "EDUCATION")
+      if (!etab) return false;
+
+      return (etab.ministry === "AGRICULTURE") === isAgricultureMinistry
     })
     .style("display", newStates[type] ? "block" : "none")
 

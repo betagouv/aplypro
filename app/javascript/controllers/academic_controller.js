@@ -60,7 +60,6 @@ export default class extends Controller {
 
   toggleBop(type) {
     this.bopVisibleStates = toggleBopVisibility(
-      this.d3,
       this.academyLayer,
       this.bopVisibleStates,
       type,
