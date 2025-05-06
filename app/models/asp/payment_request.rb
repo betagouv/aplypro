@@ -128,7 +128,7 @@ module ASP
 
     def eligible_for_incomplete_retry?
       return false unless in_state?(:incomplete)
-      return false unless funding?
+      return false unless schooling.classe.mef.funding_available?
 
       retryable_messages = RETRYABLE_INCOMPLETE_VALIDATION_TYPES.map do |r|
         I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.#{r}")
@@ -153,15 +153,6 @@ module ASP
       code_pays = coordpaie["CODEISOPAYS"]
 
       "#{code_pays}#{cle}#{zonebban}"
-    end
-
-    def funding?
-      # Enable follow up lines for when ministry doesnt have funding anymore again
-      # classe = payment_request.pfmp.classe
-      # ministry = classe.mef.ministry
-
-      # return unless ministry.eql?("menj") && !Rails.env.test?
-      true
     end
   end
 end

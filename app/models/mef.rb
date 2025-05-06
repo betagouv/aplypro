@@ -30,4 +30,13 @@ class Mef < ApplicationRecord
 
     code.to_sym
   end
+
+  def funding_available?
+    # Enable follow up lines for when ministry doesnt have funding anymore again
+    # classe = payment_request.pfmp.classe
+    # ministry = classe.mef.ministry
+
+    # return unless ministry.eql?("menj") && !Rails.env.test?
+    true
+  end
 end
