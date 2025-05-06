@@ -23,7 +23,7 @@ module ASP
 
     def status_badge
       dsfr_badge(status: BADGE_STATE_MAPPING[current_state.to_sym], classes: ["fr-badge--sm"]) do
-        status(current_state)
+        status(current_state.to_sym)
       end
     end
 
