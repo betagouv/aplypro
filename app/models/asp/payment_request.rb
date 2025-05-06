@@ -126,9 +126,12 @@ module ASP
       last_transition.present? && last_transition.metadata["ORDREREVERSEMENT"].present?
     end
 
-    def eligible_for_incomplete_retry?
+    def eligible_for_retry?
+      schooling.classe.mef.funding_available?
+    end
+
+    def eligible_for_incomplete_auto_retry?
       return false unless in_state?(:incomplete)
-      return false unless schooling.classe.mef.funding_available?
 
       retryable_messages = RETRYABLE_INCOMPLETE_VALIDATION_TYPES.map do |r|
         I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.#{r}")
