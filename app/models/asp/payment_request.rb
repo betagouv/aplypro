@@ -126,10 +126,6 @@ module ASP
       last_transition.present? && last_transition.metadata["ORDREREVERSEMENT"].present?
     end
 
-    def waiting?
-      in_state?(:incomplete) && !eligible_for_retry?
-    end
-
     def eligible_for_retry?
       schooling.classe.mef.funding_available?
     end

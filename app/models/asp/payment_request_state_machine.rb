@@ -17,8 +17,10 @@ module ASP
     FAILED_STATES = %i[rejected unpaid incomplete].freeze
     TERMINATED_STATES = FAILED_STATES + ["paid"].freeze
 
+    transition from: :pending, to: :pending
     transition from: :pending, to: :ready
     transition from: :pending, to: :incomplete
+    transition from: :incomplete, to: :pending
     transition from: :incomplete, to: :incomplete
     transition from: :incomplete, to: :ready
     transition from: :ready, to: :sent
@@ -48,6 +50,10 @@ module ASP
       payment_request.update!(
         rib: payment_request.pfmp.student.rib(payment_request.pfmp.classe.establishment)
       )
+    end
+
+    guard_transition(to: :pending) do |payment_request|
+      !payment_request.eligible_for_retry?
     end
 
     guard_transition(to: :ready) do |payment_request|

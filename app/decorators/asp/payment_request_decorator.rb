@@ -16,7 +16,7 @@ module ASP
     ORDERED_FAILED_STATES = %i[incomplete rejected unpaid].freeze
 
     PAYMENT_STAGES = [
-      %i[pending ready incomplete waiting],
+      %i[pending ready incomplete],
       %i[sent integrated rejected],
       %i[paid unpaid]
     ].freeze
@@ -52,7 +52,7 @@ module ASP
     end
 
     def status(state)
-      state = "waiting" if waiting?
+      state = "waiting" if state.eql?(:pending) && !eligible_for_retry?
 
       t("payment_requests.state.#{state}")
     end
