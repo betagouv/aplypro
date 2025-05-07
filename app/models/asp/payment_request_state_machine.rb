@@ -52,10 +52,6 @@ module ASP
       )
     end
 
-    guard_transition(to: :pending) do |payment_request|
-      !payment_request.eligible_for_retry?
-    end
-
     guard_transition(to: :ready) do |payment_request|
       ASP::PaymentRequestValidator.new(payment_request).validate
 

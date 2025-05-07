@@ -52,8 +52,6 @@ module ASP
     end
 
     def status(state)
-      state = "waiting" if state.eql?(:pending) && !eligible_for_retry?
-
       t("payment_requests.state.#{state}")
     end
 
