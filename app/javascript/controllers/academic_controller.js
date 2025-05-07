@@ -200,7 +200,10 @@ export default class extends Controller {
         .data(geojson.features.filter(d => this.establishments[d.properties.Code_UAI]))
         .enter()
         .append("g")
-        .attr("class", "marker")
+        .attr("class", d => {
+          const etab = this.parsedEstablishments.find(e => e.uai === d.properties.Code_UAI)
+          return `marker marker-${etab.ministry === "AGRICULTURE" ? "masa" : "menj"}`
+        })
         .filter(d => d.geometry && d.geometry.coordinates)
         .attr("id", d => `marker-${d.properties.Code_UAI}`)
         .attr("transform", d => {
