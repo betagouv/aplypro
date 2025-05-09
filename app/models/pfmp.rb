@@ -39,7 +39,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
               in: lambda { |pfmp|
                 pfmp.schooling.establishment.school_year_range(
                   pfmp.school_year.start_year,
-                  pfmp.schooling.max_end_date
+                  pfmp.schooling.extended_end_date
                 )
               }
             }
