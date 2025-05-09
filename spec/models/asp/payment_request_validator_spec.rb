@@ -192,6 +192,27 @@ RSpec.describe ASP::PaymentRequestValidator do
     end
   end
 
+  describe "#check_pfmp_dates" do
+    context "when PFMP dates are outside schooling dates" do
+      before { allow(pfmp).to receive(:within_schooling_dates?).and_return(false) }
+
+      it "adds an error" do
+        expect { validator.send(:check_pfmp_dates) }
+          .to change { payment_request.errors.details[:ready_state_validation] }
+          .to include(a_hash_including(error: :pfmp_outside_schooling_dates))
+      end
+    end
+
+    context "when PFMP dates are within schooling dates" do
+      before { allow(pfmp).to receive(:within_schooling_dates?).and_return(true) }
+
+      it "does not add an error" do
+        expect { validator.send(:check_pfmp_dates) }
+          .not_to change { payment_request.errors.details[:ready_state_validation] }
+      end
+    end
+  end
+
   describe "#check_schooling" do
     context "when schooling is not for a student" do
       before { allow(schooling).to receive(:student?).and_return(false) }
@@ -274,6 +295,7 @@ RSpec.describe ASP::PaymentRequestValidator do
       expect(validator).to receive(:check_rib)
       expect(validator).to receive(:check_pfmp)
       expect(validator).to receive(:check_pfmp_overlaps)
+      expect(validator).to receive(:check_pfmp_dates)
       expect(validator).to receive(:check_schooling)
       validator.validate
     end
