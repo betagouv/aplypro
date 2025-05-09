@@ -23,7 +23,7 @@ Sachantque(
            FactoryBot.create(:classe, label: classe_label, establishment: establishment)
 
   student.schoolings.last.update(end_date: Date.yesterday)
-  student.schoolings.create!(classe: classe)
+  student.schoolings.create!(classe: classe, start_date: DateTime.now)
 end
 
 Sachantque("il y a un(e) élève avec une scolarité fermée qui a une PFMP") do

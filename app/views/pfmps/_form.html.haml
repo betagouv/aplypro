@@ -1,5 +1,5 @@
 .fr-col-md-6.fr-mb-3w
-  = render 'dates_warning'
+  = render partial: 'dates_warning', locals: { schooling: @schooling }
 
 = form_with model: [selected_school_year, @classe, @schooling, @pfmp], builder: DsfrFormBuilder do |form|
   = form.dsfr_error_summary
