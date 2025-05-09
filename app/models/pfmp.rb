@@ -39,7 +39,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
               in: lambda { |pfmp|
                 pfmp.schooling.establishment.school_year_range(
                   pfmp.school_year.start_year,
-                  pfmp.schooling.max_end_date
+                  pfmp.schooling.extended_end_date
                 )
               }
             }
@@ -126,9 +126,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def can_be_destroyed?
-    return true if latest_payment_request.blank?
-
-    latest_payment_request.in_state?(:pending, :incomplete)
+    asp_prestation_dossier_id.blank? && payment_requests.none?(&:ongoing?)
   end
 
   def stalled_payment_request?
