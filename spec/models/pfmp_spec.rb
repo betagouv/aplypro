@@ -135,6 +135,14 @@ RSpec.describe Pfmp do
         expect { pfmp.destroy! }.to raise_error ActiveRecord::RecordNotDestroyed
       end
     end
+
+    context "when there is no ASP id" do
+      let(:pfmp) { create(:pfmp) }
+
+      it "can be deleted" do
+        expect { pfmp.destroy! }.not_to raise_error ActiveRecord::RecordNotDestroyed
+      end
+    end
   end
 
   describe "states" do

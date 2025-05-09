@@ -126,9 +126,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def can_be_destroyed?
-    return true if latest_payment_request.blank?
-
-    latest_payment_request.in_state?(:pending, :incomplete)
+    asp_prestation_dossier_id.blank? && payment_requests.none?(&:ongoing?)
   end
 
   def stalled_payment_request?
