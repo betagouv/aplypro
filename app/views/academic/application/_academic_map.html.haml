@@ -2,9 +2,7 @@
     data: {
       controller: "academic",
       selected_academy_value: @selected_academy.html_safe,
-      establishments_for_academy: @establishments_for_academy.to_json.html_safe,
-      nb_schoolings_per_establishments: @nb_schoolings_per_establishments.to_json.html_safe,
-      amounts_per_establishments: @amounts_per_establishments.to_json.html_safe,
+      establishments_data: @establishments_data.to_json.html_safe,
       masa_icon_path: asset_path('icons/others/seedling-fill.svg'),
       menj_icon_path: asset_path('icons/development/git-repository-fill.svg')
   }
@@ -12,7 +10,7 @@
   %h2= "Académie #{@selected_academy}"
   %h5
     %i.fr-icon-earth-fill
-    = "Répartition géographique des #{@establishments_for_academy.count} établissements"
+    = "Répartition géographique des #{@establishments_data.count} établissements"
   .fr-grid-row
     .fr-col-12.fr-col-md-6
       %div{data: { academic_target: "mapContainer" }}
@@ -26,14 +24,14 @@
               %th{scope: "col"} Scolarités
               %th{scope: "col"} Montant payé
             %tbody
-              - @establishments_for_academy.each do |establishment|
+              - @establishments_data.each do |uai, establishment|
                 %tr.academic-map{
                   data: {
-                    uai: establishment.uai,
+                    uai: uai,
                     action: "click->academic#selectEstablishment"
                   }
                 }
-                  %td= establishment.uai
-                  %td= "#{establishment.address_line1}, #{establishment.city}, #{establishment.postal_code}"
-                  %td= @nb_schoolings_per_establishments[establishment.uai]
-                  %td= number_to_currency(@amounts_per_establishments[establishment.uai][:paid_amount], unit: "€", format: "%n %u")
+                  %td= uai
+                  %td= "#{establishment[:address_line1]}, #{establishment[:city]}, #{establishment[:postal_code]}"
+                  %td= establishment[:schooling_count]
+                  %td= number_to_currency(establishment[:paid_amount], unit: "€", format: "%n %u")

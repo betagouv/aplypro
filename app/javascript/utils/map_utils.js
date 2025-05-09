@@ -42,8 +42,8 @@ export function etabMarkerScale(d3, nb, maxNbSchoolings, academyBounds) {
   return scale(nb || 0) * areaAdjustment(academyArea);
 }
 
-export function etabMarkerColor(d3, d, amounts) {
-  const establishment = amounts[d.properties.Code_UAI]
+export function etabMarkerColor(d3, d, establishments) {
+  const establishment = establishments[d.properties.Code_UAI]
   if (!establishment) return 'white'
 
   if (establishment.payable_amount === 0) return mapColors.normalRed
@@ -54,4 +54,79 @@ export function etabMarkerColor(d3, d, amounts) {
     .range([mapColors.normalRed, mapColors.normalYellow, mapColors.normalGreen])
 
   return colorScale(ratio)
+}
+
+export function createMapLegend(svg, height, toggleCallback) {
+  const legend = svg.append("g")
+    .attr("class", "legend")
+    .attr("transform", `translate(10, ${height - 40})`)
+
+  legend.append("rect")
+    .attr("width", 200)
+    .attr("height", 30)
+    .attr("fill", "white")
+
+  const legendItems = [
+    { symbol: "#masa", text: "MASA", x: 20, type: "masa" },
+    { symbol: "#menj", text: "MENJ", x: 110, type: "menj" }
+  ]
+
+  legendItems.forEach(item => {
+    const group = legend.append("g")
+      .attr("id", `legend-${item.type}`)
+      .attr("transform", `translate(${item.x}, 5)`)
+      .style("cursor", "pointer")
+      .on("click", () => toggleCallback(item.type))
+
+    group.append("use")
+      .attr("href", item.symbol)
+      .attr("width", 20)
+      .attr("height", 20)
+      .attr("x", 0)
+      .attr("y", 0)
+
+    group.append("text")
+      .attr("x", 25)
+      .attr("y", 15)
+      .text(item.text)
+      .style("font-size", "14px")
+  })
+}
+
+export function updateLegendAppearance(svg, type, isVisible) {
+  svg.select(`#legend-${type}`)
+    .selectAll("use, text")
+    .style("fill", isVisible ? "black" : "#999")
+}
+
+export function toggleBopVisibility(academyLayer, currentVisibleStates, type, establishments) {
+  const newStates = { ...currentVisibleStates }
+  newStates[type] = !newStates[type]
+
+  const isAgricultureMinistry = type === "masa"
+
+  academyLayer.selectAll("g.marker")
+    .filter(d => {
+      if (!d.properties || !d.properties.Code_UAI) return false;
+      const etab = establishments[d.properties.Code_UAI]
+      if (!etab) return false;
+
+      return (etab.ministry === "AGRICULTURE") === isAgricultureMinistry
+    })
+    .style("display", newStates[type] ? "block" : "none")
+
+  return newStates
+}
+
+export function createProgressBarHTML(ratio, payableAmount) {
+  if (payableAmount <= 0) return ''
+
+  const percentage = (ratio * 100).toFixed(1)
+
+  return `
+    <div class="progress-bar" style="--progress-value: ${percentage}%">
+      <div class="indicator"></div>
+    </div>
+    <div class="progress-percentage">${percentage}%</div>
+  `
 }
