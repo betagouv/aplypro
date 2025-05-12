@@ -3,8 +3,12 @@
       controller: "academic",
       selected_academy_value: @selected_academy.html_safe,
       establishments_data: @establishments_data.to_json.html_safe,
-      masa_icon_path: asset_path('icons/others/seedling-fill.svg'),
-      menj_icon_path: asset_path('icons/development/git-repository-fill.svg')
+      agri_icon_path: asset_path('icons/others/seedling-fill.svg'),
+      men_icon_path: asset_path('icons/development/git-repository-fill.svg'),
+      mer_icon_path: asset_path('icons/map/ship-2-fill.svg'),
+      justice_icon_path: asset_path('icons/buildings/bank-fill.svg'),
+      defense_icon_path: asset_path('icons/weather/flashlight-fill.svg'),
+      sante_icon_path: asset_path('icons/health/heart-pulse-fill.svg')
   }
 }
   %h2= "Académie #{@selected_academy}"

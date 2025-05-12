@@ -7,6 +7,15 @@ function getDsfrColor(cssVar) {
   return value;
 }
 
+export const MINISTRY_MAPPING = {
+  "AGRICULTURE": "masa",
+  "MER": "mer",
+  "JUSTICE": "justice",
+  "DEFENSE": "défense",
+  "SANTE ET SOLIDARITE NATIONALE": "santé",
+  "MINISTERE DE L'EDUCATION NATIONALE": "men"
+}
+
 export const mapColors = {
   darkBlue: getDsfrColor('--blue-france-sun-113-625'),
   normalBlue: getDsfrColor('--blue-france-main-525'),
@@ -59,27 +68,33 @@ export function etabMarkerColor(d3, d, establishments) {
 export function createMapLegend(svg, height, toggleCallback) {
   const legend = svg.append("g")
     .attr("class", "legend")
-    .attr("transform", `translate(10, ${height - 40})`)
+    .attr("transform", `translate(10, ${height - 70})`)
 
   legend.append("rect")
-    .attr("width", 200)
-    .attr("height", 30)
+    .attr("width", 320)
+    .attr("height", 60)
     .attr("fill", "white")
 
-  const legendItems = [
-    { symbol: "#masa", text: "MASA", x: 20, type: "masa" },
-    { symbol: "#menj", text: "MENJ", x: 110, type: "menj" }
-  ]
+  const legendItems = Object.entries(MINISTRY_MAPPING).map(([ministry, type], index) => {
+    const row = Math.floor(index / 3)
+    const col = index % 3
+    return {
+      type: type,
+      text: type.toUpperCase(),
+      x: 20 + col * 100,
+      y: 5 + row * 30
+    }
+  })
 
   legendItems.forEach(item => {
     const group = legend.append("g")
       .attr("id", `legend-${item.type}`)
-      .attr("transform", `translate(${item.x}, 5)`)
+      .attr("transform", `translate(${item.x}, ${item.y})`)
       .style("cursor", "pointer")
       .on("click", () => toggleCallback(item.type))
 
     group.append("use")
-      .attr("href", item.symbol)
+      .attr("href", `#${item.type}`)
       .attr("width", 20)
       .attr("height", 20)
       .attr("x", 0)
@@ -103,7 +118,7 @@ export function toggleBopVisibility(academyLayer, currentVisibleStates, type, es
   const newStates = { ...currentVisibleStates }
   newStates[type] = !newStates[type]
 
-  const isAgricultureMinistry = type === "masa"
+  const ministry = Object.keys(MINISTRY_MAPPING).find(key => MINISTRY_MAPPING[key] === type)
 
   academyLayer.selectAll("g.marker")
     .filter(d => {
@@ -111,7 +126,11 @@ export function toggleBopVisibility(academyLayer, currentVisibleStates, type, es
       const etab = establishments[d.properties.Code_UAI]
       if (!etab) return false;
 
-      return (etab.ministry === "AGRICULTURE") === isAgricultureMinistry
+      if (type === "men") {
+        return etab.ministry === ministry || !etab.ministry;
+      }
+
+      return etab.ministry === ministry;
     })
     .style("display", newStates[type] ? "block" : "none")
 

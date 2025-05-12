@@ -7,7 +7,8 @@ import {
   createMapLegend,
   updateLegendAppearance,
   toggleBopVisibility,
-  createProgressBarHTML
+  createProgressBarHTML,
+  MINISTRY_MAPPING
 } from "utils/map_utils"
 
 export default class extends Controller {
@@ -18,7 +19,11 @@ export default class extends Controller {
     panDuration: { type: Number, default: 750 },
     academyStrokeColor: { type: String, default: mapColors.normalBlue },
     menjIconPath: { type: String },
-    masaIconPath: { type: String }
+    masaIconPath: { type: String },
+    merIconPath: { type: String },
+    justiceIconPath: { type: String },
+    defenseIconPath: { type: String },
+    santeIconPath: { type: String }
   }
 
   initialize() {
@@ -28,12 +33,23 @@ export default class extends Controller {
     this.currentTransform = null
     this.zoom = null
     this.academyGeojson = null
-    this.menjIconPath = this.element.dataset.menjIconPath
-    this.masaIconPath = this.element.dataset.masaIconPath
+    this.menjIconPath = this.element.dataset.menIconPath
+    this.masaIconPath = this.element.dataset.agriIconPath
+    this.merIconPath = this.element.dataset.merIconPath
+    this.justiceIconPath = this.element.dataset.justiceIconPath
+    this.defenseIconPath = this.element.dataset.defenseIconPath
+    this.santeIconPath = this.element.dataset.santeIconPath
     this.selectedAcademy = parseInt(this.element.dataset.selectedAcademyValue)
     this.establishments = JSON.parse(this.element.dataset.establishmentsData)
     this.maxNbSchoolings = Math.max(...Object.values(this.establishments).map(e => e.schooling_count))
-    this.bopVisibleStates = { masa: true, menj: true }
+    this.bopVisibleStates = {
+      masa: true,
+      menj: true,
+      mer: true,
+      justice: true,
+      defense: true,
+      sante: true
+    }
   }
 
   async connect() {
@@ -73,6 +89,7 @@ export default class extends Controller {
     const defs = this.svg.append("defs")
 
     const createSymbolFromIcon = async (iconPath, symbolId) => {
+      if (!iconPath) return Promise.resolve()
       const svgDoc = await this.d3.svg(iconPath)
       const pathData = svgDoc.querySelector('path').getAttribute('d')
       defs.append("symbol")
@@ -84,7 +101,11 @@ export default class extends Controller {
 
     return Promise.all([
       createSymbolFromIcon(this.masaIconPath, "masa"),
-      createSymbolFromIcon(this.menjIconPath, "menj")
+      createSymbolFromIcon(this.menjIconPath, "men"),
+      createSymbolFromIcon(this.merIconPath, "mer"),
+      createSymbolFromIcon(this.justiceIconPath, "justice"),
+      createSymbolFromIcon(this.defenseIconPath, "défense"),
+      createSymbolFromIcon(this.santeIconPath, "santé")
     ])
   }
 
@@ -211,9 +232,11 @@ export default class extends Controller {
           const etab = this.establishments[d.properties.Code_UAI]
           const size = etabMarkerScale(d3, etab.schooling_count, this.maxNbSchoolings, academyBounds)
 
+          const symbolId = MINISTRY_MAPPING[etab.ministry] || "men"
+
           d3.select(nodes[i])
             .append("use")
-            .attr("href", etab.ministry === "AGRICULTURE" ? "#masa" : "#menj")
+            .attr("href", `#${symbolId}`)
             .attr("width", size)
             .attr("height", size)
             .attr("x", -size/2)
