@@ -25,7 +25,7 @@
           %table.establishments-table
             %thead
               %td{scope: "col"} UAI
-              %th{scope: "col"} Adresse
+              %th{scope: "col"} Nom
               %th{scope: "col"} Scolarités
               %th{scope: "col"} Montant payé
             %tbody
@@ -37,6 +37,6 @@
                   }
                 }
                   %td= uai
-                  %td= "#{establishment[:address_line1]}, #{establishment[:city]}, #{establishment[:postal_code]}"
+                  %td= establishment[:name]
                   %td= establishment[:schooling_count]
                   %td= number_to_currency(establishment[:paid_amount], unit: "€", format: "%n %u")
