@@ -126,7 +126,7 @@ module ASP
       last_transition.present? && last_transition.metadata["ORDREREVERSEMENT"].present?
     end
 
-    def eligible_for_retry?
+    def payable?
       schooling.classe.mef.funding_available?
     end
 

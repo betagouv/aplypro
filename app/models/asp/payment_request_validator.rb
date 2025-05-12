@@ -26,7 +26,7 @@ module ASP
     private
 
     def check_funding
-      add_error(:insufficient_funds) unless payment_request.schooling.classe.mef.funding_available?
+      add_error(:insufficient_funds) unless payment_request.payable?
     end
 
     def check_student
