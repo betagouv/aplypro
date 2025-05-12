@@ -19,6 +19,7 @@ module ASP
       check_da_cancellation
       check_rib
       check_pfmp
+      check_pfmp_dates
       check_pfmp_overlaps
       check_schooling
     end
@@ -99,6 +100,10 @@ module ASP
       add_error(:overlaps) if pfmp.overlaps.any? do |p|
         p.in_state?(:validated)
       end
+    end
+
+    def check_pfmp_dates
+      add_error(:pfmp_outside_schooling_dates) unless pfmp.within_schooling_dates?
     end
 
     def check_address

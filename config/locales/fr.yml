@@ -117,6 +117,7 @@ fr:
               missing_attributive_decision: "Il manque une décision attributive"
               needs_abrogated_attributive_decision: "Les élèves ayant changés de formation, de statut ou d'établissement doivent avoir une abrogation de leur décision d'attribution passée. Ce document peut être généré dans la liste des élèves."
               overlaps: "Une autre PFMP existe avec des dates intersectantes de fin et de début. Veuillez supprimer ou modifier l'une des deux."
+              pfmp_outside_schooling_dates: "Les dates de la PFMP ne sont pas comprises dans la période de scolarité de l'élève. Veuillez ajuster les dates de la PFMP pour qu'elles soient incluses dans la période de scolarité."
               cannot_extend_attributive_decision_with_pfmps: "Les élèves ayant changé de formation, de statut ou d'établissement doivent avoir une abrogation de leur décision d'attribution passée. Ce document peut être généré dans la liste des élèves."
 
     hints:
@@ -260,7 +261,7 @@ fr:
       empty_responsibilities_error:
         title: "Erreur d'authentification"
         content: |
-          Le guichet d'authentification n'indique aucun établissement ou aucune académie à laquelle vous êtes rattaché(e). 
+          Le guichet d'authentification n'indique aucun établissement ou aucune académie à laquelle vous êtes rattaché(e).
           Il peut d'agir d'une erreur dans la configuration de votre profil.
       no_access_found:
         title: "Erreur d'authentification"
