@@ -46,10 +46,12 @@ module Academic
           city: establishment.city,
           postal_code: establishment.postal_code,
           ministry: establishment.ministry,
+          private_contract_type_code: establishment.private_contract_type_code,
           schooling_count: schooling_count,
           payable_amount: validated_amount,
           paid_amount: paid_amount
         }
+        @establishments_data = @establishments_data.sort_by { |_uai, data| -data[:paid_amount] }.to_h
       end
     end
 

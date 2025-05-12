@@ -13,7 +13,14 @@ export const MINISTRY_MAPPING = {
   "JUSTICE": "justice",
   "DEFENSE": "défense",
   "SANTE ET SOLIDARITE NATIONALE": "santé",
-  "MINISTERE DE L'EDUCATION NATIONALE": "men"
+}
+
+export function getEstablishmentSymbolId(establishment) {
+  if (establishment.ministry === "MINISTERE DE L'EDUCATION NATIONALE") {
+    return establishment.private_contract_type_code === "99" ? "enpu" : "enpr";
+  }
+
+  return MINISTRY_MAPPING[establishment.ministry] || "men";
 }
 
 export const mapColors = {
@@ -71,20 +78,19 @@ export function createMapLegend(svg, height, toggleCallback) {
     .attr("transform", `translate(10, ${height - 70})`)
 
   legend.append("rect")
-    .attr("width", 320)
+    .attr("width", 350)
     .attr("height", 60)
     .attr("fill", "white")
 
-  const legendItems = Object.entries(MINISTRY_MAPPING).map(([ministry, type], index) => {
-    const row = Math.floor(index / 3)
-    const col = index % 3
-    return {
-      type: type,
-      text: type.toUpperCase(),
-      x: 20 + col * 100,
-      y: 5 + row * 30
-    }
-  })
+  const legendItems = [
+    { type: "masa", x: 20, y: 5 },
+    { type: "mer", x: 100, y: 5 },
+    { type: "justice", x: 180, y: 5 },
+    { type: "défense", x: 260, y: 5 },
+    { type: "santé", x: 20, y: 35 },
+    { type: "enpu", x: 100, y: 35 },
+    { type: "enpr", x: 180, y: 35 }
+  ]
 
   legendItems.forEach(item => {
     const group = legend.append("g")
@@ -103,10 +109,11 @@ export function createMapLegend(svg, height, toggleCallback) {
     group.append("text")
       .attr("x", 25)
       .attr("y", 15)
-      .text(item.text)
-      .style("font-size", "14px")
+      .text(item.type.toUpperCase())
+      .style("font-size", "12px")
   })
 }
+
 
 export function updateLegendAppearance(svg, type, isVisible) {
   svg.select(`#legend-${type}`)
@@ -118,19 +125,14 @@ export function toggleBopVisibility(academyLayer, currentVisibleStates, type, es
   const newStates = { ...currentVisibleStates }
   newStates[type] = !newStates[type]
 
-  const ministry = Object.keys(MINISTRY_MAPPING).find(key => MINISTRY_MAPPING[key] === type)
-
   academyLayer.selectAll("g.marker")
     .filter(d => {
       if (!d.properties || !d.properties.Code_UAI) return false;
       const etab = establishments[d.properties.Code_UAI]
       if (!etab) return false;
 
-      if (type === "men") {
-        return etab.ministry === ministry || !etab.ministry;
-      }
-
-      return etab.ministry === ministry;
+      const symbolId = getEstablishmentSymbolId(etab)
+      return symbolId === type
     })
     .style("display", newStates[type] ? "block" : "none")
 
