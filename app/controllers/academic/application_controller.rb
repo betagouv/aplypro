@@ -51,6 +51,7 @@ module Academic
           payable_amount: validated_amount,
           paid_amount: paid_amount
         }
+        @establishments_data = @establishments_data.sort_by { |_uai, data| -data[:paid_amount] }.to_h
       end
     end
 

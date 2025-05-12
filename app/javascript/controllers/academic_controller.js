@@ -8,7 +8,6 @@ import {
   updateLegendAppearance,
   toggleBopVisibility,
   createProgressBarHTML,
-  MINISTRY_MAPPING,
   getEstablishmentSymbolId
 } from "utils/map_utils"
 
@@ -30,6 +29,8 @@ export default class extends Controller {
   }
 
   initialize() {
+    this.arrowDown = ' &#9660;'
+    this.arrowUp = ' &#9650;'
     this.svg = null
     this.width = null
     this.height = null
@@ -68,6 +69,7 @@ export default class extends Controller {
       await this.createMarkerSymbols()
       this.createLegend()
       this.createEtabMarkers()
+      this.setupTableSorting()
     } catch (error) {
       console.error("Error during initialization:", error)
     }
@@ -345,5 +347,44 @@ export default class extends Controller {
       .duration(200)
       .attr("fill", etabMarkerColor(this.d3, d, this.establishments))
     tooltip.style("display", "none")
+  }
+
+  setupTableSorting() {
+    const table = document.querySelector('.establishments-table')
+    const headers = table.querySelectorAll('thead th')
+    headers.forEach(header => {
+      if (header.textContent.includes('Montant payé')) {
+        header.style.cursor = 'pointer'
+        const sortArrow = document.createElement('span')
+        sortArrow.innerHTML = this.arrowDown
+        sortArrow.className = 'sort-arrow'
+        sortArrow.style.paddingLeft = '5px'
+        header.appendChild(sortArrow)
+
+        header.addEventListener('click', () => {
+          this.sortAscending = !this.sortAscending
+          this.sortTable(table)
+          sortArrow.innerHTML = this.sortAscending ? this.arrowUp : this.arrowDown
+        })
+      }
+    })
+  }
+
+  sortTable(table) {
+    const tbody = table.querySelector('tbody')
+    const rows = Array.from(tbody.querySelectorAll('tr.academic-map'))
+    rows.sort((rowA, rowB) => {
+      const uaiA = rowA.dataset.uai
+      const uaiB = rowB.dataset.uai
+
+      const paidAmountA = this.establishments[uaiA]?.paid_amount || 0
+      const paidAmountB = this.establishments[uaiB]?.paid_amount || 0
+
+      return this.sortAscending
+        ? paidAmountA - paidAmountB
+        : paidAmountB - paidAmountA
+    })
+
+    rows.forEach(row => tbody.appendChild(row))
   }
 }
