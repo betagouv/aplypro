@@ -311,7 +311,7 @@ fr:
         La PFMP a été validée. La demande de paiement sera envoyée dans le prochain lot journalier.
       rectified: |
         La PFMP a été corrigée. La nouvelle demande de paiement sera envoyée dès que
-        possible avec les nouvelles informations fournises.
+        possible avec les nouvelles informations fournies.
   payment_requests:
     actions:
       reset:
