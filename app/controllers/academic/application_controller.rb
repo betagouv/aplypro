@@ -46,6 +46,7 @@ module Academic
           city: establishment.city,
           postal_code: establishment.postal_code,
           ministry: establishment.ministry,
+          private_contract_type_code: establishment.private_contract_type_code,
           schooling_count: schooling_count,
           payable_amount: validated_amount,
           paid_amount: paid_amount

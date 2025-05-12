@@ -8,7 +8,8 @@ import {
   updateLegendAppearance,
   toggleBopVisibility,
   createProgressBarHTML,
-  MINISTRY_MAPPING
+  MINISTRY_MAPPING,
+  getEstablishmentSymbolId
 } from "utils/map_utils"
 
 export default class extends Controller {
@@ -23,7 +24,9 @@ export default class extends Controller {
     merIconPath: { type: String },
     justiceIconPath: { type: String },
     defenseIconPath: { type: String },
-    santeIconPath: { type: String }
+    santeIconPath: { type: String },
+    enpuIconPath: { type: String },
+    enprIconPath: { type: String }
   }
 
   initialize() {
@@ -39,6 +42,8 @@ export default class extends Controller {
     this.justiceIconPath = this.element.dataset.justiceIconPath
     this.defenseIconPath = this.element.dataset.defenseIconPath
     this.santeIconPath = this.element.dataset.santeIconPath
+    this.enpuIconPath = this.element.dataset.enpuIconPath
+    this.enprIconPath = this.element.dataset.enprIconPath
     this.selectedAcademy = parseInt(this.element.dataset.selectedAcademyValue)
     this.establishments = JSON.parse(this.element.dataset.establishmentsData)
     this.maxNbSchoolings = Math.max(...Object.values(this.establishments).map(e => e.schooling_count))
@@ -48,7 +53,9 @@ export default class extends Controller {
       mer: true,
       justice: true,
       defense: true,
-      sante: true
+      sante: true,
+      enpu: true,
+      enpr: true
     }
   }
 
@@ -105,7 +112,9 @@ export default class extends Controller {
       createSymbolFromIcon(this.merIconPath, "mer"),
       createSymbolFromIcon(this.justiceIconPath, "justice"),
       createSymbolFromIcon(this.defenseIconPath, "défense"),
-      createSymbolFromIcon(this.santeIconPath, "santé")
+      createSymbolFromIcon(this.santeIconPath, "santé"),
+      createSymbolFromIcon(this.enpuIconPath, "enpu"),
+      createSymbolFromIcon(this.enprIconPath, "enpr")
     ])
   }
 
@@ -232,7 +241,7 @@ export default class extends Controller {
           const etab = this.establishments[d.properties.Code_UAI]
           const size = etabMarkerScale(d3, etab.schooling_count, this.maxNbSchoolings, academyBounds)
 
-          const symbolId = MINISTRY_MAPPING[etab.ministry] || "men"
+          const symbolId = getEstablishmentSymbolId(etab)
 
           d3.select(nodes[i])
             .append("use")
@@ -321,6 +330,7 @@ export default class extends Controller {
         <strong>${e.uai} - ${e.name}</strong><br>
         ${e.address_line1}, ${e.city}, ${e.postal_code}<br><br>
         <table>
+          <tr><td>Code contrat :</td><td>${e.private_contract_type_code || 'N/A'}</td></tr>
           <tr><td>Nombre de scolarités :</td><td>${e.schooling_count}</td></tr>
           <tr><td>Montant payable :</td><td>${e.payable_amount} €</td></tr>
           <tr><td>Montant payé :</td><td>${e.paid_amount} €</td></tr>
