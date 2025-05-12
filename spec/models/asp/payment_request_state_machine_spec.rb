@@ -119,5 +119,23 @@ describe ASP::PaymentRequestStateMachine do
           .to raise_error(ASP::Errors::IncompletePaymentRequestError)
       end
     end
+
+    describe "the necessary funds" do
+      let(:asp_payment_request) { create(:asp_payment_request, :sendable) }
+
+      it "set the state to ready when there are the necessary funds" do
+        allow(asp_payment_request).to receive(:payable?).and_return(true)
+        asp_payment_request.mark_ready!
+
+        expect(asp_payment_request).to be_in_state(:ready)
+      end
+
+      it "raises an incomplete error when there are no longer the necessary funds" do
+        allow(asp_payment_request).to receive(:payable?).and_return(false)
+
+        expect { asp_payment_request.transition_to!(:ready) }
+          .to raise_error(ASP::Errors::IncompletePaymentRequestError)
+      end
+    end
   end
 end
