@@ -22,6 +22,12 @@
     .fr-grid-row
       .fr-col-10
         %ul.fr-btns-group.fr-btns-group--sm
+          - if current_user.can_validate? && !schooling.attributive_decision.attached?
+            %li
+              .fr-grid-row.fr-grid-row--middle
+                .fr-col-10
+                  = button_to t("panels.attributive_decisions.generate", count: 1), create_attributive_decision_school_year_class_schooling_path(selected_school_year, classe, schooling), class: 'fr-btn', method: :post
+
           - disabled = !current_user.can_validate? || !schooling.attributive_decision.attached? || schooling.cancellation_decision.attached?
           %li
             .fr-grid-row.fr-grid-row--middle
