@@ -105,9 +105,9 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Alors la page ne contient pas "Télécharger la décision de retrait"
     Quand je clique sur "Révoquer la décision d'attribution"
     Et que je coche la case de responsable légal
-    Et que je clique sur "Confirmer le retrait"
+    Et que je clique sur "Confirmer la révocation"
     Alors la page contient "La décision d'attribution de Curie Marie a bien été retirée"
-    Et la page ne contient pas "Révoquer la décision d'attribution"
+    Et la page contient un bouton "Révoquer la décision d'attribution" désactivé
     Et la page contient "Télécharger la décision de retrait"
     Quand je consulte la classe de "1MELEC"
     Alors je peux voir dans le tableau "Élèves masqués manuellement de la classe"
