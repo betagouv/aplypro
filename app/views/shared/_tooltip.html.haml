@@ -1,3 +1,10 @@
-%button.fr-ml-0.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-#{message}-#{id}", type: "button"}
-  %span.fr-tooltip.fr-placement{id: "tooltip-#{message}-#{id}", role: "tooltip", "aria-hidden" => "true"}
-    = t("tooltips.#{message}").html_safe
+- message = local_assigns.fetch(:message)
+
+- if message.kind_of?(String)
+  - tooltip = t("tooltips.#{message}")
+- else
+  - tooltip = t("tooltips.#{message.first}", block: t("tooltips.#{message.last}"))
+
+%button.fr-ml-0.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-#{message.last}-#{id}", type: "button"}
+  %span.fr-tooltip.fr-placement{id: "tooltip-#{message.last}-#{id}", role: "tooltip", "aria-hidden" => "true"}
+    = tooltip.html_safe

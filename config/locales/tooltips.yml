@@ -16,3 +16,16 @@ fr:
         <li>> Les erreurs de RIB : quand le paiement dû à un élève est versé sur le mauvais compte bancaire. Un formulaire de déclaration à l'ASP est disponible, vous pouvez le récupérer auprès du support de votre DSI académique (communication faite aux ADSI le 9 juillet 2024).</li>
         <li>> Les rejets bancaires : quand un paiement est marqué comme envoyé mais que la banque du destinataire l'a rejeté. L'ASP contacte alors directement l'établissement scolaire (communication faite aux ADSI le 2 juillet 2024).</li>
       </ul>
+    disabled:
+      common: |
+        Cette action n'est pas disponible pour plusieurs raisons possibles :
+        <ul>
+          <li>> Vous n'êtes pas chef d'établissement</li>
+          <li>> La scolarité n'a pas de décision d'attribution générée</li>
+          %{block}
+        </ul>
+      cancellation: |
+        <li>> Une révocation de décision d'attribution a déjà été générée</li>
+      abrogation: |
+        <li>> Une abrogation de décision d'attribution a déjà été générée</li>
+        <li>> La scolarité est active</li>  

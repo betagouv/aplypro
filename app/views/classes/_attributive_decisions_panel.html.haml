@@ -8,8 +8,8 @@
 
 
 - if current_establishment.some_attributive_decisions_generating?(selected_school_year)
-  = dsfr_alert(type: :info, title: "Édition des décisions d'attribution en cours", classes: 'fr-mt-3w') do
-    %p Les décisions d'attribution sont en train d'être éditées, veuillez rafraichir la page dans quelques minutes. Vous pouvez commencer à remplir des coordonnées bancaires ou des PFMPs pendant ce temps.
+  = dsfr_alert(type: :info, title: t("panels.attributive_decisions.generating.title.other"), classes: 'fr-mt-3w') do
+    %p= t("panels.attributive_decisions.generating.body.other")
 - else
   .buttons-group
     - if current_establishment.some_attributive_decisions?(selected_school_year)
