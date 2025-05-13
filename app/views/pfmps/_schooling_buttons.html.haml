@@ -17,7 +17,6 @@
                   = render partial: "shared/tooltip", locals: { message: "remove_student", id: 1 }
 
   .fr-col-md-4
-    - disabled = !current_user.can_validate?
     %h3.fr-h6 Actions réservées au chef d'établissement
     .fr-grid-row
       .fr-col-10
@@ -26,34 +25,36 @@
             %li
               .fr-grid-row.fr-grid-row--middle
                 .fr-col-10
-                  = button_to t("panels.attributive_decisions.generate", count: 1), create_attributive_decision_school_year_class_schooling_path(selected_school_year, classe, schooling), class: 'fr-btn', method: :post
+                  = button_to t("panels.attributive_decisions.generate.one"), create_attributive_decision_school_year_class_schooling_path(selected_school_year, classe, schooling), class: 'fr-btn fr-btn--primary', method: :post
 
-          - disabled = !current_user.can_validate? || !schooling.attributive_decision.attached? || schooling.cancellation_decision.attached?
+          - common_disabled =  !current_user.can_validate? || !schooling.attributive_decision.attached?
+          - cancellation_disabled = common_disabled || schooling.cancellation_decision.attached?
+          - abrogation_disabled = common_disabled || schooling.abrogation_decision.present? || schooling.end_date.blank?
+
           %li
             .fr-grid-row.fr-grid-row--middle
-              .fr-col-10
-                = button_to "Révoquer la décision d'attribution", confirm_cancellation_decision_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get, disabled: disabled
-              .fr-col-2
-                = render partial: "shared/tooltip", locals: { message: disabled ?  "disabled" : "cancellation_decision", id: 2 }
-          - disabled = disabled || schooling.abrogation_decision.present? || schooling.end_date.blank?
-          %li
-            .fr-grid-row.fr-grid-row--middle
-              .fr-col-10
-                = button_to (schooling.extended_end_date.present? ? "Annuler le report" : "Autoriser un report"), confirm_da_extension_school_year_class_schooling_path(selected_school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get, disabled: disabled
-              .fr-col-2
-                = render partial: "shared/tooltip", locals: { message: disabled ? "disabled" : "report", id: 3 }
-          %li
-            .fr-grid-row.fr-grid-row--middle
-              .fr-col-10
-                - if schooling.extended_end_date.nil?
-                  - title = "Autoriser un report"
-                  - elsif schooling.any_extended_pfmp?
-                    - title = "Modifier le report"
-                  - else
-                    - title = "Annuler le report"
-                  = button_to title, confirm_da_extension_school_year_class_schooling_path(selected_school_year, classe, schooling), class: 'fr-btn', method: :get, disabled: disabled
+              - if schooling.extended_end_date.nil?
+                - title = "Autoriser un report"
+                - elsif schooling.any_extended_pfmp?
+                  - title = "Modifier le report"
+                - else
+                  - title = "Annuler le report"
+                = button_to title, confirm_da_extension_school_year_class_schooling_path(selected_school_year, classe, schooling), class: 'fr-btn', method: :get, disabled: abrogation_disabled
                 .fr-col-2
-                  = render partial: "shared/tooltip", locals: { message: "disabled", id: 4 }
+                  = render partial: "shared/tooltip", locals: { message: abrogation_disabled ? "disabled" : "report", id: 2 }
+          %li
+            .fr-grid-row.fr-grid-row--middle
+              .fr-col-10
+                = button_to "Abroger la décision d'attribution", confirm_abrogation_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get, disabled: abrogation_disabled
+              - if abrogation_disabled
+                .fr-col-2
+                  = render partial: "shared/tooltip", locals: { message: "disabled", id: 3 }
+          %li
+            .fr-grid-row.fr-grid-row--middle
+              .fr-col-10
+                = button_to "Révoquer la décision d'attribution", confirm_cancellation_decision_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get, disabled: cancellation_disabled
+              .fr-col-2
+                = render partial: "shared/tooltip", locals: { message: cancellation_disabled ?  "disabled" : "cancellation_decision", id: 4 }
 
 
   - if schooling.attributive_decision.attached? || schooling.abrogation_decision.attached? || schooling.cancellation_decision.attached?
