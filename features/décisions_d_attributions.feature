@@ -122,3 +122,12 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Et que je passe l'écran d'accueil
     Quand je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
     Alors la page contient un bouton "Révoquer la décision d'attribution" désactivé
+
+  Scénario: Le personnel peut générer une décision d'attribution d'attribution individuelle
+    Lorsque je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
+    Et que je clique sur "Éditer la décision d'attribution manquante"
+    Alors la page ne contient pas "Éditer la décision d'attribution manquante"
+    Alors la page contient "Édition de la décision d'attribution en cours"
+    Quand la génération des décisions d'attribution manquantes est complètement finie
+    Et que je rafraîchis la page
+    Alors la page ne contient pas "Édition de la décision d'attribution en cours"
