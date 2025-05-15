@@ -37,6 +37,6 @@
                   }
                 }
                   %td= uai
-                  %td= establishment[:name]
+                  %td= link_to establishment[:name], academic_establishment_path(establishment[:id])
                   %td= establishment[:schooling_count]
                   %td= number_to_currency(establishment[:paid_amount], unit: "€", format: "%n %u")
