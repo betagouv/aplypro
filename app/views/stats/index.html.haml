@@ -1,6 +1,8 @@
 .fr-grid-row.fr-grid-row--gutters
   .fr-col-12
-    %h2 Statistiques de paiement des PFMPs
+    %h2 
+      Statistiques de paiement des
+      %acronym{title: "Période de formation en milieu professionnel"} PFMPs
   .fr-col-12.fr-col-md-6
     .fr-grid-row.fr-grid-row--gutters
       .fr-col-12
@@ -23,7 +25,10 @@
 
       .fr-col-12
         .stat
-          %h3 Nombre de PFMPs payées par mois
+          %h3
+            Nombre de 
+            %acronym{title: "Période de formation en milieu professionnel"} PFMPs
+            payées par mois
           = column_chart paid_pfmps_per_month_stats_path, label: "nombre de stages payés"
 
   .fr-col-12.fr-col-md-6
