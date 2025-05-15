@@ -34,9 +34,11 @@ module ASP
       payment_request.schooling.update!(asp_dossier_id: attrs["idDoss"])
       payment_request.pfmp.update!(asp_prestation_dossier_id: attrs["idPretaDoss"])
     rescue ActiveRecord::RecordNotUnique => e
-      raise ASP::Errors::IntegrationError,
-            "CSV Integration error for p_r #{payment_request.id} for data" \
-            "#{transition.metadata} with message: #{e.message}"
+      raise ASP::Errors::IntegrationError.new(
+        "CSV Integration error for p_r #{payment_request.id} for data" \
+        "#{transition.metadata} with message: #{e.message}",
+        payment_request
+      )
     end
 
     after_transition(from: :pending, to: :ready) do |payment_request, _|
