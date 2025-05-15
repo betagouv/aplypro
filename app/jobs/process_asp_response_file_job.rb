@@ -28,7 +28,7 @@ class ProcessASPResponseFileJob < ApplicationJob
   def attempt_resolve(error)
     raise error unless error.message.include?("index_students_on_asp_individu_id")
 
-    StudentMerger.new(payment_request.student.duplicates.to_a).merge!
+    StudentMerger.new(error.payment_request.student.duplicates.to_a).merge!
     process_file
   end
 end
