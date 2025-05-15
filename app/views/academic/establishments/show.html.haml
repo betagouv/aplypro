@@ -1,0 +1,24 @@
+%h2.fr-mt-2w= "Établissement: #{@establishment_data[:name]}"
+
+.fr-container.fr-my-4w
+  .fr-grid-row
+    .fr-col-12.fr-col-md-8
+      .fr-card.fr-card--shadow
+        .fr-card__body
+          %h3.fr-card__title Informations générales
+          .fr-card__content
+            %ul.fr-list
+              %li
+                %strong UAI:
+                = @establishment_uai
+              %li
+                %strong Nombre de scolarités:
+                = @establishment_data[:schooling_count]
+              %li
+                %strong Montant payé:
+                = number_to_currency(@establishment_data[:paid_amount], unit: "€", format: "%n %u")
+
+.fr-container
+  .fr-grid-row.fr-mb-4w
+    .fr-col-12
+      = link_to "Retour à la carte des établissements", academic_home_path, class: "fr-btn fr-btn--secondary", data: { turbo: false }
