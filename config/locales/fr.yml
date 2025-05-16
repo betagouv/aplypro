@@ -29,7 +29,7 @@ fr:
       extended: La décision d'attribution de %{name} a bien été prolongée
       cancellation: La décision d'attribution de %{name} a bien été retirée
       extension_removed: Le report de la décision d'attribution de %{name} a bien été supprimé
-      cant_remove_extension: Le report de la décision d'attribution de %{name} n'a pas pu être supprimé car celui ci contient une PFMP
+      cant_remove_extension: Le report de la décision d'attribution de %{name} n'a pas pu être modifié car celui ci contient une PFMP
       extension_failure: La décision d'attribution de %{name} n'a pas pu être modifiée
     schooling:
       removed: L'élève %{name} a bien été retiré de la classe %{classe}
@@ -228,7 +228,7 @@ fr:
         classes: "Classes avec PFMPs à valider pour envoi en paiement"
         show: Envoyer en paiement les PFMPs de %{name}
       schoolings:
-        confirm_da_extension: "Autoriser un report de décision d'attribution"
+        confirm_da_extension: "Gérer le report de décision d'attribution"
         confirm_removal:
           title: "Masquer l'élève manuellement de la classe"
           breadcrumb: "Masquer l'élève manuellement de la classe"

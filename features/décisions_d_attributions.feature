@@ -70,9 +70,8 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Alors la page contient "Date de report"
     Quand je remplis "Date de report" avec "#{Date.parse('#{SchoolYear.current.end_date}-12-31')}"
     Et que je coche la case de responsable légal
-    Et que je clique sur "Confirmer le report"
-    Alors la page contient "La décision d'attribution de"
-    Alors la page contient "a bien été prolongée"
+    Et que je clique sur "Confirmer l'ajout du report"
+    Alors la page contient "La décision d'attribution de Curie Marie a bien été prolongée"
 
   Scénario: Le personnel peut annuler la saisie d'un report de décision d'attribution
     Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité
@@ -82,21 +81,21 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Quand je clique sur "Annuler le report"
     Alors la page contient "Êtes-vous certain(e) de vouloir supprimer le report de cette décision d'attribution ?"
     Et que je coche la case de responsable légal
-    Lorsque je clique sur "Supprimer le report"
+    Lorsque je clique sur "Confirmer la suppression du report"
     Alors la page contient "Le report de la décision d'attribution de Curie Marie a bien été supprimé"
 
-  Scénario: Le personnel ne peut pas annuler la saisie d'un report de décision d'attribution si une pfmp est saisie
+  Scénario: Le personnel peut modifier la saisie d'un report de décision d'attribution si une pfmp est saisie
     Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité
-    Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
     Et que l'élève "Curie Marie" a une décision d'attribution
     Et que l'élève "Curie Marie" a un report de décision d'attribution
+    Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
     Et que je renseigne une PFMP provisoire dans la période de report pour l'élève "Curie Marie"
     Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
-    Quand je clique sur "Annuler le report"
-    Alors la page contient "Êtes-vous certain(e) de vouloir supprimer le report de cette décision d'attribution ?"
+    Quand je clique sur "Modifier le report"
+    Alors la page contient "Êtes-vous certain(e) de vouloir modifier le report de cette décision d'attribution ?"
     Et que je coche la case de responsable légal
-    Lorsque je clique sur "Supprimer le report"
-    Alors la page contient "Le report de la décision d'attribution de Curie Marie n'a pas pu être supprimé car celui ci contient une PFMP"
+    Lorsque je clique sur "Confirmer la modification du report"
+    Alors la page contient "La décision d'attribution de Curie Marie a bien été prolongée"
 
   Scénario: Le personnel peut révoquer une décision d'attribution
     Lorsque je suis responsable légal et que je génère les décisions d'attribution manquantes
