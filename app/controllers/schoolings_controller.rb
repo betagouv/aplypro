@@ -46,16 +46,15 @@ class SchoolingsController < ApplicationController
 
   def update # rubocop:disable Metrics/AbcSize
     extended_end_date = schooling_params[:extended_end_date]
-    if extended_end_date.blank? && any_extended_pfmp?
-      redirect_to school_year_class_path(selected_school_year, @classe),
-                  alert: t("flash.da.cant_remove_extension", name: @schooling.student.full_name)
-    elsif @schooling.update(extended_end_date: extended_end_date)
-      redirect_to school_year_class_path(selected_school_year, @classe),
+
+    if extended_end_date.present? && @schooling.any_extended_pfmp?(Date.parse(extended_end_date))
+      redirect_to request.referer, alert: t("flash.da.cant_remove_extension", name: @schooling.student.full_name)
+    else
+      @schooling.update(extended_end_date: extended_end_date)
+
+      redirect_to student_path(@schooling.student),
                   notice: t(extended_end_date.blank? ? "flash.da.extension_removed" : "flash.da.extended",
                             name: @schooling.student.full_name)
-    else
-      @schooling.extended_end_date = nil
-      render :confirm_da_extension, status: :unprocessable_entity
     end
   end
 
@@ -84,12 +83,6 @@ class SchoolingsController < ApplicationController
     @schooling.pfmps.in_state(:validated).each do |pfmp|
       payment_request = pfmp.latest_payment_request
       payment_request.mark_ready! if payment_request&.eligible_for_incomplete_retry?
-    end
-  end
-
-  def any_extended_pfmp?
-    @schooling.pfmps.any? do |pfmp|
-      pfmp.end_date > @schooling.end_date
     end
   end
 

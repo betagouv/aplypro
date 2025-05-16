@@ -112,6 +112,14 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
     extended_end_date || end_date
   end
 
+  def any_extended_pfmp?(date = nil)
+    pfmps.any? { |pfmp| pfmp.end_date >= (date || end_date) }
+  end
+
+  def removable_extended_end_date?
+    extended_end_date.present? && !any_extended_pfmp?
+  end
+
   def excluded?
     Exclusion.excluded?(establishment.uai, mef.code, classe.school_year)
   end

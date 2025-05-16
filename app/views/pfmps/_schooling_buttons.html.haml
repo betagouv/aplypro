@@ -34,9 +34,15 @@
                 %li
                   .fr-grid-row.fr-grid-row--middle
                     .fr-col-10
-                      = button_to (schooling.extended_end_date.present? ? "Annuler le report" : "Autoriser un report"), confirm_da_extension_school_year_class_schooling_path(selected_school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get, disabled: disabled
+                      - if schooling.extended_end_date.nil?
+                        - title = "Autoriser un report"
+                      - elsif schooling.any_extended_pfmp?
+                        - title = "Modifier le report"
+                      - else
+                        - title = "Annuler le report"
+                      = button_to title, confirm_da_extension_school_year_class_schooling_path(selected_school_year, classe, schooling), class: 'fr-btn', method: :get, disabled: disabled
                     .fr-col-2
-                      = render partial: "shared/tooltip", locals: { message: "report", id: "#{student.id}" }
+                      = render partial: "shared/tooltip", locals: { message: "report", id: 3 }
               - if schooling.closed?
                 %li
                   .fr-grid-row.fr-grid-row--middle
