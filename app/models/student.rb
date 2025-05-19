@@ -122,10 +122,10 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def duplicates
     Student.where(
-      "LOWER(UNACCENT(first_name)) = LOWER(UNACCENT(?)) AND
-       LOWER(UNACCENT(last_name)) = LOWER(UNACCENT(?)) AND
-       birthdate = ? AND
-       birthplace_city_insee_code = ?",
+      "LOWER(UNACCENT(REPLACE(REPLACE(first_name, '-', ' '), '  ', ' '))) = LOWER(UNACCENT(REPLACE(REPLACE(?, '-', ' '), '  ', ' '))) AND
+     LOWER(UNACCENT(REPLACE(REPLACE(last_name, '-', ' '), '  ', ' '))) = LOWER(UNACCENT(REPLACE(REPLACE(?, '-', ' '), '  ', ' '))) AND
+     birthdate = ? AND
+     birthplace_city_insee_code = ?",
       first_name, last_name, birthdate, birthplace_city_insee_code
     )
   end
