@@ -10,7 +10,9 @@ RSpec.describe Academic::EstablishmentsController do
 
   before do
     sign_in(user)
-    allow_any_instance_of(described_class).to receive(:authorised_academy_codes).and_return([establishment.academy_code]) # rubocop:disable RSpec/AnyInstance
+    allow_any_instance_of(described_class).to receive(:authorised_academy_codes).and_return( # rubocop:disable RSpec/AnyInstance
+      [establishment.academy_code]
+    )
     allow_any_instance_of(described_class).to receive(:selected_academy).and_return(establishment.academy_code) # rubocop:disable RSpec/AnyInstance
     allow_any_instance_of(described_class).to receive(:selected_school_year).and_return(school_year.id) # rubocop:disable RSpec/AnyInstance
   end
