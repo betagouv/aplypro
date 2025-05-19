@@ -18,41 +18,13 @@ module Academic
 
     helper_method :current_user, :selected_academy, :authorised_academy_codes, :selected_school_year
 
-    def home # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    def home
       establishments = Establishment.joins(:classes)
                                     .where(academy_code: selected_academy,
                                            "classes.school_year_id": selected_school_year)
                                     .distinct
 
-      @establishments_data = {}
-
-      establishments.each do |establishment|
-        pfmps = establishment.pfmps
-                             .joins(schooling: { classe: :school_year })
-                             .where(classes: { school_year_id: selected_school_year })
-
-        schooling_count = establishment.schoolings.count
-        validated_amount = pfmps.joins(:transitions)
-                                .where(pfmp_transitions: { to_state: "validated", most_recent: true })
-                                .sum(:amount)
-        paid_amount = pfmps.joins(payment_requests: :asp_payment_request_transitions)
-                           .where(asp_payment_request_transitions: { to_state: "paid", most_recent: true })
-                           .sum(:amount)
-
-        @establishments_data[establishment.uai] = {
-          uai: establishment.uai,
-          name: establishment.name,
-          address_line1: establishment.address_line1,
-          city: establishment.city,
-          postal_code: establishment.postal_code,
-          ministry: establishment.ministry,
-          private_contract_type_code: establishment.private_contract_type_code,
-          schooling_count: schooling_count,
-          payable_amount: validated_amount,
-          paid_amount: paid_amount
-        }
-        @establishments_data = @establishments_data.sort_by { |_uai, data| -data[:paid_amount] }.to_h
-      end
+      @establishments_data = establishments_data_summary(establishments.pluck(:id))
     end
 
     def login
@@ -97,6 +69,32 @@ module Academic
       return unless academic_user_signed_in?
 
       redirect_to select_academy_academic_users_path(current_user) if selected_academy.nil?
+    end
+
+    # NOTE: the schena of this entity is a draft
+    def establishments_data_summary(ids) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      data = {}
+      Establishment.where(id: ids).find_each do |establishment|
+        pfmps = establishment.pfmps
+                             .joins(schooling: { classe: :school_year })
+                             .where(classes: { school_year_id: selected_school_year })
+
+        schooling_count = establishment.schoolings.count
+        validated_amount = pfmps.joins(:transitions)
+                                .where(pfmp_transitions: { to_state: "validated", most_recent: true })
+                                .sum(:amount)
+        paid_amount = pfmps.joins(payment_requests: :asp_payment_request_transitions)
+                           .where(asp_payment_request_transitions: { to_state: "paid", most_recent: true })
+                           .sum(:amount)
+
+        data[establishment.uai] = establishment.attributes.symbolize_keys.merge({
+                                                                                  schooling_count: schooling_count,
+                                                                                  payable_amount: validated_amount,
+                                                                                  paid_amount: paid_amount
+                                                                                })
+        data.sort_by { |_uai, etab_data| -etab_data[:paid_amount] }
+      end
+      data
     end
   end
 end
