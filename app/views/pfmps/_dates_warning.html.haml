@@ -1,8 +1,6 @@
 = dsfr_alert(type: :warning, title: "Les dates sont indicatives") do
   %ul
-    - string_start_date = schooling.start_date.present? ? "#{schooling.start_date.strftime('%d/%m/%Y')} et le " : schooling.establishment.school_year_range.first.strftime('%d/%m/%Y')
-    - string_end_date = schooling.max_end_date.present? ? "#{schooling.max_end_date.strftime('%d/%m/%Y')}" : schooling.establishment.school_year_range.last.strftime('%d/%m/%Y')
-    %li= "Les dates saisies doivent être comprises dans la durée de la scolarité de l'élève (entre le #{string_start_date} #{string_end_date})."
+    %li= "#{warning_schooling_dates(schooling)}"
 
     %li Les dates saisies doivent correspondre à celles qui figurent dans la convention de stage.
 
