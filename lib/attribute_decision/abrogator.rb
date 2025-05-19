@@ -2,7 +2,7 @@
 
 # rubocop:disable all
 module AttributeDecision
-  # Generate "Décision d'abrogation"
+  # Generate "Abrogation de la décision d'attribution"
   class Abrogator < DocumentGenerator
     private
 

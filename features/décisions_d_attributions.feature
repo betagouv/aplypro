@@ -60,7 +60,7 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Lorsque je clique sur "Abroger la décision d'attribution"
     Alors la page contient "Êtes-vous certain(e) de vouloir abroger cette décision d'attribution ?"
     Lorsque je clique sur "Confirmer l'abrogation"
-    Alors la page contient "Télécharger la décision d'abrogation"
+    Alors la page contient "Télécharger l'abrogation"
 
   Scénario: Le personnel peut reporter une décision d'attribution
     Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité
