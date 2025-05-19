@@ -64,8 +64,8 @@ Quand("l'élève {string} a un report de décision d'attribution") do |name|
 end
 
 Quand("l'élève {string} a une date de début et une date de fin de scolarité") do |name|
-  start_date = Date.parse("#{SchoolYear.current.start_year}-09-01")
-  end_date = Date.parse("#{SchoolYear.current.end_year}-06-30")
+  start_date = Date.parse("2024-09-01")
+  end_date = Date.parse("2025-06-30")
   student = find_student_by_full_name(name)
 
   student.current_schooling.update!(start_date: start_date, end_date: end_date)

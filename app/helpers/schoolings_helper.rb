@@ -19,7 +19,7 @@ module SchoolingsHelper
 
   def warning_schooling_dates(schooling)
     string_start_date = if schooling.start_date.present?
-                          "#{format_date(schooling.start_date)} et le "
+                          format_date(schooling.start_date)
                         else
                           format_date(schooling.establishment.school_year_range.first)
                         end
@@ -29,6 +29,6 @@ module SchoolingsHelper
                         format_date(schooling.establishment.school_year_range.last)
                       end
     "Les dates saisies doivent être comprises dans la durée de la scolarité de l'élève
-      (entre le #{string_start_date} #{string_end_date})."
+      (entre le #{string_start_date} et le #{string_end_date})."
   end
 end
