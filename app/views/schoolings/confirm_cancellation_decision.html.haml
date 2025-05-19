@@ -16,7 +16,7 @@
     - if @schooling.end_date.present?
       %li
         Fin de scolarité :
-        %span= @schooling.end_date.strftime("%d/%m/%Y")
+        %span= format_date @schooling.end_date
 
   .fr-col-md-6.fr-mt-3w
     = render partial: "shared/confirmed_director", locals: { message: t("panels.attributive_decisions.confirm_director") }
