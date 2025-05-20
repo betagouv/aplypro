@@ -1,4 +1,6 @@
-- current_value = local_assigns.fetch(:current_value)
+- rib = local_assigns.fetch(:rib)
+- current_value = rib.owner_type
+- is_new = rib.new_record?
 
 %fieldset.fr-fieldset.fr-input-group{id: "radio", "aria-labelledby": "radio-legend radio-messages"}
   %legend.fr-fieldset__legend--regular.fr-fieldset__legend{id: "radio-legend"}
@@ -7,22 +9,22 @@
 
   .fr-fieldset__element
     .fr-radio-group
-      %input{id: "radio-1", type: "radio", value: "personal", name: "rib[owner_type]", checked: current_value == "personal", data: {owner_type_target: "radioButton", action: "owner-type#updateName", }}
+      %input{id: "radio-1", type: "radio", value: "personal", name: "rib[owner_type]", checked: is_new ? true : current_value == "personal", data: {owner_type_target: "radioButton", action: "owner-type#updateName", }}
       %label.fr-label{for: "radio-1"}
         = t("activerecord.attributes.missing.owner_type_personal")
   .fr-fieldset__element
     .fr-radio-group
-      %input{id: "radio-2", type: "radio", value: "other_person", name: "rib[owner_type]", checked: current_value == "other_person"}
+      %input{id: "radio-2", type: "radio", value: "other_person", name: "rib[owner_type]", checked: !is_new && current_value == "other_person"}
       %label.fr-label{for: "radio-2"}
         = t("activerecord.attributes.missing.owner_type_other_person")
   .fr-fieldset__element
     .fr-radio-group
-      %input{id: "radio-3", type: "radio", value: "moral_person", name: "rib[owner_type]", checked: current_value == "moral_person"}
+      %input{id: "radio-3", type: "radio", value: "moral_person", name: "rib[owner_type]", checked: !is_new && current_value == "moral_person"}
       %label.fr-label{for: "radio-3"}
         = t("activerecord.attributes.missing.owner_type_moral_person")
   .fr-fieldset__element
     .fr-radio-group
-      %input{id: "radio-4", type: "radio", value: "mandate", name: "rib[owner_type]", checked: current_value == "mandate"}
+      %input{id: "radio-4", type: "radio", value: "mandate", name: "rib[owner_type]", checked: !is_new && current_value == "mandate"}
       %label.fr-label{for: "radio-4"}
         = t("activerecord.attributes.missing.owner_type_mandate")
   .fr-messages-group{id: "radio-messages", "aria-live": "assertive"}
