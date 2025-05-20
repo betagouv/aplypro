@@ -81,7 +81,7 @@ end
 
 # FIXME: we should mock the API step instead and have the correct
 # schooling + status returned in the data.
-Quand("l'élève {string} a bien le statut étudiant") do |name|
+Quand("l'élève {string} a bien le statut scolaire") do |name|
   student = find_student_by_full_name(name)
 
   student.current_schooling.update!(status: :student)

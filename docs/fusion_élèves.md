@@ -6,7 +6,7 @@ Dans les SI du système éducatif français il n'est pas impossible qu'un élèv
 
 ## Mode d'emploi
 
-## Etape 1: selectionner l'étudiant
+## Etape 1: selectionner l'élève
 
 En utilisant l'id qui remonte dans Sentry ou Sidekiq:
 
@@ -16,7 +16,7 @@ En utilisant l'id qui remonte dans Sentry ou Sidekiq:
 
 `students = Student.where(last_name: student.last_name, first_name: student.first_name, birthplace_city_inseecode: student.birthplace_city_inseecode, birthdate: student.birthdate)`
 
-## Etape 3: Fusionner les étudiants
+## Etape 3: Fusionner les élèves
 
 `StudentMerger.new(students.to_a).merge!`
 

@@ -1,5 +1,5 @@
 # language: fr
-Fonctionnalité: Recherche d'étudiants par nom et prénom
+Fonctionnalité: Recherche d'élèves par nom et prénom
   Contexte:
     Sachant que je suis un personnel MENJ de l'établissement "DINUM" avec une délégation DELEG-CE pour APLyPro
     Et que l'API SYGNE renvoie 10 élèves dans une classe "1MELEC" dont "Jüãn-Frânçois Mîchäèl-d'Estaing" pour l'établissement "DINUM"

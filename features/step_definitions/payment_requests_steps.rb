@@ -6,7 +6,7 @@ Sachantque(
   steps %(
     Sachant que l'API SYGNE renvoie une adresse en France pour l'élève "#{name}"
     Quand les informations personnelles ont été récupérées pour l'élève "#{name}"
-    Et que l'élève "#{name}" a bien le statut étudiant
+    Et que l'élève "#{name}" a bien le statut scolaire
   )
 
   if find_student_by_full_name(name).ribs.empty?
