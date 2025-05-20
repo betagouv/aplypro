@@ -48,7 +48,7 @@ module ClassesHelper
 
     content_tag(
       :div,
-      "Date de report : #{schooling.extended_end_date.strftime('%d/%m/%Y')}",
+      "Date de report : #{format_date(schooling.extended_end_date)}",
       class: "fr-badge fr-badge--sm fr-badge--info #{args[:class]}"
     )
   end

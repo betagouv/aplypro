@@ -5,6 +5,8 @@ module AttributeDecision
   # Generate "Décision de retrait"
   class Cancellation < DocumentGenerator
 
+    include ApplicationHelper
+
     private
 
     def margin
@@ -14,7 +16,7 @@ module AttributeDecision
     def articles
       composer.text("Décide :", style: :paragraph_title)
       composer.text("Article 1 : Objet", style: :paragraph_title)
-      composer.text("Vous avez été bénéficiaire de l’aide financière de l’Etat, dénommée « allocation en faveur des lycéens de la voie professionnelle dans le cadre de la valorisation des périodes de formation en milieu professionnel », au titre de la décision d’attribution annuelle numéro #{@schooling.attributive_decision_number} en date du #{@schooling.attributive_decision.created_at.strftime("%d/%m/%Y")}. Cette aide est retirée pour le bénéficiaire suivant à compter du #{I18n.l(Date.today)} : ")
+      composer.text("Vous avez été bénéficiaire de l’aide financière de l’Etat, dénommée « allocation en faveur des lycéens de la voie professionnelle dans le cadre de la valorisation des périodes de formation en milieu professionnel », au titre de la décision d’attribution annuelle numéro #{@schooling.attributive_decision_number} en date du #{format_date(@schooling.attributive_decision.created_at)}. Cette aide est retirée pour le bénéficiaire suivant à compter du #{I18n.l(Date.today)} : ")
 
       composer.text("#{student.full_name}, né(e) le #{I18n.l(student.birthdate, format: :long)}, #{address_copy}, ci-après désigné « le bénéficiaire », pour l'année scolaire #{@school_year}.", style: :paragraph)
 
