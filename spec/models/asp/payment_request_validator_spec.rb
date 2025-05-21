@@ -285,7 +285,6 @@ RSpec.describe ASP::PaymentRequestValidator do
 
   describe "#validate" do
     it "calls all check methods" do
-      expect(validator).to receive(:check_funding)
       expect(validator).to receive(:check_student)
       expect(validator).to receive(:check_insee_code)
       expect(validator).to receive(:check_address)
