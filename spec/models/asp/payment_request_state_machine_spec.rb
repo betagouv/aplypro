@@ -97,7 +97,7 @@ describe ASP::PaymentRequestStateMachine do
         expect(asp_payment_request).to be_in_state(:ready)
       end
 
-      describe "the necessary funds" do
+      describe "transitions to pending or ready depending on available funds" do
         let(:asp_payment_request) { create(:asp_payment_request, :sendable) }
 
         it "set the state to ready when there are the necessary funds" do
@@ -107,11 +107,12 @@ describe ASP::PaymentRequestStateMachine do
           expect(asp_payment_request).to be_in_state(:ready)
         end
 
-        it "raises a funding error when there are no longer the necessary funds" do
+        it "raises a funding error when there are no longer the necessary funds" do # rubocop:disable RSpec/MultipleExpectations
           allow(asp_payment_request).to receive(:payable?).and_return(false)
 
           expect { asp_payment_request.transition_to!(:ready) }
             .to raise_error(ASP::Errors::FundingNotAvailableError)
+          expect(asp_payment_request).to be_in_state(:pending)
         end
       end
     end

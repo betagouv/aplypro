@@ -34,7 +34,7 @@ class Mef < ApplicationRecord
   def funding_available?
     # Enable follow up lines for when ministry doesnt have funding anymore again
     # For instance to block all menj outgoing payments:
-    # return unless ministry.eql?("menj") && !Rails.env.test?
+    # return unless ministry.eql?("menj")
     true
   end
 end
