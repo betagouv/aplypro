@@ -1,10 +1,18 @@
+- if @schooling.extended_end_date.nil?
+  - title = "Êtes-vous certain(e) de vouloir reporter cette décision d'attribution ?"
+  - submit = "Confirmer l'ajout du report"
+- elsif @schooling.any_extended_pfmp?
+  - title = "Êtes-vous certain(e) de vouloir modifier le report de cette décision d'attribution ?"
+  - submit = "Confirmer la modification du report"
+- else
+  - title = "Êtes-vous certain(e) de vouloir supprimer le report de cette décision d'attribution ?"
+  - submit = "Confirmer la suppression du report"
+
+
 .fr-container
   .fr-grid-row
     .fr-col-md-6.fr-mb-3w
-    - if @schooling.extended_end_date.present?
-      = dsfr_alert(type: :warning, title: "Êtes-vous certain(e) de vouloir supprimer le report de cette décision d'attribution ?")
-    - else
-      = dsfr_alert(type: :warning, title: "Êtes-vous certain(e) de vouloir reporter cette décision d'attribution ?")
+      = dsfr_alert(type: :warning, title: title)
 
   .fr-grid-row
     .fr-col-md-6.fr-mb-3w
@@ -23,15 +31,15 @@
           %span= format_date @schooling.end_date
 
       .fr-col-md-6
-        = form.dsfr_date_field :extended_end_date, value: @schooling.extended_end_date, disabled: @schooling.extended_end_date.present?
+        = form.dsfr_date_field :extended_end_date, value: @schooling.extended_end_date, disabled: @schooling.removable_extended_end_date?
 
       .fr-col-md-6.fr-mt-3w
         = render partial: "shared/confirmed_director", locals: { message: t("panels.attributive_decisions.confirm_director") }
 
       .fr-btns-group.fr-btns-group--inline.fr-mt-3w
         = link_to "Annuler", school_year_class_path(selected_school_year, @classe), class: 'fr-btn fr-btn--secondary'
-        - if @schooling.extended_end_date.present?
+
+        - if @schooling.removable_extended_end_date?
           = form.hidden_field :extended_end_date, value: nil
-          = form.submit "Supprimer le report", class: 'fr-btn fr-btn--danger fr-btn--secondary'
-        - else
-          = form.submit "Confirmer le report", class: 'fr-btn fr-btn--danger fr-btn--secondary'
+
+        = form.submit submit, class: 'fr-btn fr-btn--primary'
