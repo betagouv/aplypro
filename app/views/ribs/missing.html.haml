@@ -6,33 +6,41 @@
 
         .gray-panel.fr-mb-3w.fr-container.fr-p-3w
           .fr-grid-row
-            .fr-col-md-5.fr-col-12.fr-pr-0.fr-pr-md-2w.fr-pb-2w.fr-pb-md-0
-
+            .fr-col-md-4.fr-col-12.fr-pr-0.fr-pr-md-2w.fr-pb-2w.fr-pb-md-0
               .fr-grid-md-row.fr-grid-row--middle
                 .fr-col.fr-mb-3w
                   %h2.fr-mb-1w= dsfr_link_to rib.student.full_name, student_path(rib.student), title: t("links.students.show", name: rib.student), tabindex: "1", class: 'fr-h3'
                   = closed_schooling_information_tag(@classe.closed_schooling_of rib.student_id)
                   = form.hidden_field :student_id
 
-            .fr-col-md-7.fr-col-12
-              .fr-mb-2w
-                = form.label :name, "Titulaire du compte", class: "hidden"
-                = form.text_field :name, class: "fr-input", placeholder: "Titulaire du compte"
-                - rib.errors.full_messages_for(:name).each do |error_message|
-                  %p.fr-error-text= error_message
-
+            .fr-col-md-8
               .fr-grid-row.fr-grid-row--middle.fr-grid-row--gutters
                 .fr-col-sm-8.fr-col-12
-                  = form.label :iban, "IBAN", class: "hidden"
-                  = form.text_field :iban, class: "fr-input fr-input--code", placeholder: "IBAN"
-                  - rib.errors.full_messages_for(:iban).each do |error_message|
+                  = form.label :name, "Titulaire du compte", class: "hidden"
+                  = form.text_field :name, class: "fr-input", placeholder: "Titulaire du compte"
+                  - rib.errors.full_messages_for(:name).each do |error_message|
                     %p.fr-error-text= error_message
-
                 .fr-col-sm-4.fr-col-12
                   = form.label :bic, "BIC", class: "hidden"
                   = form.text_field :bic, class: "fr-input fr-input--code", placeholder: "BIC"
                   - rib.errors.full_messages_for(:bic).each do |error_message|
                     %p.fr-error-text= error_message
+
+              .fr-grid-row.fr-grid-row--middle
+                = form.label :iban, t('activerecord.attributes.rib.iban')
+                .fr-ml-2w.fr-col-sm-10.fr-col-12{
+                  data: {
+                    controller: "iban",
+                    iban_input_class: "fr-input",
+                    iban_container_class: "iban-container",
+                    iban_clear_button_class: "iban-clear-button",
+                    iban_part_class: "iban-part"
+                  }
+                }
+                  = form.text_field :iban, class: "fr-input fr-input--code", data: { iban_target: "originalInput" }
+                - rib.errors.full_messages_for(:iban).each do |error_message|
+                  %p.fr-error-text= error_message
+
               .fr-grid-row.fr-grid-row--middle.fr-grid-row--gutters
                 .fr-col-md-12.fr-col-12
                   .fr-mb-2w
