@@ -76,7 +76,7 @@ module ASP
       transition_to!(:ready)
     rescue ASP::Errors::IncompletePaymentRequestError
       mark_incomplete!({ incomplete_reasons: errors })
-    rescue Errors::FundingNotAvailableError
+    rescue ASP::Errors::FundingNotAvailableError
       mark_pending!({ pending_reason: "Funding not currently available" })
     end
 

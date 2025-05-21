@@ -52,7 +52,7 @@ module ASP
     guard_transition(to: :ready) do |payment_request|
       ASP::PaymentRequestValidator.new(payment_request).validate
 
-      payment_request.errors.none?
+      payment_request.payable? && payment_request.errors.none?
     end
 
     guard_transition(to: :incomplete) do |payment_request|
