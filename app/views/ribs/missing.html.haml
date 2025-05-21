@@ -1,7 +1,8 @@
 = form_with scope: :ribs, url: bulk_create_school_year_class_ribs_path(selected_school_year, @classe), method: :post do |f|
   - @ribs.each do |rib|
     = f.fields_for rib.student_id.to_s, rib do |form|
-      %fieldset.fr-fieldset.fr-m-0.fr-p-0
+      - student = rib.student
+      %fieldset.fr-fieldset.fr-m-0.fr-p-0{data: {controller: "owner-type", owner_type_student_name_value: [student.first_name, student.last_name].join(" ")}}
         %legend.hidden= rib.student.full_name
 
         .gray-panel.fr-mb-3w.fr-container.fr-p-3w
@@ -9,7 +10,7 @@
             .fr-col-md-4.fr-col-12.fr-pr-0.fr-pr-md-2w.fr-pb-2w.fr-pb-md-0
               .fr-grid-md-row.fr-grid-row--middle
                 .fr-col.fr-mb-3w
-                  %h2.fr-mb-1w= dsfr_link_to rib.student.full_name, student_path(rib.student), title: t("links.students.show", name: rib.student), tabindex: "1", class: 'fr-h3'
+                  %h2.fr-mb-1w= dsfr_link_to student.full_name, student_path(student), title: t("links.students.show", name: student), tabindex: "1", class: 'fr-h3'
                   = closed_schooling_information_tag(@classe.closed_schooling_of rib.student_id)
                   = form.hidden_field :student_id
 
@@ -17,7 +18,7 @@
               .fr-grid-row.fr-grid-row--middle.fr-grid-row--gutters
                 .fr-col-sm-8.fr-col-12
                   = form.label :name, "Titulaire du compte", class: "hidden"
-                  = form.text_field :name, class: "fr-input", placeholder: "Titulaire du compte"
+                  = form.text_field :name, class: "fr-input", placeholder: "Titulaire du compte", data: {"owner_type_target": "inputName"}
                   - rib.errors.full_messages_for(:name).each do |error_message|
                     %p.fr-error-text= error_message
                 .fr-col-sm-4.fr-col-12
@@ -44,6 +45,6 @@
               .fr-grid-row.fr-grid-row--middle.fr-grid-row--gutters
                 .fr-col-md-12.fr-col-12
                   .fr-mb-2w
-                    = render partial: 'ribs/owner_type/owner_type_horizontal', locals: { student_id: rib.student_id, field_name: "ribs[#{rib.student_id}][owner_type]", current_value: rib.owner_type }
+                    = render partial: 'ribs/owner_type/owner_type_horizontal', locals: { student_id: rib.student_id, field_name: "ribs[#{rib.student_id}][owner_type]", rib: rib }
 
   = f.submit "Enregistrer les coordonnées bancaires saisies", class: "fr-btn fr-btn-primary"
