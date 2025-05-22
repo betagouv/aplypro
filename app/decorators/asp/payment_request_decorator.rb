@@ -23,7 +23,7 @@ module ASP
 
     def status_badge
       dsfr_badge(status: BADGE_STATE_MAPPING[current_state.to_sym], classes: ["fr-badge--sm"]) do
-        status
+        status(current_state.to_sym)
       end
     end
 
@@ -32,7 +32,7 @@ module ASP
         disabled = "disabled" if current_state_symbol != state
 
         dsfr_badge(status: BADGE_STATE_MAPPING[state], classes: ["fr-badge--sm", disabled]) do
-          I18n.t("payment_requests.state.#{state}")
+          status(state)
         end
       end
     end
@@ -51,8 +51,8 @@ module ASP
       current_state.to_sym
     end
 
-    def status
-      t("payment_requests.state.#{current_state}")
+    def status(state)
+      t("payment_requests.state.#{state}")
     end
 
     def status_explanation # rubocop:disable Metrics/AbcSize

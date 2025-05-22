@@ -126,7 +126,7 @@ module ASP
       last_transition.present? && last_transition.metadata["ORDREREVERSEMENT"].present?
     end
 
-    def eligible_for_incomplete_retry?
+    def eligible_for_incomplete_auto_retry?
       return false unless in_state?(:incomplete)
 
       retryable_messages = RETRYABLE_INCOMPLETE_VALIDATION_TYPES.map do |r|

@@ -148,19 +148,19 @@ RSpec.describe ASP::PaymentRequest do
 
     context "when the payment request is in 'incomplete' state with the abrogation specific error message" do
       it "returns true" do
-        expect(p_r_incomplete_for_abrogation.eligible_for_incomplete_retry?).to be true
+        expect(p_r_incomplete_for_abrogation.eligible_for_incomplete_auto_retry?).to be true
       end
     end
 
     context "when the payment request is in 'incomplete' state with the missing DA specific error message" do
       it "returns true" do
-        expect(p_r_incomplete_for_missing_da.eligible_for_incomplete_retry?).to be true
+        expect(p_r_incomplete_for_missing_da.eligible_for_incomplete_auto_retry?).to be true
       end
     end
 
     context "when the payment request is not in 'incomplete' state" do
       it "returns false" do
-        expect(p_r_ready.eligible_for_incomplete_retry?).to be false
+        expect(p_r_ready.eligible_for_incomplete_auto_retry?).to be false
       end
     end
   end
