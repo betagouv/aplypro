@@ -1,4 +1,4 @@
-%h2.fr-mt-2w= "Établissement: #{@establishment_data[:name]}"
+%h2.fr-mt-2w= "Établissement: #{@establishment_data[@etab.uai][:name]}"
 
 .fr-container.fr-my-4w
   .fr-grid-row
@@ -13,10 +13,10 @@
                 = @etab.uai
               %li
                 %strong Nombre de scolarités:
-                = @establishment_data[:schooling_count]
+                = @establishment_data[@etab.uai][:schooling_count]
               %li
                 %strong Montant payé:
-                = number_to_currency(@establishment_data[:paid_amount], unit: "€", format: "%n %u")
+                = number_to_currency(@establishment_data[@etab.uai][:paid_amount], unit: "€", format: "%n %u")
 
 .fr-container
   .fr-grid-row.fr-mb-4w
