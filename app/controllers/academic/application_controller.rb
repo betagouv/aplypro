@@ -92,7 +92,7 @@ module Academic
                                                                                   payable_amount: validated_amount,
                                                                                   paid_amount: paid_amount
                                                                                 })
-        data.sort_by { |_uai, etab_data| -etab_data[:paid_amount] }
+        data = data.sort_by { |_uai, etab_data| -etab_data[:paid_amount] }.to_h
       end
       data
     end
