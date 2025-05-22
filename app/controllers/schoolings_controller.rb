@@ -15,7 +15,7 @@ class SchoolingsController < ApplicationController
   def create_attributive_decision
     @schooling.update(generating_attributive_decision: true)
 
-    Generate::AttributiveDecisionsJob.perform_later([@schooling])
+    Generate::AttributiveDecisionJob.perform_later(@schooling)
 
     redirect_to student_path(@schooling.student), notice: t("flash.da.create", name: @schooling.student.full_name)
   end
