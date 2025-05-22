@@ -19,6 +19,9 @@
                 = number_to_currency(@establishment_data[@etab.uai][:paid_amount], unit: "€", format: "%n %u")
 
 .fr-container
+  = render 'academic/establishments/establishment_timeline'
+
+.fr-container
   .fr-grid-row.fr-mb-4w
     .fr-col-12
       = link_to "Retour à la carte des établissements", academic_home_path, class: "fr-btn fr-btn--secondary", data: { turbo: false }
