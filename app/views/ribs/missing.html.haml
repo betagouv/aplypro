@@ -28,8 +28,7 @@
                     %p.fr-error-text= error_message
 
               .fr-grid-row.fr-grid-row--middle
-                = form.label :iban, t('activerecord.attributes.rib.iban')
-                .fr-ml-2w.fr-col-sm-10.fr-col-12{
+                .fr-col-sm-10.fr-col-12{
                   data: {
                     controller: "iban",
                     iban_input_class: "fr-input",
@@ -38,7 +37,7 @@
                     iban_part_class: "iban-part"
                   }
                 }
-                  = form.text_field :iban, class: "fr-input fr-input--code", data: { iban_target: "originalInput" }
+                  = form.text_field :iban, class: "fr-input fr-input--code", data: { iban_target: "originalInput" }, placeholder: "IBAN"
                 - rib.errors.full_messages_for(:iban).each do |error_message|
                   %p.fr-error-text= error_message
 
