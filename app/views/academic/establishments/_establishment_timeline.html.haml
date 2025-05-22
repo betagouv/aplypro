@@ -1,0 +1,60 @@
+.row
+  %h2= "Année scolaire #{selected_school_year}"
+
+- if @establishment_facade.students_count <= 0
+  .row
+    = t("errors.school_years.not_found").html_safe
+- else
+  - dsfr_colors = { blue: "#000091", light_blue: "#bccdff", green: "#88fdaa", red: "#ffbdbd" }
+
+  .fr-container.fr-mb-5w
+    .fr-grid-row.fr-grid-row--gutters.fr-mb-5w
+      .fr-col-12.fr-col-lg-6
+        .gray-panel.timeline-section.fr-p-3w
+          .fr-grid-row.fr-grid-row--top
+            %h2.fr-col 1. Décisions d'attribution
+            = attributive_decisions_progress_badge(@establishment_facade.selected_schoolings, title: "Les décisions d'attribution sont générés pour chaque scolarité,\ny compris pour les élèves sortis de classes.")
+          %p.fr-mb-2w La décision d'attribution annuelle rend éligible l'élève à percevoir l'allocation, et ce pour chaque classe dans laquelle il a effectué une scolarité.
+          %p.fr-mb-3w Ce document doit obligatoirement être transmis à l'élève et conservé toute l'année scolaire et il doit être archivé par l'établissement pendant une durée de 10 ans en cas de contrôle de la chaîne des dépenses publiques.
+          .chart-container.fr-mb-2w
+            = pie_chart({ "Élèves avec DA" => @establishment_facade.attributive_decisions_count, "Élèves sans DA" => @establishment_facade.without_attributive_decisions_count }, colors: [dsfr_colors[:green], dsfr_colors[:red]], donut: true)
+
+      .fr-col-12.fr-col-lg-6
+        .gray-panel.timeline-section.fr-p-3w
+          .fr-grid-row.fr-grid-row--top
+            %h2.fr-col 2. Coordonnées bancaires
+            = ribs_progress_badge(@etab.schoolings, title: "Les coordonnées bancaires sont réutilisées pour un même élève\nà travers toutes les classes qu'il a pu fréquenter.")
+          %p.fr-mb-3w Afin de pouvoir verser l'allocation aux lycéens, APLyPro a besoin de leurs coordonnées bancaires, de celles d'un responsable légal ou d'un tiers.
+          .chart-container.fr-mb-2w
+            = pie_chart({ "Élèves avec RIB" => @establishment_facade.ribs_count, "Élèves sans RIB" => @establishment_facade.students_without_rib_count }, colors: [dsfr_colors[:green], dsfr_colors[:red]], donut: true)
+
+    .fr-grid-row.fr-grid-row--gutters
+      .fr-col-12.fr-col-lg-6
+        .gray-panel.timeline-section.fr-p-3w
+          %h2 3. Périodes de formation en milieu professionnel
+          .fr-grid-row.fr-mb-2w
+            - PfmpStateMachine.states.each_with_index do |state, index|
+              - if index > 0
+                .fr-mx-1w →
+              = pfmps_status_count_badge(state.to_sym, @establishment_facade.pfmps_counts[state.to_sym], display_zero: true)
+          %p.fr-mb-3w Pour calculer le montant des allocations à envoyer, APLyPro a besoin de connaître le nombre de jours travaillés des PFMPs de chaque élève.
+          .chart-container.fr-mb-2w
+            = column_chart(@establishment_facade.pfmps_counts.transform_keys { |key| t("pfmps.state.#{key}") },
+              colors: [dsfr_colors[:light_blue], dsfr_colors[:red], dsfr_colors[:green], dsfr_colors[:red]],
+              label: "PFMPs par états")
+
+      .fr-col-12.fr-col-lg-6
+        .gray-panel.timeline-section.fr-p-3w
+          %h2 4. Demandes de paiements des PFMPs
+          .fr-grid-row.fr-mb-2w
+            - ASP::PaymentRequestDecorator::PAYMENT_STAGES.each_with_index do |states, index|
+              - if index > 0
+                .fr-mx-1w →
+              .centering-container
+                = payment_requests_status_count_badge(states.first, @establishment_facade.payment_requests_counts[states.first], display_zero: true)
+                = payment_requests_status_count_badge(states.last, @establishment_facade.payment_requests_counts[states.last], display_zero: false)
+          %p.fr-mb-3w La validation du chef d'établissement est nécessaire pour chaque PFMP. Une fois la PFMP validée, une demande de paiement est ensuite envoyée à l'Agence de Services et de Paiement (ASP). Chaque demande de paiement possède un statut affiché dans la page "Paiements".
+          .chart-container.fr-mb-2w
+            = column_chart(@establishment_facade.payment_requests_counts.transform_keys { |key| t("payment_requests.state.#{key}") },
+              colors: [dsfr_colors[:blue], dsfr_colors[:red], dsfr_colors[:light_blue], dsfr_colors[:red], dsfr_colors[:green], dsfr_colors[:red]],
+              label: "Demandes de paiements par états")

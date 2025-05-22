@@ -14,7 +14,7 @@ RSpec.describe Academic::EstablishmentsController do
       [establishment.academy_code]
     )
     allow_any_instance_of(described_class).to receive(:selected_academy).and_return(establishment.academy_code) # rubocop:disable RSpec/AnyInstance
-    allow_any_instance_of(described_class).to receive(:selected_school_year).and_return(school_year.id) # rubocop:disable RSpec/AnyInstance
+    allow_any_instance_of(described_class).to receive(:selected_school_year).and_return(school_year) # rubocop:disable RSpec/AnyInstance
   end
 
   describe "GET show" do
