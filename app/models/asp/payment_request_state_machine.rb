@@ -17,10 +17,12 @@ module ASP
     FAILED_STATES = %i[rejected unpaid incomplete].freeze
     TERMINATED_STATES = FAILED_STATES + ["paid"].freeze
 
+    transition from: :pending, to: :pending
     transition from: :pending, to: :ready
     transition from: :pending, to: :incomplete
     transition from: :incomplete, to: :incomplete
     transition from: :incomplete, to: :ready
+    transition from: :incomplete, to: :pending
     transition from: :ready, to: :sent
     transition from: :sent, to: :rejected
     transition from: :sent, to: :integrated
@@ -50,7 +52,7 @@ module ASP
     guard_transition(to: :ready) do |payment_request|
       ASP::PaymentRequestValidator.new(payment_request).validate
 
-      payment_request.errors.none?
+      payment_request.payable? && payment_request.errors.none?
     end
 
     guard_transition(to: :incomplete) do |payment_request|
@@ -62,6 +64,8 @@ module ASP
     end
 
     after_guard_failure(to: :ready) do |payment_request, _exception|
+      raise ASP::Errors::FundingNotAvailableError unless payment_request.payable?
+
       raise(
         ASP::Errors::IncompletePaymentRequestError,
         "Conditions missing to mark the payment request as ready: #{payment_request.errors.full_messages.join('\n')}"

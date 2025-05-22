@@ -76,6 +76,12 @@ module ASP
       transition_to!(:ready)
     rescue ASP::Errors::IncompletePaymentRequestError
       mark_incomplete!({ incomplete_reasons: errors })
+    rescue ASP::Errors::FundingNotAvailableError
+      mark_pending!({ pending_reason: "Funding not currently available" })
+    end
+
+    def mark_pending!(metadata)
+      transition_to!(:pending, metadata)
     end
 
     def mark_sent!
@@ -141,6 +147,10 @@ module ASP
       decorator = ActiveDecorator::Decorator.instance.decorate(self)
       message = in_state?(:rejected) ? decorator.rejected_reason : decorator.unpaid_reason
       reasons.any? { |word| message.downcase.include?(word) }
+    end
+
+    def payable?
+      schooling.classe.mef.funding_available?
     end
 
     def reconstructed_iban
