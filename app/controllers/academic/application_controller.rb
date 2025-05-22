@@ -73,28 +73,31 @@ module Academic
 
     # NOTE: the schena of this entity is a draft
     def establishments_data_summary(ids) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-      data = {}
-      Establishment.where(id: ids).find_each do |establishment|
-        pfmps = establishment.pfmps
-                             .joins(schooling: { classe: :school_year })
-                             .where(classes: { school_year_id: selected_school_year })
+      cache_key = "establishments_data_summary/#{ids.sort.join('-')}/school_year/#{selected_school_year}"
 
-        schooling_count = establishment.schoolings.count
-        validated_amount = pfmps.joins(:transitions)
-                                .where(pfmp_transitions: { to_state: "validated", most_recent: true })
-                                .sum(:amount)
-        paid_amount = pfmps.joins(payment_requests: :asp_payment_request_transitions)
-                           .where(asp_payment_request_transitions: { to_state: "paid", most_recent: true })
-                           .sum(:amount)
+      Rails.cache.fetch(cache_key, expires_in: 2.hours) do
+        data = {}
+        Establishment.where(id: ids).find_each do |establishment|
+          pfmps = establishment.pfmps
+                               .joins(schooling: { classe: :school_year })
+                               .where(classes: { school_year_id: selected_school_year })
 
-        data[establishment.uai] = establishment.attributes.symbolize_keys.merge({
-                                                                                  schooling_count: schooling_count,
-                                                                                  payable_amount: validated_amount,
-                                                                                  paid_amount: paid_amount
-                                                                                })
-        data = data.sort_by { |_uai, etab_data| -etab_data[:paid_amount] }.to_h
+          schooling_count = establishment.schoolings.count
+          validated_amount = pfmps.joins(:transitions)
+                                  .where(pfmp_transitions: { to_state: "validated", most_recent: true })
+                                  .sum(:amount)
+          paid_amount = pfmps.joins(payment_requests: :asp_payment_request_transitions)
+                             .where(asp_payment_request_transitions: { to_state: "paid", most_recent: true })
+                             .sum(:amount)
+
+          data[establishment.uai] = establishment.attributes.symbolize_keys.merge({
+                                                                                    schooling_count: schooling_count,
+                                                                                    payable_amount: validated_amount,
+                                                                                    paid_amount: paid_amount
+                                                                                  })
+        end
+        data.sort_by { |_uai, etab_data| -etab_data[:paid_amount] }.to_h
       end
-      data
     end
   end
 end

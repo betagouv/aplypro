@@ -7,7 +7,7 @@ module Academic
     helper_method :current_establishment
 
     def show
-      @establishment_data = establishments_data_summary(@etab.id)
+      @establishment_data = establishments_data_summary([@etab.id])
     end
 
     private
