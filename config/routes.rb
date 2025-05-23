@@ -103,6 +103,7 @@ Rails.application.routes.draw do
           get "confirm_removal"
           get "confirm_removal_cancellation"
           post "remove"
+          post "create_attributive_decision"
         end
 
         resources :pfmps, except: :index do
