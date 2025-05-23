@@ -46,7 +46,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     @ribs = @classe
             .active_students
             .without_ribs
-            .map { |student| Rib.new(student: student, owner_type: :personal, name: student.full_name) }
+            .map { |student| Rib.new(student: student, owner_type: :personal) }
   end
 
   def bulk_create
