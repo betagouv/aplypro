@@ -6,7 +6,7 @@ module ASP
     STATE_MACHINE_CLASS = ASP::PaymentRequestStateMachine
 
     TRANSITION_RELATION_NAME = :asp_payment_request_transitions
-
+    FUNDING_ISSUE = "Funding not currently available"
     RETRYABLE_INCOMPLETE_VALIDATION_TYPES = %i[
       needs_abrogated_attributive_decision
       missing_attributive_decision
@@ -77,7 +77,9 @@ module ASP
     rescue ASP::Errors::IncompletePaymentRequestError
       mark_incomplete!({ incomplete_reasons: errors })
     rescue ASP::Errors::FundingNotAvailableError
-      mark_pending!({ pending_reason: "Funding not currently available" })
+      unless last_transition.metadata["pending_reasons"] == FUNDING_ISSUE
+        mark_pending!({ pending_reason: FUNDING_ISSUE })
+      end
     end
 
     def mark_pending!(metadata)
