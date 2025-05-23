@@ -77,7 +77,7 @@ module ASP
     rescue ASP::Errors::IncompletePaymentRequestError
       mark_incomplete!({ incomplete_reasons: errors })
     rescue ASP::Errors::FundingNotAvailableError
-      mark_pending!({ pending_reason: "Funding not currently available" })
+      mark_pending!({ pending_reason: "Funding not currently available" }) unless in_state?(:pending)
     end
 
     def mark_pending!(metadata)
