@@ -35,6 +35,8 @@ class Mef < ApplicationRecord
     # Enable follow up lines for when ministry doesnt have funding anymore again
     # For instance to block all menj outgoing payments:
     # return unless ministry.eql?("menj")
+    return false if %w[2762121432 2762121433].include?(code)
+
     true
   end
 end
