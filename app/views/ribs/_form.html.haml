@@ -1,4 +1,4 @@
-= form_with model: [@student, @rib], builder: DsfrFormBuilder do |form|
+= form_with model: [@student, @rib], builder: DsfrFormBuilder, data: {controller: "owner-type", owner_type_student_name_value: [@student.first_name, @student.last_name].join(" ")} do |form|
   = form.dsfr_error_summary
 
   - current_value = @rib.owner_type
@@ -9,9 +9,9 @@
         %p Important : Un élève majeur doit obligatoirement être payé sur ses coordonnées bancaires ou celles d'un tiers.
         %p= "Nous avons détecté que l'élève est majeur depuis le #{I18n.l(@student.birthdate + 18.years)}, veuillez donc vérifier que l'option sélectionnée est bien la bonne."
 
-  = render partial: 'ribs/owner_type/owner_type_vertical', locals: { current_value: current_value }
+  = render partial: 'ribs/owner_type/owner_type_vertical', locals: { rib: @rib }
 
-  = form.dsfr_text_field(:name, width: 'md-4')
+  = form.dsfr_text_field(:name, width: 'md-4', data: {"owner_type_target": "studentNameInput"})
 
   .fr-input-group
   %label.fr-label{for: "rib_iban"}

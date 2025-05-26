@@ -47,6 +47,9 @@ export default class extends Controller {
             input.dataset.index = i
             input.setAttribute("data-iban-target", "part")
             input.setAttribute("aria-label", `IBAN part ${i + 1} of ${numParts}`)
+            if (i === 0) {
+                input.placeholder = "IBAN"
+            }
             input.value = value.slice(i * this.charsPerGroupValue, (i + 1) * this.charsPerGroupValue)
 
             input.addEventListener("input", this.handleInput)
