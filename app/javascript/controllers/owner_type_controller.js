@@ -1,7 +1,7 @@
 import {Controller} from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ["radioButton", "inputName"]
+    static targets = ["personalButton", "studentNameInput"]
     static values = {
         studentName: String
     }
@@ -11,8 +11,8 @@ export default class extends Controller {
     }
 
     updateName() {
-        if (this.radioButtonTarget.checked) {
-            this.inputNameTarget.value = this.studentNameValue
+        if (this.personalButtonTarget.checked) {
+            this.studentNameInputTarget.value = this.studentNameValue
         }
     }
 }

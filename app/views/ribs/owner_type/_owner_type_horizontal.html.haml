@@ -11,7 +11,7 @@
 
   .fr-fieldset__element.fr-fieldset__element--inline
     .fr-radio-group
-      %input{id: "radio-inline-1-#{student_id}", type: "radio", value: "personal", name: field_name, checked: is_new ? true : current_value == "personal", data: {owner_type_target: "radioButton", action: "owner-type#updateName"}}
+      %input{id: "radio-inline-1-#{student_id}", type: "radio", value: "personal", name: field_name, checked: is_new ? true : current_value == "personal", data: {owner_type_target: "personalButton", action: "owner-type#updateName"}}
       %label.fr-label{for: "radio-inline-1-#{student_id}"}
         = t("activerecord.attributes.missing.owner_type_personal")
   .fr-fieldset__element.fr-fieldset__element--inline
