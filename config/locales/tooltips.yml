@@ -22,5 +22,5 @@ fr:
         <li>> Vous n'êtes pas chef d'établissement</li>
         <li>> La scolarité n'a pas de décision d'attribution générée</li>
         <li>> Une abrogation de décision d'attribution a déjà été générée</li>
-        <li>> La scolarité est active</li>  
+        <li>> La scolarité n'a pas de date de fin</li>  
       </ul>
