@@ -32,17 +32,10 @@ module SchoolingsHelper
       (entre le #{string_start_date} et le #{string_end_date})."
   end
 
-  def cancellation_disabled?(schooling)
-    disabled?(schooling) || schooling.cancellation_decision.attached?
-  end
-
-  def abrogation_disabled?(schooling)
-    disabled?(schooling) || schooling.abrogation_decision.attached? || schooling.end_date.blank?
-  end
-
-  private
-
-  def disabled?(schooling)
-    !current_user.can_validate? || !schooling.attributive_decision.attached?
+  def disabled_buttons?(schooling)
+    !current_user.can_validate? ||
+      !schooling.attributive_decision.attached? ||
+      schooling.abrogation_decision.attached? ||
+      schooling.end_date.blank?
   end
 end
