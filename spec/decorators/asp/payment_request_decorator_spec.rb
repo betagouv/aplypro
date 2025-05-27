@@ -37,9 +37,9 @@ describe ASP::PaymentRequestDecorator do
       let(:payment_request) { create(:asp_payment_request, :rejected, reason: "foo") }
 
       before do
-        allow(ASP::ErrorsDictionary).to receive(:definition).with("foo").and_return(key: :something)
+        allow(ASP::ErrorsDictionary).to receive(:rejected_definition).with("foo").and_return(key: :something)
         allow(I18n).to receive(:t).and_call_original
-        allow(I18n).to receive(:t).with("asp.errors.something").and_return "nicer error"
+        allow(I18n).to receive(:t).with("asp.errors.rejected.something").and_return "nicer error"
       end
 
       it "uses the right traduction" do

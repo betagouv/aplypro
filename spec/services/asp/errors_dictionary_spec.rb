@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe ASP::ErrorsDictionary do
   describe ".definition" do
-    subject { described_class.definition(str) }
+    subject { described_class.rejected_definition(str) }
 
     context "when the string doesn't match anything" do
       let(:str) { "random" }
