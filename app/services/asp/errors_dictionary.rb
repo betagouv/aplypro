@@ -10,6 +10,10 @@ module ASP
       {
         key: :administrative_number_already_taken,
         regexp: /ro administratif(.*)n'est pas unique/
+      },
+      {
+        key: :payment_coordinates_blocked,
+        regexp: /Coord. paiement bloquees/
       }
     ].freeze
 
