@@ -18,13 +18,12 @@ module ASP
     ].freeze
 
     UNPAID_DEFINITIONS = [
-      IAL: :payment_failed,
-      IAM: :payment_failed,
       ICO: :previous_bank_rejection,
       IDR: :anomaly_detected,
+      INR: :processing_control,
+      IPR: :control_anomaly,
       RJT: :payment_difficulty,
-      TR1: :technical_support,
-      TR2: :technical_support,
+      SFR: :fraud_suspicion
     ].freeze
 
     class << self
@@ -33,7 +32,13 @@ module ASP
       end
 
       def unpaid_definition(code)
-        UNPAID_DEFINITIONS[code]
+        return :technical_support if code.nil?
+
+        res = UNPAID_DEFINITIONS[code]
+
+        return :technical_support if res.nil?
+
+        res
       end
     end
   end
