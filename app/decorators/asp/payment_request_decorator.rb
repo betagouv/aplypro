@@ -88,12 +88,9 @@ module ASP
 
     def unpaid_reason
       code = last_transition.metadata["PAIEMENT"]["CODEMOTIFINVALIDATION"]
+      error = ASP::ErrorsDictionary.unpaid_definition(code)
 
-      if code.present? && (error = ASP::ErrorsDictionary.unpaid_definition(code))
-        I18n.t("asp.errors.unpaid.#{error}")
-      else
-        last_transition.metadata["PAIEMENT"]["LIBELLEMOTIFINVAL"]
-      end
+      I18n.t("asp.errors.unpaid.#{error}")
     end
 
     def incomplete_reason
