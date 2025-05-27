@@ -10,10 +10,11 @@ describe ASP::PaymentRequestDecorator do
   describe "unpaid reason" do
     subject(:reason) { decorator.unpaid_reason }
 
-    let(:payment_request) { create(:asp_payment_request, :unpaid, reason: "failwhale") }
+    let(:code_motif) { "ICO" }
+    let(:payment_request) { create(:asp_payment_request, :unpaid, code_motif: code_motif) }
 
-    it "finds the right metadata" do
-      expect(reason).to eq "failwhale"
+    it "finds the right unpaid definition" do
+      expect(reason).to eq I18n.t("asp.errors.unpaid.#{ASP::ErrorsDictionary::UNPAID_DEFINITIONS[code_motif.to_sym]}")
     end
   end
 

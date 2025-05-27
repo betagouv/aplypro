@@ -17,14 +17,14 @@ module ASP
       }
     ].freeze
 
-    UNPAID_DEFINITIONS = [
+    UNPAID_DEFINITIONS = {
       ICO: :previous_bank_rejection,
       IDR: :anomaly_detected,
       INR: :processing_control,
       IPR: :control_anomaly,
       RJT: :payment_difficulty,
       SFR: :fraud_suspicion
-    ].freeze
+    }.freeze
 
     class << self
       def rejected_definition(str)
@@ -34,7 +34,7 @@ module ASP
       def unpaid_definition(code)
         return :technical_support if code.nil?
 
-        res = UNPAID_DEFINITIONS[code]
+        res = UNPAID_DEFINITIONS[code.to_sym]
 
         return :technical_support if res.nil?
 
