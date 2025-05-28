@@ -111,9 +111,9 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
 #    Alors la page ne contient pas "Télécharger la décision de retrait"
 #    Quand je clique sur "Révoquer la décision d'attribution"
 #    Et que je coche la case de responsable légal
-#    Et que je clique sur "Confirmer le retrait"
+#    Et que je clique sur "Confirmer la révocation"
 #    Alors la page contient "La décision d'attribution de Curie Marie a bien été retirée"
-#    Et la page ne contient pas "Révoquer la décision d'attribution"
+#    Et la page contient un bouton "Révoquer la décision d'attribution" désactivé
 #    Et la page contient "Télécharger la décision de retrait"
 #    Quand je consulte la classe de "1MELEC"
 #    Alors je peux voir dans le tableau "Élèves masqués manuellement de la classe"
@@ -129,3 +129,12 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Et que je passe l'écran d'accueil
     Quand je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
     Alors la page contient un bouton "Autoriser un report" désactivé
+
+  Scénario: Le personnel peut générer une décision d'attribution d'attribution individuelle
+    Lorsque je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
+    Et que je clique sur "Éditer la décision d'attribution manquante"
+    Alors la page ne contient pas "Éditer la décision d'attribution manquante"
+    Alors la page contient "Édition de la décision d'attribution en cours"
+    Quand la génération des décisions d'attribution manquantes est complètement finie
+    Et que je rafraîchis la page
+    Alors la page ne contient pas "Édition de la décision d'attribution en cours"

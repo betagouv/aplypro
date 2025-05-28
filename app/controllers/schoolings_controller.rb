@@ -12,6 +12,14 @@ class SchoolingsController < ApplicationController
                                                    confirm_cancellation_decision
                                                    confirm_abrogation]
 
+  def create_attributive_decision
+    @schooling.update(generating_attributive_decision: true)
+
+    Generate::AttributiveDecisionJob.perform_later(@schooling)
+
+    redirect_to student_path(@schooling.student), notice: t("flash.da.create", name: @schooling.student.full_name)
+  end
+
   def abrogate_decision
     Generate::AbrogationDecisionJob.perform_now(@schooling)
 
