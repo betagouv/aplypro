@@ -109,6 +109,7 @@ FactoryBot.define do
 
       transient do
         reason { Faker::Lorem.sentence(word_count: 20) }
+        code_motif { "RJT" }
       end
 
       after(:create) do |payment_request, ctx|
@@ -117,7 +118,8 @@ FactoryBot.define do
           :failed,
           builder_class: ASP::Builder,
           payment_request: payment_request,
-          reason: ctx.reason
+          reason: ctx.reason,
+          code_motif: ctx.code_motif
         )
         payment_return = create(:asp_payment_return)
 

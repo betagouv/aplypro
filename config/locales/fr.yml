@@ -443,8 +443,18 @@ fr:
     confirm: Je confirme que <strong>je suis le responsable légal de l'établissement</strong> et qu'en tant qu'<strong>ordonnateur</strong> je rectifie informatiquement cette demande de paiement dans le cadre de la gestion d'un indu.
   asp:
     errors:
-      bank_coordinates_not_found: Les coordonnées bancaires ne correspondent à aucune agence connue, veuillez vérifier l'IBAN et le BIC saisis
-      administrative_number_already_taken: Une erreur technique interne à APLyPro est survenue, merci de patientez le temps que l'équipe identifie et corrige le problème
+      rejected:
+        bank_coordinates_not_found: Les coordonnées bancaires ne correspondent à aucune agence connue, veuillez vérifier l'IBAN et le BIC saisis
+        administrative_number_already_taken: Une incohérence semble exister entre le code INSEE et le code postal de la commune de résidence de l'élève.
+        payment_coordinates_blocked: Un premier paiement a été tenté par l’ASP, suite à l’échec de celui ci les coordonnées bancaires sont considérées comme bloquées. Pour ces cas l’ASP prend contact avec l’établissement afin de débloquer le premier paiement. Une fois ce déblocage terminé, l’établissement pourra retenter une nouvelle demande de paiement.
+      unpaid:
+        technical_support: Le paiement a échoué, merci de prendre contact avec votre support technique.
+        previous_bank_rejection: La coordonnée de paiement est actuellement bloquée, soit en raison d’un rejet bancaire antérieur en cours de traitement, soit pour suspicion de fraude. L'ASP va prochainement prendre contact avec vous pour indiquer la marche à suivre.
+        anomaly_detected: Suite à un contrôle de l’ASP, une anomalie a été détectée sur la demande de paiement, souvent liée à un risque d’erreur de RIB. Merci de vérifier que la coordonnée bancaire saisie (IBAN/BIC) correspond bien au bénéficiaire ou à son représentant légal, et de la corriger si nécessaire avant de renvoyer les informations des PFMP et versements concernés.
+        processing_control: Ce rejet est lié à un contrôle en cours par l’Agence comptable de l’ASP. Merci d’attendre les précisions de l’ASP concernant les pièces justificatives ou actions à engager.
+        control_anomaly: Ce rejet fait suite à un contrôle de l’Agence comptable de l’ASP ayant mis en évidence une problématique dans le dossier. Merci d’attendre les précisions de l’ASP concernant les pièces justificatives ou actions à engager.
+        payment_difficulty: Ce rejet est lié à un problème technique lors du paiement, comme un RIB non compatible avec les virements ; un mail de l’ASP vous sera envoyé pour expliquer l’origine du blocage et indiquer les éléments à fournir ou corriger. Merci d’attendre les précisions de l’ASP concernant les pièces justificatives ou actions à engager.
+        fraud_suspicion: Ce rejet peut être lié à une suspicion de fraude sur la coordonnée de paiement, même si celle-ci concerne un autre dispositif. Merci d’attendre les précisions de l’ASP concernant les pièces justificatives ou actions à engager.
   academic:
     welcome:
       title: Bonjour et bienvenue sur la page APLyPro dédiée aux utilisateurs qui ne sont pas en établissement !

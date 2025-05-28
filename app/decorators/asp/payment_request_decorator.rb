@@ -79,15 +79,18 @@ module ASP
     def rejected_reason
       msg = last_transition.metadata["Motif rejet"]
 
-      if (error = ASP::ErrorsDictionary.definition(msg))
-        I18n.t("asp.errors.#{error[:key]}")
+      if (error = ASP::ErrorsDictionary.rejected_definition(msg))
+        I18n.t("asp.errors.rejected.#{error[:key]}")
       else
         msg
       end
     end
 
     def unpaid_reason
-      last_transition.metadata["PAIEMENT"]["LIBELLEMOTIFINVAL"]
+      code = last_transition.metadata["PAIEMENT"]["CODEMOTIFINVAL"]
+      error = ASP::ErrorsDictionary.unpaid_definition(code)
+
+      I18n.t("asp.errors.unpaid.#{error}")
     end
 
     def incomplete_reason

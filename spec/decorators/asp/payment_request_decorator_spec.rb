@@ -10,10 +10,11 @@ describe ASP::PaymentRequestDecorator do
   describe "unpaid reason" do
     subject(:reason) { decorator.unpaid_reason }
 
-    let(:payment_request) { create(:asp_payment_request, :unpaid, reason: "failwhale") }
+    let(:code_motif) { "ICO" }
+    let(:payment_request) { create(:asp_payment_request, :unpaid, code_motif: code_motif) }
 
-    it "finds the right metadata" do
-      expect(reason).to eq "failwhale"
+    it "finds the right unpaid definition" do
+      expect(reason).to eq I18n.t("asp.errors.unpaid.#{ASP::ErrorsDictionary::UNPAID_DEFINITIONS[code_motif.to_sym]}")
     end
   end
 
@@ -37,9 +38,9 @@ describe ASP::PaymentRequestDecorator do
       let(:payment_request) { create(:asp_payment_request, :rejected, reason: "foo") }
 
       before do
-        allow(ASP::ErrorsDictionary).to receive(:definition).with("foo").and_return(key: :something)
+        allow(ASP::ErrorsDictionary).to receive(:rejected_definition).with("foo").and_return(key: :something)
         allow(I18n).to receive(:t).and_call_original
-        allow(I18n).to receive(:t).with("asp.errors.something").and_return "nicer error"
+        allow(I18n).to receive(:t).with("asp.errors.rejected.something").and_return "nicer error"
       end
 
       it "uses the right traduction" do
