@@ -125,8 +125,10 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     normalized_last_name = last_name.tr("-'", " ").squeeze(" ").strip
 
     Student.where(
-      "LOWER(UNACCENT(REGEXP_REPLACE(REGEXP_REPLACE(first_name, '[''\\-]', ' ', 'g'), '\\s+', ' ', 'g'))) = LOWER(UNACCENT(?)) AND " \
-      "LOWER(UNACCENT(REGEXP_REPLACE(REGEXP_REPLACE(last_name, '[''\\-]', ' ', 'g'), '\\s+', ' ', 'g'))) = LOWER(UNACCENT(?)) AND " \
+      "LOWER(UNACCENT(REGEXP_REPLACE(REGEXP_REPLACE(first_name, '[''\\-]', ' ', 'g'), '\\s+', ' ', 'g'))) = " \
+      "LOWER(UNACCENT(?)) AND " \
+      "LOWER(UNACCENT(REGEXP_REPLACE(REGEXP_REPLACE(last_name, '[''\\-]', ' ', 'g'), '\\s+', ' ', 'g'))) = " \
+      "LOWER(UNACCENT(?)) AND " \
       "birthdate = ? AND " \
       "birthplace_city_insee_code = ?",
       normalized_first_name, normalized_last_name, birthdate, birthplace_city_insee_code
