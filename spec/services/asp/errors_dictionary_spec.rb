@@ -30,32 +30,32 @@ describe ASP::ErrorsDictionary do
   describe ".rejected_definition" do
     subject { described_class.rejected_definition(str) }
 
+    context "when the string is nil" do
+      let(:str) { nil }
+
+      it { is_expected.to eq :technical_support }
+    end
+
     context "when the string doesn't match anything" do
       let(:str) { "random" }
 
-      it { is_expected.to be_nil }
+      it { is_expected.to eq :technical_support }
     end
 
-    [
-      [
-        "Les codes saisis (16598, 00001 et FPRLFR21) n existent pas dans le
-          referentiel refdombancaire ou ne sont pas actifs à cette date",
-        :bank_coordinates_not_found
-      ],
-      [
-        "La demande a été rejetée : Le numÃ©ro administratif MASA2023301 n'est pas unique",
-        :technical_support
-      ],
-      [
-        "Le code saisi (VREFHEXAPOSTE) n'existe pas dans le dictionnaire des referentiels",
-        :inconsistent_address
-      ]
-    ].each do |msg, key|
-      context "with a message like \"#{msg.truncate(40).strip}\"" do
-        let(:str) { msg }
+    I18n.t("asp.errors.rejected.returns").each_key do |key|
+      context "when '#{key}' has a return and a response in 'fr.yml'" do
+        let(:str) { I18n.t("asp.errors.rejected.returns.#{key}") }
 
-        it { is_expected.to include({ key: key }) }
+        it { is_expected.to eq key }
       end
+    end
+
+    context "when the string match (With REGEX)" do
+      let(:str) do
+        "Les codes saisis 123456 n existent pas dans le referentiel refdombancaire ou ne sont pas actifs à cette date"
+      end
+
+      it { is_expected.to eq :refdombancaire_not_found }
     end
   end
 end

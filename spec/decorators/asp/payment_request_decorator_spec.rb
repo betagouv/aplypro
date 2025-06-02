@@ -38,9 +38,9 @@ describe ASP::PaymentRequestDecorator do
       let(:payment_request) { create(:asp_payment_request, :rejected, reason: "foo") }
 
       before do
-        allow(ASP::ErrorsDictionary).to receive(:rejected_definition).with("foo").and_return(key: :something)
+        allow(ASP::ErrorsDictionary).to receive(:rejected_definition).with("foo").and_return(:something)
         allow(I18n).to receive(:t).and_call_original
-        allow(I18n).to receive(:t).with("asp.errors.rejected.something").and_return "nicer error"
+        allow(I18n).to receive(:t).with("asp.errors.rejected.responses.something").and_return "nicer error"
       end
 
       it "uses the right traduction" do
@@ -52,7 +52,7 @@ describe ASP::PaymentRequestDecorator do
       let(:payment_request) { create(:asp_payment_request, :rejected, reason: "c'est dimanche") }
 
       it "uses the original reason" do
-        expect(reason).to eq "c'est dimanche"
+        expect(reason).to eq I18n.t("asp.errors.rejected.responses.technical_support")
       end
     end
   end

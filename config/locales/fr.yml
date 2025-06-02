@@ -444,10 +444,34 @@ fr:
   asp:
     errors:
       rejected:
-        technical_support: Un problème est survenu, merci de prendre contact avec votre support technique.
-        bank_coordinates_not_found: Les coordonnées bancaires ne correspondent à aucune agence connue, veuillez vérifier l'IBAN et le BIC saisis
-        inconsistent_address: Une incohérence semble exister entre le code INSEE et le code postal de la commune de résidence de l'élève.
-        payment_coordinates_blocked: Un premier paiement a été tenté par l’ASP, suite à l’échec de celui ci les coordonnées bancaires sont considérées comme bloquées. Pour ces cas l’ASP prend contact avec l’établissement afin de débloquer le premier paiement. Une fois ce déblocage terminé, l’établissement pourra retenter une nouvelle demande de paiement.
+        returns:
+          payment_coordinates_blocked: Coord. paiement bloquees
+          birth_commune_not_found: La commune de naissance sélectionnée n'existait pas à la date de naissance de l'individu
+          outdated_insee_code: Le code Insee commune de l'entité individu (.*)est périmé.
+          localisationgeographique_not_found: Le code saisi (.*) n'existe pas dans le LOCALISATIONGEOGRAPHIQUE
+          refinseepays_not_found: Le code saisi (.*) n'existe pas dans le referentiel refinseepays
+          refdombancaire_not_found: Les codes saisis (.*) n existent pas dans le referentiel refdombancaire ou ne sont pas actifs à cette date
+          inconsistent_address: Le code saisi (.*) n'existe pas dans le dictionnaire des referentiels
+          bic_sepa_not_allowed: Le pays correspondant au code BIC (.*) n'autorise pas le mode de réglement SEPA
+          iban_sepa_not_allowed: L'IBAN ne fait pas partie de la zone SEPA.
+          invalid_rib: Le RIB (.*) est Invalide
+          invalid_characters: Les caractères autorisés pour l'intitulé SEPA sont limités à l'alphabet latin, aux chiffres, au caractère espace et aux caractères suivants(.*)
+          invalid_payment_coordinates: La coordonnée de paiement est invalide
+          hamlet: Les codes saisis (.*) de la table REFHEXAPOSTE correspondent à un lieu-dit
+        responses:
+          payment_coordinates_blocked: Un premier paiement a été tenté par l’ASP, suite à l’échec de celui ci les coordonnées bancaires sont considérées comme bloquées. Pour ces cas l’ASP prend contact avec l’établissement afin de débloquer le premier paiement. Une fois ce déblocage terminé, l’établissement pourra retenter une nouvelle demande de paiement.
+          birth_commune_not_found: X
+          outdated_insee_code: X
+          localisationgeographique_not_found: X
+          refinseepays_not_found: X
+          refdombancaire_not_found: Les coordonnées bancaires ne correspondent à aucune agence connue, veuillez vérifier l'IBAN et le BIC saisis
+          inconsistent_address: Une incohérence semble exister entre le code INSEE et le code postal de la commune de résidence de l'élève.
+          bic_sepa_not_allowed: X
+          iban_sepa_not_allowed: X
+          invalid_rib: X
+          invalid_characters: X
+          invalid_payment_coordinates: X
+          technical_support: Un problème est survenu, merci de prendre contact avec votre support technique.
       unpaid:
         technical_support: Le paiement a échoué, merci de prendre contact avec votre support technique.
         previous_bank_rejection: La coordonnée de paiement est actuellement bloquée, soit en raison d’un rejet bancaire antérieur en cours de traitement, soit pour suspicion de fraude. L'ASP va prochainement prendre contact avec vous pour indiquer la marche à suivre.

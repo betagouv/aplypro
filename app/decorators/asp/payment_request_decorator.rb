@@ -78,12 +78,9 @@ module ASP
 
     def rejected_reason
       msg = last_transition.metadata["Motif rejet"]
+      error = ASP::ErrorsDictionary.rejected_definition(msg)
 
-      if (error = ASP::ErrorsDictionary.rejected_definition(msg))
-        I18n.t("asp.errors.rejected.#{error[:key]}")
-      else
-        msg
-      end
+      I18n.t("asp.errors.rejected.responses.#{error}")
     end
 
     def unpaid_reason
