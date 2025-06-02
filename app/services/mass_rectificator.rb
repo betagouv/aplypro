@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class MassCorrector # rubocop:disable Metrics/ClassLength
+class MassRectificator # rubocop:disable Metrics/ClassLength
   class RectificationError < StandardError; end
   class NegativeAmountError < RectificationError; end
 

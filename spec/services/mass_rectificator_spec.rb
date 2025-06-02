@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe MassCorrector do
+RSpec.describe MassRectificator do
   subject(:corrector) { described_class.new(schooling_ids) }
 
   let(:schooling_ids) { [schooling.id] }
