@@ -8,12 +8,16 @@ module ASP
         regexp: /Les codes saisis (.*) n existent pas dans le referentiel refdombancaire/
       },
       {
-        key: :administrative_number_already_taken,
+        key: :technical_support,
         regexp: /ro administratif(.*)n'est pas unique/
       },
       {
         key: :payment_coordinates_blocked,
         regexp: /Coord. paiement bloquees/
+      },
+      {
+        key: :inconsistent_address,
+        regexp: /Le code saisi (.*) n'existe pas dans le dictionnaire des referentiels/
       }
     ].freeze
 

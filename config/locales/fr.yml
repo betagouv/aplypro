@@ -444,8 +444,9 @@ fr:
   asp:
     errors:
       rejected:
+        technical_support: Un problème est survenu, merci de prendre contact avec votre support technique.
         bank_coordinates_not_found: Les coordonnées bancaires ne correspondent à aucune agence connue, veuillez vérifier l'IBAN et le BIC saisis
-        administrative_number_already_taken: Une incohérence semble exister entre le code INSEE et le code postal de la commune de résidence de l'élève.
+        inconsistent_address: Une incohérence semble exister entre le code INSEE et le code postal de la commune de résidence de l'élève.
         payment_coordinates_blocked: Un premier paiement a été tenté par l’ASP, suite à l’échec de celui ci les coordonnées bancaires sont considérées comme bloquées. Pour ces cas l’ASP prend contact avec l’établissement afin de débloquer le premier paiement. Une fois ce déblocage terminé, l’établissement pourra retenter une nouvelle demande de paiement.
       unpaid:
         technical_support: Le paiement a échoué, merci de prendre contact avec votre support technique.

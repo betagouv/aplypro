@@ -44,7 +44,11 @@ describe ASP::ErrorsDictionary do
       ],
       [
         "La demande a été rejetée : Le numÃ©ro administratif MASA2023301 n'est pas unique",
-        :administrative_number_already_taken
+        :technical_support
+      ],
+      [
+        "Le code saisi (VREFHEXAPOSTE) n'existe pas dans le dictionnaire des referentiels",
+        :inconsistent_address
       ]
     ].each do |msg, key|
       context "with a message like \"#{msg.truncate(40).strip}\"" do
