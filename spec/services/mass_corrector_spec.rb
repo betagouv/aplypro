@@ -1,0 +1,62 @@
+# frozen_string_literal: true
+
+require "rails_helper"
+
+RSpec.describe MassCorrector do
+  subject(:corrector) { described_class.new(schooling_ids) }
+
+  let(:schooling_ids) { [schooling.id] }
+  let(:schooling) { pfmp.schooling }
+  let(:student) { schooling.student }
+  let!(:pfmp) { create(:asp_payment_request, :paid).pfmp }
+
+  before do
+    allow(Rails.logger).to receive(:info)
+    allow(Rails.logger).to receive(:warn)
+    allow(Rails.logger).to receive(:error)
+  end
+
+  describe "#call" do
+    context "when processing a valid schooling" do
+      before do
+        allow_any_instance_of(Sync::StudentJob).to receive(:perform)
+        allow_any_instance_of(PfmpManager).to receive(:rectify_and_update_attributes!)
+        student.update!(
+          address_line1: "123 Main St",
+          address_country_code: "FR",
+          address_postal_code: "75001",
+          address_city_insee_code: "75101"
+        )
+      end
+
+      it "rectifies the PFMP" do # rubocop:disable RSpec/MultipleExpectations
+        results = corrector.call
+
+        expect(results[:processed]).to eq(1)
+        expect(results[:rectified]).to include(schooling.id)
+      end
+    end
+
+    context "when schooling already has rectified PFMPs" do
+      let!(:pfmp) { create(:pfmp, :rectified) }
+
+      it "skips the schooling" do
+        results = corrector.call
+
+        expect(results[:skipped]).to include(hash_including(id: schooling.id, reason: "already has rectified PFMPs"))
+      end
+    end
+
+    context "when an error occurs during processing" do
+      before do
+        allow_any_instance_of(Sync::StudentJob).to receive(:perform).and_raise(StandardError, "Test error")
+      end
+
+      it "handles the error gracefully" do
+        results = corrector.call
+
+        expect(results[:errors]).to include(hash_including(id: schooling.id, error: "Test error"))
+      end
+    end
+  end
+end
