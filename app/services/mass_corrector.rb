@@ -20,8 +20,10 @@ class MassCorrector # rubocop:disable Metrics/ClassLength
   def call
     Rails.logger.info "Processing batch of #{schooling_ids.count} schoolings"
 
-    Schooling.where(id: schooling_ids).find_each do |schooling|
-      process_schooling(schooling)
+    ApplicationRecord.transaction do
+      Schooling.where(id: schooling_ids).find_each do |schooling|
+        process_schooling(schooling)
+      end
     end
 
     log_results

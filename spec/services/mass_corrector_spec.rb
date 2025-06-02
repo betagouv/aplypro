@@ -10,17 +10,11 @@ RSpec.describe MassCorrector do
   let(:student) { schooling.student }
   let!(:pfmp) { create(:asp_payment_request, :paid).pfmp }
 
-  before do
-    allow(Rails.logger).to receive(:info)
-    allow(Rails.logger).to receive(:warn)
-    allow(Rails.logger).to receive(:error)
-  end
-
   describe "#call" do
     context "when processing a valid schooling" do
       before do
-        allow_any_instance_of(Sync::StudentJob).to receive(:perform)
-        allow_any_instance_of(PfmpManager).to receive(:rectify_and_update_attributes!)
+        allow_any_instance_of(Sync::StudentJob).to receive(:perform) # rubocop:disable RSpec/AnyInstance
+        allow_any_instance_of(PfmpManager).to receive(:rectify_and_update_attributes!) # rubocop:disable RSpec/AnyInstance
         student.update!(
           address_line1: "123 Main St",
           address_country_code: "FR",
@@ -38,7 +32,7 @@ RSpec.describe MassCorrector do
     end
 
     context "when schooling already has rectified PFMPs" do
-      let!(:pfmp) { create(:pfmp, :rectified) }
+      let!(:pfmp) { create(:pfmp, :rectified) } # rubocop:disable RSpec/LetSetup
 
       it "skips the schooling" do
         results = corrector.call
@@ -49,7 +43,7 @@ RSpec.describe MassCorrector do
 
     context "when an error occurs during processing" do
       before do
-        allow_any_instance_of(Sync::StudentJob).to receive(:perform).and_raise(StandardError, "Test error")
+        allow_any_instance_of(Sync::StudentJob).to receive(:perform).and_raise(StandardError, "Test error") # rubocop:disable RSpec/AnyInstance
       end
 
       it "handles the error gracefully" do
