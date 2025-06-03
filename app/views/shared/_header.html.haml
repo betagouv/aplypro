@@ -24,6 +24,7 @@
                     .fr-px-2w.fr-pb-1w
                       = current_user.name
                     = button_to 'Se déconnecter', @logout_path || destroy_user_session_path, method: :delete, class: "fr-btn fr-icon-lock-line"
+      = render "shared/search_student"
 
   #modal-476.fr-header__menu.fr-modal{"aria-labelledby" => "button-477"}
     .fr-container
@@ -48,11 +49,3 @@
             %li.fr-nav__item
               %a.fr-nav__link{ href: faq_path, target: "_self", "aria-current" => current_path?(faq_path) ? "page" : nil }
                 = t("menu.faq")
-
-            .fr-header__tools
-              .fr-header__search
-                = form_with method: :get, url: search_results_students_path do |form|
-                  .fr-search-bar{id: "header-search", role: "search"}
-                    = form.label :name, "Recherche", class: "fr-label"
-                    = form.text_field :name, placeholder: "Rechercher un élève...", value: @name, class: "fr-input"
-                    = form.button "Rechercher", type: "submit", class: "fr-btn", name: nil
