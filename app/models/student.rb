@@ -166,7 +166,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     date >= birthdate + 18.years
   end
 
-  def retry_pfmps_payment_requests!(reasons)
-    pfmps.in_state(:validated).each { |pfmp| PfmpManager.new(pfmp).retry_payment_request!(reasons) }
+  def retry_pfmps_payment_requests!
+    pfmps.in_state(:validated).each { |pfmp| PfmpManager.new(pfmp).retry_payment_request! }
   end
 end

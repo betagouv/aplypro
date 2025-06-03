@@ -46,7 +46,7 @@ module Sync
          student.previous_changes.key?("address_city_insee_code") ||
          student.previous_changes.key?("address_country_code")
 
-        student.retry_pfmps_payment_requests!(%w[adresse pays postal résidence])
+        student.retry_pfmps_payment_requests!
       end
     end
   end

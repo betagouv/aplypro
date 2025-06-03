@@ -33,7 +33,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
       @rib = @student.create_new_rib(rib_params)
 
       if @rib.save
-        @student.retry_pfmps_payment_requests!(%w[rib bic paiement coordonnées bancaires])
+        @student.retry_pfmps_payment_requests!
 
         redirect_to student_path(@student), notice: t(".success")
       else

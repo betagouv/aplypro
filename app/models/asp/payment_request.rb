@@ -143,12 +143,11 @@ module ASP
       last_transition.metadata["incomplete_reasons"]["ready_state_validation"].intersect?(retryable_messages)
     end
 
-    def eligible_for_rejected_or_unpaid_auto_retry?(reasons)
-      return false unless in_state?(:rejected, :unpaid)
+    def eligible_for_rejected_auto_retry?
+      return false unless in_state?(:rejected)
 
-      decorator = ActiveDecorator::Decorator.instance.decorate(self)
-      message = in_state?(:rejected) ? decorator.rejected_reason : decorator.unpaid_reason
-      reasons.any? { |word| message.downcase.include?(word) }
+      error_code = ActiveDecorator::Decorator.instance.decorate(self).rejected_error_code
+      !error_code.eql?(:technical_support)
     end
 
     def payable?

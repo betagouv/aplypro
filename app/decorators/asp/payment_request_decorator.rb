@@ -76,11 +76,14 @@ module ASP
       nil
     end
 
-    def rejected_reason
+    def rejected_error_code
       msg = last_transition.metadata["Motif rejet"]
-      error = ASP::ErrorsDictionary.rejected_definition(msg)
 
-      I18n.t("asp.errors.rejected.responses.#{error}")
+      ASP::ErrorsDictionary.rejected_definition(msg)
+    end
+
+    def rejected_reason
+      I18n.t("asp.errors.rejected.responses.#{rejected_error_code}")
     end
 
     def unpaid_reason

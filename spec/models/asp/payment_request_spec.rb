@@ -165,28 +165,29 @@ RSpec.describe ASP::PaymentRequest do
     end
   end
 
-  describe "eligible_for_rejected_or_unpaid_auto_retry?" do
-    let(:reasons) { %w[rib bic paiement coordonnées bancaires] }
-
-    context "when the payment request is in 'rejected' state without a RIB reason" do
-      let(:p_r) { create(:asp_payment_request, :rejected, reason: "Blabla") }
-
-      it "returns false" do
-        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?(reasons)).to be false
-      end
-    end
-
-    context "when the payment request is in 'rejected' state with a RIB reason" do
+  describe "eligible_for_rejected_auto_retry?" do
+    context "when the payment request is in 'rejected' without an auto-retryable reason" do
       let(:p_r) do
         create(:asp_payment_request, :rejected, reason: "Test d'une raison de blocage d'un paiement bancaire")
       end
 
-      it "returns true" do
-        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?(reasons)).to be true
+      it "returns false" do
+        expect(p_r.eligible_for_rejected_auto_retry?).to be false
       end
     end
 
-    context "when the payment request is in 'unpaid' and does not have the correct 'code_motif'" do
+    context "when the payment request is in 'rejected' with an auto-retryable reason" do
+      let(:p_r) do
+        create(:asp_payment_request, :rejected,
+               reason: I18n.t("asp.errors.rejected.returns.payment_coordinates_blocked"))
+      end
+
+      it "returns true" do
+        expect(p_r.eligible_for_rejected_auto_retry?).to be true
+      end
+    end
+
+    context "when the payment request is in 'unpaid'" do
       let(:p_r) do
         create(:asp_payment_request, :unpaid,
                reason: "Test d'une raison de blocage d'un paiement bancaire",
@@ -194,29 +195,7 @@ RSpec.describe ASP::PaymentRequest do
       end
 
       it "returns false" do
-        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?(reasons)).to be false
-      end
-    end
-
-    context "when the payment request is in 'unpaid' and has the correct 'code_motif'" do
-      let(:p_r) do
-        create(:asp_payment_request, :unpaid,
-               reason: "Test d'une raison de blocage d'un paiement bancaire",
-               code_motif: "RJT")
-      end
-
-      it "returns true" do
-        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?(reasons)).to be true
-      end
-    end
-
-    context "when the payment request is in 'unpaid' state with a RIB reason" do
-      let(:p_r) do
-        create(:asp_payment_request, :unpaid, reason: "Test d'une raison de blocage d'un paiement bancaire")
-      end
-
-      it "returns true" do
-        expect(p_r.eligible_for_rejected_or_unpaid_auto_retry?(reasons)).to be true
+        expect(p_r.eligible_for_rejected_auto_retry?).to be false
       end
     end
   end
