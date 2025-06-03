@@ -31,7 +31,7 @@
     .fr-container
       %main#main.fr-pt-3w.fr-pb-6w
         = render 'shared/flash'
-        - if user_signed_in?
+        - if academic_user_signed_in?
           = render_breadcrumbs(builder: DsfrHelper::BreadcrumbBuilder)
           - if @page_title and not @inhibit_title
             %h1.fr-mb-5w= @page_title

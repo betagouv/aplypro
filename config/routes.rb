@@ -25,6 +25,11 @@ Rails.application.routes.draw do
 
     resources :establishments, only: [:show]
 
+    resource :students do
+      get "search_results"
+      get "show"
+    end
+
     resources :school_years, path: :year, only: [] do
       get "selected"
 
