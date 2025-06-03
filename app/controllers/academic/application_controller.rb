@@ -6,7 +6,7 @@ module Academic
     include PageTitle
     include SelectedSchoolYear
 
-    layout "application"
+    layout "academic"
 
     before_action :authenticate_academic_user!,
                   :check_selected_academy,

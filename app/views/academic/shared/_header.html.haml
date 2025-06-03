@@ -1,0 +1,51 @@
+%header.fr-header{role: "banner"}
+  .fr-header__body
+    .fr-container
+      .fr-header__body-row
+        .fr-header__brand.fr-enlarge-link
+          .fr-header__brand-top
+            .fr-header__logo
+              %p.fr-logo
+                = t("global.sponsor")
+            .fr-header__navbar
+              %button#button-477.fr-btn--menu.fr-btn{"aria-controls" => "modal-476", "aria-haspopup" => "menu", "data-fr-opened" => "false", title: "Menu"} Menu
+          .fr-header__service
+            %a{href: "/", title: "Accueil - APLyPro - Direction Interministérielle du Numérique"}
+              %p.fr-header__service-title
+                = t("global.service_name")
+            %p.fr-header__service-tagline
+              = t("global.service_description")
+        - if current_user
+          .fr-header__tools
+            .fr-header__tools-links
+              %ul.fr-btns-group
+                %li
+                  %div
+                    .fr-px-2w.fr-pb-1w
+                      = current_user.name
+                    = button_to 'Se déconnecter', @logout_path || destroy_user_session_path, method: :delete, class: "fr-btn fr-icon-lock-line"
+      = render "shared/search_student"
+
+  #modal-476.fr-header__menu.fr-modal{"aria-labelledby" => "button-477"}
+    .fr-container
+      %button.fr-btn--close.fr-btn{"aria-controls" => "modal-476", title: "Fermer"} Fermer
+      .fr-header__menu-links
+      %nav#main-nav.fr-nav{"aria-label" => "Menu principal", role: "navigation"}
+        %ul.fr-nav__list
+          - if current_user and not @inhibit_nav
+            %li.fr-nav__item
+              %a.fr-nav__link{ href: school_year_home_path(selected_school_year), target: "_self", "aria-current" => current_path?(school_year_home_path(selected_school_year)) ? "page" : nil }
+                = t("menu.home")
+            %li.fr-nav__item
+              %a.fr-nav__link{ href: school_year_classes_path(selected_school_year), target: "_self", "aria-current" => current_path?(school_year_classes_path(selected_school_year)) ? "page" : nil }
+                = t("menu.classes")
+            %li.fr-nav__item
+              %a.fr-nav__link{ href: school_year_validations_path(selected_school_year), target: "_self", "aria-current" => (current_path_is_validation? ? "page" : nil) }
+                = t("menu.validate_all_pfmps")
+            - if current_establishment.present? && current_user.can_invite?
+              %li.fr-nav__item
+                %a.fr-nav__link{ href: establishment_invitations_path(current_establishment), target: "_self", "aria-current" => current_path?(establishment_invitations_path(current_establishment)) ? "page" : nil }
+                  = t("menu.invitations")
+            %li.fr-nav__item
+              %a.fr-nav__link{ href: faq_path, target: "_self", "aria-current" => current_path?(faq_path) ? "page" : nil }
+                = t("menu.faq")
