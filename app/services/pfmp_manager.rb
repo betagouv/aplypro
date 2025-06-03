@@ -33,7 +33,7 @@ class PfmpManager
     Pfmp.transaction do
       pfmp.schooling&.lock! # prevent race condition using pessimistic locking (blocks r+w)
 
-      pfmp.update!(params)
+      pfmp.update(params)
       recalculate_amounts! if params[:day_count].present?
       transition!
     end
@@ -95,7 +95,7 @@ class PfmpManager
   def recalculate_amounts!
     raise PfmpNotModifiableError unless pfmp.can_be_modified?
 
-    pfmp.update!(amount: calculate_amount(pfmp))
+    pfmp.update(amount: calculate_amount(pfmp))
     rebalance_other_pfmps!
   end
 

@@ -153,6 +153,52 @@ RSpec.describe Student do
     end
   end
 
+  describe "#duplicates" do
+    let(:student) do
+      create(:student,
+             first_name: "Jean-Pierre",
+             last_name: "N'Dour",
+             birthdate: "2000-01-01",
+             birthplace_city_insee_code: "75056")
+    end
+
+    it "finds students with apostrophes and hyphens replaced by spaces" do # rubocop:disable RSpec/ExampleLength
+      duplicate = create(:student,
+                         first_name: "Jean Pierre",
+                         last_name: "N Dour",
+                         birthdate: student.birthdate,
+                         birthplace_city_insee_code: student.birthplace_city_insee_code)
+
+      expect(student.duplicates).to include(student, duplicate)
+    end
+
+    it "handles accents correctly" do # rubocop:disable RSpec/ExampleLength
+      duplicate = create(:student,
+                         first_name: "Jéan-Pièrre",
+                         last_name: "N'Doùr",
+                         birthdate: student.birthdate,
+                         birthplace_city_insee_code: student.birthplace_city_insee_code)
+
+      expect(student.duplicates).to include(duplicate)
+    end
+
+    it "does not find students with different birthdate or birthplace" do # rubocop:disable RSpec/ExampleLength
+      different_birthdate = create(:student,
+                                   first_name: "Jean Pierre",
+                                   last_name: "N Dour",
+                                   birthdate: "2001-01-01",
+                                   birthplace_city_insee_code: student.birthplace_city_insee_code)
+
+      different_birthplace = create(:student,
+                                    first_name: "Jean Pierre",
+                                    last_name: "N Dour",
+                                    birthdate: student.birthdate,
+                                    birthplace_city_insee_code: "69123")
+
+      expect(student.duplicates).not_to include(different_birthdate, different_birthplace)
+    end
+  end
+
   describe "transferred?" do
     subject { student.transferred? }
 
