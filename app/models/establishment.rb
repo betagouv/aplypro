@@ -127,8 +127,8 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     invitations.exists?(email: email)
   end
 
-  def find_students(name)
-    return [] if name.blank?
+  def self.find_students(establishments, name) # rubocop:disable Metrics/AbcSize
+    return [] if name.blank? || establishments.blank?
 
     search_terms = name
                    .strip
@@ -136,7 +136,9 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
                    .split
                    .map { |term| "%#{Student.sanitize_sql_like(term)}%" }
 
-    students
+    Student
+      .joins(:schoolings)
+      .where(schoolings: { classe_id: establishments.joins(:classes).select("classes.id") })
       .includes(current_schooling: :classe)
       .where(
         search_terms.map do
@@ -147,6 +149,10 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
       )
       .unscope(:order)
       .distinct
+  end
+
+  def find_students(name)
+    self.class.find_students(Establishment.where(id: id), name)
   end
 
   def select_label

@@ -1,0 +1,18 @@
+- if @students.none?
+  %p Aucun résultat trouvé pour la recherche : #{@name}
+- else
+  .fr-table
+    %table
+      %caption #{@students.count} résultats trouvés pour la recherche : #{@name}
+      %thead
+        %th{scope: "col"} Élèves
+        %th{scope: "col"} Dernière classe
+      %tbody
+        - @students.each do |student|
+          %tr
+            %td= dsfr_link_to student.full_name, academic_student_path(student)
+            %td
+              -if student.current_schooling.nil?
+                Aucune scolarité active
+              -else
+                = student.current_schooling.classe.label

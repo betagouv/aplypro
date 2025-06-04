@@ -23,9 +23,7 @@
     = render 'shared/analytics' if Rails.env.production?
     = render 'academic/shared/header'
     - unless @inhibit_banner
-      - if defined?(current_establishment) && current_establishment
-        = render 'shared/etab_banner'
-      - elsif defined?(selected_academy) && selected_academy
+      - if defined?(selected_academy) && selected_academy
         = render 'academic/shared/academy_banner'
         = render 'academic/shared/welcome_banner'
     .fr-container
