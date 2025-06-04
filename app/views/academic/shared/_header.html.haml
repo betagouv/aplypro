@@ -24,4 +24,15 @@
                     .fr-px-2w.fr-pb-1w
                       = current_user.name
                     = button_to 'Se déconnecter', @logout_path || destroy_user_session_path, method: :delete, class: "fr-btn fr-icon-lock-line"
-      = render "academic/shared/search_student"
+
+  #modal-476.fr-header__menu.fr-modal{"aria-labelledby" => "button-477"}
+    .fr-container
+      %button.fr-btn--close.fr-btn{"aria-controls" => "modal-476", title: "Fermer"} Fermer
+      .fr-header__menu-links
+      %nav#main-nav.fr-nav{"aria-label" => "Menu principal", role: "navigation"}
+        %ul.fr-nav__list
+          - if current_user and not @inhibit_nav
+            %li.fr-nav__item
+              %a.fr-nav__link{ href: school_year_home_path(selected_school_year), target: "_self", "aria-current" => current_path?(school_year_home_path(selected_school_year)) ? "page" : nil }
+                = t("menu.home")
+        = render "academic/shared/search_student"

@@ -49,7 +49,7 @@ module Academic
     end
 
     def set_overrides
-      @inhibit_nav = true
+      @inhibit_nav = false
       @inhibit_title = true
       @logout_path = :destroy_academic_user_session
     end

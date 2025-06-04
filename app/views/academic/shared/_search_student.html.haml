@@ -3,5 +3,5 @@
     = form_with method: :get, url: search_results_academic_students_path do |form|
       .fr-search-bar{id: "header-search", role: "search"}
         = form.label :name, "Recherche", class: "fr-label"
-        = form.text_field :name, placeholder: "Rechercher un élève...", value: @name, class: "fr-input"
+        = form.text_field :name, placeholder: "Rechercher un élève dans l'académie...", value: @name, class: "fr-input"
         = form.button "Rechercher", type: "submit", class: "fr-btn", name: nil

@@ -6,13 +6,19 @@
       %caption #{@students.count} résultats trouvés pour la recherche : #{@name}
       %thead
         %th{scope: "col"} Élèves
+        %th{scope: "col"} Établissement
         %th{scope: "col"} Dernière classe
       %tbody
         - @students.each do |student|
           %tr
             %td= dsfr_link_to student.full_name, academic_student_path(student)
             %td
-              -if student.current_schooling.nil?
+              - if student.current_schooling.nil?
+                Aucun établissement
+              - else
+                = student.current_schooling.classe.establishment.name
+            %td
+              - if student.current_schooling.nil?
                 Aucune scolarité active
-              -else
+              - else
                 = student.current_schooling.classe.label
