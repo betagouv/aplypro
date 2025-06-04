@@ -127,7 +127,7 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     invitations.exists?(email: email)
   end
 
-  def self.find_students(establishments, name) # rubocop:disable Metrics/AbcSize
+  def self.find_students(establishments, name) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     return [] if name.blank? || establishments.blank?
 
     search_terms = name

@@ -1,7 +1,8 @@
-.fr-header__tools
-  .fr-header__search
-    = form_with method: :get, url: search_results_students_path do |form|
-      .fr-search-bar{id: "header-search", role: "search"}
-        = form.label :name, "Recherche", class: "fr-label"
-        = form.text_field :name, placeholder: "Rechercher un élève dans l'établissement...", value: @name, class: "fr-input"
-        = form.button "Rechercher", type: "submit", class: "fr-btn", name: nil
+- if current_user and not @inhibit_nav
+  .fr-header__tools
+    .fr-header__search
+      = form_with method: :get, url: search_results_students_path do |form|
+        .fr-search-bar{id: "header-search", role: "search"}
+          = form.label :name, "Recherche", class: "fr-label"
+          = form.text_field :name, placeholder: "Rechercher un élève dans l'établissement...", value: @name, class: "fr-input"
+          = form.button "Rechercher", type: "submit", class: "fr-btn", name: nil
