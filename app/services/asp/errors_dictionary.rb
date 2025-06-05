@@ -2,20 +2,34 @@
 
 module ASP
   class ErrorsDictionary
-    DEFINITIONS = [
-      {
-        key: :bank_coordinates_not_found,
-        regexp: /Les codes saisis (.*) n existent pas dans le referentiel refdombancaire/
-      },
-      {
-        key: :administrative_number_already_taken,
-        regexp: /ro administratif(.*)n'est pas unique/
-      }
-    ].freeze
+    UNPAID_DEFINITIONS = {
+      ICO: :previous_bank_rejection,
+      IDR: :anomaly_detected,
+      INR: :processing_control,
+      IPR: :control_anomaly,
+      RJT: :payment_difficulty,
+      SFR: :fraud_suspicion
+    }.freeze
 
     class << self
-      def definition(str)
-        DEFINITIONS.find { |entry| entry[:regexp].match?(str.squish) }
+      def rejected_definition(str)
+        return :fallback_message if str.nil?
+
+        I18n.t("asp.errors.rejected.returns").each do |key, msg|
+          return key if str.squish.match?(/#{msg}/)
+        end
+
+        :fallback_message
+      end
+
+      def unpaid_definition(code)
+        return :fallback_message if code.nil?
+
+        res = UNPAID_DEFINITIONS[code.to_sym]
+
+        return :fallback_message if res.nil?
+
+        res
       end
     end
   end

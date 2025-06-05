@@ -54,7 +54,11 @@ RSpec.describe Sync::StudentJob, :student_api do
     end
 
     context "when the addresses informations change and have a payment request rejected" do
-      let(:payment_request) { create(:asp_payment_request, :rejected, reason: "L'adresse ne correspond pas.") }
+      let(:payment_request) do
+        create(:asp_payment_request, :rejected,
+               reason: I18n.t("asp.errors.rejected.returns.payment_coordinates_blocked"))
+      end
+
       let(:pfmp) { payment_request.pfmp }
 
       before { described_class.perform_now(student.current_schooling) }
