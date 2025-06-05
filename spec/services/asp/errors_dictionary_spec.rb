@@ -9,13 +9,13 @@ describe ASP::ErrorsDictionary do
     context "when the code is nil" do
       let(:code) { nil }
 
-      it { is_expected.to eq :technical_support }
+      it { is_expected.to eq :fallback_message }
     end
 
     context "when the code doesn't match anything" do
       let(:code) { "random" }
 
-      it { is_expected.to eq :technical_support }
+      it { is_expected.to eq :fallback_message }
     end
 
     ASP::ErrorsDictionary::UNPAID_DEFINITIONS.each do |key, sym|
@@ -33,13 +33,13 @@ describe ASP::ErrorsDictionary do
     context "when the string is nil" do
       let(:str) { nil }
 
-      it { is_expected.to eq :technical_support }
+      it { is_expected.to eq :fallback_message }
     end
 
     context "when the string doesn't match anything" do
       let(:str) { "random" }
 
-      it { is_expected.to eq :technical_support }
+      it { is_expected.to eq :fallback_message }
     end
 
     I18n.t("asp.errors.rejected.returns").each_key do |key|

@@ -52,7 +52,7 @@ describe ASP::PaymentRequestDecorator do
       let(:payment_request) { create(:asp_payment_request, :rejected, reason: "c'est dimanche") }
 
       it "uses the original reason" do
-        expect(reason).to eq I18n.t("asp.errors.rejected.responses.technical_support")
+        expect(reason).to eq I18n.t("asp.errors.rejected.responses.fallback_message")
       end
     end
   end

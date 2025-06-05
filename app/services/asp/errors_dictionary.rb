@@ -13,21 +13,21 @@ module ASP
 
     class << self
       def rejected_definition(str)
-        return :technical_support if str.nil?
+        return :fallback_message if str.nil?
 
         I18n.t("asp.errors.rejected.returns").each do |key, msg|
           return key if str.squish.match?(/#{msg}/)
         end
 
-        :technical_support
+        :fallback_message
       end
 
       def unpaid_definition(code)
-        return :technical_support if code.nil?
+        return :fallback_message if code.nil?
 
         res = UNPAID_DEFINITIONS[code.to_sym]
 
-        return :technical_support if res.nil?
+        return :fallback_message if res.nil?
 
         res
       end

@@ -146,7 +146,7 @@ module ASP
     def eligible_for_rejected_auto_retry?
       return false unless in_state?(:rejected)
 
-      !rejected_error_code.eql?(:technical_support)
+      !rejected_error_code.eql?(:fallback_message)
     end
 
     def rejected_error_code
