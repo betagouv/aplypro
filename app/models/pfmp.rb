@@ -4,6 +4,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   TRANSITION_CLASS = PfmpTransition
   STATE_MACHINE_CLASS = PfmpStateMachine
   TRANSITION_RELATION_NAME = :transitions
+  attr_accessor :skip_amounts_yearly_cap_validation
 
   include ::StateMachinable
 
@@ -169,6 +170,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   private
 
   def amounts_yearly_cap
+    return if skip_amounts_yearly_cap_validation
     return unless mef
 
     pfmps = all_pfmps_for_mef
