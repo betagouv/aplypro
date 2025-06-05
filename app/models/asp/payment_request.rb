@@ -146,8 +146,12 @@ module ASP
     def eligible_for_rejected_auto_retry?
       return false unless in_state?(:rejected)
 
-      error_code = ActiveDecorator::Decorator.instance.decorate(self).rejected_error_code
-      !error_code.eql?(:technical_support)
+      !rejected_error_code.eql?(:technical_support)
+    end
+
+    def rejected_error_code
+      msg = last_transition.metadata["Motif rejet"]
+      ASP::ErrorsDictionary.rejected_definition(msg)
     end
 
     def payable?

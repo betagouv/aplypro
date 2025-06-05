@@ -76,12 +76,6 @@ module ASP
       nil
     end
 
-    def rejected_error_code
-      msg = last_transition.metadata["Motif rejet"]
-
-      ASP::ErrorsDictionary.rejected_definition(msg)
-    end
-
     def rejected_reason
       I18n.t("asp.errors.rejected.responses.#{rejected_error_code}")
     end
