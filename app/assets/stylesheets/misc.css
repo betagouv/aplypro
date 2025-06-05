@@ -3,6 +3,14 @@
   white-space: pre-line;
 }
 
+nav {
+  display: flex;
+
+  .fr-header__tools {
+    align-self: end;
+  }
+}
+
 .etab-banner {
   text-align: left;
   padding: 0.5rem 0;

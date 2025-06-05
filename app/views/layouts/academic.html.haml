@@ -21,14 +21,15 @@
   %body
     = render 'shared/skiplinks'
     = render 'shared/analytics' if Rails.env.production?
-    = render 'shared/header'
+    = render 'academic/shared/header'
     - unless @inhibit_banner
-      - if defined?(current_establishment) && current_establishment
-        = render 'shared/etab_banner'
+      - if defined?(selected_academy) && selected_academy
+        = render 'academic/shared/academy_banner'
+        = render 'academic/shared/welcome_banner'
     .fr-container
       %main#main.fr-pt-3w.fr-pb-6w
         = render 'shared/flash'
-        - if user_signed_in?
+        - if academic_user_signed_in?
           = render_breadcrumbs(builder: DsfrHelper::BreadcrumbBuilder)
           - if @page_title and not @inhibit_title
             %h1.fr-mb-5w= @page_title

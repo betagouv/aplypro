@@ -72,7 +72,7 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
     pfmp.latest_payment_request&.current_state == "ready"
   end
 
-  def rectify_pfmp(schooling, target_pfmp) # rubocop:disable Metrics/AbcSize
+  def rectify_pfmp(schooling, target_pfmp) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     reset_pfmp_amounts(schooling)
     sync_student_data(schooling)
     validate_student_address(schooling)
@@ -81,6 +81,7 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
 
     Rails.logger.info "Attempting rectification of Schooling #{schooling.id} on PFMP #{target_pfmp.id}"
 
+    target_pfmp.skip_amounts_yearly_cap_validation = true
     PfmpManager.new(target_pfmp).rectify_and_update_attributes!(
       { day_count: target_pfmp.day_count },
       address_params
@@ -105,7 +106,8 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
       real_amount = extract_real_amount(pfmp)
       next if pfmp.amount == real_amount.to_i
 
-      pfmp.update(amount: real_amount.to_i)
+      pfmp.skip_amounts_yearly_cap_validation = true
+      pfmp.update!(amount: real_amount.to_i)
       Rails.logger.info "Reset amount to #{real_amount} for PFMP #{pfmp.id}"
     end
   end
