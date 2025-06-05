@@ -460,17 +460,17 @@ fr:
           hamlet: Les codes saisis (.*) de la table REFHEXAPOSTE correspondent à un lieu-dit
         responses:
           payment_coordinates_blocked: Un premier paiement a été tenté par l’ASP, suite à l’échec de celui ci les coordonnées bancaires sont considérées comme bloquées. Pour ces cas l’ASP prend contact avec l’établissement afin de débloquer le premier paiement. Une fois ce déblocage terminé, l’établissement pourra retenter une nouvelle demande de paiement.
-          birth_commune_not_found: X
-          outdated_insee_code: X
-          localisationgeographique_not_found: X
-          refinseepays_not_found: X
-          refdombancaire_not_found: Les coordonnées bancaires ne correspondent à aucune agence connue, veuillez vérifier l'IBAN et le BIC saisis
+          birth_commune_not_found: La commune de naissance sélectionnée n'existait pas à la date de naissance de l'individu.
+          outdated_insee_code: Le code Insee saisi pour la commune de résidence de cet élève n'existe plus.
+          localisationgeographique_not_found: Le code postal ou le code Insee de la commune de résidence de cet élève n'existe pas.
+          refinseepays_not_found: Le code Insee du pays de résidence de l'élève n'existe pas.
+          refdombancaire_not_found: Les coordonnées bancaires ne correspondent à aucune agence connue, veuillez vérifier l'IBAN et le BIC saisis.
           inconsistent_address: Une incohérence semble exister entre le code INSEE et le code postal de la commune de résidence de l'élève.
-          bic_sepa_not_allowed: X
-          iban_sepa_not_allowed: X
-          invalid_rib: X
-          invalid_characters: X
-          invalid_payment_coordinates: X
+          bic_sepa_not_allowed: Le pays correspondant au code BIC saisi dans les coordonnées bancaires de l'élève n'accepte pas les paiements SEPA.
+          iban_sepa_not_allowed: L'IBAN correspond à un pays qui ne fait pas partie de la zone SEPA.
+          invalid_rib: Les coordonnées de paiement saisies sont invalides.
+          invalid_characters: "Les caractères autorisés pour l'intitulé du titulaire du compte sont limités à l'alphabet latin, aux chiffres, au caractère espace et aux caractères suivants: / - ? : ( ) . , ' +"
+          invalid_payment_coordinates: Les coordonnées de paiement saisies sont invalides.
           technical_support: Un problème est survenu, merci de prendre contact avec votre support technique.
       unpaid:
         technical_support: Le paiement a échoué, merci de prendre contact avec votre support technique.
