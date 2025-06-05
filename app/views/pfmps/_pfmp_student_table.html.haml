@@ -5,9 +5,11 @@
   - school_year = classe.school_year
   %section.fr-my-4w
     %h2.fr-h4.fr-mb-1w
-      = link_to "#{school_year} - #{classe.label} - #{classe.establishment}", school_year_class_path(school_year, classe)
+      = link_to "#{school_year} - #{classe.label} - #{classe.mef.label}", school_year_class_path(school_year, classe)
 
-    %p.fr-text--xs.fr-mb-1w= "#{display_dates(schooling)}"
+    %p.fr-text--sm.fr-mb-2w= "#{classe.establishment}"
+
+    %p.fr-text--xs.fr-mb-2w= "#{display_dates(schooling)}"
 
     = closed_schooling_information_tag(schooling, class: "fr-mb-2w")
     = extended_end_date_information_tag(schooling, class: "fr-mb-2w")
