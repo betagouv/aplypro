@@ -13,13 +13,13 @@ module ASP
       check_student
       check_insee_code
       check_address
+      check_pfmp
+      check_pfmp_dates
+      check_pfmp_overlaps
       check_da_attribution
       check_da_abrogation
       check_da_cancellation
       check_rib
-      check_pfmp
-      check_pfmp_dates
-      check_pfmp_overlaps
       check_schooling
     end
 
