@@ -16,6 +16,8 @@ RSpec.describe Schooling do
     let!(:current_schooling_no_end_date) { create(:schooling, end_date: nil) }
     let!(:current_schooling_future_end_date) { create(:schooling, end_date: 1.day.from_now) }
     let!(:former_schooling_past_end_date) { create(:schooling, end_date: 1.day.ago) }
+    let!(:former_schooling_removed_at) { create(:schooling, removed_at: 1.day.from_now) }
+    let!(:current_schooling_no_removed_at) { create(:schooling, removed_at: nil) }
 
     describe ".former" do
       subject { described_class.former }
@@ -23,9 +25,12 @@ RSpec.describe Schooling do
       it { is_expected.to include(former_schooling_past_end_date) }
       it { is_expected.not_to include(current_schooling_no_end_date) }
       it { is_expected.not_to include(current_schooling_future_end_date) }
+      it { is_expected.to include(former_schooling_removed_at) }
+      it { is_expected.not_to include(current_schooling_no_removed_at) }
 
-      it "includes schoolings with end_date on or before the current date" do
-        expect(described_class.former.to_a).to eq([former_schooling_past_end_date])
+      it "includes schoolings with removed_at on, end_date on or before the current date" do
+        expect(described_class.former.to_a).to contain_exactly(former_schooling_removed_at,
+                                                               former_schooling_past_end_date)
       end
     end
 
@@ -35,9 +40,12 @@ RSpec.describe Schooling do
       it { is_expected.to include(current_schooling_no_end_date) }
       it { is_expected.to include(current_schooling_future_end_date) }
       it { is_expected.not_to include(former_schooling_past_end_date) }
+      it { is_expected.not_to include(former_schooling_removed_at) }
+      it { is_expected.to include(current_schooling_no_removed_at) }
 
-      it "includes schoolings with no end_date or end_date after the current date" do
-        expect(described_class.current.to_a).to contain_exactly(current_schooling_no_end_date,
+      it "includes schoolings with no removed_at date, no end_date or end_date after the current date" do
+        expect(described_class.current.to_a).to contain_exactly(current_schooling_no_removed_at,
+                                                                current_schooling_no_end_date,
                                                                 current_schooling_future_end_date)
       end
     end
@@ -213,6 +221,14 @@ RSpec.describe Schooling do
 
     context "when the schooling is closed in the past" do
       subject(:schooling) { create(:schooling, end_date: Date.yesterday) }
+
+      it "returns true" do
+        expect(schooling.closed?).to be true
+      end
+    end
+
+    context "when the schooling is removed" do
+      subject(:schooling) { create(:schooling, removed_at: Date.tomorrow) }
 
       it "returns true" do
         expect(schooling.closed?).to be true
