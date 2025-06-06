@@ -16,9 +16,15 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_one :mef, through: :classe
   has_one :establishment, through: :classe
 
-  scope :former, -> { where.not(end_date: nil).where(end_date: ..Date.current) }
-  scope :active, -> { where("schoolings.end_date IS NULL OR schoolings.end_date > ?", Date.current) }
-  scope :current, -> { active.without_removed_students }
+  scope :former, lambda {
+    where("schoolings.removed_at IS NOT NULL OR (schoolings.end_date IS NOT NULL AND schoolings.end_date <= ?)",
+          Date.current)
+  }
+  scope :active, lambda {
+    where("schoolings.removed_at IS NULL AND (schoolings.end_date IS NULL OR schoolings.end_date > ?)",
+          Date.current)
+  }
+  scope :current, -> { active }
   scope :without_removed_students, -> { where(removed_at: nil) }
   scope :with_removed_students, -> { where.not(removed_at: nil) }
 
@@ -81,7 +87,7 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def closed?
-    end_date.present? && end_date <= Date.current
+    (end_date.present? && end_date <= Date.current) || removed?
   end
 
   def nullified?
