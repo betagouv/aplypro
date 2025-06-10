@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   delete "asp/logout", to: "asp/application#logout", as: :destroy_asp_user_session
 
   namespace :academic do
+    root to: "application#home"
     get "home", to: "application#home"
 
     resources :establishments, only: [:show]
@@ -44,6 +45,7 @@ Rails.application.routes.draw do
     resource :users, only: [] do
       get "select_academy"
       post "selected_academy"
+      get "index"
     end
 
     devise_for :users, class_name: "Academic::User"

@@ -62,8 +62,6 @@ module Academic
       @authorised_academy_codes ||= session[:academy_codes]
     end
 
-    private
-
     def check_selected_academy
       # TODO: verify that selected academy is authorised
       return unless academic_user_signed_in?
@@ -71,7 +69,9 @@ module Academic
       redirect_to select_academy_academic_users_path(current_user) if selected_academy.nil?
     end
 
-    # NOTE: the schena of this entity is a draft
+    private
+
+    # NOTE: the schema of this entity is a draft
     def establishments_data_summary(ids) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       cache_key = "establishments_data_summary/#{ids.sort.join('-')}/school_year/#{selected_school_year}"
 
