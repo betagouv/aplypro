@@ -11,9 +11,10 @@ module Academic
     end
 
     def index
-      @users = User.joins(:directed_establishments)
+      @users = User.joins(establishment_user_roles: :establishment)
+                   .where(establishment_user_roles: { role: :dir })
                    .where(establishments: { academy_code: selected_academy })
-                   .includes(:directed_establishments)
+                   .includes(:establishments, :directed_establishments)
                    .distinct
                    .page(params[:page])
                    .per(50)
