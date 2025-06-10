@@ -16,7 +16,7 @@ RSpec.describe Schooling do
     let!(:current_schooling_no_end_date) { create(:schooling, end_date: nil) }
     let!(:current_schooling_future_end_date) { create(:schooling, end_date: 1.day.from_now) }
     let!(:former_schooling_past_end_date) { create(:schooling, end_date: 1.day.ago) }
-    let!(:former_schooling_removed_at) { create(:schooling, removed_at: 1.day.from_now) }
+    let!(:removed_schooling) { create(:schooling, removed_at: 1.day.from_now) }
     let!(:current_schooling_no_removed_at) { create(:schooling, removed_at: nil) }
 
     describe ".former" do
@@ -25,12 +25,11 @@ RSpec.describe Schooling do
       it { is_expected.to include(former_schooling_past_end_date) }
       it { is_expected.not_to include(current_schooling_no_end_date) }
       it { is_expected.not_to include(current_schooling_future_end_date) }
-      it { is_expected.to include(former_schooling_removed_at) }
+      it { is_expected.not_to include(removed_schooling) }
       it { is_expected.not_to include(current_schooling_no_removed_at) }
 
-      it "includes schoolings with removed_at on, end_date on or before the current date" do
-        expect(described_class.former.to_a).to contain_exactly(former_schooling_removed_at,
-                                                               former_schooling_past_end_date)
+      it "includes schoolings with end_date on or before the current date" do
+        expect(described_class.former.to_a).to contain_exactly(former_schooling_past_end_date)
       end
     end
 
@@ -40,7 +39,7 @@ RSpec.describe Schooling do
       it { is_expected.to include(current_schooling_no_end_date) }
       it { is_expected.to include(current_schooling_future_end_date) }
       it { is_expected.not_to include(former_schooling_past_end_date) }
-      it { is_expected.not_to include(former_schooling_removed_at) }
+      it { is_expected.not_to include(removed_schooling) }
       it { is_expected.to include(current_schooling_no_removed_at) }
 
       it "includes schoolings with no removed_at date, no end_date or end_date after the current date" do
@@ -50,16 +49,42 @@ RSpec.describe Schooling do
       end
     end
 
-    describe "mutual exclusivity" do
-      it "ensures every schooling is either current or former" do
-        all_schoolings = described_class.all
-        current_and_former = described_class.current.or(described_class.former)
+    describe ".removed" do
+      subject { described_class.removed }
 
-        expect(all_schoolings).to match_array(current_and_former)
+      it { is_expected.to include(removed_schooling) }
+      it { is_expected.not_to include(current_schooling_no_removed_at) }
+      it { is_expected.not_to include(current_schooling_no_end_date) }
+      it { is_expected.not_to include(current_schooling_future_end_date) }
+      it { is_expected.not_to include(former_schooling_past_end_date) }
+
+      it "includes schoolings with removed_at date" do
+        expect(described_class.removed.to_a).to contain_exactly(removed_schooling)
+      end
+    end
+
+    describe "mutual exclusivity" do
+      it "ensures every schooling is current, former, or removed" do
+        all_schoolings = described_class.all
+        current_former_removed = described_class.current.or(described_class.former).or(described_class.removed)
+
+        expect(all_schoolings).to match_array(current_former_removed)
       end
 
       it "ensures no schooling is both current and former" do
         overlap = described_class.current.where(id: described_class.former)
+
+        expect(overlap).to be_empty
+      end
+
+      it "ensures no schooling is both current, or removed" do
+        overlap = described_class.current.where(id: described_class.removed)
+
+        expect(overlap).to be_empty
+      end
+
+      it "ensures no schooling is both removed and former" do
+        overlap = described_class.removed.where(id: described_class.former)
 
         expect(overlap).to be_empty
       end

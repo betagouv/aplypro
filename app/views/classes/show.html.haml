@@ -24,8 +24,8 @@
 
 - if @classe.inactive_students.any?
   %h2 Élèves sortis de la classe
-  = render partial: "students_table", locals: { schoolings: @classe_facade.schoolings.without_removed_students.former, caption: "Élèves sortis de la classe" }
+  = render partial: "students_table", locals: { schoolings: @classe_facade.schoolings.former, caption: "Élèves sortis de la classe" }
 
 - if @classe.removed_students.any?
   %h2 Élèves masqués manuellement de la classe
-  = render partial: "students_removed_table", locals: { schoolings: @classe_facade.schoolings.with_removed_students, caption: "Élèves masqués manuellement de la classe" }
+  = render partial: "students_removed_table", locals: { schoolings: @classe_facade.schoolings.removed, caption: "Élèves masqués manuellement de la classe" }
