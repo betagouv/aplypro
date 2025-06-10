@@ -1,0 +1,45 @@
+%section.fr-container.fr-pb-3w
+  %h1.fr-h3 Directeurs confirmés - Académie #{selected_academy}
+
+  - if @users.empty?
+    .fr-alert.fr-alert--info
+      %p.fr-alert__title Aucun directeur confirmé trouvé pour cette académie.
+  - else
+    .fr-table.fr-table--no-caption
+      %table
+        %caption Liste des directeurs confirmés de l'académie
+        %thead
+          %tr
+            %th{scope: "col"} Nom
+            %th{scope: "col"} Email
+            %th{scope: "col"} Établissement(s)
+            %th{scope: "col"} Nombre d'établissements
+            %th{scope: "col"} Dernière connexion
+        %tbody
+          - @users.each do |user|
+            %tr
+              %td
+                %strong= user.name
+              %td= user.email
+              %td
+                - establishments = user.directed_establishments.select { |e| e.academy_code == selected_academy }
+                - if establishments.any?
+                  %ul.fr-raw-list
+                    - establishments.each do |establishment|
+                      %li
+                        = establishment.name
+                        %br
+                        %span.fr-text--xs.fr-text--mention-grey UAI : #{establishment.uai}
+                - else
+                  %span.fr-text--sm.fr-text--mention-grey Aucun établissement
+              %td
+                %span.fr-badge.fr-badge--sm.fr-badge--blue-cumulus
+                  = user.directed_establishments.select { |e| e.academy_code == selected_academy }.count
+              %td
+                - if user.last_sign_in_at
+                  = l(user.last_sign_in_at, format: :long)
+                - else
+                  %span.fr-text--sm.fr-text--mention-grey Jamais connecté
+
+    .fr-mt-3w.d-flex.justify-content-center
+      = paginate @users

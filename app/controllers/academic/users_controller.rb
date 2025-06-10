@@ -11,7 +11,7 @@ module Academic
     end
 
     def index
-      @users = User.joins(:confirmed_establishments)
+      @users = User.joins(:directed_establishments)
                    .where(establishments: { academy_code: selected_academy })
                    .includes(:directed_establishments)
                    .distinct

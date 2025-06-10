@@ -179,7 +179,7 @@ fr:
           show: Informations établissements
         users:
           select_academy: Choix de l'académie
-          index: "Liste des utilisateurs"
+          index: Liste des utilisateurs
       stats:
         index: Statistiques
       school_years:
