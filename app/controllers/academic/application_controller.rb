@@ -63,10 +63,9 @@ module Academic
     end
 
     def check_selected_academy
-      # TODO: verify that selected academy is authorised
-      return unless academic_user_signed_in?
+      return unless selected_academy.nil?
 
-      redirect_to select_academy_academic_users_path(current_user) if selected_academy.nil?
+      redirect_to select_academy_academic_users_path(current_user)
     end
 
     private
