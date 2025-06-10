@@ -35,4 +35,7 @@
             %li.fr-nav__item
               %a.fr-nav__link{ href: school_year_home_path(selected_school_year), target: "_self", "aria-current" => current_path?(school_year_home_path(selected_school_year)) ? "page" : nil }
                 = t("menu.home")
+            %li.fr-nav__item
+              %a.fr-nav__link{ href: school_year_home_path(selected_school_year), target: "_self", "aria-current" => current_path?(school_year_home_path(selected_school_year)) ? "page" : nil }
+                = t("menu.users")
         = render "academic/shared/search_student" if academic_user_signed_in?

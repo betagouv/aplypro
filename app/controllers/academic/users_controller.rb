@@ -16,5 +16,8 @@ module Academic
       session[:selected_academy] = params[:academy]
       redirect_to academic_home_path
     end
+
+    def index
+    end
   end
 end
