@@ -1,4 +1,12 @@
+
 fr:
+  views:
+    pagination:
+      first: "&laquo; Premier"
+      last: "Dernier &raquo;"
+      previous: "&lsaquo; Prec"
+      next: "Suiv &rsaquo;"
+      truncate: "&hellip;"
   year:
     "Année scolaire %{start_year} - %{end_year}"
   flash:
@@ -36,6 +44,14 @@ fr:
       removed: L'élève %{name} a bien été retiré de la classe %{classe}
       reintegrated: L'élève %{name} a bien été réintégré dans la classe %{classe}
   helpers:
+    page_entries_info:
+      one_page:
+        display_entries:
+          zero: "Aucun %{entry_name} trouvé"
+          one: "Affichage <b>1</b> %{entry_name}"
+          other: "Affichage <b>complet %{count}</b> %{entry_name}"
+      more_pages:
+        display_entries: "Affichage %{entry_name} <b>%{first}–%{last}</b> de <b>%{total}</b> au total"
     submit:
       rib:
         create: "Enregistrer les coordonnées bancaires"
