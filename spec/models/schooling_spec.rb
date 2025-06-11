@@ -251,14 +251,6 @@ RSpec.describe Schooling do
         expect(schooling.closed?).to be true
       end
     end
-
-    context "when the schooling is removed" do
-      subject(:schooling) { create(:schooling, removed_at: Date.tomorrow) }
-
-      it "returns true" do
-        expect(schooling.closed?).to be true
-      end
-    end
   end
 
   describe "#syncable?" do

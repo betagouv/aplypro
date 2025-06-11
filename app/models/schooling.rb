@@ -82,7 +82,7 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def closed?
-    (end_date.present? && end_date <= Date.current) || removed?
+    end_date.present? && end_date <= Date.current
   end
 
   def nullified?
