@@ -10,6 +10,11 @@ module Academic
       @inhibit_banner = true
     end
 
+    def selected_academy
+      session[:selected_academy] = params[:academy]
+      redirect_to academic_home_path
+    end
+
     def index
       @users = User.joins(establishment_user_roles: :establishment)
                    .where(establishment_user_roles: { role: :dir })
