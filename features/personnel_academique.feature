@@ -36,3 +36,8 @@ Fonctionnalité: Gestion du personnel académique
     Et que je suis un personnel académique sans validation
     Et que je me connecte en tant que personnel académique
     Alors la page contient "Erreur d'authentification"
+
+  Scénario: Le personnel académique peut voir la liste des directeurs
+    Lorsque je me rends sur la page d'accueil
+    Quand je clique sur "Utilisateurs"
+    Alors la page contient "Directeurs - Académie 06"

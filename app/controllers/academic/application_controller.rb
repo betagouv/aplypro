@@ -10,7 +10,7 @@ module Academic
 
     before_action :authenticate_academic_user!,
                   :check_selected_academy,
-                  except: %i[login logout]
+                  except: %i[login logout set_selected_academy]
 
     before_action :log_user,
                   :set_overrides,
