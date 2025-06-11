@@ -1,7 +1,7 @@
 #academic-map-container{
     data: {
       controller: "academic",
-      selected_academy_value: @selected_academy.html_safe,
+      selected_academy_value: selected_academy.html_safe,
       establishments_data: @establishments_data.to_json.html_safe,
       agri_icon_path: asset_path('icons/others/seedling-fill.svg'),
       enpu_icon_path: asset_path('icons/development/git-repository-fill.svg'),
@@ -12,7 +12,7 @@
       sante_icon_path: asset_path('icons/health/heart-pulse-fill.svg')
   }
 }
-  %h2= "Académie #{@selected_academy}"
+  %h2= "Académie #{selected_academy}"
   %h5
     %i.fr-icon-earth-fill
     = "Répartition géographique des #{@establishments_data.count} établissements"

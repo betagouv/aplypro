@@ -60,6 +60,9 @@ gem "omniauth-rails_csrf_protection"
 # data fetching
 gem "faraday"
 
+# pagination
+gem "kaminari"
+
 # state management
 gem "statesman"
 
