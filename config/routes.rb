@@ -44,7 +44,7 @@ Rails.application.routes.draw do
 
     resource :users, only: [] do
       get "select_academy"
-      post "selected_academy"
+      post "set_selected_academy"
       get "index"
     end
 
