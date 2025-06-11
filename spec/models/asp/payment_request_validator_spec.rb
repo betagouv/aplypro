@@ -281,6 +281,25 @@ RSpec.describe ASP::PaymentRequestValidator do
           .not_to change { payment_request.errors.details[:ready_state_validation] }
       end
     end
+
+
+    context "when PFMP is not within schooling dates" do
+      let(:other_schooling) { instance_double(Schooling, nullified?: false) }
+      let(:other_classe) { instance_double(Classe, school_year:) }
+
+      before do
+        allow(student).to receive(:transferred?).and_return(true)
+        allow(schooling).to receive(:abrogated?).and_return(false)
+        allow(pfmp).to receive(:within_schooling_dates?).and_return(false)
+        allow(student).to receive_message_chain(:schoolings, :excluding).and_return([other_schooling])
+        allow(other_schooling).to receive(:classe).and_return(other_classe)
+      end
+
+      it "does not add an error" do
+        expect { validator.send(:check_da_abrogation) }
+          .not_to change { payment_request.errors.details[:ready_state_validation] }
+      end
+    end
   end
 
   describe "#validate" do
