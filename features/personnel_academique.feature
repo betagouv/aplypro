@@ -15,6 +15,7 @@ Fonctionnalité: Gestion du personnel académique
     Et que je sélectionne "11" pour "Académie"
     Et que je clique sur "Continuez avec cette académie"
     Alors la page contient "Académie 11"
+    Alors la page ne contient pas "Rechercher un élève"
     Quand je clique sur "Changer d'académie"
     Et que je sélectionne "16" pour "Académie"
     Et que je clique sur "Continuez avec cette académie"

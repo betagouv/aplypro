@@ -8,6 +8,7 @@ module Academic
 
     def select_academy
       @inhibit_banner = true
+      @inhibit_nav = true
     end
 
     def set_selected_academy
