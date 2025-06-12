@@ -16,7 +16,7 @@ module ASP
           codecominsee
         ]
 
-        def self.payment_mapper_class
+        def self.mapper_class
           Mappers::Adresse::EtrangerMapper
         end
 

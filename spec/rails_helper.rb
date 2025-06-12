@@ -98,7 +98,7 @@ RSpec.configure do |config|
       double = instance_double(name)
 
       allow(double).to receive(:to_xml) { |builder| builder.send(name.downcase) }
-      allow(klass).to receive(:from_payment_request).and_return(double)
+      allow(klass).to receive(:from_schooling).and_return(double)
     end
   end
 

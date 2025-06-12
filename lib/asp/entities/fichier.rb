@@ -9,10 +9,11 @@ module ASP
 
       validates_with ASP::SchemaValidator
 
-      attr_reader :payment_requests
+      attr_reader :schoolings_payment_requests, :schoolings
 
       def initialize(payment_requests)
-        @payment_requests = payment_requests
+        @schoolings_payment_requests = payment_requests.group_by(&:schooling)
+        @schoolings = @schoolings_payment_requests.keys
       end
 
       def to_xml
@@ -21,8 +22,8 @@ module ASP
             parametrage(xml)
 
             xml.enregistrements do
-              payment_requests.each do |payment_request|
-                Entities::Enregistrement.from_payment_request(payment_request).to_xml(xml)
+              schoolings.each do |schooling|
+                Entities::Enregistrement.from_schooling(schooling).to_xml(xml)
               end
             end
           end
