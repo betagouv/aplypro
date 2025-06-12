@@ -7,7 +7,7 @@ module ASP
 
       def initialize(payment_request)
         @pfmp = payment_request.pfmp
-        @schooling = pfmp.schooling
+        @schooling = payment_request.schooling
       end
 
       def numadm

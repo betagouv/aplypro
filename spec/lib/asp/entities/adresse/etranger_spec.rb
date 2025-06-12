@@ -3,9 +3,9 @@
 require "rails_helper"
 
 describe ASP::Entities::Adresse::Etranger, type: :model do
-  subject(:model) { described_class.from_payment_request(request) }
+  subject(:model) { described_class.from_schooling(request) }
 
-  let(:request) { create(:asp_payment_request, :ready) }
+  let(:request) { create(:schooling) }
 
   describe "validation" do
     it { is_expected.to validate_presence_of(:codepostalcedex) }
@@ -15,14 +15,14 @@ describe ASP::Entities::Adresse::Etranger, type: :model do
   end
 
   describe "fragment" do
-    let(:establishment) { request.pfmp.establishment }
+    let(:establishment) { request.establishment }
 
     before do
       establishment.update!(commune_code: "12345", postal_code: "54321")
     end
 
     it_behaves_like "an XML-fragment producer" do
-      let(:entity) { described_class.from_payment_request(request) }
+      let(:entity) { described_class.from_schooling(request) }
       let(:probe) { %w[codetypeadr PRINCIPALE] }
 
       it "uses the establishment details for the address" do
@@ -36,7 +36,7 @@ describe ASP::Entities::Adresse::Etranger, type: :model do
       before { establishment.update(commune_code: nil) }
 
       it "raises MissingEstablishmentCommuneCodeError" do
-        expect { described_class.from_payment_request(request).to_xml(Nokogiri::XML::Builder.new) }
+        expect { described_class.from_schooling(request).to_xml(Nokogiri::XML::Builder.new) }
           .to raise_error(ActiveModel::ValidationError)
       end
     end
@@ -45,7 +45,7 @@ describe ASP::Entities::Adresse::Etranger, type: :model do
       before { establishment.update(postal_code: nil) }
 
       it "raises MissingEstablishmentPostalCodeError" do
-        expect { described_class.from_payment_request(request).to_xml(Nokogiri::XML::Builder.new) }
+        expect { described_class.from_schooling(request).to_xml(Nokogiri::XML::Builder.new) }
           .to raise_error(ActiveModel::ValidationError)
       end
     end

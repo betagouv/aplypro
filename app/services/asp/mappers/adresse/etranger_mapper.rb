@@ -6,8 +6,8 @@ module ASP
       class EtrangerMapper
         attr_reader :establishment
 
-        def initialize(payment_request)
-          @establishment = payment_request.pfmp.establishment
+        def initialize(schooling)
+          @establishment = schooling.establishment
         end
 
         def codecominsee
