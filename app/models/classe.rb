@@ -30,7 +30,7 @@ class Classe < ApplicationRecord
            inverse_of: :classe
 
   has_many :removed_schoolings,
-           -> { with_removed_students },
+           -> { removed },
            dependent: :destroy,
            class_name: "Schooling",
            inverse_of: :classe

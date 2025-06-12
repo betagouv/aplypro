@@ -32,7 +32,7 @@ describe Student::Mappers::Sygne do
     context "when a student has disappeared" do
       let(:next_data) { normal_payload.dup.tap(&:pop) }
 
-      it "closes its current shooling" do
+      it "closes its current schooling" do
         expect { mapper.parse! }.to change { student.reload.current_schooling }.to(nil)
       end
     end
@@ -73,6 +73,21 @@ describe Student::Mappers::Sygne do
         opened_mapper.parse!
 
         expect(student.schoolings.last.open?).to be true
+      end
+    end
+
+    context "when the student already has a removed schooling" do
+      let(:next_data) { normal_payload.dup.tap(&:pop) }
+
+      let(:student) { Student.find_by(ine: normal_payload.last["ine"]) }
+      let(:removed_schooling) { create(:schooling, removed_at: Time.zone.today) }
+
+      before do
+        student.schoolings << removed_schooling
+      end
+
+      it "initializes the incoming schooling" do
+        expect { mapper.parse! }.to(change { student.reload.current_schooling })
       end
     end
   end

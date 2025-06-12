@@ -16,11 +16,12 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_one :mef, through: :classe
   has_one :establishment, through: :classe
 
-  scope :former, -> { where.not(end_date: nil).where(end_date: ..Date.current) }
+  scope :former, -> { where("schoolings.end_date IS NOT NULL AND schoolings.end_date <= ?", Date.current) }
   scope :active, -> { where("schoolings.end_date IS NULL OR schoolings.end_date > ?", Date.current) }
+  scope :removed, -> { where.not(removed_at: nil) }
+
   scope :current, -> { active.without_removed_students }
   scope :without_removed_students, -> { where(removed_at: nil) }
-  scope :with_removed_students, -> { where.not(removed_at: nil) }
 
   scope :with_attributive_decisions, lambda {
     without_cancellation_decisions.without_removed_students.joins(:attributive_decision_attachment)

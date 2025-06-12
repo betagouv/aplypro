@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_12_163347) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_10_130944) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "unaccent"
@@ -249,7 +249,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_12_163347) do
     t.index ["student_id", "classe_id"], name: "one_schooling_per_class_student", unique: true
     t.index ["student_id", "end_date", "removed_at"], name: "index_schoolings_on_student_id_and_end_date_and_removed_at"
     t.index ["student_id"], name: "index_schoolings_on_student_id"
-    t.index ["student_id"], name: "one_active_schooling_per_student", unique: true, where: "(end_date IS NULL)"
+    t.index ["student_id"], name: "one_active_schooling_per_student", unique: true, where: "((end_date IS NULL) AND (removed_at IS NULL))"
   end
 
   create_table "students", force: :cascade do |t|
