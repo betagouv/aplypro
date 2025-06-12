@@ -31,6 +31,7 @@
           %th{scope: "col"} Classe
           %th{scope: "col"} PFMP
           %th{scope: "col"} Statut paiement
+          %th{scope: "col"} Motif
           %th{scope: "col"} Nombre de jours
           %th{scope: "col"} Montant
         %tbody
@@ -45,6 +46,9 @@
                     = pfmp.latest_payment_request.status_badge
                   - else
                     %span.fr-badge.fr-badge--sm Aucune demande
+                %td
+                  - if pfmp.latest_payment_request.present?
+                    = pfmp.latest_payment_request.status_explanation
                 %td= pfmp.day_count
                 %td
                   %strong= number_to_currency(pfmp.amount)
