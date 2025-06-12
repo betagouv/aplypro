@@ -240,3 +240,66 @@ nav {
   font-size: 0.875rem;
   margin-top: 2px;
 }
+
+/* Kaminari */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  gap: 0.25rem;
+}
+
+.pagination > * {
+  display: inline-block;
+}
+
+.pagination a,
+.pagination span.current,
+.pagination span.gap {
+  padding: 0.5rem 0.75rem;
+  text-decoration: none;
+  color: var(--text-action-high-blue-france);
+  border: 1px solid var(--border-default-grey);
+  background-color: var(--background-default-grey);
+  transition: all 0.3s ease;
+  min-width: 2.5rem;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination a:hover {
+  background-color: var(--background-action-low-blue-france);
+  border-color: var(--border-action-high-blue-france);
+}
+
+.pagination span.current {
+  background-color: var(--background-action-high-blue-france);
+  color: white;
+  border-color: var(--border-action-high-blue-france);
+  font-weight: bold;
+}
+
+.pagination span.gap {
+  border: none;
+  background-color: transparent;
+  padding: 0.5rem 0.25rem;
+}
+
+.pagination .first,
+.pagination .prev,
+.pagination .next,
+.pagination .last {
+  font-weight: 500;
+}
+
+.pagination .disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
