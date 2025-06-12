@@ -1,8 +1,8 @@
 %h2.fr-mt-2w= "Établissement: #{@establishment_data[@etab.uai][:name]}"
 
 .fr-container.fr-my-4w
-  .fr-grid-row
-    .fr-col-12.fr-col-md-8
+  .fr-grid-row.fr-grid-row--gutters
+    .fr-col-12.fr-col-md-6
       .fr-card.fr-card--shadow
         .fr-card__body
           %h3.fr-card__title Informations générales
@@ -17,6 +17,37 @@
               %li
                 %strong Montant payé:
                 = number_to_currency(@establishment_data[@etab.uai][:paid_amount], unit: "€", format: "%n %u")
+
+    .fr-col-12.fr-col-md-6
+      .fr-card.fr-card--shadow
+        .fr-card__body
+          %h3.fr-card__title Directeurs associés
+          .fr-card__content
+            - if @directors.empty?
+              .fr-alert.fr-alert--info
+                %p.fr-alert__title Aucun directeur trouvé pour cet établissement.
+            - else
+              .fr-table.fr-table--no-caption
+                %table
+                  %caption Liste des directeurs de l'établissement
+                  %thead
+                    %tr
+                      %th{scope: "col"} Nom
+                      %th{scope: "col"} Email
+                      %th{scope: "col"} Statut
+                  %tbody
+                    - @directors.each do |user|
+                      %tr
+                        %td
+                          %strong= user.name
+                        %td= user.email
+                        %td
+                          - if @etab.confirmed_director_id == user.id
+                            %span.fr-badge.fr-badge--success
+                              Directeur confirmé
+                          - else
+                            %span.fr-badge.fr-badge--info
+                              Directeur non confirmé
 
 .fr-container
   = render 'academic/establishments/establishment_timeline'

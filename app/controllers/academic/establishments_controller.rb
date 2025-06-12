@@ -7,6 +7,9 @@ module Academic
     helper_method :current_establishment
 
     def show
+      @directors = User.joins(establishment_user_roles: :establishment)
+                       .where(establishment_user_roles: { role: :dir, establishment_id: @etab.id })
+                       .distinct
       @establishment_data = establishments_data_summary([@etab.id])
     end
 
