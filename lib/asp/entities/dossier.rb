@@ -25,11 +25,14 @@ module ASP
       end
 
       def fragment(xml)
-        xml.numadm(numadm)
-        xml.codedispositif(codedispositif)
-
         xml.listeprestadoss do
-          Prestadoss.from_payment_request(payment_request).to_xml(xml)
+          schoolings_payment_requests.each do |payment_requests|
+            xml.numadm(numadm)
+            xml.codedispositif(codedispositif)
+            payment_requests.each do |payment_request|
+              Prestadoss.from_payment_request(payment_request).to_xml(xml)
+            end
+          end
         end
       end
 

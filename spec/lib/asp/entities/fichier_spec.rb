@@ -3,6 +3,7 @@
 require "rails_helper"
 
 describe ASP::Entities::Fichier do
+  # TODO
   subject(:file) { described_class.new(requests) }
 
   let(:requests) { create_list(:asp_payment_request, 1, :ready) }
