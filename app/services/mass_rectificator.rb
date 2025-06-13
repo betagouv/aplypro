@@ -32,7 +32,7 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
 
   private
 
-  def process_schooling(schooling)
+  def process_schooling(schooling) # rubocop:disable Metrics/MethodLength
     Rails.logger.info "Processing schooling #{schooling.id}"
     results[:processed] += 1
 
@@ -40,7 +40,7 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
       skip_schooling(schooling, "already has rectified PFMPs")
       return
     end
-
+    reset_pfmp_amounts(schooling)
     target_pfmp = find_target_pfmp(schooling)
     unless target_pfmp
       skip_schooling(schooling, "no valid target PFMP found")
@@ -72,8 +72,7 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
     pfmp.latest_payment_request&.current_state == "ready"
   end
 
-  def rectify_pfmp(schooling, target_pfmp) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    reset_pfmp_amounts(schooling)
+  def rectify_pfmp(schooling, target_pfmp) # rubocop:disable Metrics/AbcSize
     sync_student_data(schooling)
     validate_student_address(schooling)
 
