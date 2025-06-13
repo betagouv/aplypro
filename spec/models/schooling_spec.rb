@@ -362,7 +362,7 @@ RSpec.describe Schooling do
     let(:output) { StringIO.new("test output") }
 
     context "with a valid attachment type" do
-      it "attaches the attributive decision" do # rubocop:disable RSpec/MultipleExpectations
+      it "attaches the attributive decision" do
         expect do
           schooling.attach_attributive_document(output, :attributive_decision)
         end.to change { schooling.attributive_decision.attached? }.from(false).to(true)
@@ -371,7 +371,7 @@ RSpec.describe Schooling do
         expect(schooling.attributive_decision.content_type).to eq("application/pdf")
       end
 
-      it "attaches the abrogation decision" do # rubocop:disable RSpec/MultipleExpectations
+      it "attaches the abrogation decision" do
         expect do
           schooling.attach_attributive_document(output, :abrogation_decision)
         end.to change { schooling.abrogation_decision.attached? }.from(false).to(true)
@@ -380,7 +380,7 @@ RSpec.describe Schooling do
         expect(schooling.abrogation_decision.content_type).to eq("application/pdf")
       end
 
-      it "attaches the cancellation decision" do # rubocop:disable RSpec/MultipleExpectations
+      it "attaches the cancellation decision" do
         expect do
           schooling.attach_attributive_document(output, :cancellation_decision)
         end.to change { schooling.cancellation_decision.attached? }.from(false).to(true)

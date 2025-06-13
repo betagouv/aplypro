@@ -136,7 +136,7 @@ RSpec.describe PfmpsController do
     let(:addresse_params) { { address_line1: "123 New St", address_city: "New City" } }
 
     context "when the PFMP can be rectified" do
-      it "rectifies the PFMP and redirects with a success notice" do # rubocop:disable RSpec/ExampleLength,RSpec/MultipleExpectations
+      it "rectifies the PFMP and redirects with a success notice" do # rubocop:disable RSpec/ExampleLength
         post rectify_school_year_class_schooling_pfmp_path(school_year,
                                                            class_id: pfmp.classe.id,
                                                            schooling_id: pfmp.schooling.id,
@@ -153,7 +153,7 @@ RSpec.describe PfmpsController do
     context "when the PFMP cannot be rectified" do
       let(:pfmp) { create(:pfmp, :validated, schooling: schooling) }
 
-      it "redirects with an alert" do # rubocop:disable RSpec/MultipleExpectations
+      it "redirects with an alert" do
         post rectify_school_year_class_schooling_pfmp_path(
           school_year, class_id: pfmp.classe.id, schooling_id: pfmp.schooling.id, id: pfmp.id
         ), params: { pfmp: pfmp_params, addresse: addresse_params, confirmed_director: "1" }

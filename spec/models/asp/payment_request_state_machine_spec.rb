@@ -107,7 +107,7 @@ describe ASP::PaymentRequestStateMachine do
           expect(asp_payment_request).to be_in_state(:ready)
         end
 
-        it "raises a funding error when there are no longer the necessary funds" do # rubocop:disable RSpec/MultipleExpectations
+        it "raises a funding error when there are no longer the necessary funds" do
           allow(asp_payment_request).to receive(:payable?).and_return(false)
 
           expect { asp_payment_request.transition_to!(:ready) }

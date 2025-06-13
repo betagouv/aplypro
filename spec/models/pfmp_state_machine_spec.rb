@@ -88,7 +88,7 @@ describe PfmpStateMachine do
     describe "transition to rectified" do
       let(:pfmp) { create(:asp_payment_request, :paid).pfmp }
 
-      it "recalculates amounts and creates a new payment request and attempts to mark it as ready" do # rubocop:disable RSpec/MultipleExpectations
+      it "recalculates amounts and creates a new payment request and attempts to mark it as ready" do
         expect do
           pfmp.state_machine.transition_to!(:rectified)
         end.to change { pfmp.payment_requests.count }.by(1)

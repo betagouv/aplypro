@@ -23,7 +23,7 @@ RSpec.describe MassRectificator do
         )
       end
 
-      it "rectifies the PFMP" do # rubocop:disable RSpec/MultipleExpectations
+      it "rectifies the PFMP" do
         results = corrector.call
 
         expect(results[:processed]).to eq(1)
@@ -56,7 +56,7 @@ RSpec.describe MassRectificator do
     context "when rectification amount threshold is not reached" do
       before do
         allow_any_instance_of(Sync::StudentJob).to receive(:perform) # rubocop:disable RSpec/AnyInstance
-        allow_any_instance_of(PfmpManager).to receive(:rectify_and_update_attributes!)
+        allow_any_instance_of(PfmpManager).to receive(:rectify_and_update_attributes!) # rubocop:disable RSpec/AnyInstance
           .and_raise(PfmpManager::RectificationAmountThresholdNotReachedError)
         student.update!(
           address_line1: "123 Main St",
@@ -79,7 +79,7 @@ RSpec.describe MassRectificator do
     context "when rectification amount is zero" do
       before do
         allow_any_instance_of(Sync::StudentJob).to receive(:perform) # rubocop:disable RSpec/AnyInstance
-        allow_any_instance_of(PfmpManager).to receive(:rectify_and_update_attributes!)
+        allow_any_instance_of(PfmpManager).to receive(:rectify_and_update_attributes!) # rubocop:disable RSpec/AnyInstance
           .and_raise(PfmpManager::RectificationAmountZeroError)
         student.update!(
           address_line1: "123 Main St",
