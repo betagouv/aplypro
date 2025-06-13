@@ -3,10 +3,9 @@
 require "rails_helper"
 
 describe ASP::Mappers::DossierMapper do
-  subject(:mapper) { described_class.new(payment_request) }
+  subject(:mapper) { described_class.new(schooling) }
 
-  let(:payment_request) { create(:asp_payment_request, :ready) }
-  let(:schooling) { payment_request.schooling }
+  let(:schooling) { create(:schooling) }
 
   describe "#numadm" do
     it "returns the schooling's DA number" do
