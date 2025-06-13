@@ -4,7 +4,7 @@
 require "rails_helper"
 require_relative "../../db/wage_seeder"
 
-# rubocop:disable RSpec/ExampleLength, RSpec/MultipleExpectations
+# rubocop:disable RSpec/ExampleLength
 RSpec.describe WageSeeder do
   describe ".seed" do
     let!(:school_year) { SchoolYear.create!(start_year: 2022) }

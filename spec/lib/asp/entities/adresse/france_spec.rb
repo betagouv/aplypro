@@ -24,7 +24,7 @@ describe ASP::Entities::Adresse::France, type: :model do
     let(:entity) { described_class.from_payment_request(request) }
     let(:probe) { ["codecominsee", student.address_city_insee_code] }
 
-    it "uses the address details of the student" do # rubocop:disable RSpec/MultipleExpectations
+    it "uses the address details of the student" do
       expect(document.at("codepostalcedex").text).to eq student.address_postal_code
       expect(document.at("codeinseepays").text).to eq InseeCodes::FRANCE_INSEE_COUNTRY_CODE
       expect(document.at("codetypeadr").text).to eq "PRINCIPALE"

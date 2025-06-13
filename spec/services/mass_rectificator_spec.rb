@@ -23,7 +23,7 @@ RSpec.describe MassRectificator do
         )
       end
 
-      it "rectifies the PFMP" do # rubocop:disable RSpec/MultipleExpectations
+      it "rectifies the PFMP" do
         results = corrector.call
 
         expect(results[:processed]).to eq(1)
@@ -50,6 +50,52 @@ RSpec.describe MassRectificator do
         results = corrector.call
 
         expect(results[:errors]).to include(hash_including(id: schooling.id, error: "Test error"))
+      end
+    end
+
+    context "when rectification amount threshold is not reached" do
+      before do
+        allow_any_instance_of(Sync::StudentJob).to receive(:perform) # rubocop:disable RSpec/AnyInstance
+        allow_any_instance_of(PfmpManager).to receive(:rectify_and_update_attributes!) # rubocop:disable RSpec/AnyInstance
+          .and_raise(PfmpManager::RectificationAmountThresholdNotReachedError)
+        student.update!(
+          address_line1: "123 Main St",
+          address_country_code: "FR",
+          address_postal_code: "75001",
+          address_city_insee_code: "75101"
+        )
+      end
+
+      it "skips the schooling with appropriate reason" do
+        results = corrector.call
+
+        expect(results[:skipped]).to include(
+          hash_including(id: schooling.id, reason: "amount too small or zero")
+        )
+        expect(results[:rectified]).to be_empty
+      end
+    end
+
+    context "when rectification amount is zero" do
+      before do
+        allow_any_instance_of(Sync::StudentJob).to receive(:perform) # rubocop:disable RSpec/AnyInstance
+        allow_any_instance_of(PfmpManager).to receive(:rectify_and_update_attributes!) # rubocop:disable RSpec/AnyInstance
+          .and_raise(PfmpManager::RectificationAmountZeroError)
+        student.update!(
+          address_line1: "123 Main St",
+          address_country_code: "FR",
+          address_postal_code: "75001",
+          address_city_insee_code: "75101"
+        )
+      end
+
+      it "skips the schooling with appropriate reason" do
+        results = corrector.call
+
+        expect(results[:skipped]).to include(
+          hash_including(id: schooling.id, reason: "amount too small or zero")
+        )
+        expect(results[:rectified]).to be_empty
       end
     end
   end
