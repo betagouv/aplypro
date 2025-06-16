@@ -34,7 +34,7 @@ RSpec.describe Users::OmniauthCallbacksController do
       )
     end
 
-    it "handles successful authentication" do # rubocop:disable RSpec/MultipleExpectations
+    it "handles successful authentication" do
       expect do
         get "/users/auth/fim/callback"
       end.to change(User, :count).by(1)
@@ -85,7 +85,7 @@ RSpec.describe Users::OmniauthCallbacksController do
       )
     end
 
-    it "updates existing user instead of creating new one" do # rubocop:disable RSpec/MultipleExpectations,RSpec/ExampleLength
+    it "updates existing user instead of creating new one" do # rubocop:disable RSpec/ExampleLength
       expect do
         get "/users/auth/fim/callback"
       end.not_to change(User, :count)

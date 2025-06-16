@@ -25,7 +25,7 @@ describe ASP::Entities::Adresse::InduEtranger, type: :model do
       let(:entity) { described_class.from_payment_request(pfmp.latest_payment_request) }
       let(:probe) { %w[codetypeadr PRINCIPALE] }
 
-      it "uses the establishment details for the address" do # rubocop:disable RSpec/MultipleExpectations
+      it "uses the establishment details for the address" do
         expect(document.at("localiteetranger").text).to eq "Cool City"
         expect(document.at("bureaudistribetranger").text).to eq  66_666.to_s
       end

@@ -27,7 +27,7 @@ describe StudentsApi::Sygne::Mappers::AddressMapper do
   context "when address_line2 is nil" do
     before { data["adrResidenceEle"]["adresseLigne2"] = nil }
 
-    it "maps addresses correctly" do # rubocop:disable RSpec/MultipleExpectations
+    it "maps addresses correctly" do
       expect(mapper.call(data)[:address_line1]).to eq data["adrResidenceEle"]["adresseLigne1"]
       expect(mapper.call(data)[:address_line2]).to eq [data["adrResidenceEle"]["adresseLigne3"],
                                                        data["adrResidenceEle"]["adresseLigne4"]].join(" ")
@@ -45,7 +45,7 @@ describe StudentsApi::Sygne::Mappers::AddressMapper do
       }
     end
 
-    it "correctly maps adresseLigne3 to address_line2" do # rubocop:disable RSpec/MultipleExpectations
+    it "correctly maps adresseLigne3 to address_line2" do
       result = mapper.call(data)
       expect(result[:address_line1]).to eq ""
       expect(result[:address_line2]).to eq "13 RUE DE LA FONTAINE"

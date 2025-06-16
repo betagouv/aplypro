@@ -25,7 +25,7 @@ describe ASP::Entities::Adresse::Etranger, type: :model do
       let(:entity) { described_class.from_payment_request(request) }
       let(:probe) { %w[codetypeadr PRINCIPALE] }
 
-      it "uses the establishment details for the address" do # rubocop:disable RSpec/MultipleExpectations
+      it "uses the establishment details for the address" do
         expect(document.at("codecominsee").text).to eq establishment.commune_code
         expect(document.at("codepostalcedex").text).to eq establishment.postal_code
         expect(document.at("codeinseepays").text).to eq InseeCodes::FRANCE_INSEE_COUNTRY_CODE
