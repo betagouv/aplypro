@@ -144,7 +144,7 @@ describe PfmpManager do
     end
     let(:confirmed_address_params) { { address_line1: "123 New St", address_city: "New City" } }
 
-    it "rectifies the PFMP and updates attributes" do # rubocop:disable RSpec/ExampleLength
+    it "rectifies the PFMP and updates attributes" do
       expect do
         manager.rectify_and_update_attributes!(confirmed_pfmp_params, confirmed_address_params)
       end.to change { pfmp.reload.current_state }.from("validated").to("rectified")
@@ -154,7 +154,7 @@ describe PfmpManager do
                                                                                    }.to(confirmed_address_params[:address_line1]) # rubocop:disable Layout/LineLength
     end
 
-    it "raises an error when the corrected amount is below threshold" do # rubocop:disable RSpec/ExampleLength
+    it "raises an error when the corrected amount is below threshold" do
       expect do
         manager.rectify_and_update_attributes!(
           { day_count: pfmp.day_count - 2, start_date: pfmp.start_date, end_date: pfmp.end_date },
@@ -163,7 +163,7 @@ describe PfmpManager do
       end.to raise_error(PfmpManager::RectificationAmountThresholdNotReachedError)
     end
 
-    it "raises an error when the corrected amount is zero" do # rubocop:disable RSpec/ExampleLength
+    it "raises an error when the corrected amount is zero" do
       expect do
         manager.rectify_and_update_attributes!(
           { day_count: pfmp.day_count, start_date: pfmp.start_date, end_date: pfmp.end_date },
@@ -172,7 +172,7 @@ describe PfmpManager do
       end.to raise_error(PfmpManager::RectificationAmountZeroError)
     end
 
-    it "allows rectification when setting day count to zero" do # rubocop:disable RSpec/ExampleLength
+    it "allows rectification when setting day count to zero" do
       expect do
         manager.rectify_and_update_attributes!(
           { day_count: 0, start_date: pfmp.start_date, end_date: pfmp.end_date },

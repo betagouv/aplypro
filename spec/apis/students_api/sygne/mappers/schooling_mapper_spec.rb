@@ -20,7 +20,7 @@ describe StudentsApi::Sygne::Mappers::SchoolingMapper do
     end
   end
 
-  it "maps the data correctly" do # rubocop:disable RSpec/ExampleLength
+  it "maps the data correctly" do
     expected = {
       label: "some label",
       mef_code: "123",

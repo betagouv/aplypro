@@ -389,7 +389,7 @@ RSpec.describe Schooling do
         expect(schooling.cancellation_decision.content_type).to eq("application/pdf")
       end
 
-      it "purges the existing attachment before attaching a new one" do # rubocop:disable RSpec/ExampleLength
+      it "purges the existing attachment before attaching a new one" do
         schooling.attributive_decision.attach(
           io: StringIO.new("existing attachment"),
           filename: "existing.pdf",

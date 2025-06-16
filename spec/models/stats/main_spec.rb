@@ -26,7 +26,6 @@ RSpec.describe Stats::Main do
 
     include_context "when there is data for stats per bops"
 
-    # rubocop:disable RSpec/ExampleLength
     it "computes the correct percentages" do
       expect(data).to eq(
         [["BOP", *indicators_titles],
@@ -36,7 +35,6 @@ RSpec.describe Stats::Main do
          ["MER", 4.0 / 7, 4.0 / 7, 4.0 / 7, 4.0 / 7, 20.0, 700, 7, 7, 4, 4, nil, nil]]
       )
     end
-    # rubocop:enable RSpec/ExampleLength
   end
 
   describe "#menj_academies_data" do
@@ -44,7 +42,6 @@ RSpec.describe Stats::Main do
 
     include_context "when there is data for stats per MENJ academies"
 
-    # rubocop:disable RSpec/ExampleLength
     it "computes the correct percentages" do
       expect(data).to eq(
         [["Académie", *indicators_titles],
@@ -53,7 +50,6 @@ RSpec.describe Stats::Main do
          ["Paris", 0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5, 2, 2, 2, 10]]
       )
     end
-    # rubocop:enable RSpec/ExampleLength
   end
 
   describe "#establishments_data" do
@@ -61,7 +57,6 @@ RSpec.describe Stats::Main do
 
     include_context "when there is data for stats per establishments"
 
-    # rubocop:disable RSpec/ExampleLength
     # rubocop:disable Layout/LineLength
     it "computes the correct percentages" do
       expect(data).to eq(
@@ -71,7 +66,6 @@ RSpec.describe Stats::Main do
          ["0000000C", "0000000C", "MINISTERE DE L'EDUCATION NATIONALE", "Marseille", "Public", 0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5, 2, 2, 2, 10]]
       )
     end
-    # rubocop:enable RSpec/ExampleLength
     # rubocop:enable Layout/LineLength
   end
 

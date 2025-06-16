@@ -85,7 +85,7 @@ RSpec.describe Users::OmniauthCallbacksController do
       )
     end
 
-    it "updates existing user instead of creating new one" do # rubocop:disable RSpec/ExampleLength
+    it "updates existing user instead of creating new one" do
       expect do
         get "/users/auth/fim/callback"
       end.not_to change(User, :count)
