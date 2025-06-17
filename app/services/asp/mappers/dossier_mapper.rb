@@ -10,10 +10,11 @@ module ASP
         id_dossier: :asp_dossier_id
       }.freeze
 
-      attr_reader :schooling
+      attr_reader :schooling, :payment_requests
 
-      def initialize(schooling)
-        @schooling = schooling
+      def initialize(payment_requests)
+        @schooling = payment_requests.first.schooling
+        @payment_requests = payment_requests
       end
 
       MAPPING.each do |name, attr|

@@ -13,3 +13,9 @@ RSpec.shared_examples "a schooling mapping entity" do
     expect(described_class.from_schooling(schooling)).to be_valid
   end
 end
+
+RSpec.shared_examples "ASP payments mapping entity" do
+  it "produces a valid object" do
+    expect(described_class.from_payment_requests(payment_requests)).to be_valid
+  end
+end

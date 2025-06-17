@@ -7,12 +7,16 @@ module ASP
       include ActiveModel::Attributes
       include ActiveModel::AttributeAssignment
 
-      attr_reader :payment_request, :schooling
+      attr_reader :payment_request, :schooling, :payment_requests
 
       ASP_MODIFICATION = { modification: "O" }.freeze
       ASP_NO_MODIFICATION = { modification: "N" }.freeze
 
       class << self
+        def from_payment_requests(payment_requests)
+          from("payment_requests", payment_requests)
+        end
+
         def from_payment_request(payment_request)
           from("payment_request", payment_request)
         end
@@ -70,7 +74,7 @@ module ASP
       end
 
       def adresse_entity_class
-        student = payment_request.nil? ? schooling.student : payment_request.student
+        student = payment_request.nil? ? payment_requests.first.student : payment_request.student
         if payment_request.present? && payment_request.pfmp.rectified?
           student.lives_in_france? ? Adresse::InduFrance : Adresse::InduEtranger
         else
