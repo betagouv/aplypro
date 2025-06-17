@@ -18,7 +18,9 @@ class PearlPfmpsRectificator < MassRectificator
 
     Rails.logger.info "Schooling #{schooling.id} has excess of #{excess_amount} (paid: #{total_paid}, cap: #{yearly_cap})"
 
-    distribute_rectifications(schooling, excess_amount)
+    ApplicationRecord.transaction do
+      distribute_rectifications(schooling, excess_amount)
+    end
   rescue StandardError => e
     handle_error(schooling, e)
   end
