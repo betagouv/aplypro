@@ -19,7 +19,7 @@ describe ASP::Mappers::PrestadossMapper do
       end
 
       it "accounts for the PFMP's index" do
-        expect(mapper.numadm).to eq "#{schooling.attributive_decision_number}03"
+        expect(mapper.numadm).to eq "#{schooling.attributive_decision_number}01"
       end
     end
   end
