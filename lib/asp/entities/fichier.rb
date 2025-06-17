@@ -22,8 +22,8 @@ module ASP
             parametrage(xml)
 
             xml.enregistrements do
-              schoolings.each do |schooling|
-                Entities::Enregistrement.from_schooling(schooling).to_xml(xml)
+              @schoolings_payment_requests.each_value do |payment_requests|
+                Entities::Enregistrement.from_payment_requests(payment_requests).to_xml(xml)
               end
             end
           end

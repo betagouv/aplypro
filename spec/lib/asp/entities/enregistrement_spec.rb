@@ -3,22 +3,22 @@
 require "rails_helper"
 
 describe ASP::Entities::Enregistrement, type: :model do
-  let(:payment_request) { create(:asp_payment_request, :ready) }
+  let(:payment_requests) { create_list(:asp_payment_request, 3, :ready) }
 
   before do
     %w[PersPhysique Adresse::France CoordPaie Dossier].each { |name| mock_entity(name) }
   end
 
-  it_behaves_like "an ASP payment mapping entity"
+  it_behaves_like "ASP payments mapping entity"
 
   it_behaves_like "an XML-fragment producer" do
-    let(:entity) { described_class.from_payment_request(payment_request) }
+    let(:entity) { described_class.from_payment_requests(payment_requests) }
     let(:probe) { ["enregistrement/individu/natureindividu", "P"] }
 
     describe "idIndividu" do
       subject(:attributes) { document.at("individu").attributes }
 
-      let(:student) { payment_request.student }
+      let(:student) { payment_requests.first.student }
 
       context "when the student is registered with the ASP" do
         before { student.update!(asp_individu_id: "foobar") }

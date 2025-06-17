@@ -28,7 +28,7 @@ module ASP
         xml.numadm(numadm)
         xml.codedispositif(codedispositif)
         xml.listeprestadoss do
-          schoolings_payment_requests[schooling].each do |payment_request|
+          payment_requests.each do |payment_request|
             Prestadoss.from_payment_request(payment_request).to_xml(xml)
           end
         end

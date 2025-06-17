@@ -24,20 +24,20 @@ module ASP
 
       def individu(xml)
         xml.natureindividu("P")
-        PersPhysique.from_schooling(schooling).to_xml(xml)
-        xml.adressesindividu { adresse_entity_class.from_schooling(schooling).to_xml(xml) }
+        PersPhysique.from_schooling(payment_requests.first.schooling).to_xml(xml)
+        xml.adressesindividu { adresse_entity_class.from_schooling(payment_requests.first.schooling).to_xml(xml) }
 
-        xml.listedossier { Dossier.from_schooling(schooling).to_xml(xml) }
+        xml.listedossier { Dossier.from_payment_requests(payment_requests).to_xml(xml) }
 
-      # rescue ActiveModel::ValidationError => e
-      #   Sentry.capture_exception(
-      #     ASP::Errors::PaymentFileValidationError.new(
-      #       "Payment file validation failed for p_r: #{payment_request.id} " \
-      #       "with message #{e.message}"
-      #     )
-      #   )
-      #   raise e
-
+        # TODO
+        # rescue ActiveModel::ValidationError => e
+        #   Sentry.capture_exception(
+        #     ASP::Errors::PaymentFileValidationError.new(
+        #       "Payment file validation failed for p_r: #{payment_request.id} " \
+        #       "with message #{e.message}"
+        #     )
+        #   )
+        #   raise e
       end
 
       def individu_attrs
