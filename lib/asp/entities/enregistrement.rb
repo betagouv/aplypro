@@ -24,8 +24,8 @@ module ASP
 
       def individu(xml)
         xml.natureindividu("P")
-        PersPhysique.from_schooling(payment_requests.first.schooling).to_xml(xml)
-        xml.adressesindividu { adresse_entity_class.from_schooling(payment_requests.first.schooling).to_xml(xml) }
+        PersPhysique.from_payment_request(payment_requests.first).to_xml(xml)
+        xml.adressesindividu { adresse_entity_class.from_payment_request(payment_requests.first).to_xml(xml) }
 
         xml.listedossier { Dossier.from_payment_requests(payment_requests).to_xml(xml) }
 

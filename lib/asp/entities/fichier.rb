@@ -9,11 +9,10 @@ module ASP
 
       validates_with ASP::SchemaValidator
 
-      attr_reader :schoolings_payment_requests, :schoolings
+      attr_reader :schoolings_payment_requests
 
       def initialize(payment_requests)
         @schoolings_payment_requests = payment_requests.group_by(&:schooling)
-        @schoolings = @schoolings_payment_requests.keys
       end
 
       def to_xml

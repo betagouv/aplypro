@@ -7,7 +7,7 @@ module ASP
       include ActiveModel::Attributes
       include ActiveModel::AttributeAssignment
 
-      attr_reader :payment_request, :schooling, :payment_requests
+      attr_reader :payment_request, :payment_requests
 
       ASP_MODIFICATION = { modification: "O" }.freeze
       ASP_NO_MODIFICATION = { modification: "N" }.freeze
@@ -19,10 +19,6 @@ module ASP
 
         def from_payment_request(payment_request)
           from("payment_request", payment_request)
-        end
-
-        def from_schooling(schooling)
-          from("schooling", schooling)
         end
 
         def from(variable_name, variable_value)

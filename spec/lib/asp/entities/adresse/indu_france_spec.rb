@@ -22,7 +22,7 @@ describe ASP::Entities::Adresse::InduFrance, type: :model do
     end
 
     it_behaves_like "an XML-fragment producer" do
-      let(:entity) { described_class.from_schooling(pfmp.schooling) }
+      let(:entity) { described_class.from_payment_request(pfmp.latest_payment_request) }
       let(:probe) { %w[codetypeadr PRINCIPALE] }
 
       it "uses the establishment details for the address" do
