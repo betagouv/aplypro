@@ -27,7 +27,11 @@ module ASP
         PersPhysique.from_payment_request(payment_requests.first).to_xml(xml)
         xml.adressesindividu { adresse_entity_class.from_payment_request(payment_requests.first).to_xml(xml) }
 
-        xml.listedossier { Dossier.from_payment_requests(payment_requests).to_xml(xml) }
+        xml.listedossier do
+          payment_requests.group_by(&:schooling).each_value do |grouped_p_r|
+            Dossier.from_payment_requests(grouped_p_r).to_xml(xml)
+          end
+        end
 
         # TODO
         # rescue ActiveModel::ValidationError => e
