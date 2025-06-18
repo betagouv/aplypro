@@ -136,7 +136,7 @@ RSpec.describe PfmpsController do
     let(:addresse_params) { { address_line1: "123 New St", address_city: "New City" } }
 
     context "when the PFMP can be rectified" do
-      it "rectifies the PFMP and redirects with a success notice" do # rubocop:disable RSpec/ExampleLength
+      it "rectifies the PFMP and redirects with a success notice" do
         post rectify_school_year_class_schooling_pfmp_path(school_year,
                                                            class_id: pfmp.classe.id,
                                                            schooling_id: pfmp.schooling.id,

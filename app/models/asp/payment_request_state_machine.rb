@@ -35,7 +35,7 @@ module ASP
       payment_request.student.update!(asp_individu_id: attrs["idIndDoss"])
       payment_request.schooling.update!(asp_dossier_id: attrs["idDoss"])
       payment_request.pfmp.update!(asp_prestation_dossier_id: attrs["idPretaDoss"])
-    rescue ActiveRecord::RecordNotUnique => e
+    rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid => e
       raise ASP::Errors::IntegrationError.new(
         "CSV Integration error for p_r #{payment_request.id} for data" \
         "#{transition.metadata} with message: #{e.message}",

@@ -32,6 +32,9 @@ RSpec/MultipleExpectations:
 RSpec/NestedGroups:
   Max: 5
 
+RSpec/ExampleLength:
+  Max: 10
+
 Style/HashSyntax:
   EnforcedShorthandSyntax: either
 

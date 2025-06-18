@@ -42,7 +42,7 @@ describe Updaters::StudentSchoolingsUpdater do
     allow(mapper_double).to receive(:call).and_return(mapped_schooling_attributes)
   end
 
-  it "asks for the schooling information" do # rubocop:disable RSpec/ExampleLength
+  it "asks for the schooling information" do
     updater.call
 
     expect(api_double).to have_received(:fetch_resource).with(

@@ -52,7 +52,7 @@ describe StudentsApi::Fregata::Api do
   end
 
   describe "fetch_establishment_students!" do
-    it "queries the right endpoint with the right parameters" do # rubocop:disable RSpec/ExampleLength
+    it "queries the right endpoint with the right parameters" do
       api.fetch_resource(:establishment_students, uai: uai, start_year: SchoolYear.current.start_year)
 
       expect(WebMock)
@@ -72,7 +72,7 @@ describe StudentsApi::Fregata::Api do
         mock_fregata_students_with(uai, "")
       end
 
-      it "calculates the proper year" do # rubocop:disable RSpec/ExampleLength
+      it "calculates the proper year" do
         api.fetch_resource(:establishment_students, uai: uai,
                                                     start_year: SchoolYear.current.start_year)
 

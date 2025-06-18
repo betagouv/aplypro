@@ -162,7 +162,7 @@ RSpec.describe Student do
              birthplace_city_insee_code: "75056")
     end
 
-    it "finds students with apostrophes and hyphens replaced by spaces" do # rubocop:disable RSpec/ExampleLength
+    it "finds students with apostrophes and hyphens replaced by spaces" do
       duplicate = create(:student,
                          first_name: "Jean Pierre",
                          last_name: "N Dour",
@@ -172,7 +172,7 @@ RSpec.describe Student do
       expect(student.duplicates).to include(student, duplicate)
     end
 
-    it "handles accents correctly" do # rubocop:disable RSpec/ExampleLength
+    it "handles accents correctly" do
       duplicate = create(:student,
                          first_name: "Jéan-Pièrre",
                          last_name: "N'Doùr",
