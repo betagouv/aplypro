@@ -3,17 +3,17 @@
 require "rails_helper"
 
 describe ASP::Entities::PersPhysique, type: :model do
-  let(:schooling) { create(:schooling) }
+  let(:payment_request) { create(:asp_payment_request, :ready) }
   let(:student) { create(:student, :with_all_asp_info, first_name: "Marie") }
 
   before do
-    schooling.update!(student: student)
+    payment_request.schooling.update!(student: student)
 
-    schooling.reload
+    payment_request.reload
   end
 
   describe "validation" do
-    subject(:model) { described_class.from_schooling(schooling) }
+    subject(:model) { described_class.from_payment_request(payment_request) }
 
     include_examples "a limited string attribute", attribute: :prenom, length: 20
     include_examples "a limited string attribute", attribute: :nomnaissance, length: 50
@@ -33,10 +33,10 @@ describe ASP::Entities::PersPhysique, type: :model do
     end
   end
 
-  it_behaves_like "a schooling mapping entity"
+  it_behaves_like "an ASP payment mapping entity"
 
   it_behaves_like "an XML-fragment producer" do
-    let(:entity) { described_class.from_schooling(schooling) }
+    let(:entity) { described_class.from_payment_request(payment_request) }
     let(:probe) { ["persphysique/prenom", "Marie"] }
 
     context "when the student is born abroad" do
