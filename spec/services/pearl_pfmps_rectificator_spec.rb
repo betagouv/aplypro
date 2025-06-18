@@ -24,13 +24,13 @@ RSpec.describe PearlPfmpsRectificator do
 
         allow_any_instance_of(Wage).to receive(:yearly_cap).and_return(300) # rubocop:disable RSpec/AnyInstance
 
-        3.times do
+        8.times do
           payment_request = create(:asp_payment_request, :paid)
           pfmp = payment_request.pfmp
           pfmp.skip_amounts_yearly_cap_validation = true
-          pfmp.update!(schooling: schooling, amount: 150, day_count: 15)
+          pfmp.update!(schooling: schooling, amount: 75, day_count: 15)
           payment_request.last_transition.update!(
-            metadata: { "PAIEMENT" => { "MTNET" => "150" } }
+            metadata: { "PAIEMENT" => { "MTNET" => "80" } }
           )
         end
 
@@ -41,6 +41,7 @@ RSpec.describe PearlPfmpsRectificator do
         results = rectificator.call
         expect(results[:processed]).to eq(1)
         expect(results[:rectified]).to include(schooling.id)
+        expect(schooling.pfmps.pluck(:amount)).to eq([0, 0, 0, 0, 60, 80, 80, 80])
       end
     end
 
