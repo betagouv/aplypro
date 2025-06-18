@@ -16,7 +16,8 @@ class PearlPfmpsRectificator < MassRectificator
       return
     end
 
-    Rails.logger.info "Schooling #{schooling.id} has excess of #{excess_amount} (paid: #{total_paid}, cap: #{yearly_cap})"
+    Rails.logger.info "Schooling #{schooling.id} has excess of #{excess_amount} " \
+                      "(paid: #{total_paid}, cap: #{yearly_cap})"
 
     ApplicationRecord.transaction do
       distribute_rectifications(schooling, excess_amount)
@@ -73,7 +74,8 @@ class PearlPfmpsRectificator < MassRectificator
     end
 
     if remaining_excess.positive?
-      Rails.logger.warn "Could not distribute entire excess for schooling #{schooling.id}. Remaining: #{remaining_excess}"
+      Rails.logger.warn "Could not distribute entire excess for schooling #{schooling.id}." \
+                        "Remaining: #{remaining_excess}"
     end
 
     Rails.logger.info "Rectified #{rectified_count} PFMPs for schooling #{schooling.id}"
