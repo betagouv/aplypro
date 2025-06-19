@@ -479,27 +479,27 @@ fr:
           invalid_payment_coordinates: La coordonnée de paiement est invalide
           hamlet: Les codes saisis (.*) de la table REFHEXAPOSTE correspondent à un lieu-dit
         responses:
-          payment_coordinates_blocked: Un premier paiement a été tenté par l’ASP, suite à l’échec de celui ci les coordonnées bancaires sont considérées comme bloquées. Pour ces cas l’ASP prend contact avec l’établissement afin de débloquer le premier paiement. Une fois ce déblocage terminé, l’établissement pourra retenter une nouvelle demande de paiement.
-          birth_commune_not_found: La commune de naissance sélectionnée n'existait pas à la date de naissance de l'individu.
-          outdated_insee_code: Le code Insee saisi pour la commune de résidence de cet élève n'existe plus.
-          localisationgeographique_not_found: Le code postal ou le code Insee de la commune de résidence de cet élève n'existe pas.
-          refinseepays_not_found: Le code Insee du pays de résidence de l'élève n'existe pas.
-          refdombancaire_not_found: Les coordonnées bancaires ne correspondent à aucune agence connue, veuillez vérifier l'IBAN et le BIC saisis.
-          inconsistent_address: Une incohérence semble exister entre le code INSEE et le code postal de la commune de résidence de l'élève.
-          bic_sepa_not_allowed: Le pays correspondant au code BIC saisi dans les coordonnées bancaires de l'élève n'accepte pas les paiements SEPA.
-          iban_sepa_not_allowed: L'IBAN correspond à un pays qui ne fait pas partie de la zone SEPA.
-          invalid_rib: Les coordonnées de paiement saisies sont invalides.
+          payment_coordinates_blocked: Un premier paiement a été tenté par l’ASP, suite à l’échec de celui ci les coordonnées bancaires sont considérées comme bloquées. Pour ces cas l’ASP prend contact avec l’établissement afin de débloquer le premier paiement. Une fois ce déblocage terminé, l’établissement pourra retenter une nouvelle demande de paiement
+          birth_commune_not_found: La commune de naissance sélectionnée n'existait pas à la date de naissance de l'individu
+          outdated_insee_code: Le code Insee saisi pour la commune de résidence de cet élève n'existe plus
+          localisationgeographique_not_found: Le code postal ou le code Insee de la commune de résidence de cet élève n'existe pas
+          refinseepays_not_found: Le code Insee du pays de résidence de l'élève n'existe pas
+          refdombancaire_not_found: Les coordonnées bancaires ne correspondent à aucune agence connue, veuillez vérifier l'IBAN et le BIC saisis
+          inconsistent_address: Une incohérence semble exister entre le code INSEE et le code postal de la commune de résidence de l'élève
+          bic_sepa_not_allowed: Le pays correspondant au code BIC saisi dans les coordonnées bancaires de l'élève n'accepte pas les paiements SEPA
+          iban_sepa_not_allowed: L'IBAN correspond à un pays qui ne fait pas partie de la zone SEPA
+          invalid_rib: Les coordonnées de paiement saisies sont invalides
           invalid_characters: "Les caractères autorisés pour l'intitulé du titulaire du compte sont limités à l'alphabet latin, aux chiffres, au caractère espace et aux caractères suivants: / - ? : ( ) . , ' +"
-          invalid_payment_coordinates: Les coordonnées de paiement saisies sont invalides.
-          fallback_message: Un problème est survenu, merci de prendre contact avec votre support technique.
+          invalid_payment_coordinates: Les coordonnées de paiement saisies sont invalides
+          fallback_message: Un problème est survenu, merci de prendre contact avec votre support technique
       unpaid:
-        fallback_message: Le paiement a échoué, merci de prendre contact avec votre support technique.
-        previous_bank_rejection: La coordonnée de paiement est actuellement bloquée, soit en raison d’un rejet bancaire antérieur en cours de traitement, soit pour suspicion de fraude. L'ASP va prochainement prendre contact avec vous pour indiquer la marche à suivre.
-        anomaly_detected: Suite à un contrôle de l’ASP, une anomalie a été détectée sur la demande de paiement, souvent liée à un risque d’erreur de RIB. Merci de vérifier que la coordonnée bancaire saisie (IBAN/BIC) correspond bien au bénéficiaire ou à son représentant légal, et de la corriger si nécessaire avant de renvoyer les informations des PFMP et versements concernés.
-        processing_control: Ce rejet est lié à un contrôle en cours par l’Agence comptable de l’ASP. Merci d’attendre les précisions de l’ASP concernant les pièces justificatives ou actions à engager.
-        control_anomaly: Ce rejet fait suite à un contrôle de l’Agence comptable de l’ASP ayant mis en évidence une problématique dans le dossier. Merci d’attendre les précisions de l’ASP concernant les pièces justificatives ou actions à engager.
-        payment_difficulty: Ce rejet est lié à un problème technique lors du paiement, comme un RIB non compatible avec les virements ; un mail de l’ASP vous sera envoyé pour expliquer l’origine du blocage et indiquer les éléments à fournir ou corriger. Merci d’attendre les précisions de l’ASP concernant les pièces justificatives ou actions à engager.
-        fraud_suspicion: Ce rejet peut être lié à une suspicion de fraude sur la coordonnée de paiement, même si celle-ci concerne un autre dispositif. Merci d’attendre les précisions de l’ASP concernant les pièces justificatives ou actions à engager.
+        fallback_message: Le paiement a échoué, merci de prendre contact avec votre support technique
+        previous_bank_rejection: La coordonnée de paiement est actuellement bloquée, soit en raison d’un rejet bancaire antérieur en cours de traitement, soit pour suspicion de fraude. L'ASP va prochainement prendre contact avec vous pour indiquer la marche à suivre
+        anomaly_detected: Suite à un contrôle de l’ASP, une anomalie a été détectée sur la demande de paiement, souvent liée à un risque d’erreur de RIB. Merci de vérifier que la coordonnée bancaire saisie (IBAN/BIC) correspond bien au bénéficiaire ou à son représentant légal, et de la corriger si nécessaire avant de renvoyer les informations des PFMP et versements concernés
+        processing_control: Ce rejet est lié à un contrôle en cours par l’Agence comptable de l’ASP. Merci d’attendre les précisions de l’ASP concernant les pièces justificatives ou actions à engager
+        control_anomaly: Ce rejet fait suite à un contrôle de l’Agence comptable de l’ASP ayant mis en évidence une problématique dans le dossier. Merci d’attendre les précisions de l’ASP concernant les pièces justificatives ou actions à engager
+        payment_difficulty: Ce rejet est lié à un problème technique lors du paiement, comme un RIB non compatible avec les virements ; un mail de l’ASP vous sera envoyé pour expliquer l’origine du blocage et indiquer les éléments à fournir ou corriger. Merci d’attendre les précisions de l’ASP concernant les pièces justificatives ou actions à engager
+        fraud_suspicion: Ce rejet peut être lié à une suspicion de fraude sur la coordonnée de paiement, même si celle-ci concerne un autre dispositif. Merci d’attendre les précisions de l’ASP concernant les pièces justificatives ou actions à engager
   academic:
     welcome:
       title: Bonjour et bienvenue sur la page APLyPro dédiée aux utilisateurs qui ne sont pas en établissement !
