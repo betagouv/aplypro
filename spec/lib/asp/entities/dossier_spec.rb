@@ -31,5 +31,11 @@ describe ASP::Entities::Dossier, type: :model do
         expect(attributes["modification"]).to have_attributes value: "N"
       end
     end
+
+    context "when there are multiple payments" do
+      it "includes multiple records" do
+        expect(document.at("listeprestadoss")).to have(3).elements
+      end
+    end
   end
 end

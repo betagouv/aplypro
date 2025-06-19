@@ -38,5 +38,23 @@ describe ASP::Entities::Enregistrement, type: :model do
         end
       end
     end
+
+    context "when there are multiple schoolings" do
+      it "includes one record per schooling" do
+        expect(document.at("listedossier")).to have(3).elements
+      end
+    end
+
+    context "when there are multiple payments for the same schooling" do
+      let(:student) { create(:student) }
+      let(:schooling) { create(:schooling, student: student) }
+      let(:payment_requests) { create_list(:asp_payment_request, 3, :ready) }
+
+      before { payment_requests.each { |p_r| p_r.pfmp.update(schooling: schooling) } }
+
+      it "includes only one record" do
+        expect(document.at("listedossier")).to have(1).elements
+      end
+    end
   end
 end
