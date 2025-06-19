@@ -19,14 +19,17 @@ describe ASP::Entities::Fichier do
     context "when there are multiple students" do
       let(:requests) { create_list(:asp_payment_request, 3, :ready) }
 
-      it "includes one record per schooling" do
+      it "includes one record per student" do
         expect(document / "ENREGISTREMENT").to have(3).elements
       end
     end
 
-    context "when there are multiple payments with the same schooling" do
-      let(:schooling) { create(:schooling) }
-      let(:requests) { create_list(:asp_payment_request, 3, :ready, schooling: schooling) }
+    context "when there are multiple payments for the same student" do
+      let(:student) { create(:student) }
+      let(:schooling) { create(:schooling, student: student) }
+      let(:requests) { create_list(:asp_payment_request, 3, :ready) }
+
+      before { requests.each { |p_r| p_r.pfmp.update(schooling: schooling) } }
 
       it "includes only one record" do
         expect(document / "ENREGISTREMENT").to have(1).elements
