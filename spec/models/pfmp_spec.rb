@@ -300,7 +300,9 @@ RSpec.describe Pfmp do
   describe "after_create callback" do
     it "correctly sets the administrative_number" do
       p = create(:pfmp)
-      expect(p.attributes["administrative_number"]).to eq("ENPU#{SchoolYear.current.start_year}001")
+      expect(p.attributes["administrative_number"]).to eq(
+        "ENPU#{p.schooling.administrative_number}#{SchoolYear.current.start_year}001"
+      )
     end
   end
 

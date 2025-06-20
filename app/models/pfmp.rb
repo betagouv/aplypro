@@ -93,6 +93,9 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def administrative_number
+    numadm = attributes["administrative_number"]
+    return numadm if numadm.present?
+
     index = relative_human_index.to_s.rjust(2, "0")
 
     schooling.attributive_decision_number + index

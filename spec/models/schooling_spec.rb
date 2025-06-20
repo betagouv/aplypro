@@ -158,16 +158,15 @@ RSpec.describe Schooling do
   end
 
   describe "administrative_number" do
-    subject!(:number) { schooling.administrative_number }
-
     context "when there is already a schooling with that reference" do
-      let(:schooling) { build(:schooling) }
+      let(:schooling) { create(:schooling) }
 
       before do
-        create(:schooling, administrative_number: "foobar")
-
+        sc = create(:schooling)
+        sc.update!(administrative_number: "foobar")
         allow(SecureRandom)
           .to receive(:alphanumeric).and_return("FOOBAR").and_return "BATMAN"
+        schooling.update!(administrative_number: nil)
       end
 
       it "creates a new one" do

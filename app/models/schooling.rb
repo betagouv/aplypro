@@ -71,6 +71,8 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   sourced_from_external_api :start_date, :end_date, :status
 
+  before_create -> { generate_administrative_number }
+
   def generate_administrative_number
     return if administrative_number.present?
 
