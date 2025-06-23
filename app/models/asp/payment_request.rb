@@ -77,7 +77,7 @@ module ASP
     rescue ASP::Errors::IncompletePaymentRequestError
       mark_incomplete!({ incomplete_reasons: errors })
     rescue ASP::Errors::FundingNotAvailableError
-      unless last_transition.metadata["pending_reasons"] == FUNDING_ISSUE
+      unless last_transition.present? && last_transition.metadata["pending_reasons"] == FUNDING_ISSUE
         mark_pending!({ pending_reason: FUNDING_ISSUE })
       end
     end
