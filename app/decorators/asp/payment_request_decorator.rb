@@ -22,7 +22,7 @@ module ASP
     ].freeze
 
     def status_badge
-      dsfr_badge(status: BADGE_STATE_MAPPING[current_state.to_sym], classes: ["fr-badge--sm"]) do
+      dsfr_badge(status: BADGE_STATE_MAPPING[current_state.to_sym], html_attributes: { classes: ["fr-badge--sm"] }) do
         status(current_state.to_sym)
       end
     end
@@ -31,7 +31,7 @@ module ASP
       current_stages.map do |state|
         disabled = "disabled" if current_state_symbol != state
 
-        dsfr_badge(status: BADGE_STATE_MAPPING[state], classes: ["fr-badge--sm", disabled]) do
+        dsfr_badge(status: BADGE_STATE_MAPPING[state], html_attributes: { classes: ["fr-badge--sm", disabled] }) do
           status(state)
         end
       end

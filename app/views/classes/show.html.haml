@@ -11,13 +11,13 @@
   - if @classe_facade.nb_pending_pfmps > 0
     = link_to bulk_pfmp_completion_school_year_class_path(selected_school_year, @classe), class: 'fr-btn fr-btn--secondary' do
       = @classe_facade.pending_pfmps_button_text
-      = dsfr_badge(status: :new, classes: ["fr-badge--sm", "fr-ml-1w"]) do
+      = dsfr_badge(status: :new, html_attributes: { classes: ["fr-badge--sm", "fr-ml-1w"] }) do
         = t("pfmps.states.pending")
-  
+
   - if current_user.can_validate? && @classe_facade.nb_can_transition_to_validated_pfmps > 0
     = link_to validation_school_year_class_path(selected_school_year, @classe), class: 'fr-btn fr-btn--secondary' do
       = @classe_facade.can_transition_to_validated_pfmps_button_text
-      = dsfr_badge(status: :info, classes: ["fr-badge--sm", "fr-ml-1w"]) do
+      = dsfr_badge(status: :info, html_attributes: { classes: ["fr-badge--sm", "fr-ml-1w"] }) do
         = t("pfmps.states.completed")
 
 = render partial: "students_table", locals: { schoolings: @classe_facade.schoolings.current, caption: "Liste des élèves" }
