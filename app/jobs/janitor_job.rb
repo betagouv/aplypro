@@ -10,7 +10,7 @@ class JanitorJob < ApplicationJob
 
   private
 
-  def reset_attributive_decision_version_attribute
+  def reset_attributive_decision_version_attribute # rubocop:disable Naming/PredicateMethod
     Schooling.where("attributive_decision_version > ?", 9).find_each do |schooling|
       schooling.update!(attributive_decision_version: 9)
     end

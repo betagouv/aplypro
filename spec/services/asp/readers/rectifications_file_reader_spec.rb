@@ -36,12 +36,12 @@ describe ASP::Readers::RectificationsFileReader do
   context "when the payment has been successful" do
     let(:payment_state) { :success }
 
-    include_examples "a payment request changing to", "paid"
+    it_behaves_like "a payment request changing to", "paid"
   end
 
   context "when the payment failed" do
     let(:payment_state) { :failed }
 
-    include_examples "a payment request changing to", "unpaid"
+    it_behaves_like "a payment request changing to", "unpaid"
   end
 end

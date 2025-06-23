@@ -101,11 +101,11 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def multiple_mefs?
-    classes.current.joins(:mef).select(:"mefs.id").distinct.count > 1
+    classes.current.joins(:mef).select(:"mefs.id").distinct.many?
   end
 
   def multiple_establishments?
-    classes.current.select(:establishment_id).distinct.count > 1
+    classes.current.select(:establishment_id).distinct.many?
   end
 
   def any_classes_in_establishment?(establishment)
