@@ -17,6 +17,7 @@ describe ASP::Entities::Enregistrement, type: :model do
 
     describe "idIndividu" do
       subject(:attributes) { document.at("individu").attributes }
+
       let(:student) { payment_requests.first.student }
 
       context "when the student is registered with the ASP" do
@@ -44,7 +45,7 @@ describe ASP::Entities::Enregistrement, type: :model do
       end
     end
 
-    context "when there are multiple payments for the same schooling" do
+    context "when there are multiple payments for the same schooling" do # rubocop:disable RSpec/MultipleMemoizedHelpers
       let(:student) { create(:student) }
       let(:schooling) { create(:schooling, student: student) }
       let(:pfmps) { create_list(:pfmp, 3, :can_be_validated, schooling: schooling) }
