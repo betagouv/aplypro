@@ -46,7 +46,7 @@ class PfmpManager
     pfmp.payment_requests.create! if pfmp.payable?
   end
 
-  def retry_incomplete_payment_request!
+  def retry_incomplete_payment_request! # rubocop:disable Naming/PredicateMethod
     last_payment_request = pfmp.latest_payment_request
 
     raise PaymentRequestNotIncompleteError unless last_payment_request.in_state?(:incomplete)

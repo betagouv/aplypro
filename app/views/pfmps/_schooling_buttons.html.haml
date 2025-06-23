@@ -23,7 +23,7 @@
         %ul.fr-btns-group.fr-btns-group--sm
           - if schooling.generating_attributive_decision.eql?(true)
             %li
-              = dsfr_alert(type: :info, title: t("panels.attributive_decisions.generating.title.one"), classes: 'fr-mb-3w') do
+              = dsfr_alert(type: :info, title: t("panels.attributive_decisions.generating.title.one"), html_attributes: { classes: 'fr-mb-3w' }) do
                 %p= t("panels.attributive_decisions.generating.body.one")
           - elsif current_user.can_validate? && !schooling.attributive_decision.attached?
             %li

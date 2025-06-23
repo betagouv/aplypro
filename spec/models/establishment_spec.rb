@@ -67,7 +67,7 @@ RSpec.describe Establishment do
 
       it "returns the default school year range" do
         expect(establishment.school_year_range).to eq(
-          start_date..start_date >> 12
+          start_date..(start_date >> 12)
         )
       end
     end
@@ -77,7 +77,7 @@ RSpec.describe Establishment do
       let(:expected_start_date) { Date.new(SchoolYear.current.start_year, 8, 16) }
 
       it "returns the school year range based on the exception" do
-        expect(establishment.school_year_range).to eq(expected_start_date..expected_start_date >> 12)
+        expect(establishment.school_year_range).to eq(expected_start_date..(expected_start_date >> 12))
       end
     end
   end

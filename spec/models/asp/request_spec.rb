@@ -111,19 +111,19 @@ RSpec.describe ASP::Request do
     context "when something in the XML formatting goes wrong" do
       before { allow(double).to receive(:to_xml).and_raise }
 
-      include_examples "does not persist anything"
+      it_behaves_like "does not persist anything"
     end
 
     context "when the XML is not valid" do
       before { allow(double).to receive(:validate!).and_raise }
 
-      include_examples "does not persist anything"
+      it_behaves_like "does not persist anything"
     end
 
     context "when the server can't upload the file" do
       before { allow(server_double).to receive(:upload_file!).and_raise }
 
-      include_examples "does not persist anything"
+      it_behaves_like "does not persist anything"
     end
 
     context "when the rerun parameter is passed" do
