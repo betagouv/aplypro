@@ -6,7 +6,7 @@ module ApplicationHelper
   end
 
   def success_badge(status, content)
-    dsfr_badge(status: status ? :success : :error, html_attributes: { classes: ["fr-badge--sm fr-mb-0"] }) do
+    dsfr_badge(status: status ? :success : :error, html_attributes: { class: ["fr-badge--sm fr-mb-0"] }) do
       content
     end
   end
