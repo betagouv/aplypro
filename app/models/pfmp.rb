@@ -56,8 +56,8 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
               only_integer: true,
               allow_nil: true,
               greater_than: 0,
-              less_than_or_equal_to: ->(pfmp) { (pfmp.end_date - pfmp.start_date).to_i + 1 }
-            }, unless: :rectified? # NOTE: a rectification with a 0 day count can be created to cancel a payment
+              less_than_or_equal_to: ->(pfmp) { pfmp.calculate_max_day_count }
+            }, if: :should_validate_day_count?
 
   after_create -> { self.administrative_number = administrative_number }
 
@@ -170,7 +170,16 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     errors.add(:end_date, "La date de fin de la PFMP est supérieure à la date du jour") if end_date > DateTime.now
   end
 
+  def calculate_max_day_count
+    (end_date - start_date).to_i + 1
+  end
+
   private
+
+  # NOTE: a rectification with a 0 day count can be created to cancel a payment
+  def should_validate_day_count?
+    !rectified? && start_date.present? && end_date.present?
+  end
 
   def amounts_yearly_cap
     return if skip_amounts_yearly_cap_validation
