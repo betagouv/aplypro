@@ -19,7 +19,7 @@ module ApplicationHelper
     disabled = count.zero? ? "disabled" : ""
 
     content_tag(:div, class: "fr-badge-group no-wrap fr-mb-1w #{args[:class]}", "aria-label": aria_label) do
-      safe_join([count_tag, send(badge_method, status, class: disabled)], " ")
+      safe_join([count_tag, send(badge_method, status, html_attributes: { class: disabled })], " ")
     end
   end
 end
