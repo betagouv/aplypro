@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 # rubocop:disable all
-module AttributeDecision
+  module Generator
   # Generate "Décision d'attribution"
-  class Attributor < DocumentGenerator
+  class Attributor < Document
     private
 
     def articles

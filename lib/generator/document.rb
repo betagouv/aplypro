@@ -2,8 +2,8 @@
 
 require "hexapdf"
 
-module AttributeDecision
-  class DocumentGenerator
+module Generator
+  class Document
     include ActionView::Helpers::NumberHelper
 
     attr_reader :composer, :schooling, :student, :school_year
