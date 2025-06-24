@@ -6,7 +6,7 @@
 
     = form.submit "Autoriser l'email", { class: 'fr-btn' }
 
-    = dsfr_alert(type: :warning, title: t("invitations.alert.#{current_user.provider}"), html_attributes: { classes: 'fr-my-3w' }) do
+    = dsfr_alert(type: :warning, title: t("invitations.alert.#{current_user.provider}"), html_attributes: { class: 'fr-my-3w' }) do
       %p
         L'utilisateur invité doit impérativement pouvoir se connecter avec cet email via le portail de connexion du
         = t("omniauth.#{current_user.provider}.title")

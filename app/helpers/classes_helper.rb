@@ -60,7 +60,7 @@ module ClassesHelper
     status = progress_badge_status(count, total)
 
     content_tag(:div, title: args[:title]) do
-      dsfr_badge(status: status, html_attributes: { classes: ["fr-badge counter"] }) do
+      dsfr_badge(status: status, html_attributes: { class: ["fr-badge counter"] }) do
         "#{count} / #{total}"
       end
     end

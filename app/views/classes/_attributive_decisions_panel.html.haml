@@ -8,7 +8,7 @@
 
 
 - if current_establishment.some_attributive_decisions_generating?(selected_school_year)
-  = dsfr_alert(type: :info, title: t("panels.attributive_decisions.generating.title.other"), html_attributes: { classes: 'fr-mt-3w' }) do
+  = dsfr_alert(type: :info, title: t("panels.attributive_decisions.generating.title.other"), html_attributes: { class: 'fr-mt-3w' }) do
     %p= t("panels.attributive_decisions.generating.body.other")
 - else
   .buttons-group
