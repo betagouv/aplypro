@@ -346,7 +346,9 @@ RSpec.describe Pfmp do
       it "is invalid" do
         pfmp.amount = paid_amount
         expect(pfmp).not_to be_valid
-        expect(pfmp.errors[:amount]).to include("must be different from the previously paid amount (#{paid_amount}€) when rectifying")
+        expect(pfmp.errors[:amount]).to include(
+          "must be different from the previously paid amount (#{paid_amount}€) when rectifying"
+        )
       end
     end
 
