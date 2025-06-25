@@ -331,4 +331,30 @@ RSpec.describe Pfmp do
       end
     end
   end
+
+  describe "rectified amount validation" do
+    let(:paid_amount) { 100 }
+    let(:pfmp) do
+      pr = create(:asp_payment_request, :paid)
+      pr.asp_payment_request_transitions
+        .find_by(to_state: "paid")
+        .update!(metadata: { "PAIEMENT" => { "MTNET" => paid_amount.to_s } })
+      pr.pfmp.reload.tap(&:rectify!)
+    end
+
+    context "when rectified amount equals previously paid amount" do
+      it "is invalid" do
+        pfmp.amount = paid_amount
+        expect(pfmp).not_to be_valid
+        expect(pfmp.errors[:amount]).to include("must be different from the previously paid amount (#{paid_amount}€) when rectifying")
+      end
+    end
+
+    context "when rectified amount differs from previously paid amount" do
+      it "is valid" do
+        pfmp.amount = paid_amount + 50
+        expect(pfmp).to be_valid
+      end
+    end
+  end
 end

@@ -32,6 +32,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validates :start_date, :end_date, presence: true
 
   validate :amounts_yearly_cap
+  validate :rectified_amount_must_differ_from_paid_amount, if: :rectified?
 
   validates :end_date,
             :start_date,
