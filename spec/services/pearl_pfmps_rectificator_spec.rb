@@ -99,7 +99,7 @@ RSpec.describe PearlPfmpsRectificator do
       let(:student) { schooling.student }
 
       before do
-        allow_any_instance_of(Sync::StudentJob).to receive(:perform)
+        allow_any_instance_of(Sync::StudentJob).to receive(:perform) # rubocop:disable RSpec/AnyInstance
 
         student.update!(
           address_line1: "123 Main St",
@@ -108,7 +108,7 @@ RSpec.describe PearlPfmpsRectificator do
           address_city_insee_code: "75101"
         )
 
-        allow_any_instance_of(Wage).to receive(:yearly_cap).and_return(300)
+        allow_any_instance_of(Wage).to receive(:yearly_cap).and_return(300) # rubocop:disable RSpec/AnyInstance
 
         payment_request = create(:asp_payment_request, :paid)
         pfmp = payment_request.pfmp
@@ -141,7 +141,7 @@ RSpec.describe PearlPfmpsRectificator do
       let(:student) { schooling.student }
 
       before do
-        allow_any_instance_of(Sync::StudentJob).to receive(:perform)
+        allow_any_instance_of(Sync::StudentJob).to receive(:perform) # rubocop:disable RSpec/AnyInstance
 
         student.update!(
           address_line1: "123 Main St",
@@ -150,7 +150,7 @@ RSpec.describe PearlPfmpsRectificator do
           address_city_insee_code: "75101"
         )
 
-        allow_any_instance_of(Wage).to receive(:yearly_cap).and_return(300)
+        allow_any_instance_of(Wage).to receive(:yearly_cap).and_return(300) # rubocop:disable RSpec/AnyInstance
 
         4.times do |i|
           payment_request = create(:asp_payment_request, :paid)
@@ -168,7 +168,7 @@ RSpec.describe PearlPfmpsRectificator do
           )
         end
 
-        allow_any_instance_of(PfmpManager).to receive(:rectify_and_update_attributes!)
+        allow_any_instance_of(PfmpManager).to receive(:rectify_and_update_attributes!) # rubocop:disable RSpec/AnyInstance
       end
 
       it "distributes excess reduction across PFMPs respecting 30€ threshold" do
