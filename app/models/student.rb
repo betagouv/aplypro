@@ -169,4 +169,8 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def retry_pfmps_payment_requests!
     pfmps.in_state(:validated).each { |pfmp| PfmpManager.new(pfmp).retry_payment_request! }
   end
+
+  def other_first_names
+    "#{first_name2}, #{first_name3}"
+  end
 end

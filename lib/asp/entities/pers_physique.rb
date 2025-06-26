@@ -10,6 +10,7 @@ module ASP
       attribute :nomusage, :string, limit: LAST_NAME_MAX_LENGTH
       attribute :nomnaissance, :string, limit: LAST_NAME_MAX_LENGTH
       attribute :prenom, :string, limit: FIRST_NAME_MAX_LENGTH
+      attribute :autresprenoms, :string, limit: 40
       attribute :datenaissance, :asp_date
       attribute :codeinseepaysnai, :string
       attribute :codeinseecommune, :string
@@ -19,15 +20,17 @@ module ASP
         nomusage
         nomnaissance
         prenom
+        autresprenoms
         datenaissance
         codeinseepaysnai
       ]
 
       validates_presence_of :codeinseecommune, if: :born_in_france?
 
-      def fragment(xml)
+      def fragment(xml) # rubocop:disable Metrics/AbcSize
         xml.titre(titre)
         xml.prenom(prenom)
+        xml.autresprenoms(autresprenoms)
         xml.nomusage(nomusage)
         xml.nomnaissance(nomnaissance)
         xml.datenaissance(datenaissance)
