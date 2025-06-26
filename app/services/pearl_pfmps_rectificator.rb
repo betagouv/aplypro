@@ -36,7 +36,7 @@ class PearlPfmpsRectificator < MassRectificator
   def calculate_total_paid(schooling)
     schooling.pfmps
              .select(&:paid?)
-             .sum { |pfmp| extract_real_amount(pfmp).to_i }
+             .sum(&:paid_amount)
   end
 
   def distribute_rectifications(schooling, excess_amount) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
@@ -53,10 +53,10 @@ class PearlPfmpsRectificator < MassRectificator
     eligible_pfmps.each do |pfmp|
       break if remaining_excess <= 0
 
-      paid_amount = extract_real_amount(pfmp).to_i
+      paid_amount = pfmp.paid_amount
       max_reduction = [paid_amount, remaining_excess].min
 
-      next if max_reduction <= 5
+      next if max_reduction <= PfmpManager::EXCESS_AMOUNT_RECTIFICATION_THRESHOLD
 
       new_amount = paid_amount - max_reduction
       Rails.logger.info "Rectifying PFMP #{pfmp.id}: reducing from #{paid_amount} to #{new_amount}"

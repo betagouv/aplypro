@@ -102,11 +102,11 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
     schooling.pfmps.each do |pfmp|
       next unless should_reset_amount?(pfmp)
 
-      real_amount = extract_real_amount(pfmp)
-      next if pfmp.amount == real_amount.to_i
+      real_amount = pfmp.paid_amount
+      next if real_amount.nil? || pfmp.amount == real_amount
 
       pfmp.skip_amounts_yearly_cap_validation = true
-      pfmp.update!(amount: real_amount.to_i)
+      pfmp.update!(amount: real_amount)
       Rails.logger.info "Reset amount to #{real_amount} for PFMP #{pfmp.id}"
     end
   end
@@ -114,13 +114,6 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
   def should_reset_amount?(pfmp)
     pfmp.latest_payment_request.present? &&
       pfmp.latest_payment_request.current_state == "paid"
-  end
-
-  def extract_real_amount(pfmp)
-    pfmp.latest_payment_request
-        .last_transition
-        .metadata.dig("PAIEMENT", "MTNET")
-        .to_f
   end
 
   def sync_student_data(schooling)

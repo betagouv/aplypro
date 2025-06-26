@@ -41,7 +41,7 @@ RSpec.describe PearlPfmpsRectificator do
         results = rectificator.call
         expect(results[:processed]).to eq(1)
         expect(results[:rectified]).to include(schooling.id)
-        expect(schooling.pfmps.pluck(:amount)).to eq([0, 0, 0, 0, 60, 80, 80, 80])
+        expect(schooling.pfmps.pluck(:amount)).to eq([0, 0, 0, 0, 80, 80, 80, 80])
       end
     end
 

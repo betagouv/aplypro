@@ -32,6 +32,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validates :start_date, :end_date, presence: true
 
   validate :amounts_yearly_cap
+  validate :rectified_amount_must_differ_from_paid_amount, if: :rectified?
 
   validates :end_date,
             :start_date,
@@ -174,6 +175,17 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     (end_date - start_date).to_i + 1
   end
 
+  def paid_amount
+    last_paid_request = payment_requests.in_state(:paid).order(created_at: :desc).first
+    return unless last_paid_request
+
+    last_paid_request
+      .last_transition_to(:paid)
+      .metadata
+      .dig("PAIEMENT", "MTNET")
+      .to_i
+  end
+
   private
 
   # NOTE: a rectification with a 0 day count can be created to cancel a payment
@@ -193,5 +205,12 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     errors.add(:amount,
                "Yearly cap of #{cap} not respected for Mef code: #{mef.code} \\
                -> #{total}/#{cap} with #{pfmps.count} PFMPs")
+  end
+
+  def rectified_amount_must_differ_from_paid_amount
+    return unless amount.present? && paid_amount.present?
+    return if amount != paid_amount
+
+    errors.add(:amount, "must be different from the previously paid amount (#{paid_amount}€) when rectifying")
   end
 end
