@@ -36,46 +36,58 @@ class PearlPfmpsRectificator < MassRectificator
   def calculate_total_paid(schooling)
     schooling.pfmps
              .select(&:paid?)
-             .sum(&:paid_amount)
+             .sum(&:amount)
   end
 
-  def distribute_rectifications(schooling, excess_amount) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
-    eligible_pfmps = schooling.pfmps
-                              .in_state(:validated)
-                              .select(&:paid?)
-                              .select { |p| p.amount.to_i.positive? }
-                              .sort_by { |p| -p.amount.to_i }
-
-    remaining_excess = excess_amount
+  def distribute_rectifications(schooling, _excess_amount) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
     rectified_count = 0
     address_params = schooling.student.attributes.slice("address_line1")
 
-    eligible_pfmps.each do |pfmp|
-      break if remaining_excess <= 0
+    loop do
+      schooling.reload
+      current_total = calculate_total_paid(schooling)
+      yearly_cap = schooling.pfmps.first.mef.wage.yearly_cap
+      current_excess = current_total - yearly_cap
 
+      break if current_excess <= PfmpManager::EXCESS_AMOUNT_RECTIFICATION_THRESHOLD
+
+      eligible_pfmps = schooling.pfmps
+                                .in_state(:validated)
+                                .select(&:paid?)
+                                .sort_by { |p| -p.amount.to_i }
+
+      break if eligible_pfmps.empty?
+
+      pfmp = eligible_pfmps.first
       paid_amount = pfmp.paid_amount
-      max_reduction = [paid_amount, remaining_excess].min
 
-      next if max_reduction <= PfmpManager::EXCESS_AMOUNT_RECTIFICATION_THRESHOLD
+      if current_excess >= paid_amount
+        new_amount = 0
+        max_reduction = paid_amount
+      else
+        max_reduction = current_excess
+        new_amount = paid_amount - max_reduction
+      end
 
-      new_amount = paid_amount - max_reduction
+      break if max_reduction <= PfmpManager::EXCESS_AMOUNT_RECTIFICATION_THRESHOLD
+
       Rails.logger.info "Rectifying PFMP #{pfmp.id}: reducing from #{paid_amount} to #{new_amount}"
 
       pfmp.skip_amounts_yearly_cap_validation = true
-      pfmp.update!(amount: new_amount)
 
       PfmpManager.new(pfmp).rectify_and_update_attributes!(
-        { day_count: pfmp.day_count },
+        { amount: new_amount },
         address_params
       )
 
-      remaining_excess -= max_reduction
       rectified_count += 1
     end
 
-    if remaining_excess.positive?
+    final_total = calculate_total_paid(schooling)
+    final_excess = final_total - schooling.pfmps.first.mef.wage.yearly_cap
+    if final_excess > PfmpManager::EXCESS_AMOUNT_RECTIFICATION_THRESHOLD
       Rails.logger.warn "Could not distribute entire excess for schooling #{schooling.id}." \
-                        "Remaining: #{remaining_excess}"
+                        "Remaining: #{final_excess}"
     end
 
     Rails.logger.info "Rectified #{rectified_count} PFMPs for schooling #{schooling.id}"

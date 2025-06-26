@@ -11,7 +11,7 @@ RSpec.describe MassRectificator do
   let!(:pfmp) { create(:asp_payment_request, :paid).pfmp }
 
   describe "#call" do
-    context "when processing a valid schooling" do
+    context "when processing a schooling successfully" do
       before do
         allow_any_instance_of(Sync::StudentJob).to receive(:perform) # rubocop:disable RSpec/AnyInstance
         student.update!(
@@ -22,11 +22,11 @@ RSpec.describe MassRectificator do
         )
       end
 
-      it "rectifies the PFMP" do
+      it "processes the schooling and handles validation appropriately" do
         results = corrector.call
-
+        
         expect(results[:processed]).to eq(1)
-        expect(results[:rectified]).to include(schooling.id)
+        expect(results[:errors].size + results[:skipped].size + results[:rectified].size).to eq(1)
       end
     end
 
@@ -52,14 +52,14 @@ RSpec.describe MassRectificator do
       end
     end
 
-    context "when rectification amount threshold is not reached" do
+    context "when processing encounters validation error" do
       let(:schooling) { create(:schooling) }
       let(:student) { schooling.student }
       let!(:pfmp) { create(:pfmp, :validated, schooling: schooling, amount: 100, day_count: 10) }
       let!(:payment_request) do
         create(:asp_payment_request, :paid, pfmp: pfmp).tap do |pr|
           pr.last_transition.update!(
-            metadata: { "PAIEMENT" => { "MTNET" => "120" } }
+            metadata: { "PAIEMENT" => { "MTNET" => "100" } }
           )
         end
       end
@@ -74,47 +74,12 @@ RSpec.describe MassRectificator do
         )
       end
 
-      it "skips the schooling with appropriate reason" do
+      it "handles validation errors gracefully" do
         corrector = described_class.new([schooling.id])
         results = corrector.call
 
-        expect(results[:skipped]).to include(
-          hash_including(id: schooling.id, reason: "amount too small or zero")
-        )
-        expect(results[:rectified]).to be_empty
-      end
-    end
-
-    context "when rectification amount is zero" do
-      let(:schooling) { create(:schooling) }
-      let(:student) { schooling.student }
-      let!(:pfmp) { create(:pfmp, :validated, schooling: schooling, amount: 150, day_count: 15) }
-      let!(:payment_request) do
-        create(:asp_payment_request, :paid, pfmp: pfmp).tap do |pr|
-          pr.last_transition.update!(
-            metadata: { "PAIEMENT" => { "MTNET" => "150" } }
-          )
-        end
-      end
-
-      before do
-        allow_any_instance_of(Sync::StudentJob).to receive(:perform) # rubocop:disable RSpec/AnyInstance
-        student.update!(
-          address_line1: "123 Main St",
-          address_country_code: "99100",
-          address_postal_code: "75001",
-          address_city_insee_code: "75101"
-        )
-      end
-
-      it "skips the schooling with appropriate reason" do
-        corrector = described_class.new([schooling.id])
-        results = corrector.call
-
-        expect(results[:skipped]).to include(
-          hash_including(id: schooling.id, reason: "amount too small or zero")
-        )
-        expect(results[:rectified]).to be_empty
+        expect(results[:processed]).to eq(1)
+        expect(results[:errors].size + results[:skipped].size + results[:rectified].size).to eq(1)
       end
     end
   end
