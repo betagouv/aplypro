@@ -17,7 +17,7 @@ RSpec.describe MassRectificator do
         allow_any_instance_of(PfmpManager).to receive(:rectify_and_update_attributes!) # rubocop:disable RSpec/AnyInstance
         student.update!(
           address_line1: "123 Main St",
-          address_country_code: "FR",
+          address_country_code: "99100",
           address_postal_code: "75001",
           address_city_insee_code: "75101"
         )
@@ -60,7 +60,7 @@ RSpec.describe MassRectificator do
           .and_raise(PfmpManager::RectificationAmountThresholdNotReachedError)
         student.update!(
           address_line1: "123 Main St",
-          address_country_code: "FR",
+          address_country_code: "99100",
           address_postal_code: "75001",
           address_city_insee_code: "75101"
         )
@@ -83,7 +83,7 @@ RSpec.describe MassRectificator do
           .and_raise(PfmpManager::RectificationAmountZeroError)
         student.update!(
           address_line1: "123 Main St",
-          address_country_code: "FR",
+          address_country_code: "99100",
           address_postal_code: "75001",
           address_city_insee_code: "75101"
         )
