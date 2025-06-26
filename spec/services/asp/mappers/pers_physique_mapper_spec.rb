@@ -10,7 +10,11 @@ describe ASP::Mappers::PersPhysiqueMapper do
 
   described_class::MAPPING.each do |name, mapping|
     it "maps to the student's`#{mapping}'" do
-      expect(mapper.send(name)).to eq student[mapping]
+      if mapping.eql?(:other_first_names)
+        expect(mapper.send(name)).to eq "#{student.first_name2}, #{student.first_name3}"
+      else
+        expect(mapper.send(name)).to eq student[mapping]
+      end
     end
   end
 

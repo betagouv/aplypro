@@ -5,6 +5,7 @@ module ASP
     class PersPhysiqueMapper
       MAPPING = {
         prenom: :first_name,
+        autresprenoms: :other_first_names,
         nomusage: :last_name,
         nomnaissance: :last_name,
         datenaissance: :birthdate,
@@ -28,7 +29,7 @@ module ASP
       end
 
       MAPPING.each do |name, attr|
-        define_method(name) { student[attr] }
+        define_method(name) { student.send(attr) }
       end
 
       def titre
