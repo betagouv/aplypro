@@ -33,8 +33,6 @@ RSpec.describe PearlPfmpsRectificator do
             metadata: { "PAIEMENT" => { "MTNET" => "80" } }
           )
         end
-
-        allow_any_instance_of(PfmpManager).to receive(:rectify_and_update_attributes!).and_return(true) # rubocop:disable RSpec/AnyInstance
       end
 
       it "rectifies the schooling" do
@@ -167,8 +165,6 @@ RSpec.describe PearlPfmpsRectificator do
             metadata: { "PAIEMENT" => { "MTNET" => "85" } }
           )
         end
-
-        allow_any_instance_of(PfmpManager).to receive(:rectify_and_update_attributes!) # rubocop:disable RSpec/AnyInstance
       end
 
       it "distributes excess reduction across PFMPs respecting 30€ threshold" do
