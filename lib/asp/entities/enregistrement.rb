@@ -22,12 +22,16 @@ module ASP
         xml.individu(**individu_attrs) { individu(xml) }
       end
 
-      def individu(xml)
+      def individu(xml) # rubocop disable:Metrics/AbcSize # rubocop:disable Metrics/AbcSize
         xml.natureindividu("P")
-        PersPhysique.from_payment_request(payment_request).to_xml(xml)
-        xml.adressesindividu { adresse_entity_class.from_payment_request(payment_request).to_xml(xml) }
+        PersPhysique.from_payment_request(payment_requests.first).to_xml(xml)
+        xml.adressesindividu { adresse_entity_class.from_payment_request(payment_requests.first).to_xml(xml) }
 
-        xml.listedossier { Dossier.from_payment_request(payment_request).to_xml(xml) }
+        xml.listedossier do
+          payment_requests.group_by(&:schooling).each_value do |grouped_p_r|
+            Dossier.from_payment_requests(grouped_p_r).to_xml(xml)
+          end
+        end
       rescue ActiveModel::ValidationError => e
         Sentry.capture_exception(
           ASP::Errors::PaymentFileValidationError.new(
