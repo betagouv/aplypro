@@ -47,38 +47,68 @@ class PearlPfmpsRectificator < MassRectificator # rubocop:disable Metrics/ClassL
              .sum(&:amount)
   end
 
-  def distribute_rectifications(schooling, _excess_amount) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    rectified_count = 0
+  def distribute_rectifications(schooling, _excess_amount)
     address_params = schooling.student.attributes.slice("address_line1")
+    rectification_plan = calculate_rectification_plan(schooling)
 
-    loop do
-      current_excess = calculate_current_excess(schooling)
-      break if current_excess <= PfmpManager::EXCESS_AMOUNT_RECTIFICATION_THRESHOLD
+    rectified_count = execute_rectification_plan(rectification_plan, address_params)
+    log_rectification_results(schooling, rectified_count)
+    results[:rectified] << schooling.id
+  end
 
-      eligible_pfmps = find_eligible_pfmps_sorted_by_amount(schooling)
-      break if eligible_pfmps.empty?
+  def calculate_rectification_plan(schooling)
+    total_paid = calculate_total_paid(schooling)
+    yearly_cap = schooling.pfmps.first.mef.wage.yearly_cap
+    excess_amount = total_paid - yearly_cap
 
-      pfmp = eligible_pfmps.first
+    return [] if excess_amount <= PfmpManager::EXCESS_AMOUNT_RECTIFICATION_THRESHOLD
+
+    eligible_pfmps = find_eligible_pfmps_sorted_by_amount(schooling)
+    distribute_excess_across_pfmps(eligible_pfmps, excess_amount)
+  end
+
+  def distribute_excess_across_pfmps(pfmps, excess_amount)
+    remaining_excess = excess_amount
+    rectification_plan = []
+
+    pfmps.each do |pfmp|
+      break if remaining_excess <= PfmpManager::EXCESS_AMOUNT_RECTIFICATION_THRESHOLD
+
       paid_amount = pfmp.paid_amount
-      new_amount, max_reduction = calculate_rectification_amounts(current_excess, paid_amount)
+      reduction = [remaining_excess, paid_amount].min
 
-      break if max_reduction <= PfmpManager::EXCESS_AMOUNT_RECTIFICATION_THRESHOLD
+      next if reduction <= PfmpManager::EXCESS_AMOUNT_RECTIFICATION_THRESHOLD
 
-      if dry_run
-        action = "[DRY RUN] Would rectify"
-        Rails.logger.info "#{action} PFMP #{pfmp.id}: reducing from #{paid_amount} to #{new_amount}"
-      else
-        rectify_single_pfmp(pfmp, paid_amount, new_amount, address_params)
-      end
-      rectified_count += 1
+      new_amount = paid_amount - reduction
+      rectification_plan << { pfmp: pfmp, old_amount: paid_amount, new_amount: new_amount }
+      remaining_excess -= reduction
     end
 
+    rectification_plan
+  end
+
+  def execute_rectification_plan(plan, address_params)
+    plan.each do |rectification|
+      pfmp = rectification[:pfmp]
+      old_amount = rectification[:old_amount]
+      new_amount = rectification[:new_amount]
+
+      if dry_run
+        Rails.logger.info "[DRY RUN] Would rectify PFMP #{pfmp.id}: reducing from #{old_amount} to #{new_amount}"
+      else
+        rectify_single_pfmp(pfmp, old_amount, new_amount, address_params)
+      end
+    end
+
+    plan.size
+  end
+
+  def log_rectification_results(schooling, rectified_count)
     if dry_run
       log_final_results_dry_run(schooling, rectified_count)
     else
       log_final_results(schooling, rectified_count)
     end
-    results[:rectified] << schooling.id
   end
 
   def calculate_current_excess(schooling)
