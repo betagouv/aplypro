@@ -124,7 +124,7 @@ class Student
       end
 
       def current_school_year?(start_date)
-        start_date.present? && Date.parse(start_date).year >= SchoolYear.current.start_year
+        start_date.present? && @establishment.school_year_range.include?(Date.parse(start_date))
       end
     end
   end

@@ -18,7 +18,7 @@ describe "ASP Entities" do # rubocop:disable RSpec/DescribeClass
   let(:payment_requests) { create_list(:asp_payment_request, 3, :ready) }
 
   it "produce valid documents" do
-    log_on_failure = -> { file.errors.each { |e| puts "ASP validation error: #{e.message}\n" } }
+    log_on_failure = -> { file.errors.each { |e| Rails.logger.debug "ASP validation error: #{e.message}\n" } }
 
     expect { file.validate! }.not_to raise_error, log_on_failure
   end

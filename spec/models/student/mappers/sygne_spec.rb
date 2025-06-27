@@ -61,9 +61,9 @@ describe Student::Mappers::Sygne do
 
       let(:student) { Student.find_by(ine: "1234") }
 
-      before { mapper.parse! }
-
       it "sets the end_date for closed schoolings" do
+        mapper.parse!
+
         expect(student.schoolings.last.end_date.to_s).to eq closed_payload.last["dateFinSco"]
       end
 
@@ -73,6 +73,16 @@ describe Student::Mappers::Sygne do
         opened_mapper.parse!
 
         expect(student.schoolings.last.open?).to be true
+      end
+
+      context "when the schooling is not in the current school year" do
+        before { closed_payload.first.update(dateDebSco: "#{SchoolYear.current.start_year - 2}-05-05") }
+
+        it "does not update the end date" do
+          mapper.parse!
+
+          expect(student.schoolings.last.end_date).to be_nil
+        end
       end
     end
 

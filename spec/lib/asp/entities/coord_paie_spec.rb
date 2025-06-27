@@ -7,7 +7,7 @@ describe ASP::Entities::CoordPaie, type: :model do
 
   let(:payment_request) { create(:asp_payment_request, :ready) }
 
-  include_examples "a limited string attribute", attribute: :intitdest, length: 32
+  it_behaves_like "a limited string attribute", attribute: :intitdest, length: 32
 
   it_behaves_like "an ASP payment mapping entity"
 

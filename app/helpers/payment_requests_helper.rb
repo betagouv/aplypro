@@ -4,7 +4,7 @@ module PaymentRequestsHelper
   def payment_request_status_badge(status, **args)
     status_level = ASP::PaymentRequestDecorator::BADGE_STATE_MAPPING[status]
 
-    dsfr_badge(status: status_level, classes: %w[fr-badge--sm fr-m-0].push(args[:class])) do
+    dsfr_badge(status: status_level, html_attributes: { class: %w[fr-badge--sm fr-m-0].push(args[:class]) }) do
       t("payment_requests.states.#{status}")
     end
   end

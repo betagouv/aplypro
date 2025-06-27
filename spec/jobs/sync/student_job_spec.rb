@@ -39,7 +39,7 @@ RSpec.describe Sync::StudentJob, :student_api do
       WebmockHelpers.mock_sygne_student_endpoint_with(student.ine, payload)
     end
 
-    include_examples "maps all the extra fields correctly"
+    it_behaves_like "maps all the extra fields correctly"
 
     context "when the student was not found before" do
       before { student.update!(ine_not_found: true) }
@@ -97,7 +97,7 @@ RSpec.describe Sync::StudentJob, :student_api do
       WebmockHelpers.mock_fregata_students_with(establishment.uai, payload)
     end
 
-    include_examples "maps all the extra fields correctly"
+    it_behaves_like "maps all the extra fields correctly"
   end
 end
 # rubocop:enable RSpec/MultipleMemoizedHelpers

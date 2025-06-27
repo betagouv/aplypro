@@ -11,7 +11,7 @@ module PfmpDecorator
   }.freeze
 
   def status_badge
-    dsfr_badge(status: PFMP_STATE_MAPPING[current_state.to_sym], classes: ["fr-badge--sm"]) do
+    dsfr_badge(status: PFMP_STATE_MAPPING[current_state.to_sym], html_attributes: { class: ["fr-badge--sm"] }) do
       status_to_s
     end
   end
@@ -23,7 +23,7 @@ module PfmpDecorator
   def all_status_badges
     t("pfmps.state").map do |status_key, status_string|
       disabled = current_state.to_sym == status_key ? "" : "disabled"
-      dsfr_badge(status: PFMP_STATE_MAPPING[status_key], classes: ["fr-badge--sm", disabled]) do
+      dsfr_badge(status: PFMP_STATE_MAPPING[status_key], html_attributes: { class: ["fr-badge--sm", disabled] }) do
         status_string
       end
     end

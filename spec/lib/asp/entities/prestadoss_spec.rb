@@ -19,8 +19,8 @@ describe ASP::Entities::Prestadoss, type: :model do
   describe "formatting" do
     let(:model) { described_class.from_payment_request(payment_request) }
 
-    include_examples "an ASP-friendly date attribute", attribute: :datecomplete
-    include_examples "an ASP-friendly date attribute", attribute: :datereceptionprestadoss
+    it_behaves_like "an ASP-friendly date attribute", attribute: :datecomplete
+    it_behaves_like "an ASP-friendly date attribute", attribute: :datereceptionprestadoss
   end
 
   it_behaves_like "an XML-fragment producer" do

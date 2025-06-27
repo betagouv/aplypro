@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_10_130944) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_26_074806) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "unaccent"
@@ -270,6 +270,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_10_130944) do
     t.integer "biological_sex", default: 0
     t.string "asp_individu_id"
     t.boolean "ine_not_found", default: false, null: false
+    t.string "first_name2"
+    t.string "first_name3"
     t.index ["asp_individu_id"], name: "index_students_on_asp_individu_id", unique: true
     t.index ["ine"], name: "index_students_on_ine", unique: true
   end

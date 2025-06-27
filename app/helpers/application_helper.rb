@@ -6,7 +6,7 @@ module ApplicationHelper
   end
 
   def success_badge(status, content)
-    dsfr_badge(status: status ? :success : :error, classes: ["fr-badge--sm fr-mb-0"]) do
+    dsfr_badge(status: status ? :success : :error, html_attributes: { class: ["fr-badge--sm fr-mb-0"] }) do
       content
     end
   end
@@ -19,7 +19,7 @@ module ApplicationHelper
     disabled = count.zero? ? "disabled" : ""
 
     content_tag(:div, class: "fr-badge-group no-wrap fr-mb-1w #{args[:class]}", "aria-label": aria_label) do
-      safe_join([count_tag, send(badge_method, status, class: disabled)], " ")
+      safe_join([count_tag, send(badge_method, status, html_attributes: { class: disabled })], " ")
     end
   end
 end

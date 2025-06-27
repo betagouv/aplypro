@@ -18,13 +18,13 @@ describe Student::Mappers::Base do
     end
 
     context "when the start date is before the current school year range" do
-      let(:start_date) { "#{SchoolYear.current.start_year - 1}-12-31" }
+      let(:start_date) { "#{SchoolYear.current.start_year}-01-30" }
 
       it { expect(result).to be false }
     end
 
     context "when the start date is equal to the current school year range" do
-      let(:start_date) { "#{SchoolYear.current.start_year}-12-31" }
+      let(:start_date) { "#{SchoolYear.current.start_year}-09-30" }
 
       it { expect(result).to be true }
     end

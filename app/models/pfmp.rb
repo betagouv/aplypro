@@ -32,6 +32,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validates :start_date, :end_date, presence: true
 
   validate :amounts_yearly_cap
+  validate :rectified_amount_must_differ_from_paid_amount, if: :rectified?
 
   validates :end_date,
             :start_date,
@@ -56,8 +57,8 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
               only_integer: true,
               allow_nil: true,
               greater_than: 0,
-              less_than_or_equal_to: ->(pfmp) { (pfmp.end_date - pfmp.start_date).to_i + 1 }
-            }, unless: :rectified? # NOTE: a rectification with a 0 day count can be created to cancel a payment
+              less_than_or_equal_to: ->(pfmp) { pfmp.calculate_max_day_count }
+            }, if: :should_validate_day_count?
 
   after_create -> { self.administrative_number = administrative_number }
 
@@ -170,7 +171,27 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     errors.add(:end_date, "La date de fin de la PFMP est supérieure à la date du jour") if end_date > DateTime.now
   end
 
+  def calculate_max_day_count
+    (end_date - start_date).to_i + 1
+  end
+
+  def paid_amount
+    last_paid_request = payment_requests.in_state(:paid).order(created_at: :desc).first
+    return unless last_paid_request
+
+    last_paid_request
+      .last_transition_to(:paid)
+      .metadata
+      .dig("PAIEMENT", "MTNET")
+      .to_i
+  end
+
   private
+
+  # NOTE: a rectification with a 0 day count can be created to cancel a payment
+  def should_validate_day_count?
+    !rectified? && start_date.present? && end_date.present?
+  end
 
   def amounts_yearly_cap
     return if skip_amounts_yearly_cap_validation
@@ -184,5 +205,12 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     errors.add(:amount,
                "Yearly cap of #{cap} not respected for Mef code: #{mef.code} \\
                -> #{total}/#{cap} with #{pfmps.count} PFMPs")
+  end
+
+  def rectified_amount_must_differ_from_paid_amount
+    return unless amount.present? && paid_amount.present?
+    return if amount != paid_amount
+
+    errors.add(:amount, "must be different from the previously paid amount (#{paid_amount}€) when rectifying")
   end
 end

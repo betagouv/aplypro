@@ -173,6 +173,9 @@ describe PfmpManager do
     end
 
     it "allows rectification when setting day count to zero" do
+      paid_transition = pfmp.latest_payment_request.asp_payment_request_transitions.find_by(to_state: "paid")
+      paid_transition.update!(metadata: { "PAIEMENT" => { "MTNET" => "50" } })
+      pfmp.reload
       expect do
         manager.rectify_and_update_attributes!(
           { day_count: 0, start_date: pfmp.start_date, end_date: pfmp.end_date },
