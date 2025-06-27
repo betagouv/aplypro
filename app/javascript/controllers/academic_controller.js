@@ -61,6 +61,11 @@ export default class extends Controller {
   }
 
   async connect() {
+    if (!this.hasMapContainerTarget) {
+      console.warn("MapContainer target not found, skipping map initialization")
+      return
+    }
+
     this.d3 = await import("d3")
     this.d3Tile = await import("d3-tile")
 
@@ -76,7 +81,9 @@ export default class extends Controller {
   }
 
   disconnect() {
-    this.mapContainerTarget.innerHTML = ''
+    if (this.hasMapContainerTarget) {
+      this.mapContainerTarget.innerHTML = ''
+    }
   }
 
   createLegend() {
