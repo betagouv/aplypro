@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
-class PearlPfmpsRectificator < MassRectificator
+class PearlPfmpsRectificator < MassRectificator # rubocop:disable Metrics/ClassLength
   private
 
-  def rectify_pfmp(schooling, target_pfmp)
+  def rectify_pfmp(schooling, target_pfmp) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     sync_student_data(schooling)
     validate_student_address(schooling)
+
+    log_pfmp_amounts_overview(schooling, "before")
 
     total_paid = calculate_total_paid(schooling)
     yearly_cap = target_pfmp.mef.wage.yearly_cap
@@ -22,6 +24,7 @@ class PearlPfmpsRectificator < MassRectificator
 
     if dry_run
       distribute_rectifications(schooling, excess_amount)
+      log_pfmp_amounts_overview(schooling, "after (simulated)")
     else
       ApplicationRecord.transaction do
         distribute_rectifications(schooling, excess_amount)
@@ -44,7 +47,7 @@ class PearlPfmpsRectificator < MassRectificator
              .sum(&:amount)
   end
 
-  def distribute_rectifications(schooling, _excess_amount) # rubocop:disable Metrics/AbcSize
+  def distribute_rectifications(schooling, _excess_amount) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     rectified_count = 0
     address_params = schooling.student.attributes.slice("address_line1")
 

@@ -283,8 +283,8 @@ RSpec.describe PearlPfmpsRectificator do
         rectificator.call
       end
 
-      it "does not call sync student data job" do
-        expect_any_instance_of(Sync::StudentJob).not_to receive(:perform) # rubocop:disable RSpec/AnyInstance
+      it "still calls sync student data job" do
+        expect_any_instance_of(Sync::StudentJob).to receive(:perform) # rubocop:disable RSpec/AnyInstance
 
         rectificator.call
       end

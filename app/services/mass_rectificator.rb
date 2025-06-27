@@ -18,7 +18,7 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
     }
   end
 
-  def call
+  def call # rubocop:disable Metrics/AbcSize
     Rails.logger.info "Processing batch of #{schooling_ids.count} schoolings#{' (DRY RUN)' if dry_run}"
 
     if dry_run
@@ -79,9 +79,11 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
     pfmp.latest_payment_request&.current_state == "ready"
   end
 
-  def rectify_pfmp(schooling, target_pfmp) # rubocop:disable Metrics/AbcSize
+  def rectify_pfmp(schooling, target_pfmp) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     sync_student_data(schooling)
     validate_student_address(schooling)
+
+    log_pfmp_amounts_overview(schooling, "before")
 
     address_params = target_pfmp.student.attributes.slice("address_line1")
 
@@ -91,6 +93,7 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
     if dry_run
       results[:rectified] << schooling.id
       Rails.logger.info "[DRY RUN] Would successfully rectify schooling #{schooling.id}"
+      log_pfmp_amounts_overview(schooling, "after (simulated)")
     else
       target_pfmp.skip_amounts_yearly_cap_validation = true
       PfmpManager.new(target_pfmp).rectify_and_update_attributes!(
@@ -134,21 +137,17 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
   end
 
   def sync_student_data(schooling)
-    if dry_run
-      Rails.logger.info "[DRY RUN] Would sync student data for schooling #{schooling.id}"
-    else
-      Rails.logger.info "Syncing student data for schooling #{schooling.id}"
+    Rails.logger.info "#{'[DRY RUN] ' if dry_run}Syncing student data for schooling #{schooling.id}"
 
-      retry_count = 0
-      begin
-        Sync::StudentJob.new.perform(schooling)
-      rescue Faraday::UnauthorizedError
-        retry_count += 1
-        Rails.logger.warn "Auth error syncing schooling #{schooling.id}, retry #{retry_count}"
-        sleep(1)
-        retry if retry_count < 5
-        raise
-      end
+    retry_count = 0
+    begin
+      Sync::StudentJob.new.perform(schooling)
+    rescue Faraday::UnauthorizedError
+      retry_count += 1
+      Rails.logger.warn "Auth error syncing schooling #{schooling.id}, retry #{retry_count}"
+      sleep(1)
+      retry if retry_count < 5
+      raise
     end
   end
 
@@ -188,5 +187,33 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
     return unless results[:pearl_pfmps].any?
 
     Rails.logger.warn "PFMPs with negative amounts: #{results[:pearl_pfmps].join(', ')}"
+  end
+
+  def log_pfmp_amounts_overview(schooling, stage)
+    return unless dry_run
+
+    pfmps = schooling.pfmps.in_state(:validated).select(&:paid?)
+    return if pfmps.empty?
+
+    log_pfmp_amounts_header(schooling, stage)
+    log_individual_pfmp_amounts(pfmps)
+    log_pfmp_amounts_totals(pfmps)
+  end
+
+  def log_pfmp_amounts_header(schooling, stage)
+    Rails.logger.info "[DRY RUN] #{stage.upcase} amounts for schooling #{schooling.id}:"
+  end
+
+  def log_individual_pfmp_amounts(pfmps)
+    pfmps.each do |pfmp|
+      paid_amount = pfmp.paid_amount || 0
+      Rails.logger.info "  PFMP #{pfmp.id}: amount=#{pfmp.amount}, paid_amount=#{paid_amount}"
+    end
+  end
+
+  def log_pfmp_amounts_totals(pfmps)
+    total_amount = pfmps.sum(&:amount)
+    total_paid = pfmps.sum { |p| p.paid_amount || 0 }
+    Rails.logger.info "  Total: amount=#{total_amount}, paid_amount=#{total_paid}"
   end
 end

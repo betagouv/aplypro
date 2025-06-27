@@ -54,7 +54,7 @@ RSpec.describe MassRectificator do
       end
     end
 
-    context "when processing encounters validation error" do
+    context "when processing encounters validation error" do # rubocop:disable RSpec/MultipleMemoizedHelpers
       let(:schooling) { create(:schooling) }
       let(:student) { schooling.student }
       let!(:pfmp) { create(:pfmp, :validated, schooling: schooling, amount: 100, day_count: 10) }
@@ -111,8 +111,8 @@ RSpec.describe MassRectificator do
         corrector.call
       end
 
-      it "does not call sync student data job" do
-        expect_any_instance_of(Sync::StudentJob).not_to receive(:perform) # rubocop:disable RSpec/AnyInstance
+      it "still calls sync student data job" do
+        expect_any_instance_of(Sync::StudentJob).to receive(:perform) # rubocop:disable RSpec/AnyInstance
 
         corrector.call
       end
