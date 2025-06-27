@@ -103,10 +103,10 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
       next unless should_reset_amount?(pfmp)
 
       real_amount = pfmp.paid_amount
-      next if pfmp.amount == real_amount.to_i
+      next if real_amount.nil? || pfmp.amount == real_amount
 
       pfmp.skip_amounts_yearly_cap_validation = true
-      pfmp.update!(amount: real_amount.to_i)
+      pfmp.update!(amount: real_amount)
       Rails.logger.info "Reset amount to #{real_amount} for PFMP #{pfmp.id}"
     end
   end
