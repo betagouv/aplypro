@@ -4,10 +4,11 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
   class RectificationError < StandardError; end
   class NegativeAmountError < RectificationError; end
 
-  attr_reader :schooling_ids, :results
+  attr_reader :schooling_ids, :results, :dry_run
 
-  def initialize(schooling_ids)
+  def initialize(schooling_ids, dry_run: false)
     @schooling_ids = schooling_ids
+    @dry_run = dry_run
     @results = {
       processed: 0,
       rectified: [],
@@ -18,11 +19,17 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
   end
 
   def call
-    Rails.logger.info "Processing batch of #{schooling_ids.count} schoolings"
+    Rails.logger.info "Processing batch of #{schooling_ids.count} schoolings#{' (DRY RUN)' if dry_run}"
 
-    ApplicationRecord.transaction do
+    if dry_run
       Schooling.where(id: schooling_ids).find_each do |schooling|
         process_schooling(schooling)
+      end
+    else
+      ApplicationRecord.transaction do
+        Schooling.where(id: schooling_ids).find_each do |schooling|
+          process_schooling(schooling)
+        end
       end
     end
 
@@ -78,16 +85,22 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
 
     address_params = target_pfmp.student.attributes.slice("address_line1")
 
-    Rails.logger.info "Attempting rectification of Schooling #{schooling.id} on PFMP #{target_pfmp.id}"
+    action = dry_run ? "[DRY RUN] Would attempt" : "Attempting"
+    Rails.logger.info "#{action} rectification of Schooling #{schooling.id} on PFMP #{target_pfmp.id}"
 
-    target_pfmp.skip_amounts_yearly_cap_validation = true
-    PfmpManager.new(target_pfmp).rectify_and_update_attributes!(
-      { day_count: target_pfmp.day_count },
-      address_params
-    )
+    if dry_run
+      results[:rectified] << schooling.id
+      Rails.logger.info "[DRY RUN] Would successfully rectify schooling #{schooling.id}"
+    else
+      target_pfmp.skip_amounts_yearly_cap_validation = true
+      PfmpManager.new(target_pfmp).rectify_and_update_attributes!(
+        { day_count: target_pfmp.day_count },
+        address_params
+      )
 
-    results[:rectified] << schooling.id
-    Rails.logger.info "Successfully rectified schooling #{schooling.id}"
+      results[:rectified] << schooling.id
+      Rails.logger.info "Successfully rectified schooling #{schooling.id}"
+    end
   rescue PfmpManager::RectificationAmountThresholdNotReachedError,
          PfmpManager::RectificationAmountZeroError
     skip_schooling(schooling, "amount too small or zero")
@@ -105,9 +118,13 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
       real_amount = pfmp.paid_amount
       next if pfmp.amount == real_amount.to_i
 
-      pfmp.skip_amounts_yearly_cap_validation = true
-      pfmp.update!(amount: real_amount.to_i)
-      Rails.logger.info "Reset amount to #{real_amount} for PFMP #{pfmp.id}"
+      if dry_run
+        Rails.logger.info "[DRY RUN] Would reset amount to #{real_amount} for PFMP #{pfmp.id}"
+      else
+        pfmp.skip_amounts_yearly_cap_validation = true
+        pfmp.update!(amount: real_amount.to_i)
+        Rails.logger.info "Reset amount to #{real_amount} for PFMP #{pfmp.id}"
+      end
     end
   end
 
@@ -117,17 +134,21 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
   end
 
   def sync_student_data(schooling)
-    Rails.logger.info "Syncing student data for schooling #{schooling.id}"
+    if dry_run
+      Rails.logger.info "[DRY RUN] Would sync student data for schooling #{schooling.id}"
+    else
+      Rails.logger.info "Syncing student data for schooling #{schooling.id}"
 
-    retry_count = 0
-    begin
-      Sync::StudentJob.new.perform(schooling)
-    rescue Faraday::UnauthorizedError
-      retry_count += 1
-      Rails.logger.warn "Auth error syncing schooling #{schooling.id}, retry #{retry_count}"
-      sleep(1)
-      retry if retry_count < 5
-      raise
+      retry_count = 0
+      begin
+        Sync::StudentJob.new.perform(schooling)
+      rescue Faraday::UnauthorizedError
+        retry_count += 1
+        Rails.logger.warn "Auth error syncing schooling #{schooling.id}, retry #{retry_count}"
+        sleep(1)
+        retry if retry_count < 5
+        raise
+      end
     end
   end
 
@@ -154,8 +175,9 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
   end
 
   def log_results # rubocop:disable Metrics/AbcSize
+    dry_run_text = dry_run ? "(DRY RUN) " : ""
     Rails.logger.info <<~LOG
-      Mass correction completed:
+      Mass correction #{dry_run_text}completed:
       - Processed: #{results[:processed]}
       - Rectified: #{results[:rectified].count}
       - Skipped: #{results[:skipped].count}

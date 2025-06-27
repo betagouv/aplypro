@@ -16,11 +16,16 @@ class PearlPfmpsRectificator < MassRectificator
       return
     end
 
-    Rails.logger.info "Schooling #{schooling.id} has excess of #{excess_amount} " \
+    dry_run_prefix = dry_run ? "[DRY RUN] " : ""
+    Rails.logger.info "#{dry_run_prefix}Schooling #{schooling.id} has excess of #{excess_amount} " \
                       "(paid: #{total_paid}, cap: #{yearly_cap})"
 
-    ApplicationRecord.transaction do
+    if dry_run
       distribute_rectifications(schooling, excess_amount)
+    else
+      ApplicationRecord.transaction do
+        distribute_rectifications(schooling, excess_amount)
+      end
     end
   rescue StandardError => e
     handle_error(schooling, e)
@@ -59,26 +64,31 @@ class PearlPfmpsRectificator < MassRectificator
       next if max_reduction <= 5
 
       new_amount = paid_amount - max_reduction
-      Rails.logger.info "Rectifying PFMP #{pfmp.id}: reducing from #{paid_amount} to #{new_amount}"
+      action = dry_run ? "[DRY RUN] Would rectify" : "Rectifying"
+      Rails.logger.info "#{action} PFMP #{pfmp.id}: reducing from #{paid_amount} to #{new_amount}"
 
-      pfmp.skip_amounts_yearly_cap_validation = true
-      pfmp.update!(amount: new_amount)
+      unless dry_run
+        pfmp.skip_amounts_yearly_cap_validation = true
+        pfmp.update!(amount: new_amount)
 
-      PfmpManager.new(pfmp).rectify_and_update_attributes!(
-        { day_count: pfmp.day_count },
-        address_params
-      )
+        PfmpManager.new(pfmp).rectify_and_update_attributes!(
+          { day_count: pfmp.day_count },
+          address_params
+        )
+      end
 
       remaining_excess -= max_reduction
       rectified_count += 1
     end
 
     if remaining_excess.positive?
-      Rails.logger.warn "Could not distribute entire excess for schooling #{schooling.id}." \
+      dry_run_prefix = dry_run ? "[DRY RUN] " : ""
+      Rails.logger.warn "#{dry_run_prefix}Could not distribute entire excess for schooling #{schooling.id}." \
                         "Remaining: #{remaining_excess}"
     end
 
-    Rails.logger.info "Rectified #{rectified_count} PFMPs for schooling #{schooling.id}"
+    action = dry_run ? "[DRY RUN] Would rectify" : "Rectified"
+    Rails.logger.info "#{action} #{rectified_count} PFMPs for schooling #{schooling.id}"
     results[:rectified] << schooling.id
   end
 end
