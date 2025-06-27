@@ -24,7 +24,7 @@ RSpec.describe MassRectificator do
 
       it "processes the schooling and handles validation appropriately" do
         results = corrector.call
-        
+
         expect(results[:processed]).to eq(1)
         expect(results[:errors].size + results[:skipped].size + results[:rectified].size).to eq(1)
       end
@@ -56,7 +56,7 @@ RSpec.describe MassRectificator do
       let(:schooling) { create(:schooling) }
       let(:student) { schooling.student }
       let!(:pfmp) { create(:pfmp, :validated, schooling: schooling, amount: 100, day_count: 10) }
-      let!(:payment_request) do
+      let!(:payment_request) do # rubocop:disable RSpec/LetSetup
         create(:asp_payment_request, :paid, pfmp: pfmp).tap do |pr|
           pr.last_transition.update!(
             metadata: { "PAIEMENT" => { "MTNET" => "100" } }
