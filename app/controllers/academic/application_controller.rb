@@ -27,20 +27,6 @@ module Academic
       @establishments_data = establishments_data_summary(establishments.pluck(:id))
     end
 
-    def academic_map
-      establishments = Establishment.joins(:classes)
-                                    .where(academy_code: selected_academy,
-                                           "classes.school_year_id": selected_school_year)
-                                    .distinct
-
-      @establishments_data = establishments_data_summary(establishments.pluck(:id))
-
-      respond_to do |format|
-        format.html { render partial: "academic_map", layout: false }
-        format.turbo_stream
-      end
-    end
-
     def login
       @inhibit_banner = true
     end

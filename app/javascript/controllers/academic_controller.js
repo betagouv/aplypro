@@ -70,6 +70,8 @@ export default class extends Controller {
     this.d3Tile = await import("d3-tile")
 
     try {
+      this.mapContainerTarget.innerHTML = ''
+      
       this.createMap()
       await this.createMarkerSymbols()
       this.createLegend()
