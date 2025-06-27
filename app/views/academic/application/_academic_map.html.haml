@@ -46,6 +46,6 @@
                     }
                   }
                     %td= uai
-                    %td= link_to establishment[:name], academic_establishment_path(establishment[:id])
+                    %td= link_to establishment[:name], academic_establishment_path(establishment[:id]), data: { turbo_frame: "_top" }
                     %td= establishment[:schooling_count]
                     %td= number_to_currency(establishment[:paid_amount], unit: "€", format: "%n %u")

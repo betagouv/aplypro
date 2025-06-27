@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   namespace :academic do
     root to: "application#home"
     get "home", to: "application#home"
+    get "academic_map", to: "application#academic_map"
 
     resources :establishments, only: [:show]
 
