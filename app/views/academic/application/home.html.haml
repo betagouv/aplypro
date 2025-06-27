@@ -1,2 +1,3 @@
 .home.fr-container
-  = render 'academic_map'
+  = turbo_frame_tag "academic-map" do
+    = render 'academic_map'

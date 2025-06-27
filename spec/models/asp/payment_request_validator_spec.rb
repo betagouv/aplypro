@@ -106,7 +106,6 @@ RSpec.describe ASP::PaymentRequestValidator do
     end
   end
 
-
   describe "#check_rib" do
     context "when RIB is missing" do
       before do

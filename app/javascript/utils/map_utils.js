@@ -81,6 +81,8 @@ export function createMapLegend(svg, height, toggleCallback) {
     .attr("width", 350)
     .attr("height", 60)
     .attr("fill", "white")
+    .attr("rx", 4)
+    .attr("ry", 4)
 
   const legendItems = [
     { type: "masa", x: 20, y: 5 },
@@ -99,6 +101,25 @@ export function createMapLegend(svg, height, toggleCallback) {
       .style("cursor", "pointer")
       .on("click", () => toggleCallback(item.type))
 
+    const text = group.append("text")
+      .attr("x", 25)
+      .attr("y", 15)
+      .text(item.type.toUpperCase())
+      .style("font-size", "12px")
+
+    const textWidth = text.node().getBBox().width
+    const hoverWidth = textWidth + 30
+    
+    group.insert("rect", ":first-child")
+      .attr("width", hoverWidth)
+      .attr("height", 22)
+      .attr("x", -3)
+      .attr("y", -2)
+      .attr("fill", "transparent")
+      .attr("rx", 3)
+      .attr("ry", 3)
+      .style("transition", "fill 0.2s ease")
+
     group.append("use")
       .attr("href", `#${item.type}`)
       .attr("width", 20)
@@ -106,11 +127,15 @@ export function createMapLegend(svg, height, toggleCallback) {
       .attr("x", 0)
       .attr("y", 0)
 
-    group.append("text")
-      .attr("x", 25)
-      .attr("y", 15)
-      .text(item.type.toUpperCase())
-      .style("font-size", "12px")
+    group
+      .on("mouseenter", function() {
+        group.select("rect")
+          .attr("fill", getDsfrColor('--background-action-low-blue-france'))
+      })
+      .on("mouseleave", function() {
+        group.select("rect")
+          .attr("fill", "transparent")
+      })
   })
 }
 

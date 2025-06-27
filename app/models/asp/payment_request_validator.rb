@@ -43,7 +43,9 @@ module ASP
 
     def check_pfmp
       add_error(:pfmp) unless pfmp.valid?
-      add_error(:pfmp_amount) if pfmp.amount.nil? || pfmp.amount <= 0
+      add_error(:pfmp_amount) if pfmp.amount.nil? ||
+                                 pfmp.amount.negative? ||
+                                 (pfmp.amount.zero? && !pfmp.rectified?)
     end
 
     def check_schooling

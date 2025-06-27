@@ -42,7 +42,7 @@ module StudentsApi
 
           return {} if addresses.blank?
 
-          addresses.find { |entry| entry["estPrioritaire"] == true }
+          addresses.find { |entry| entry["estPrioritaire"] == true } || {}
         end
 
         def catch_empty_address(mapped)

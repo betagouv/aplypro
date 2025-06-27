@@ -128,10 +128,10 @@ class PfmpManager
   end
 
   def check_rectification_delta(delta)
-    if delta.positive? && delta <= EXCESS_AMOUNT_RECTIFICATION_THRESHOLD
-      raise RectificationAmountThresholdNotReachedError
-    end
-
     raise RectificationAmountZeroError if delta.zero?
+
+    return unless delta.positive? && delta <= EXCESS_AMOUNT_RECTIFICATION_THRESHOLD
+
+    raise RectificationAmountThresholdNotReachedError
   end
 end
