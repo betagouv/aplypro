@@ -74,6 +74,8 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   before_destroy :ensure_destroyable?, prepend: true
 
   def validate!
+    return if in_state?(:validated)
+
     transition_to!(:validated)
   end
 
