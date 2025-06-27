@@ -1,42 +1,51 @@
-#academic-map-container{
-    data: {
-      controller: "academic",
-      selected_academy_value: selected_academy.html_safe,
-      establishments_data: @establishments_data.to_json.html_safe,
-      agri_icon_path: asset_path('icons/others/seedling-fill.svg'),
-      enpu_icon_path: asset_path('icons/development/git-repository-fill.svg'),
-      enpr_icon_path: asset_path('icons/development/git-repository-line.svg'),
-      mer_icon_path: asset_path('icons/map/ship-2-fill.svg'),
-      justice_icon_path: asset_path('icons/buildings/bank-fill.svg'),
-      defense_icon_path: asset_path('icons/weather/flashlight-fill.svg'),
-      sante_icon_path: asset_path('icons/health/heart-pulse-fill.svg')
+%h2= "Académie #{selected_academy}"
+
+- if @establishments_data.empty?
+  .fr-callout.fr-callout--info
+    %p.fr-callout__title Aucun établissement trouvé
+    %p.fr-callout__text Aucun établissement n'a été trouvé pour cette académie et cette année scolaire.
+- else
+  #academic-map-container{
+      data: {
+        controller: "academic",
+        selected_academy_value: selected_academy.html_safe,
+        establishments_data: @establishments_data.to_json.html_safe,
+        agri_icon_path: asset_path('icons/others/seedling-fill.svg'),
+        enpu_icon_path: asset_path('icons/development/git-repository-fill.svg'),
+        enpr_icon_path: asset_path('icons/development/git-repository-line.svg'),
+        mer_icon_path: asset_path('icons/map/ship-2-fill.svg'),
+        justice_icon_path: asset_path('icons/buildings/bank-fill.svg'),
+        defense_icon_path: asset_path('icons/weather/flashlight-fill.svg'),
+        sante_icon_path: asset_path('icons/health/heart-pulse-fill.svg')
+    }
   }
-}
-  %h2= "Académie #{selected_academy}"
-  %h5
-    %i.fr-icon-earth-fill
-    = "Répartition géographique des #{@establishments_data.count} établissements"
-  .fr-grid-row
-    .fr-col-12.fr-col-md-6
-      %div{data: { academic_target: "mapContainer" }}
-    .fr-col-12.fr-col-md-6
-      .establishments-table-container
-        .fr-table
-          %table.establishments-table
-            %thead
-              %td{scope: "col"} UAI
-              %th{scope: "col"} Nom
-              %th{scope: "col"} Scolarités
-              %th{scope: "col"} Montant payé
-            %tbody
-              - @establishments_data.each do |uai, establishment|
-                %tr.academic-map{
-                  data: {
-                    uai: uai,
-                    action: "click->academic#selectEstablishment"
+    %h5
+      %i.fr-icon-earth-fill
+      = "Répartition géographique des #{@establishments_data.count} établissements"
+    .fr-grid-row
+      .fr-col-12.fr-col-md-6
+        %div{data: { "academic-target": "mapContainer" }}
+          .loading-container{style: "min-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center;"}
+            %i.fr-icon-refresh-line.fr-icon--lg{style: "margin-bottom: 1rem;"}
+            %p.fr-text--lg Carte académique en chargement...
+      .fr-col-12.fr-col-md-6
+        .establishments-table-container
+          .fr-table
+            %table.establishments-table
+              %thead
+                %td{scope: "col"} UAI
+                %th{scope: "col"} Nom
+                %th{scope: "col"} Scolarités
+                %th{scope: "col"} Montant payé
+              %tbody
+                - @establishments_data.each do |uai, establishment|
+                  %tr.academic-map{
+                    data: {
+                      uai: uai,
+                      action: "click->academic#selectEstablishment"
+                    }
                   }
-                }
-                  %td= uai
-                  %td= link_to establishment[:name], academic_establishment_path(establishment[:id])
-                  %td= establishment[:schooling_count]
-                  %td= number_to_currency(establishment[:paid_amount], unit: "€", format: "%n %u")
+                    %td= uai
+                    %td= link_to establishment[:name], academic_establishment_path(establishment[:id]), data: { turbo_frame: "_top" }
+                    %td= establishment[:schooling_count]
+                    %td= number_to_currency(establishment[:paid_amount], unit: "€", format: "%n %u")
