@@ -169,6 +169,10 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
     ].join.upcase
   end
 
+  def liquidation_number
+    "TODO"
+  end
+
   def bop_code
     mef.bop(establishment)
   end

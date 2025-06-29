@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "attribute_decision/attributor"
+require "generator/attributor"
 
 module Generate
   class CancellationDecisionJob < ApplicationJob
@@ -33,7 +33,7 @@ module Generate
     private
 
     def generate_document(schooling)
-      io = AttributeDecision::Cancellation.new(schooling).write
+      io = Generator::Cancellation.new(schooling).write
       schooling.attach_attributive_document(io, :cancellation_decision)
     end
 
