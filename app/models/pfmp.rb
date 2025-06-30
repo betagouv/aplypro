@@ -6,6 +6,8 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   TRANSITION_RELATION_NAME = :transitions
   attr_accessor :skip_amounts_yearly_cap_validation
 
+  has_one_attached :liquidation
+
   include ::StateMachinable
 
   has_many :transitions, class_name: "PfmpTransition", autosave: false, dependent: :destroy

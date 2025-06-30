@@ -16,8 +16,9 @@ module Generate
     private
 
     def generate_document(pfmp)
+      pfmp.increment(:liquidation_version)
       io = Generator::Liquidation.new(pfmp).write
-      attach_document(io, :liquidation)
+      ASP::AttachDocument.from_pfmp(io, pfmp)
     end
 
     def sync_data(pfmp)

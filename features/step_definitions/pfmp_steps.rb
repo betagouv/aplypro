@@ -128,7 +128,7 @@ Quand("la dernière PFMP de {string} est validable") do |name|
   schooling = pfmp.schooling
 
   schooling.tap(&:generate_administrative_number).save!
-  schooling.attach_attributive_document(StringIO.new("hello"), :attributive_decision)
+  ASP::AttachDocument.from_schooling(StringIO.new("hello"), schooling, :attributive_decision)
 end
 
 Quand("toutes les PFMPs pour la classe {string} sont validables") do |classe_label|

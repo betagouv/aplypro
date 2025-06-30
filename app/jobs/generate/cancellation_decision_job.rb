@@ -34,7 +34,7 @@ module Generate
 
     def generate_document(schooling)
       io = Generator::Cancellation.new(schooling).write
-      schooling.attach_attributive_document(io, :cancellation_decision)
+      ASP::AttachDocument.from_schooling(io, schooling, :cancellation_decision)
     end
 
     def rectify_pfmp_if_necessary(schooling)

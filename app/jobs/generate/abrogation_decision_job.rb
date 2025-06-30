@@ -35,7 +35,7 @@ module Generate
     def generate_document(schooling)
       schooling.increment(:abrogation_decision_version)
       io = Generator::Abrogator.new(schooling).write
-      schooling.attach_attributive_document(io, :abrogation_decision)
+      ASP::AttachDocument.from_schooling(io, schooling, :abrogation_decision)
     end
   end
 end

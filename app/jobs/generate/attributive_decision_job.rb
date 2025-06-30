@@ -30,7 +30,7 @@ module Generate
       schooling.generate_administrative_number
       schooling.increment(:attributive_decision_version)
       io = Generator::Attributor.new(schooling).write
-      schooling.attach_attributive_document(io, :attributive_decision)
+      ASP::AttachDocument.from_schooling(io, schooling, :attributive_decision)
     end
 
     def sync_data(schooling)
