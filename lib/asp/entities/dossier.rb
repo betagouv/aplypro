@@ -31,6 +31,13 @@ module ASP
         xml.listeprestadoss do
           payment_requests.each do |payment_request|
             Prestadoss.from_payment_request(payment_request).to_xml(xml)
+          rescue ActiveModel::ValidationError => e
+            Sentry.capture_exception(
+              ASP::Errors::PaymentFileValidationError.new(
+                "Payment file validation failed for p_r: #{payment_request.id} with message #{e.message}"
+              )
+            )
+            raise e
           end
         end
       end

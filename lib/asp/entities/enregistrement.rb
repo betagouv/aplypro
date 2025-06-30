@@ -22,7 +22,7 @@ module ASP
         xml.individu(**individu_attrs) { individu(xml) }
       end
 
-      def individu(xml) # rubocop disable:Metrics/AbcSize # rubocop:disable Metrics/AbcSize
+      def individu(xml)
         xml.natureindividu("P")
         PersPhysique.from_payment_request(payment_requests.first).to_xml(xml)
         xml.adressesindividu { adresse_entity_class.from_payment_request(payment_requests.first).to_xml(xml) }
@@ -32,14 +32,6 @@ module ASP
             Dossier.from_payment_requests(grouped_p_r).to_xml(xml)
           end
         end
-      rescue ActiveModel::ValidationError => e
-        Sentry.capture_exception(
-          ASP::Errors::PaymentFileValidationError.new(
-            "Payment file validation failed for p_r: #{payment_request.id} " \
-            "with message #{e.message}"
-          )
-        )
-        raise e
       end
 
       def individu_attrs

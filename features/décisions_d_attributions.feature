@@ -68,7 +68,7 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
     Quand je clique sur "Autoriser un report"
     Alors la page contient "Date de report"
-    Quand je remplis "Date de report" avec "#{Date.parse('#{SchoolYear.current.end_date}-12-31')}"
+    Quand je remplis "Date de report" avec "#{Date.parse('#{SchoolYear.current.end_year}-12-31')}"
     Et que je coche la case de responsable légal
     Et que je clique sur "Confirmer l'ajout du report"
     Alors la page contient "La décision d'attribution de Curie Marie a bien été prolongée"
