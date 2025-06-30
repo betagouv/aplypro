@@ -57,7 +57,7 @@ Quand("les élèves actuels sont les seuls à avoir des décisions d'attribution
 end
 
 Quand("l'élève {string} a un report de décision d'attribution") do |name|
-  extended_end_date = Date.parse("#{SchoolYear.current.end_year}-11-30")
+  extended_end_date = Date.parse("2025-11-30")
   student = find_student_by_full_name(name)
 
   student.current_schooling.update!(extended_end_date: extended_end_date)

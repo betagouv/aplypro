@@ -68,12 +68,13 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
     Quand je clique sur "Autoriser un report"
     Alors la page contient "Date de report"
-    Quand je remplis "Date de report" avec "#{Date.parse('#{SchoolYear.current.end_date}-12-31')}"
+    Quand je remplis "Date de report" avec "31/12/2025"
     Et que je coche la case de responsable légal
     Et que je clique sur "Confirmer l'ajout du report"
     Alors la page contient "La décision d'attribution de Curie Marie a bien été prolongée"
 
   Scénario: Le personnel peut annuler la saisie d'un report de décision d'attribution
+    Sachant que la date du jour est "25/06/2025"
     Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité
     Et que l'élève "Curie Marie" a une décision d'attribution
     Et que l'élève "Curie Marie" a un report de décision d'attribution
@@ -85,6 +86,7 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Alors la page contient "Le report de la décision d'attribution de Curie Marie a bien été supprimé"
 
   Scénario: Le personnel peut modifier la saisie d'un report de décision d'attribution si une pfmp est saisie
+    Sachant que la date du jour est "25/06/2025"
     Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité
     Et que l'élève "Curie Marie" a une décision d'attribution
     Et que l'élève "Curie Marie" a un report de décision d'attribution

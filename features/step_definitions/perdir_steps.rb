@@ -135,3 +135,7 @@ Sachantque(
     establishment: establishment
   )
 end
+
+Sachantque("la date du jour est {string}") do |date|
+  Timecop.freeze(Date.parse(date))
+end
