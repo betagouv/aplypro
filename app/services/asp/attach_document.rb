@@ -25,7 +25,7 @@ module ASP
 
       def from_pfmp(output, pfmp)
         name = attachment_file_name(
-          schooling.student,
+          pfmp.schooling.student,
           "état-liquidatif",
           pfmp.num_presta_doss
         )

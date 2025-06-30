@@ -202,6 +202,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_30_071856) do
     t.string "asp_prestation_dossier_id"
     t.integer "amount"
     t.string "administrative_number"
+    t.integer "liquidation_version", default: 0
     t.index ["asp_prestation_dossier_id"], name: "index_pfmps_on_asp_prestation_dossier_id", unique: true
     t.index ["schooling_id"], name: "index_pfmps_on_schooling_id"
   end

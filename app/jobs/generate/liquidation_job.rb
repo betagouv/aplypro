@@ -9,7 +9,7 @@ module Generate
 
       Pfmp.transaction do
         generate_document(pfmp)
-        schooling.save!
+        pfmp.save!
       end
     end
 
@@ -17,12 +17,12 @@ module Generate
 
     def generate_document(pfmp)
       pfmp.increment(:liquidation_version)
-      io = Generator::Liquidation.new(pfmp).write
+      io = Generator::Pfmp::Liquidation.new(pfmp).write
       ASP::AttachDocument.from_pfmp(io, pfmp)
     end
 
     def sync_data(pfmp)
-      Sync::StudentJob.new.perform(pfmp)
+      Sync::StudentJob.new.perform(pfmp.schooling)
     end
   end
 end
