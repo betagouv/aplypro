@@ -270,4 +270,26 @@ RSpec.describe Student do
       end
     end
   end
+
+  describe "#other_first_names" do
+    subject { student.other_first_names }
+
+    context "when the student has no first_name2 or first_name3" do
+      let(:student) { create(:student, first_name2: nil, first_name3: nil) }
+
+      it { is_expected.to eq "" }
+    end
+
+    context "when the student has another first_name" do
+      let(:student) { create(:student, first_name2: nil, first_name3: "Jean") }
+
+      it { is_expected.to eq "Jean" }
+    end
+
+    context "when the student has two other first_names" do
+      let(:student) { create(:student, first_name2: "Jean", first_name3: "Louis") }
+
+      it { is_expected.to eq "Jean, Louis" }
+    end
+  end
 end
