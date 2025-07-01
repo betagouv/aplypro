@@ -20,7 +20,6 @@ module ASP
         nomusage
         nomnaissance
         prenom
-        autresprenoms
         datenaissance
         codeinseepaysnai
       ]
@@ -30,7 +29,7 @@ module ASP
       def fragment(xml) # rubocop:disable Metrics/AbcSize
         xml.titre(titre)
         xml.prenom(prenom)
-        xml.autresprenoms(autresprenoms)
+        xml.autresprenoms(autresprenoms) if autresprenoms.present?
         xml.nomusage(nomusage)
         xml.nomnaissance(nomnaissance)
         xml.datenaissance(datenaissance)
