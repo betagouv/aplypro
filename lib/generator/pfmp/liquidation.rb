@@ -16,7 +16,7 @@ module Generator
            ["Décision d'attribution annuelle", @schooling.attributive_decision_number],
            ["Numéro de dossier", @pfmp.administrative_number],
            ["Période d'attribution (année scolaire)", @school_year],
-           ["Période visée par l'état liquidatif", "#{@pfmp.start_date} - #{@pfmp.end_date}"],
+           ["Période visée par l'état liquidatif", "#{@pfmp.start_date.strftime("%d/%m/%Y")} - #{@pfmp.end_date.strftime("%d/%m/%Y")}"],
            ["Montant à verser (calcul)", "#{@pfmp.day_count *  @pfmp.wage.daily_rate}€"],
            ["Ministère financeur et programme concerné", @schooling.mef.ministry],
            ["Coordonnées de paiement : IBAN", @rib&.iban],
@@ -25,14 +25,11 @@ module Generator
           ]
         )
 
-        composer.text("Etat liquidatif édité le #{Time.zone.today} par validation informatique du responsable légal de l'établissement")
+        composer.text("Etat liquidatif édité le #{Time.zone.today.strftime("%d/%m/%Y")} par validation informatique du responsable légal de l'établissement")
       end
 
       def header
-        composer.image(Rails.root.join("app/assets/images/Republique_Francaise_RVB.png").to_s, height: 100, position: :float)
-        composer.text("Etat liquidatif".upcase, style: :title, margin: [150, 0, 0, 0])
-        composer.text("Relative au versement d’une allocation en faveur des lycéens de la voie professionnelle dans le cadre de la valorisation des périodes de formation en milieu professionnel".upcase, style: :subtitle)
-        composer.text("année scolaire #{@school_year}".upcase, style: :subtitle, margin: [10, 0, 50, 0])
+        header_initializer("Etat liquidatif")
       end
 
       def summary

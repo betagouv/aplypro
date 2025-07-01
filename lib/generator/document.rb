@@ -23,6 +23,17 @@ module Generator
       io
     end
 
+    protected
+
+    # rubocop:disable Layout/LineLength
+    def header_initializer(title)
+      composer.image(Rails.root.join("app/assets/images/Republique_Francaise_RVB.png").to_s, height: 100, position: :float)
+      composer.text(title.upcase, style: :title, margin: [150, 0, 0, 0])
+      composer.text("Relative au versement d’une allocation en faveur des lycéens de la voie professionnelle dans le cadre de la valorisation des périodes de formation en milieu professionnel".upcase, style: :subtitle)
+      composer.text("année scolaire #{@school_year}".upcase, style: :subtitle, margin: [10, 0, 50, 0])
+    end
+    # rubocop:enable Layout/LineLength
+
     private
 
     def margin
