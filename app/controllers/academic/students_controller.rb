@@ -21,7 +21,7 @@ module Academic
     private
 
     def current_establishment
-      @current_establishment ||= @student.current_schooling.establishment
+      @current_establishment ||= @student.current_schooling&.establishment
     end
 
     def set_student

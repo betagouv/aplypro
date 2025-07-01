@@ -103,14 +103,6 @@ class PearlPfmpsRectificator < MassRectificator # rubocop:disable Metrics/ClassL
     plan.size
   end
 
-  def log_rectification_results(schooling, rectified_count)
-    if dry_run
-      log_final_results_dry_run(schooling, rectified_count)
-    else
-      log_final_results(schooling, rectified_count)
-    end
-  end
-
   def calculate_current_excess(schooling)
     schooling.reload
     current_total = calculate_total_paid(schooling)
@@ -143,7 +135,7 @@ class PearlPfmpsRectificator < MassRectificator # rubocop:disable Metrics/ClassL
     )
   end
 
-  def log_final_results(schooling, rectified_count)
+  def log_rectification_results(schooling, rectified_count)
     final_total = calculate_total_paid(schooling)
     final_excess = final_total - schooling.pfmps.first.mef.wage.yearly_cap
 
@@ -153,17 +145,5 @@ class PearlPfmpsRectificator < MassRectificator # rubocop:disable Metrics/ClassL
     end
 
     Rails.logger.info "Rectified #{rectified_count} PFMPs for schooling #{schooling.id}"
-  end
-
-  def log_final_results_dry_run(schooling, rectified_count)
-    current_total = calculate_total_paid(schooling)
-    current_excess = current_total - schooling.pfmps.first.mef.wage.yearly_cap
-
-    if current_excess > PfmpManager::EXCESS_AMOUNT_RECTIFICATION_THRESHOLD
-      Rails.logger.warn "[DRY RUN] Could not distribute entire excess for schooling #{schooling.id}. " \
-                        "Remaining: #{current_excess}"
-    end
-
-    Rails.logger.info "[DRY RUN] Would rectify #{rectified_count} PFMPs for schooling #{schooling.id}"
   end
 end
