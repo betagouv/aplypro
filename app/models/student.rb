@@ -171,6 +171,6 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def other_first_names
-    "#{first_name2}, #{first_name3}"
+    [first_name2, first_name3].compact.join(", ")
   end
 end
