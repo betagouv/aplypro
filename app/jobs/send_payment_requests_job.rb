@@ -7,6 +7,7 @@ class SendPaymentRequestsJob < ApplicationJob
 
   def perform
     payment_requests = ASP::PaymentRequest.in_state(:ready).order(created_at: :asc)
+    return true # TODO: re-enable
 
     return if payment_requests.none?
 
