@@ -28,7 +28,7 @@ module ASP
         validates_length_of :districtetranger, maximum: ADRESSE_ATTR_MAX_LENGTH, allow_nil: true
         validates_length_of :regionetranger, maximum: ADRESSE_ATTR_MAX_LENGTH, allow_nil: true
 
-        def self.mapper_class
+        def self.payment_mapper_class
           Mappers::Adresse::InduEtrangerMapper
         end
 

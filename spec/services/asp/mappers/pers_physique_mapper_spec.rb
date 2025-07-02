@@ -3,10 +3,10 @@
 require "rails_helper"
 
 describe ASP::Mappers::PersPhysiqueMapper do
-  subject(:mapper) { described_class.new(schooling) }
+  subject(:mapper) { described_class.new(payment_request) }
 
-  let(:schooling) { create(:schooling) }
-  let(:student) { schooling.student }
+  let(:payment_request) { create(:asp_payment_request) }
+  let(:student) { payment_request.student }
 
   described_class::MAPPING.each do |name, mapping|
     it "maps to the student's`#{mapping}'" do

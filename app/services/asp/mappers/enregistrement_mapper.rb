@@ -3,18 +3,18 @@
 module ASP
   module Mappers
     class EnregistrementMapper
-      attr_reader :payment_requests
+      attr_reader :payment_request
 
-      def initialize(payment_requests)
-        @payment_requests = payment_requests
+      def initialize(payment_request)
+        @payment_request = payment_request
       end
 
       def id_enregistrement
-        payment_requests.first.id
+        payment_request.id
       end
 
       def id_individu
-        payment_requests.first.student.asp_individu_id
+        payment_request.student.asp_individu_id
       end
     end
   end

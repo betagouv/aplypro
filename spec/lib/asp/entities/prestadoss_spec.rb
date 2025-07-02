@@ -4,6 +4,7 @@ require "rails_helper"
 
 describe ASP::Entities::Prestadoss, type: :model do
   let(:payment_request) { create(:asp_payment_request, :ready) }
+  let(:schooling) { payment_request.schooling }
 
   before do
     mock_entity("Adresse::France")

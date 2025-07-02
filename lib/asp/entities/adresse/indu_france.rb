@@ -24,7 +24,7 @@ module ASP
         validates_length_of :pointremise, maximum: ADRESSE_ATTR_MAX_LENGTH
         validates_length_of :cpltdistribution, maximum: ADRESSE_ATTR_MAX_LENGTH, allow_nil: true
 
-        def self.mapper_class
+        def self.payment_mapper_class
           Mappers::Adresse::InduFranceMapper
         end
 
