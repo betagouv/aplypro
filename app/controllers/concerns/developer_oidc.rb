@@ -3,14 +3,14 @@
 module DeveloperOidc
   extend ActiveSupport::Concern
 
-  def oidcize_dev_hash(attrs)
+  def oidcize_dev_hash(attrs, extra = true) # rubocop:disable Style/OptionalBooleanParameter
     attrs.merge!(
       {
         **provider_info(attrs),
-        **static_info(attrs),
-        **extra_info(attrs)
+        **static_info(attrs)
       }
     )
+    attrs.merge!(extra_info(attrs)) if extra
   end
 
   private
@@ -19,6 +19,8 @@ module DeveloperOidc
     case attrs["info"]["Portail de connexion"]
     when /MASA/
       :masa
+    when /ASP/
+      :asp
     else
       :fim
     end

@@ -69,7 +69,7 @@ end
 Sachantque("je me connecte au portail ASP") do
   visit new_asp_user_session_path
 
-  click_link_or_button "Se connecter"
+  click_link_or_button "Se connecter (ASP)"
 end
 
 Sachantque("je suis un personnel académique de {string}") do |academy|
