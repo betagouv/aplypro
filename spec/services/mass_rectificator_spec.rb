@@ -117,5 +117,40 @@ RSpec.describe MassRectificator do
         corrector.call
       end
     end
+
+    context "when yearly cap is exceeded" do
+      let(:schooling) { pfmp.schooling }
+      let(:student) { schooling.student }
+      let!(:pfmp) { create(:asp_payment_request, :paid).pfmp }
+
+      before do
+        pfmp.update!(amount: 900, day_count: 10, end_date: pfmp.start_date + 10.days)
+        pfmp.mef.wage.update!(daily_rate: 90, yearly_cap: 600)
+        pfmp.latest_payment_request.last_transition.update!(
+          metadata: { "PAIEMENT" => { "MTNET" => "900" } }
+        )
+
+        allow_any_instance_of(Sync::StudentJob).to receive(:perform) # rubocop:disable RSpec/AnyInstance
+        student.update!(
+          address_line1: "123 Main St",
+          address_country_code: "99100",
+          address_postal_code: "75001",
+          address_city_insee_code: "75101"
+        )
+      end
+
+      it "rectifies PFMP with correct amount respecting yearly cap" do
+        expect(pfmp.amount).to eq(900)
+        expect(pfmp.mef.wage.yearly_cap).to eq(600)
+
+        results = corrector.call
+
+        expect(results[:rectified]).to include(schooling.id)
+
+        pfmp.reload
+        expect(pfmp).to be_rectified
+        expect(pfmp.amount).to eq(600)
+      end
+    end
   end
 end
