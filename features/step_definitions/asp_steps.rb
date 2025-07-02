@@ -25,9 +25,7 @@ Sachantque("le numéro administratif de {string} est {string}") do |name, admini
   schooling = student.current_schooling
   schooling.update!(administrative_number: administrative_number)
   schooling.attributive_decision.update!(
-    filename: ASP::AttachDocument.attachment_file_name(schooling.student,
-                                                       "décision-d-attribution",
-                                                       schooling.attributive_decision_number)
+    filename: ASP::AttachDocument.attachment_file_name(schooling, "décision-d-attribution")
   )
 end
 

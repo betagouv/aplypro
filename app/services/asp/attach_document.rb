@@ -12,33 +12,25 @@ module ASP
 
         raise "Unsupported attachment type" unless descriptions.keys.include?(attachment_name)
 
-        name = attachment_file_name(
-          schooling.student,
-          descriptions[attachment_name],
-          schooling.attributive_decision_number
-        )
-
         attachment = schooling.public_send(attachment_name)
+
+        name = attachment_file_name(schooling, descriptions[attachment_name])
 
         attach_document(output, schooling, attachment, name)
       end
 
       def from_pfmp(output, pfmp)
-        name = attachment_file_name(
-          pfmp.schooling.student,
-          "état-liquidatif",
-          pfmp.num_presta_doss
-        )
+        name = attachment_file_name(pfmp.schooling, "état-liquidatif")
 
         attach_document(output, pfmp.schooling, pfmp.liquidation, name)
       end
 
-      def attachment_file_name(student, description, number)
+      def attachment_file_name(schooling, description)
         [
-          student.last_name,
-          student.first_name,
+          schooling.student.last_name,
+          schooling.student.first_name,
           description,
-          number
+          schooling.attributive_decision_number
         ].join("_").concat(".pdf")
       end
 

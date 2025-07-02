@@ -232,9 +232,7 @@ RSpec.describe Schooling do
       key =
         "#{uai}/#{year}/1ere-apex-test/DUPONT_Jeanne_décision-d-attribution_#{decision_number}.pdf"
 
-      attachment_file_name = ASP::AttachDocument.attachment_file_name(schooling.student,
-                                                                      "décision-d-attribution",
-                                                                      schooling.attributive_decision_number)
+      attachment_file_name = ASP::AttachDocument.attachment_file_name(schooling, "décision-d-attribution")
 
       expect(ASP::AttachDocument.attributive_decision_key(schooling.classe, attachment_file_name)).to eq key
     end

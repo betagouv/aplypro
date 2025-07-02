@@ -8,7 +8,7 @@ module Generator
       private
 
       def articles
-        composer.text("Certifie avoir procédé au contrôle de la réalisation effective d’une période de formation en milieu professionnel ouvrant droit au versement de l’allocation en faveur des lycéens de la voie professionnelle dans le cadre de la valorisation des périodes de formation en milieu professionnel prévue par le décret N° 2023-765 du 11/08/2023 et de l’arrêté du 11/08/2023 est attribuée au bénéficiaire ci-dessous identifié par la décision d’attribution annuelle N°#{@schooling.attributive_decision_number}.")
+        composer.text("Certifie avoir procédé au contrôle de la réalisation effective d’une période de formation en milieu professionnel ouvrant droit au versement de l’allocation en faveur des lycéens de la voie professionnelle dans le cadre de la valorisation des périodes de formation en milieu professionnel prévue par le décret N° 2023-765 du 11/08/2023 et de l’arrêté du 11/08/2023 est attribuée au bénéficiaire ci-dessous identifié.")
 
         composer.table(
           [
@@ -40,7 +40,7 @@ module Generator
         composer.text("Numéro de dossier administratif : #{@schooling.administrative_number}")
         composer.text("Numéro de décision attributive annuelle : #{@schooling.attributive_decision_number}")
         composer.text("Bénéficiaire : #{@student}")
-        composer.text("Numéro d'état liquidatif : #{@pfmp.num_presta_doss}")
+        composer.text("Numéro d'état liquidatif : #{@pfmp.administrative_number}")
         composer.text("Adresse email de l'établissement : #{establishment.email}")
         composer.text("Téléphone de l'établissement : #{establishment.telephone}")
         composer.text("#{director.name}, représentant légal de l’établissement d’enseignement #{establishment.name}, (#{establishment.uai}), sis #{establishment.address}.", style: :paragraph)

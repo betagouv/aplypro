@@ -13,6 +13,13 @@ module Generator
         @rib = schooling.student.rib(schooling.establishment.id)
         super(schooling)
       end
+
+      def render
+        setup_styles
+        header
+        summary
+        articles
+      end
     end
   end
 end
