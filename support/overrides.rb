@@ -92,7 +92,7 @@ class Student < ApplicationRecord
     if all_payment_requests.any?
       puts "\nPayment requests by state:"
       all_payment_requests.group_by(&:current_state).each do |state, requests|
-        puts "  #{state}: #{requests.count}"
+        puts "  #{state}: #{requests.count} -> #{requests.pluck(:id)}"
       end
     end
 
