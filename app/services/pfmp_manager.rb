@@ -28,7 +28,6 @@ class PfmpManager # rubocop:disable Metrics/ClassLength
   end
 
   def update!(params = {}, recalculate_amounts: true, **kwargs)
-    # Handle both hash params and keyword arguments
     params = params.to_h.merge(kwargs).with_indifferent_access
 
     Pfmp.transaction do
