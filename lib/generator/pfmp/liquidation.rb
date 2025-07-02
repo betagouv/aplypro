@@ -17,7 +17,7 @@ module Generator
            ["Numéro de dossier", @pfmp.administrative_number],
            ["Période d'attribution (année scolaire)", @school_year],
            ["Période visée par l'état liquidatif", "#{@pfmp.start_date.strftime("%d/%m/%Y")} - #{@pfmp.end_date.strftime("%d/%m/%Y")}"],
-           ["Montant à verser (calcul)", "#{@pfmp.day_count *  @pfmp.wage.daily_rate}€"],
+           ["Montant à verser (calcul)", "#{@pfmp.day_count * @pfmp.wage.daily_rate}€"],
            ["Ministère financeur et programme concerné", @schooling.mef.ministry],
            ["Coordonnées de paiement : IBAN", @rib&.iban],
            ["Coordonnées de paiement : BIC", @rib&.bic],
