@@ -7,27 +7,25 @@ module ASP
       include ActiveModel::Attributes
       include ActiveModel::AttributeAssignment
 
-      attr_reader :payment_request, :payment_requests
+      attr_reader :payment_request
 
       ASP_MODIFICATION = { modification: "O" }.freeze
       ASP_NO_MODIFICATION = { modification: "N" }.freeze
 
       class << self
-        def from_payment_requests(payment_requests)
-          from("payment_requests", payment_requests)
+        def payment_mapper_class
+          klass = name.demodulize
+
+          "ASP::Mappers::#{klass}Mapper".constantize
         end
 
         def from_payment_request(payment_request)
-          from("payment_request", payment_request)
-        end
+          raise ArgumentError, "cannot make a #{name} instance with a nil payment" if payment_request.nil?
 
-        def from(variable_name, variable_value)
-          raise ArgumentError, "cannot make a #{name} instance with a nil" if variable_value.nil?
-
-          mapper = mapper_class.new(variable_value)
+          mapper = payment_mapper_class.new(payment_request)
 
           new.tap do |instance|
-            instance.instance_variable_set(:"@#{variable_name}", variable_value)
+            instance.instance_variable_set(:@payment_request, payment_request)
 
             mapped_attributes = attribute_names.index_with do |attr|
               mapper.send(attr) if mapper.respond_to?(attr)
@@ -35,12 +33,6 @@ module ASP
 
             instance.assign_attributes(mapped_attributes)
           end
-        end
-
-        def mapper_class
-          klass = name.demodulize
-
-          "ASP::Mappers::#{klass}Mapper".constantize
         end
 
         def known_with(attr)
@@ -70,11 +62,10 @@ module ASP
       end
 
       def adresse_entity_class
-        student = payment_request.nil? ? payment_requests.first.student : payment_request.student
-        if payment_request.present? && payment_request.pfmp.rectified?
-          student.lives_in_france? ? Adresse::InduFrance : Adresse::InduEtranger
+        if payment_request.pfmp.rectified?
+          payment_request.student.lives_in_france? ? Adresse::InduFrance : Adresse::InduEtranger
         else
-          student.lives_in_france? ? Adresse::France : Adresse::Etranger
+          payment_request.student.lives_in_france? ? Adresse::France : Adresse::Etranger
         end
       end
     end
