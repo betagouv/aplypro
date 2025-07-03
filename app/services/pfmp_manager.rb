@@ -2,7 +2,7 @@
 
 # Simple Ruby service to Handle complex actions on PFMPs
 
-class PfmpManager
+class PfmpManager # rubocop:disable Metrics/ClassLength
   class PfmpManagerError < StandardError; end
   class ExistingActivePaymentRequestError < PfmpManagerError; end
   class PaidPfmpError < PfmpManagerError; end
@@ -27,14 +27,14 @@ class PfmpManager
     false
   end
 
-  def update!(params)
-    params = params.to_h.with_indifferent_access
+  def update!(params = {}, recalculate_amounts: true, **kwargs)
+    params = params.to_h.merge(kwargs).with_indifferent_access
 
     Pfmp.transaction do
       pfmp.schooling&.lock! # prevent race condition using pessimistic locking (blocks r+w)
 
       pfmp.update!(params)
-      recalculate_amounts! if params[:day_count].present?
+      recalculate_amounts! if params[:day_count].present? && recalculate_amounts
       transition!
     end
   end
@@ -56,11 +56,20 @@ class PfmpManager
     !last_payment_request.in_state?(:incomplete)
   end
 
-  def rectify_and_update_attributes!(confirmed_pfmp_params, confirmed_address_params)
+  def rectify_and_update_attributes!(confirmed_pfmp_params, confirmed_address_params) # rubocop:disable Metrics/AbcSize
     Pfmp.transaction do
       paid_amount = pfmp.amount
+
+      if confirmed_pfmp_params[:day_count].present?
+        new_amount = calculate_amount(pfmp.tap { |p| p.assign_attributes(confirmed_pfmp_params) })
+        confirmed_pfmp_params = confirmed_pfmp_params.merge(amount: new_amount)
+        should_recalculate = false
+      else
+        should_recalculate = true
+      end
+
       pfmp.rectify!
-      update!(confirmed_pfmp_params)
+      update!(confirmed_pfmp_params, recalculate_amounts: should_recalculate)
       correct_amount = pfmp.reload.amount
       check_rectification_delta(paid_amount - correct_amount)
       pfmp.student.update!(confirmed_address_params)
