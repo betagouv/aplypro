@@ -33,8 +33,8 @@ Quand(
   FactoryBot.create(:schooling, :closed, student: student, classe: classe)
 end
 
-Quand("l'élève {string} {string} a une ancienne scolarité dans un autre établissement") do |first_name, last_name|
-  student = Student.find_by(first_name: first_name, last_name: last_name)
+Quand("l'élève {string} a une ancienne scolarité dans un autre établissement") do |name|
+  student = find_student_by_full_name(name)
   other_classe = FactoryBot.create(:classe)
   FactoryBot.create(:schooling, :closed, student: student, classe: other_classe)
 end
@@ -63,7 +63,15 @@ Quand("l'élève {string} a un report de décision d'attribution") do |name|
   student.schoolings.last.update!(extended_end_date: extended_end_date)
 end
 
-Quand("l'élève {string} a une date de début et une date de fin de scolarité") do |name|
+Quand("l'élève {string} a une date de début et une date de fin de scolarité sur une année scolaire passée") do |name|
+  start_date = Date.parse("2022-09-01")
+  end_date = Date.parse("2023-06-30")
+  student = find_student_by_full_name(name)
+
+  student.current_schooling.update!(start_date: start_date, end_date: end_date)
+end
+
+Quand("l'élève {string} a une date de début et une date de fin de scolarité sur l'année scolaire courante") do |name|
   start_date = Date.parse("#{SchoolYear.current.start_year}-09-01")
   end_date = Date.parse("#{SchoolYear.current.end_year}-06-30")
   student = find_student_by_full_name(name)
