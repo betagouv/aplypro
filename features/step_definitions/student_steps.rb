@@ -33,8 +33,8 @@ Quand(
   FactoryBot.create(:schooling, :closed, student: student, classe: classe)
 end
 
-Quand("l'élève {string} {string} a une ancienne scolarité dans un autre établissement") do |first_name, last_name|
-  student = Student.find_by(first_name: first_name, last_name: last_name)
+Quand("l'élève {string} a une ancienne scolarité dans un autre établissement") do |name|
+  student = find_student_by_full_name(name)
   other_classe = FactoryBot.create(:classe)
   FactoryBot.create(:schooling, :closed, student: student, classe: other_classe)
 end
@@ -58,12 +58,29 @@ end
 
 Quand("l'élève {string} a un report de décision d'attribution") do |name|
   extended_end_date = Date.parse("#{SchoolYear.current.end_year}-11-30")
-  student = find_student_by_full_name(name)
+  schooling = find_schooling_by_student_full_name(name)
 
-  student.schoolings.last.update!(extended_end_date: extended_end_date)
+  schooling.update!(extended_end_date: extended_end_date)
 end
 
-Quand("l'élève {string} a une date de début et une date de fin de scolarité") do |name|
+Quand("l'élève {string} a une date de début et une date de fin de scolarité sur une année scolaire passée") do |name|
+  start_date = Date.parse("2022-09-01")
+  end_date = Date.parse("2023-06-30")
+
+  schooling = find_schooling_by_student_full_name(name)
+  school_year = SchoolYear.find_or_create_by!(start_year: start_date.year)
+
+  mef = schooling.classe.mef
+  FactoryBot.create(:wage, mefstat4: mef.mefstat4, ministry: mef.ministry, school_year:)
+  mef.update!(school_year:)
+
+  schooling.classe.update!(school_year:)
+  schooling.update!(start_date:, end_date:)
+
+  steps %(Quand je consulte l'année scolaire "2022-2023")
+end
+
+Quand("l'élève {string} a une date de début et une date de fin de scolarité sur l'année scolaire courante") do |name|
   start_date = Date.parse("#{SchoolYear.current.start_year}-09-01")
   end_date = Date.parse("#{SchoolYear.current.end_year}-06-30")
   student = find_student_by_full_name(name)
