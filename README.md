@@ -21,7 +21,6 @@ Cette application sert de support aux personnels de lycées professionnels pour 
 ## Démarrage
 
 ```sh
-git submodule update --init --recursive
 make up
 ```
 
