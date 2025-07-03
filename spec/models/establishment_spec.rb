@@ -101,4 +101,26 @@ RSpec.describe Establishment do
       expect(etab.find_students("   ")).to be_empty
     end
   end
+
+  describe "#in_current_school_year_range?" do
+    subject { establishment.in_current_school_year_range?(start_date) }
+
+    context "when there is no start date" do
+      let(:start_date) { nil }
+
+      it { is_expected.to be false }
+    end
+
+    context "when the start date is before the current school year range" do
+      let(:start_date) { Date.parse("#{SchoolYear.current.start_year}-01-30") }
+
+      it { is_expected.to be false }
+    end
+
+    context "when the start date is equal to the current school year range" do
+      let(:start_date) { Date.parse("#{SchoolYear.current.start_year}-09-30") }
+
+      it { is_expected.to be true }
+    end
+  end
 end

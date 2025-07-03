@@ -44,7 +44,7 @@
                   - title = "Annuler le report"
                 = button_to title, confirm_da_extension_school_year_class_schooling_path(selected_school_year, classe, schooling), class: 'fr-btn', method: :get, disabled: disabled
               .fr-col-2
-                = render partial: "shared/tooltip", locals: { message: disabled ? "disabled" : "report", id: 2 }
+                = render partial: "shared/tooltip", locals: { message: disabled || schooling.establishment.in_current_school_year_range?(Time.zone.today) ? "disabled" : "report", id: 2 }
 
           %li
             .fr-grid-row.fr-grid-row--middle
