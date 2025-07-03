@@ -10,7 +10,6 @@ require:
 AllCops:
   NewCops: enable
   Exclude:
-    - 'mock/**/*'
     - 'db/**/*'
     - 'bin/**/*'
 
