@@ -6,7 +6,7 @@ class Student
       def map_schooling!(classe, student, entry)
         attributes = map_schooling_attributes(entry)
 
-        school_year_is_current = current_school_year?(attributes[:start_date])
+        school_year_is_current = @establishment.in_current_school_year_range?(Date.parse(attributes[:start_date]))
 
         attributes.delete(:end_date) unless school_year_is_current
 

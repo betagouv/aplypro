@@ -122,10 +122,6 @@ class Student
       def inspect
         "#{self.class}<UAI: #{uai}>"
       end
-
-      def current_school_year?(start_date)
-        start_date.present? && @establishment.school_year_range.include?(Date.parse(start_date))
-      end
     end
   end
 end

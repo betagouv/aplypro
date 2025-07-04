@@ -76,7 +76,7 @@ Fonctionnalité: Saisie des coordonnées banquaires manquantes pour une classe
       | Langevin Paul |                               | Non saisies                 |           |
 
   Scénario: Le personnel peut saisir des coordonnées bancaires pour une classe même si un élève a d'autres scolarités dans d'autres classes
-    Sachant que l'élève "Marie" "Curie" a une ancienne scolarité dans un autre établissement
+    Sachant que l'élève "Curie Marie" a une ancienne scolarité dans un autre établissement
     Et que je saisis en masse les coordonnées bancaires d'un tiers pour "Curie Marie"
     Et que je saisis en masse les coordonnées bancaires d'un tiers pour "Langevin Paul"
     Quand je clique sur "Enregistrer les coordonnées bancaires saisies"

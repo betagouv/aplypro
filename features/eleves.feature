@@ -14,7 +14,7 @@ Fonctionnalité: Gestion des scolarités de l'élève
     Et la page ne contient pas "et finie le"
     Quand je clique sur "Ajouter une PFMP"
     Alors la page contient "(entre le 02/09/2024 et le 01/09/2025)"
-    Sachant que l'élève "Dupuis Jean" a une date de début et une date de fin de scolarité
+    Sachant que l'élève "Dupuis Jean" a une date de début et une date de fin de scolarité sur l'année scolaire courante
     Et que je consulte le profil de "Dupuis Jean" dans la classe de "1MELEC"
     Alors la page contient "Scolarité débutée le 01/09/2024 et finie le 30/06/2025"
     Quand je clique sur "Ajouter une PFMP"

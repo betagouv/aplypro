@@ -119,6 +119,10 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     (start_date..end_date)
   end
 
+  def in_current_school_year_range?(date)
+    date.present? && school_year_range.include?(date)
+  end
+
   def to_s
     [uai, name, city, postal_code].compact.join(", ")
   end
