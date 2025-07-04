@@ -417,6 +417,10 @@ fr:
       title: "Secrétariat d'État\n chargé de la Mer"
       description: "Je me connecte via le portail de l'éducation nationale."
       button: Se connecter (Mer)
+    asp:
+      title: Agence de Services et Paiements (ASP)
+      description: Vous êtes un agent de l'ASP
+      button: Se connecter (ASP)
     developer:
       title: Développeur
       description: "Je me connecte en mode développeur pour tester l'application."

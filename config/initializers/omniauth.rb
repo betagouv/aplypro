@@ -19,6 +19,14 @@ Rails.application.config.middleware.use OmniAuth::Builder do
              ]
 
     provider :developer,
+             name: :asp_developer,
+             path_prefix: "/auth",
+             fields: [
+               :email,
+               { "Portail de connexion" => ["ASP"] }
+             ]
+
+    provider :developer,
              name: :academic_developer,
              path_prefix: "/auth",
              fields: %i[academy_code email]
@@ -56,6 +64,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 
   provider :openid_connect, {
     name: :asp,
+    path_prefix: "/auth",
     scope: ENV.fetch("APLYPRO_ASP_OIDC_SCOPE"),
     discovery: true,
     issuer: ENV.fetch("APLYPRO_ASP_OIDC_ISSUER"),
