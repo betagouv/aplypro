@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "attribute_decision/attributor"
+require "generator/attributor"
 
 module Generate
   class AbrogationDecisionJob < ApplicationJob
@@ -34,8 +34,8 @@ module Generate
 
     def generate_document(schooling)
       schooling.increment(:abrogation_decision_version)
-      io = AttributeDecision::Abrogator.new(schooling).write
-      schooling.attach_attributive_document(io, :abrogation_decision)
+      io = Generator::Abrogator.new(schooling).write
+      ASP::AttachDocument.from_schooling(io, schooling, :abrogation_decision)
     end
   end
 end

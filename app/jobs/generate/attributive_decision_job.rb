@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "attribute_decision/attributor"
+require "generator/attributor"
 
 module Generate
   class AttributiveDecisionJob < ApplicationJob
@@ -29,8 +29,8 @@ module Generate
     def generate_document(schooling)
       schooling.generate_administrative_number
       schooling.increment(:attributive_decision_version)
-      io = AttributeDecision::Attributor.new(schooling).write
-      schooling.attach_attributive_document(io, :attributive_decision)
+      io = Generator::Attributor.new(schooling).write
+      ASP::AttachDocument.from_schooling(io, schooling, :attributive_decision)
     end
 
     def sync_data(schooling)
