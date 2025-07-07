@@ -5,7 +5,9 @@ class SendPaymentRequestsJob < ApplicationJob
 
   sidekiq_options retry: false
 
-  def perform
+  def perform # rubocop:disable Metrics/AbcSize
+    return unless ActiveModel::Type::Boolean.new.cast(ENV.fetch("APLYPRO_OUTGOING_PAYMENTS_ENABLED"))
+
     payment_requests = ASP::PaymentRequest.in_state(:ready).order(created_at: :asc)
 
     return if payment_requests.none?
