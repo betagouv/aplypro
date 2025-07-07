@@ -13,14 +13,20 @@ RSpec.describe ASP::User do
 
       let(:user) { described_class.new(uid: "foo", name: "bar", provider: "asp", email: email) }
 
-      context "when the email is not asp-public.fr" do
+      context "when the email is neither 'asp-public.fr' nor 'asp.gouv.fr'" do
         let(:email) { "test@gmail.com" }
 
         it { is_expected.not_to be_valid }
       end
 
-      context "when the email matches" do
+      context "when the email is 'asp-public.fr'" do
         let(:email) { "test@asp-public.fr" }
+
+        it { is_expected.to be_valid }
+      end
+
+      context "when the email is 'asp.gouv.fr'" do
+        let(:email) { "test@asp.gouv.fr" }
 
         it { is_expected.to be_valid }
       end

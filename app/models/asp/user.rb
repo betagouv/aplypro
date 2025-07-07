@@ -2,13 +2,13 @@
 
 module ASP
   class User < ApplicationRecord
-    EMAIL_DOMAIN = "asp-public.fr"
+    EMAIL_DOMAIN = %w[asp-public.fr asp.gouv.fr].freeze
 
     devise :authenticatable
 
     validates :uid, :provider, :name, :email, presence: true
 
-    validates :email, format: { with: /@#{EMAIL_DOMAIN}\z/ }
+    validates :email, format: { with: /@#{EMAIL_DOMAIN.join('|')}\z/ }
 
     class << self
       def from_oidc(attrs)

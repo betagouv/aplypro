@@ -47,7 +47,7 @@ Sachantque("je suis un agent de l'ASP") do
       uid: Faker::Internet.uuid,
       info: {
         name: Faker::Name.name,
-        email: Faker::Internet.email(domain: ASP::User::EMAIL_DOMAIN)
+        email: Faker::Internet.email(domain: ASP::User::EMAIL_DOMAIN.first)
       }
     }
   )
