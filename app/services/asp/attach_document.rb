@@ -2,27 +2,29 @@
 
 module ASP
   class AttachDocument
+    DESCRIPTIONS = {
+      attributive_decision: "décision-d-attribution",
+      abrogation_decision: "décision-d-abrogation",
+      cancellation_decision: "décision-de-retrait",
+      liquidation: "état-liquidatif"
+    }.freeze
+
     class << self
       def from_schooling(output, schooling, attachment_name)
-        descriptions = {
-          attributive_decision: "décision-d-attribution",
-          abrogation_decision: "décision-d-abrogation",
-          cancellation_decision: "décision-de-retrait"
-        }
-
-        raise "Unsupported attachment type" unless descriptions.keys.include?(attachment_name)
+        raise "Unsupported attachment type" unless DESCRIPTIONS.keys.include?(attachment_name)
 
         attachment = schooling.public_send(attachment_name)
 
-        name = attachment_file_name(schooling, descriptions[attachment_name])
+        name = attachment_file_name(schooling, DESCRIPTIONS[attachment_name])
 
-        attach_document(output, schooling, attachment, name)
-      end
+        attachment.purge if attachment.present?
 
-      def from_pfmp(output, pfmp)
-        name = attachment_file_name(pfmp.schooling, "état-liquidatif")
-
-        attach_document(output, pfmp.schooling, pfmp.liquidation, name)
+        attachment.attach(
+          io: output,
+          key: attributive_decision_key(schooling.classe, name),
+          filename: name,
+          content_type: "application/pdf"
+        )
       end
 
       def attachment_file_name(schooling, description)
@@ -41,19 +43,6 @@ module ASP
           classe.label.parameterize,
           filename
         ].join("/")
-      end
-
-      private
-
-      def attach_document(output, schooling, attachment, name)
-        attachment.purge if attachment.present?
-
-        attachment.attach(
-          io: output,
-          key: attributive_decision_key(schooling.classe, name),
-          filename: name,
-          content_type: "application/pdf"
-        )
       end
     end
   end

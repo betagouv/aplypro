@@ -2,12 +2,13 @@
 
 require "rails_helper"
 require "support/webmock_helpers"
+require "hexapdf"
 
 RSpec.describe Generate::LiquidationJob, :student_api do
-  subject(:job) { described_class.new(pfmp) }
+  subject(:job) { described_class.new(schooling) }
 
-  let(:pfmp) { create(:pfmp, :validated) }
-  let(:student) { pfmp.schooling.student }
+  let(:schooling) { create(:schooling) }
+  let(:student) { schooling.student }
 
   before do
     ActiveJob::Base.queue_adapter = :test
@@ -20,17 +21,39 @@ RSpec.describe Generate::LiquidationJob, :student_api do
   end
 
   describe "#perform" do
-    it "generates one liquidation decision per pfmp" do
-      expect { job.perform_now }.to change { pfmp.liquidation.attached? }.from(false).to(true)
+    context "when the schooling has no pfmp" do
+      it "does not generate a liquidation for the schooling" do
+        expect { job.perform_now }.not_to change { schooling.liquidation.attached? }.from(false)
+      end
     end
 
-    it "bumps the version" do
-      expect { job.perform_now }.to change(pfmp, :liquidation_version).from(0).to(1)
-    end
+    context "when the schooling has pfmp" do
+      let(:pfmps) { create_list(:pfmp, 3, :validated, schooling: schooling) }
 
-    it "executes within a transaction" do
-      expect(Pfmp).to receive(:transaction) # rubocop:disable RSpec/MessageSpies
-      job.perform_now
+      before { schooling.update(pfmps: pfmps) }
+
+      it "generates a liquidation for the schooling" do
+        expect { job.perform_now }.to change { schooling.liquidation.attached? }.from(false).to(true)
+      end
+
+      it "generates a number of pages equal to the number of PFMPs" do
+        job.perform_now
+
+        tempfile = Tempfile.new("état-liquidatif.pdf")
+        tempfile.binmode
+        tempfile.write(schooling.liquidation.download)
+
+        expect(HexaPDF::Document.open(tempfile.path).pages.count).to eq(pfmps.size)
+      end
+
+      it "bumps the version" do
+        expect { job.perform_now }.to change(schooling, :liquidation_version).from(0).to(1)
+      end
+
+      it "executes within a transaction" do
+        expect(Schooling).to receive(:transaction) # rubocop:disable RSpec/MessageSpies
+        job.perform_now
+      end
     end
   end
 end

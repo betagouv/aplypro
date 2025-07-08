@@ -4,25 +4,27 @@ module Generate
   class LiquidationJob < ApplicationJob
     include DocumentGeneration
 
-    def perform(pfmp)
-      sync_data(pfmp)
+    def perform(schooling)
+      return unless schooling.pfmps.any?
 
-      Pfmp.transaction do
-        generate_document(pfmp)
-        pfmp.save!
+      sync_data(schooling)
+
+      Schooling.transaction do
+        generate_document(schooling)
+        schooling.save!
       end
     end
 
     private
 
-    def generate_document(pfmp)
-      pfmp.increment(:liquidation_version)
-      io = Generator::Pfmp::Liquidation.new(pfmp).write
-      ASP::AttachDocument.from_pfmp(io, pfmp)
+    def generate_document(schooling)
+      schooling.increment(:liquidation_version)
+      io = Generator::Pfmp::Liquidation.new(schooling).write
+      ASP::AttachDocument.from_schooling(io, schooling, :liquidation)
     end
 
-    def sync_data(pfmp)
-      Sync::StudentJob.new.perform(pfmp.schooling)
+    def sync_data(schooling)
+      Sync::StudentJob.new.perform(schooling)
     end
   end
 end

@@ -8,7 +8,7 @@ module Generator
       private
 
       def articles
-        composer.text("Certifie avoir procédé au contrôle de la réalisation effective d’une période de formation en milieu professionnel ouvrant droit au versement de l’allocation en faveur des lycéens de la voie professionnelle dans le cadre de la valorisation des périodes de formation en milieu professionnel prévue par le décret N° 2023-765 du 11/08/2023 et de l’arrêté du 11/08/2023 est attribuée au bénéficiaire ci-dessous identifié.")
+        composer.text("Certifie avoir procédé au contrôle de la réalisation effective d’une période de formation en milieu professionnel ouvrant droit au versement de l’allocation en faveur des lycéens de la voie professionnelle dans le cadre de la valorisation des périodes de formation en milieu professionnel prévue par le décret N° 2023-765 du 11/08/2023.")
 
         composer.table(
           [
@@ -29,7 +29,7 @@ module Generator
       end
 
       def header
-        header_initializer("Etat liquidatif")
+        header_initializer("Etat liquidatif", false)
       end
 
       def summary

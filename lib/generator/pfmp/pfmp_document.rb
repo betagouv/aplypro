@@ -1,17 +1,13 @@
 # frozen_string_literal: true
 
-require "hexapdf"
-
 module Generator
   module Pfmp
     class PfmpDocument < Document
       attr_reader :pfmp, :rib
 
-      def initialize(pfmp)
-        @pfmp = pfmp
-        schooling = pfmp.schooling
+      def initialize(schooling)
         @rib = schooling.student.rib(schooling.establishment.id)
-        super(schooling)
+        super
       end
 
       def render
@@ -19,6 +15,19 @@ module Generator
         header
         summary
         articles
+      end
+
+      def write
+        io = StringIO.new
+
+        schooling.pfmps.each do |pfmp|
+          @pfmp = pfmp
+          render
+        end
+
+        composer.write(io)
+        io.rewind
+        io
       end
     end
   end

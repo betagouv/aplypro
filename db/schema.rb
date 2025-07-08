@@ -202,7 +202,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_30_071856) do
     t.string "asp_prestation_dossier_id"
     t.integer "amount"
     t.string "administrative_number"
-    t.integer "liquidation_version", default: 0
     t.index ["asp_prestation_dossier_id"], name: "index_pfmps_on_asp_prestation_dossier_id", unique: true
     t.index ["schooling_id"], name: "index_pfmps_on_schooling_id"
   end
@@ -244,6 +243,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_30_071856) do
     t.integer "abrogation_decision_version", default: 0
     t.date "extended_end_date"
     t.datetime "removed_at", precision: nil
+    t.integer "liquidation_version", default: 0
     t.index ["administrative_number"], name: "index_schoolings_on_administrative_number", unique: true
     t.index ["asp_dossier_id"], name: "index_schoolings_on_asp_dossier_id", unique: true
     t.index ["classe_id"], name: "index_schoolings_on_classe_id"
