@@ -4,8 +4,7 @@ module ASP
   module Mappers
     class PersPhysiqueMapper
       MAPPING = {
-        prenom: :first_name,
-        autresprenoms: :other_first_names,
+        prenom: :first_names,
         nomusage: :last_name,
         nomnaissance: :last_name,
         datenaissance: :birthdate,

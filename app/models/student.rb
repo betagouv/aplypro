@@ -170,7 +170,7 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     pfmps.in_state(:validated).each { |pfmp| PfmpManager.new(pfmp).retry_payment_request! }
   end
 
-  def other_first_names
-    [first_name2, first_name3].compact.join(", ")
+  def first_names
+    [first_name, first_name2, first_name3].compact.join(", ")
   end
 end

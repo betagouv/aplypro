@@ -26,10 +26,9 @@ module ASP
 
       validates_presence_of :codeinseecommune, if: :born_in_france?
 
-      def fragment(xml) # rubocop:disable Metrics/AbcSize
+      def fragment(xml)
         xml.titre(titre)
         xml.prenom(prenom)
-        xml.autresprenoms(autresprenoms) if autresprenoms.present?
         xml.nomusage(nomusage)
         xml.nomnaissance(nomnaissance)
         xml.datenaissance(datenaissance)
