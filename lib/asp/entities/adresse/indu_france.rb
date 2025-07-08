@@ -6,7 +6,7 @@ module ASP
       class InduFrance < Entity
         ADRESSE_ATTR_MAX_LENGTH = 38
 
-        attribute :pointremise, :string
+        attribute :libellevoie, :string
         attribute :cpltdistribution, :string
         attribute :codetypeadr, :string
         attribute :codecominsee, :string
@@ -14,14 +14,14 @@ module ASP
         attribute :codepostalcedex, :string
 
         validates_presence_of %i[
-          pointremise
+          libellevoie
           codetypeadr
           codeinseepays
           codepostalcedex
           codecominsee
         ]
 
-        validates_length_of :pointremise, maximum: ADRESSE_ATTR_MAX_LENGTH
+        validates_length_of :libellevoie, maximum: 28
         validates_length_of :cpltdistribution, maximum: ADRESSE_ATTR_MAX_LENGTH, allow_nil: true
 
         def self.payment_mapper_class
@@ -33,7 +33,7 @@ module ASP
         end
 
         def fragment(xml)
-          xml.pointremise(pointremise)
+          xml.libellevoie(libellevoie)
           xml.cpltdistribution(cpltdistribution) if cpltdistribution.present?
           xml.codetypeadr(codetypeadr)
           xml.codeinseepays(codeinseepays)

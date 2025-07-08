@@ -4,7 +4,7 @@ module ASP
   module Mappers
     module Adresse
       class InduFranceMapper < FranceMapper
-        def pointremise
+        def libellevoie
           student.address_line1.presence || student.address_line2
         end
 
