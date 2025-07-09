@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 # rubocop:disable all
-module AttributeDecision
+module Generator
   # Generate "Décision de retrait"
-  class Cancellation < DocumentGenerator
+  class Cancellation < Document
 
     include ApplicationHelper
 
@@ -39,10 +39,7 @@ module AttributeDecision
     end
 
     def header
-      composer.image(Rails.root.join("app/assets/images/Republique_Francaise_RVB.png").to_s, height: 100, position: :float)
-      composer.text("Retrait de la décision d'attribution annuelle".upcase, style: :title, margin: [150, 0, 0, 0])
-      composer.text("Relative au versement d’une allocation en faveur des lycéens de la voie professionnelle dans le cadre de la valorisation des périodes de formation en milieu professionnel".upcase, style: :subtitle)
-      composer.text("année scolaire #{@school_year}".upcase, style: :subtitle, margin: [10, 0, 50, 0])
+      header_initializer("Retrait de la décision d'attribution annuelle")
     end
 
     def summary

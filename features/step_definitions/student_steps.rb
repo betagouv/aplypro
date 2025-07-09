@@ -52,7 +52,7 @@ Quand("les élèves actuels sont les seuls à avoir des décisions d'attribution
   establishment = Establishment.last
 
   establishment.schoolings.current.find_each do |schooling|
-    schooling.attach_attributive_document(StringIO.new("hello"), :attributive_decision)
+    ASP::AttachDocument.from_schooling(StringIO.new("hello"), schooling, :attributive_decision)
   end
 end
 
@@ -75,8 +75,8 @@ Quand("l'élève {string} a une décision d'attribution") do |name|
   student = find_student_by_full_name(name)
 
   establishment = Establishment.last
-  establishment.schoolings.find_by(student: student).attach_attributive_document(StringIO.new("hello"),
-                                                                                 :attributive_decision)
+  schooling = establishment.schoolings.find_by(student: student)
+  ASP::AttachDocument.from_schooling(StringIO.new("hello"), schooling, :attributive_decision)
 end
 
 # FIXME: we should mock the API step instead and have the correct

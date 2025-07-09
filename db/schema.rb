@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_26_074806) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_30_071856) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "unaccent"
@@ -243,6 +243,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_26_074806) do
     t.integer "abrogation_decision_version", default: 0
     t.date "extended_end_date"
     t.datetime "removed_at", precision: nil
+    t.integer "liquidation_version", default: 0
     t.index ["administrative_number"], name: "index_schoolings_on_administrative_number", unique: true
     t.index ["asp_dossier_id"], name: "index_schoolings_on_asp_dossier_id", unique: true
     t.index ["classe_id"], name: "index_schoolings_on_classe_id"

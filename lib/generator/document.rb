@@ -2,8 +2,8 @@
 
 require "hexapdf"
 
-module AttributeDecision
-  class DocumentGenerator
+module Generator
+  class Document
     include ActionView::Helpers::NumberHelper
 
     attr_reader :composer, :schooling, :student, :school_year
@@ -22,6 +22,19 @@ module AttributeDecision
       io.rewind
       io
     end
+
+    protected
+
+    # rubocop:disable Layout/LineLength
+    # rubocop:disable Style/OptionalBooleanParameter
+    def header_initializer(title, feminine = true)
+      composer.image(Rails.root.join("app/assets/images/Republique_Francaise_RVB.png").to_s, height: 100, position: :float)
+      composer.text(title.upcase, style: :title, margin: [150, 0, 0, 0])
+      composer.text("#{feminine ? 'Relative' : 'Relatif'} au versement d’une allocation en faveur des lycéens de la voie professionnelle dans le cadre de la valorisation des périodes de formation en milieu professionnel".upcase, style: :subtitle)
+      composer.text("année scolaire #{@school_year}".upcase, style: :subtitle, margin: [10, 0, 50, 0])
+    end
+    # rubocop:enable Layout/LineLength
+    # rubocop:enable Style/OptionalBooleanParameter
 
     private
 

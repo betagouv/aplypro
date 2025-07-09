@@ -4,6 +4,7 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_one_attached :attributive_decision
   has_one_attached :abrogation_decision
   has_one_attached :cancellation_decision
+  has_one_attached :liquidation
 
   enum :status, { student: 0, apprentice: 1, other: 2 }, scopes: false, validate: { allow_nil: true }
 
@@ -142,24 +143,6 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
     !student.ine_not_found && !removed? && establishment.students_provider != "csv"
   end
 
-  def attachment_file_name(description)
-    [
-      student.last_name,
-      student.first_name,
-      description,
-      attributive_decision_number
-    ].join("_").concat(".pdf")
-  end
-
-  def attributive_decision_key(filename)
-    [
-      establishment.uai,
-      classe.school_year.start_year,
-      classe.label.parameterize,
-      filename
-    ].join("/")
-  end
-
   def attributive_decision_number
     [
       attributive_decision_bop_indicator,
@@ -182,27 +165,5 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
     else
       code
     end
-  end
-
-  def attach_attributive_document(output, attachment_name)
-    descriptions = {
-      attributive_decision: "décision-d-attribution",
-      abrogation_decision: "décision-d-abrogation",
-      cancellation_decision: "décision-de-retrait"
-    }
-
-    raise "Unsupported attachment type" unless descriptions.keys.include?(attachment_name)
-
-    name = attachment_file_name(descriptions[attachment_name])
-
-    attachment = public_send(attachment_name)
-    attachment.purge if attachment.present?
-
-    attachment.attach(
-      io: output,
-      key: attributive_decision_key(name),
-      filename: name,
-      content_type: "application/pdf"
-    )
   end
 end
