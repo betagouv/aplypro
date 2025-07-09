@@ -47,7 +47,7 @@ Sachantque("je suis un agent de l'ASP") do
       uid: Faker::Internet.uuid,
       info: {
         name: Faker::Name.name,
-        email: Faker::Internet.email(domain: ASP::User::EMAIL_DOMAIN)
+        email: Faker::Internet.email(domain: ASP::User::EMAIL_DOMAIN.first)
       }
     }
   )
@@ -69,7 +69,7 @@ end
 Sachantque("je me connecte au portail ASP") do
   visit new_asp_user_session_path
 
-  click_link_or_button "Se connecter"
+  click_link_or_button "Se connecter (ASP)"
 end
 
 Sachantque("je suis un personnel académique de {string}") do |academy|

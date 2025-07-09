@@ -23,6 +23,12 @@ module Users
       academic
     end
 
+    def asp_developer
+      oidcize_dev_hash(auth_hash, false)
+
+      asp
+    end
+
     def masa
       oidc
     end
@@ -75,11 +81,13 @@ module Users
 
     def asp
       @asp_login = true
-      @asp_user = ASP::User.from_oidc(auth_hash).tap(&:save!)
+      @asp_user = ASP::User.from_oidc(auth_hash).tap(&:save!) # TODO: "save!" ne marche pas
+
+      add_auth_breadcrumb(data: { user_id: @asp_user.id }, message: "Successfully parsed asp user")
 
       sign_in(:asp_user, @asp_user)
 
-      redirect_to asp_schoolings_path
+      redirect_to asp_schoolings_path, notice: t("auth.success")
     end
 
     def failure

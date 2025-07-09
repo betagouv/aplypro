@@ -133,13 +133,13 @@ Rails.application.routes.draw do
   end
 
   devise_scope :asp_user do
-    get "/auth/asp/callback" => "users/omniauth_callbacks#asp", as: :asp_login
+    get "/auth/asp/callback", to: "users/omniauth_callbacks#asp"
+    post "/auth/asp_developer/callback", to: "users/omniauth_callbacks#asp_developer"
   end
 
   devise_scope :academic_user do
-    %w[academic academic_developer].each do |action|
-      match "/auth/#{action}/callback", to: "users/omniauth_callbacks##{action}", via: %i[get post]
-    end
+    get "/auth/academic/callback", to: "users/omniauth_callbacks#academic"
+    post "/auth/academic_developer/callback", to: "users/omniauth_callbacks#academic_developer"
   end
 
   devise_for :users
