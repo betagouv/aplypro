@@ -79,15 +79,14 @@ StudentsApi::Fregata::Api.get("/autre/terminaison/hypothétique")
 
 ## Création de données
 
-[`aplypro-mock-data`](https://github.com/betagouv/aplypro-mock-data/)
-fournit un serveur qui simule ses terminaisons et peut générer des
+Le répertoire `mock` simule ses terminaisons et peut générer des
 données semblables à celles de production grâce à des factories
 paramétrables pour chaque terminaison d'API, par exemple celle de
 SYGNE :
 
-https://github.com/betagouv/aplypro-mock-data/tree/main/apis/factories/sygne/
+`mock/apis/factories/sygne/`
 
-La forme finale de ces donnés peut être constatée avec :
+La forme finale de ces données peut être constatée avec :
 
 
 ```sh
