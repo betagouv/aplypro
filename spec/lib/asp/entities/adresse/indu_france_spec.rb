@@ -8,13 +8,13 @@ describe ASP::Entities::Adresse::InduFrance, type: :model do
 
     before do
       pfmp.student.update(
-        address_line1: "A" * 38,
+        address_line1: "A" * 28,
         address_line2: "B" * 38
       )
     end
 
     describe "validation" do
-      it { is_expected.to validate_presence_of(:pointremise) }
+      it { is_expected.to validate_presence_of(:libellevoie) }
       it { is_expected.to validate_presence_of(:codepostalcedex) }
       it { is_expected.to validate_presence_of(:codecominsee) }
       it { is_expected.to validate_presence_of(:codeinseepays) }
@@ -26,14 +26,14 @@ describe ASP::Entities::Adresse::InduFrance, type: :model do
       let(:probe) { %w[codetypeadr PRINCIPALE] }
 
       it "uses the establishment details for the address" do
-        expect(document.at("pointremise").text).to eq "A" * 38
+        expect(document.at("libellevoie").text).to eq "A" * 28
         expect(document.at("cpltdistribution").text).to eq  "B" * 38
       end
 
       context "when the addresse is too long" do
         before do
           pfmp.student.update(
-            address_line1: "A" * 50,
+            address_line1: "A" * 29,
             address_line2: "B" * 50
           )
         end
