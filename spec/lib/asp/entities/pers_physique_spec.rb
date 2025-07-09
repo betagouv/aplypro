@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe ASP::Entities::PersPhysique, type: :model do
   let(:payment_request) { create(:asp_payment_request, :ready) }
-  let(:student) { create(:student, :with_all_asp_info, first_name: "Marie") }
+  let(:student) { create(:student, :with_all_asp_info, first_name: "Marie", first_name2: nil, first_name3: nil) }
 
   before do
     payment_request.schooling.update!(student: student)
