@@ -17,12 +17,6 @@ describe StudentsApi::Fregata::Api do
     let(:fregata_student) { build(:fregata_student, ine_value: ine).to_h }
     let(:en_student) { build(:fregata_student, :national_education, ine_value: ine).to_h }
 
-    before do
-      allow_any_instance_of(StudentsApi::Fregata::Mappers::StudentMapper).to receive(:call) do |_, entry| # rubocop:disable RSpec/AnyInstance
-        { ine: entry.dig("apprenant", "ine") }
-      end
-    end
-
     it "filters out students with estEN set to true" do
       payload = [en_student, fregata_student]
 
