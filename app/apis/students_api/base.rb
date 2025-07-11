@@ -18,6 +18,8 @@ module StudentsApi
       end
 
       def fetch_resource(resource_type, params)
+        return if Establishment.find_by(uai: params.fetch(:uai)).in_summer_vacation_range?
+
         send("fetch_#{resource_type}", params)
       end
 
