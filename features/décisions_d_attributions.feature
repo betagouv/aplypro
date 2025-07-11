@@ -62,8 +62,14 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Lorsque je clique sur "Confirmer l'abrogation"
     Alors la page contient "Télécharger l'abrogation"
 
+  Scénario: Le personnel ne peut pas reporter une décision d'attribution pour une scolarité active
+    Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité sur l'année scolaire courante
+    Et que l'élève "Curie Marie" a une décision d'attribution
+    Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
+    Alors la page ne contient pas "Autoriser un report"
+
   Scénario: Le personnel peut reporter une décision d'attribution
-    Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité
+    Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité sur une année scolaire passée
     Et que l'élève "Curie Marie" a une décision d'attribution
     Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
     Quand je clique sur "Autoriser un report"
@@ -74,7 +80,7 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Alors la page contient "La décision d'attribution de Curie Marie a bien été prolongée"
 
   Scénario: Le personnel peut annuler la saisie d'un report de décision d'attribution
-    Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité
+    Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité sur une année scolaire passée
     Et que l'élève "Curie Marie" a une décision d'attribution
     Et que l'élève "Curie Marie" a un report de décision d'attribution
     Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
@@ -85,12 +91,11 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Alors la page contient "Le report de la décision d'attribution de Curie Marie a bien été supprimé"
 
   Scénario: Le personnel peut modifier la saisie d'un report de décision d'attribution si une pfmp est saisie
-    Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité
+    Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité sur une année scolaire passée
     Et que l'élève "Curie Marie" a une décision d'attribution
     Et que l'élève "Curie Marie" a un report de décision d'attribution
     Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
     Et que je renseigne une PFMP provisoire dans la période de report pour l'élève "Curie Marie"
-    Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
     Quand je clique sur "Modifier le report"
     Alors la page contient "Êtes-vous certain(e) de vouloir modifier le report de cette décision d'attribution ?"
     Et que je coche la case de responsable légal
@@ -121,13 +126,14 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
 #      | Curie Marie   | Réintégrer Curie Marie dans la classe 1MELEC |
 
   Scénario: Seul le chef d'établissement a accès à certaines actions
-    Sachant que l'élève "Curie Marie" a une date de début et une date de fin de scolarité
-    Lorsque je suis responsable légal et que je génère les décisions d'attribution manquantes
+    Sachant que l'élève "Curie Marie" a une date de début et une date de fin de scolarité sur une année scolaire passée
+    Et que je suis responsable légal et que je génère les décisions d'attribution manquantes
     Et que la génération des décisions d'attribution manquantes est complètement finie
     Sachant que je me déconnecte
     Et que je me connecte en tant que personnel autorisé de l'établissement "DINUM"
     Et que je passe l'écran d'accueil
-    Quand je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
+    Quand je consulte l'année scolaire "2022-2023"
+    Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
     Alors la page contient un bouton "Autoriser un report" désactivé
 
   Scénario: Le personnel peut générer une décision d'attribution d'attribution individuelle
