@@ -1,0 +1,5 @@
+= turbo_stream.update "liquidation-status" do
+  = render partial: "asp/schoolings/liquidation_status", locals: { schooling: schooling }
+
+= turbo_stream.update "liquidation-documents" do
+  = render partial: "asp/schoolings/liquidation_documents", locals: { schooling: schooling }

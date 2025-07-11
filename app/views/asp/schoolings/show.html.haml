@@ -1,17 +1,14 @@
 = render partial: 'search-bar'
 
-.fr-grid-row.fr-grid-row--gutters{"data-controller": "liquidation", "data-liquidation-generate-url-value": generate_liquidation_asp_schooling_path(@schooling), "data-liquidation-download-url-value": download_liquidation_asp_schooling_path(@schooling), "data-liquidation-current-version-value": @schooling.liquidation_version || 0}
+.fr-grid-row.fr-grid-row--gutters{"data-controller": "liquidation"}
+  = turbo_stream_from "liquidation_#{@schooling.id}"
   .fr-col-md-6
     %section.fr-my-3w.downloads-section
       %h3.fr-h6 Actions
       %ul.fr-btns-group.fr-btns-group--sm
         - if @schooling.pfmps.any?
-          %li{"data-liquidation-target": "generateButton", style: "display: none;"}
-            %button.fr-btn.fr-btn--primary{"data-action": "click->liquidation#generate"}
-              %span Générer états liquidatifs
-          %li{"data-liquidation-target": "regenerateButton", style: "display: none;"}
-            %button.fr-btn.fr-btn--primary{"data-action": "click->liquidation#generate"}
-              %span Regénérer les états liquidatifs
+          #liquidation-status
+            = render partial: "liquidation_status", locals: { schooling: @schooling }
         - else
           %li
             %span Aucune PFMP disponible
@@ -24,9 +21,8 @@
           %li
             = link_to url_for(@schooling.attributive_decision), class: 'fr-link fr-link--download', download: true do
               Télécharger la décision d'attribution
-        %li{"data-liquidation-target": "downloadButton", style: "display: none;"}
-          = link_to download_liquidation_asp_schooling_path(@schooling), class: 'fr-link fr-link--download', download: true do
-            États liquidatifs
+        #liquidation-documents
+          = render partial: "liquidation_documents", locals: { schooling: @schooling }
 
 .fr-table.fr-table--no-caption
   %table

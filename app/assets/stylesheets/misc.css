@@ -241,42 +241,15 @@ nav {
   margin-top: 2px;
 }
 
-.fr-btn.loading {
-  position: relative;
-  overflow: hidden;
-}
-
-.fr-btn.loading::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0%;
-  height: 100%;
-  background: var(--liquidation-progress-color, var(--success-425-625));
-  animation: button-fill 0.3s linear infinite;
-  z-index: 1;
-}
-
-.fr-btn.loading span {
-  position: relative;
-  z-index: 2;
-}
-
-@keyframes button-fill {
-  0% {
-    width: 0%;
-  }
-  100% {
-    width: 100%;
-  }
+.liquidation-loading {
+  border: 2px solid #b8fec9 !important;
 }
 
 .liquidation-flash {
   position: fixed;
   top: 20px;
   right: 20px;
-  background: var(--liquidation-progress-color, var(--success-425-625));
+  background: var(--success-950-100);
   color: black;
   padding: 1rem 1.5rem;
   border-radius: 8px;

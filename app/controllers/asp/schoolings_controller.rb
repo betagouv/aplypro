@@ -14,8 +14,12 @@ module ASP
     end
 
     def generate_liquidation
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.update("liquidation-status", partial: "liquidation_loading")
+        end
+      end
       Generate::LiquidationJob.perform_later(@schooling)
-      render json: { status: "success" }
     end
 
     def download_liquidation
