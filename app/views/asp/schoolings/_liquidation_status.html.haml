@@ -1,0 +1,8 @@
+- if schooling.liquidation.attached?
+  %li
+    = form_with url: generate_liquidation_asp_schooling_path(schooling), method: :post, local: false do |f|
+      = f.submit "Regénérer les états liquidatifs", class: "fr-btn fr-btn--primary"
+- else
+  %li
+    = form_with url: generate_liquidation_asp_schooling_path(schooling), method: :post, local: false do |f|
+      = f.submit "Générer états liquidatifs", class: "fr-btn fr-btn--primary"

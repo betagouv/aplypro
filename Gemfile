@@ -75,6 +75,7 @@ gem "sentry-ruby"
 
 gem "active_decorator"
 
+gem "redis"
 gem "sidekiq"
 
 gem "dry-transformer"

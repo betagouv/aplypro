@@ -241,6 +241,62 @@ nav {
   margin-top: 2px;
 }
 
+.liquidation-loading {
+  border: 2px solid #b8fec9 !important;
+}
+
+.liquidation-flash {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--success-950-100);
+  color: black;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  animation: flash-in 0.3s ease-out;
+  font-weight: 500;
+}
+
+@keyframes flash-in {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.actions.fr-btns-group.fr-btns-group--inline {
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.actions.fr-btns-group.fr-btns-group--inline .fr-btn {
+  margin-bottom: 0;
+}
+
+.actions.fr-btns-group.fr-btns-group--inline > span {
+  color: var(--text-mention-grey);
+  font-style: italic;
+}
+
+.downloads-section {
+  background-color: var(--background-default-grey);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-default-grey);
+}
+
+.downloads-section h2 {
+  color: var(--text-title-grey);
+  margin-bottom: 1rem;
+}
+
 /* Kaminari */
 
 .pagination {

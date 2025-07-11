@@ -1,12 +1,28 @@
 = render partial: 'search-bar'
 
-%h1.fr-mb-5w= @page_title
+.fr-grid-row.fr-grid-row--gutters{"data-controller": "liquidation"}
+  = turbo_stream_from "liquidation_#{@schooling.id}"
+  .fr-col-md-6
+    %section.fr-my-3w.downloads-section
+      %h3.fr-h6 Actions
+      %ul.fr-btns-group.fr-btns-group--sm
+        - if @schooling.pfmps.any?
+          #liquidation-status
+            = render partial: "liquidation_status", locals: { schooling: @schooling }
+        - else
+          %li
+            %span Aucune PFMP disponible
 
-.fr-my-3w
-  - if @schooling.attributive_decision.present?
-    = link_to "Télécharger la décision d'attribution", url_for(@schooling.attributive_decision), class: 'fr-btn fr-btn--secondary', target: :download
-  - else
-    Aucune décision d'attribution éditée
+  .fr-col-md-6
+    %section.fr-my-3w.downloads-section
+      %h3.fr-h6 Documents administratifs
+      %ul.fr-links-group
+        - if @schooling.attributive_decision.present?
+          %li
+            = link_to url_for(@schooling.attributive_decision), class: 'fr-link fr-link--download', download: true do
+              Télécharger la décision d'attribution
+        #liquidation-documents
+          = render partial: "liquidation_documents", locals: { schooling: @schooling }
 
 .fr-table.fr-table--no-caption
   %table

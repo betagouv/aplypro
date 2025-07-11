@@ -8,11 +8,11 @@ module Generate
       return unless schooling.pfmps.any?
 
       sync_data(schooling)
-
       Schooling.transaction do
         generate_document(schooling)
         schooling.save!
       end
+      broadcast_completion(schooling)
     end
 
     private
@@ -25,6 +25,15 @@ module Generate
 
     def sync_data(schooling)
       Sync::StudentJob.new.perform(schooling)
+    end
+
+    def broadcast_completion(schooling)
+      schooling.reload
+      Turbo::StreamsChannel.broadcast_render_to(
+        "liquidation_#{schooling.id}",
+        partial: "asp/schoolings/liquidation_complete",
+        locals: { schooling: schooling }
+      )
     end
   end
 end
