@@ -1,0 +1,7 @@
+- if schooling.liquidation.attached?
+  %li
+    = link_to download_liquidation_asp_schooling_path(schooling),
+              class: "fr-link fr-link--download",
+              download: true do
+      États liquidatifs
+      = " (v#{schooling.liquidation_version})"
