@@ -18,7 +18,7 @@ module StudentsApi
       end
 
       def fetch_resource(resource_type, params)
-        return if find_establishment(params).in_summer_hiatus_range?
+        return if in_summer_hiatus_range?
 
         send("fetch_#{resource_type}", params)
       end
@@ -50,12 +50,13 @@ module StudentsApi
         end
       end
 
-      def find_establishment(params)
-        if params.key?(:uai)
-          Establishment.find_by(uai: params[:uai])
-        else
-          Student.find_by(ine: params[:ine]).schoolings.first.establishment
-        end
+      def in_summer_hiatus_range?
+        return false unless ActiveModel::Type::Boolean.new.cast(ENV.fetch("APLYPRO_SYGNE_SUMMER_HIATUS_ENABLED"))
+
+        year = SchoolYear.current.end_year
+        range = Date.parse("#{year}-06-01")..Date.parse("#{year}-09-01")
+
+        range.include?(Time.zone.today)
       end
     end
   end

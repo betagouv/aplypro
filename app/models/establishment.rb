@@ -123,14 +123,6 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     date.present? && school_year_range.include?(date)
   end
 
-  def in_summer_hiatus_range?
-    return false unless ActiveModel::Type::Boolean.new.cast(ENV.fetch("APLYPRO_SYGNE_SUMMER_HIATUS_ENABLED"))
-
-    range = Date.parse("#{SchoolYear.current.end_year}-06-01")..school_year_range.last
-
-    range.include?(Time.zone.today)
-  end
-
   def to_s
     [uai, name, city, postal_code].compact.join(", ")
   end
