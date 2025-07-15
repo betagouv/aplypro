@@ -16,8 +16,8 @@ class ValidationsFacade
                         ON latest_payment_requests.pfmp_id = pfmps.id")
                 .includes(:student, payment_requests: :asp_payment_request_transitions)
 
-    pfmps.group_by { |pfmp| pfmp.latest_payment_request.current_state }
-         .reject { |pr_state| ASP::PaymentRequestStateMachine::FAILED_STATES.exclude?(pr_state.to_sym) }
+    pfmps.group_by { |pfmp| pfmp.latest_payment_request&.current_state }
+         .reject { |pr_state| pr_state.nil? || ASP::PaymentRequestStateMachine::FAILED_STATES.exclude?(pr_state.to_sym) }
   end
 
   def validatable_classes
