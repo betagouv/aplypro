@@ -47,13 +47,14 @@
                 .fr-col-2
                   = render partial: "shared/tooltip", locals: { message: disabled ? "disabled" : "report", id: 2 }
 
-          %li
-            .fr-grid-row.fr-grid-row--middle
-              .fr-col-10
-                = button_to "Abroger la décision d'attribution", confirm_abrogation_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get, disabled: disabled
-              - if disabled
-                .fr-col-2
-                  = render partial: "shared/tooltip", locals: { message: "disabled", id: 3 }
+          - if schooling.closed?
+            %li
+              .fr-grid-row.fr-grid-row--middle
+                .fr-col-10
+                  = button_to "Abroger la décision d'attribution", confirm_abrogation_school_year_class_schooling_path(school_year, classe, schooling), class: 'fr-btn fr-btn--danger', method: :get, disabled: disabled
+                - if disabled
+                  .fr-col-2
+                    = render partial: "shared/tooltip", locals: { message: "disabled", id: 3 }
 
           -# // Rajouter la condition `schooling.cancellation_decision.attached?` dans `disabled` et dans la `tooltip` si la fonctionnalité est réintroduite
           -# %li
