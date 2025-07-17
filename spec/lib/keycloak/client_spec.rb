@@ -54,6 +54,43 @@ RSpec.describe Keycloak::Client do
     end
   end
 
+  describe "#remove_user_by_email" do
+    context "when user exists and removal succeeds" do
+      before do
+        stub_request(:get, "https://keycloak.example.com/admin/realms/test-realm/users")
+          .with(query: { email: "user@example.com" })
+          .to_return(
+            status: 200,
+            body: [{ "id" => "user-123", "email" => "user@example.com" }].to_json,
+            headers: { "Content-Type" => "application/json" }
+          )
+
+        stub_request(:delete, "https://keycloak.example.com/admin/realms/test-realm/users/user-123")
+          .to_return(status: 204, body: "")
+      end
+
+      it "removes user successfully" do
+        client = described_class.new
+        result = client.remove_user_by_email("test-realm", "user@example.com")
+        expect(result).to eq({ success: true, message: "User removed successfully" })
+      end
+    end
+
+    context "when user does not exist" do
+      before do
+        stub_request(:get, "https://keycloak.example.com/admin/realms/test-realm/users")
+          .with(query: { email: "nonexistent@example.com" })
+          .to_return(status: 200, body: [].to_json, headers: { "Content-Type" => "application/json" })
+      end
+
+      it "returns user not found error" do
+        client = described_class.new
+        result = client.remove_user_by_email("test-realm", "nonexistent@example.com")
+        expect(result).to eq({ success: false, error: "User not found" })
+      end
+    end
+  end
+
   describe "error handling" do
     context "when environment variables are missing" do
       before do

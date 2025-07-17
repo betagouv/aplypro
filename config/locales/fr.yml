@@ -171,6 +171,7 @@ fr:
   menu:
     home: Tableau de bord
     users: Utilisateurs
+    tools: Outils
     classes: Classes
     new_rib: Saisir des coord. bancaires
     new_pfmp: Saisir une PFMP
