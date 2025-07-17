@@ -80,44 +80,90 @@
 
       composer.text("Article 10 : Mentions informatives auprès du public relatif au système d’information APLyPro", style: :paragraph_title)
 
-      composer.text("Finalités", style: :paragraph_title)
-      composer.text("L’application informatique APLyPro permet le versement d’une allocation en faveur des lycéens de la voie professionnelle inscrits dans des formations professionnelles des ministères chargés de l'éducation nationale, de l'agriculture et de la mer, de niveau 3 et 4, afin de valoriser leurs périodes de formation en milieu professionnel.")
-      composer.text("Les informations recueillies dans le cadre de ce traitement sont également utilisées à des fins statistiques.")
 
-      composer.text("Base légale", style: :paragraph_title)
-      composer.text("Cette application informatique constitue un traitement de données à caractère personnel mis en œuvre par le Ministère de l’Éducation Nationale et de la Jeunesse pour l’ensemble des lycées professionnels des ministères chargés de l'éducation, de l'agriculture et de la mer, de formations professionnelles de niveau 3 et 4, pour le respect d'une obligation légale à laquelle le responsable du traitement est soumis au sens du c) du 1 de l’article 6 du règlement général sur la protection des données (RGPD).")
-      composer.text("Le ministère s'engage à ce que la collecte et le traitement de vos données à caractère personnel, effectués à partir de l’application informatique APLyPro, soient conformes à ce règlement.")
 
-      composer.text("Données traitées et durées de conservation", style: :paragraph_title)
-      composer.text("Les données proviennent :")
+      composer.text("FINALITÉS", style: :paragraph_title)
+      composer.text(
+        "L’application informatique ApLyPro permet le versement d’une allocation en faveur des lycéens de la
+        voie professionnelle inscrits dans des formations professionnelles des ministères chargés de
+        l'éducation nationale, de l'agriculture et de la mer, de niveau 3 et 4, afin de valoriser leurs périodes de
+        formation en milieu professionnel. Les informations recueillies dans le cadre de ce traitement sont
+        également utilisées à des fins statistiques."
+      )
 
+      composer.text("BASE LÉGALE", style: :paragraph_title)
+      composer.text("La base légale sur laquelle se fonde le traitement est la suivante :")
       composer.list do |list|
-        list.text("pour les élèves scolarisés dans les établissements dépendant du ministère en charge de l’éducation nationale ou du ministère en charge de la mer, du traitement SYGNE (référentiel des élèves du second degré) ;")
-        list.text("pour les élèves scolarisés dans les établissements dépendant du ministère en charge de l’agriculture, du traitement FREGATA.")
+        list.text("Décret n° 2023-765 du 11 août 2023 relatif au versement d'une allocation en faveur des lycéens de
+          la voie professionnelle dans le cadre de la valorisation des périodes de formation en milieu professionnel ;")
+        list.text("Arrêté du 11 août 2023 déterminant les montants et les conditions de versement de l'allocation aux
+          lycéens de la voie professionnelle engagés dans des périodes de formation en milieu professionnel")
       end
+      composer.text(
+        "Cette application informatique constitue un traitement de données à caractère personnel mis en
+          œuvre par le ministère chargé de l’éducation nationale pour l’ensemble des lycées professionnels des
+          ministères chargés de l'éducation, de l'agriculture et de la mer, des formations professionnelles de
+          niveau 3 et 4, pour le respect d'une obligation légale à laquelle le responsable du traitement est soumis
+          au sens du c) du 1 de l’article 6 du Règlement (UE) 2016/679 du Parlement européen et du Conseil du
+          27 avril 2016 relatif à la protection des personnes physiques à l'égard du traitement des données à
+          caractère personnel et à la libre circulation de ces données (RGPD)."
+      )
+      composer.text(" Le ministère s'engage à ce que la collecte et le traitement de vos données à caractère personnel, effectués à partir de l’application informatique ApLyPro, soient conformes à ce règlement.")
 
+      composer.text("DONNÉES TRAITÉES ET DURÉES DE CONSERVATION", style: :paragraph_title)
+      composer.text(
+        "Pour les élèves scolarisés dans les établissements dépendant du ministère en charge de l’éducation
+        nationale ou du ministère chargé de la mer, le numéro INE, les nom, prénoms, l’adresse,
+        l’établissement, le module élémentaire de formation et la classe proviennent du traitement SYGNE
+        (référentiel des élèves du second degré).
+      ")
+      composer.text(
+        "Pour les élèves scolarisés dans les établissements dépendant du ministère en charge de l’agriculture,
+        le numéro INE, les nom, prénoms, l’adresse, l’établissement, le module élémentaire de formation et la
+        classe proviennent du traitement FREGATA mis en œuvre sous la responsabilité du ministère chargé
+        de l’agriculture."
+      )
+      composer.text(
+        "Pour les représentants légaux, les titulaires d’un compte autre que les élèves bénéficiaires (tiers
+        physique, tiers moral), les noms, prénoms, les données bancaires, l’adresse postale, le consentement
+        du représentant légal lorsque l’élève est mineur pour la destination bancaire du versement de
+        l’allocation sont issues des pièces justificatives collectées en début d’année scolaire. Ces données sont
+        nécessaires au paiement."
+      )
       composer.text("Vos données sont conservées pour une durée de 10 ans à compter de leur collecte.")
 
-      composer.text("Destinataires", style: :paragraph_title)
-      composer.text("Les destinataires de vos données sont les agents de la Direction Interministérielle du Numérique (DINUM), les administrateurs du système d’information en administration centrale et en académie, personnel du pôle de diffusion nationale, qui assurent l’assistance de l’application, et de l’Agence de Services et de Paiement (ASP) qui assure le paiement de l’allocation.")
+      composer.text("DESTINATAIRES", style: :paragraph_title)
+      composer.text(
+        "Les destinataires de vos données sont le chef ou directeur d’établissement, l’adjoint au chef
+        d’établissement, le personnel de l’établissement désigné par le chef d’établissement en charge de la
+        saisie de vos données, les administrateurs du système d’information en administration centrale et en
+        académie, le personnel du pôle de diffusion nationale, qui assure l’assistance de l’application, la
+        direction du numérique éducatif (DNE) qui assure la gestion technique de l’application et de l’agence
+        de services et de paiement (ASP) qui assure le paiement de l’allocation."
+      )
 
-      composer.text("Droit des personnes", style: :paragraph_title)
-      composer.text("Vous pouvez exercer vos droits d’accès, de rectification et de limitation prévus par les articles 15, 16 et 18 du RGPD, et sur le fondement de l'obligation légale, auprès du chef d’établissement, sur place, par voie postale ou par voie électronique. Les droits à l’effacement et à l’opposition ne s’appliquent pas au présent traitement.")
+      composer.text("DROITS DES PERSONNES", style: :paragraph_title)
+      composer.text(
+        "Vous pouvez exercer vos droits d’accès, de rectification et de limitation prévus par les articles 15, 16
+        et 18 du RGPD auprès du chef d’établissement, sur place, par voie postale ou par voie électronique.
+        Les droits à l’effacement et à l’opposition ne s’appliquent pas au présent traitement."
+      )
       composer.text("De la même manière, vous pouvez exercer les droits prévus à l’article 85 de la loi n° 78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés.")
-      composer.text("Pour exercer vos droits ou pour toute autre question sur le traitement de vos données à caractère personnel, vous pouvez aussi contacter le délégué à la protection des données du ministère de l’éducation nationale, de la jeunesse et des sports :")
-
+      composer.text(
+        "Pour exercer vos droits ou pour toute autre question sur le traitement de vos données à caractère
+        personnel, vous pouvez aussi contacter le délégué à la protection des données du ministère de
+        l’Education nationale, de l’Enseignement supérieur et de la Recherche :"
+      )
       composer.list do |list|
         list.text("à l’adresse électronique suivante : dpd@education.gouv.fr")
         list.text("par courrier en vous adressant au :
 
-            Ministère de l'Éducation Nationale et de la Jeunesse
+            Ministère chargé de l'éducation nationale
             À l'attention du délégué à la protection des données (DPD)
             110 rue de Grenelle
             75357 Paris Cedex 07")
       end
-
       composer.text("Si vous estimez, après nous avoir contactés, que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à la CNIL :")
-
       composer.list do |list|
         list.text("via le formulaire de saisine en ligne : https://www.cnil.fr/fr/vous-souhaitez-contacter-la-cnil")
         list.text("ou par courrier postal, à l’adresse :
@@ -126,8 +172,12 @@
         TSA 80715
         75334 Paris Cedex 07")
       end
-
-      composer.text("À l’occasion de ces démarches, vous devez justifier de votre identité par tout moyen. En cas de doute sur votre identité, les services chargés du droit d’accès et le délégué à la protection des données peuvent vous demander les informations supplémentaires qui leur apparaissent nécessaires, y compris la photocopie d’un titre d’identité portant votre signature.")
+      composer.text(
+        "À l’occasion de ces démarches, vous devez justifier de votre identité par tout moyen. En cas de doute
+        sur votre identité, les services chargés du droit d’accès et le délégué à la protection des données
+        peuvent vous demander les informations supplémentaires qui leur apparaissent nécessaires, y compris
+        la photocopie d’un titre d’identité portant votre signature."
+      )
 
       composer.text("Décision d’attribution éditée le #{I18n.l(Date.today)} par validation informatique du responsable légal de l'établissement qui a collecté et vérifié les pièces jointes relatives à l’identité de l’élève bénéficiaire de l’allocation afin de valider la procédure de versement de l’allocation.")
     end
