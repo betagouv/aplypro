@@ -18,6 +18,8 @@ module StudentsApi
       end
 
       def fetch_resource(resource_type, params)
+        return if in_summer_hiatus_range?
+
         send("fetch_#{resource_type}", params)
       end
 
@@ -46,6 +48,15 @@ module StudentsApi
 
           get(url)
         end
+      end
+
+      def in_summer_hiatus_range?
+        return false unless ActiveModel::Type::Boolean.new.cast(ENV.fetch("APLYPRO_SYGNE_SUMMER_HIATUS_ENABLED"))
+
+        year = SchoolYear.current.end_year
+        range = Date.parse("#{year}-06-01")..Date.parse("#{year}-09-01")
+
+        range.include?(Time.zone.today)
       end
     end
   end
