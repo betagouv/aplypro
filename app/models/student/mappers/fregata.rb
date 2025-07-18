@@ -4,6 +4,8 @@ class Student
   module Mappers
     class Fregata < Base
       def map_classes!
+        return {} if payload.nil?
+
         filtered_payload = payload.reject { |entry| entry["estEN"] == true }
         grouped_by_classe = filtered_payload.group_by { |entry| map_classe!(entry) }
         grouped_by_classe.reject! { |classe, entries| classe.nil? || all_menj_students?(classe, entries) }
