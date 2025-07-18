@@ -19,6 +19,8 @@ module StudentsApi
         end
 
         def get(url)
+          return nil if in_summer_hiatus_range?
+
           authenticated_client!.get(url).body
         end
 
@@ -40,6 +42,15 @@ module StudentsApi
 
         def authenticated_client!
           client.access_token!
+        end
+
+        def in_summer_hiatus_range?
+          return false unless ActiveModel::Type::Boolean.new.cast(ENV.fetch("APLYPRO_SYGNE_SUMMER_HIATUS_ENABLED"))
+
+          year = SchoolYear.current.end_year
+          range = Date.parse("#{year}-06-01")..Date.parse("#{year}-09-01")
+
+          range.include?(Time.zone.today)
         end
       end
     end
