@@ -1,0 +1,15 @@
+= turbo_stream.update "keycloak-removal-status" do
+  - if result[:success]
+    .fr-alert.fr-alert--success
+      %p.fr-alert__title
+        %span.fr-icon-check-line.fr-icon--sm{"aria-hidden": "true"}
+        Suppression réussie
+      %p.fr-alert__description
+        L'utilisateur #{email} a été supprimé avec succès du realm Keycloak.
+  - else
+    .fr-alert.fr-alert--error
+      %p.fr-alert__title
+        %span.fr-icon-error-warning-line.fr-icon--sm{"aria-hidden": "true"}
+        Erreur lors de la suppression
+      %p.fr-alert__description
+        = result[:error]

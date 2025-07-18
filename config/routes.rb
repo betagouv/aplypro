@@ -54,6 +54,12 @@ Rails.application.routes.draw do
       get "index"
     end
 
+    resources :tools, only: [:index] do
+      collection do
+        post "remove_keycloak_user"
+      end
+    end
+
     devise_for :users, class_name: "Academic::User"
   end
 

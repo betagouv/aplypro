@@ -1,0 +1,22 @@
+.fr-container
+  %h1.fr-h3 Outils
+
+  .fr-grid-row
+    .fr-col-md-8.fr-mb-3w
+      %h2.fr-h4 Suppression d'utilisateur Keycloak
+      %p.fr-text--sm.fr-mb-3w
+        Si un utilisateur rencontre des problèmes de connexion via la FIM la suppression de son compte dans l'instance Keycloak Aplypro peut être déclenchée ci-dessous pour résoudre certains problèmes :
+
+      = turbo_stream_from "keycloak_removal_status"
+      = form_with url: remove_keycloak_user_academic_tools_path, method: :post, local: false, data: { turbo_frame: false } do |form|
+        .fr-grid-row.fr-mb-3w
+          .fr-col-md-8.fr-mr-3w
+            .fr-input-group
+              = form.label :email, "Email de l'utilisateur", class: "fr-label"
+              = form.email_field :email, class: "fr-input", required: true
+
+        .fr-btns-group.fr-btns-group--inline.fr-mt-3w
+          = form.submit "Supprimer l'utilisateur", class: "fr-btn fr-btn--secondary"
+
+        .fr-mt-3w
+          #keycloak-removal-status

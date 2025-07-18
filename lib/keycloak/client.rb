@@ -74,5 +74,31 @@ module Keycloak
       response = connection.delete("realms/#{realm_name}/users/#{user_id}")
       response.body
     end
+
+    def find_user_by_email(realm_name, email)
+      response = connection.get("realms/#{realm_name}/users", { email: email })
+      return nil unless response.success?
+
+      users = response.body
+      users.is_a?(Array) && users.any? ? users.first : nil
+    end
+
+    def remove_user_by_email(realm_name, email)
+      user = find_user_by_email(realm_name, email)
+      return failure_result("User not found") unless user
+
+      response = connection.delete("realms/#{realm_name}/users/#{user['id']}")
+      response.success? ? success_result : failure_result("Failed to remove user: #{response.body}")
+    end
+
+    private
+
+    def success_result
+      { success: true, message: "User removed successfully" }
+    end
+
+    def failure_result(error)
+      { success: false, error: error }
+    end
   end
 end
