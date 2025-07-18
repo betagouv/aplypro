@@ -82,7 +82,7 @@
 
 
 
-      composer.text("FINALITÉS", style: :paragraph_title)
+      composer.text("Finalités", style: :paragraph_title, underline: true)
       composer.text(
         "L’application informatique ApLyPro permet le versement d’une allocation en faveur des lycéens de la
         voie professionnelle inscrits dans des formations professionnelles des ministères chargés de
@@ -91,7 +91,7 @@
         également utilisées à des fins statistiques."
       )
 
-      composer.text("BASE LÉGALE", style: :paragraph_title)
+      composer.text("Base légale", style: :paragraph_title, underline: true)
       composer.text("La base légale sur laquelle se fonde le traitement est la suivante :")
       composer.list do |list|
         list.text("Décret n° 2023-765 du 11 août 2023 relatif au versement d'une allocation en faveur des lycéens de
@@ -110,7 +110,7 @@
       )
       composer.text(" Le ministère s'engage à ce que la collecte et le traitement de vos données à caractère personnel, effectués à partir de l’application informatique ApLyPro, soient conformes à ce règlement.")
 
-      composer.text("DONNÉES TRAITÉES ET DURÉES DE CONSERVATION", style: :paragraph_title)
+      composer.text("Données traitées et durées de conservation", style: :paragraph_title, underline: true)
       composer.text(
         "Pour les élèves scolarisés dans les établissements dépendant du ministère en charge de l’éducation
         nationale ou du ministère chargé de la mer, le numéro INE, les nom, prénoms, l’adresse,
@@ -132,7 +132,7 @@
       )
       composer.text("Vos données sont conservées pour une durée de 10 ans à compter de leur collecte.")
 
-      composer.text("DESTINATAIRES", style: :paragraph_title)
+      composer.text("Destinataires", style: :paragraph_title, underline: true)
       composer.text(
         "Les destinataires de vos données sont le chef ou directeur d’établissement, l’adjoint au chef
         d’établissement, le personnel de l’établissement désigné par le chef d’établissement en charge de la
@@ -142,7 +142,7 @@
         de services et de paiement (ASP) qui assure le paiement de l’allocation."
       )
 
-      composer.text("DROITS DES PERSONNES", style: :paragraph_title)
+      composer.text("Droit des personnes", style: :paragraph_title, underline: true)
       composer.text(
         "Vous pouvez exercer vos droits d’accès, de rectification et de limitation prévus par les articles 15, 16
         et 18 du RGPD auprès du chef d’établissement, sur place, par voie postale ou par voie électronique.
@@ -156,7 +156,6 @@
       composer.list do |list|
         list.text("à l’adresse électronique suivante : dpd@education.gouv.fr")
         list.text("par courrier en vous adressant au :
-
             Ministère chargé de l'éducation nationale
             À l'attention du délégué à la protection des données (DPD)
             110 rue de Grenelle
