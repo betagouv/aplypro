@@ -119,4 +119,34 @@ describe Student::Mappers::Fregata do
       expect(student.schoolings.last.open?).to be true
     end
   end
+
+  describe "estEN filtering" do
+    context "when all students in a class are estEN" do
+      let(:data) do
+        [
+          build(:fregata_student, :national_education, classe_label: "TEST CLASS", ine_value: "1111"),
+          build(:fregata_student, :national_education, classe_label: "TEST CLASS", ine_value: "2222")
+        ]
+      end
+
+      it "does not create the classe" do
+        expect { mapper.new(data, uai).parse! }.not_to change(Classe, :count)
+      end
+    end
+
+    context "when some students in a class are estEN" do
+      let(:data) do
+        [
+          build(:fregata_student, classe_label: "MIXED CLASS", ine_value: "1111"),
+          build(:fregata_student, :national_education, classe_label: "MIXED CLASS", ine_value: "2222"),
+          build(:fregata_student, classe_label: "MIXED CLASS", ine_value: "3333")
+        ]
+      end
+
+      it "only creates non-estEN students" do
+        mapper.new(data, uai).parse!
+        expect(Student.pluck(:ine)).to contain_exactly("1111", "3333")
+      end
+    end
+  end
 end

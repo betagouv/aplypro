@@ -3,6 +3,13 @@
 class Student
   module Mappers
     class Fregata < Base
+      def map_classes!
+        filtered_payload = payload.reject { |entry| entry["estEN"] == true }
+        grouped_by_classe = filtered_payload.group_by { |entry| map_classe!(entry) }
+        grouped_by_classe.reject! { |classe, entries| classe.nil? || all_menj_students?(classe, entries) }
+        grouped_by_classe
+      end
+
       def map_student_attributes(attrs)
         student_attrs = super
 
@@ -32,6 +39,15 @@ class Student
 
       def map_schooling_attributes(entry)
         schooling_mapper.new.call(entry)
+      end
+
+      private
+
+      def all_menj_students?(classe, entries)
+        return false if classe.nil?
+
+        original_entries_for_classe = payload.select { |entry| map_classe!(entry) == classe }
+        entries.empty? && original_entries_for_classe.any?
       end
     end
   end
