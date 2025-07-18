@@ -23,10 +23,11 @@ module Sync
       return true if establishment.students_provider == "csv"
 
       api = establishment.students_api
+      data = api.fetch_resource(:establishment_students, uai: establishment.uai, start_year: school_year.start_year)
 
-      api
-        .fetch_resource(:establishment_students, uai: establishment.uai, start_year: school_year.start_year)
-        .then { |data| api.mapper.new(data, establishment.uai).parse! }
+      return if data.nil?
+
+      api.mapper.new(data, establishment.uai).parse!
     end
   end
 end

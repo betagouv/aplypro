@@ -51,13 +51,15 @@ module Updaters
     end
 
     def mapped_schooling_data # rubocop:disable Metrics/AbcSize
-      api
-        .fetch_resource(:student_schoolings,
-                        ine: student.ine,
-                        uai: last_establishment.uai,
-                        start_year: student.schoolings.last.classe.school_year.start_year)
-        .map { |entry| api.schooling_mapper.new.call(entry) }
-        .compact
+      data = api.fetch_resource(:student_schoolings,
+                                ine: student.ine,
+                                uai: last_establishment.uai,
+                                start_year: student.schoolings.last.classe.school_year.start_year)
+
+      return [] if data.nil?
+
+      data.map { |entry| api.schooling_mapper.new.call(entry) }
+          .compact
     end
   end
 end
