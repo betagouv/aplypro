@@ -16,6 +16,7 @@ RSpec.describe Sync::ClassesJob do
     allow(api_double).to receive(:fetch_resource).with(:establishment_students,
                                                        uai: establishment.uai,
                                                        start_year: school_year.start_year)
+                                                 .and_return([])
     allow(api_double)
       .to receive(:mapper)
       .and_return(class_double(Student::Mappers::Sygne, new: mapper_double))

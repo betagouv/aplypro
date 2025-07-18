@@ -61,6 +61,8 @@ class Student
       end
 
       def map_classes!
+        return {} if payload.nil?
+
         payload
           .group_by { |entry| map_classe!(entry) }
           .except(nil)

@@ -18,14 +18,16 @@ module Sync
 
     private
 
-    def fetch_student_data(schooling) # rubocop:disable Metrics/AbcSize
+    def fetch_student_data(schooling)
       api = schooling.establishment.students_api
-      api.fetch_resource(:student,
-                         ine: schooling.student.ine,
-                         uai: schooling.establishment.uai,
-                         start_year: schooling.classe.school_year.start_year)
-         .then { |data| map_student_attributes(data, api) }
-         .then { |attributes| schooling.student.update!(attributes) }
+      data = api.fetch_resource(:student,
+                                ine: schooling.student.ine,
+                                uai: schooling.establishment.uai,
+                                start_year: schooling.classe.school_year.start_year)
+      return if data.nil?
+
+      attributes = map_student_attributes(data, api)
+      schooling.student.update!(attributes)
 
       retry_payment_request_for_addresses_informations!(schooling.student)
     end
