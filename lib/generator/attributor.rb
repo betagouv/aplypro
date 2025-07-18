@@ -101,12 +101,12 @@
       end
       composer.text(
         "Cette application informatique constitue un traitement de données à caractère personnel mis en
-          œuvre par le ministère chargé de l’éducation nationale pour l’ensemble des lycées professionnels des
-          ministères chargés de l'éducation, de l'agriculture et de la mer, des formations professionnelles de
-          niveau 3 et 4, pour le respect d'une obligation légale à laquelle le responsable du traitement est soumis
-          au sens du c) du 1 de l’article 6 du Règlement (UE) 2016/679 du Parlement européen et du Conseil du
-          27 avril 2016 relatif à la protection des personnes physiques à l'égard du traitement des données à
-          caractère personnel et à la libre circulation de ces données (RGPD)."
+        œuvre par le ministère chargé de l’éducation nationale pour l’ensemble des lycées professionnels des
+        ministères chargés de l'éducation, de l'agriculture et de la mer, des formations professionnelles de
+        niveau 3 et 4, pour le respect d'une obligation légale à laquelle le responsable du traitement est soumis
+        au sens du c) du 1 de l’article 6 du Règlement (UE) 2016/679 du Parlement européen et du Conseil du
+        27 avril 2016 relatif à la protection des personnes physiques à l'égard du traitement des données à
+        caractère personnel et à la libre circulation de ces données (RGPD)."
       )
       composer.text(" Le ministère s'engage à ce que la collecte et le traitement de vos données à caractère personnel, effectués à partir de l’application informatique ApLyPro, soient conformes à ce règlement.")
 
@@ -115,8 +115,8 @@
         "Pour les élèves scolarisés dans les établissements dépendant du ministère en charge de l’éducation
         nationale ou du ministère chargé de la mer, le numéro INE, les nom, prénoms, l’adresse,
         l’établissement, le module élémentaire de formation et la classe proviennent du traitement SYGNE
-        (référentiel des élèves du second degré).
-      ")
+        (référentiel des élèves du second degré)."
+      )
       composer.text(
         "Pour les élèves scolarisés dans les établissements dépendant du ministère en charge de l’agriculture,
         le numéro INE, les nom, prénoms, l’adresse, l’établissement, le module élémentaire de formation et la
@@ -151,9 +151,8 @@
       composer.text("De la même manière, vous pouvez exercer les droits prévus à l’article 85 de la loi n° 78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés.")
       composer.text(
         "Pour exercer vos droits ou pour toute autre question sur le traitement de vos données à caractère
-        personnel, vous pouvez aussi contacter le délégué à la protection des données du ministère de
-        l’Education nationale, de l’Enseignement supérieur et de la Recherche :"
-      )
+        personnel, vous pouvez aussi contacter le délégué à la protection des données du ministère chargé de
+        l’éducation nationale:")
       composer.list do |list|
         list.text("à l’adresse électronique suivante : dpd@education.gouv.fr")
         list.text("par courrier en vous adressant au :
