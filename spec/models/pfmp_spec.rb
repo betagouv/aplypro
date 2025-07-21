@@ -127,21 +127,19 @@ RSpec.describe Pfmp do
     end
   end
 
-  describe "deletion" do
+  describe "can_be_archived?" do
+    subject { pfmp.can_be_archived? }
+
     context "when there is an ongoing payment request" do
       let(:pfmp) { create(:asp_payment_request, :sent).pfmp.reload }
 
-      it "cannot be deleted" do
-        expect { pfmp.destroy! }.to raise_error ActiveRecord::RecordNotDestroyed
-      end
+      it { is_expected.to be false }
     end
 
     context "when there is no ASP id" do
       let(:pfmp) { create(:pfmp) }
 
-      it "can be deleted" do
-        expect { pfmp.destroy! }.not_to raise_error ActiveRecord::RecordNotDestroyed
-      end
+      it { is_expected.to be true }
     end
   end
 

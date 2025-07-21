@@ -69,11 +69,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
                        .where(school_year: { start_year: start_year })
                    }
 
-  scope :archived, -> { where.not(archived_at: nil) }
-
   delegate :wage, to: :mef
-
-  before_destroy :ensure_destroyable?, prepend: true
 
   def validate!
     return if in_state?(:validated)
@@ -134,7 +130,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     !latest_payment_request&.ongoing? && !latest_payment_request&.in_state?(:paid)
   end
 
-  def can_be_destroyed?
+  def can_be_archived?
     asp_prestation_dossier_id.blank? && payment_requests.none?(&:ongoing?)
   end
 
@@ -150,13 +146,6 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     student.pfmps.excluding(self).select do |other|
       (other.start_date..other.end_date).overlap?(start_date..end_date)
     end
-  end
-
-  def ensure_destroyable?
-    return true if can_be_destroyed?
-
-    errors.add(:base, :locked)
-    throw :abort
   end
 
   def can_retrigger_payment?

@@ -122,9 +122,10 @@ Rails.application.routes.draw do
           post "create_attributive_decision"
         end
 
-        resources :pfmps, except: :index do
+        resources :pfmps, except: %i[index destroy] do
           member do
             post :validate
+            put :archive
             get :confirm_deletion
             get :confirm_rectification
             post :rectify

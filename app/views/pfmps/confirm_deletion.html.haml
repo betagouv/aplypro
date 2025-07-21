@@ -12,4 +12,4 @@
 
   .fr-btns-group.fr-btns-group--inline.fr-mt-3w
     = link_to "Annuler", school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
-    = button_to "Confirmer la suppression", school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), method: :delete, class: 'fr-btn fr-btn--danger fr-btn--secondary'
+    = button_to "Confirmer la suppression", archive_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), method: :put, class: 'fr-btn fr-btn--danger fr-btn--secondary'

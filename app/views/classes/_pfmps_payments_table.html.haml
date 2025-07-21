@@ -1,4 +1,4 @@
-- schooling.pfmps.each do |pfmp|
+- schooling.pfmps.reject(&:archived?).each do |pfmp|
   .fr-grid-row
     .fr-col-md-7
       = dsfr_link_to pfmp.listing_to_s, school_year_class_schooling_pfmp_path(selected_school_year, @classe, schooling, pfmp), title: pfmp.full_dates

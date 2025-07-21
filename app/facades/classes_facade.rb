@@ -19,7 +19,7 @@ class ClassesFacade
   end
 
   def nb_payment_requests(classe, states)
-    classe.pfmps.count do |pfmp|
+    classe.pfmps.reject(&:archived?).count do |pfmp|
       p_r = pfmp.latest_payment_request
       p_r.present? && p_r.in_state?(states)
     end
@@ -36,7 +36,7 @@ class ClassesFacade
 
     Pfmp.joins(:schooling)
         .joins("LEFT JOIN pfmp_transitions ON pfmp_transitions.pfmp_id = pfmps.id AND pfmp_transitions.most_recent = true") # rubocop:disable Layout/LineLength
-        .where(schoolings: { classe_id: @classes.pluck(:id), removed_at: nil })
+        .where(archived_at: nil, schoolings: { classe_id: @classes.pluck(:id), removed_at: nil })
         .group("schoolings.classe_id", "COALESCE(pfmp_transitions.to_state, 'pending')")
         .count
         .each do |(class_id, state), count|
