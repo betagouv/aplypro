@@ -29,6 +29,8 @@ module StudentsApi
         def fetch_student_schoolings(params)
           data = super
 
+          return nil if data.nil?
+
           data["scolarites"]
         end
 
