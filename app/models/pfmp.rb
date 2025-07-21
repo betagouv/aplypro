@@ -69,6 +69,8 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
                        .where(school_year: { start_year: start_year })
                    }
 
+  scope :archived, -> { where.not(archived_at: nil) }
+
   delegate :wage, to: :mef
 
   before_destroy :ensure_destroyable?, prepend: true
@@ -164,7 +166,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def all_pfmps_for_mef
     student.pfmps
            .joins(schooling: :classe)
-           .where("classes.mef_id": mef.id, "classes.school_year_id": school_year.id)
+           .where(archived_at: nil, "classes.mef_id": mef.id, "classes.school_year_id": school_year.id)
   end
 
   def check_validation_transition
@@ -186,6 +188,14 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
       .metadata
       .dig("PAIEMENT", "MTNET")
       .to_i
+  end
+
+  def archived?
+    archived_at.present?
+  end
+
+  def archive!
+    update!(archived_at: DateTime.now)
   end
 
   private

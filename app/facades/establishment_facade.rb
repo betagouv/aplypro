@@ -53,7 +53,7 @@ class EstablishmentFacade
     @pfmps_counts ||= PfmpStateMachine
                       .states
                       .map(&:to_sym)
-                      .index_with { |state| pfmps.in_state(state).count }
+                      .index_with { |state| pfmps.where(archived_at: nil).in_state(state).count }
   end
 
   def payment_requests_counts

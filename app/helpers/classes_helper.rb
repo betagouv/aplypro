@@ -22,7 +22,7 @@ module ClassesHelper
   end
 
   def nb_pfmps(schoolings)
-    schoolings.joins(:pfmps).count(:"pfmps.id")
+    schoolings.joins(:pfmps).where(pfmps: { archived_at: nil }).count(:"pfmps.id")
   end
 
   def closed_schooling_information_tag(schooling, **args)
