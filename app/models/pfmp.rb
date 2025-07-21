@@ -60,6 +60,8 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
               less_than_or_equal_to: ->(pfmp) { pfmp.calculate_max_day_count }
             }, if: :should_validate_day_count?
 
+  validates :administrative_number, length: { within: 20..22 }, if: :persisted?
+
   after_create -> { self.administrative_number = administrative_number }
 
   scope :finished, -> { where("pfmps.end_date <= (?)", Time.zone.today) }
