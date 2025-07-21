@@ -38,8 +38,10 @@ module ASP
 
     scope :latest_per_pfmp, lambda {
       subquery = ASP::PaymentRequest
-                 .select("DISTINCT ON (pfmp_id) *")
-                 .order("pfmp_id", "created_at DESC")
+                 .select("DISTINCT ON (pfmp_id) asp_payment_requests.*")
+                 .joins(:pfmp)
+                 .where(pfmp: { archived_at: nil })
+                 .order("pfmp_id", "asp_payment_requests.created_at DESC")
                  .to_sql
       from("(#{subquery}) as asp_payment_requests")
     }
