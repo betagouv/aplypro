@@ -47,6 +47,11 @@ RSpec.describe Pfmp do
         .only_integer.is_greater_than_or_equal_to(0)
     end
 
+    it "validates administrative_number length" do
+      expect(pfmp).to validate_length_of(:administrative_number)
+        .is_at_least(20).is_at_most(22)
+    end
+
     context "when the end date is before the start" do
       before do
         pfmp.start_date = Time.zone.now
