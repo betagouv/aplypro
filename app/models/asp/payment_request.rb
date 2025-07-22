@@ -48,7 +48,7 @@ module ASP
 
     scope :for_year, lambda { |start_year|
                        joins(pfmp: { schooling: { classe: :school_year } })
-                         .where(school_year: { start_year: start_year })
+                         .where("pfmps.archived_at": nil, school_year: { start_year: start_year })
                      }
 
     class << self
@@ -61,6 +61,7 @@ module ASP
       def to_consider
         in_state(:pending)
           .joins(:schooling, :pfmp, :student)
+          .where(pfmp: { archived_at: nil })
           .merge(Schooling.with_attributive_decisions)
           .merge(Schooling.with_administrative_number)
           .merge(Schooling.with_one_character_attributive_decision_version)
