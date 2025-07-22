@@ -1,6 +1,6 @@
 %h2.fr-mt-4w.fr-h4 Scolarités
 - schoolings.sort_by{ |schooling| schooling.classe.school_year.start_year}.reverse.each do |schooling|
-  - pfmps = schooling.pfmps.reject(&:archived?)
+  - pfmps = schooling.pfmps.active
   - classe = schooling.classe
   - school_year = classe.school_year
   %section.fr-my-4w

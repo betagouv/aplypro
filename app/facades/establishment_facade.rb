@@ -53,7 +53,7 @@ class EstablishmentFacade
     @pfmps_counts ||= PfmpStateMachine
                       .states
                       .map(&:to_sym)
-                      .index_with { |state| pfmps.where(archived_at: nil).in_state(state).count }
+                      .index_with { |state| pfmps.in_state(state).count }
   end
 
   def payment_requests_counts
@@ -85,7 +85,7 @@ class EstablishmentFacade
   end
 
   def pfmps
-    establishment.pfmps.merge(Classe.for_year(school_year.start_year))
+    establishment.pfmps.active.merge(Classe.for_year(school_year.start_year))
   end
 
   def selected_payment_requests
