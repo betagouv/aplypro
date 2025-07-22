@@ -8,4 +8,6 @@ RSpec.describe Academic::User do
       it { is_expected.to validate_presence_of(attr) }
     end
   end
+
+  it_behaves_like "a trackable user", :academic_user
 end

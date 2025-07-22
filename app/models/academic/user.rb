@@ -2,7 +2,7 @@
 
 module Academic
   class User < User
-    devise :authenticatable
+    devise :authenticatable, :trackable
 
     validates :uid, :provider, :name, :email, presence: true
 

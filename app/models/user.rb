@@ -3,7 +3,7 @@
 class User < ApplicationRecord
   include UserAuthorisation
 
-  devise :authenticatable
+  devise :authenticatable, :trackable
 
   OMNIAUTH_PROVIDERS = if Rails.env.production?
                          %i[fim masa]
