@@ -68,10 +68,25 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Quand je clique sur "Voir la PFMP"
     Alors la page ne contient pas "Valider"
 
-  Scénario: Le personnel de direction peut supprimer une PFMP
-    Quand je renseigne une PFMP de 4 jours
-    Et que je clique sur "Voir la PFMP"
+  Scénario: Les PFMPs archivées et les requêtes de paiement associées ne sont plus affichées
+    Sachant que je consulte la classe de "A1"
+    Et que je renseigne et valide une PFMP de 9 jours pour "Curie Marie"
+    Et que la dernière PFMP de "Curie Marie" en classe de "A1" a une requête de paiement rejetée
+    Quand je me rends sur la page d'accueil
+    Alors l'indicateur de PFMP "Validées" affiche 1
+    Et l'indicateur de demandes de paiements "Demandes rejetées" affiche 1
+    Quand je consulte le profil de "Curie Marie" dans la classe de "A1"
+    Et que je consulte la dernière PFMP
     Et que je clique sur "Supprimer la PFMP"
     Et que je clique sur "Confirmer la suppression"
     Alors la page contient "La PFMP de Curie Marie a bien été supprimée"
     Et la page contient "Aucune PFMP enregistrée pour le moment"
+    Quand je consulte la liste des classes
+    Alors je peux voir dans le tableau "Liste des classes"
+      | Classe | Décisions d'attribution | Coordonnées bancaires | PFMPs | Paiements |
+      | A1     | 10 / 10                 | 1 / 10                |       |           |
+    Quand je consulte la classe "A1"
+    Alors la page contient "PFMPs et Paiements (0)"
+    Quand je me rends sur la page d'accueil
+    Alors l'indicateur de PFMP "Validées" affiche 0
+    Et la page ne contient pas "Demandes rejetées"

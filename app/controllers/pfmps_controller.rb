@@ -63,8 +63,9 @@ class PfmpsController < ApplicationController
     redirect_to student_path(@schooling.student)
   end
 
-  def destroy
-    if @pfmp.destroy
+  def archive
+    if @pfmp.can_be_archived?
+      @pfmp.archive!
       redirect_to student_path(@schooling.student),
                   notice: t("flash.pfmps.destroyed", name: @schooling.student.full_name)
     else

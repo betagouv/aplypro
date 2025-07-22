@@ -85,7 +85,7 @@ class EstablishmentFacade
   end
 
   def pfmps
-    establishment.pfmps.merge(Classe.for_year(school_year.start_year))
+    establishment.pfmps.active.merge(Classe.for_year(school_year.start_year))
   end
 
   def selected_payment_requests

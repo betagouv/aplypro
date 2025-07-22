@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_30_071856) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_18_132240) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "unaccent"
@@ -202,6 +202,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_30_071856) do
     t.string "asp_prestation_dossier_id"
     t.integer "amount"
     t.string "administrative_number"
+    t.datetime "archived_at", precision: nil
     t.index ["asp_prestation_dossier_id"], name: "index_pfmps_on_asp_prestation_dossier_id", unique: true
     t.index ["schooling_id"], name: "index_pfmps_on_schooling_id"
   end

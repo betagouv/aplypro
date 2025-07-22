@@ -64,16 +64,16 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   after_create -> { self.administrative_number = administrative_number }
 
-  scope :finished, -> { where("pfmps.end_date <= (?)", Time.zone.today) }
+  scope :finished, -> { active.where("pfmps.end_date <= (?)", Time.zone.today) }
 
   scope :for_year, lambda { |start_year|
-                     joins(schooling: { classe: :school_year })
-                       .where(school_year: { start_year: start_year })
+                     active.joins(schooling: { classe: :school_year })
+                           .where(school_year: { start_year: start_year })
                    }
 
-  delegate :wage, to: :mef
+  scope :active, -> { where.not(archived_at: nil) }
 
-  before_destroy :ensure_destroyable?, prepend: true
+  delegate :wage, to: :mef
 
   def validate!
     return if in_state?(:validated)
@@ -134,7 +134,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     !latest_payment_request&.ongoing? && !latest_payment_request&.in_state?(:paid)
   end
 
-  def can_be_destroyed?
+  def can_be_archived?
     asp_prestation_dossier_id.blank? && payment_requests.none?(&:ongoing?)
   end
 
@@ -152,13 +152,6 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def ensure_destroyable?
-    return true if can_be_destroyed?
-
-    errors.add(:base, :locked)
-    throw :abort
-  end
-
   def can_retrigger_payment?
     latest_payment_request.failed?
   end
@@ -166,7 +159,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def all_pfmps_for_mef
     student.pfmps
            .joins(schooling: :classe)
-           .where("classes.mef_id": mef.id, "classes.school_year_id": school_year.id)
+           .where(archived_at: nil, "classes.mef_id": mef.id, "classes.school_year_id": school_year.id)
   end
 
   def check_validation_transition
@@ -188,6 +181,14 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
       .metadata
       .dig("PAIEMENT", "MTNET")
       .to_i
+  end
+
+  def archived?
+    archived_at.present?
+  end
+
+  def archive!
+    update!(archived_at: DateTime.now)
   end
 
   private
