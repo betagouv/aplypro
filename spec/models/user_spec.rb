@@ -49,4 +49,6 @@ RSpec.describe User do
       expect { user.update!(selected_establishment: other_establishment) }.to raise_error(/no corresponding roles/)
     end
   end
+
+  it_behaves_like "a trackable user", :user
 end
