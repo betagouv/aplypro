@@ -1,0 +1,130 @@
+.fr-container
+  %h1.fr-h3 Statistiques de l'académie
+
+  - if @report
+    .fr-grid-row.fr-grid-row--gutters
+      .fr-col-12
+        %h2.fr-h4= "Année scolaire #{@current_year} - #{@current_year + 1}"
+        
+        .fr-grid-row.fr-grid-row--gutters.fr-mb-3w
+          .fr-col-6
+            %p.fr-text--sm.fr-mb-0
+              %i.fr-icon-refresh-line.fr-icon--sm
+              = "Rapport du #{l(@report.created_at, format: :long)}"
+          .fr-col-6.fr-text--right
+            - if @report.previous_report
+              = link_to "← Rapport précédent", academic_stats_path(report_id: @report.previous_report.id), class: "fr-btn fr-btn--sm fr-btn--secondary fr-mr-2w"
+            - if @report.next_report
+              = link_to "Rapport suivant →", academic_stats_path(report_id: @report.next_report.id), class: "fr-btn fr-btn--sm fr-btn--secondary"
+  - else
+    .fr-grid-row.fr-grid-row--gutters
+      .fr-col-12
+        .fr-alert.fr-alert--info
+          %h3.fr-alert__title Aucun rapport disponible
+          %p Aucun rapport de statistiques n'a encore été généré. Les rapports sont générés automatiquement chaque lundi à 6h.
+
+  - if @report
+    .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
+      .fr-col-md-3
+        .fr-card
+          .fr-card__body
+            .fr-card__content
+              %h3.fr-card__title.fr-h5 Établissements
+              %p.fr-text--lead.fr-mb-0= number_with_delimiter(@academy_stats[:total_establishments])
+      
+      .fr-col-md-3
+        .fr-card
+          .fr-card__body
+            .fr-card__content
+              %h3.fr-card__title.fr-h5 Élèves
+              %p.fr-text--lead.fr-mb-0= number_with_delimiter(@academy_stats[:total_students])
+      
+      .fr-col-md-3
+        .fr-card
+          .fr-card__body
+            .fr-card__content
+              %h3.fr-card__title.fr-h5 PFMP totales
+              %p.fr-text--lead.fr-mb-0= number_with_delimiter(@academy_stats[:total_pfmps])
+      
+      .fr-col-md-3
+        .fr-card
+          .fr-card__body
+            .fr-card__content
+              %h3.fr-card__title.fr-h5 PFMP validées
+              %p.fr-text--lead.fr-mb-0= number_with_delimiter(@academy_stats[:validated_pfmps])
+
+    .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
+      .fr-col-md-6
+        .fr-card
+          .fr-card__body
+            .fr-card__content
+              %h3.fr-card__title.fr-h5 Montant validé total
+              %p.fr-text--lead.fr-mb-0= number_to_currency(@academy_stats[:total_validated_amount], unit: "€", separator: ",", delimiter: " ")
+      
+      .fr-col-md-6
+        .fr-card
+          .fr-card__body
+            .fr-card__content
+              %h3.fr-card__title.fr-h5 Montant payé total
+              %p.fr-text--lead.fr-mb-0= number_to_currency(@academy_stats[:total_paid_amount], unit: "€", separator: ",", delimiter: " ")
+
+    .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
+      .fr-col-12
+        %h2.fr-h4= "Établissements de l'académie #{selected_academy}"
+        .fr-table.fr-table--bordered.stats-table-container
+          %table
+            %thead
+              %tr
+                - @establishments_data.first.each do |header|
+                  %th{scope: "col"}= header
+            %tbody
+              - @establishments_data[1..].each do |row|
+                %tr
+                  - row.each_with_index do |value, index|
+                    %td{class: (index <= 1 ? "fr-text--sm" : ""), style: (index > 4 ? cell_background_color(value) : "")}= format_stat_value(value)
+
+    %h1.fr-h3.fr-mt-6w Statistiques nationales
+
+    .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
+      .fr-col-12
+        %h2.fr-h4 Statistiques globales
+        .fr-table.fr-table--bordered.stats-table-container
+          %table
+            %thead
+              %tr
+                - @global_data.first.each do |header|
+                  %th{scope: "col"}= header
+            %tbody
+              %tr
+                - @global_data.last.each do |value|
+                  %td{style: cell_background_color(value)}= format_stat_value(value)
+
+    .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
+      .fr-col-12
+        %h2.fr-h4 Statistiques par BOP
+        .fr-table.fr-table--bordered.stats-table-container
+          %table
+            %thead
+              %tr
+                - @bops_data.first.each do |header|
+                  %th{scope: "col"}= header
+            %tbody
+              - @bops_data[1..].each do |row|
+                %tr
+                  - row.each_with_index do |value, index|
+                    %td{style: (index > 0 ? cell_background_color(value) : "")}= format_stat_value(value)
+
+    .fr-grid-row.fr-grid-row--gutters
+      .fr-col-12
+        %h2.fr-h4 Statistiques par académie MENJ
+        .fr-table.fr-table--bordered.stats-table-container
+          %table
+            %thead
+              %tr
+                - @menj_academies_data.first.each do |header|
+                  %th{scope: "col"}= header
+            %tbody
+              - @menj_academies_data[1..].each do |row|
+                %tr
+                  - row.each_with_index do |value, index|
+                    %td{class: (index == 0 ? "fr-text--bold" : ""), style: (index > 0 ? cell_background_color(value) : "")}= format_stat_value(value)
