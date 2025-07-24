@@ -60,6 +60,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :stats, only: [:index]
+
     devise_for :users, class_name: "Academic::User"
   end
 

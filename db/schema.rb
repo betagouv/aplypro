@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_30_071856) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_22_122946) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "unaccent"
@@ -91,6 +91,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_30_071856) do
     t.string "uid", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
     t.index ["uid"], name: "index_asp_users_on_uid", unique: true
   end
 
@@ -204,6 +209,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_30_071856) do
     t.string "administrative_number"
     t.index ["asp_prestation_dossier_id"], name: "index_pfmps_on_asp_prestation_dossier_id", unique: true
     t.index ["schooling_id"], name: "index_pfmps_on_schooling_id"
+  end
+
+  create_table "reports", force: :cascade do |t|
+    t.jsonb "data", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_reports_on_created_at", unique: true
+    t.index ["data"], name: "index_reports_on_data", using: :gin
   end
 
   create_table "ribs", force: :cascade do |t|

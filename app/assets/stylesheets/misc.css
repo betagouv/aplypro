@@ -359,3 +359,12 @@ nav {
   cursor: not-allowed;
   pointer-events: none;
 }
+
+.stats-table-container {
+  overflow-x: auto;
+}
+
+.stats-table-container th,
+.stats-table-container td {
+  white-space: nowrap;
+}

@@ -35,8 +35,8 @@ module Stats
       csv_of(send(data_method_name(method)))
     end
 
-    def respond_to_missing?(method)
-      (method.ends_with("_data_csv") && super(data_method_name(method))) || super
+    def respond_to_missing?(method, include_all = false)
+      (method.to_s.end_with?("_data_csv") && super(data_method_name(method), include_all)) || super
     end
 
     def data_method_name(csv_method_name)
