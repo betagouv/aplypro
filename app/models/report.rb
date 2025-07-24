@@ -15,7 +15,7 @@ class Report < ApplicationRecord
   end
 
   def next_report
-    self.class.where(created_at: created_at..).order(:created_at).first
+    self.class.where("created_at > ?", created_at).order(:created_at).first
   end
 
   def self.create_for_date(date = Time.current)
@@ -38,8 +38,7 @@ class Report < ApplicationRecord
         global_data: stats.global_data,
         bops_data: stats.bops_data,
         menj_academies_data: stats.menj_academies_data,
-        establishments_data: stats.establishments_data,
-        generated_at: Time.current
+        establishments_data: stats.establishments_data
       }
     end
   end
