@@ -109,7 +109,7 @@ class PfmpManager # rubocop:disable Metrics/ClassLength
   end
 
   def other_pfmps_for_mef(excluded_pfmp)
-    pfmp.all_pfmps_for_mef.excluding(excluded_pfmp)
+    pfmp.schooling.all_pfmps_for_mef.excluding(excluded_pfmp)
   end
 
   def other_priced_pfmps(pfmp)

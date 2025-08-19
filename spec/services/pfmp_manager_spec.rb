@@ -211,6 +211,7 @@ describe PfmpManager do
 
     before do
       pfmp.schooling.update!(classe: classe)
+      # TODO: schooling.update!(classe: classe) ?
     end
 
     context "when the PFMP doesn't have a day count" do # rubocop:disable RSpec/MultipleMemoizedHelpers

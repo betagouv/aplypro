@@ -24,6 +24,7 @@
         %tr
           %td
             = dsfr_link_to student.full_name, student_path(student), title: t("links.students.show", name: student)
+            %p= amounts_yearly_reached_information_tag(schooling)
           %td
             - if schooling.attributive_decision.present? && !schooling.abrogation_decision.present? && !schooling.cancellation_decision.present?
               %p= dsfr_badge(status: :success) { "Éditée" }
