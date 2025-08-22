@@ -41,3 +41,9 @@ Fonctionnalité: Le personnel de direction peut constater les montants des PFMPs
       | Saisie à valider |               9 | 90 €    |
       | Saisie à valider |               2 | 10 €    |
       | Saisie à valider |               4 | 0 €     |
+    
+  Scénario: Le personnel de direction peut voir les badges indiquant que le plafond est atteint
+    Quand je renseigne une PFMP de 12 jours
+    Alors la page contient "Plafond atteint"
+    Quand je consulte la classe "2NDEB"
+    Et la rangée "Curie Marie" contient "Plafond atteint"
