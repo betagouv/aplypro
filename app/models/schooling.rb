@@ -16,6 +16,7 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   has_one :mef, through: :classe
   has_one :establishment, through: :classe
+  has_one :school_year, through: :classe
 
   scope :former, -> { where("schoolings.end_date IS NOT NULL AND schoolings.end_date <= ?", Date.current) }
   scope :active, -> { where("schoolings.end_date IS NULL OR schoolings.end_date > ?", Date.current) }

@@ -41,6 +41,9 @@
             %li.fr-nav__item
               %a.fr-nav__link{ href: school_year_validations_path(selected_school_year), target: "_self", "aria-current" => (current_path_is_validation? ? "page" : nil) }
                 = t("menu.validate_all_pfmps")
+            %li.fr-nav__item
+              %a.fr-nav__link{ href: school_year_abrogations_path(selected_school_year), target: "_self", "aria-current" => (current_path_is_abrogation? ? "page" : nil) }
+                = t("menu.abrogate_all_schoolings")
             - if current_establishment.present? && current_user.can_invite?
               %li.fr-nav__item
                 %a.fr-nav__link{ href: establishment_invitations_path(current_establishment), target: "_self", "aria-current" => current_path?(establishment_invitations_path(current_establishment)) ? "page" : nil }

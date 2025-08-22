@@ -1,0 +1,22 @@
+- if current_user.can_abrogate?
+  %h2 Liste des scolarités abrogeables
+  - if @schoolings_per_school_year.empty?
+    Il n'y a aucune scolarité à abroger pour le moment.
+  - else
+    - @schoolings_per_school_year.each do |school_year, schoolings|
+      .fr-table.fr-table
+        %table
+          %caption.fr-h3
+            = t("year", start_year: school_year.start_year, end_year: school_year.end_year)
+          %thead
+            %th{scope: "col"} Élèves
+            %th{scope: "col"} Classes
+            %th{scope: "col"} Début de scolarité
+            %th{scope: "col"} Abroger
+          %tbody
+            - schoolings.each do |schooling|
+              %tr
+                %td= dsfr_link_to schooling.student, student_path(schooling.student), title: t("links.students.show", name: schooling.student)
+                %td= dsfr_link_to schooling.classe.to_long_s, validation_school_year_class_path(school_year, schooling.classe), title: t("links.classes.show", label: schooling.classe.to_long_s)
+                %td= schooling.start_date
+                %td= "TODO"
