@@ -177,7 +177,7 @@ fr:
     new_rib: Saisir des coord. bancaires
     new_pfmp: Saisir une PFMP
     validate_all_pfmps: Paiements
-    abrogate_all_schoolings: Abrogations
+    abrogate_all_da: Abrogations
     invitations: Gestion des accès
     faq: F.A.Q.
   pages:
@@ -252,7 +252,7 @@ fr:
         classes: "Classes avec PFMPs à valider pour envoi en paiement"
         show: Envoyer en paiement les PFMPs de %{name}
       abrogations:
-        index: "Abrogations"
+        index: "Liste des décisions d'attribution abrogeables"
       schoolings:
         confirm_da_extension: "Gérer le report de décision d'attribution"
         confirm_removal:
