@@ -97,8 +97,9 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
     closed? && abrogation_decision.attached?
   end
 
-  def abrogeable?
+  def abrogeable? # rubocop:disable Metrics/AbcSize
     closed? &&
+      attributive_decision.attached? &&
       !abrogation_decision.attached? &&
       end_date < establishment.school_year_range(school_year.start_year).last &&
       student.schoolings.for_year(school_year.start_year).many?

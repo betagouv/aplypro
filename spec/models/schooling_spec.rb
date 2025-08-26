@@ -470,23 +470,52 @@ RSpec.describe Schooling do
     let(:school_year) { create(:school_year) }
     let(:classe) { create(:classe, school_year: school_year) }
     let(:end_date) { establishment.school_year_range(school_year.start_year).last - 3.months }
-    let!(:schooling) { create(:schooling, student: student, classe: classe, end_date: end_date) }
+    let!(:schooling) do
+      create(:schooling, :with_attributive_decision, student: student, classe: classe, end_date: end_date)
+    end
 
     context "when student has only one closed schooling" do
       it { expect(schooling.abrogeable?).to be false }
     end
 
     context "when student has only one open schooling" do
-      let!(:schooling) { create(:schooling, student: student, classe: classe) }
+      let!(:schooling) { create(:schooling, :with_attributive_decision, student: student, classe: classe) }
 
       it { expect(schooling.abrogeable?).to be false }
+    end
+
+    context "when student has two schoolings on the same school year but no attributive decision" do
+      let!(:schooling) { create(:schooling, student: student, classe: classe, end_date: end_date) }
+      let(:another_classe) { create(:classe, school_year: school_year) }
+
+      it "returns false" do
+        create(:schooling, student: student, classe: another_classe, start_date: end_date + 3.days)
+
+        expect(schooling.abrogeable?).to be false
+      end
+    end
+
+    context "when student has two schoolings on the same school year but already an abrogation decision" do
+      let!(:schooling) do
+        create(:schooling, :with_abrogation_decision, student: student, classe: classe, end_date: end_date)
+      end
+      let(:another_classe) { create(:classe, school_year: school_year) }
+
+      it "returns false" do
+        create(:schooling, student: student, classe: another_classe, start_date: end_date + 3.days)
+
+        expect(schooling.abrogeable?).to be false
+      end
     end
 
     context "when student has two schoolings on the same school year" do
       let(:another_classe) { create(:classe, school_year: school_year) }
 
       it "returns true" do
-        create(:schooling, student: student, classe: another_classe, start_date: end_date + 3.days)
+        create(:schooling, :with_attributive_decision,
+               student: student,
+               classe: another_classe,
+               start_date: end_date + 3.days)
 
         expect(schooling.abrogeable?).to be true
       end
@@ -497,7 +526,7 @@ RSpec.describe Schooling do
       let(:another_classe) { create(:classe, school_year: another_school_year) }
 
       it "returns true" do
-        create(:schooling, student: student, classe: another_classe)
+        create(:schooling, :with_attributive_decision, student: student, classe: another_classe)
 
         expect(schooling.abrogeable?).to be false
       end
