@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_22_122946) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_26_142518) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "unaccent"
@@ -157,6 +157,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_22_122946) do
     t.bigint "school_year_id"
     t.index ["school_year_id"], name: "index_exclusions_on_school_year_id"
     t.index ["uai", "mef_code", "school_year_id"], name: "index_exclusions_on_uai_and_mef_code_and_school_year_id", unique: true
+  end
+
+  create_table "insee_exception_codes", force: :cascade do |t|
+    t.string "code_type", null: false
+    t.string "entry_code", null: false
+    t.string "exit_code", null: false
+    t.string "deadline"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "invitations", force: :cascade do |t|
