@@ -4,9 +4,11 @@ class CreateInseeExceptionCodes < ActiveRecord::Migration[8.0]
       t.string :code_type, null: false
       t.string :entry_code, null: false
       t.string :exit_code, null: false
-      t.string :deadline
+      t.date :expired_at
 
       t.timestamps
+
+      t.index :entry_code, unique: true
     end
   end
 end

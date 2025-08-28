@@ -163,9 +163,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_142518) do
     t.string "code_type", null: false
     t.string "entry_code", null: false
     t.string "exit_code", null: false
-    t.string "deadline"
+    t.date "expired_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["entry_code"], name: "index_insee_exception_codes_on_entry_code", unique: true
   end
 
   create_table "invitations", force: :cascade do |t|
