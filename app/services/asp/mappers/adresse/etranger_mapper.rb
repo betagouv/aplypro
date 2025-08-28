@@ -11,7 +11,7 @@ module ASP
         end
 
         def codecominsee
-          establishment.commune_code
+          InseeExceptionCodes.transform_insee_code(establishment.commune_code)
         end
 
         def codepostalcedex
