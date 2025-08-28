@@ -12,8 +12,8 @@ RSpec.describe InseeExceptionCodes do
 
     it { is_expected.to validate_uniqueness_of(:entry_code) }
 
-    it { is_expected.to validate_length_of(:entry_code).is_at_most(5) }
-    it { is_expected.to validate_length_of(:exit_code).is_at_most(5) }
+    it { is_expected.to validate_length_of(:entry_code).is_at_least(5).is_at_most(5) }
+    it { is_expected.to validate_length_of(:exit_code).is_at_least(5).is_at_most(5) }
   end
 
   describe "#transform_insee_code" do

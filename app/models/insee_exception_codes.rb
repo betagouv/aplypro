@@ -4,7 +4,7 @@ class InseeExceptionCodes < ApplicationRecord
   validates :code_type, :entry_code, :exit_code, presence: true
   validates :entry_code, uniqueness: true
 
-  validates :entry_code, :exit_code, length: { maximum: 5 }, allow_blank: true
+  validates :entry_code, :exit_code, length: { minimum: 5, maximum: 5 }
 
   class << self
     def transform_insee_code(entry_code, code_type = "address")
