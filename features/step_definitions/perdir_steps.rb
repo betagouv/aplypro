@@ -89,13 +89,6 @@ Sachantque("j'autorise {string} à rejoindre l'application") do |email|
   )
 end
 
-Lorsque("je consulte la liste des décisions d'attributions abrogeables") do
-  steps %(
-    Quand je me rends sur la page d'accueil
-    Et que je clique sur "Abrogations"
-  )
-end
-
 Lorsque("je consulte la liste des invitations") do
   steps %(
     Quand je me rends sur la page d'accueil

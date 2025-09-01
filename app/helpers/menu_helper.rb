@@ -8,8 +8,4 @@ module MenuHelper
   def current_path_is_validation?
     request.path.include?("validation")
   end
-
-  def current_path_is_abrogation?
-    request.path.include?("abrogation")
-  end
 end
