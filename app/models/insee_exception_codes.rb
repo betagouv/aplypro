@@ -3,16 +3,25 @@
 class InseeExceptionCodes < ApplicationRecord
   validates :code_type, :entry_code, :exit_code, presence: true
   validates :entry_code, uniqueness: true
+  validates :entry_code, :exit_code, length: { is: 5 }
 
-  validates :entry_code, :exit_code, length: { minimum: 5, maximum: 5 }
+  after_commit -> { self.class.reset_cache! }
 
   class << self
     def transform_insee_code(entry_code, code_type = "address")
-      exception_code = InseeExceptionCodes.find_by(entry_code:, code_type:)
+      mapping[[entry_code, code_type]] || entry_code
+    end
 
-      return exception_code.exit_code if exception_code.present?
+    def mapping
+      Rails.cache.fetch("insee_exception_codes_mapping") do
+        all.each_with_object({}) do |exception_code, hash|
+          hash[[exception_code.entry_code, exception_code.code_type]] = exception_code.exit_code
+        end
+      end
+    end
 
-      entry_code
+    def reset_cache!
+      Rails.cache.delete("insee_exception_codes_mapping")
     end
   end
 end
