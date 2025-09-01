@@ -158,12 +158,12 @@ module ASP
       # Enable follow up lines for when ministry doesnt have funding anymore again
       # For instance to block all menj outgoing payments:
       # return false if ministry.eql?("menj")
-      classe = schooling.classe
-      ministry = classe.mef.ministry
-      contract_type_code = classe.establishment.private_contract_type_code
-
-      return false if ministry.eql?("menj") && !contract_type_code.eql?("99") && !Rails.env.test?
-
+      #
+      # classe = schooling.classe
+      # ministry = classe.mef.ministry
+      # contract_type_code = classe.establishment.private_contract_type_code
+      #
+      # return false if ministry.eql?("menj") && !contract_type_code.eql?("99") && !Rails.env.test?
       true
     end
 
