@@ -143,7 +143,6 @@ Rails.application.routes.draw do
     end
 
     resources :validations, only: :index
-    resources :abrogations, only: :index
   end
 
   devise_scope :asp_user do
