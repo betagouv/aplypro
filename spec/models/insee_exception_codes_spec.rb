@@ -17,27 +17,42 @@ RSpec.describe InseeExceptionCodes do
   end
 
   describe "#transform_insee_code" do
-    subject { described_class.transform_insee_code(entry_code, code_type) }
-
-    let(:entry_code) { "1234A" }
-    let(:code_type) { "address" }
-
-    before { create(:insee_exception_codes) }
-
-    context "when the code_type and the entry_code are valid" do
-      it { is_expected.to eq "54321" }
+    before do
+      create(:insee_exception_codes)
+      Rails.cache.clear
     end
 
-    context "when the entry_code does not match" do
-      let(:entry_code) { "98765" }
-
-      it { is_expected.to eq entry_code }
+    it "returns the exit_code when mapping exists" do
+      expect(described_class.transform_insee_code("1234A", "address")).to eq("54321")
     end
 
-    context "when the code_type does not match" do
-      let(:code_type) { "birthdate" }
+    it "returns the entry_code when no mapping exists" do
+      expect(described_class.transform_insee_code("99999", "address")).to eq("99999")
+    end
+  end
 
-      it { is_expected.to eq entry_code }
+  describe "#mapping" do
+    before { Rails.cache.clear }
+
+    it "updates mapping after create and destroy" do
+      expect(described_class.mapping.keys).not_to include(%w[address 1234A])
+
+      exception_code = create(:insee_exception_codes)
+      expect(described_class.mapping.keys).to include(%w[address 1234A])
+
+      exception_code.destroy!
+      expect(described_class.mapping.keys).not_to include(%w[address 1234A])
+    end
+
+    it "does not hit the database when mapping is cached" do
+      create(:insee_exception_codes)
+      described_class.mapping
+
+      allow(ActiveRecord::Base.connection).to receive(:exec_query).and_call_original
+
+      described_class.mapping
+
+      expect(ActiveRecord::Base.connection).not_to have_received(:exec_query)
     end
   end
 end

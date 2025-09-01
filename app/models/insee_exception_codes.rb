@@ -9,13 +9,13 @@ class InseeExceptionCodes < ApplicationRecord
 
   class << self
     def transform_insee_code(entry_code, code_type = "address")
-      mapping[[entry_code, code_type]] || entry_code
+      mapping[[code_type, entry_code]] || entry_code
     end
 
     def mapping
-      Rails.cache.fetch("insee_exception_codes_mapping") do
+      Rails.cache.fetch("insee_exception_codes_mapping", expires_in: 3.hours) do
         all.each_with_object({}) do |exception_code, hash|
-          hash[[exception_code.entry_code, exception_code.code_type]] = exception_code.exit_code
+          hash[[exception_code.code_type, exception_code.entry_code]] = exception_code.exit_code
         end
       end
     end
