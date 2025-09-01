@@ -62,7 +62,15 @@ RSpec.describe Pfmp do
     end
 
     describe "check_validation_transition" do
-      let(:pfmp) { create(:pfmp, start_date: Time.zone.today, end_date: Time.zone.today + 3.days) }
+      let(:start_date) { Date.parse("#{SchoolYear.current.start_year}-10-08") }
+      let(:pfmp) { create(:pfmp, start_date: start_date, end_date: start_date + 3.days) }
+
+      around do |example|
+        Timecop.safe_mode = false
+        Timecop.freeze(start_date) do
+          example.run
+        end
+      end
 
       before { pfmp.check_validation_transition }
 
