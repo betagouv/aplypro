@@ -52,7 +52,7 @@ module Generator
         ]
       )
 
-      composer.text("Etat liquidatif édité le #{Time.zone.today.strftime("%d/%m/%Y")} par validation informatique du responsable légal de l'établissement")
+      composer.text("Etat liquidatif édité le #{@pfmp.transitions.find_by(to_state: "validated", most_recent: true).created_at.strftime("%d/%m/%Y")} par validation informatique du responsable légal de l'établissement")
     end
 
     def header
