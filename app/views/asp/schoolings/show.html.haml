@@ -6,7 +6,7 @@
     %section.fr-my-3w.downloads-section
       %h3.fr-h6 Actions
       %ul.fr-btns-group.fr-btns-group--sm
-        - if @schooling.pfmps.any? { |pfmp| (pfmp.in_state?(:validated) && pfmp.amount > 0) }
+        - if @schooling.pfmps.any? { |pfmp| (pfmp.in_state?(:validated) && pfmp.amount > 0) || pfmp.rectified? }
           #liquidation-status
             = render partial: "liquidation_status", locals: { schooling: @schooling }
         - else

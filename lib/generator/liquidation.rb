@@ -23,6 +23,23 @@ module Generator
 
       schooling.pfmps.each do |pfmp|
         @pfmp = pfmp
+        @title = "Etat liquidatif"
+        @state = "validated"
+
+        if @pfmp.rectified?
+          # Pour une PFMP rectifiée, il faut faire 2 pages :
+          # - Etat liquidatif / Date de la validation / Montant de la métadata
+          # - Etat liquidatif rectificatif / Date de la rectification / Montant de la PFMP
+          @amount = pfmp.latest_payment_request.last_transition.metadata["PAIEMENT"]["MTNET"].to_i
+
+          render
+
+          @title += " rectificatif"
+          @state = "rectified"
+        end
+
+        @amount = pfmp.amount
+
         render
         composer.new_page unless pfmp == schooling.pfmps.last
       end
@@ -41,10 +58,10 @@ module Generator
         [
          ["Bénéficiaire", "#{@student.full_name}, né(e) le #{I18n.l(@student.birthdate, format: :long)}, #{address_copy}"],
          ["Décision d'attribution annuelle", @schooling.attributive_decision_number],
-         ["Numéro de dossier", @pfmp.administrative_number],
+         ["Numéro de prestation dossier", @pfmp.administrative_number],
          ["Période d'attribution (année scolaire)", @school_year],
          ["Période visée par l'état liquidatif", "#{@pfmp.start_date.strftime("%d/%m/%Y")} - #{@pfmp.end_date.strftime("%d/%m/%Y")}"],
-         ["Montant à verser (calcul)", "#{@pfmp.day_count * @pfmp.wage.daily_rate}€"],
+         ["Montant à verser (calcul)", "#{@amount}€"],
          ["Ministère financeur et programme concerné", @schooling.mef.ministry],
          ["Coordonnées de paiement : IBAN", @rib&.iban],
          ["Coordonnées de paiement : BIC", @rib&.bic],
@@ -52,11 +69,12 @@ module Generator
         ]
       )
 
-      composer.text("Etat liquidatif édité le #{@pfmp.transitions.find_by(to_state: "validated", most_recent: true).created_at.strftime("%d/%m/%Y")} par validation informatique du responsable légal de l'établissement")
+      date = @pfmp.transitions.find_by(to_state: @state).created_at.strftime("%d/%m/%Y")
+      composer.text("Etat liquidatif édité le #{date} par validation informatique du responsable légal de l'établissement")
     end
 
     def header
-      header_initializer("Etat liquidatif", false)
+      header_initializer(@title, false)
     end
 
     def summary
