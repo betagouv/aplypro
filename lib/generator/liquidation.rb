@@ -30,7 +30,7 @@ module Generator
           # Pour une PFMP rectifiée, il faut faire 2 pages :
           # - Etat liquidatif / Date de la validation / Montant de la métadata
           # - Etat liquidatif rectificatif / Date de la rectification / Montant de la PFMP
-          @amount = pfmp.latest_payment_request.last_transition.metadata["PAIEMENT"]["MTNET"].to_i
+          @amount = @pfmp.paid_amount
 
           render
 
