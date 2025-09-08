@@ -96,6 +96,19 @@ Quand("l'élève {string} a une décision d'attribution") do |name|
   ASP::AttachDocument.from_schooling(StringIO.new("hello"), schooling, :attributive_decision)
 end
 
+# rubocop:disable Layout/LineLength
+Quand("l'élève {string} a une décision d'attribution pour une ancienne scolarité sur l'année scolaire {int}") do |name, start_year|
+  student = find_student_by_full_name(name)
+  school_year = SchoolYear.find_by(start_year: start_year)
+
+  schooling = Schooling.joins(:classe)
+                       .where.not(end_date: nil)
+                       .find_by(student:, "classes.school_year": school_year)
+
+  ASP::AttachDocument.from_schooling(StringIO.new("hello"), schooling, :attributive_decision)
+end
+# rubocop:enable Layout/LineLength
+
 # FIXME: we should mock the API step instead and have the correct
 # schooling + status returned in the data.
 Quand("l'élève {string} a bien le statut scolaire") do |name|
