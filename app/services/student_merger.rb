@@ -19,6 +19,7 @@ class StudentMerger
       determine_target_and_merge_student!
       transfer_asp_individu_id!
       transfer_schoolings!
+      transfer_ribs!
 
       @student_to_merge.destroy!
 
@@ -72,5 +73,9 @@ class StudentMerger
 
   def transfer_schoolings!
     @student_to_merge.schoolings.update!(student_id: @target_student.id)
+  end
+
+  def transfer_ribs!
+    @student_to_merge.ribs.update!(student_id: @target_student.id, archived_at: Time.zone.today)
   end
 end
