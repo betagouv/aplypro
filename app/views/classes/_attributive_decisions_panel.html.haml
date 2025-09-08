@@ -15,7 +15,7 @@
     - if current_establishment.some_attributive_decisions?(selected_school_year)
       = attributive_decisions_download_button
 
-    - if :can_try_to_generate_attributive_decisions?
+    - if current_user.can_try_to_generate_attributive_decisions?
       - if current_establishment.missing_attributive_decisions?(selected_school_year)
         = attributive_decisions_generation_form
       - if current_establishment.some_attributive_decisions?(selected_school_year)
