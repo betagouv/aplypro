@@ -106,6 +106,13 @@ RSpec.describe PearlPfmpsRectificator do
       let(:schooling) { create(:schooling) }
       let(:student) { schooling.student }
 
+      around do |example|
+        Timecop.safe_mode = false
+        Timecop.freeze(Date.parse("#{SchoolYear.current.end_year}-08-01")) do
+          example.run
+        end
+      end
+
       before do
         allow_any_instance_of(Sync::StudentJob).to receive(:perform) # rubocop:disable RSpec/AnyInstance
 
