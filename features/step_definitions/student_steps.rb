@@ -81,7 +81,7 @@ Quand("l'élève {string} a une date de début et une date de fin de scolarité 
 end
 
 Quand("l'élève {string} a une date de début et une date de fin de scolarité sur l'année scolaire courante") do |name|
-  start_date = Date.parse("#{SchoolYear.current.start_year}-09-01")
+  start_date = Date.parse("#{SchoolYear.current.start_year}-09-03")
   end_date = Date.parse("#{SchoolYear.current.end_year}-06-30")
   student = find_student_by_full_name(name)
 

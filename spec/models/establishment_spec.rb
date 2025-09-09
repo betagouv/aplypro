@@ -56,28 +56,19 @@ RSpec.describe Establishment do
 
     context "when the establishment has a default academy_code" do
       let(:academy_code) { "14" }
-      let(:start_date) { Date.parse("2024-09-01") }
 
-      around do |example|
-        Timecop.safe_mode = false
-        Timecop.freeze(start_date) do
-          example.run
-        end
-      end
-
-      it "returns the default school year range" do
-        expect(establishment.school_year_range).to eq(
-          start_date..((start_date >> 12) - 1.day)
-        )
+      it "returns the current school year range" do
+        expect(establishment.school_year_range).to eq(Date.new(2024, 9, 2)..Date.new(2025, 8, 31))
       end
     end
 
-    context "when the establishment has a academy_code with an exception" do
+    context "when the establishment has a academy_code in SchoolYearRanges" do
       let(:academy_code) { "28" }
-      let(:expected_start_date) { Date.new(SchoolYear.current.start_year, 8, 16) }
+      let(:expected_start_date) { Date.new(2023, 8, 17) }
+      let(:expected_end_date) { Date.new(2024, 8, 18) }
 
       it "returns the school year range based on the exception" do
-        expect(establishment.school_year_range).to eq(expected_start_date..((expected_start_date >> 12) - 1.day))
+        expect(establishment.school_year_range(2023)).to eq(expected_start_date..expected_end_date)
       end
     end
   end
