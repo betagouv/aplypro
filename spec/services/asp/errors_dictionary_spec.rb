@@ -46,6 +46,8 @@ describe ASP::ErrorsDictionary do
       context "when '#{key}' has a return and a response in 'fr.yml'" do
         let(:str) { I18n.t("asp.errors.rejected.returns.#{key}") }
 
+        it { expect(I18n.t("asp.errors.rejected.responses.#{key}")).not_to be_nil }
+
         it { is_expected.to eq key }
       end
     end
