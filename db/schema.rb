@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_26_142518) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_09_072049) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "unaccent"
@@ -244,6 +244,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_142518) do
     t.index ["student_id"], name: "index_ribs_on_student_id"
   end
 
+  create_table "school_year_ranges", force: :cascade do |t|
+    t.string "academy_code", null: false
+    t.bigint "school_year_id", null: false
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_year_id", "academy_code"], name: "index_school_year_ranges_on_school_year_id_and_academy_code", unique: true
+    t.index ["school_year_id"], name: "index_school_year_ranges_on_school_year_id"
+  end
+
   create_table "school_years", force: :cascade do |t|
     t.integer "start_year", null: false
     t.datetime "created_at", null: false
@@ -356,6 +367,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_142518) do
   add_foreign_key "pfmps", "schoolings"
   add_foreign_key "ribs", "establishments"
   add_foreign_key "ribs", "students"
+  add_foreign_key "school_year_ranges", "school_years"
   add_foreign_key "schoolings", "classes", column: "classe_id"
   add_foreign_key "schoolings", "students"
   add_foreign_key "users", "establishments", column: "selected_establishment_id"
