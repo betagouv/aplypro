@@ -13,6 +13,7 @@
 
     = closed_schooling_information_tag(schooling, class: "fr-mb-2w")
     = extended_end_date_information_tag(schooling, class: "fr-mb-2w")
+    = amounts_yearly_reached_information_tag(schooling, class: "fr-mb-2w")
 
     - if pfmps.none?
       %p Aucune PFMP enregistrée pour le moment.

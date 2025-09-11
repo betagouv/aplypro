@@ -163,12 +163,6 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     latest_payment_request.failed?
   end
 
-  def all_pfmps_for_mef
-    student.pfmps
-           .joins(schooling: :classe)
-           .where("classes.mef_id": mef.id, "classes.school_year_id": school_year.id)
-  end
-
   def check_validation_transition
     errors.add(:rib, "Les coordonnées bancaires sont manquantes") if student.rib(establishment).blank?
     errors.add(:da, "La décision d'attribution est manquante") unless schooling.attributive_decision.attached?
@@ -200,15 +194,9 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def amounts_yearly_cap
     return if skip_amounts_yearly_cap_validation
     return unless mef
+    return unless schooling.amounts_yearly_reached?
 
-    pfmps = all_pfmps_for_mef
-    cap = mef.wage.yearly_cap
-    total = pfmps.to_a.map { |pfmp| pfmp.amount || 0 }.sum
-    return unless total > cap
-
-    errors.add(:amount,
-               "Yearly cap of #{cap} not respected for Mef code: #{mef.code} \\
-               -> #{total}/#{cap} with #{pfmps.count} PFMPs")
+    errors.add(:amount, "Yearly cap of #{mef.wage.yearly_cap} not respected for Mef code: #{mef.code}")
   end
 
   def rectified_amount_must_differ_from_paid_amount
