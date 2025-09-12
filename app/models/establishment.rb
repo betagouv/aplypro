@@ -28,14 +28,14 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     "24" => "Créteil",
     "25" => "Versailles",
     "27" => "Corse",
-    "28" => "La Réunion",
+    "28" => "Réunion",
     "31" => "Martinique",
     "32" => "Guadeloupe",
     "33" => "Guyane",
     "40" => "Nouvelle-Calédonie",
     "41" => "Polynésie Française",
     "43" => "Mayotte",
-    "44" => "Saint-Pierre-et-Miquelon",
+    "44" => "Saint Pierre et Miquelon",
     "70" => "Normandie"
   }.freeze
 
@@ -106,17 +106,11 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
-  # NOTE: this method could fetch the actual data per academie if we stored that information
-  #       this was implemented as a hotfix for La Réunion and Mayotte
   def school_year_range(year = SchoolYear.current.start_year, extended_end_date = nil)
-    school_year_range_exceptions = {
-      "43" => Date.new(year, 8, 23), # Mayotte
-      "28" => Date.new(year, 8, 16) # La Réunion
-    }
+    range = DateRangeFetcher.call(academy_code, year)
+    return range unless extended_end_date
 
-    start_date = school_year_range_exceptions.fetch(academy_code, Date.new(year, 9, 1))
-    end_date = extended_end_date.presence || (start_date >> 12)
-    (start_date..end_date)
+    (range.begin..(extended_end_date.presence || range.end))
   end
 
   def in_current_school_year_range?(date)
