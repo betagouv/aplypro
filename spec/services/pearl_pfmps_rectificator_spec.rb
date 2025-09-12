@@ -105,6 +105,14 @@ RSpec.describe PearlPfmpsRectificator do
     context "when excess amount is exactly at the threshold" do
       let(:schooling) { create(:schooling) }
       let(:student) { schooling.student }
+      let(:start_date) { Date.parse("2024-10-01") }
+
+      around do |example|
+        Timecop.safe_mode = false
+        Timecop.freeze(start_date) do
+          example.run
+        end
+      end
 
       around do |example|
         Timecop.safe_mode = false
