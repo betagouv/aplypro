@@ -5,7 +5,15 @@ class DateRangeFetcher
   BASE_URL = "https://data.education.gouv.fr/api/v2/catalog/datasets/fr-en-calendrier-scolaire"
 
   class << self
-    def call(academy_code, year = SchoolYear.current.start_year) # rubocop:disable Metrics/AbcSize
+    def call(academy_code, year = SchoolYear.current.start_year)
+      cache_key = "date_range_fetcher/#{academy_code}/#{year}"
+
+      Rails.cache.fetch(cache_key, expires_in: 1.day) do
+        fetch_date_range(academy_code, year)
+      end
+    end
+
+    def fetch_date_range(academy_code, year) # rubocop:disable Metrics/AbcSize
       location = Establishment::ACADEMY_LABELS.fetch(academy_code)
 
       previous_year = SchoolYear.new(start_year: year - 1).to_s
@@ -15,8 +23,13 @@ class DateRangeFetcher
 
       return fallback_school_year_range(academy_code, year) if records.empty?
 
-      start_date = Date.parse(find_summer_vacation_for_year(records, previous_year)[:end_date]) + 1
-      end_date = Date.parse(find_summer_vacation_for_year(records, current_year)[:end_date])
+      previous_year_vacation = find_summer_vacation_for_year(records, previous_year)
+      current_year_vacation = find_summer_vacation_for_year(records, current_year)
+
+      return fallback_school_year_range(academy_code, year) if previous_year_vacation.nil? || current_year_vacation.nil?
+
+      start_date = Date.parse(previous_year_vacation[:end_date]) + 1
+      end_date = Date.parse(current_year_vacation[:end_date])
       (start_date..end_date)
     rescue Faraday::Error, JSON::ParserError
       fallback_school_year_range(academy_code, year)
