@@ -48,6 +48,19 @@ Quand("l'élève {string} a une ancienne scolarité dans la classe {string} dans
 end
 # rubocop:enable Layout/LineLength
 
+Quand("l'élève {string} a une scolarité plus récente pour l'année scolaire {int}") do |name, start_year|
+  student = find_student_by_full_name(name)
+  school_year = SchoolYear.find_by(start_year: start_year)
+
+  schooling = Schooling.joins(:classe)
+                       .where.not(end_date: nil)
+                       .find_by(student:, "classes.school_year": school_year)
+
+  classe =  FactoryBot.create(:classe, school_year:, establishment: schooling.establishment)
+
+  FactoryBot.create(:schooling, student:, classe:, end_date: schooling.end_date + 3.months)
+end
+
 Quand("les élèves actuels sont les seuls à avoir des décisions d'attribution") do
   establishment = Establishment.last
 
@@ -95,19 +108,6 @@ Quand("l'élève {string} a une décision d'attribution") do |name|
   schooling = establishment.schoolings.find_by(student: student)
   ASP::AttachDocument.from_schooling(StringIO.new("hello"), schooling, :attributive_decision)
 end
-
-# rubocop:disable Layout/LineLength
-Quand("l'élève {string} a une décision d'attribution pour une ancienne scolarité sur l'année scolaire {int}") do |name, start_year|
-  student = find_student_by_full_name(name)
-  school_year = SchoolYear.find_by(start_year: start_year)
-
-  schooling = Schooling.joins(:classe)
-                       .where.not(end_date: nil)
-                       .find_by(student:, "classes.school_year": school_year)
-
-  ASP::AttachDocument.from_schooling(StringIO.new("hello"), schooling, :attributive_decision)
-end
-# rubocop:enable Layout/LineLength
 
 # FIXME: we should mock the API step instead and have the correct
 # schooling + status returned in the data.
