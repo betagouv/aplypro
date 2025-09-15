@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 # Returns the eligible range that is allowed for establishments to input PFMPs for a given year based on API data
-class DateRangeFetcher
+class AcademicDatesRangeFetcher
   BASE_URL = "https://data.education.gouv.fr/api/v2/catalog/datasets/fr-en-calendrier-scolaire"
 
   class << self
     def call(academy_code, year = SchoolYear.current.start_year)
-      cache_key = "date_range_fetcher/#{academy_code}/#{year}"
+      cache_key = "academic_dates_range_fetcher/#{academy_code}/#{year}"
 
       Rails.cache.fetch(cache_key, expires_in: 1.day) do
         fetch_date_range(academy_code, year)
