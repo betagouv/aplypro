@@ -102,7 +102,7 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
       attributive_decision.attached? &&
       !abrogation_decision.attached? &&
       end_date < establishment.school_year_range(school_year.start_year).last &&
-      student.schoolings.for_year(school_year.start_year).many?
+      student.schoolings.for_year(school_year.start_year).where.not(id: id).any? { |sc| sc.start_date > end_date }
   end
 
   def cancelled?

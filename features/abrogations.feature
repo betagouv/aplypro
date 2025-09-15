@@ -12,8 +12,9 @@ Fonctionnalité: Gestion des abrogations
     Alors la page contient "Il n'y a aucune décision d'attribution à abroger pour le moment."
 
   Scénario: Seul le directeur peut abroger les décisions d'attribution
-    Sachant que l'élève "Curie Marie" a une ancienne scolarité dans la classe "A1" dans le même établissement
-    Et que l'élève "Curie Marie" a une décision d'attribution pour une ancienne scolarité sur l'année scolaire 2024
+    Sachant que l'élève "Curie Marie" a une scolarité fermée
+    Et que l'élève "Curie Marie" a une décision d'attribution
+    Et que l'élève "Curie Marie" a une scolarité plus récente pour l'année scolaire 2024
     Lorsque je me déconnecte
     Et que je suis un personnel MENJ de l'établissement "DINUM" avec une délégation DELEG-CE pour APLyPro
     Lorsque je me connecte en tant que personnel MENJ
@@ -22,8 +23,9 @@ Fonctionnalité: Gestion des abrogations
     Alors la page contient un bouton "Abroger la décision d'attribution" désactivé
 
   Scénario: La décision d'attribution est abrogeable si les conditions sont réunies
-    Sachant que l'élève "Curie Marie" a une ancienne scolarité dans la classe "A1" dans le même établissement
-    Et que l'élève "Curie Marie" a une décision d'attribution pour une ancienne scolarité sur l'année scolaire 2024
+    Sachant que l'élève "Curie Marie" a une scolarité fermée
+    Et que l'élève "Curie Marie" a une décision d'attribution
+    Et que l'élève "Curie Marie" a une scolarité plus récente pour l'année scolaire 2024
     Et que je rafraîchis la page
     Alors la page contient "Année scolaire 2024 - 2025"
     Et la page contient "Curie Marie"
