@@ -13,19 +13,33 @@ class DateRangeFetcher
 
       records = fetch_summer_vacations_for_location_and_years(location, previous_year, current_year)
 
-      raise "No summer vacation records found for #{location}" if records.empty?
+      return fallback_school_year_range(academy_code, year) if records.empty?
 
       start_date = Date.parse(find_summer_vacation_for_year(records, previous_year)[:end_date]) + 1
       end_date = Date.parse(find_summer_vacation_for_year(records, current_year)[:end_date])
       (start_date..end_date)
+    rescue Faraday::Error, JSON::ParserError
+      fallback_school_year_range(academy_code, year)
     end
 
     private
 
+    def fallback_school_year_range(academy_code, year)
+      school_year_range_exceptions = {
+        "43" => Date.new(year, 8, 23), # Mayotte
+        "28" => Date.new(year, 8, 16) # La Réunion
+      }
+
+      start_date = school_year_range_exceptions.fetch(academy_code, Date.new(year, 9, 1))
+      end_date = start_date >> 12
+      (start_date..end_date)
+    end
+
     def fetch_summer_vacations_for_location_and_years(location, previous_year, current_year)
       vacation_type = location == "Réunion" ? "Vacances d'Hiver austral" : "Vacances d'Été"
       where_clause = "location=\"#{location}\" AND (annee_scolaire=\"#{previous_year}\" OR " \
-                     "annee_scolaire=\"#{current_year}\") AND description=\"#{vacation_type}\" AND population=\"Élèves\""
+                     "annee_scolaire=\"#{current_year}\") AND description=\"#{vacation_type}\" " \
+                     "AND population=\"Élèves\""
       query_params = {
         where: where_clause,
         select: "description,start_date,end_date,location,annee_scolaire,zones,population",
@@ -53,7 +67,6 @@ class DateRangeFetcher
 
     def client
       @client ||= Faraday.new do |f|
-        f.response :raise_error
         f.adapter Faraday.default_adapter
       end
     end

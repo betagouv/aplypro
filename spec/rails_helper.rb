@@ -43,6 +43,12 @@ RSpec.configure do |config|
     Rails.application.load_seed if missing_seeds?
   end
 
+  config.include WebmockHelpers
+
+  config.before do
+    mock_data_gouv_calendar_api
+  end
+
   # TODO: Remove when Devise fixes https://github.com/heartcombo/devise/issues/5705
   config.before(:each, type: :request) do
     Rails.application.reload_routes_unless_loaded

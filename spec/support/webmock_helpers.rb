@@ -73,4 +73,16 @@ module WebmockHelpers
            )
            .to_return(status: 200, body: payload, headers: { "Content-Type" => "application/json" })
   end
+
+  def mock_data_gouv_calendar_api
+    WebMock.stub_request(:get, %r{https://data.education.gouv.fr/api/v2/catalog/datasets/fr-en-calendrier-scolaire/records})
+           .with(
+             headers: {
+               "Accept" => "*/*",
+               "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+               "User-Agent" => "Faraday v2.13.1"
+             }
+           )
+           .to_return(status: 200, body: '{"records": []}', headers: { "Content-Type" => "application/json" })
+  end
 end

@@ -17,4 +17,6 @@ Before do
       }
     )
     .to_return_json(body: etab_fixture)
+
+  mock_data_gouv_calendar_api
 end
