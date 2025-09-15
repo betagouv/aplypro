@@ -56,6 +56,7 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
       | Élèves (10) | Décisions d'attribution (10/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
       |             | Éditée                          |                              |           |
     Quand l'élève "Curie Marie" a une scolarité fermée
+    Et que l'élève "Curie Marie" a une scolarité plus récente pour l'année scolaire 2024
     Et je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
     Lorsque je clique sur "Abroger la décision d'attribution"
     Alors la page contient "Êtes-vous certain(e) de vouloir abroger cette décision d'attribution ?"
@@ -66,7 +67,7 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité sur l'année scolaire courante
     Et que l'élève "Curie Marie" a une décision d'attribution
     Et que je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
-    Alors la page ne contient pas "Autoriser un report"
+    Alors la page contient un bouton "Autoriser un report" désactivé
 
   Scénario: Le personnel peut reporter une décision d'attribution
     Quand l'élève "Curie Marie" a une date de début et une date de fin de scolarité sur une année scolaire passée

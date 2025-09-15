@@ -76,6 +76,14 @@ Quand("l'élève {string} a un report de décision d'attribution") do |name|
   schooling.update!(extended_end_date: extended_end_date)
 end
 
+Quand("l'élève {string} a une décision d'attribution abrogeable") do |name|
+  steps %(
+    Sachant que l'élève "#{name}" a une scolarité fermée
+    Et que l'élève "#{name}" a une décision d'attribution
+    Et que l'élève "#{name}" a une scolarité plus récente pour l'année scolaire 2024
+  )
+end
+
 Quand("l'élève {string} a une date de début et une date de fin de scolarité sur une année scolaire passée") do |name|
   start_date = Date.parse("2022-09-01")
   end_date = Date.parse("2023-06-30")
