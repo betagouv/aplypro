@@ -81,6 +81,7 @@ Quand("l'élève {string} a une décision d'attribution abrogeable") do |name|
     Sachant que l'élève "#{name}" a une scolarité fermée
     Et que l'élève "#{name}" a une décision d'attribution
     Et que l'élève "#{name}" a une scolarité plus récente pour l'année scolaire 2024
+    Et que l'élève "#{name}" a une décision d'attribution
   )
 end
 
@@ -113,7 +114,7 @@ Quand("l'élève {string} a une décision d'attribution") do |name|
   student = find_student_by_full_name(name)
 
   establishment = Establishment.last
-  schooling = establishment.schoolings.find_by(student: student)
+  schooling = establishment.schoolings.where(student: student).last
   ASP::AttachDocument.from_schooling(StringIO.new("hello"), schooling, :attributive_decision)
 end
 
