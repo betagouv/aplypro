@@ -472,7 +472,10 @@ RSpec.describe Schooling do
 
     let(:another_classe) { create(:classe, school_year: school_year) }
     let!(:another_schooling) do # rubocop:disable RSpec/LetSetup
-      create(:schooling, student: student, classe: another_classe, end_date: schooling.end_date + 3.months)
+      create(:schooling, :with_attributive_decision,
+             student: student,
+             classe: another_classe,
+             end_date: schooling.end_date + 3.months)
     end
 
     context "when student has only one schooling" do
@@ -499,7 +502,10 @@ RSpec.describe Schooling do
 
     context "when student has two schoolings on the same school year but the other one is not after" do
       let(:another_schooling) do
-        create(:schooling, student: student, classe: another_classe, end_date: schooling.start_date - 1.day)
+        create(:schooling, :with_attributive_decision,
+               student: student,
+               classe: another_classe,
+               end_date: schooling.start_date - 1.day)
       end
 
       it { expect(schooling.abrogeable?).to be false }
@@ -507,6 +513,14 @@ RSpec.describe Schooling do
 
     context "when student has two schoolings on the same school year and the other one is after" do
       it { expect(schooling.abrogeable?).to be true }
+    end
+
+    context "when student has two schoolings on the same school year and the other one is after but no attributive decision" do # rubocop:disable Layout/LineLength
+      let(:another_schooling) do
+        create(:schooling, student: student, classe: another_classe, end_date: schooling.end_date + 3.months)
+      end
+
+      it { expect(schooling.abrogeable?).to be false }
     end
 
     context "when student has another schooling on another school_year" do
