@@ -20,7 +20,6 @@
     = favicon_link_tag "favicon/favicon.ico"
   %body
     = render 'shared/skiplinks'
-    = render 'shared/analytics' if Rails.env.production?
     = render 'academic/shared/header'
     - unless @inhibit_banner
       - if defined?(selected_academy) && selected_academy
