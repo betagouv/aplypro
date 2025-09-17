@@ -78,9 +78,11 @@ RSpec.describe StudentMerger do
         let(:rib) { create(:rib, student: source_student) }
 
         it "transfers ribs from source to target student" do
+          expect(rib.student).to eq source_student
           merger.merge!
 
-          expect(target_student.reload.ribs).to include rib
+          expect(rib.reload.student).to eq target_student
+          expect(rib.reload).to be_archived
         end
       end
     end
