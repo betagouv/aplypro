@@ -62,18 +62,21 @@ module ASP
       add_error(:attributive_decision_cancelled) if payment_request.schooling.cancelled?
     end
 
-    def check_da_abrogation # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
+    def check_da_abrogation # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+      schooling = payment_request.schooling
+      pfmp = payment_request.pfmp
+
       if !student.transferred? ||
-         (payment_request.schooling.abrogated? && payment_request.pfmp.within_schooling_dates?) ||
-         !payment_request.pfmp.within_schooling_dates?
+         (schooling.abrogated? && pfmp.within_schooling_dates?) ||
+         !pfmp.within_schooling_dates?
         return
       end
 
-      other_schoolings = student.schoolings.excluding(payment_request.schooling).to_a.select do |sc|
-        sc.classe.school_year == payment_request.schooling.classe.school_year
+      other_schoolings = student.schoolings.excluding(schooling).to_a.select do |sc|
+        sc.classe.school_year == schooling.classe.school_year
       end
 
-      return if other_schoolings.all?(&:nullified?)
+      return if other_schoolings.all? { |sc| sc.nullified? || !sc.attributive_decision.attached? }
 
       add_error(:needs_abrogated_attributive_decision)
     end
