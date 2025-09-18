@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe StudentMerger do
   describe "#merge!" do
-    let(:source_student) { create(:schooling, :closed).student }
-    let(:target_student) { create(:schooling, :closed).student }
+    let(:source_student) { create(:student) }
+    let(:target_student) { create(:student) }
     let(:students) { [source_student, target_student] }
     let(:merger) { described_class.new(students) }
 
@@ -62,9 +62,6 @@ RSpec.describe StudentMerger do
       end
 
       context "when transferring asp_individu_id" do
-        let(:source_student) { create(:schooling, :closed).student }
-        let(:target_student) { create(:schooling, :closed).student }
-
         before do
           source_student.update!(asp_individu_id: "123ABC")
           target_student.update!(asp_individu_id: nil)
@@ -74,6 +71,18 @@ RSpec.describe StudentMerger do
           merger.merge!
 
           expect(target_student.reload.asp_individu_id).to eq("123ABC")
+        end
+      end
+
+      context "when transferring ribs" do
+        let(:rib) { create(:rib, student: source_student) }
+
+        it "transfers ribs from source to target student" do
+          expect(rib.student).to eq source_student
+          merger.merge!
+
+          expect(rib.reload.student).to eq target_student
+          expect(rib.reload).to be_archived
         end
       end
     end

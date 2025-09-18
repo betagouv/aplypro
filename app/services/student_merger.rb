@@ -19,11 +19,14 @@ class StudentMerger
       determine_target_and_merge_student!
       transfer_asp_individu_id!
       transfer_schoolings!
+      transfer_ribs!
 
+      @student_to_merge.reload
+      student_to_merge_id = @student_to_merge.id
       @student_to_merge.destroy!
 
       Rails.logger.info(
-        "Merged student #{@student_to_merge.id} into #{@target_student.id}"
+        "Merged student #{student_to_merge_id} into #{@target_student.id}"
       )
       true
     end
@@ -72,5 +75,9 @@ class StudentMerger
 
   def transfer_schoolings!
     @student_to_merge.schoolings.update!(student_id: @target_student.id)
+  end
+
+  def transfer_ribs!
+    @student_to_merge.ribs.update!(student_id: @target_student.id, archived_at: DateTime.now)
   end
 end
