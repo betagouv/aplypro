@@ -9,7 +9,7 @@ RSpec.describe Classe do
     it { is_expected.to belong_to(:establishment).class_name("Establishment") }
     it { is_expected.to belong_to(:mef).class_name("Mef") }
     it { is_expected.to belong_to(:school_year).class_name("SchoolYear") }
-    it { is_expected.to have_many(:students).order(%w[last_name first_name]) }
+    it { is_expected.to have_many(:students).order(%i[last_name first_name]) }
   end
 
   describe "validations" do

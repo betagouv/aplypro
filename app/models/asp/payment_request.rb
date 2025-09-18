@@ -39,7 +39,7 @@ module ASP
     scope :latest_per_pfmp, lambda {
       subquery = ASP::PaymentRequest
                  .select("DISTINCT ON (pfmp_id) *")
-                 .order("pfmp_id", "created_at DESC")
+                 .order(:pfmp_id, created_at: :desc)
                  .to_sql
       from("(#{subquery}) as asp_payment_requests")
     }
