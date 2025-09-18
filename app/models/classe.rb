@@ -9,7 +9,7 @@ class Classe < ApplicationRecord
 
   has_many :schoolings, dependent: :destroy
 
-  has_many :students, -> { order("last_name", "first_name") }, dependent: nil, through: :schoolings
+  has_many :students, -> { order(:last_name, :first_name) }, dependent: nil, through: :schoolings
 
   has_many :pfmps, through: :schoolings
 
@@ -36,19 +36,19 @@ class Classe < ApplicationRecord
            inverse_of: :classe
 
   has_many :active_students,
-           -> { order("last_name", "first_name") },
+           -> { order(:last_name, :first_name) },
            class_name: "Student",
            through: :active_schoolings,
            source: :student
 
   has_many :inactive_students,
-           -> { order("last_name", "first_name") },
+           -> { order(:last_name, :first_name) },
            class_name: "Student",
            through: :inactive_schoolings,
            source: :student
 
   has_many :removed_students,
-           -> { order("last_name", "first_name") },
+           -> { order(:last_name, :first_name) },
            class_name: "Student",
            through: :removed_schoolings,
            source: :student
