@@ -34,7 +34,7 @@ FactoryBot.define do
     end
 
     trait :closed do
-      end_date { Date.parse("#{classe.school_year.start_year}-12-01") }
+      end_date { Date.parse("#{classe.school_year.start_year}-09-18") }
     end
 
     trait :extended do

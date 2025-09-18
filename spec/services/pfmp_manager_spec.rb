@@ -86,10 +86,16 @@ describe PfmpManager do
 
     context "when there is no allowance left" do
       let(:pfmp) { create(:pfmp, schooling: schooling, day_count: 10) }
+      let(:start_date) { Date.parse("#{SchoolYear.current.start_year}-09-03") }
+
+      around do |example|
+        Timecop.safe_mode = false
+        Timecop.freeze(start_date >> 2) do
+          example.run
+        end
+      end
 
       before do
-        start_date = Date.parse("#{SchoolYear.current.start_year}-09-03")
-
         create(
           :pfmp,
           :validated,
@@ -266,8 +272,6 @@ describe PfmpManager do
     let(:pfmp) do
       create(:pfmp,
              :validated,
-             start_date: "2024-09-03",
-             end_date: "2024-09-28",
              schooling: schooling,
              day_count: 3)
     end
@@ -284,7 +288,7 @@ describe PfmpManager do
         create(:pfmp,
                :validated,
                start_date: "#{old_school_year.start_year}-09-03",
-               end_date: "#{old_school_year.start_year}-09-28",
+               end_date: "#{old_school_year.start_year}-09-18",
                schooling: old_schooling,
                day_count: 1)
       end
@@ -298,8 +302,6 @@ describe PfmpManager do
       before do
         create(:pfmp,
                :validated,
-               start_date: "2024-10-03",
-               end_date: "2024-10-28",
                schooling: schooling,
                day_count: 3)
       end

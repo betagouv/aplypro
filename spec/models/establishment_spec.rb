@@ -66,7 +66,7 @@ RSpec.describe Establishment do
       end
 
       it "returns the default school year range" do
-        expect(establishment.school_year_range).to eq(
+        expect(establishment.school_year_range(2024)).to eq(
           start_date..(start_date >> 12)
         )
       end
