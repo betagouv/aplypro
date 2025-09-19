@@ -56,7 +56,10 @@ describe Student::Mappers::Sygne do
     end
 
     context "when there is a schooling for that classe that was closed" do
-      let(:closed_payload) { [build(:sygne_student, :closed, classe: "1MELEC", ine: "1234")] }
+      let(:closed_payload) do
+        [build(:sygne_student, :closed, classe: "1MELEC", ine: "1234", dateFinSco: 1.day.ago.to_date)]
+      end
+
       let(:mapper) { described_class.new(closed_payload, uai) }
 
       let(:student) { Student.find_by(ine: "1234") }
