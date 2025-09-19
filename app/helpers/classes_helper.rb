@@ -54,7 +54,7 @@ module ClassesHelper
   end
 
   def amounts_yearly_reached_information_tag(schooling, **args)
-    return unless schooling.amounts_yearly_exceeded?
+    return if schooling.pfmps.empty? || !schooling.pfmps.first.amounts_yearly_exceeded?
 
     content_tag(
       :div,

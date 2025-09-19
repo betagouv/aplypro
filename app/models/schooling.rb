@@ -166,24 +166,4 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
       code
     end
   end
-
-  def all_pfmps_for_mef
-    student.pfmps
-           .joins(schooling: :classe)
-           .where("classes.mef_id": mef.id, "classes.school_year_id": classe.school_year.id)
-  end
-
-  def amounts_yearly_reached?
-    total_pfmps_for_mef > mef.wage.yearly_cap
-  end
-
-  def amounts_yearly_exceeded?
-    total_pfmps_for_mef >= mef.wage.yearly_cap
-  end
-
-  private
-
-  def total_pfmps_for_mef
-    all_pfmps_for_mef.to_a.map { |pfmp| pfmp.amount || 0 }.sum
-  end
 end
