@@ -20,7 +20,6 @@ class PfmpStateMachine
 
   guard_transition(to: :validated) do |pfmp|
     pfmp.check_validation_transition
-
     pfmp.errors.none?
   end
 
