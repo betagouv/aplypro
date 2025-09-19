@@ -190,6 +190,14 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
       .to_i
   end
 
+  def amounts_yearly_reached?
+    total_pfmps_for_mef > mef.wage.yearly_cap
+  end
+
+  def amounts_yearly_exceeded?
+    total_pfmps_for_mef >= mef.wage.yearly_cap
+  end
+
   private
 
   # NOTE: a rectification with a 0 day count can be created to cancel a payment
@@ -200,15 +208,9 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def amounts_yearly_cap
     return if skip_amounts_yearly_cap_validation
     return unless mef
+    return unless amounts_yearly_reached?
 
-    pfmps = all_pfmps_for_mef
-    cap = mef.wage.yearly_cap
-    total = pfmps.to_a.map { |pfmp| pfmp.amount || 0 }.sum
-    return unless total > cap
-
-    errors.add(:amount,
-               "Yearly cap of #{cap} not respected for Mef code: #{mef.code} \\
-               -> #{total}/#{cap} with #{pfmps.count} PFMPs")
+    errors.add(:amount, "Yearly cap of #{mef.wage.yearly_cap} not respected for Mef code: #{mef.code}")
   end
 
   def rectified_amount_must_differ_from_paid_amount
@@ -216,5 +218,9 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     return if amount != paid_amount
 
     errors.add(:amount, "must be different from the previously paid amount (#{paid_amount}€) when rectifying")
+  end
+
+  def total_pfmps_for_mef
+    all_pfmps_for_mef.to_a.map { |pfmp| pfmp.amount || 0 }.sum
   end
 end
