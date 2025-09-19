@@ -31,11 +31,4 @@ module SchoolingsHelper
     "Les dates saisies doivent être comprises dans la durée de la scolarité de l'élève
       (entre le #{string_start_date} et le #{string_end_date})."
   end
-
-  def disabled_buttons?(schooling)
-    !current_user.can_validate? ||
-      !schooling.attributive_decision.attached? ||
-      schooling.abrogation_decision.attached? ||
-      schooling.end_date.blank?
-  end
 end
