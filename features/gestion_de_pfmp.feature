@@ -29,11 +29,11 @@ Fonctionnalité: Le personnel de direction édite les PFMPs
     Et la section pour la classe "A2" ne contient pas de lien sur "Voir la PFMP"
 
   Scénario: Le personnel de direction peut ajouter une PFMP pour toute la classe
-    Quand je saisis une PFMP pour toute la classe "A1" avec les dates "17/03/2025" et "20/03/2025"
+    Quand je saisis une PFMP pour toute la classe "A1" avec les dates "17/03/2026" et "20/03/2026"
     Alors la page contient "Compléter 10 PFMP"
 
   Scénario: Le personnel de direction est informé d'une erreur de saisie pour toute la classe
-    Quand je saisis une PFMP pour toute la classe "A1" avec les dates "17/03/2025" et "10/03/2025"
+    Quand je saisis une PFMP pour toute la classe "A1" avec les dates "17/03/2026" et "10/03/2026"
     Alors la page contient "La date de fin doit être ultérieure à la date de début"
     Et la page ne contient pas "Compléter 10 PFMP"
 
