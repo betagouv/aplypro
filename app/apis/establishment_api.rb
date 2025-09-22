@@ -6,7 +6,7 @@ class EstablishmentApi
   class << self
     def fetch!(uai)
       response = connection.get("search") do |req|
-        req.params["refine.identifiant_de_l_etablissement"] = uai
+        req.params["refine"] = "identifiant_de_l_etablissement%#{uai}"
       end
 
       response.body
@@ -17,7 +17,6 @@ class EstablishmentApi
     def connection
       Faraday.new(
         url: url,
-        params: { dataset: DATASET },
         headers: { "Content-Type" => "application/json" }
       ) do |f|
         f.response :json
@@ -25,7 +24,7 @@ class EstablishmentApi
     end
 
     def url
-      ENV.fetch("APLYPRO_ESTABLISHMENTS_DATA_URL")
+      "#{ENV.fetch("APLYPRO_DATA_EDUCATION_URL")}/#{DATASET}/records"
     end
   end
 end

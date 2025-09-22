@@ -2,7 +2,8 @@
 
 # Returns the eligible range that is allowed for establishments to input PFMPs for a given year based on API data
 class AcademicDatesRangeFetcher
-  BASE_URL = "https://data.education.gouv.fr/api/v2/catalog/datasets/fr-en-calendrier-scolaire"
+  BASE_URL = ENV.fetch("APLYPRO_DATA_EDUCATION_URL")
+  DATASET = "fr-en-calendrier-scolaire"
 
   class << self
     def call(academy_code, year = SchoolYear.current.start_year)
@@ -59,7 +60,7 @@ class AcademicDatesRangeFetcher
         limit: 100
       }
 
-      response = client.get("#{BASE_URL}/records", query_params)
+      response = client.get("#{BASE_URL}/#{DATASET}/records", query_params)
       data = JSON.parse(response.body)
       data["records"] || []
     rescue Faraday::Error, JSON::ParserError
