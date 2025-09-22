@@ -5,8 +5,8 @@ class EstablishmentApi
 
   class << self
     def fetch!(uai)
-      response = connection.get("search") do |req|
-        req.params["refine"] = "identifiant_de_l_etablissement%#{uai}"
+      response = connection.get("records") do |req|
+        req.params["refine"] = "identifiant_de_l_etablissement:#{uai}"
       end
 
       response.body
@@ -24,7 +24,7 @@ class EstablishmentApi
     end
 
     def url
-      "#{ENV.fetch("APLYPRO_DATA_EDUCATION_URL")}/#{DATASET}/records"
+      "#{ENV.fetch('APLYPRO_DATA_EDUCATION_URL')}/#{DATASET}"
     end
   end
 end
