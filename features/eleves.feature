@@ -10,15 +10,15 @@ Fonctionnalité: Gestion des scolarités de l'élève
     Et que je consulte le profil de "Dupuis Jean" dans la classe de "1MELEC"
 
   Scénario: Les dates de scolarité de l'élève sont affichées
-    Alors la page contient "Scolarité débutée le 02/09/2024"
+    Alors la page contient "Scolarité débutée le 02/09/2025"
     Et la page ne contient pas "et finie le"
     Quand je clique sur "Ajouter une PFMP"
-    Alors la page contient "(entre le 02/09/2024 et le 01/09/2025)"
+    Alors la page contient "(entre le 02/09/2025 et le 01/09/2026)"
     Sachant que l'élève "Dupuis Jean" a une date de début et une date de fin de scolarité sur l'année scolaire courante
     Et que je consulte le profil de "Dupuis Jean" dans la classe de "1MELEC"
-    Alors la page contient "Scolarité débutée le 01/09/2024 et finie le 30/06/2025"
+    Alors la page contient "Scolarité débutée le 01/09/2025 et finie le 30/06/2026"
     Quand je clique sur "Ajouter une PFMP"
-    Alors la page contient "(entre le 01/09/2024 et le 30/06/2025)"
+    Alors la page contient "(entre le 01/09/2025 et le 30/06/2026)"
 
   Scénario: Le personnel veut réintégrer un élève retiré manuellement de la classe
     Quand je clique sur "Masquer l'élève de la classe"
