@@ -45,7 +45,7 @@
               .fr-col-2
                 = render partial: "shared/tooltip", locals: { message: disabled ? "disabled_extended" : "extended", id: 2 }
 
-          - disabled = !(current_user.can_abrogate? & schooling.abrogeable?)
+          - disabled = !(current_user.can_abrogate? & schooling.any_older_schooling?)
           %li
             .fr-grid-row.fr-grid-row--middle
               .fr-col-10

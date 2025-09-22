@@ -481,13 +481,13 @@ RSpec.describe Schooling do
     context "when student has only one schooling" do
       let(:another_schooling) { nil }
 
-      it { expect(schooling.abrogeable?).to be false }
+      it { expect(schooling.any_older_schooling?).to be false }
     end
 
     context "when student has two schoolings on the same school year but no attributive decision" do
       let(:schooling) { create(:schooling, :closed, student: student, classe: classe) }
 
-      it { expect(schooling.abrogeable?).to be false }
+      it { expect(schooling.any_older_schooling?).to be false }
     end
 
     context "when student has two schoolings on the same school year but already an abrogation decision" do
@@ -497,7 +497,7 @@ RSpec.describe Schooling do
                classe: classe)
       end
 
-      it { expect(schooling.abrogeable?).to be false }
+      it { expect(schooling.any_older_schooling?).to be false }
     end
 
     context "when student has two schoolings on the same school year but the other one is not after" do
@@ -508,11 +508,11 @@ RSpec.describe Schooling do
                end_date: schooling.start_date - 1.day)
       end
 
-      it { expect(schooling.abrogeable?).to be false }
+      it { expect(schooling.any_older_schooling?).to be false }
     end
 
     context "when student has two schoolings on the same school year and the other one is after" do
-      it { expect(schooling.abrogeable?).to be true }
+      it { expect(schooling.any_older_schooling?).to be true }
     end
 
     context "when student has two schoolings on the same school year and the other one is after but no attributive decision" do # rubocop:disable Layout/LineLength
@@ -520,14 +520,14 @@ RSpec.describe Schooling do
         create(:schooling, student: student, classe: another_classe, end_date: schooling.end_date + 3.months)
       end
 
-      it { expect(schooling.abrogeable?).to be false }
+      it { expect(schooling.any_older_schooling?).to be false }
     end
 
     context "when student has another schooling on another school_year" do
       let(:another_school_year) { create(:school_year, start_year: 2021) }
       let(:another_classe) { create(:classe, school_year: another_school_year) }
 
-      it { expect(schooling.abrogeable?).to be false }
+      it { expect(schooling.any_older_schooling?).to be false }
     end
   end
   # rubocop:enable RSpec/MultipleMemoizedHelpers

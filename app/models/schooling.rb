@@ -97,15 +97,15 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
     closed? && abrogation_decision.attached?
   end
 
-  def abrogeable?
-    not_disabled? &&
+  def any_older_schooling?
+    abrogeable? &&
       student.schoolings.for_year(school_year.start_year).excluding(self).any? do |sc|
         sc.attributive_decision.attached? && sc.start_date > end_date
       end
   end
 
   def extensible?
-    not_disabled? && !establishment.in_current_school_year_range?(start_date)
+    abrogeable? && !establishment.in_current_school_year_range?(start_date)
   end
 
   def cancelled?
@@ -181,7 +181,7 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   private
 
-  def not_disabled?
+  def abrogeable?
     closed? && attributive_decision.attached? && !abrogation_decision.attached?
   end
 end

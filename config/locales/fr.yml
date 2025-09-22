@@ -177,7 +177,7 @@ fr:
     new_rib: Saisir des coord. bancaires
     new_pfmp: Saisir une PFMP
     validate_all_pfmps: Paiements
-    abrogate_all_da: Abrogations
+    abrogate: Abrogations
     invitations: Gestion des accès
     faq: F.A.Q.
   pages:

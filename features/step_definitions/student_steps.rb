@@ -76,11 +76,11 @@ Quand("l'élève {string} a un report de décision d'attribution") do |name|
   schooling.update!(extended_end_date: extended_end_date)
 end
 
-Quand("l'élève {string} a une décision d'attribution abrogeable") do |name|
+Quand("l'élève {string} a une décision d'attribution abrogeable pour l'année scolaire {int}") do |name, year|
   steps %(
     Sachant que l'élève "#{name}" a une scolarité fermée
     Et que l'élève "#{name}" a une décision d'attribution
-    Et que l'élève "#{name}" a une scolarité plus récente pour l'année scolaire 2024
+    Et que l'élève "#{name}" a une scolarité plus récente pour l'année scolaire #{year}
     Et que l'élève "#{name}" a une décision d'attribution
   )
 end
