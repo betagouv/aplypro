@@ -9,8 +9,8 @@ Fonctionnalité: Accueil d'un personnel de direction sur l'application
     Et que je passe l'écran d'accueil
 
   Scénario: Le personnel de direction voit l'année scolaire par défaut
-    Alors la page contient "Année scolaire 2024-2025"
-    Et que le bandeau informatif contient "2024-2025"
+    Alors la page contient "Année scolaire 2025-2026"
+    Et que le bandeau informatif contient "2025-2026"
 
   Scénario: Le personnel de direction change d'année scolaire
     Quand je consulte l'année scolaire "2023-2024"

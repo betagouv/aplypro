@@ -17,9 +17,9 @@ Fonctionnalité: Le personnel ASP consulte des dossiers
 
   Scénario: Le personnel ASP entre un numéro de décision d'attribution existant
     Sachant que le numéro administratif de "Curie Marie" est "THEDOSS"
-    Et que je remplis "Numéro de décision d'attribution" avec "THEDOSS2024"
+    Et que je remplis "Numéro de décision d'attribution" avec "THEDOSS2025"
     Quand je clique sur "Rechercher"
-    Quand je clique sur "ENPUTHEDOSS20240"
+    Quand je clique sur "ENPUTHEDOSS20250"
     Alors la page contient "3 jours x 10 € par jour = 30 €"
     Et la page contient "IBAN"
 

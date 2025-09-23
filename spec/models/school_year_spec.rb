@@ -16,7 +16,7 @@ RSpec.describe SchoolYear do
 
   describe "#current" do
     it "select the last year" do
-      expect(described_class.current.start_year).to eq 2024
+      expect(described_class.current).to eq described_class.order(:start_year).last
     end
   end
 end

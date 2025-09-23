@@ -153,8 +153,15 @@ RSpec.describe ASP::Request do
     describe ".total_payment_requests_left" do
       subject(:allowance) { described_class.total_payment_requests_left }
 
+      around do |example|
+        Timecop.safe_mode = false
+        Timecop.freeze("2025-10-01") do
+          example.run
+        end
+      end
+
       before do
-        Timecop.travel(2.weeks.ago) do
+        Timecop.travel(1.week.ago) do
           create_list(:asp_payment_request, 3, :sent)
         end
 

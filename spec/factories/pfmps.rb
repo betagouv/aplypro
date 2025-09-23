@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :pfmp do
     schooling { association :schooling, student: student }
     start_date { "#{SchoolYear.current.start_year}-09-03" }
-    end_date { "#{SchoolYear.current.start_year}-09-28" }
+    end_date { "#{SchoolYear.current.start_year}-09-18" }
 
     transient do
       student { build(:student) } # rubocop:disable FactoryBot/FactoryAssociationWithStrategy

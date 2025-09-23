@@ -87,7 +87,7 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
     Alors la page contient "Les PFMPs ont bien été modifiées"
     Et je peux voir dans le tableau "Élèves sortis de la classe"
       | Élèves (1)    | Décisions d'attribution | Coordonnées Bancaires | PFMPs (1)                   |
-      | Dupuis Jean   |                         |                       | Saisie à valider sept. 2024 |
+      | Dupuis Jean   |                         |                       | Saisie à valider sept. 2025 |
 
   Scénario: Le personnel peut voir les PFMPs à valider des anciens élèves
     Quand je consulte la classe de "1MELEC"
@@ -98,7 +98,7 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
     Quand je clique sur "1MELEC"
     Alors je peux voir dans le tableau "Liste des pfmps à valider"
       | Élève       | PFMP       | Nombre de jours | Montant |
-      | Dupuis Jean | sept. 2024 | 3 jours         |         |
+      | Dupuis Jean | sept. 2025 | 3 jours         |         |
     Et la rangée "Dupuis Jean" contient "Sorti(e) de la classe"
 
   Scénario: Le personnel peut valider les PFMPs des anciens élèves
@@ -114,7 +114,7 @@ Fonctionnalité: Les anciens élèves sont inclus à part dans l'interface
     Et que je clique sur "1MELEC"
     Alors je peux voir dans le tableau "Élèves sortis de la classe"
       | Élèves      | Décisions d'attribution | Coordonnées bancaires | PFMPs              |
-      | Dupuis Jean |                         |                       | Validée sept. 2024 |
+      | Dupuis Jean |                         |                       | Validée sept. 2025 |
 
   Scénario: Le personnel peut consulter le profil des anciens élèves
     Quand je consulte la classe de "1MELEC"

@@ -14,6 +14,13 @@ RSpec.describe PearlPfmpsRectificator do
       let(:schooling) { create(:schooling) }
       let(:student) { schooling.student }
 
+      around do |example|
+        Timecop.safe_mode = false
+        Timecop.freeze("04-05-#{SchoolYear.current.start_year + 1}") do
+          example.run
+        end
+      end
+
       before do
         allow_any_instance_of(Sync::StudentJob).to receive(:perform) # rubocop:disable RSpec/AnyInstance
 
@@ -157,6 +164,13 @@ RSpec.describe PearlPfmpsRectificator do
     context "when excess amount is just above threshold with multiple PFMPs" do
       let(:schooling) { create(:schooling) }
       let(:student) { schooling.student }
+
+      around do |example|
+        Timecop.safe_mode = false
+        Timecop.freeze("04-05-#{SchoolYear.current.start_year + 1}") do
+          example.run
+        end
+      end
 
       before do
         allow_any_instance_of(Sync::StudentJob).to receive(:perform) # rubocop:disable RSpec/AnyInstance

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Quand("je renseigne une PFMP de {int} jours") do |days|
-  start_date = Date.parse("#{SchoolYear.current.start_year}-09-17")
+  start_date = Date.parse("#{SchoolYear.current.start_year}-09-07")
   end_date   = start_date + days.days
 
   steps %(
@@ -14,7 +14,7 @@ Quand("je renseigne une PFMP de {int} jours") do |days|
 end
 
 Quand("je renseigne une PFMP de {int} jours pour la classe {string}") do |days, classe|
-  start_date = Date.parse("#{SchoolYear.current.start_year}-09-17")
+  start_date = Date.parse("#{SchoolYear.current.start_year}-09-08")
   end_date   = start_date + days.days
 
   steps %(
