@@ -37,7 +37,7 @@ Quand("l'élève {string} a une scolarité fermée") do |name|
   student = find_student_by_full_name(name)
   schooling = student.current_schooling
 
-  schooling.update!(end_date: schooling.start_date + 3.months)
+  schooling.update!(end_date: schooling.start_date + 10.days)
 end
 
 Quand("l'élève {string} a une PFMP dans la classe {string} dans un autre établissement") do |name, classe_label|

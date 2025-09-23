@@ -55,7 +55,7 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Alors je peux voir dans le tableau "Liste des élèves"
       | Élèves (10) | Décisions d'attribution (10/10) | Coordonnées Bancaires (0/10) | PFMPs (0) |
       |             | Éditée                          |                              |           |
-    Sachant que l'élève "Curie Marie" a une décision d'attribution abrogeable pour l'année scolaire 2024
+    Sachant que l'élève "Curie Marie" a une décision d'attribution abrogeable pour l'année scolaire 2025
     Et je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
     Lorsque je clique sur "Abroger la décision d'attribution"
     Alors la page contient "Êtes-vous certain(e) de vouloir abroger cette décision d'attribution ?"
