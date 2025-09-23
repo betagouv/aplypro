@@ -14,11 +14,13 @@ class MefSeeder
     ministry: "MINISTERE"
   }.freeze
 
-  def self.seed
+  def self.seed(file_paths = nil)
     @@logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
 
+    paths = file_paths || Rails.root.glob("data/mefs/*.csv")
+
     Mef.transaction do
-      Dir.glob(Rails.root.join("data/mefs/*.csv")).each do |file_path|
+      paths.each do |file_path|
         process_file(file_path)
       end
     end
