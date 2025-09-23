@@ -10,7 +10,7 @@
         %span= @student.rib(current_establishment).name
       %li
         IBAN :
-        %code= @student.rib(current_establishment).iban
+        %code= @student.rib(current_establishment).iban_to_s
       %li
         BIC :
         %code= @student.rib(current_establishment).bic

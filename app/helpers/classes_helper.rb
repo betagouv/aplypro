@@ -53,6 +53,16 @@ module ClassesHelper
     )
   end
 
+  def amounts_yearly_reached_information_tag(schooling, **args)
+    return if schooling.pfmps.empty? || !schooling.pfmps.first.amounts_yearly_exceeded?
+
+    content_tag(
+      :div,
+      "Plafond atteint",
+      class: "fr-badge fr-badge--sm fr-badge--warning #{args[:class]}"
+    )
+  end
+
   private
 
   def progress_badge(count, total, **args)
