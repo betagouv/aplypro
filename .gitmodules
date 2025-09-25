@@ -1,3 +1,4 @@
 [submodule "mock"]
 	path = mock
 	url = git@github.com:betagouv/aplypro-mock-data.git
+	branch = fix/data-etab

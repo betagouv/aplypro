@@ -6,13 +6,13 @@ module Sync
 
     def perform(establishment)
       raw = EstablishmentApi.fetch!(establishment.uai)
+      data = raw["results"]
 
-      return true if raw["records"].blank?
-
-      data = raw["records"].first["fields"]
+      return true if data.blank?
+      raise "there are more than one establishment returned by the API" if data.many?
 
       attributes = Establishment::API_MAPPING.to_h do |col, attr|
-        [attr, data[col]]
+        [attr, data.first[col]]
       end
 
       establishment.update!(attributes)

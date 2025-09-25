@@ -30,10 +30,18 @@ RSpec.describe Sync::EstablishmentJob do
   end
 
   context "when the EstablishmentApi returns no data" do
-    let(:json) { { "records" => [] }.to_json }
+    let(:json) { { "results" => [{}] }.to_json }
 
     it "doesn't raise an error" do
       expect { described_class.perform_now(establishment) }.not_to raise_error
+    end
+  end
+
+  context "when the EstablishmentApi more than one result" do
+    let(:json) { { "results" => [{ test1: "1" }, { test2: "2" }] }.to_json }
+
+    it "raise an error" do
+      expect { described_class.perform_now(establishment) }.to raise_error(/there are more than one establishment/)
     end
   end
 end
