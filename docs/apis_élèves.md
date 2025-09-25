@@ -48,7 +48,7 @@ données sont récapitulées dans le tableau suivant :
 
 | paramètre `resource_type` | type de ressources               | terminaison SYGNE              | terminaison FREGATA                    |
 |---------------------------|----------------------------------|--------------------------------|----------------------------------------|
-| :establishment_students   | Les élèves d'un établissment     | `/etablissements/{uai}/eleves` | `/inscriptions?rne={uai}`              |
+| :establishment_students   | Les élèves d'un établissement     | `/etablissements/{uai}/eleves` | `/inscriptions?rne={uai}`              |
 | :student                  | Les informations d'un seul élève | `/eleves/{ine}`                | `/inscriptions?rne={uai}` **voir [1]** |
 | :student_schoolings       | Les scolarités d'un seul élève   | `/eleves/{ine}`                | pas implémenté                         |
 
@@ -67,7 +67,7 @@ FREGATA utilise HMAC.
 
 ## Exploration des APIs
 
-Les APIs sont concues pour pouvoir être explorées / debuggées
+Les APIs sont conçues pour pouvoir être explorées / debuggées
 facilement car elles exposent une méthode `get(endpoint)` qui permet
 de faire un appel à une terminaison avec l'authentification
 nécessaire de chaque côté :
@@ -87,7 +87,7 @@ SYGNE :
 
 https://github.com/betagouv/aplypro-mock-data/tree/main/apis/factories/sygne/
 
-La forme finale de ces donnés peut être constatée avec :
+La forme finale de ces données peut être constatée avec :
 
 
 ```sh

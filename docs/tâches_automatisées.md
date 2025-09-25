@@ -1,6 +1,6 @@
 # Tâches automatisées
 
-Certaines tâches (i.e : Active Jobs) sont lancées à intervales
+Certaines tâches (i.e : Active Jobs) sont lancées à intervalles
 réguliers pour assurer le bon fonctionnement du système.
 
 ## Fonctionnement général
@@ -12,7 +12,7 @@ est un fichier consommé par la librairie
 [`whenever`](https://github.com/javan/whenever).
 
 Whenever interprète une syntaxe très naturelle et la traduit dans la
-syntaxe compris par `cron` qui est l'option la plus simple disponible sur Scalingo.
+syntaxe comprise par `cron` qui est l'option la plus simple disponible sur Scalingo.
 
 ### Mise à jour
 
@@ -23,7 +23,7 @@ bin/rails schedule:regenerate
 ```
 
 qui va se servir de `whenever` pour produire une syntaxe `cron` et
-l'écrire dans un fichier à la racine du répértoire du projet qui
+l'écrire dans un fichier à la racine du répertoire du projet qui
 correspond aux exigences du Scalingo Scheduler.
 
 https://doc.scalingo.com/platform/app/task-scheduling/scalingo-schedule

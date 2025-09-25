@@ -39,7 +39,7 @@ Entre autres :
 - `make lint` : lance Rubocop.;
 - `make debug` : connecter le debugger
 
-# Deploiement
+# Déploiement
 
 1. Créer une [nouvelle release](https://github.com/betagouv/aplypro/releases)
 2. Deployer la branch `main` depuis [Scalingo](https://dashboard.scalingo.com/)
@@ -54,7 +54,7 @@ Ministères :
 - Mer : Secrétariat d'État Chargé De La Mer ;
 - Armée : L'Armée.
 
-Systèmes d'autentification :
+Systèmes d'authentification :
 
 - FIM : Federation Identity Manager : Pour MENJ, Mer et Armée
   - Passe par notre Keycloak
@@ -80,7 +80,7 @@ Sources de données :
 ### Pour les établissements FIM qui n'ont pas un niveau d'accès de directeur au sens de l'éducation nationale
 C'est à dire les établissements maritimes, quelques collèges, ou autres cas particuliers
 
-Pour donner un rôle de chef d'établissement à un FIM user dans le vecteur d'identitié sur KeyCloak: `AplyproResp`
+Pour donner un rôle de chef d'établissement à un FIM user dans le vecteur d'identité sur KeyCloak: `AplyproResp`
 Il est utilisé [ici](https://github.com/betagouv/aplypro/blob/main/app/models/concerns/identity_mappers/fim.rb/#L18) et doit contenir un UAI.
 
 ### Vocabulaire des paiements

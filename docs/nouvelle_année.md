@@ -8,7 +8,7 @@ Chaque année au mois d'Octobre à une date décidée par la DGESCO une nouvelle
 
 ### 2 - Ajout des nouveaux fichiers Mefs et Wages dans le dossier /data du repo
 
-La suite de test RSpec encapsule donc le parsing des nouveaux fichiers et signale tout erreur de parsing.
+La suite de test RSpec encapsule donc le parsing des nouveaux fichiers et signale toute erreur de parsing.
 
 ### 3 - Création dans le SchoolYearSeeder d'une nouvelle année
 
@@ -26,7 +26,7 @@ Pour qu'elle soit accessible depuis un container Scalingo.
 
 Ex: Scénario de validation et paiement d'une PFMP avec un nouveau plafond.
 
-### 7 - Deploiement en production de la nouvelle donnée (sans seeding)
+### 7 - Déploiement en production de la nouvelle donnée (sans seeding)
 
 ### 8 - Activation de la nouvelle année
 
