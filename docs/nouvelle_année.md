@@ -20,7 +20,11 @@ Il y a encore certaines dates encodées en dur qui nécessitent d'être changée
 
 ### 5 - Déploiement de la nouvelle donnée en staging
 
+Pour qu'elle soit accessible depuis un container Scalingo.
+
 ### 6 - Test de scénarios sur la nouvelle année en staging
+
+Ex: Scénario de validation et paiement d'une PFMP avec un nouveau plafond.
 
 ### 7 - Deploiement en production de la nouvelle donnée (sans seeding)
 
@@ -28,4 +32,12 @@ Il y a encore certaines dates encodées en dur qui nécessitent d'être changée
 
 Un jour avant l'ouverture : créer la nouvelle année scolaire et déclencher les seeders sur la nouvelle donnée.
 
+`SchoolYear.create!(start_year: xxxx)`
+`WageSeeder.seed('data/wages/xxxx_xxxx.csv')`
+`MefSeeder.seed('data/mefs/xxxx_xxxx.csv')`
+
 ### 9 - Récupération proactive des classes de la nouvelle année
+
+`Sync::AllClassesJob.perform_later`
+
+
