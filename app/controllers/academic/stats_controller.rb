@@ -3,6 +3,7 @@
 module Academic
   class StatsController < Academic::ApplicationController
     def index
+      @inhibit_banner = true
       @current_year = selected_school_year.start_year
       @report = find_report
       @stats = Stats::Main.new(@current_year)
