@@ -8,7 +8,7 @@ Before do
   extend WebmockHelpers
 
   etab_fixture = Rails.root.join("mock/data/etab.json").read
-  stub_request(:get, /#{ENV.fetch('APLYPRO_ESTABLISHMENTS_DATA_URL')}/)
+  stub_request(:get, %r{#{ENV.fetch('APLYPRO_DATA_EDUCATION_URL')}/fr-en-annuaire-education/records})
     .with(
       headers: {
         "Accept" => "*/*",

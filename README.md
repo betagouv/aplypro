@@ -65,7 +65,8 @@ Sources de données :
 
 - SYGNE : Expose les données des élèves du MENJ, provenant de la Base Établissements Élèves (BEE) ;
 - FREGATA : Expose les données des élèves du MASA, provenant d'Educagri ;
-- [Annuaire de l'Éducation](https://data.education.gouv.fr/api/v1/console/records/1.0/search/?dataset=fr-en-annuaire-education) : Données publiques des établissements. Ces données proviennent de RAMSES (appli de l'éducation nationale) et de l'ONISEP ([exemple](https://www.onisep.fr/ressources/univers-lycee/lycees/hauts-de-france/oise/lycee-professionnel-arthur-rimbaud)).
+- [Annuaire de l'Éducation](https://data.education.gouv.fr/explore/dataset/fr-en-annuaire-education/information) : Données publiques des établissements. Ces données proviennent de RAMSES (appli de l'éducation nationale) et de l'ONISEP ([exemple](https://www.onisep.fr/ressources/univers-lycee/lycees/hauts-de-france/oise/lycee-professionnel-arthur-rimbaud)).
+- [Le calendrier scolaire](https://data.education.gouv.fr/explore/dataset/fr-en-calendrier-scolaire/information) : Le calendrier scolaire officiel, publié par le Ministère de l'Education nationale, de l'Enseignement supérieur et de la Recherche (http://www.education.gouv.fr/vacances).
 
 ## Vocabulaire technique
 
