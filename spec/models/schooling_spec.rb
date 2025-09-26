@@ -529,6 +529,17 @@ RSpec.describe Schooling do
 
       it { expect(schooling.any_older_schooling?).to be false }
     end
+
+    context "when student has another schooling with nil start_date but attributive decision" do
+      let(:another_schooling) do
+        create(:schooling, :with_attributive_decision,
+               student: student,
+               classe: another_classe,
+               start_date: nil)
+      end
+
+      it { expect(schooling.any_older_schooling?).to be false }
+    end
   end
   # rubocop:enable RSpec/MultipleMemoizedHelpers
 
