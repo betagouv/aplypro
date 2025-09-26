@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe AcademicDatesRangeFetcher do
+describe EstablishmentsApis::AcademicDatesRangeFetcher do
   describe ".call" do
     context "when academy code has no special exception" do
       it "returns a default September 1st range" do

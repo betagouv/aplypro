@@ -14,13 +14,13 @@ RSpec.describe Sync::EstablishmentJob do
   let(:json) { Rails.root.join("mock/data/etab.json").read }
 
   before do
-    allow(EstablishmentApi).to receive(:fetch!).and_return(JSON.parse(json))
+    allow(EstablishmentsApis::EstablishmentApi).to receive(:fetch!).and_return(JSON.parse(json))
   end
 
   it "calls the EstablishmentApi proxy" do
     described_class.perform_now(establishment)
 
-    expect(EstablishmentApi).to have_received(:fetch!).with(establishment.uai)
+    expect(EstablishmentsApis::EstablishmentApi).to have_received(:fetch!).with(establishment.uai)
   end
 
   Establishment::API_MAPPING.each_value do |attr|
