@@ -16,6 +16,7 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   has_one :mef, through: :classe
   has_one :establishment, through: :classe
+  has_one :school_year, through: :classe
 
   scope :former, -> { where("schoolings.end_date IS NOT NULL AND schoolings.end_date <= ?", Date.current) }
   scope :active, -> { where("schoolings.end_date IS NULL OR schoolings.end_date > ?", Date.current) }
@@ -96,6 +97,17 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
     closed? && abrogation_decision.attached?
   end
 
+  def any_older_schooling?
+    abrogeable? &&
+      student.schoolings.for_year(school_year.start_year).excluding(self).any? do |sc|
+        sc.attributive_decision.attached? && sc.start_date > end_date
+      end
+  end
+
+  def extensible?
+    abrogeable? && !establishment.in_current_school_year_range?(start_date)
+  end
+
   def cancelled?
     cancellation_decision.attached?
   end
@@ -165,5 +177,11 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
     else
       code
     end
+  end
+
+  private
+
+  def abrogeable?
+    closed? && attributive_decision.attached? && !abrogation_decision.attached?
   end
 end

@@ -1,6 +1,6 @@
 fr:
   tooltips:
-    report: |
+    extended: |
       Un report permet de saisir une date jusqu'à laquelle prolonger la durée de la Décision d'Attribution associée à cette scolarité. Il devient ensuite possible de saisir des PFMPs pour l'année scolaire terminée. Cette option est à utiliser pour les élèves qui n'aurait pas pu réaliser leur PFMP au cours de l'année scolaire passée (raisons de santé, fermeture de l'entreprise d'accueil, problèmes liés à la météo....) et la rattrape sur l'année scolaire suivante
     owner_type: |
       Pour un élève majeur qui ne peut pas ouvrir de compte et souhaite que son allocation soit versée sur le compte d'un tiers dans le cadre de la procédure du mandat sous seing privé (comme indiqué dans la FàQ EduScol), l'option à sélectionner est : 
@@ -16,11 +16,21 @@ fr:
         <li>> Les erreurs de RIB : quand le paiement dû à un élève est versé sur le mauvais compte bancaire. Un formulaire de déclaration à l'ASP est disponible, vous pouvez le récupérer auprès du support de votre DSI académique (communication faite aux ADSI le 9 juillet 2024).</li>
         <li>> Les rejets bancaires : quand un paiement est marqué comme envoyé mais que la banque du destinataire l'a rejeté. L'ASP contacte alors directement l'établissement scolaire (communication faite aux ADSI le 2 juillet 2024).</li>
       </ul>
-    disabled: |
+    disabled_extended: |
       Cette action n'est pas disponible pour plusieurs raisons possibles :
       <ul>
         <li>> Vous n'êtes pas chef d'établissement</li>
         <li>> La scolarité n'a pas de décision d'attribution générée</li>
         <li>> Une abrogation de décision d'attribution a déjà été générée</li>
         <li>> La scolarité n'a pas de date de fin</li>  
+        <li>> La scolarité est sur l'année scolaire en cours</li>  
+      </ul>
+    disabled_abrogation: |
+      Cette action n'est pas disponible pour plusieurs raisons possibles :
+      <ul>
+        <li>> Vous n'êtes pas chef d'établissement</li>
+        <li>> La scolarité n'a pas de décision d'attribution générée</li>
+        <li>> Une abrogation de décision d'attribution a déjà été générée</li>
+        <li>> La scolarité n'a pas de date de fin</li>  
+        <li>> Il n'existe aucune scolarité plus récente pour la même année scolaire</li>  
       </ul>

@@ -33,10 +33,11 @@ Sachantque("il y a un(e) élève avec une scolarité fermée qui a une PFMP") do
   FactoryBot.create(:pfmp, schooling: schooling)
 end
 
-Sachantque("l'élève {string} a une scolarité fermée") do |name|
+Quand("l'élève {string} a une scolarité fermée") do |name|
   student = find_student_by_full_name(name)
+  schooling = student.current_schooling
 
-  student.current_schooling.update!(end_date: Date.yesterday)
+  schooling.update!(end_date: schooling.start_date + 10.days)
 end
 
 Quand("l'élève {string} a une PFMP dans la classe {string} dans un autre établissement") do |name, classe_label|
@@ -86,6 +87,13 @@ Sachantque("j'autorise {string} à rejoindre l'application") do |email|
     Et que je clique sur "Autoriser un nouvel email"
     Et que je remplis "Email" avec "#{email}"
     Et que je clique sur "Autoriser l'email"
+  )
+end
+
+Lorsque("je consulte la liste des décisions d'attributions abrogeables") do
+  steps %(
+    Quand je me rends sur la page d'accueil
+    Et que je clique sur "Abrogations"
   )
 end
 

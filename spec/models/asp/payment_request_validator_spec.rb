@@ -252,7 +252,8 @@ RSpec.describe ASP::PaymentRequestValidator do
 
   describe "#check_da_abrogation" do
     context "when student is transferred and schooling needs abrogated attributive decision" do
-      let(:other_schooling) { instance_double(Schooling, nullified?: false) }
+      let(:attached_file) { instance_double(ActiveStorage::Attached::One, attached?: true) }
+      let(:other_schooling) { instance_double(Schooling, nullified?: false, attributive_decision: attached_file) }
       let(:other_classe) { instance_double(Classe, school_year:) }
 
       before do
@@ -280,7 +281,6 @@ RSpec.describe ASP::PaymentRequestValidator do
           .not_to change { payment_request.errors.details[:ready_state_validation] }
       end
     end
-
 
     context "when PFMP is not within schooling dates" do
       let(:other_schooling) { instance_double(Schooling, nullified?: false) }

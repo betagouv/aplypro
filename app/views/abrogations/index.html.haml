@@ -1,0 +1,27 @@
+- if @schoolings_per_school_year.empty?
+  Il n'y a aucune décision d'attribution à abroger pour le moment.
+- else
+  .fr-accordions-group
+    - @schoolings_per_school_year.sort_by{ |s_y, _schoolings| s_y.start_year }.each do |school_year, schoolings|
+      %section.fr-accordion
+        %h3.fr-accordion__title
+          %button.fr-accordion__btn{"aria-controls" => "accordion-#{school_year.id}", "aria-expanded" => "false"}
+            = t("year", start_year: school_year.start_year, end_year: school_year.end_year)
+
+        %div.fr-collapse{id: "accordion-#{school_year.id}"}
+          .fr-table.fr-mb-3w
+            %table
+              %thead
+                %th{scope: "col"} Élève
+                %th{scope: "col"} Classe
+                %th{scope: "col"} Début de scolarité
+                %th{scope: "col"} Fin de scolarité
+                %th{scope: "col"} Abroger
+              %tbody
+                - schoolings.sort_by{ |sc| sc.student.full_name }.each do |schooling|
+                  %tr
+                    %td= dsfr_link_to schooling.student, student_path(schooling.student), title: t("links.students.show", name: schooling.student)
+                    %td= dsfr_link_to schooling.classe.to_long_s, school_year_class_path(school_year, schooling.classe), title: t("links.classes.show", label: schooling.classe.to_long_s)
+                    %td= l(schooling.start_date) if schooling.start_date
+                    %td= l(schooling.end_date) if schooling.end_date
+                    %td= button_to "Abroger la décision d'attribution", confirm_abrogation_school_year_class_schooling_path(school_year, schooling.classe, schooling), class: 'fr-btn fr-btn--danger', method: :get, disabled: !current_user.can_abrogate?

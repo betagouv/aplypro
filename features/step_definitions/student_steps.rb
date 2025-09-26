@@ -48,6 +48,19 @@ Quand("l'élève {string} a une ancienne scolarité dans la classe {string} dans
 end
 # rubocop:enable Layout/LineLength
 
+Quand("l'élève {string} a une scolarité plus récente pour l'année scolaire {int}") do |name, start_year|
+  student = find_student_by_full_name(name)
+  school_year = SchoolYear.find_by(start_year: start_year)
+
+  schooling = Schooling.joins(:classe)
+                       .where.not(end_date: nil)
+                       .find_by(student:, "classes.school_year": school_year)
+
+  classe =  FactoryBot.create(:classe, school_year:, establishment: schooling.establishment)
+
+  FactoryBot.create(:schooling, student:, classe:, end_date: schooling.end_date + 3.months)
+end
+
 Quand("les élèves actuels sont les seuls à avoir des décisions d'attribution") do
   establishment = Establishment.last
 
@@ -61,6 +74,15 @@ Quand("l'élève {string} a un report de décision d'attribution") do |name|
   schooling = find_schooling_by_student_full_name(name)
 
   schooling.update!(extended_end_date: extended_end_date)
+end
+
+Quand("l'élève {string} a une décision d'attribution abrogeable pour l'année scolaire {int}") do |name, year|
+  steps %(
+    Sachant que l'élève "#{name}" a une scolarité fermée
+    Et que l'élève "#{name}" a une décision d'attribution
+    Et que l'élève "#{name}" a une scolarité plus récente pour l'année scolaire #{year}
+    Et que l'élève "#{name}" a une décision d'attribution
+  )
 end
 
 Quand("l'élève {string} a une date de début et une date de fin de scolarité sur une année scolaire passée") do |name|
@@ -92,7 +114,7 @@ Quand("l'élève {string} a une décision d'attribution") do |name|
   student = find_student_by_full_name(name)
 
   establishment = Establishment.last
-  schooling = establishment.schoolings.find_by(student: student)
+  schooling = establishment.schoolings.where(student: student).last
   ASP::AttachDocument.from_schooling(StringIO.new("hello"), schooling, :attributive_decision)
 end
 
