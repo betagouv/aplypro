@@ -21,9 +21,11 @@ RSpec.describe GenerateReportJob do
     end
 
     context "when integrated with Report model" do
+      let(:school_year) { create(:school_year, start_year: 2070) }
+
       before do
         allow(Report).to receive(:create_for_date).and_call_original
-        allow(SchoolYear).to receive(:current).and_return(instance_double(SchoolYear, start_year: 2024))
+        allow(SchoolYear).to receive(:current).and_return(school_year)
         allow(Stats::Main).to receive(:new).and_return(instance_double(Stats::Main,
                                                                        global_data: [["Global"]],
                                                                        bops_data: [["BOP"]],
@@ -36,7 +38,7 @@ RSpec.describe GenerateReportJob do
       end
 
       it "does not create a duplicate report for the same date" do
-        create(:report, created_at: date)
+        create(:report, created_at: date, school_year: school_year)
         expect { described_class.new.perform(date) }.not_to change(Report, :count)
       end
     end
