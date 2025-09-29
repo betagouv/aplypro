@@ -68,15 +68,11 @@ module DataEducationApi
       end
 
       def find_summer_vacation_for_year(records, school_year)
-        year_record = records.find do |record|
-          record.dig("record", "fields", "annee_scolaire") == school_year
-        end
+        year_record = records.find { |record| record["annee_scolaire"] == school_year }
 
         return nil if year_record.nil?
 
-        {
-          end_date: year_record.dig("record", "fields", "end_date")
-        }
+        { end_date: year_record["end_date"] }
       end
 
       def fetch!(param)
