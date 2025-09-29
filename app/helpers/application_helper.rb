@@ -27,15 +27,15 @@ module ApplicationHelper
     return if progressions.nil? || !progressions.key?(stat_key)
 
     progression = progressions[stat_key]
-    return if progression == 0
+    return if progression.zero?
 
-    css_class = progression > 0 ? "progression-positive" : "progression-negative"
-    icon = progression > 0 ? "arrow-up-line" : "arrow-down-line"
-    sign = progression > 0 ? "+" : ""
+    css_class = progression.positive? ? "progression-positive" : "progression-negative"
+    icon = progression.positive? ? "arrow-up-line" : "arrow-down-line"
+    sign = progression.positive? ? "+" : ""
 
     content_tag(:div, class: "progression-indicator #{css_class}") do
       content_tag(:i, "", class: "fr-icon-#{icon} fr-icon--sm") +
-      content_tag(:span, "#{sign}#{progression.abs}%")
+        content_tag(:span, "#{sign}#{progression.abs}%")
     end
   end
 end
