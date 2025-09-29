@@ -7,23 +7,22 @@ module DataEducationApi
         "fr-en-annuaire-education"
       end
 
-      def fetch!(uai)
-        response = connection.get("records") do |req|
-          req.params["refine"] = "identifiant_de_l_etablissement:#{uai}"
-        end
+      def result(uai)
+        data = fetch!(uai)["results"]
 
-        response.body
+        raise "there are more than one establishment returned by the API" if data.many?
+
+        data
       end
 
       private
 
-      def connection
-        Faraday.new(
-          url: base_url,
-          headers: { "Content-Type" => "application/json" }
-        ) do |f|
-          f.response :json
+      def fetch!(uai)
+        response = client.get("records") do |req|
+          req.params["refine"] = "identifiant_de_l_etablissement:#{uai}"
         end
+
+        response.body
       end
     end
   end

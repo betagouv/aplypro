@@ -21,7 +21,7 @@ describe DataEducationApi::EstablishmentApi do
   end
 
   it "calls the right endpoint" do
-    described_class.fetch!(uai)
+    described_class.send(:fetch!, uai)
 
     url = "#{api}/fr-en-annuaire-education/records?refine=identifiant_de_l_etablissement:#{uai}"
 

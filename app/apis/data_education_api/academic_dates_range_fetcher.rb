@@ -64,11 +64,7 @@ module DataEducationApi
           limit: 100
         }
 
-        response = client.get("#{base_url}/records", query_params)
-        data = JSON.parse(response.body)
-        data["records"] || []
-      rescue Faraday::Error, JSON::ParserError
-        []
+        fetch!(query_params)["results"] || []
       end
 
       def find_summer_vacation_for_year(records, school_year)
@@ -83,10 +79,10 @@ module DataEducationApi
         }
       end
 
-      def client
-        @client ||= Faraday.new do |f|
-          f.adapter Faraday.default_adapter
-        end
+      def fetch!(param)
+        response = client.get("records", param)
+
+        response.body
       end
     end
   end
