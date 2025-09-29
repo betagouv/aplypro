@@ -28,45 +28,51 @@
       .fr-col-md-3
         .fr-card
           .fr-card__body
-            .fr-card__content
+            .fr-card__content.position-relative
               %h3.fr-card__title.fr-h5 Établissements
               %p.fr-text--lead.fr-mb-0= number_with_delimiter(@academy_stats[:total_establishments])
+              = progression_indicator(:total_establishments, @academy_stats_progressions)
       
       .fr-col-md-3
         .fr-card
           .fr-card__body
-            .fr-card__content
+            .fr-card__content.position-relative
               %h3.fr-card__title.fr-h5 Élèves
               %p.fr-text--lead.fr-mb-0= number_with_delimiter(@academy_stats[:total_students])
+              = progression_indicator(:total_students, @academy_stats_progressions)
       
       .fr-col-md-3
         .fr-card
           .fr-card__body
-            .fr-card__content
+            .fr-card__content.position-relative
               %h3.fr-card__title.fr-h5 PFMP totales
               %p.fr-text--lead.fr-mb-0= number_with_delimiter(@academy_stats[:total_pfmps])
+              = progression_indicator(:total_pfmps, @academy_stats_progressions)
       
       .fr-col-md-3
         .fr-card
           .fr-card__body
-            .fr-card__content
+            .fr-card__content.position-relative
               %h3.fr-card__title.fr-h5 PFMP validées
               %p.fr-text--lead.fr-mb-0= number_with_delimiter(@academy_stats[:validated_pfmps])
+              = progression_indicator(:validated_pfmps, @academy_stats_progressions)
 
     .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
       .fr-col-md-6
         .fr-card
           .fr-card__body
-            .fr-card__content
+            .fr-card__content.position-relative
               %h3.fr-card__title.fr-h5 Montant validé total
               %p.fr-text--lead.fr-mb-0= number_to_currency(@academy_stats[:total_validated_amount], unit: "€", separator: ",", delimiter: " ")
+              = progression_indicator(:total_validated_amount, @academy_stats_progressions)
       
       .fr-col-md-6
         .fr-card
           .fr-card__body
-            .fr-card__content
+            .fr-card__content.position-relative
               %h3.fr-card__title.fr-h5 Montant payé total
               %p.fr-text--lead.fr-mb-0= number_to_currency(@academy_stats[:total_paid_amount], unit: "€", separator: ",", delimiter: " ")
+              = progression_indicator(:total_paid_amount, @academy_stats_progressions)
 
     .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
       .fr-col-12

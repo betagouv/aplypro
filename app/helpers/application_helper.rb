@@ -22,4 +22,20 @@ module ApplicationHelper
       safe_join([count_tag, send(badge_method, status, html_attributes: { class: disabled })], " ")
     end
   end
+
+  def progression_indicator(stat_key, progressions)
+    return if progressions.nil? || !progressions.key?(stat_key)
+
+    progression = progressions[stat_key]
+    return if progression == 0
+
+    css_class = progression > 0 ? "progression-positive" : "progression-negative"
+    icon = progression > 0 ? "arrow-up-line" : "arrow-down-line"
+    sign = progression > 0 ? "+" : ""
+
+    content_tag(:div, class: "progression-indicator #{css_class}") do
+      content_tag(:i, "", class: "fr-icon-#{icon} fr-icon--sm") +
+      content_tag(:span, "#{sign}#{progression.abs}%")
+    end
+  end
 end
