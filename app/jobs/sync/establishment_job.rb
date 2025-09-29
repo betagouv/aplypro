@@ -5,7 +5,7 @@ module Sync
     queue_as :default
 
     def perform(establishment)
-      raw = EstablishmentsApis::EstablishmentApi.fetch!(establishment.uai)
+      raw = DataEducationApi::EstablishmentApi.fetch!(establishment.uai)
       data = raw["results"]
 
       return true if data.blank?

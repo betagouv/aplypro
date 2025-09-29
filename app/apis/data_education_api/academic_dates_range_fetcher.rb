@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-module EstablishmentsApis
+module DataEducationApi
   # Returns the eligible range that is allowed for establishments to input PFMPs for a given year based on API data
-  class AcademicDatesRangeFetcher < EstablishmentsApis::Base
+  class AcademicDatesRangeFetcher < DataEducationApi::Base
     class << self
       def dataset
         "fr-en-calendrier-scolaire"

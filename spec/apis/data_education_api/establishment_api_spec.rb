@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe EstablishmentsApis::EstablishmentApi do
+describe DataEducationApi::EstablishmentApi do
   let(:api) { "https://api.com" }
   let(:uai) { "uai" }
 

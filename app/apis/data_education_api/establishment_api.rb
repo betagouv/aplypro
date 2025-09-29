@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module EstablishmentsApis
-  class EstablishmentApi < EstablishmentsApis::Base
+module DataEducationApi
+  class EstablishmentApi < DataEducationApi::Base
     class << self
       def dataset
         "fr-en-annuaire-education"

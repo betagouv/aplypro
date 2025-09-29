@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module EstablishmentsApis
+module DataEducationApi
   class Base
     class << self
       def dataset
