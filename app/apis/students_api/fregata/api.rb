@@ -32,7 +32,7 @@ module StudentsApi
             seulementAvecDivision: true
           }.to_query
 
-          "#{base_url}/inscriptions/?#{query}"
+          "#{base_url}/inscriptions?#{query}"
         end
 
         def student_schoolings_endpoint(params)
@@ -70,7 +70,7 @@ module StudentsApi
 
           encoded = OpenSSL::HMAC.digest("SHA1", SECRET, str)
 
-          Base64.urlsafe_encode64(encoded)
+          CGI.escape(Base64.strict_encode64(encoded))
         end
 
         def signature_header
