@@ -83,6 +83,6 @@ module WebmockHelpers
                "User-Agent" => /Faraday v\d+\.\d+\.\d+/
              }
            )
-           .to_return(status: 200, body: '{"records": []}', headers: { "Content-Type" => "application/json" })
+           .to_return(status: 200, body: '{"results": []}', headers: { "Content-Type" => "application/json" })
   end
 end
