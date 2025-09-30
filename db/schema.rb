@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_26_142518) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_26_133923) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "unaccent"
@@ -225,8 +225,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_142518) do
     t.jsonb "data", default: {}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "school_year_id", null: false
     t.index ["created_at"], name: "index_reports_on_created_at", unique: true
     t.index ["data"], name: "index_reports_on_data", using: :gin
+    t.index ["school_year_id"], name: "index_reports_on_school_year_id"
   end
 
   create_table "ribs", force: :cascade do |t|
@@ -354,6 +356,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_142518) do
   add_foreign_key "mefs", "school_years"
   add_foreign_key "pfmp_transitions", "pfmps"
   add_foreign_key "pfmps", "schoolings"
+  add_foreign_key "reports", "school_years"
   add_foreign_key "ribs", "establishments"
   add_foreign_key "ribs", "students"
   add_foreign_key "schoolings", "classes", column: "classe_id"

@@ -13,14 +13,22 @@ RSpec.describe Report do
   end
 
   describe "validations" do
+    subject { build(:report) }
+
     it { is_expected.to validate_presence_of(:data) }
     it { is_expected.to validate_presence_of(:created_at) }
-    it { is_expected.to validate_uniqueness_of(:created_at) }
+
+    describe "uniqueness of created_at" do
+      before { create(:report, school_year: create(:school_year, start_year: 2060)) }
+
+      it { is_expected.to validate_uniqueness_of(:created_at) }
+    end
   end
 
   describe "scopes" do
-    let!(:older_report) { create(:report, created_at: 2.days.ago) }
-    let!(:newer_report) { create(:report, created_at: 1.day.ago) }
+    let(:scope_school_year) { create(:school_year, start_year: 2050) }
+    let!(:older_report) { create(:report, created_at: 2.days.ago, school_year: scope_school_year) }
+    let!(:newer_report) { create(:report, created_at: 1.day.ago, school_year: scope_school_year) }
 
     describe ".ordered" do
       it "returns reports ordered by created_at desc" do
@@ -41,8 +49,9 @@ RSpec.describe Report do
   end
 
   describe "#previous_report" do
-    let(:oldest_report) { create(:report, created_at: 3.days.ago) }
-    let(:middle_report) { create(:report, created_at: 2.days.ago) }
+    let(:nav_school_year) { create(:school_year, start_year: 2030) }
+    let(:oldest_report) { create(:report, created_at: 3.days.ago, school_year: nav_school_year) }
+    let(:middle_report) { create(:report, created_at: 2.days.ago, school_year: nav_school_year) }
 
     before do
       oldest_report
@@ -59,8 +68,9 @@ RSpec.describe Report do
   end
 
   describe "#next_report" do
-    let(:middle_report) { create(:report, created_at: 2.days.ago) }
-    let(:newest_report) { create(:report, created_at: 1.day.ago) }
+    let(:nav_school_year) { create(:school_year, start_year: 2031) }
+    let(:middle_report) { create(:report, created_at: 2.days.ago, school_year: nav_school_year) }
+    let(:newest_report) { create(:report, created_at: 1.day.ago, school_year: nav_school_year) }
 
     before do
       middle_report
@@ -78,10 +88,11 @@ RSpec.describe Report do
 
   describe ".create_for_date" do
     let(:date) { Time.current }
+    let(:create_for_date_school_year) { create(:school_year, start_year: 2040) }
 
     context "when no report exists for the date" do
       before do
-        allow(SchoolYear).to receive(:current).and_return(instance_double(SchoolYear, start_year: 2024))
+        allow(SchoolYear).to receive(:current).and_return(create_for_date_school_year)
         allow(Stats::Main).to receive(:new).and_return(instance_double(Stats::Main,
                                                                        global_data: [["Global"]],
                                                                        bops_data: [["BOP"]],
@@ -106,7 +117,10 @@ RSpec.describe Report do
     end
 
     context "when a report already exists for the date" do
-      before { create(:report, created_at: date) }
+      before do
+        allow(SchoolYear).to receive(:current).and_return(create_for_date_school_year)
+        create(:report, created_at: date, school_year: create_for_date_school_year)
+      end
 
       it "does not create a new report" do
         expect { described_class.create_for_date(date) }.not_to change(described_class, :count)

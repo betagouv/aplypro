@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :report do
+    school_year
     data do
       {
         "global_data" => [["Global Header"], ["Global Data"]],

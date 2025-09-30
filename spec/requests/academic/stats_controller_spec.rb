@@ -39,7 +39,9 @@ RSpec.describe Academic::StatsController do
       end
 
       it "displays navigation when multiple reports exist" do
-        older_report = create(:report, created_at: 1.week.ago)
+        shared_school_year = create(:school_year, start_year: 2080)
+        older_report = create(:report, created_at: 1.week.ago, school_year: shared_school_year)
+        create(:report, created_at: 1.day.ago, school_year: shared_school_year)
         get academic_stats_path(report_id: older_report.id)
         expect(response).to have_http_status(:success)
         expect(response.body).to include("Rapport suivant")
@@ -47,10 +49,11 @@ RSpec.describe Academic::StatsController do
     end
 
     context "when accessing a specific report" do
+      let(:request_school_year) { create(:school_year, start_year: 2090) }
       let(:reports) do
         [
-          create(:report, created_at: 1.week.ago),
-          create(:report, created_at: 1.day.ago)
+          create(:report, created_at: 1.week.ago, school_year: request_school_year),
+          create(:report, created_at: 1.day.ago, school_year: request_school_year)
         ]
       end
       let(:older_report) { reports.first }
