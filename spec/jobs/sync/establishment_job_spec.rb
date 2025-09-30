@@ -14,13 +14,13 @@ RSpec.describe Sync::EstablishmentJob do
   let(:json) { Rails.root.join("mock/data/etab.json").read }
 
   before do
-    allow(EstablishmentApi).to receive(:fetch!).and_return(JSON.parse(json))
+    allow(DataEducationApi::EstablishmentApi).to receive(:fetch!).and_return(JSON.parse(json))
   end
 
   it "calls the EstablishmentApi proxy" do
     described_class.perform_now(establishment)
 
-    expect(EstablishmentApi).to have_received(:fetch!).with(establishment.uai)
+    expect(DataEducationApi::EstablishmentApi).to have_received(:fetch!).with(establishment.uai)
   end
 
   Establishment::API_MAPPING.each_value do |attr|
@@ -30,10 +30,18 @@ RSpec.describe Sync::EstablishmentJob do
   end
 
   context "when the EstablishmentApi returns no data" do
-    let(:json) { { "records" => [] }.to_json }
+    let(:json) { { "results" => [{}] }.to_json }
 
     it "doesn't raise an error" do
       expect { described_class.perform_now(establishment) }.not_to raise_error
+    end
+  end
+
+  context "when the EstablishmentApi more than one result" do
+    let(:json) { { "results" => [{ test1: "1" }, { test2: "2" }] }.to_json }
+
+    it "raise an error" do
+      expect { described_class.perform_now(establishment) }.to raise_error(/there are more than one establishment/)
     end
   end
 end

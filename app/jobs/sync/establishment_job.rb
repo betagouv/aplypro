@@ -5,14 +5,12 @@ module Sync
     queue_as :default
 
     def perform(establishment)
-      raw = EstablishmentApi.fetch!(establishment.uai)
+      data = DataEducationApi::EstablishmentApi.result(establishment.uai)
 
-      return true if raw["records"].blank?
-
-      data = raw["records"].first["fields"]
+      return true if data.blank?
 
       attributes = Establishment::API_MAPPING.to_h do |col, attr|
-        [attr, data[col]]
+        [attr, data.first[col]]
       end
 
       establishment.update!(attributes)

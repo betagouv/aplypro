@@ -107,7 +107,7 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def school_year_range(year = SchoolYear.current.start_year, extended_end_date = nil)
-    range = AcademicDatesRangeFetcher.call(academy_code, year)
+    range = DataEducationApi::AcademicDatesRangeFetcher.call(academy_code, year)
     return range unless extended_end_date
 
     (range.begin..(extended_end_date.presence || range.end))

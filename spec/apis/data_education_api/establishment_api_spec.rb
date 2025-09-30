@@ -2,14 +2,14 @@
 
 require "rails_helper"
 
-describe EstablishmentApi do
+describe DataEducationApi::EstablishmentApi do
   let(:api) { "https://api.com" }
   let(:uai) { "uai" }
 
   before do
     allow(ENV)
       .to receive(:fetch)
-      .with("APLYPRO_ESTABLISHMENTS_DATA_URL")
+      .with("APLYPRO_DATA_EDUCATION_URL")
       .and_return(api)
 
     stub_request(:get, /#{api}/)
@@ -21,9 +21,9 @@ describe EstablishmentApi do
   end
 
   it "calls the right endpoint" do
-    described_class.fetch!(uai)
+    described_class.send(:fetch!, uai)
 
-    url = "#{api}/search?dataset=fr-en-annuaire-education&refine.identifiant_de_l_etablissement=#{uai}"
+    url = "#{api}/fr-en-annuaire-education/records?refine=identifiant_de_l_etablissement:#{uai}"
 
     expect(WebMock).to have_requested(:get, url)
   end
