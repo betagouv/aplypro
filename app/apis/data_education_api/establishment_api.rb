@@ -10,9 +10,13 @@ module DataEducationApi
       def result(uai)
         data = fetch!(uai)["results"]
 
-        raise "there are more than one establishment returned by the API" if data.many?
+        if data.many?
+          data = data.select { |e| e["voie_professionnelle"] == "1" }
 
-        data
+          raise "there are more than one establishment returned by the API" if data.many?
+        end
+
+        data.first || nil
       end
 
       private
