@@ -16,7 +16,7 @@ module DataEducationApi
           raise "there are more than one establishment returned by the API" if data.many?
         end
 
-        data.first
+        data.first || nil
       end
 
       private
