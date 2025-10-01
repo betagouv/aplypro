@@ -39,24 +39,18 @@ describe DataEducationApi::EstablishmentApi do
       it { is_expected.to be_nil }
     end
 
-    context "when the EstablishmentApi more than one result and none of them has 'voie_professionnelle' equal to 1" do
-      let(:json) { { "results" => [{ voie_professionnelle: "0" }, { voie_professionnelle: "0" }] }.to_json }
+    context "when it returns one result" do
+      let(:results) { [{ "test" => "1" }] }
+      let(:json) { { "results" => results }.to_json }
 
-      it { is_expected.to be_nil }
+      it { is_expected.to eq results.first }
     end
 
-    context "when the EstablishmentApi more than one result and one of them has 'voie_professionnelle' equal to 1" do
-      let(:json) { { "results" => [{ voie_professionnelle: "1" }, { voie_professionnelle: "0" }] }.to_json }
+    context "when it returns more than one result" do
+      let(:results) { [{ "test1" => "1" }, { "test2" => "2" }] }
+      let(:json) { { "results" => results }.to_json }
 
-      it { is_expected.not_to be_nil }
-    end
-
-    context "when the EstablishmentApi more than one result and two of them has 'voie_professionnelle' equal to 1" do
-      let(:json) { { "results" => [{ voie_professionnelle: "1" }, { voie_professionnelle: "1" }] }.to_json }
-
-      it "raise an error" do
-        expect { result }.to raise_error(/there are more than one establishment/)
-      end
+      it { is_expected.to eq results.first }
     end
   end
 end
