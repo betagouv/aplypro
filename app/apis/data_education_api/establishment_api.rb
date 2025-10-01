@@ -10,21 +10,19 @@ module DataEducationApi
       def result(uai)
         data = fetch!(uai)["results"]
 
-        if data.many?
-          data = data.select { |e| e["voie_professionnelle"] == "1" }
-
-          raise "there are more than one establishment returned by the API" if data.many?
-        end
-
         data.first || nil
       end
 
       private
 
       def fetch!(uai)
-        response = client.get("records") do |req|
-          req.params["refine"] = "identifiant_de_l_etablissement:#{uai}"
-        end
+        where_clause = "identifiant_de_l_etablissement=\"#{uai}\" AND voie_professionnelle=\"1\""
+        query_params = {
+          where: where_clause,
+          limit: 10
+        }
+
+        response = client.get("records", query_params)
 
         response.body
       end
