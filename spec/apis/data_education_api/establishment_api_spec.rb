@@ -3,16 +3,11 @@
 require "rails_helper"
 
 describe DataEducationApi::EstablishmentApi do
-  let(:api) { "https://api.com" }
   let(:uai) { "uai" }
+  let(:api) { ENV.fetch("APLYPRO_DATA_EDUCATION_URL") }
 
   before do
-    allow(ENV)
-      .to receive(:fetch)
-      .with("APLYPRO_DATA_EDUCATION_URL")
-      .and_return(api)
-
-    stub_request(:get, /#{api}/)
+    stub_request(:get, /#{Regexp.escape(api)}/)
       .to_return(
         status: 200,
         body: JSON.generate({}),
@@ -23,7 +18,8 @@ describe DataEducationApi::EstablishmentApi do
   it "calls the right endpoint" do
     described_class.send(:fetch!, uai)
 
-    url = "#{api}/fr-en-annuaire-education/records?refine=identifiant_de_l_etablissement:#{uai}"
+    where_param = "identifiant_de_l_etablissement%3D%22#{uai}%22%20AND%20voie_professionnelle%3D%221%22"
+    url = "#{api}/fr-en-annuaire-education/records?where=#{where_param}&limit=10"
 
     expect(WebMock).to have_requested(:get, url)
   end
@@ -39,24 +35,10 @@ describe DataEducationApi::EstablishmentApi do
       it { is_expected.to be_nil }
     end
 
-    context "when the EstablishmentApi more than one result and none of them has 'voie_professionnelle' equal to 1" do
-      let(:json) { { "results" => [{ voie_professionnelle: "0" }, { voie_professionnelle: "0" }] }.to_json }
-
-      it { is_expected.to be_nil }
-    end
-
-    context "when the EstablishmentApi more than one result and one of them has 'voie_professionnelle' equal to 1" do
-      let(:json) { { "results" => [{ voie_professionnelle: "1" }, { voie_professionnelle: "0" }] }.to_json }
+    context "when it returns data" do
+      let(:json) { { "results" => [{ voie_professionnelle: "1" }] }.to_json }
 
       it { is_expected.not_to be_nil }
-    end
-
-    context "when the EstablishmentApi more than one result and two of them has 'voie_professionnelle' equal to 1" do
-      let(:json) { { "results" => [{ voie_professionnelle: "1" }, { voie_professionnelle: "1" }] }.to_json }
-
-      it "raise an error" do
-        expect { result }.to raise_error(/there are more than one establishment/)
-      end
     end
   end
 end
