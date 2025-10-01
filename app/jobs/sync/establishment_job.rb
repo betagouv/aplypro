@@ -7,10 +7,10 @@ module Sync
     def perform(establishment)
       data = DataEducationApi::EstablishmentApi.result(establishment.uai)
 
-      return true if data.blank?
+      return true if data.nil?
 
       attributes = Establishment::API_MAPPING.to_h do |col, attr|
-        [attr, data.first[col]]
+        [attr, data[col]]
       end
 
       establishment.update!(attributes)
