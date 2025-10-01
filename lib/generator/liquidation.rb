@@ -21,7 +21,7 @@ module Generator
     def write
       io = StringIO.new
 
-      schooling.pfmps.each do |pfmp|
+      schooling.pfmps.in_state(:validated, :rectified).each do |pfmp|
         @pfmp = pfmp
         @title = "Etat liquidatif"
         @state = "validated"
