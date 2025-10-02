@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Keycloak
-  class Client
+  class Client # rubocop:disable Metrics/ClassLength
     KEYCLOAK_GRANT_TYPE = "password"
 
     def keycloak_host
@@ -89,6 +89,37 @@ module Keycloak
 
       response = connection.delete("realms/#{realm_name}/users/#{user['id']}")
       response.success? ? success_result : failure_result("Failed to remove user: #{response.body}")
+    end
+
+    def get_user(realm_name, user_id)
+      response = connection.get("realms/#{realm_name}/users/#{user_id}")
+      return nil unless response.success?
+
+      response.body
+    end
+
+    def update_user(realm_name, user_id, attributes)
+      response = connection.put("realms/#{realm_name}/users/#{user_id}", attributes)
+      response.success? ? success_result : failure_result("Failed to update user: #{response.body}")
+    end
+
+    def add_aplypro_academie_resp_attributes(realm_name, email, academy_codes)
+      user = find_user_by_email(realm_name, email)
+      return failure_result("User not found") unless user
+
+      user_details = get_user(realm_name, user["id"])
+      return failure_result("Failed to fetch user details") unless user_details
+
+      existing_academy_codes = Array(user_details.dig("attributes", "AplyproAcademieResp")).compact
+      updated_academy_codes = (existing_academy_codes + academy_codes).uniq
+
+      updated_attributes = user_details.merge(
+        "attributes" => user_details.fetch("attributes", {}).merge(
+          "AplyproAcademieResp" => updated_academy_codes
+        )
+      )
+
+      update_user(realm_name, user["id"], updated_attributes)
     end
 
     private
