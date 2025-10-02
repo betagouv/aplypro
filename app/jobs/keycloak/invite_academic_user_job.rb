@@ -12,7 +12,7 @@ module Keycloak
     private
 
     def invite_user_to_keycloak(email, academy_codes)
-      realm_name = ENV.fetch("KEYCLOAK_MAIN_REALM")
+      realm_name = ENV.fetch("KEYCLOAK_ACADEMIC_REALM")
       client = Keycloak::Client.new
       client.add_aplypro_academie_resp_attributes(realm_name, email, academy_codes)
     end
