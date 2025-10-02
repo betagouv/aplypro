@@ -58,7 +58,7 @@ RSpec.describe Keycloak::Client do
     context "when user exists and removal succeeds" do
       before do
         stub_request(:get, "https://keycloak.example.com/admin/realms/test-realm/users")
-          .with(query: { email: "user@example.com" })
+          .with(query: { email: "user@example.com", exact: true })
           .to_return(
             status: 200,
             body: [{ "id" => "user-123", "email" => "user@example.com" }].to_json,
@@ -79,7 +79,7 @@ RSpec.describe Keycloak::Client do
     context "when user does not exist" do
       before do
         stub_request(:get, "https://keycloak.example.com/admin/realms/test-realm/users")
-          .with(query: { email: "nonexistent@example.com" })
+          .with(query: { email: "nonexistent@example.com", exact: true })
           .to_return(status: 200, body: [].to_json, headers: { "Content-Type" => "application/json" })
       end
 
