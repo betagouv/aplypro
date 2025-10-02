@@ -464,7 +464,7 @@ RSpec.describe Schooling do
   end
 
   # rubocop:disable RSpec/MultipleMemoizedHelpers
-  describe "abrogeable?" do
+  describe "any_older_schooling?" do
     let(:student) { create(:student) }
     let(:school_year) { create(:school_year) }
     let(:classe) { create(:classe, school_year: school_year) }
@@ -515,6 +515,14 @@ RSpec.describe Schooling do
       it { expect(schooling.any_older_schooling?).to be true }
     end
 
+    context "when student has another open schooling (on the same school year)" do
+      let(:another_schooling) do
+        create(:schooling, :with_attributive_decision, student: student, classe: another_classe)
+      end
+
+      it { expect(schooling.any_older_schooling?).to be true }
+    end
+
     context "when student has two schoolings on the same school year and the other one is after but no attributive decision" do # rubocop:disable Layout/LineLength
       let(:another_schooling) do
         create(:schooling, student: student, classe: another_classe, end_date: schooling.end_date + 3.months)
@@ -526,17 +534,6 @@ RSpec.describe Schooling do
     context "when student has another schooling on another school_year" do
       let(:another_school_year) { create(:school_year, start_year: 2021) }
       let(:another_classe) { create(:classe, school_year: another_school_year) }
-
-      it { expect(schooling.any_older_schooling?).to be false }
-    end
-
-    context "when student has another schooling with nil start_date but attributive decision" do
-      let(:another_schooling) do
-        create(:schooling, :with_attributive_decision,
-               student: student,
-               classe: another_classe,
-               start_date: nil)
-      end
 
       it { expect(schooling.any_older_schooling?).to be false }
     end
