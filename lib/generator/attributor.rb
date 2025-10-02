@@ -112,6 +112,24 @@
 
       composer.text("Données traitées et durées de conservation", style: :paragraph_title, underline: true)
       composer.text(
+        "La présente décision a été prise sur le fondement d’un traitement algorithmique.
+        Ce traitement permet : d’une part, de calculer le montant de l’allocation de stage, en prenant en compte
+        la durée de la PFMP (date de début et date de fin) et le barème associé au nombre de jours de PFMP effectués."
+      )
+      composer.text(
+        "D’autre part, de s’assurer de la cohérence des données saisies, nécessaires au paiement de l’allocation
+        de stage, en prenant en compte : les coordonnées bancaires, l’information minimale concernant la domiciliation,
+        l’identité et l’âge du bénéficiaire, l’éligibilité de l’élève à percevoir l’allocation de stage."
+      )
+      composer.text(
+        "En application de l’article R. 311-3-1-1 et R. 311-3-1-2 du code des relations entre le public et
+        l’administration, vous pouvez demander la communication des règles définissant ce traitement et leur mise
+        en œuvre dans votre cas auprès du Délégué à la protection des données du ministère chargé de l'éducation
+        nationale (dpd@education.gouv.fr). En cas d’absence de réponse dans un délai d’un mois à la suite de la
+        réception de votre demande par nos services, vous disposez d'un délai de deux mois pour saisir la Commission
+        d'accès aux documents administratifs (CADA) selon les modalités décrites sur le site web www.cada.fr"
+      )
+      composer.text(
         "Pour les élèves scolarisés dans les établissements dépendant du ministère en charge de l’éducation
         nationale ou du ministère chargé de la mer, le numéro INE, les nom, prénoms, l’adresse,
         l’établissement, le module élémentaire de formation et la classe proviennent du traitement SYGNE
