@@ -111,23 +111,43 @@ module Keycloak
       end
     end
 
+    def create_user(realm_name, email, attributes = {})
+      user_payload = {
+        email: email,
+        username: email,
+        enabled: true,
+        emailVerified: false,
+        attributes: attributes
+      }
+
+      response = connection.post("realms/#{realm_name}/users", user_payload)
+      if response.success?
+        success_result("User created successfully")
+      else
+        failure_result("Failed to create user: #{response.body}")
+      end
+    end
+
     def add_aplypro_academie_resp_attributes(realm_name, email, academy_codes)
       user = find_user_by_email(realm_name, email)
-      return failure_result("User not found") unless user
 
-      user_details = get_user(realm_name, user["id"])
-      return failure_result("Failed to fetch user details") unless user_details
+      if user
+        user_details = get_user(realm_name, user["id"])
+        return failure_result("Failed to fetch user details") unless user_details
 
-      existing_academy_codes = Array(user_details.dig("attributes", "AplyproAcademieResp")).compact
-      updated_academy_codes = (existing_academy_codes + academy_codes).uniq
+        existing_academy_codes = Array(user_details.dig("attributes", "AplyproAcademieResp")).compact
+        updated_academy_codes = (existing_academy_codes + academy_codes).uniq
 
-      updated_attributes = user_details.merge(
-        "attributes" => user_details.fetch("attributes", {}).merge(
-          "AplyproAcademieResp" => updated_academy_codes
+        updated_attributes = user_details.merge(
+          "attributes" => user_details.fetch("attributes", {}).merge(
+            "AplyproAcademieResp" => updated_academy_codes
+          )
         )
-      )
 
-      update_user(realm_name, user["id"], updated_attributes)
+        update_user(realm_name, user["id"], updated_attributes)
+      else
+        create_user(realm_name, email, { "AplyproAcademieResp" => academy_codes })
+      end
     end
 
     private
