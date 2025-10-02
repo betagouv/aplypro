@@ -3,7 +3,7 @@
 
   .fr-grid-row
     .fr-col-md-8.fr-mb-3w
-      %h2.fr-h4 Suppression d'utilisateur Keycloak
+      %h2.fr-h4 Suppression d'un utilisateur
       %p.fr-text--sm.fr-mb-3w
         Si un utilisateur rencontre des problèmes de connexion via la FIM la suppression de son compte dans l'instance Keycloak Aplypro peut être déclenchée ci-dessous pour résoudre certains problèmes :
 
@@ -23,9 +23,9 @@
 
   .fr-grid-row.fr-mt-6w
     .fr-col-md-8.fr-mb-3w
-      %h2.fr-h4 Invitation d'utilisateur
+      %h2.fr-h4 Invitation d'un utilisateur académique
       %p.fr-text--sm.fr-mb-3w
-        Inviter un utilisateur existant dans Keycloak en lui attribuant des droits sur une ou plusieurs académies :
+        Inviter un utilisateur académique en lui attribuant des droits sur une ou plusieurs académies :
 
       = turbo_stream_from "keycloak_invitation_status"
       = form_with url: invite_keycloak_user_academic_tools_path, method: :post, local: false, data: { turbo_frame: false } do |form|
@@ -40,7 +40,7 @@
             .fr-input-group
               = form.label :academy_codes, "Codes académie", class: "fr-label"
               %span.fr-hint-text Sélectionnez une ou plusieurs académies
-              = form.select :academy_codes, options_for_select(authorised_academy_codes), {}, { multiple: true, class: "fr-select", required: true, size: 8 }
+              = form.select :academy_codes, options_for_select(authorised_academy_codes), {}, { multiple: true, class: "fr-select", required: true, size: 4 }
 
         .fr-btns-group.fr-btns-group--inline.fr-mt-3w
           = form.submit "Inviter l'utilisateur", class: "fr-btn fr-btn--secondary"
