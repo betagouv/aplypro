@@ -76,7 +76,7 @@ module Keycloak
     end
 
     def find_user_by_email(realm_name, email)
-      response = connection.get("realms/#{realm_name}/users", { email: email })
+      response = connection.get("realms/#{realm_name}/users", { email: email, exact: true })
       return nil unless response.success?
 
       users = response.body
@@ -88,7 +88,11 @@ module Keycloak
       return failure_result("User not found") unless user
 
       response = connection.delete("realms/#{realm_name}/users/#{user['id']}")
-      response.success? ? success_result : failure_result("Failed to remove user: #{response.body}")
+      if response.success?
+        success_result("User removed successfully")
+      else
+        failure_result("Failed to remove user: #{response.body}")
+      end
     end
 
     def get_user(realm_name, user_id)
@@ -100,7 +104,11 @@ module Keycloak
 
     def update_user(realm_name, user_id, attributes)
       response = connection.put("realms/#{realm_name}/users/#{user_id}", attributes)
-      response.success? ? success_result : failure_result("Failed to update user: #{response.body}")
+      if response.success?
+        success_result("User updated successfully")
+      else
+        failure_result("Failed to update user: #{response.body}")
+      end
     end
 
     def add_aplypro_academie_resp_attributes(realm_name, email, academy_codes)
@@ -124,8 +132,8 @@ module Keycloak
 
     private
 
-    def success_result
-      { success: true, message: "User removed successfully" }
+    def success_result(message)
+      { success: true, message: message }
     end
 
     def failure_result(error)
