@@ -50,7 +50,7 @@ module WebmockHelpers
 
     WebMock.stub_request(:get, url)
            .with(
-             query: { "etat-scolarisation" => true, "annee-scolaire" => school_year },
+             query: { "annee-scolaire" => school_year },
              headers: {
                "Accept" => "*/*",
                "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
