@@ -1,49 +1,46 @@
 .fr-container
-  %h1.fr-h3 Outils
+  %h1.fr-h3 Outils de gestion
 
-  .fr-grid-row
-    .fr-col-md-8.fr-mb-3w
-      %h2.fr-h4 Suppression d'un utilisateur
+  .fr-grid-row.fr-grid-row--gutters
+    .fr-col-12.fr-col-lg-6
+      %h2.fr-h4
+        %span.fr-icon-user-add-line.fr-icon--lg.fr-mr-1v{"aria-hidden": "true"}
+        Invitation d'un utilisateur académique
       %p.fr-text--sm.fr-mb-3w
-        Si un utilisateur rencontre des problèmes de connexion via la FIM la suppression de son compte dans l'instance Keycloak Aplypro peut être déclenchée ci-dessous pour résoudre certains problèmes :
+        Inviter un utilisateur académique en lui attribuant des droits sur une ou plusieurs académies. Si l'utilisateur n'existe pas encore, il sera créé automatiquement.
+
+      = turbo_stream_from "keycloak_invitation_status"
+      = form_with url: invite_keycloak_user_academic_tools_path, method: :post, local: false, data: { turbo_frame: false } do |form|
+        .fr-input-group
+          = form.label :email, "Email de l'utilisateur", class: "fr-label"
+          = form.email_field :email, class: "fr-input", required: true, placeholder: "utilisateur@ac-academie.fr"
+
+        .fr-input-group
+          = form.label :academy_codes, "Codes académie", class: "fr-label"
+          %span.fr-hint-text Sélectionnez une ou plusieurs académies
+          = form.select :academy_codes, options_for_select(authorised_academy_codes.map { |code| ["#{code} - #{Establishment::ACADEMY_LABELS[code]}", code] }), {}, { multiple: true, class: "fr-select", required: true, size: 4 }
+
+        .fr-mt-3w
+          = form.submit "Inviter l'utilisateur", class: "fr-btn"
+
+        .fr-mt-3w
+          #keycloak-invitation-status
+
+    .fr-col-12.fr-col-lg-6
+      %h2.fr-h4
+        %span.fr-icon-delete-line.fr-icon--lg.fr-mr-1v{"aria-hidden": "true"}
+        Suppression d'un utilisateur
+      %p.fr-text--sm.fr-mb-3w
+        Si un utilisateur rencontre des problèmes de connexion via la FIM, la suppression de son compte dans l'instance Keycloak Aplypro peut résoudre certains problèmes.
 
       = turbo_stream_from "keycloak_removal_status"
       = form_with url: remove_keycloak_user_academic_tools_path, method: :post, local: false, data: { turbo_frame: false } do |form|
-        .fr-grid-row.fr-mb-3w
-          .fr-col-md-8.fr-mr-3w
-            .fr-input-group
-              = form.label :email, "Email de l'utilisateur", class: "fr-label"
-              = form.email_field :email, class: "fr-input", required: true
+        .fr-input-group
+          = form.label :email, "Email de l'utilisateur", class: "fr-label"
+          = form.email_field :email, class: "fr-input", required: true, placeholder: "utilisateur@ac-academie.fr"
 
-        .fr-btns-group.fr-btns-group--inline.fr-mt-3w
+        .fr-mt-3w
           = form.submit "Supprimer l'utilisateur", class: "fr-btn fr-btn--secondary"
 
         .fr-mt-3w
           #keycloak-removal-status
-
-  .fr-grid-row.fr-mt-6w
-    .fr-col-md-8.fr-mb-3w
-      %h2.fr-h4 Invitation d'un utilisateur académique
-      %p.fr-text--sm.fr-mb-3w
-        Inviter un utilisateur académique en lui attribuant des droits sur une ou plusieurs académies :
-
-      = turbo_stream_from "keycloak_invitation_status"
-      = form_with url: invite_keycloak_user_academic_tools_path, method: :post, local: false, data: { turbo_frame: false } do |form|
-        .fr-grid-row.fr-mb-3w
-          .fr-col-md-8.fr-mr-3w
-            .fr-input-group
-              = form.label :email, "Email de l'utilisateur", class: "fr-label"
-              = form.email_field :email, class: "fr-input", required: true
-
-        .fr-grid-row.fr-mb-3w
-          .fr-col-md-8.fr-mr-3w
-            .fr-input-group
-              = form.label :academy_codes, "Codes académie", class: "fr-label"
-              %span.fr-hint-text Sélectionnez une ou plusieurs académies
-              = form.select :academy_codes, options_for_select(authorised_academy_codes), {}, { multiple: true, class: "fr-select", required: true, size: 4 }
-
-        .fr-btns-group.fr-btns-group--inline.fr-mt-3w
-          = form.submit "Inviter l'utilisateur", class: "fr-btn fr-btn--secondary"
-
-        .fr-mt-3w
-          #keycloak-invitation-status
