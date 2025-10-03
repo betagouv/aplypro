@@ -91,6 +91,129 @@ RSpec.describe Keycloak::Client do
     end
   end
 
+  describe "#find_user_by_email" do
+    context "when user exists" do
+      before do
+        stub_request(:get, "https://keycloak.example.com/admin/realms/test-realm/users")
+          .with(query: { email: "user@example.com", exact: true })
+          .to_return(
+            status: 200,
+            body: [{ "id" => "user-123", "email" => "user@example.com" }].to_json,
+            headers: { "Content-Type" => "application/json" }
+          )
+      end
+
+      it "returns the user" do
+        client = described_class.new
+        result = client.find_user_by_email("test-realm", "user@example.com")
+        expect(result).to eq({ "id" => "user-123", "email" => "user@example.com" })
+      end
+    end
+
+    context "when user does not exist" do
+      before do
+        stub_request(:get, "https://keycloak.example.com/admin/realms/test-realm/users")
+          .with(query: { email: "nonexistent@example.com", exact: true })
+          .to_return(status: 200, body: [].to_json, headers: { "Content-Type" => "application/json" })
+      end
+
+      it "returns nil" do
+        client = described_class.new
+        result = client.find_user_by_email("test-realm", "nonexistent@example.com")
+        expect(result).to be_nil
+      end
+    end
+  end
+
+  describe "#create_user" do
+    context "when creation succeeds" do
+      before do
+        stub_request(:post, "https://keycloak.example.com/admin/realms/test-realm/users")
+          .with(
+            body: {
+              email: "newuser@example.com",
+              username: "newuser@example.com",
+              enabled: true,
+              emailVerified: false,
+              attributes: { "AplyproAcademieResp" => ["06"] }
+            }.to_json
+          )
+          .to_return(status: 201, body: "")
+      end
+
+      it "creates user successfully" do
+        client = described_class.new
+        result = client.create_user("test-realm", "newuser@example.com", { "AplyproAcademieResp" => ["06"] })
+        expect(result).to eq({ success: true, message: "User created successfully" })
+      end
+    end
+
+    context "when creation fails" do
+      before do
+        stub_request(:post, "https://keycloak.example.com/admin/realms/test-realm/users")
+          .to_return(status: 409, body: { error: "User already exists" }.to_json)
+      end
+
+      it "returns failure result" do
+        client = described_class.new
+        result = client.create_user("test-realm", "newuser@example.com")
+        expect(result[:success]).to be false
+        expect(result[:error]).to include("Failed to create user")
+      end
+    end
+  end
+
+  describe "#add_aplypro_academie_resp_attributes" do
+    context "when user exists" do
+      before do
+        stub_request(:get, "https://keycloak.example.com/admin/realms/test-realm/users")
+          .with(query: { email: "user@example.com", exact: true })
+          .to_return(
+            status: 200,
+            body: [{ "id" => "user-123", "email" => "user@example.com" }].to_json,
+            headers: { "Content-Type" => "application/json" }
+          )
+
+        stub_request(:get, "https://keycloak.example.com/admin/realms/test-realm/users/user-123")
+          .to_return(
+            status: 200,
+            body: {
+              "id" => "user-123",
+              "email" => "user@example.com",
+              "attributes" => { "AplyproAcademieResp" => ["01"] }
+            }.to_json,
+            headers: { "Content-Type" => "application/json" }
+          )
+
+        stub_request(:put, "https://keycloak.example.com/admin/realms/test-realm/users/user-123")
+          .to_return(status: 204, body: "")
+      end
+
+      it "updates user with merged academy codes" do
+        client = described_class.new
+        result = client.add_aplypro_academie_resp_attributes("test-realm", "user@example.com", ["06"])
+        expect(result).to eq({ success: true, message: "User updated successfully" })
+      end
+    end
+
+    context "when user does not exist" do
+      before do
+        stub_request(:get, "https://keycloak.example.com/admin/realms/test-realm/users")
+          .with(query: { email: "newuser@example.com", exact: true })
+          .to_return(status: 200, body: [].to_json, headers: { "Content-Type" => "application/json" })
+
+        stub_request(:post, "https://keycloak.example.com/admin/realms/test-realm/users")
+          .to_return(status: 201, body: "")
+      end
+
+      it "creates user with academy codes" do
+        client = described_class.new
+        result = client.add_aplypro_academie_resp_attributes("test-realm", "newuser@example.com", ["06"])
+        expect(result).to eq({ success: true, message: "User created successfully" })
+      end
+    end
+  end
+
   describe "error handling" do
     context "when environment variables are missing" do
       before do
