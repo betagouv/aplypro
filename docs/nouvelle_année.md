@@ -36,7 +36,12 @@ Un jour avant l'ouverture : créer la nouvelle année scolaire et déclencher le
 `WageSeeder.seed('data/wages/xxxx_xxxx.csv')`
 `MefSeeder.seed('data/mefs/xxxx_xxxx.csv')`
 
-### 9 - Récupération proactive des classes de la nouvelle année
+### 9 - Création de potentielles exclusions du dispositif
+
+Exemple :
+`Exception.create!(uai: "XXXXX", mef_code: "132131312312", school_year: SchoolYear.current)`
+
+### 10 - Récupération proactive des classes de la nouvelle année
 
 `Sync::AllClassesJob.perform_later`
 

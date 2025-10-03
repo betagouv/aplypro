@@ -45,6 +45,6 @@ every :weekday, at: "12:30AM" do
   runner "JanitorJob.perform_later"
 end
 
-every :monday, at: "6:30AM" do
+every :sunday, at: "4:00PM" do
   runner "GenerateReportJob.perform_later"
 end
