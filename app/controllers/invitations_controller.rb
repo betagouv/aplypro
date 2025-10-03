@@ -6,17 +6,17 @@ class InvitationsController < ApplicationController
   before_action :add_new_breadcrumbs, only: %i[new create]
 
   def index
-    @invitations = current_establishment.invitations
+    @invitations = current_establishment.establishment_invitations
 
     infer_page_title
   end
 
   def new
-    @invitation = Invitation.new
+    @invitation = EstablishmentInvitation.new
   end
 
   def create
-    @invitation = Invitation.new(invitation_params)
+    @invitation = EstablishmentInvitation.new(invitation_params)
 
     if @invitation.save
       redirect_to establishment_invitations_path, notice: t("flash.invites.created", email: @invitation.email)
@@ -44,7 +44,7 @@ class InvitationsController < ApplicationController
   end
 
   def set_invitation
-    @invitation = current_establishment.invitations.find(params[:id])
+    @invitation = current_establishment.establishment_invitations.find(params[:id])
   end
 
   def check_authorised_to_invite

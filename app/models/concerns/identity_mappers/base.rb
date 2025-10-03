@@ -62,7 +62,7 @@ module IdentityMappers
     end
 
     def establishments_invited_for(email)
-      Establishment.joins(:invitations).where("invitations.email": email)
+      Establishment.joins(:invitations).where("invitations.email": email, "invitations.type": "EstablishmentInvitation")
     end
 
     def establishments_delegated

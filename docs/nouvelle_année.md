@@ -32,11 +32,16 @@ Ex: Scénario de validation et paiement d'une PFMP avec un nouveau plafond.
 
 Un jour avant l'ouverture : créer la nouvelle année scolaire et déclencher les seeders sur la nouvelle donnée.
 
-`SchoolYear.create!(start_year: xxxx)`
-`WageSeeder.seed('data/wages/xxxx_xxxx.csv')`
-`MefSeeder.seed('data/mefs/xxxx_xxxx.csv')`
+`SchoolYear.create!(start_year: SchoolYear.current.start_year + 1)`
+`WageSeeder.seed(['data/wages/xxxx_xxxx.csv'])`
+`MefSeeder.seed(['data/mefs/xxxx_xxxx.csv'])`
 
-### 9 - Récupération proactive des classes de la nouvelle année
+### 9 - Création de potentielles exclusions du dispositif
+
+Exemple :
+`Exclusion.create!(uai: "XXXXX", mef_code: "132131312312", school_year: SchoolYear.current)`
+
+### 10 - Récupération proactive des classes de la nouvelle année
 
 `Sync::AllClassesJob.perform_later`
 

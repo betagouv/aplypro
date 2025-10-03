@@ -91,7 +91,7 @@ RSpec.describe IdentityMappers::Base do
 
     context "when there is an invitation for the email, even for an UAI not in the FrEduRne" do
       let(:establishment) { create(:establishment, uai: "invited") }
-      let(:invitation) { create(:invitation, email: email, establishment: establishment) }
+      let(:invitation) { create(:establishment_invitation, email: email, establishment: establishment) }
 
       before do
         invitation

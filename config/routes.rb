@@ -57,6 +57,7 @@ Rails.application.routes.draw do
     resources :tools, only: [:index] do
       collection do
         post "remove_keycloak_user"
+        post "invite_keycloak_user"
       end
     end
 
