@@ -43,6 +43,7 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validates :students_provider, inclusion: { in: PROVIDERS }
 
   has_many :invitations, dependent: :nullify
+  has_many :establishment_invitations, dependent: :nullify
   has_many :ribs, dependent: :nullify
 
   has_many :establishment_user_roles, dependent: :destroy

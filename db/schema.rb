@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_26_133923) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_03_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "unaccent"
@@ -170,13 +170,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_26_133923) do
   end
 
   create_table "invitations", force: :cascade do |t|
-    t.bigint "establishment_id", null: false
+    t.bigint "establishment_id"
     t.bigint "user_id", null: false
     t.string "email", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "type"
+    t.text "academy_codes", default: [], array: true
     t.index ["establishment_id", "email"], name: "index_invitations_on_establishment_id_and_email", unique: true
     t.index ["establishment_id"], name: "index_invitations_on_establishment_id"
+    t.index ["type"], name: "index_invitations_on_type"
     t.index ["user_id"], name: "index_invitations_on_user_id"
   end
 
