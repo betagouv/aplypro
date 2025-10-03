@@ -8,6 +8,7 @@ RSpec.describe Keycloak::InviteAcademicUserJob do
     let(:academy_codes) { %w[06 01] }
     let(:stream_id) { "test_stream" }
     let(:client) { instance_double(Keycloak::Client) }
+    let(:success_result) { { success: true, message: "User updated successfully" } }
 
     before do
       allow(ENV).to receive(:fetch).with("KEYCLOAK_ACADEMIC_REALM").and_return("test-academic-realm")
@@ -18,18 +19,14 @@ RSpec.describe Keycloak::InviteAcademicUserJob do
     it "invites user and broadcasts result" do
       allow(client).to receive(:add_aplypro_academie_resp_attributes)
         .with("test-academic-realm", email, academy_codes)
-        .and_return({ success: true, message: "User updated successfully" })
+        .and_return(success_result)
 
       described_class.new.perform(email, academy_codes, stream_id)
 
       expect(Turbo::StreamsChannel).to have_received(:broadcast_render_to).with(
         stream_id,
         partial: "academic/tools/keycloak_invitation_result",
-        locals: {
-          result: { success: true, message: "User updated successfully" },
-          email: email,
-          academy_codes: academy_codes
-        }
+        locals: { result: success_result, email: email, academy_codes: academy_codes }
       )
     end
 
