@@ -5,5 +5,6 @@ class GenerateReportJob < ApplicationJob
 
   def perform(date = Time.current)
     Report.create_for_date(date)
+    WarmCachesJob.perform_later
   end
 end
