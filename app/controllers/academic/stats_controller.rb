@@ -30,10 +30,14 @@ module Academic
     end
 
     def academy_statistics
-      establishments = current_academy_establishments
-      establishment_ids = establishments.pluck(:id)
-      calculator = Academic::StatsProgressionCalculator.new(@report, selected_academy, {})
-      calculator.calculate_current_stats(establishments, establishment_ids, selected_school_year)
+      cache_key = "academy_stats/#{selected_academy}/report/#{@report.id}/school_year/#{selected_school_year.id}"
+
+      Rails.cache.fetch(cache_key, expires_in: 1.week) do
+        establishments = current_academy_establishments
+        establishment_ids = establishments.pluck(:id)
+        calculator = Academic::StatsProgressionCalculator.new(@report, selected_academy, {})
+        calculator.calculate_current_stats(establishments, establishment_ids, selected_school_year)
+      end
     end
 
     def current_academy_establishments
@@ -44,8 +48,12 @@ module Academic
     end
 
     def filtered_establishments_data_from_report
-      full_data = @report.data["establishments_data"]
-      filter_establishments_data(full_data)
+      cache_key = "filtered_establishments_data/#{selected_academy}/report/#{@report.id}/school_year/#{selected_school_year.id}"
+
+      Rails.cache.fetch(cache_key, expires_in: 1.week) do
+        full_data = @report.data["establishments_data"]
+        filter_establishments_data(full_data)
+      end
     end
 
     def filter_establishments_data(full_data)
@@ -63,7 +71,11 @@ module Academic
     end
 
     def calculate_progressions
-      Academic::StatsProgressionCalculator.new(@report, selected_academy, @academy_stats).calculate
+      cache_key = "academy_stats_progressions/#{selected_academy}/report/#{@report.id}/school_year/#{selected_school_year.id}"
+
+      Rails.cache.fetch(cache_key, expires_in: 1.week) do
+        Academic::StatsProgressionCalculator.new(@report, selected_academy, @academy_stats).calculate
+      end
     end
   end
 end
