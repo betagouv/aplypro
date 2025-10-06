@@ -58,6 +58,8 @@ Rails.application.routes.draw do
       collection do
         post "remove_keycloak_user"
         post "invite_keycloak_user"
+        get "academic_invitations"
+        get "establishment_invitations"
       end
     end
 

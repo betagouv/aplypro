@@ -1,0 +1,25 @@
+.fr-container
+  %h1.fr-h3 Invitations d'établissement
+
+  %p.fr-text--sm.fr-mb-3w
+    = link_to "Retour aux outils de gestion", academic_tools_path, class: "fr-link fr-icon-arrow-left-line fr-link--icon-left"
+
+  - if @invitations.any?
+    .fr-table.fr-table--bordered
+      %table
+        %caption Liste des invitations d'établissement que vous avez créées
+        %thead
+          %tr
+            %th{scope: "col"} Email
+            %th{scope: "col"} Établissement
+            %th{scope: "col"} Date d'invitation
+        %tbody
+          - @invitations.each do |invitation|
+            %tr
+              %td= invitation.email
+              %td= invitation.establishment.name
+              %td= l(invitation.created_at, format: :short)
+  - else
+    .fr-callout
+      %p.fr-callout__text
+        Aucune invitation d'établissement n'a été créée pour le moment.

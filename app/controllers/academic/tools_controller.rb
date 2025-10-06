@@ -4,6 +4,16 @@ module Academic
   class ToolsController < Academic::ApplicationController
     def index; end
 
+    def academic_invitations
+      @invitations = AcademicInvitation.where(user: current_user).order(created_at: :desc)
+      infer_page_title
+    end
+
+    def establishment_invitations
+      @invitations = EstablishmentInvitation.where(user: current_user).order(created_at: :desc)
+      infer_page_title
+    end
+
     def remove_keycloak_user
       email = params[:email]
       stream_id = "keycloak_removal_status"
