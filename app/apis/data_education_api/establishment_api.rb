@@ -10,7 +10,7 @@ module DataEducationApi
       def result(uai)
         data = fetch!(uai)["results"]
 
-        data.first || nil
+        data&.first
       end
 
       private
