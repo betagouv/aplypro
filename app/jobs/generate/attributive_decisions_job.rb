@@ -11,6 +11,8 @@ module Generate
     ].freeze
 
     def perform(schoolings)
+      return if schoolings.blank?
+
       establishment = schoolings.first.establishment
       @uai = establishment.uai
 
