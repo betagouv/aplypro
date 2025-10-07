@@ -201,6 +201,8 @@ fr:
           index: Liste des utilisateurs
         tools:
           index: Outils de gestion
+        stats:
+          index: Statistiques
       stats:
         index: Statistiques
       school_years:

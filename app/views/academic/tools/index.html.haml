@@ -4,7 +4,7 @@
   .fr-callout.fr-mb-3w
     %h2.fr-callout__title.fr-text--lg Types d'invitations
     %p.fr-callout__text
-      Deux types d'invitations sont disponibles :
+      Deux types d'invitations sont disponibles gérés tous les deux via l'instance Keycloak :
     %ul.fr-callout__text
       %li
         %strong Invitations académiques :
@@ -45,9 +45,9 @@
     .fr-col-12.fr-col-lg-6
       %h2.fr-h4
         %span.fr-icon-delete-line.fr-icon--lg.fr-mr-1v{"aria-hidden": "true"}
-        Suppression d'un utilisateur
+        Suppression d'un utilisateur établissement
       %p.fr-text--sm.fr-mb-3w
-        Si un utilisateur rencontre des problèmes de connexion via la FIM, la suppression de son compte dans l'instance Keycloak Aplypro peut résoudre certains problèmes.
+        Si un utilisateur établissement rencontre des problèmes de connexion via la FIM, la suppression de son compte dans l'instance Keycloak Aplypro peut résoudre certains problèmes.
 
       = turbo_stream_from "keycloak_removal_status"
       = form_with url: remove_keycloak_user_academic_tools_path, method: :post, local: false, data: { turbo_frame: false } do |form|
