@@ -199,6 +199,8 @@ fr:
         users:
           select_academy: Choix de l'académie
           index: Liste des utilisateurs
+        tools:
+          index: Outils de gestion
       stats:
         index: Statistiques
       school_years:

@@ -30,40 +30,34 @@ module Academic
     end
 
     def academy_statistics
-      establishments = current_academy_establishments
-      establishment_ids = establishments.pluck(:id)
-      calculator = Academic::StatsProgressionCalculator.new(@report, selected_academy, {})
-      calculator.calculate_current_stats(establishments, establishment_ids, selected_school_year)
-    end
+      cache_key = "academy_stats/#{selected_academy}/report/#{@report.id}/school_year/#{selected_school_year.id}"
 
-    def current_academy_establishments
-      Establishment.joins(:classes)
-                   .where(academy_code: selected_academy,
-                          "classes.school_year_id": selected_school_year)
-                   .distinct
+      Rails.cache.fetch(cache_key, expires_in: 1.week) do
+        stats_builder.calculate_academy_stats(@report)
+      end
     end
 
     def filtered_establishments_data_from_report
-      full_data = @report.data["establishments_data"]
-      filter_establishments_data(full_data)
-    end
+      cache_key = "filtered_establishments_data/#{selected_academy}/report/#{@report.id}/" \
+                  "school_year/#{selected_school_year.id}"
 
-    def filter_establishments_data(full_data)
-      titles = full_data.first
-      establishment_rows = full_data[1..]
-
-      academy_establishments = current_academy_establishments.pluck(:uai)
-
-      filtered_rows = establishment_rows.select do |row|
-        uai = row[0]
-        academy_establishments.include?(uai)
+      Rails.cache.fetch(cache_key, expires_in: 1.week) do
+        full_data = @report.data["establishments_data"]
+        stats_builder.filter_establishments_data(full_data)
       end
-
-      [titles, *filtered_rows]
     end
 
     def calculate_progressions
-      Academic::StatsProgressionCalculator.new(@report, selected_academy, @academy_stats).calculate
+      cache_key = "academy_stats_progressions/#{selected_academy}/report/#{@report.id}/" \
+                  "school_year/#{selected_school_year.id}"
+
+      Rails.cache.fetch(cache_key, expires_in: 1.week) do
+        stats_builder.calculate_progressions(@report, @academy_stats)
+      end
+    end
+
+    def stats_builder
+      @stats_builder ||= Academic::StatsDataBuilder.new(selected_academy, selected_school_year)
     end
   end
 end
