@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_03_000001) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_03_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "unaccent"
@@ -177,7 +177,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_03_000001) do
     t.datetime "updated_at", null: false
     t.string "type"
     t.text "academy_codes", default: [], array: true
-    t.index ["establishment_id", "email"], name: "index_invitations_on_establishment_id_and_email", unique: true
+    t.index ["email"], name: "index_academic_invitations_on_email", unique: true, where: "((type)::text = 'AcademicInvitation'::text)"
+    t.index ["establishment_id", "email"], name: "index_establishment_invitations_on_establishment_and_email", unique: true, where: "((type)::text = 'EstablishmentInvitation'::text)"
     t.index ["establishment_id"], name: "index_invitations_on_establishment_id"
     t.index ["type"], name: "index_invitations_on_type"
     t.index ["user_id"], name: "index_invitations_on_user_id"
