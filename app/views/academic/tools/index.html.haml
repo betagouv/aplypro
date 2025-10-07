@@ -1,6 +1,22 @@
 .fr-container
   %h1.fr-h3 Outils de gestion
 
+  .fr-callout.fr-mb-3w
+    %h2.fr-callout__title.fr-text--lg Types d'invitations
+    %p.fr-callout__text
+      Deux types d'invitations sont disponibles :
+    %ul.fr-callout__text
+      %li
+        %strong Invitations académiques :
+        permettent d'inviter un utilisateur en lui attribuant des droits sur une ou plusieurs académies. Si l'utilisateur n'existe pas, il sera créé automatiquement.
+        %br
+        = link_to "Voir mes invitations académiques", academic_invitations_academic_tools_path, class: "fr-link fr-icon-arrow-right-line fr-link--icon-right fr-mt-1v"
+      %li
+        %strong Invitations d'établissement :
+        permettent d'inviter un utilisateur à rejoindre un établissement spécifique.
+        %br
+        = link_to "Voir mes invitations d'établissement", establishment_invitations_academic_tools_path, class: "fr-link fr-icon-arrow-right-line fr-link--icon-right fr-mt-1v"
+
   .fr-grid-row.fr-grid-row--gutters
     .fr-col-12.fr-col-lg-6
       %h2.fr-h4
