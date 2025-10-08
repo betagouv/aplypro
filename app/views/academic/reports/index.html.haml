@@ -1,0 +1,26 @@
+.fr-container
+  %h1.fr-h3 Historique des rapports
+
+  - if @reports.any?
+    .fr-grid-row.fr-grid-row--gutters
+      .fr-col-12
+        .fr-table.fr-table--bordered
+          %table
+            %thead
+              %tr
+                %th{scope: "col"} Date de génération
+                %th{scope: "col"} Année scolaire
+                %th{scope: "col"} Actions
+            %tbody
+              - @reports.each do |report|
+                %tr
+                  %td= l(report.created_at, format: :long)
+                  %td= "#{report.school_year.start_year} - #{report.school_year.start_year + 1}"
+                  %td
+                    = link_to "Voir les statistiques", academic_stats_path(report_id: report.id), class: "fr-btn fr-btn--sm"
+  - else
+    .fr-grid-row.fr-grid-row--gutters
+      .fr-col-12
+        .fr-alert.fr-alert--info
+          %h3.fr-alert__title Aucun rapport disponible
+          %p Aucun rapport de statistiques n'a encore été généré.

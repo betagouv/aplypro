@@ -1,4 +1,8 @@
 .fr-container
+  .fr-grid-row.fr-grid-row--gutters
+    .fr-col-12.fr-mb-2w
+      = link_to "← Historique des rapports", academic_reports_path, class: "fr-btn fr-btn--sm fr-btn--tertiary"
+
   %h1.fr-h3 Statistiques de l'académie
 
   - if @report

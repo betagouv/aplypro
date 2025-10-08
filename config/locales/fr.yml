@@ -203,6 +203,8 @@ fr:
           index: Outils de gestion
         stats:
           index: Statistiques
+        reports:
+          index: Historique des rapports
       stats:
         index: Statistiques
       school_years:
