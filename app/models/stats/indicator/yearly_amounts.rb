@@ -12,7 +12,11 @@ module Stats
       end
 
       def title
-        "Somme des montants annuels"
+        "Montant annuel total"
+      end
+
+      def tooltip_key
+        "stats.yearly_amounts"
       end
 
       def with_mef_and_establishment

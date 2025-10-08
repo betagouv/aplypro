@@ -4,9 +4,9 @@ module Stats
   module Indicator
     class PaymentRequestStates < Count
       STATE_FOR_TITLE = {
-        sent: "envoyées à l'ASP",
-        integrated: "intégrées par l'ASP",
-        paid: "payées par l'ASP"
+        sent: "envoyées",
+        integrated: "intégrées",
+        paid: "payées"
       }.freeze
 
       def initialize(start_year, state)
@@ -21,7 +21,11 @@ module Stats
       end
 
       def title
-        "Demandes de paiement #{STATE_FOR_TITLE[@state]}"
+        "Demandes #{STATE_FOR_TITLE[@state]}"
+      end
+
+      def tooltip_key
+        "stats.payment_request_#{@state}"
       end
 
       def with_mef_and_establishment
