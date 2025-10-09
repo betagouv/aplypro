@@ -12,7 +12,7 @@ module Stats
       end
 
       def title
-        "DA éditées"
+        "DA"
       end
 
       def tooltip_key

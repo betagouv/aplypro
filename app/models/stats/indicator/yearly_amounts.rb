@@ -12,7 +12,7 @@ module Stats
       end
 
       def title
-        "Montant annuel total"
+        "Mt. annuel total"
       end
 
       def tooltip_key

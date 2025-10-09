@@ -12,7 +12,11 @@ module Stats
       end
 
       def title
-        "Coordonnées bancaires saisies"
+        "Coord. bancaires"
+      end
+
+      def tooltip_key
+        "stats.ribs"
       end
 
       def with_mef_and_establishment

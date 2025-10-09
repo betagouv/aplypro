@@ -10,7 +10,11 @@ module Stats
       end
 
       def title
-        "Toutes les PFMPs (même non complétées)"
+        "Toutes PFMPs"
+      end
+
+      def tooltip_key
+        "stats.pfmps"
       end
 
       def with_mef_and_establishment

@@ -10,7 +10,11 @@ module Stats
       end
 
       def title
-        "Scolarités concernées"
+        "Scolarités"
+      end
+
+      def tooltip_key
+        "stats.schoolings"
       end
 
       def with_mef_and_establishment
