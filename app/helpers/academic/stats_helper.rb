@@ -49,5 +49,19 @@ module Academic
         "background-color: var(--red-marianne-950-100);"
       end
     end
+
+    def column_empty?(data, column_index)
+      data[1..].all? do |row|
+        value = row[column_index]
+        value.nil? || (value.respond_to?(:nan?) && value.nan?)
+      end
+    end
+
+    def visible_columns(data)
+      return [] if data.empty?
+
+      headers = data.first
+      (0...headers.length).reject { |index| column_empty?(data, index) }
+    end
   end
 end

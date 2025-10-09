@@ -28,6 +28,7 @@ module Academic
       @menj_academies_data = @report.data["menj_academies_data"]
       @establishments_data = filtered_establishments_data_from_report
       @academy_stats_progressions = calculate_progressions
+      @indicators_metadata = @stats.indicators_with_metadata
     end
 
     def academy_statistics

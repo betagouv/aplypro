@@ -4,9 +4,9 @@ module Stats
   module Indicator
     class PaymentRequestStateAmounts < Sum
       STATE_FOR_TITLE = {
-        sent: "envoyé à l'ASP",
-        integrated: "intégré par l'ASP",
-        paid: "payé par l'ASP"
+        sent: "envoyé",
+        integrated: "intégré",
+        paid: "payé"
       }.freeze
 
       def initialize(start_year, state)
@@ -24,6 +24,10 @@ module Stats
 
       def title
         "Montant #{STATE_FOR_TITLE[@state]}"
+      end
+
+      def tooltip_key
+        "stats.payment_amount_#{@state}"
       end
 
       def with_mef_and_establishment

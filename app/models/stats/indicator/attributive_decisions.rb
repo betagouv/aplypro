@@ -12,7 +12,11 @@ module Stats
       end
 
       def title
-        "Décisions d'attributions éditées"
+        "DA éditées"
+      end
+
+      def tooltip_key
+        "stats.attributive_decisions"
       end
 
       def with_mef_and_establishment

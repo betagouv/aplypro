@@ -1,4 +1,8 @@
 .fr-container
+  .fr-grid-row.fr-grid-row--gutters
+    .fr-col-12.fr-mb-2w
+      = link_to "← Historique des rapports", academic_reports_path, class: "fr-btn fr-btn--sm fr-btn--tertiary"
+
   %h1.fr-h3 Statistiques de l'académie
 
   - if @report
@@ -81,12 +85,19 @@
           %table
             %thead
               %tr
-                - @establishments_data.first.each do |header|
-                  %th{scope: "col"}= header
+                - visible_columns(@establishments_data).each do |index|
+                  - header = @establishments_data.first[index]
+                  %th{scope: "col"}
+                    = header
+                    - if index > 4 && @indicators_metadata[index - 5]&.dig(:tooltip_key)
+                      %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-establishments-#{index}", type: "button"}
+                        %span.fr-tooltip.fr-placement{id: "tooltip-establishments-#{index}", role: "tooltip", "aria-hidden" => "true"}
+                          = t("tooltips.#{@indicators_metadata[index - 5][:tooltip_key]}")
             %tbody
               - @establishments_data[1..].each do |row|
                 %tr
-                  - row.each_with_index do |value, index|
+                  - visible_columns(@establishments_data).each do |index|
+                    - value = row[index]
                     %td{class: (index <= 1 ? "fr-text--sm" : ""), style: (index > 4 ? cell_background_color(value) : "")}= format_stat_value(value)
 
     %h1.fr-h3.fr-mt-6w Statistiques nationales
@@ -98,11 +109,18 @@
           %table
             %thead
               %tr
-                - @global_data.first.each do |header|
-                  %th{scope: "col"}= header
+                - visible_columns(@global_data).each do |index|
+                  - header = @global_data.first[index]
+                  %th{scope: "col"}
+                    = header
+                    - if @indicators_metadata[index]&.dig(:tooltip_key)
+                      %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-stats-#{index}", type: "button"}
+                        %span.fr-tooltip.fr-placement{id: "tooltip-stats-#{index}", role: "tooltip", "aria-hidden" => "true"}
+                          = t("tooltips.#{@indicators_metadata[index][:tooltip_key]}")
             %tbody
               %tr
-                - @global_data.last.each do |value|
+                - visible_columns(@global_data).each do |index|
+                  - value = @global_data.last[index]
                   %td{style: cell_background_color(value)}= format_stat_value(value)
 
     .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
@@ -112,12 +130,19 @@
           %table
             %thead
               %tr
-                - @bops_data.first.each do |header|
-                  %th{scope: "col"}= header
+                - visible_columns(@bops_data).each do |index|
+                  - header = @bops_data.first[index]
+                  %th{scope: "col"}
+                    = header
+                    - if index > 0 && @indicators_metadata[index - 1]&.dig(:tooltip_key)
+                      %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-bops-#{index}", type: "button"}
+                        %span.fr-tooltip.fr-placement{id: "tooltip-bops-#{index}", role: "tooltip", "aria-hidden" => "true"}
+                          = t("tooltips.#{@indicators_metadata[index - 1][:tooltip_key]}")
             %tbody
               - @bops_data[1..].each do |row|
                 %tr
-                  - row.each_with_index do |value, index|
+                  - visible_columns(@bops_data).each do |index|
+                    - value = row[index]
                     %td{style: (index > 0 ? cell_background_color(value) : "")}= format_stat_value(value)
 
     .fr-grid-row.fr-grid-row--gutters
@@ -127,10 +152,17 @@
           %table
             %thead
               %tr
-                - @menj_academies_data.first.each do |header|
-                  %th{scope: "col"}= header
+                - visible_columns(@menj_academies_data).each do |index|
+                  - header = @menj_academies_data.first[index]
+                  %th{scope: "col"}
+                    = header
+                    - if index > 0 && @indicators_metadata[index - 1]&.dig(:tooltip_key)
+                      %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-academies-#{index}", type: "button"}
+                        %span.fr-tooltip.fr-placement{id: "tooltip-academies-#{index}", role: "tooltip", "aria-hidden" => "true"}
+                          = t("tooltips.#{@indicators_metadata[index - 1][:tooltip_key]}")
             %tbody
               - @menj_academies_data[1..].each do |row|
                 %tr
-                  - row.each_with_index do |value, index|
+                  - visible_columns(@menj_academies_data).each do |index|
+                    - value = row[index]
                     %td{class: (index == 0 ? "fr-text--bold" : ""), style: (index > 0 ? cell_background_color(value) : "")}= format_stat_value(value)

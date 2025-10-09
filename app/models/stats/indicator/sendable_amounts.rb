@@ -14,7 +14,11 @@ module Stats
       end
 
       def title
-        "Somme des PFMPs terminées validées avec RIB, DA & données élèves (prêtes à l'envoi)"
+        "Montant prêt à l'envoi"
+      end
+
+      def tooltip_key
+        "stats.sendable_amounts"
       end
 
       def with_mef_and_establishment

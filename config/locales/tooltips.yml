@@ -1,5 +1,15 @@
 fr:
   tooltips:
+    stats:
+      attributive_decisions: "Décisions d'attributions éditées"
+      sendable_amounts: "Somme des PFMPs terminées validées avec RIB, DA & données élèves (prêtes à l'envoi)"
+      yearly_amounts: "Somme des montants annuels"
+      payment_request_sent: "Demandes de paiement envoyées à l'ASP"
+      payment_request_integrated: "Demandes de paiement intégrées par l'ASP"
+      payment_request_paid: "Demandes de paiement payées par l'ASP"
+      payment_amount_sent: "Montant envoyé à l'ASP"
+      payment_amount_integrated: "Montant intégré par l'ASP"
+      payment_amount_paid: "Montant payé par l'ASP"
     extended: |
       Un report permet de saisir une date jusqu'à laquelle prolonger la durée de la Décision d'Attribution associée à cette scolarité. Il devient ensuite possible de saisir des PFMPs pour l'année scolaire terminée. Cette option est à utiliser pour les élèves qui n'aurait pas pu réaliser leur PFMP au cours de l'année scolaire passée (raisons de santé, fermeture de l'entreprise d'accueil, problèmes liés à la météo....) et la rattrape sur l'année scolaire suivante
     owner_type: |
