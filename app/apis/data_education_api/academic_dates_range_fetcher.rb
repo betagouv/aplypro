@@ -17,7 +17,9 @@ module DataEducationApi
       end
 
       def fetch_date_range(academy_code, year) # rubocop:disable Metrics/AbcSize
-        location = Establishment::ACADEMY_LABELS.fetch(academy_code)
+        location = Establishment::ACADEMY_LABELS[academy_code]
+
+        return fallback_school_year_range(academy_code, year) if location.nil?
 
         previous_year = SchoolYear.new(start_year: year - 1).to_s
         current_year = SchoolYear.new(start_year: year).to_s
