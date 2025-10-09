@@ -36,19 +36,21 @@ RSpec.describe Academic::ToolsController do
     end
 
     it "enqueues invite job with filtered academy codes" do
-      post invite_keycloak_user_academic_tools_path, params: { email: "user@example.com", academy_codes: ["", "44"] }, as: :turbo_stream
+      post invite_keycloak_user_academic_tools_path, params: { email: "user@example.com", academy_codes: ["", "44"] },
+                                                     as: :turbo_stream
 
       expect(response).to have_http_status(:success)
       expect(Keycloak::InviteAcademicUserJob).to have_received(:perform_later)
-        .with("user@example.com", ["44"], "keycloak_invitation_status")
+        .with("user@example.com", ["44"], user.id, "keycloak_invitation_status")
     end
 
     it "handles multiple academy codes" do
-      post invite_keycloak_user_academic_tools_path, params: { email: "user@example.com", academy_codes: ["", "44", "06"] }, as: :turbo_stream
+      post invite_keycloak_user_academic_tools_path,
+           params: { email: "user@example.com", academy_codes: ["", "44", "06"] }, as: :turbo_stream
 
       expect(response).to have_http_status(:success)
       expect(Keycloak::InviteAcademicUserJob).to have_received(:perform_later)
-        .with("user@example.com", %w[44 06], "keycloak_invitation_status")
+        .with("user@example.com", %w[44 06], user.id, "keycloak_invitation_status")
     end
   end
 end
