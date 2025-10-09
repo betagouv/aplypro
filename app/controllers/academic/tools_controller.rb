@@ -31,7 +31,7 @@ module Academic
 
     def invite_keycloak_user
       email = params[:email]
-      academy_codes = params[:academy_codes]
+      academy_codes = Array(params[:academy_codes]).reject(&:blank?)
       stream_id = "keycloak_invitation_status"
 
       respond_to do |format|
