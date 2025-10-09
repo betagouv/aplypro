@@ -13,7 +13,11 @@ module Stats
       end
 
       def title
-        "Données d'élèves nécessaires présentes"
+        "Données élèves"
+      end
+
+      def tooltip_key
+        "stats.students_data"
       end
 
       def with_mef_and_establishment

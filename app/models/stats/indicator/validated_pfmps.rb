@@ -13,7 +13,11 @@ module Stats
       end
 
       def title
-        "PFMPs terminées et validées"
+        "PFMPs validées"
+      end
+
+      def tooltip_key
+        "stats.validated_pfmps"
       end
 
       def with_mef_and_establishment

@@ -21,7 +21,7 @@ module Stats
       end
 
       def title
-        "Demandes #{STATE_FOR_TITLE[@state]}"
+        "Dem. #{STATE_FOR_TITLE[@state]}"
       end
 
       def tooltip_key

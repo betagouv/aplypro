@@ -2,8 +2,13 @@ fr:
   tooltips:
     stats:
       attributive_decisions: "Décisions d'attributions éditées"
+      ribs: "Coordonnées bancaires saisies"
+      validated_pfmps: "PFMPs terminées et validées"
+      students_data: "Données d'élèves nécessaires présentes"
       sendable_amounts: "Somme des PFMPs terminées validées avec RIB, DA & données élèves (prêtes à l'envoi)"
       yearly_amounts: "Somme des montants annuels"
+      schoolings: "Scolarités concernées"
+      pfmps: "Toutes les PFMPs (même non complétées)"
       payment_request_sent: "Demandes de paiement envoyées à l'ASP"
       payment_request_integrated: "Demandes de paiement intégrées par l'ASP"
       payment_request_paid: "Demandes de paiement payées par l'ASP"

@@ -23,7 +23,7 @@ module Stats
       end
 
       def title
-        "Montant #{STATE_FOR_TITLE[@state]}"
+        "Mt. #{STATE_FOR_TITLE[@state]}"
       end
 
       def tooltip_key

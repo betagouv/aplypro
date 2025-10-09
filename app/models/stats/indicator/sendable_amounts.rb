@@ -14,7 +14,7 @@ module Stats
       end
 
       def title
-        "Montant prêt à l'envoi"
+        "Mt. prêt envoi"
       end
 
       def tooltip_key

@@ -31,7 +31,7 @@ module Academic
 
     def invite_keycloak_user
       email = params[:email]
-      academy_codes = params[:academy_codes]
+      academy_codes = Array(params[:academy_codes]).compact_blank
       stream_id = "keycloak_invitation_status"
 
       respond_to do |format|
@@ -42,7 +42,7 @@ module Academic
         end
       end
 
-      Keycloak::InviteAcademicUserJob.perform_later(email, academy_codes, stream_id)
+      Keycloak::InviteAcademicUserJob.perform_later(email, academy_codes, current_user.id, stream_id)
     end
   end
 end

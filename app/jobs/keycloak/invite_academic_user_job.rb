@@ -2,8 +2,9 @@
 
 module Keycloak
   class InviteAcademicUserJob < ApplicationJob
-    def perform(email, academy_codes, stream_id)
+    def perform(email, academy_codes, user_id, stream_id)
       result = invite_user_to_keycloak(email, academy_codes)
+      create_invitation_record(email, academy_codes, user_id) if result[:success]
       broadcast_result(stream_id, result, email, academy_codes)
     rescue StandardError => e
       broadcast_error(stream_id, e.message)
@@ -15,6 +16,14 @@ module Keycloak
       realm_name = ENV.fetch("KEYCLOAK_ACADEMIC_REALM")
       client = Keycloak::Client.new
       client.add_aplypro_academie_resp_attributes(realm_name, email, academy_codes)
+    end
+
+    def create_invitation_record(email, academy_codes, user_id)
+      AcademicInvitation.create!(
+        email: email,
+        academy_codes: academy_codes,
+        user_id: user_id
+      )
     end
 
     def broadcast_result(stream_id, result, email, academy_codes)
