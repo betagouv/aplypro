@@ -439,7 +439,7 @@ fr:
   invitations:
     alert:
       fim: "Seuls les emails de comptes académiques seront autorisés à se connecter"
-      masa: "Seuls les emails de comptes EDUCAGRI seront autorisés à se connecter"
+      masa: "Seul l'email principal d'un compte AGRICOLL sera autorisé à se connecter"
   roles:
     errors:
       not_director: &not_director_error Vous devez être chef d'établissement
