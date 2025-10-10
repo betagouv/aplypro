@@ -41,7 +41,7 @@ Fonctionnalité: Gestion du personnel académique
   Scénario: Le personnel académique peut voir la liste des directeurs
     Lorsque je me rends sur la page d'accueil
     Quand je clique sur "Utilisateurs"
-    Alors la page contient "Directeurs - Académie 06"
+    Alors la page contient "Utilisateurs en établissement - Académie Clermont-Ferrand"
 
   Scénario: Le personnel académique voit un message quand il n'y a pas d'établissements
     Alors la page contient "Aucun établissement trouvé"
