@@ -64,6 +64,7 @@ module Users
       add_auth_breadcrumb(data: { user_id: @academic_user.id }, message: "Successfully parsed academic user")
 
       @academies = @mapper.aplypro_academies
+      @academies = merge_invitation_academies!(@academic_user.email, @academies)
 
       raise IdentityMappers::Errors::EmptyResponsibilitiesError if @academies.empty?
 
@@ -125,6 +126,18 @@ module Users
     end
 
     private
+
+    def merge_invitation_academies!(email, existing_academies)
+      invitation = AcademicInvitation.find_by(email: email)
+      return existing_academies unless invitation
+
+      combined_academies = (existing_academies + invitation.academy_codes).uniq
+      realm_name = ENV.fetch("KEYCLOAK_ACADEMIC_REALM")
+
+      Keycloak::ApplyInvitationAttributesJob.perform_later(realm_name, email, combined_academies)
+
+      combined_academies
+    end
 
     def check_access!
       check_responsibilities!
