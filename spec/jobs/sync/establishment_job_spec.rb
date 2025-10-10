@@ -11,13 +11,10 @@ RSpec.describe Sync::EstablishmentJob do
   #
   # matcher further below.
   let(:establishment) { create(:establishment, :dehydrated, :sygne_provider) }
-  let(:json) { Rails.root.join("mock/data/etab.json").read }
-
-  before do
-    allow(DataEducationApi::EstablishmentApi).to receive(:fetch!).and_return(JSON.parse(json))
-  end
 
   it "calls the EstablishmentApi proxy" do
+    allow(DataEducationApi::EstablishmentApi).to receive(:fetch!).and_call_original
+
     described_class.perform_now(establishment)
 
     expect(DataEducationApi::EstablishmentApi).to have_received(:fetch!).with(establishment.uai)
