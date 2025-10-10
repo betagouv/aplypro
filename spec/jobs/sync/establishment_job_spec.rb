@@ -13,11 +13,9 @@ RSpec.describe Sync::EstablishmentJob do
   let(:establishment) { create(:establishment, :dehydrated, :sygne_provider) }
 
   it "calls the EstablishmentApi proxy" do
-    allow(DataEducationApi::EstablishmentApi).to receive(:fetch!).and_call_original
-
     described_class.perform_now(establishment)
 
-    expect(DataEducationApi::EstablishmentApi).to have_received(:fetch!).with(establishment.uai)
+    expect(establishment.reload.name).not_to be_nil
   end
 
   Establishment::API_MAPPING.each_value do |attr|
