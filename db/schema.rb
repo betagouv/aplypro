@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_03_000002) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_13_113743) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "unaccent"
@@ -282,6 +282,37 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_03_000002) do
     t.index ["student_id"], name: "one_active_schooling_per_student", unique: true, where: "((end_date IS NULL) AND (removed_at IS NULL))"
   end
 
+  create_table "statistics", force: :cascade do |t|
+    t.bigint "school_year_id", null: false
+    t.string "bop"
+    t.string "academy_code"
+    t.string "academy_label"
+    t.integer "schoolings"
+    t.integer "edited_da"
+    t.integer "students"
+    t.integer "students_with_rib"
+    t.integer "students_with_data"
+    t.integer "pfmps"
+    t.integer "validated_pfmps"
+    t.integer "validated_pfmps_amount"
+    t.integer "completed_pfmps"
+    t.integer "completed_pfmps_amount"
+    t.integer "incomplete_pfmps"
+    t.integer "theoretical_incomplete_pfmps_amount"
+    t.integer "invalid_pfmps"
+    t.integer "theoretical_invalid_pfmps_amount"
+    t.integer "asp_payments_paid"
+    t.integer "asp_payments_paid_amount"
+    t.integer "paid_students"
+    t.integer "paid_pfmps"
+    t.integer "payable_pfmps"
+    t.integer "reported_da"
+    t.integer "reported_da_amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_year_id"], name: "index_statistics_on_school_year_id"
+  end
+
   create_table "students", force: :cascade do |t|
     t.string "ine", null: false
     t.string "first_name"
@@ -365,6 +396,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_03_000002) do
   add_foreign_key "ribs", "students"
   add_foreign_key "schoolings", "classes", column: "classe_id"
   add_foreign_key "schoolings", "students"
+  add_foreign_key "statistics", "school_years"
   add_foreign_key "users", "establishments", column: "selected_establishment_id"
   add_foreign_key "wages", "school_years"
 
