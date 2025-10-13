@@ -464,7 +464,9 @@ RSpec.describe Schooling do
   end
 
   # rubocop:disable RSpec/MultipleMemoizedHelpers
-  describe "any_older_schooling?" do
+  describe "#any_older_schooling?" do
+    subject { schooling.any_older_schooling? }
+
     let(:student) { create(:student) }
     let(:school_year) { create(:school_year) }
     let(:classe) { create(:classe, school_year: school_year) }
@@ -481,13 +483,13 @@ RSpec.describe Schooling do
     context "when student has only one schooling" do
       let(:another_schooling) { nil }
 
-      it { expect(schooling.any_older_schooling?).to be false }
+      it { is_expected.to be false }
     end
 
     context "when student has two schoolings on the same school year but no attributive decision" do
       let(:schooling) { create(:schooling, :closed, student: student, classe: classe) }
 
-      it { expect(schooling.any_older_schooling?).to be false }
+      it { is_expected.to be false }
     end
 
     context "when student has two schoolings on the same school year but already an abrogation decision" do
@@ -497,7 +499,7 @@ RSpec.describe Schooling do
                classe: classe)
       end
 
-      it { expect(schooling.any_older_schooling?).to be false }
+      it { is_expected.to be false }
     end
 
     context "when student has two schoolings on the same school year but the other one is not after" do
@@ -508,7 +510,7 @@ RSpec.describe Schooling do
                end_date: schooling.start_date - 1.day)
       end
 
-      it { expect(schooling.any_older_schooling?).to be false }
+      it { is_expected.to be false }
     end
 
     context "when student has two schoolings on the same school year and the other one is after" do
@@ -520,7 +522,7 @@ RSpec.describe Schooling do
         create(:schooling, :with_attributive_decision, student: student, classe: another_classe)
       end
 
-      it { expect(schooling.any_older_schooling?).to be true }
+      it { is_expected.to be true }
     end
 
     context "when student has two schoolings on the same school year and the other one is after but no attributive decision" do # rubocop:disable Layout/LineLength
@@ -528,17 +530,80 @@ RSpec.describe Schooling do
         create(:schooling, student: student, classe: another_classe, end_date: schooling.end_date + 3.months)
       end
 
-      it { expect(schooling.any_older_schooling?).to be false }
+      it { is_expected.to be false }
     end
 
     context "when student has another schooling on another school_year" do
       let(:another_school_year) { create(:school_year, start_year: 2021) }
       let(:another_classe) { create(:classe, school_year: another_school_year) }
 
-      it { expect(schooling.any_older_schooling?).to be false }
+      it { is_expected.to be false }
     end
   end
   # rubocop:enable RSpec/MultipleMemoizedHelpers
+
+  describe "#older_than?" do
+    subject { schooling.send(:older_than?, another_schooling) }
+
+    let(:schooling) { create(:schooling, :closed) }
+    let(:another_schooling) { create(:schooling, :closed) }
+
+    context "when the schooling is open" do
+      let(:schooling) { create(:schooling, end_date: nil) }
+
+      it { is_expected.to be false }
+    end
+
+    context "when the other schooling is open" do
+      let(:another_schooling) { create(:schooling, end_date: nil) }
+
+      it { is_expected.to be true }
+    end
+
+    context "when the other schooling ends after the schooling" do
+      let(:another_schooling) { create(:schooling, end_date: schooling.end_date + 3.days) }
+
+      it { is_expected.to be true }
+    end
+
+    context "when the other schooling ends before the schooling" do
+      let(:another_schooling) { create(:schooling, end_date: schooling.end_date - 3.days) }
+
+      it { is_expected.to be false }
+    end
+
+    context "when the schooling does not have start_date" do
+      # On doit passer par 'before' car le build de la factory écrase notre paramètre 'start_date' (end_date - 1.month)
+      before { schooling.update(start_date: nil) }
+
+      it { is_expected.to be false }
+    end
+
+    context "when the other schooling does not have start_date" do
+      # On doit passer par 'before' car le build de la factory écrase notre paramètre 'start_date' (end_date - 1.month)
+      before { another_schooling.update(start_date: nil) }
+
+      it { is_expected.to be false }
+    end
+
+    context "when the other schooling begins after the schooling" do
+      # On doit passer par 'before' car le build de la factory écrase notre paramètre 'start_date' (end_date - 1.month)
+      before { another_schooling.update(start_date: schooling.start_date + 3.days) }
+
+      it { is_expected.to be true }
+    end
+
+    context "when the other schooling begins before the schooling" do
+      # On doit passer par 'before' car le build de la factory écrase notre paramètre 'start_date' (end_date - 1.month)
+      before { another_schooling.update(start_date: schooling.start_date - 3.days) }
+
+      it { is_expected.to be false }
+    end
+
+    context "when both schoolings have the same start date and end date" do
+      it { is_expected.to be true }
+    end
+  end
 
   describe "#cancelled?" do
     context "when schooling has cancellation attached" do

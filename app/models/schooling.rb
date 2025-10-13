@@ -100,7 +100,7 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def any_older_schooling?
     abrogeable? &&
       student.schoolings.for_year(school_year.start_year).excluding(self).any? do |sc|
-        sc.attributive_decision.attached? && older?(sc)
+        sc.attributive_decision.attached? && older_than?(sc)
       end
   end
 
@@ -185,10 +185,14 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
     closed? && attributive_decision.attached? && !abrogation_decision.attached?
   end
 
-  def older?(schooling)
+  # Cette méthode vérifie que la scolarité passée en paramètre est plus récente que l'objet 'schooling' que l'on étudie.
+  # La complexité de la méthode vient du fait que les scolarités remontées peuvent se chevaucher.
+  def older_than?(schooling) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+    return false if open?
+
     schooling.open? ||
       schooling.end_date > end_date ||
-      (schooling.start_date && start_date &&
+      (schooling.start_date.present? && start_date.present? &&
         (schooling.start_date > start_date ||
           (schooling.start_date.eql?(start_date) && schooling.end_date.eql?(end_date))
         )
