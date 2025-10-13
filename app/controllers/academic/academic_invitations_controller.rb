@@ -7,9 +7,11 @@ module Academic
 
       if @invitation.user_id == current_user.id
         @invitation.destroy
-        redirect_to academic_invitations_academic_tools_path, notice: "L'invitation a été supprimée avec succès."
+        redirect_to academic_invitations_academic_tools_path,
+                    notice: t(".success")
       else
-        redirect_to academic_invitations_academic_tools_path, alert: "Vous n'êtes pas autorisé à supprimer cette invitation."
+        redirect_to academic_invitations_academic_tools_path,
+                    alert: t(".unauthorized")
       end
     end
   end
