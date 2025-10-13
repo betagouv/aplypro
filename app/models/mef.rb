@@ -5,7 +5,9 @@ class Mef < ApplicationRecord
 
   belongs_to :school_year
 
-  scope :with_wages, -> { joins("JOIN wages ON wages.mef_codes ? mefs.code") }
+  scope :with_wages, lambda {
+    joins("JOIN wages ON wages.mef_codes ? mefs.code AND wages.school_year_id = mefs.school_year_id")
+  }
 
   validates :label, :code, :short, :mefstat11, :ministry, presence: true
   validates :code, uniqueness: { scope: :school_year_id }
