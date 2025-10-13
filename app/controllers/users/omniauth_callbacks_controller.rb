@@ -59,7 +59,7 @@ module Users
       parse_identity
 
       @academic_login = true
-      @academic_user = Academic::User.from_oidc(auth_hash).tap(&:save!)
+      inflate_academic_user
 
       add_auth_breadcrumb(data: { user_id: @academic_user.id }, message: "Successfully parsed academic user")
 
@@ -269,6 +269,36 @@ module Users
         UserMailDuplicateError.new(
           "Merged user attributes #{auth_hash} for email #{@user.email} and provider #{@user.provider} \
           due to unicity constraint"
+        )
+      )
+    end
+
+    def inflate_academic_user
+      Academic::User.transaction do
+        @academic_user = Academic::User.from_oidc(auth_hash)
+        @academic_user.save!
+      rescue ActiveRecord::RecordInvalid
+        @academic_user = merge_academic_user_attributes
+      end
+    end
+
+    def merge_academic_user_attributes
+      existing_user = Academic::User.find_by(email: @academic_user.email, provider: @academic_user.provider)
+      existing_user.update!(
+        token: auth_hash["credentials"]["token"],
+        uid: auth_hash["uid"],
+        name: auth_hash["info"]["name"],
+        oidc_attributes: auth_hash
+      )
+      log_academic_merge_event
+      existing_user
+    end
+
+    def log_academic_merge_event
+      Sentry.capture_exception(
+        UserMailDuplicateError.new(
+          "Merged academic user attributes #{auth_hash} for email #{@academic_user.email} and \
+          provider #{@academic_user.provider} due to unicity constraint"
         )
       )
     end
