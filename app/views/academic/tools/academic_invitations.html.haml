@@ -13,6 +13,7 @@
             %th{scope: "col"} Email
             %th{scope: "col"} Académies
             %th{scope: "col"} Date d'invitation
+            %th{scope: "col"} Actions
         %tbody
           - @invitations.each do |invitation|
             %tr
@@ -21,6 +22,8 @@
                 - invitation.academy_codes.each do |code|
                   %span.fr-tag.fr-tag--sm.fr-mr-1v= "#{code} - #{Establishment::ACADEMY_LABELS[code]}"
               %td= l(invitation.created_at, format: :short)
+              %td
+                = button_to "Supprimer", academic_academic_invitation_path(invitation), method: :delete, class: "fr-btn fr-btn--secondary fr-btn--sm fr-icon-delete-line", data: { confirm: "Êtes-vous sûr de vouloir supprimer cette invitation ?" }
   - else
     .fr-callout
       %p.fr-callout__text

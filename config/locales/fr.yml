@@ -519,6 +519,10 @@ fr:
         payment_difficulty: Ce rejet est lié à un problème technique lors du paiement, comme un RIB non compatible avec les virements ; un mail de l’ASP vous sera envoyé pour expliquer l’origine du blocage et indiquer les éléments à fournir ou corriger. Merci d’attendre les précisions de l’ASP concernant les pièces justificatives ou actions à engager
         fraud_suspicion: Ce rejet peut être lié à une suspicion de fraude sur la coordonnée de paiement, même si celle-ci concerne un autre dispositif. Merci d’attendre les précisions de l’ASP concernant les pièces justificatives ou actions à engager
   academic:
+    academic_invitations:
+      destroy:
+        success: L'invitation a été supprimée avec succès.
+        unauthorized: Vous n'êtes pas autorisé à supprimer cette invitation.
     welcome:
       title: Bonjour et bienvenue sur la page APLyPro dédiée aux utilisateurs qui ne sont pas en établissement !
       description: |

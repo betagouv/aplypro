@@ -9,6 +9,8 @@ module Academic
         number_to_currency(value, unit: "€", separator: ",", delimiter: " ", precision: 2)
       elsif ratio_value?(value)
         number_to_percentage(value * 100, precision: 2, separator: ",")
+      elsif integer_value?(value)
+        number_with_delimiter(value.to_i, delimiter: " ")
       else
         number_with_precision(value, precision: 2, separator: ",", delimiter: " ")
       end
@@ -34,6 +36,10 @@ module Academic
 
     def ratio_value?(value)
       value.is_a?(Float) && value >= 0 && value <= 1 && !currency_amount?(value)
+    end
+
+    def integer_value?(value)
+      value.is_a?(Integer) || (value.is_a?(Numeric) && value == value.to_i)
     end
 
     def cell_background_color(value)

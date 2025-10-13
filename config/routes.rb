@@ -63,6 +63,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :academic_invitations, only: [:destroy]
+
     resources :stats, only: [:index]
     resources :reports, only: [:index]
 

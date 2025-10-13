@@ -15,6 +15,7 @@ fr:
       payment_amount_sent: "Montant envoyé à l'ASP"
       payment_amount_integrated: "Montant intégré par l'ASP"
       payment_amount_paid: "Montant payé par l'ASP"
+      pfmp_paid_payable_ratio: "Ratio des PFMPs payées par rapport aux PFMPs payables (validées)"
     extended: |
       Un report permet de saisir une date jusqu'à laquelle prolonger la durée de la Décision d'Attribution associée à cette scolarité. Il devient ensuite possible de saisir des PFMPs pour l'année scolaire terminée. Cette option est à utiliser pour les élèves qui n'aurait pas pu réaliser leur PFMP au cours de l'année scolaire passée (raisons de santé, fermeture de l'entreprise d'accueil, problèmes liés à la météo....) et la rattrape sur l'année scolaire suivante
     owner_type: |

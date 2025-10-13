@@ -48,6 +48,30 @@
 .fr-table.fr-table--no-caption
   %table
     %thead
+      %th{colspan: 2} Adresse
+    %tbody
+      %tr
+        %td Ligne d'adresse 1
+        %td= @schooling.student.address_line1
+      %tr
+        %td Ligne d'adresse 2
+        %td= @schooling.student.address_line2
+      %tr
+        %td Code postal
+        %td= @schooling.student.address_postal_code
+      %tr
+        %td Ville
+        %td= @schooling.student.address_city
+      %tr
+        %td Code INSEE de la ville
+        %td= display_insee_code(@schooling.student.address_city_insee_code)
+      %tr
+        %td Code pays
+        %td= display_insee_code(@schooling.student.address_country_code)
+
+.fr-table.fr-table--no-caption
+  %table
+    %thead
       %th{colspan: 2} Établissement
     %tbody
       %tr
