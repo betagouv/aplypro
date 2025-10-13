@@ -27,4 +27,9 @@
 
     .fr-mt-2w.gray-text
       Dernière mise à jour le
-      = l(payment_request.last_transition&.updated_at || payment_request.updated_at, format: :long)
+      - transition = payment_request.last_transition
+      - if payment_request.in_state?(:paid) && transition.metadata["PAIEMENT"]["DATEPAIEMENT"]
+        - date = Date.strptime(transition.metadata["PAIEMENT"]["DATEPAIEMENT"], "%d/%m/%Y")
+      - else
+        - date = transition&.updated_at || payment_request.updated_at
+      = l(date, format: :long)
