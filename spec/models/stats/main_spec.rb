@@ -16,7 +16,7 @@ RSpec.describe Stats::Main do
     it "computes the right percentages" do
       expect(data).to eq(
         [indicators_titles,
-         [0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5, 2, 0, 0, 0]]
+         [0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5, 2, 0, 0, 0, 0.0]]
       )
     end
   end
@@ -29,10 +29,10 @@ RSpec.describe Stats::Main do
     it "computes the correct percentages" do
       expect(data).to eq(
         [["BOP", *indicators_titles],
-         ["ENPU", 0.25, 0.25, 0.25, 0.25, 5.0, 400, 4, 4, 1, 1, nil, nil],
-         ["ENPR", 0.8, 0.8, 0.8, 0.8, 20.0, 500, 5, 5, 4, 4, nil, nil],
-         ["MASA", 0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5, 2, 2, nil, nil],
-         ["MER", 4.0 / 7, 4.0 / 7, 4.0 / 7, 4.0 / 7, 20.0, 700, 7, 7, 4, 4, nil, nil]]
+         ["ENPU", 0.25, 0.25, 0.25, 0.25, 5.0, 400, 4, 4, 1, 1, nil, nil, nil],
+         ["ENPR", 0.8, 0.8, 0.8, 0.8, 20.0, 500, 5, 5, 4, 4, nil, nil, nil],
+         ["MASA", 0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5, 2, 2, nil, nil, nil],
+         ["MER", 4.0 / 7, 4.0 / 7, 4.0 / 7, 4.0 / 7, 20.0, 700, 7, 7, 4, 4, nil, nil, nil]]
       )
     end
   end
@@ -45,9 +45,9 @@ RSpec.describe Stats::Main do
     it "computes the correct percentages" do
       expect(data).to eq(
         [["Académie", *indicators_titles],
-         ["Bordeaux", 0.25, 0.25, 0.25, 0.25, 5.0, 400, 4, 4, 1, 1, 1, 5],
-         ["Montpellier", 0.5, 0.5, 0.5, 0.5, 15.0, 600, 6, 6, 3, 3, 3, 15],
-         ["Paris", 0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5, 2, 2, 2, 10]]
+         ["Bordeaux", 0.25, 0.25, 0.25, 0.25, 5.0, 400, 4, 4, 1, 1, 1, 5, 1.0],
+         ["Montpellier", 0.5, 0.5, 0.5, 0.5, 15.0, 600, 6, 6, 3, 3, 3, 15, 1.0],
+         ["Paris", 0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5, 2, 2, 2, 10, 1.0]]
       )
     end
   end
@@ -61,9 +61,9 @@ RSpec.describe Stats::Main do
     it "computes the correct percentages" do
       expect(data).to eq(
         [["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public", *indicators_titles],
-         ["0000000A", "0000000A", "MINISTERE DE L'EDUCATION NATIONALE", "Marseille", "Public", 0.25, 0.25, 0.25, 0.25, 5.0, 400, 4, 4, 1, 1, 1, 5],
-         ["0000000B", "0000000B", "MINISTERE DE L'EDUCATION NATIONALE", "Marseille", "Public", 0.5, 0.5, 0.5, 0.5, 15.0, 600, 6, 6, 3, 3, 3, 15],
-         ["0000000C", "0000000C", "MINISTERE DE L'EDUCATION NATIONALE", "Marseille", "Public", 0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5, 2, 2, 2, 10]]
+         ["0000000A", "0000000A", "MINISTERE DE L'EDUCATION NATIONALE", "Marseille", "Public", 0.25, 0.25, 0.25, 0.25, 5.0, 400, 4, 4, 1, 1, 1, 5, 1.0],
+         ["0000000B", "0000000B", "MINISTERE DE L'EDUCATION NATIONALE", "Marseille", "Public", 0.5, 0.5, 0.5, 0.5, 15.0, 600, 6, 6, 3, 3, 3, 15, 1.0],
+         ["0000000C", "0000000C", "MINISTERE DE L'EDUCATION NATIONALE", "Marseille", "Public", 0.4, 0.4, 0.4, 0.4, 10.0, 500, 5, 5, 2, 2, 2, 10, 1.0]]
       )
     end
     # rubocop:enable Layout/LineLength

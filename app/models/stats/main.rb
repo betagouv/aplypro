@@ -23,6 +23,7 @@ module Stats
       end
 
       @indicators.push Indicator::PaymentRequestStateAmounts.new(start_year, :paid)
+      @indicators.push Indicator::PfmpPaidPayableRatio.new(start_year)
     end
 
     def indicators_titles
