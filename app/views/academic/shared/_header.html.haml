@@ -38,10 +38,10 @@
             %li.fr-nav__item
               %a.fr-nav__link{ href: academic_users_path, target: "_self", "aria-current" => current_path?(academic_users_path) ? "page" : nil }
                 = t("menu.users")
-            %li.fr-nav__item
-              %a.fr-nav__link{ href: academic_stats_path, target: "_self", "aria-current" => current_path?(academic_stats_path) ? "page" : nil }
-                = t("menu.stats")
-            %li.fr-nav__item
-              %a.fr-nav__link{ href: academic_tools_path, target: "_self", "aria-current" => current_path?(academic_tools_path) ? "page" : nil }
-                = t("menu.tools")
+            -# %li.fr-nav__item
+            -#   %a.fr-nav__link{ href: academic_stats_path, target: "_self", "aria-current" => current_path?(academic_stats_path) ? "page" : nil }
+            -#     = t("menu.stats")
+            -# %li.fr-nav__item
+            -#   %a.fr-nav__link{ href: academic_tools_path, target: "_self", "aria-current" => current_path?(academic_tools_path) ? "page" : nil }
+            -#     = t("menu.tools")
         = render "academic/shared/search_student" if academic_user_signed_in?
