@@ -1,10 +1,12 @@
 # frozen_string_literal: true
-# load  'mock/factories/asp.rb'
-require './spec/support/attributive_decision_helpers'
+
+require "./spec/support/attributive_decision_helpers"
 
 class ReportSeeder
   def self.seed
     raise "ReportSeeder cannot be run in production!" if Rails.env.production?
+
+    load_asp_factories
 
     cleanup_existing_data
     Report.destroy_all
@@ -34,6 +36,14 @@ class ReportSeeder
     end
   end
 
+  def self.load_asp_factories
+    FactoryBot.build(:asp_integration)
+  rescue ArgumentError, KeyError => e
+    raise unless e.message.include?("Factory not registered") || e.message.include?("asp")
+
+    load "mock/factories/asp.rb"
+  end
+
   def self.cleanup_existing_data
     test_establishments = Establishment.where("uai LIKE 'RS%'")
     test_establishment_ids = test_establishments.pluck(:id)
@@ -53,7 +63,7 @@ class ReportSeeder
     test_establishments.delete_all
   end
 
-  def self.create_fake_academy_data(school_year, seed_offset)
+  def self.create_fake_academy_data(_school_year, seed_offset)
     academy_code = "06"
     academy_label = "Clermont-Ferrand"
 
@@ -66,7 +76,7 @@ class ReportSeeder
       establishment.update!(
         academy_code: academy_code,
         academy_label: academy_label,
-        uai: "RS#{rand(10000..99999)}"
+        uai: "RS#{rand(10_000..99_999)}"
       )
     end
 
@@ -76,7 +86,7 @@ class ReportSeeder
       establishment.update!(
         academy_code: academy_code,
         academy_label: academy_label,
-        uai: "RS#{rand(10000..99999)}"
+        uai: "RS#{rand(10_000..99_999)}"
       )
     end
   end
@@ -142,7 +152,9 @@ class ReportSeeder
       global_data: global_data,
       bops_data: bops_data,
       menj_academies_data: menj_academies_data,
-      establishments_data: [["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public", *indicators_titles], *establishments]
+      establishments_data: [
+        ["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public", *indicators_titles], *establishments
+      ]
     }
   end
 
@@ -164,7 +176,7 @@ class ReportSeeder
     when Stats::Ratio
       (rand(50..100) + variance).clamp(30, 100) / 100.0
     when Stats::Sum
-      rand(10000..500000) + (seed_offset * 50000) + rand(-20000..20000)
+      rand(10_000..500_000) + (seed_offset * 50_000) + rand(-20_000..20_000)
     when Stats::Count
       rand(50..300) + (seed_offset * 20) + rand(-15..15)
     else
@@ -178,9 +190,9 @@ class ReportSeeder
     when Stats::Ratio
       (rand(70..95) + variance).clamp(50, 100) / 100.0
     when Stats::Sum
-      rand(5000000..20000000) + (seed_offset * 1000000) + rand(-500000..500000)
+      rand(5_000_000..20_000_000) + (seed_offset * 1_000_000) + rand(-500_000..500_000)
     when Stats::Count
-      rand(5000..15000) + (seed_offset * 500) + rand(-300..300)
+      rand(5000..15_000) + (seed_offset * 500) + rand(-300..300)
     else
       (rand(70..95) + variance).clamp(50, 100) / 100.0
     end
@@ -192,7 +204,7 @@ class ReportSeeder
     when Stats::Ratio
       (rand(60..95) + variance).clamp(40, 100) / 100.0
     when Stats::Sum
-      rand(1000000..8000000) + (seed_offset * 400000) + rand(-200000..200000)
+      rand(1_000_000..8_000_000) + (seed_offset * 400_000) + rand(-200_000..200_000)
     when Stats::Count
       rand(1000..5000) + (seed_offset * 200) + rand(-100..100)
     else
@@ -206,7 +218,7 @@ class ReportSeeder
     when Stats::Ratio
       (rand(55..98) + variance).clamp(40, 100) / 100.0
     when Stats::Sum
-      rand(200000..2000000) + (seed_offset * 100000) + rand(-50000..50000)
+      rand(200_000..2_000_000) + (seed_offset * 100_000) + rand(-50_000..50_000)
     when Stats::Count
       rand(200..1500) + (seed_offset * 50) + rand(-30..30)
     else
