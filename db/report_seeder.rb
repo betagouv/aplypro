@@ -6,35 +6,37 @@ class ReportSeeder
   def self.seed
     raise "ReportSeeder cannot be run in production!" if Rails.env.production?
 
-    current_school_year = SchoolYear.current
-
     cleanup_existing_data
     Report.destroy_all
 
-    dates = [
-      5.weeks.ago,
-      4.weeks.ago,
-      3.weeks.ago,
-      2.weeks.ago,
-      1.week.ago
-    ]
+    school_years = SchoolYear.order(start_year: :desc).limit(3)
 
-    dates.each_with_index do |date, index|
-      ApplicationRecord.transaction do
-        create_fake_academy_data(current_school_year, index)
+    school_years.each_with_index do |school_year, year_index|
+      dates = [
+        (5 + (year_index * 52)).weeks.ago,
+        (3 + (year_index * 52)).weeks.ago
+      ]
+
+      dates.each_with_index do |date, report_index|
+        seed_offset = (year_index * 2) + report_index
+
+        ApplicationRecord.transaction do
+          create_fake_academy_data(school_year, seed_offset)
+        end
+
+        report_data = generate_bogus_data(school_year.start_year, seed_offset)
+        Report.create!(
+          data: report_data,
+          created_at: date,
+          school_year: school_year
+        )
       end
-
-      report_data = generate_bogus_data(current_school_year.start_year, index)
-      Report.create!(
-        data: report_data,
-        created_at: date,
-        school_year: current_school_year
-      )
     end
   end
 
   def self.cleanup_existing_data
     test_establishments = Establishment.where("uai LIKE 'RS%'")
+    test_establishment_ids = test_establishments.pluck(:id)
     classes = Classe.where(establishment: test_establishments)
     schoolings = Schooling.where(classe: classes)
     student_ids = schoolings.pluck(:student_id).uniq
@@ -47,6 +49,7 @@ class ReportSeeder
     schoolings.delete_all
     Student.where(id: student_ids).delete_all
     classes.delete_all
+    EstablishmentUserRole.where(establishment_id: test_establishment_ids).delete_all
     test_establishments.delete_all
   end
 
