@@ -1,17 +1,24 @@
 %section.fr-container.fr-pb-3w
   %h1.fr-h3 Utilisateurs en établissement - Académie #{Establishment::ACADEMY_LABELS[selected_academy]}
 
+  .fr-mb-3w
+    .fr-btns-group.fr-btns-group--inline
+      = link_to "Tous", academic_users_path, class: "fr-btn #{params[:role].blank? ? 'fr-btn--secondary' : 'fr-btn--tertiary'}"
+      = link_to "Directeurs", academic_users_path(role: :dir), class: "fr-btn #{params[:role] == 'dir' ? 'fr-btn--secondary' : 'fr-btn--tertiary'}"
+      = link_to "Habilités", academic_users_path(role: :authorised), class: "fr-btn #{params[:role] == 'authorised' ? 'fr-btn--secondary' : 'fr-btn--tertiary'}"
+
   - if @users.empty?
     .fr-alert.fr-alert--info
-      %p.fr-alert__title Aucun directeur trouvé pour cette académie.
+      %p.fr-alert__title Aucun utilisateur trouvé pour cette académie.
   - else
     .fr-table.fr-table--no-caption
       %table
-        %caption Liste des directeurs de l'académie
+        %caption Liste des utilisateurs de l'académie
         %thead
           %tr
             %th{scope: "col"} Nom
             %th{scope: "col"} Email
+            %th{scope: "col"} Rôle(s)
             %th{scope: "col"} Établissement(s)
             %th{scope: "col"} Statut
             %th{scope: "col"} Dernière connexion
@@ -21,6 +28,12 @@
               %td
                 %strong= user.name
               %td= user.email
+              %td
+                - user_roles = user.establishment_user_roles.select { |eur| eur.establishment.academy_code == selected_academy }.map(&:role).uniq
+                - if user_roles.include?('dir')
+                  %span.fr-badge.fr-badge--blue-ecume Directeur
+                - if user_roles.include?('authorised')
+                  %span.fr-badge.fr-badge--purple-glycine.fr-ml-1w Habilité
               %td
                 - establishments = user.establishments.select { |e| e.academy_code == selected_academy }
                 - if establishments.any?

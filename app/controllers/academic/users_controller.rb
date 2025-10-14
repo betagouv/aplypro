@@ -18,12 +18,20 @@ module Academic
 
     def index
       @users = User.joins(establishment_user_roles: :establishment)
-                   .where(establishment_user_roles: { role: :dir })
                    .where(establishments: { academy_code: selected_academy })
-                   .includes(:establishments, :directed_establishments)
+                   .then { |relation| filter_by_role(relation) }
+                   .includes(:establishments, :directed_establishments, :establishment_user_roles)
                    .distinct
                    .page(params[:page])
                    .per(50)
+    end
+
+    private
+
+    def filter_by_role(relation)
+      return relation if params[:role].blank?
+
+      relation.where(establishment_user_roles: { role: params[:role] })
     end
   end
 end
