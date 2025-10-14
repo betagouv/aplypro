@@ -5,7 +5,7 @@ module Academic
     def format_stat_value(value, indicator_type: nil)
       return handle_special_values(value) unless valid_numeric?(value)
 
-      if currency_amount?(value, indicator_type)
+      if currency_indicator?(indicator_type)
         number_to_currency(value, unit: "€", separator: ",", delimiter: " ", precision: 2)
       elsif ratio_value?(value)
         number_to_percentage(value * 100, precision: 2, separator: ",")
@@ -30,10 +30,8 @@ module Academic
       value.is_a?(Numeric)
     end
 
-    def currency_amount?(value, indicator_type)
-      return false unless value >= 1000
-
-      indicator_type == "Stats::Sum" || value.to_s.include?(".")
+    def currency_indicator?(indicator_type)
+      indicator_type == "Stats::Sum"
     end
 
     def ratio_value?(value)
