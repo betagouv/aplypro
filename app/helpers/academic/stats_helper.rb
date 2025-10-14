@@ -2,10 +2,10 @@
 
 module Academic
   module StatsHelper
-    def format_stat_value(value)
+    def format_stat_value(value, indicator_type: nil)
       return handle_special_values(value) unless valid_numeric?(value)
 
-      if currency_amount?(value)
+      if currency_indicator?(indicator_type)
         number_to_currency(value, unit: "€", separator: ",", delimiter: " ", precision: 2)
       elsif ratio_value?(value)
         number_to_percentage(value * 100, precision: 2, separator: ",")
@@ -30,12 +30,12 @@ module Academic
       value.is_a?(Numeric)
     end
 
-    def currency_amount?(value)
-      value.to_s.include?(".") && value >= 1000
+    def currency_indicator?(indicator_type)
+      indicator_type == "Stats::Sum"
     end
 
     def ratio_value?(value)
-      value.is_a?(Float) && value >= 0 && value <= 1 && !currency_amount?(value)
+      value.is_a?(Float) && value >= 0 && value <= 1
     end
 
     def integer_value?(value)
