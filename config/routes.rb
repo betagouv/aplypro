@@ -48,10 +48,11 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :users, only: [:index]
+
     resource :users, only: [] do
       get "select_academy"
       post "set_selected_academy"
-      get "index"
     end
 
     resources :tools, only: [:index] do
