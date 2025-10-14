@@ -16,6 +16,13 @@ RSpec.describe Academic::ReportsController do
     allow_any_instance_of(described_class).to receive(:selected_academy).and_return(establishment.academy_code) # rubocop:disable RSpec/AnyInstance
   end
 
+  describe "GET index" do
+    it "renders the page successfully" do
+      get academic_reports_path
+      expect(response).to have_http_status(:success)
+    end
+  end
+
   describe "GET show" do
     context "when report exists" do
       let(:report) { create(:report) }
