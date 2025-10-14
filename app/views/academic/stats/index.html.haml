@@ -96,10 +96,16 @@
                           = t("tooltips.#{@indicators_metadata[index - 5][:tooltip_key]}")
             %tbody
               - @establishments_data[1..].each do |row|
+                - establishment = Establishment.find_by(uai: row[0])
                 %tr
                   - visible_columns(@establishments_data).each do |index|
                     - value = row[index]
-                    %td{class: (index <= 1 ? "fr-text--sm" : ""), style: (index > 4 ? cell_background_color(value) : "")}= format_stat_value(value)
+                    - indicator_type = index > 4 ? @indicators_metadata[index - 5]&.dig(:type) : nil
+                    %td{class: (index <= 1 ? "fr-text--sm" : ""), style: (index > 4 ? cell_background_color(value) : "")}
+                      - if index == 1 && establishment
+                        = link_to value, academic_establishment_path(establishment)
+                      - else
+                        = format_stat_value(value, indicator_type: indicator_type)
 
     .fr-grid-row.fr-grid-row--gutters.fr-mt-6w
       .fr-col-12
@@ -124,7 +130,8 @@
               %tr
                 - visible_columns(@global_data).each do |index|
                   - value = @global_data.last[index]
-                  %td{style: cell_background_color(value)}= format_stat_value(value)
+                  - indicator_type = @indicators_metadata[index]&.dig(:type)
+                  %td{style: cell_background_color(value)}= format_stat_value(value, indicator_type: indicator_type)
 
     .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
       .fr-col-12
@@ -146,7 +153,8 @@
                 %tr
                   - visible_columns(@bops_data).each do |index|
                     - value = row[index]
-                    %td{style: (index > 0 ? cell_background_color(value) : "")}= format_stat_value(value)
+                    - indicator_type = index > 0 ? @indicators_metadata[index - 1]&.dig(:type) : nil
+                    %td{style: (index > 0 ? cell_background_color(value) : "")}= format_stat_value(value, indicator_type: indicator_type)
 
     .fr-grid-row.fr-grid-row--gutters
       .fr-col-12
@@ -168,4 +176,5 @@
                 %tr
                   - visible_columns(@menj_academies_data).each do |index|
                     - value = row[index]
-                    %td{class: (index == 0 ? "fr-text--bold" : ""), style: (index > 0 ? cell_background_color(value) : "")}= format_stat_value(value)
+                    - indicator_type = index > 0 ? @indicators_metadata[index - 1]&.dig(:type) : nil
+                    %td{class: (index == 0 ? "fr-text--bold" : ""), style: (index > 0 ? cell_background_color(value) : "")}= format_stat_value(value, indicator_type: indicator_type)

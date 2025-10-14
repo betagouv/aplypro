@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Stats
+  # rubocop:disable Metrics/ClassLength
   class Main
     attr_reader :indicators
 
@@ -34,7 +35,8 @@ module Stats
       indicators.map do |indicator|
         {
           title: indicator.title,
-          tooltip_key: indicator.respond_to?(:tooltip_key) ? indicator.tooltip_key : nil
+          tooltip_key: indicator.respond_to?(:tooltip_key) ? indicator.tooltip_key : nil,
+          type: indicator.class.superclass.name
         }
       end
     end
@@ -130,4 +132,5 @@ module Stats
       ratio.to_s.gsub(".", ",")
     end
   end
+  # rubocop:enable Metrics/ClassLength
 end
