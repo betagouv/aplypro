@@ -17,7 +17,7 @@
                   %td= l(report.created_at, format: :long)
                   %td= "#{report.school_year.start_year} - #{report.school_year.start_year + 1}"
                   %td
-                    = link_to "Voir les statistiques", academic_stats_path(report_id: report.id), class: "fr-btn fr-btn--sm"
+                    = link_to "Voir les statistiques", academic_report_path(report), class: "fr-btn fr-btn--sm"
   - else
     .fr-grid-row.fr-grid-row--gutters
       .fr-col-12

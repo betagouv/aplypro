@@ -18,9 +18,9 @@
               = "Rapport du #{l(@report.created_at, format: :long)}"
           .fr-col-6.fr-text--right
             - if @report.previous_report
-              = link_to "← Rapport précédent", academic_stats_path(report_id: @report.previous_report.id), class: "fr-btn fr-btn--sm fr-btn--secondary fr-mr-2w"
+              = link_to "← Rapport précédent", academic_report_path(@report.previous_report), class: "fr-btn fr-btn--sm fr-btn--secondary fr-mr-2w"
             - if @report.next_report
-              = link_to "Rapport suivant →", academic_stats_path(report_id: @report.next_report.id), class: "fr-btn fr-btn--sm fr-btn--secondary"
+              = link_to "Rapport suivant →", academic_report_path(@report.next_report), class: "fr-btn fr-btn--sm fr-btn--secondary"
   - else
     .fr-grid-row.fr-grid-row--gutters
       .fr-col-12
