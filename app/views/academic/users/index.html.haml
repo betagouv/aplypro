@@ -20,7 +20,6 @@
             %th{scope: "col"} Email
             %th{scope: "col"} Rôle(s)
             %th{scope: "col"} Établissement(s)
-            %th{scope: "col"} Statut
             %th{scope: "col"} Dernière connexion
         %tbody
           - @users.each do |user|
@@ -47,14 +46,6 @@
                           %span.fr-badge.fr-badge--sm.fr-badge--success.fr-ml-1w Confirmé
                 - else
                   %span.fr-text--sm.fr-text--mention-grey Aucun établissement
-              %td
-                - confirmed_count = user.directed_establishments.select { |e| e.academy_code == selected_academy }.count
-                - if confirmed_count > 0
-                  %span.fr-badge.fr-badge--success
-                    Directeur confirmé (#{confirmed_count})
-                - else
-                  %span.fr-badge.fr-badge--info
-                    Directeur non confirmé
               %td
                 - if user.last_sign_in_at
                   = l(user.last_sign_in_at, format: :long)
