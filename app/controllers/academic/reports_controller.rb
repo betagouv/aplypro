@@ -11,6 +11,7 @@ module Academic
     def show
       infer_page_title
       @inhibit_banner = true
+      @inhibit_breadcrumb = true
       @report = Report.find(params[:id])
       @current_year = @report.school_year.start_year
       @stats = Stats::Main.new(@current_year)
