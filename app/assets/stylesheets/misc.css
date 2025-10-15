@@ -369,18 +369,9 @@ nav {
   white-space: nowrap;
 }
 
-.academic-stats-page {
+.academic-stats-page .stats-table-container {
   width: 100vw;
   margin-left: calc(-50vw + 50%);
-  padding: 0;
-}
-
-.academic-stats-page .fr-px-3w {
-  padding-left: 2rem;
-  padding-right: 2rem;
-}
-
-.academic-stats-page .fr-grid-row {
   padding-left: 2rem;
   padding-right: 2rem;
 }
