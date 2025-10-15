@@ -287,6 +287,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_13_113743) do
     t.string "bop"
     t.string "academy_code"
     t.string "academy_label"
+    t.string "establishment_uai"
+    t.string "establishment_name"
     t.integer "schoolings"
     t.integer "edited_da"
     t.integer "students"
