@@ -30,7 +30,7 @@ describe ASP::Entities::Adresse::InduEtranger, type: :model do
         expect(document.at("bureaudistribetranger").text).to eq  66_666.to_s
       end
 
-      context "when the addresse is too long" do
+      context "when the address is too long and contains no abbreviatable words" do
         before do
           pfmp.student.update(
             address_city: "A" * 50
@@ -39,6 +39,30 @@ describe ASP::Entities::Adresse::InduEtranger, type: :model do
 
         it "errors" do
           expect { document.to_s }.to raise_error ActiveModel::ValidationError
+        end
+      end
+
+      context "when the address is too long and contains abbreviatable words" do
+        before do
+          pfmp.student.update(
+            address_city: "Résidence Oliviers Boulevard Victor Hugo"
+          )
+        end
+
+        it "abbreviates the address field to fit within limits" do
+          expect(document.at("localiteetranger").text).to eq "Rdce Oliviers Bvd Victor Hugo"
+        end
+      end
+
+      context "when the address is within limits and contains abbreviatable words" do
+        before do
+          pfmp.student.update(
+            address_city: "Boulevard Victor"
+          )
+        end
+
+        it "does not abbreviate the address field" do
+          expect(document.at("localiteetranger").text).to eq "Boulevard Victor"
         end
       end
     end

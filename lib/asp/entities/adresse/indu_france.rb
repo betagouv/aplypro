@@ -4,6 +4,7 @@ module ASP
   module Entities
     module Adresse
       class InduFrance < Entity
+        LIBELLEVOIE_MAX_LENGTH = 28
         ADRESSE_ATTR_MAX_LENGTH = 38
 
         attribute :libellevoie, :string
@@ -21,7 +22,7 @@ module ASP
           codecominsee
         ]
 
-        validates_length_of :libellevoie, maximum: 28
+        validates_length_of :libellevoie, maximum: LIBELLEVOIE_MAX_LENGTH
         validates_length_of :cpltdistribution, maximum: ADRESSE_ATTR_MAX_LENGTH, allow_nil: true
 
         def self.payment_mapper_class

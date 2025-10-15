@@ -5,23 +5,38 @@ module ASP
     module Adresse
       class InduEtrangerMapper < FranceMapper
         def localiteetranger
-          student.address_city
+          AddressAbbreviator.abbreviate(
+            student.address_city,
+            max_length: Entities::Adresse::InduEtranger::ADRESSE_ATTR_MAX_LENGTH
+          )
         end
 
         def bureaudistribetranger
-          student.address_postal_code
+          AddressAbbreviator.abbreviate(
+            student.address_postal_code,
+            max_length: Entities::Adresse::InduEtranger::ADRESSE_ATTR_MAX_LENGTH
+          )
         end
 
         def voiepointgeoetranger
-          student.address_line1
+          AddressAbbreviator.abbreviate(
+            student.address_line1,
+            max_length: Entities::Adresse::InduEtranger::ADRESSE_ATTR_MAX_LENGTH
+          )
         end
 
         def districtetranger
-          student.address_line2
+          AddressAbbreviator.abbreviate(
+            student.address_line2,
+            max_length: Entities::Adresse::InduEtranger::ADRESSE_ATTR_MAX_LENGTH
+          )
         end
 
         def regionetranger
-          student.address_line2
+          AddressAbbreviator.abbreviate(
+            student.address_line2,
+            max_length: Entities::Adresse::InduEtranger::ADRESSE_ATTR_MAX_LENGTH
+          )
         end
       end
     end
