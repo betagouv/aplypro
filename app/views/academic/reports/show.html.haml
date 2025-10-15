@@ -1,16 +1,14 @@
 .academic-stats-page
-  .fr-px-3w
-    .fr-grid-row.fr-grid-row--gutters
-      .fr-col-12.fr-mb-2w
-        = link_to "← Historique des rapports", academic_reports_path, class: "fr-btn fr-btn--sm fr-btn--tertiary"
+  .fr-container
+    .fr-px-3w
+      .fr-grid-row.fr-grid-row--gutters
+        .fr-col-12.fr-mb-2w
+          = link_to "← Historique des rapports", academic_reports_path, class: "fr-btn fr-btn--sm fr-btn--tertiary"
 
-    %h1.fr-h3 Statistiques de l'académie
+      %h1.fr-h3= "Statistiques de l'académie #{Establishment::ACADEMY_LABELS[selected_academy]} (#{selected_academy}) - Année scolaire #{@current_year} - #{@current_year + 1}"
 
-  - if @report
     .fr-grid-row.fr-grid-row--gutters
       .fr-col-12
-        %h2.fr-h4= "Année scolaire #{@current_year} - #{@current_year + 1}"
-        
         .fr-grid-row.fr-grid-row--gutters.fr-mb-3w
           .fr-col-6
             %p.fr-text--sm.fr-mb-0
@@ -21,14 +19,6 @@
               = link_to "← Rapport précédent", academic_report_path(@report.previous_report), class: "fr-btn fr-btn--sm fr-btn--secondary fr-mr-2w"
             - if @report.next_report
               = link_to "Rapport suivant →", academic_report_path(@report.next_report), class: "fr-btn fr-btn--sm fr-btn--secondary"
-  - else
-    .fr-grid-row.fr-grid-row--gutters
-      .fr-col-12
-        .fr-alert.fr-alert--info
-          %h3.fr-alert__title Aucun rapport disponible
-          %p Aucun rapport de statistiques n'a encore été généré. Les rapports sont générés automatiquement chaque lundi à 6h.
-
-  - if @report
     .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
       .fr-col-md-3
         .fr-card
@@ -37,7 +27,7 @@
               %h3.fr-card__title.fr-h5 Établissements
               %p.fr-text--lead.fr-mb-0= number_with_delimiter(@academy_stats[:total_establishments])
               = progression_indicator(:total_establishments, @academy_stats_progressions)
-      
+
       .fr-col-md-3
         .fr-card
           .fr-card__body
@@ -45,7 +35,7 @@
               %h3.fr-card__title.fr-h5 Élèves
               %p.fr-text--lead.fr-mb-0= number_with_delimiter(@academy_stats[:total_students])
               = progression_indicator(:total_students, @academy_stats_progressions)
-      
+
       .fr-col-md-3
         .fr-card
           .fr-card__body
@@ -53,7 +43,7 @@
               %h3.fr-card__title.fr-h5 PFMP totales
               %p.fr-text--lead.fr-mb-0= number_with_delimiter(@academy_stats[:total_pfmps])
               = progression_indicator(:total_pfmps, @academy_stats_progressions)
-      
+
       .fr-col-md-3
         .fr-card
           .fr-card__body
@@ -70,7 +60,7 @@
               %h3.fr-card__title.fr-h5 Montant validé total
               %p.fr-text--lead.fr-mb-0= number_to_currency(@academy_stats[:total_validated_amount], unit: "€", separator: ",", delimiter: " ")
               = progression_indicator(:total_validated_amount, @academy_stats_progressions)
-      
+
       .fr-col-md-6
         .fr-card
           .fr-card__body
@@ -79,102 +69,128 @@
               %p.fr-text--lead.fr-mb-0= number_to_currency(@academy_stats[:total_paid_amount], unit: "€", separator: ",", delimiter: " ")
               = progression_indicator(:total_paid_amount, @academy_stats_progressions)
 
-    .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
+    .fr-grid-row.fr-grid-row--gutters.fr-mt-4w
       .fr-col-12
-        %h2.fr-h4= "Établissements de l'académie #{selected_academy}"
-        .fr-table.fr-table--bordered.stats-table-container
-          %table
-            %thead
-              %tr
-                - visible_columns(@establishments_data).each do |index|
-                  - header = @establishments_data.first[index]
-                  %th{scope: "col"}
-                    = header
-                    - if index > 4 && @indicators_metadata[index - 5]&.dig(:tooltip_key)
-                      %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-establishments-#{index}", type: "button"}
-                        %span.fr-tooltip.fr-placement{id: "tooltip-establishments-#{index}", role: "tooltip", "aria-hidden" => "true"}
-                          = t("tooltips.#{@indicators_metadata[index - 5][:tooltip_key]}")
-            %tbody
-              - @establishments_data[1..].each do |row|
-                - establishment = Establishment.find_by(uai: row[0])
-                %tr
-                  - visible_columns(@establishments_data).each do |index|
-                    - value = row[index]
-                    - indicator_type = index > 4 ? @indicators_metadata[index - 5]&.dig(:type) : nil
-                    %td{class: (index <= 1 ? "fr-text--sm" : ""), style: (index > 4 ? cell_background_color(value) : "")}
-                      - if index == 1 && establishment
-                        = link_to value, academic_establishment_path(establishment)
-                      - else
-                        = format_stat_value(value, indicator_type: indicator_type)
+        %button.fr-btn.fr-btn--secondary#toggle-establishments-btn{type: "button", onclick: "toggleEstablishments()"}
+          %span#establishments-toggle-text
+            = "Afficher le détail des établissements (#{@establishments_data.length - 1})"
 
+  #establishments-table-wrapper.hidden
+    .fr-table.fr-table--bordered.stats-table-container
+      %table
+        %thead
+          %tr
+            - visible_columns(@establishments_data).each do |index|
+              - header = @establishments_data.first[index]
+              %th{scope: "col"}
+                = header
+                - if index > 4 && @indicators_metadata[index - 5]&.dig(:tooltip_key)
+                  %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-establishments-#{index}", type: "button"}
+                    %span.fr-tooltip.fr-placement{id: "tooltip-establishments-#{index}", role: "tooltip", "aria-hidden" => "true"}
+                      = t("tooltips.#{@indicators_metadata[index - 5][:tooltip_key]}")
+        %tbody
+          - @establishments_data[1..].each do |row|
+            - establishment = Establishment.find_by(uai: row[0])
+            %tr
+              - visible_columns(@establishments_data).each do |index|
+                - value = row[index]
+                - indicator_type = index > 4 ? @indicators_metadata[index - 5]&.dig(:type) : nil
+                %td{class: (index <= 1 ? "fr-text--sm" : ""), style: (index > 4 ? cell_background_color(value) : "")}
+                  - if index == 1 && establishment
+                    = link_to value, academic_establishment_path(establishment)
+                  - else
+                    = format_stat_value(value, indicator_type: indicator_type)
+
+  .fr-container
     .fr-grid-row.fr-grid-row--gutters.fr-mt-6w
       .fr-col-12
-        %h1.fr-h3 Statistiques nationales
+        %h2.fr-h3 Statistiques nationales
 
     .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
       .fr-col-12
-        %h2.fr-h4 Statistiques globales
-        .fr-table.fr-table--bordered.stats-table-container
-          %table
-            %thead
-              %tr
-                - visible_columns(@global_data).each do |index|
-                  - header = @global_data.first[index]
-                  %th{scope: "col"}
-                    = header
-                    - if @indicators_metadata[index]&.dig(:tooltip_key)
-                      %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-stats-#{index}", type: "button"}
-                        %span.fr-tooltip.fr-placement{id: "tooltip-stats-#{index}", role: "tooltip", "aria-hidden" => "true"}
-                          = t("tooltips.#{@indicators_metadata[index][:tooltip_key]}")
-            %tbody
-              %tr
-                - visible_columns(@global_data).each do |index|
-                  - value = @global_data.last[index]
-                  - indicator_type = @indicators_metadata[index]&.dig(:type)
-                  %td{style: cell_background_color(value)}= format_stat_value(value, indicator_type: indicator_type)
+        %h3.fr-h5 Statistiques globales
 
+  .fr-table.fr-table--bordered.stats-table-container
+    %table
+      %thead
+        %tr
+          - visible_columns(@global_data).each do |index|
+            - header = @global_data.first[index]
+            %th{scope: "col"}
+              = header
+              - if @indicators_metadata[index]&.dig(:tooltip_key)
+                %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-stats-#{index}", type: "button"}
+                  %span.fr-tooltip.fr-placement{id: "tooltip-stats-#{index}", role: "tooltip", "aria-hidden" => "true"}
+                    = t("tooltips.#{@indicators_metadata[index][:tooltip_key]}")
+      %tbody
+        %tr
+          - visible_columns(@global_data).each do |index|
+            - value = @global_data.last[index]
+            - indicator_type = @indicators_metadata[index]&.dig(:type)
+            %td{style: cell_background_color(value)}= format_stat_value(value, indicator_type: indicator_type)
+
+  .fr-container
     .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
       .fr-col-12
-        %h2.fr-h4 Statistiques par BOP
-        .fr-table.fr-table--bordered.stats-table-container
-          %table
-            %thead
-              %tr
-                - visible_columns(@bops_data).each do |index|
-                  - header = @bops_data.first[index]
-                  %th{scope: "col"}
-                    = header
-                    - if index > 0 && @indicators_metadata[index - 1]&.dig(:tooltip_key)
-                      %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-bops-#{index}", type: "button"}
-                        %span.fr-tooltip.fr-placement{id: "tooltip-bops-#{index}", role: "tooltip", "aria-hidden" => "true"}
-                          = t("tooltips.#{@indicators_metadata[index - 1][:tooltip_key]}")
-            %tbody
-              - @bops_data[1..].each do |row|
-                %tr
-                  - visible_columns(@bops_data).each do |index|
-                    - value = row[index]
-                    - indicator_type = index > 0 ? @indicators_metadata[index - 1]&.dig(:type) : nil
-                    %td{style: (index > 0 ? cell_background_color(value) : "")}= format_stat_value(value, indicator_type: indicator_type)
+        %h3.fr-h5 Statistiques par BOP
 
+  .fr-table.fr-table--bordered.stats-table-container
+    %table
+      %thead
+        %tr
+          - visible_columns(@bops_data).each do |index|
+            - header = @bops_data.first[index]
+            %th{scope: "col"}
+              = header
+              - if index > 0 && @indicators_metadata[index - 1]&.dig(:tooltip_key)
+                %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-bops-#{index}", type: "button"}
+                  %span.fr-tooltip.fr-placement{id: "tooltip-bops-#{index}", role: "tooltip", "aria-hidden" => "true"}
+                    = t("tooltips.#{@indicators_metadata[index - 1][:tooltip_key]}")
+      %tbody
+        - @bops_data[1..].each do |row|
+          %tr
+            - visible_columns(@bops_data).each do |index|
+              - value = row[index]
+              - indicator_type = index > 0 ? @indicators_metadata[index - 1]&.dig(:type) : nil
+              %td{style: (index > 0 ? cell_background_color(value) : "")}= format_stat_value(value, indicator_type: indicator_type)
+
+  .fr-container
     .fr-grid-row.fr-grid-row--gutters
       .fr-col-12
-        %h2.fr-h4 Statistiques par académie MENJ
-        .fr-table.fr-table--bordered.stats-table-container
-          %table
-            %thead
-              %tr
-                - visible_columns(@menj_academies_data).each do |index|
-                  - header = @menj_academies_data.first[index]
-                  %th{scope: "col"}
-                    = header
-                    - if index > 0 && @indicators_metadata[index - 1]&.dig(:tooltip_key)
-                      %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-academies-#{index}", type: "button"}
-                        %span.fr-tooltip.fr-placement{id: "tooltip-academies-#{index}", role: "tooltip", "aria-hidden" => "true"}
-                          = t("tooltips.#{@indicators_metadata[index - 1][:tooltip_key]}")
-            %tbody
-              - @menj_academies_data[1..].each do |row|
-                %tr
-                  - visible_columns(@menj_academies_data).each do |index|
-                    - value = row[index]
-                    - indicator_type = index > 0 ? @indicators_metadata[index - 1]&.dig(:type) : nil
-                    %td{class: (index == 0 ? "fr-text--bold" : ""), style: (index > 0 ? cell_background_color(value) : "")}= format_stat_value(value, indicator_type: indicator_type)
+        %h3.fr-h5 Statistiques par académie MENJ
+
+  .fr-table.fr-table--bordered.stats-table-container
+    %table
+      %thead
+        %tr
+          - visible_columns(@menj_academies_data).each do |index|
+            - header = @menj_academies_data.first[index]
+            %th{scope: "col"}
+              = header
+              - if index > 0 && @indicators_metadata[index - 1]&.dig(:tooltip_key)
+                %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-academies-#{index}", type: "button"}
+                  %span.fr-tooltip.fr-placement{id: "tooltip-academies-#{index}", role: "tooltip", "aria-hidden" => "true"}
+                    = t("tooltips.#{@indicators_metadata[index - 1][:tooltip_key]}")
+      %tbody
+        - @menj_academies_data[1..].each do |row|
+          %tr
+            - visible_columns(@menj_academies_data).each do |index|
+              - value = row[index]
+              - indicator_type = index > 0 ? @indicators_metadata[index - 1]&.dig(:type) : nil
+              %td{class: (index == 0 ? "fr-text--bold" : ""), style: (index > 0 ? cell_background_color(value) : "")}= format_stat_value(value, indicator_type: indicator_type)
+
+:javascript
+  function toggleEstablishments() {
+    const wrapper = document.getElementById('establishments-table-wrapper');
+    const text = document.getElementById('establishments-toggle-text');
+    const count = #{@establishments_data.length - 1};
+
+    if (wrapper.classList.contains('hidden')) {
+      wrapper.classList.remove('hidden');
+      text.textContent = 'Masquer le détail des établissements (' + count + ')';
+    } else {
+      wrapper.classList.add('hidden');
+      text.textContent = 'Afficher le détail des établissements (' + count + ')';
+    }
+  }
+

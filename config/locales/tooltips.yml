@@ -6,7 +6,7 @@ fr:
       validated_pfmps: "PFMPs terminées et validées"
       students_data: "Données d'élèves nécessaires présentes"
       sendable_amounts: "Somme des PFMPs terminées validées avec RIB, DA & données élèves (prêtes à l'envoi)"
-      yearly_amounts: "Somme des montants annuels"
+      yearly_amounts: "Somme maximale des montants annuels versables (en additionnant les plafonds)"
       schoolings: "Scolarités concernées"
       pfmps: "Toutes les PFMPs (même non complétées)"
       payment_request_sent: "Demandes de paiement envoyées à l'ASP"
@@ -19,7 +19,7 @@ fr:
     extended: |
       Un report permet de saisir une date jusqu'à laquelle prolonger la durée de la Décision d'Attribution associée à cette scolarité. Il devient ensuite possible de saisir des PFMPs pour l'année scolaire terminée. Cette option est à utiliser pour les élèves qui n'aurait pas pu réaliser leur PFMP au cours de l'année scolaire passée (raisons de santé, fermeture de l'entreprise d'accueil, problèmes liés à la météo....) et la rattrape sur l'année scolaire suivante
     owner_type: |
-      Pour un élève majeur qui ne peut pas ouvrir de compte et souhaite que son allocation soit versée sur le compte d'un tiers dans le cadre de la procédure du mandat sous seing privé (comme indiqué dans la FàQ EduScol), l'option à sélectionner est : 
+      Pour un élève majeur qui ne peut pas ouvrir de compte et souhaite que son allocation soit versée sur le compte d'un tiers dans le cadre de la procédure du mandat sous seing privé (comme indiqué dans la FàQ EduScol), l'option à sélectionner est :
       <strong>Un élève majeur payé sur le compte d'un tiers</strong>
     remove_student: |
       Utilisez ce bouton pour un élève qui est inscrit dans la classe mais ne s'est jamais présenté dans l'établissement. Si cet élève est toujours présent dans la Base Elèves Etablissement (BEE) ou dans Colentagri, cela permettra de ne plus le voir affiché dans les effectifs APLyPro.
@@ -38,8 +38,8 @@ fr:
         <li>> Vous n'êtes pas chef d'établissement</li>
         <li>> La scolarité n'a pas de décision d'attribution générée</li>
         <li>> Une abrogation de décision d'attribution a déjà été générée</li>
-        <li>> La scolarité n'a pas de date de fin</li>  
-        <li>> La scolarité est sur l'année scolaire en cours</li>  
+        <li>> La scolarité n'a pas de date de fin</li>
+        <li>> La scolarité est sur l'année scolaire en cours</li>
       </ul>
     disabled_abrogation: |
       Cette action n'est pas disponible pour plusieurs raisons possibles :
@@ -47,6 +47,6 @@ fr:
         <li>> Vous n'êtes pas chef d'établissement</li>
         <li>> La scolarité n'a pas de décision d'attribution générée</li>
         <li>> Une abrogation de décision d'attribution a déjà été générée</li>
-        <li>> La scolarité n'a pas de date de fin</li>  
-        <li>> Il n'existe aucune scolarité plus récente pour la même année scolaire</li>  
+        <li>> La scolarité n'a pas de date de fin</li>
+        <li>> Il n'existe aucune scolarité plus récente pour la même année scolaire</li>
       </ul>
