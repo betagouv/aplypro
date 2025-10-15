@@ -205,7 +205,7 @@ fr:
           index: Statistiques
         reports:
           index: Historique des rapports
-          show: Rapport
+          show: Statistiques de l'académie
       stats:
         index: Statistiques
       school_years:

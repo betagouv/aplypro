@@ -32,7 +32,7 @@ RSpec.describe Academic::ReportsController do
       it "renders the page with report data" do
         get academic_report_path(report)
         expect(response).to have_http_status(:success)
-        expect(response.body).to include("Statistiques de l'académie")
+        expect(response.body).to include("Statistiques de l&#39;académie")
         expect(response.body).to include("Rapport du")
       end
 

@@ -4,8 +4,9 @@
       .fr-grid-row.fr-grid-row--gutters
         .fr-col-12.fr-mb-2w
           = link_to "← Historique des rapports", academic_reports_path, class: "fr-btn fr-btn--sm fr-btn--tertiary"
-
-      %h1.fr-h3= "Statistiques de l'académie #{Establishment::ACADEMY_LABELS[selected_academy]} (#{selected_academy}) - Année scolaire #{@current_year} - #{@current_year + 1}"
+      .fr-grid-row.fr-grid-row--gutters
+        .fr-col-12
+          %h1.fr-h3= "Statistiques de l'académie #{Establishment::ACADEMY_LABELS[selected_academy]} (#{selected_academy}) - Année scolaire #{@current_year} - #{@current_year + 1}"
 
     .fr-grid-row.fr-grid-row--gutters
       .fr-col-12
