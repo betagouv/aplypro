@@ -23,9 +23,9 @@
                   %i.fr-icon-download-line.fr-icon--sm.fr-mr-1w{"aria-hidden": "true"}
                   Exporter en CSV
               - if @report.previous_report
-                = link_to "← Précédent", academic_report_path(@report.previous_report), class: "fr-btn fr-btn--sm fr-btn--secondary"
+                = link_to "← Rapport précédent", academic_report_path(@report.previous_report), class: "fr-btn fr-btn--sm fr-btn--secondary"
               - if @report.next_report
-                = link_to "Suivant →", academic_report_path(@report.next_report), class: "fr-btn fr-btn--sm fr-btn--secondary"
+                = link_to "Rapport suivant →", academic_report_path(@report.next_report), class: "fr-btn fr-btn--sm fr-btn--secondary"
     .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
       .fr-col-md-3
         .fr-card
