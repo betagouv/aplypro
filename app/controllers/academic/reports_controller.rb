@@ -2,6 +2,8 @@
 
 module Academic
   class ReportsController < Academic::ApplicationController
+    include Zipline
+
     def index
       infer_page_title
       @inhibit_banner = true
@@ -17,6 +19,17 @@ module Academic
       @stats = Stats::Main.new(@current_year)
 
       prepare_statistics_data
+    end
+
+    def export
+      @report = Report.find(params[:id])
+
+      unless current_user.admin?
+        redirect_to academic_report_path(@report), alert: t(".unauthorized")
+        return
+      end
+
+      zipline(export_files, export_filename)
     end
 
     private
@@ -60,6 +73,19 @@ module Academic
 
     def stats_builder
       @stats_builder ||= Academic::StatsDataBuilder.new(selected_academy, @report.school_year)
+    end
+
+    def export_files
+      csv_exporter = Reports::CsvExporter.new(@report)
+      csv_exporter.csv_files.map do |filename, content|
+        [StringIO.new(content), filename]
+      end
+    end
+
+    def export_filename
+      year = @report.school_year.start_year
+      date = @report.created_at.strftime("%Y%m%d")
+      "aplypro_rapport_#{@report.id}_annee-scol#{year}_date#{date}.zip"
     end
   end
 end
