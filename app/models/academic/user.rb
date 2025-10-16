@@ -25,6 +25,13 @@ module Academic
       establishments.distinct.pluck(:academy_code)
     end
 
+    def admin?
+      return false if oidc_attributes.blank?
+
+      mapper = IdentityMappers::Fim.new(oidc_attributes.fetch("extra", {}).fetch("raw_info", {}))
+      mapper.aplypro_academies.any? { |academy| academy == "*" }
+    end
+
     def to_s
       name
     end
