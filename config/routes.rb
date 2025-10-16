@@ -66,7 +66,11 @@ Rails.application.routes.draw do
 
     resources :academic_invitations, only: [:destroy]
 
-    resources :reports, only: %i[index show]
+    resources :reports, only: %i[index show] do
+      member do
+        post :export
+      end
+    end
 
     devise_for :users, class_name: "Academic::User"
   end
