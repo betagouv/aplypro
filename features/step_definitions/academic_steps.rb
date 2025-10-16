@@ -18,3 +18,8 @@ Quand("je clique sur le nom de l'établissement dans le tableau") do
     first("a").click
   end
 end
+
+Alors("je devrais voir l'académie {string} dans les options") do |academy_code|
+  academy_label = Establishment::ACADEMY_LABELS[academy_code]
+  expect(page).to have_content("#{academy_label} (#{academy_code})")
+end
