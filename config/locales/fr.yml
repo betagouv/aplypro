@@ -91,6 +91,8 @@ fr:
             email:
               invalid: "n'est pas valide : seuls les emails académiques sont autorisés."
               taken: ": cet email est déjà autorisé."
+            academy_codes:
+              invalid_codes: "contient des codes académie invalides : %{codes}"
         rib:
           attributes:
             student_id:
