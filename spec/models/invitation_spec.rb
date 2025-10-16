@@ -81,6 +81,29 @@ RSpec.describe Invitation do
         expect(invitation.errors[:academy_codes]).to be_present
       end
 
+      it "does not allow invalid academy codes" do
+        invitation.academy_codes = ["99"]
+        expect(invitation).not_to be_valid
+        expect(invitation.errors[:academy_codes]).to be_present
+      end
+
+      it "does not allow star character" do
+        invitation.academy_codes = ["*"]
+        expect(invitation).not_to be_valid
+        expect(invitation.errors[:academy_codes]).to be_present
+      end
+
+      it "does not allow mix of valid and invalid codes" do
+        invitation.academy_codes = %w[01 99 02]
+        expect(invitation).not_to be_valid
+        expect(invitation.errors[:academy_codes]).to be_present
+      end
+
+      it "allows all valid academy codes" do
+        invitation.academy_codes = %w[01 06 14]
+        expect(invitation).to be_valid
+      end
+
       describe "email uniqueness within type" do
         it "validates uniqueness of email within AcademicInvitation type (case insensitive)" do
           create(:academic_invitation, email: "test@educagri.fr")

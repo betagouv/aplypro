@@ -55,29 +55,12 @@ module Users
       choose_redirect_page!
     end
 
-    def academic # rubocop:disable Metrics/AbcSize
+    def academic
       parse_identity
-
-      @academic_login = true
-      inflate_academic_user
-
-      add_auth_breadcrumb(data: { user_id: @academic_user.id }, message: "Successfully parsed academic user")
-
-      @academies = @mapper.aplypro_academies
-      @academies = merge_invitation_academies!(@academic_user.email, @academies)
-
-      raise IdentityMappers::Errors::EmptyResponsibilitiesError if @academies.empty?
-
-      sign_in(:academic_user, @academic_user)
-      session[:academy_codes] = @academies
-
-      if @academies.many?
-        redirect_to select_academy_academic_users_path(@academic_user)
-      else
-        session[:selected_academy] = @academies.first
-
-        redirect_to academic_home_path, notice: t("auth.success")
-      end
+      setup_academic_user
+      process_academy_codes
+      validate_academies!
+      complete_academic_login
     end
 
     def asp
@@ -126,6 +109,39 @@ module Users
     end
 
     private
+
+    def setup_academic_user
+      @academic_login = true
+      inflate_academic_user
+      add_auth_breadcrumb(data: { user_id: @academic_user.id }, message: "Successfully parsed academic user")
+    end
+
+    def process_academy_codes
+      @academies = @mapper.aplypro_academies
+      @academies = merge_invitation_academies!(@academic_user.email, @academies)
+      expand_admin_academy_codes if @academies.include?("*")
+    end
+
+    def expand_admin_academy_codes
+      all_academy_codes = Establishment.distinct.pluck(:academy_code).compact.sort
+      @academies = all_academy_codes.presence || ["*"]
+    end
+
+    def validate_academies!
+      raise IdentityMappers::Errors::EmptyResponsibilitiesError if @academies.empty?
+    end
+
+    def complete_academic_login
+      sign_in(:academic_user, @academic_user)
+      session[:academy_codes] = @academies
+
+      if @academies.many?
+        redirect_to select_academy_academic_users_path(@academic_user)
+      else
+        session[:selected_academy] = @academies.first
+        redirect_to academic_home_path, notice: t("auth.success")
+      end
+    end
 
     def merge_invitation_academies!(email, existing_academies)
       invitation = AcademicInvitation.find_by(email: email)

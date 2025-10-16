@@ -102,6 +102,16 @@ Sachantque("je suis un personnel académique sans validation") do
   )
 end
 
+Sachantque("je suis un personnel académique administrateur") do
+  OmniAuth.config.mock_auth[:academic] = make_fim_hash(
+    name: Faker::Name.name,
+    email: Faker::Internet.email,
+    raw_info: {
+      AplyproAcademieResp: ["*"]
+    }
+  )
+end
+
 Sachantque("je suis un personnel MENJ de l'établissement {string}") do |uai|
   OmniAuth.config.mock_auth[:fim] = make_fim_hash(
     name: Faker::Name.name,
