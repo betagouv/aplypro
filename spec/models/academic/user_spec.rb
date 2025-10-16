@@ -59,7 +59,7 @@ RSpec.describe Academic::User do
         {
           "extra" => {
             "raw_info" => {
-              "AplyproAcademieResp" => ["01", "02"]
+              "AplyproAcademieResp" => %w[01 02]
             }
           }
         }
