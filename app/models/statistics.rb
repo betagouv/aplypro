@@ -9,7 +9,10 @@ class Statistics < ApplicationRecord
   scope :global, -> { initialize_scope(false, false, false) }
 
   scope :ordered, -> { order(created_at: :desc) }
-  scope :for_school_year, ->(school_year) { where(school_year: school_year) }
+  scope :for_year, lambda { |start_year|
+    joins(classe: :school_year)
+      .where(school_year: { start_year: start_year })
+  }
 
   def edited_da_percentage
     edited_da.percent_of(schoolings)
@@ -32,16 +35,15 @@ class Statistics < ApplicationRecord
   end
 
   class << self
-    def create_for_year(school_year) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      start_year = school_year.start_year
-
+    def create_for_year(start_year) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       schoolings = Schooling.for_year(start_year)
       students = Student.for_year(start_year)
       pfmps = Pfmp.for_year(start_year)
+      paid_pfmps = PaidPfmp.paid # TODO: .for_year(start_year) ?
       payment_requests = ASP::PaymentRequest.for_year(start_year).joins(:asp_payment_request_transitions)
 
       Statistics.create!(
-        school_year: school_year,
+        school_year: SchoolYear.find_by(start_year:),
         bop: "",
         academy_code: "",
         academy_label: "",
@@ -55,17 +57,17 @@ class Statistics < ApplicationRecord
         pfmps: pfmps.count,
         validated_pfmps: pfmps.finished.in_state(:validated).count,
         validated_pfmps_amount: "",
-        completed_pfmps: "",
+        completed_pfmps: pfmps.in_state(:completed).count,
         completed_pfmps_amount: "",
-        incomplete_pfmps: "",
+        incomplete_pfmps: pfmps.in_state(:incomplete).count,
         theoretical_incomplete_pfmps_amount: "",
         invalid_pfmps: "",
         theoretical_invalid_pfmps_amount: "",
-        asp_payments_paid: payment_requests.where("asp_payment_request_transitions.to_state": :paid).count,
+        asp_payments_paid: payment_requests.in_state(:paid).count,
         asp_payments_paid_amount: "",
-        paid_students: "",
-        paid_pfmps: "",
-        payable_pfmps: "",
+        paid_students: paid_pfmps.distinct.count(:student_id),
+        paid_pfmps: paid_pfmps.count,
+        payable_pfmps: pfmps.select(&:payable?),
         reported_da: "",
         reported_da_amount: ""
       )

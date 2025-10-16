@@ -2,12 +2,12 @@
 
 module Statistics
   class AllJob < ApplicationJob
-    def perform(school_year = SchoolYear.current)
-      Statistics.create_for_year(school_year)
-      # Statistics::AcademyJob.perform_now(school_year)
-      # Statistics::BopJob.perform_now(school_year)
-      # Statistics::EstablishmentJob.perform_now(school_year)
-      # Statistics::GlobalJob.perform_now(school_year)
+    def perform(start_year = SchoolYear.current.start_year)
+      Statistics.create_for_year(start_year)
+      # Statistics::AcademyJob.perform_now(start_year)
+      # Statistics::BopJob.perform_now(start_year)
+      # Statistics::EstablishmentJob.perform_now(start_year)
+      # Statistics::GlobalJob.perform_now(start_year)
     end
   end
 end
