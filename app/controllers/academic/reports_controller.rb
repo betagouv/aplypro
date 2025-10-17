@@ -76,7 +76,7 @@ module Academic
     end
 
     def export_files
-      csv_exporter = Reports::CsvExporter.new(@report)
+      csv_exporter = Reports::CSVExporter.new(@report)
       csv_exporter.csv_files.map do |filename, content|
         [StringIO.new(content), filename]
       end

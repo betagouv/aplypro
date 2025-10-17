@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-  class CsvExporter
+  class CSVExporter
     attr_reader :report
 
     def initialize(report)
