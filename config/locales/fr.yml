@@ -526,6 +526,9 @@ fr:
       destroy:
         success: L'invitation a été supprimée avec succès.
         unauthorized: Vous n'êtes pas autorisé à supprimer cette invitation.
+    reports:
+      export:
+        unauthorized: Accès non autorisé
     welcome:
       title: Bonjour et bienvenue sur la page APLyPro dédiée aux utilisateurs qui ne sont pas en établissement !
       description: |
