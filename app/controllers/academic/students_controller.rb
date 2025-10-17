@@ -9,7 +9,7 @@ module Academic
     helper_method :current_establishment
 
     def show
-      @schoolings = @student.schoolings
+      @schoolings = @student.schoolings.includes(:classe, :establishment, :pfmps)
 
       infer_page_title(name: @student.full_name)
     end

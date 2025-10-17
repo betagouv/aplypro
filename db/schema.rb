@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_03_000002) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_17_154338) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "unaccent"
@@ -145,6 +145,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_03_000002) do
     t.bigint "confirmed_director_id"
     t.string "department_code"
     t.string "commune_code"
+    t.index ["academy_code"], name: "index_establishments_on_academy_code"
     t.index ["confirmed_director_id"], name: "index_establishments_on_confirmed_director_id"
     t.index ["uai"], name: "index_establishments_on_uai", unique: true
   end
@@ -245,6 +246,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_03_000002) do
     t.string "name", null: false
     t.integer "owner_type", default: 1, null: false
     t.bigint "establishment_id"
+    t.index ["archived_at"], name: "index_ribs_on_archived_at"
     t.index ["establishment_id"], name: "index_ribs_on_establishment_id"
     t.index ["student_id", "establishment_id"], name: "one_active_rib_per_student_per_establishment", unique: true, where: "(archived_at IS NULL)"
     t.index ["student_id"], name: "index_ribs_on_student_id"
@@ -276,6 +278,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_03_000002) do
     t.index ["administrative_number"], name: "index_schoolings_on_administrative_number", unique: true
     t.index ["asp_dossier_id"], name: "index_schoolings_on_asp_dossier_id", unique: true
     t.index ["classe_id"], name: "index_schoolings_on_classe_id"
+    t.index ["status"], name: "index_schoolings_on_status"
     t.index ["student_id", "classe_id"], name: "one_schooling_per_class_student", unique: true
     t.index ["student_id", "end_date", "removed_at"], name: "index_schoolings_on_student_id_and_end_date_and_removed_at"
     t.index ["student_id"], name: "index_schoolings_on_student_id"
