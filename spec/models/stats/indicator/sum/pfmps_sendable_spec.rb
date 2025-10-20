@@ -3,7 +3,7 @@
 require "rails_helper"
 require "./spec/models/stats/shared_contexts"
 
-describe Stats::Indicator::SendableAmounts do
+describe Stats::Indicator::Sum::PfmpsSendable do
   let(:current_start_year) { SchoolYear.current.start_year }
 
   describe "#global_data" do
