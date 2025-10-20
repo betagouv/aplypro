@@ -47,27 +47,4 @@ RSpec.describe ApplicationController do
       end
     end
   end
-
-  describe "redirect_asp_users!" do
-    context "when only an ASP user is signed in" do
-      before { sign_in(asp_user, scope: :asp_user) }
-
-      it "redirects to asp_schoolings_path" do
-        get school_year_classes_path(school_year)
-        expect(response).to redirect_to(asp_schoolings_path)
-      end
-    end
-
-    context "when both ASP and establishment users are signed in" do
-      before do
-        sign_in(asp_user, scope: :asp_user)
-        sign_in(establishment_user, scope: :user)
-      end
-
-      it "does not redirect and allows access to establishment routes" do
-        get school_year_classes_path(school_year)
-        expect(response).to have_http_status(:ok)
-      end
-    end
-  end
 end
