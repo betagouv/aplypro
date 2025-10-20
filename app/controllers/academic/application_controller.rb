@@ -18,14 +18,7 @@ module Academic
 
     helper_method :current_user, :selected_academy, :authorised_academy_codes, :selected_school_year
 
-    def home
-      establishments = Establishment.joins(:classes)
-                                    .where(academy_code: selected_academy,
-                                           "classes.school_year_id": selected_school_year)
-                                    .distinct
-
-      @establishments_data = establishments_data_summary(establishments.pluck(:id))
-    end
+    def home; end
 
     def academic_map
       establishments = Establishment.joins(:classes)
@@ -36,7 +29,7 @@ module Academic
       @establishments_data = establishments_data_summary(establishments.pluck(:id))
 
       respond_to do |format|
-        format.html { render partial: "academic_map", layout: false }
+        format.html { render "academic_map", layout: false }
         format.turbo_stream
       end
     end

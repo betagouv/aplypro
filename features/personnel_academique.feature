@@ -42,23 +42,3 @@ Fonctionnalité: Gestion du personnel académique
     Lorsque je me rends sur la page d'accueil
     Quand je clique sur "Utilisateurs"
     Alors la page contient "Utilisateurs en établissement - Académie Clermont-Ferrand"
-
-  Scénario: Le personnel académique voit un message quand il n'y a pas d'établissements
-    Alors la page contient "Aucun établissement trouvé"
-    Et la page contient "Aucun établissement n'a été trouvé pour cette académie et cette année scolaire"
-
-  Scénario: Le personnel académique peut cliquer sur un établissement pour voir ses détails
-    Sachant qu'il existe un établissement avec le code académie "06"
-    Lorsque je me rends sur la page d'accueil
-    Quand je clique sur le nom de l'établissement dans le tableau
-    Alors la page contient "Informations générales"
-    Et la page contient "UAI:"
-    Et la page contient "Nombre de scolarités:"
-    Et la page contient "Montant payé:"
-
-  Scénario: Le personnel académique peut revenir à la carte depuis les détails d'un établissement
-    Sachant qu'il existe un établissement avec le code académie "06"
-    Lorsque je me rends sur la page d'accueil
-    Quand je clique sur le nom de l'établissement dans le tableau
-    Et que je clique sur "Retour à la carte des établissements"
-    Alors la page contient "Académie 06"

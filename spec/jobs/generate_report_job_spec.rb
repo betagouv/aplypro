@@ -4,43 +4,35 @@ require "rails_helper"
 
 RSpec.describe GenerateReportJob do
   describe "#perform" do
+    let(:school_year) { create(:school_year, start_year: 2070) }
     let(:date) { Time.current }
 
     before do
-      allow(Report).to receive(:create_for_date)
+      allow(SchoolYear).to receive(:current).and_return(school_year)
+      allow(Stats::Main).to receive(:new).and_return(instance_double(Stats::Main,
+                                                                     global_data: [["Global"]],
+                                                                     bops_data: [["BOP"]],
+                                                                     menj_academies_data: [["Academy"]],
+                                                                     establishments_data: [["Establishment"]]))
     end
 
-    it "calls Report.create_for_date with the provided date" do
-      described_class.new.perform(date)
-      expect(Report).to have_received(:create_for_date).with(date)
+    it "creates a report with the provided date" do
+      expect { described_class.new.perform(school_year, date) }.to change(Report, :count).by(1)
+      expect(Report.last.created_at).to be_within(1.second).of(date)
+      expect(Report.last.school_year).to eq(school_year)
     end
 
-    it "calls Report.create_for_date with current time when no date provided" do
-      described_class.new.perform
-      expect(Report).to have_received(:create_for_date).once
+    it "creates a report with current time when no date provided" do
+      expect { described_class.new.perform(school_year) }.to change(Report, :count).by(1)
     end
 
-    context "when integrated with Report model" do
-      let(:school_year) { create(:school_year, start_year: 2070) }
+    it "creates a report when none exists for the date" do
+      expect { described_class.new.perform(school_year, date) }.to change(Report, :count).by(1)
+    end
 
-      before do
-        allow(Report).to receive(:create_for_date).and_call_original
-        allow(SchoolYear).to receive(:current).and_return(school_year)
-        allow(Stats::Main).to receive(:new).and_return(instance_double(Stats::Main,
-                                                                       global_data: [["Global"]],
-                                                                       bops_data: [["BOP"]],
-                                                                       menj_academies_data: [["Academy"]],
-                                                                       establishments_data: [["Establishment"]]))
-      end
-
-      it "creates a report when none exists for the date" do
-        expect { described_class.new.perform(date) }.to change(Report, :count).by(1)
-      end
-
-      it "does not create a duplicate report for the same date" do
-        create(:report, created_at: date, school_year: school_year)
-        expect { described_class.new.perform(date) }.not_to change(Report, :count)
-      end
+    it "does not create a duplicate report for the same date" do
+      create(:report, created_at: date, school_year: school_year)
+      expect { described_class.new.perform(school_year, date) }.not_to change(Report, :count)
     end
   end
 end
