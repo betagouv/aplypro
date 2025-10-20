@@ -180,7 +180,11 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def paid_amount
-    last_paid_request = payment_requests.in_state(:paid).order(created_at: :desc).first
+    last_paid_request = payment_requests
+                          .in_state(:paid)
+                          .order(created_at: :desc)
+                          .reject(&:recovery?)
+                          .first
     return unless last_paid_request
 
     last_paid_request
