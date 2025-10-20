@@ -46,11 +46,11 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_asp_users!
-    redirect_to asp_schoolings_path and return if asp_user_signed_in?
+    redirect_to asp_schoolings_path and return if asp_user_signed_in? && !user_signed_in?
   end
 
   def redirect_academic_users!
-    redirect_to academic_home_path and return if academic_user_signed_in?
+    redirect_to academic_home_path and return if academic_user_signed_in? && !user_signed_in?
   end
 
   private
