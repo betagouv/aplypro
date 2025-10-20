@@ -9,22 +9,22 @@ module Stats
       @school_year = SchoolYear.find_by!(start_year:)
 
       @indicators = [
-        Indicator::AttributiveDecisions,
-        Indicator::Ribs,
-        Indicator::ValidatedPfmps,
-        Indicator::StudentsData,
-        Indicator::SendableAmounts,
-        Indicator::YearlyAmounts,
-        Indicator::Schoolings,
-        Indicator::Pfmps
+        Indicator::Ratio::AttributiveDecisions,
+        Indicator::Ratio::Ribs,
+        Indicator::Ratio::ValidatedPfmps,
+        Indicator::Ratio::StudentsData,
+        Indicator::Sum::PfmpsSendable,
+        Indicator::Sum::Yearly,
+        Indicator::Count::Schoolings,
+        Indicator::Count::Pfmps
       ].map { |indicator_class| indicator_class.new(start_year) }
 
       %i[sent integrated paid].each do |state|
-        @indicators.push Indicator::PaymentRequestStates.new(start_year, state)
+        @indicators.push Indicator::Count::PaymentRequestStates.new(start_year, state)
       end
 
-      @indicators.push Indicator::PaymentRequestStateAmounts.new(start_year, :paid)
-      @indicators.push Indicator::PfmpPaidPayableRatio.new(start_year)
+      @indicators.push Indicator::Sum::PaymentRequestsStates.new(start_year, :paid)
+      @indicators.push Indicator::Ratio::PfmpsPaidPayable.new(start_year)
     end
 
     def indicators_titles
