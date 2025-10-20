@@ -68,12 +68,7 @@ module Academic
     end
 
     def calculate_progressions
-      cache_key = "academy_stats_progressions/#{selected_academy}/report/#{@report.id}/" \
-                  "school_year/#{@report.school_year.id}"
-
-      Rails.cache.fetch(cache_key, expires_in: 1.week) do
-        stats_builder.calculate_progressions(@report, @academy_stats)
-      end
+      stats_builder.calculate_progressions(@report, @academy_stats)
     end
 
     def stats_builder

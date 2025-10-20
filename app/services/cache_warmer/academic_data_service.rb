@@ -55,9 +55,8 @@ module CacheWarmer
     def warm_stats_caches(academy_code, school_year, report)
       builder = Academic::StatsDataBuilder.new(academy_code, school_year)
 
-      academy_stats = warm_academy_stats(builder, academy_code, school_year, report)
+      warm_academy_stats(builder, academy_code, school_year, report)
       warm_filtered_establishments(builder, academy_code, school_year, report)
-      warm_stats_progressions(builder, academy_code, school_year, report, academy_stats)
     end
 
     def warm_academy_stats(builder, academy_code, school_year, report)
@@ -72,13 +71,6 @@ module CacheWarmer
       warm_cache(cache_key) do
         full_data = report.data["establishments_data"]
         builder.filter_establishments_data(full_data)
-      end
-    end
-
-    def warm_stats_progressions(builder, academy_code, school_year, report, academy_stats)
-      cache_key = stats_cache_key("academy_stats_progressions", academy_code, report.id, school_year.id)
-      warm_cache(cache_key) do
-        builder.calculate_progressions(report, academy_stats)
       end
     end
 
