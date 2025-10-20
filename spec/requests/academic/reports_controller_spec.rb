@@ -21,6 +21,24 @@ RSpec.describe Academic::ReportsController do
       get academic_reports_path
       expect(response).to have_http_status(:success)
     end
+
+    context "when filtering by school year" do
+      let(:first_school_year) { create(:school_year, start_year: 2030) }
+      let(:second_school_year) { create(:school_year, start_year: 2031) }
+      let!(:first_report) { create(:report, school_year: first_school_year) }
+      let!(:second_report) { create(:report, school_year: second_school_year) }
+
+      it "shows all reports when no filter is applied" do
+        get academic_reports_path
+        expect(assigns(:reports)).to include(first_report, second_report)
+      end
+
+      it "filters reports by school year" do
+        get academic_reports_path(school_year_id: first_school_year.id)
+        expect(assigns(:reports)).to include(first_report)
+        expect(assigns(:reports)).not_to include(second_report)
+      end
+    end
   end
 
   describe "GET show" do

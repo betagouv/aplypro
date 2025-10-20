@@ -7,7 +7,12 @@ module Academic
     def index
       infer_page_title
       @inhibit_banner = true
+      @inhibit_breadcrumb = true
+      @school_years = SchoolYear.order(start_year: :desc)
+      @selected_school_year_id = params[:school_year_id]
+
       @reports = Report.includes(:school_year).order(created_at: :desc)
+      @reports = @reports.where(school_year_id: @selected_school_year_id) if @selected_school_year_id.present?
     end
 
     def show
