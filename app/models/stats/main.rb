@@ -8,31 +8,29 @@ module Stats
     def initialize(start_year)
       @school_year = SchoolYear.find_by!(start_year:)
 
-      @indicators = [
-        Indicator::Ratio::AttributiveDecisions,
-        Indicator::Ratio::Ribs,
-        Indicator::Ratio::ValidatedPfmps,
-        Indicator::Ratio::StudentsData,
-        Indicator::Sum::PfmpsSendable,
-        Indicator::Sum::Yearly,
+      indicators_class = [
+        Indicator::Count::Pfmps,
         Indicator::Count::Schoolings,
-        Indicator::Count::Pfmps
+        Indicator::Ratio::AttributiveDecisions,
+        Indicator::Ratio::PfmpsPaidPayable,
+        Indicator::Ratio::Ribs,
+        Indicator::Ratio::StudentsData,
+        Indicator::Ratio::ValidatedPfmps,
+        Indicator::Sum::PfmpsSendable,
+        Indicator::Sum::Yearly
       ].map { |indicator_class| indicator_class.new(start_year) }
 
       %i[sent integrated paid].each do |state|
-        @indicators.push Indicator::Count::PaymentRequestStates.new(start_year, state)
+        indicators_class << Indicator::Count::PaymentRequestStates.new(start_year, state)
       end
 
-      @indicators.push Indicator::Sum::PaymentRequestsStates.new(start_year, :paid)
-      @indicators.push Indicator::Ratio::PfmpsPaidPayable.new(start_year)
-    end
+      indicators_class << Indicator::Sum::PaymentRequestsStates.new(start_year, :paid)
 
-    def indicators_titles
-      indicators.map(&:title)
+      @indicators = indicators_class.index_by { |indicator| indicator.title.to_sym }
     end
 
     def indicators_with_metadata
-      indicators.map do |indicator|
+      indicators.values do |indicator|
         {
           title: indicator.title,
           tooltip_key: indicator.respond_to?(:tooltip_key) ? indicator.tooltip_key : nil,
@@ -60,31 +58,55 @@ module Stats
     end
 
     def global_data
-      [indicators_titles, indicators.map(&:global_data)]
+      indicators.transform_values(&:global_data)
     end
 
     def bops_data
-      [["BOP", *indicators_titles], *bop_lines]
+      %w[ENPU ENPR MASA MER].map do |bop|
+        indicators[:BOP] = bop
+
+        indicators.transform_values do |indicator|
+          indicator.bops_data[bop]
+        rescue NoMethodError
+          indicator
+        end
+      end
     end
 
     def menj_academies_data
-      [["Académie", *indicators_titles], *academy_lines]
+      academies.map do |academy|
+        indicators[:Académie] = academy
+
+        indicators.transform_values do |indicator|
+          indicator.menj_academies_data[academy]
+        rescue NoMethodError
+          indicator
+        end
+      end
     end
 
     def establishments_data
-      [establishment_titles, *establishment_lines]
+      establishments.map do |uai, name, academy, private_code, ministry|
+        indicators.merge!(
+          UAI: uai,
+          "Nom de l'établissement": name,
+          Ministère: ministry,
+          Académie: academy,
+          "Privé/Public": format_private_status(private_code)
+        )
+
+        indicators.transform_values do |indicator|
+          indicator.establishments_data[uai]
+        rescue NoMethodError
+          indicator
+        end
+      end
     end
 
     private
 
     def format_cell_for_csv(cell)
       cell.is_a?(Float) || cell.nil? ? number_string(cell) : cell
-    end
-
-    def bop_lines
-      %w[ENPU ENPR MASA MER].map do |bop|
-        [bop, *indicators.map { |indicator| indicator.bops_data[bop] }]
-      end
     end
 
     def academy_lines
@@ -100,16 +122,6 @@ module Stats
                    .map(&:academy_label).uniq
     end
 
-    def establishment_titles
-      ["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public", *indicators_titles]
-    end
-
-    def establishment_lines
-      establishments.map do |uai, name, academy, private_code, ministry|
-        [uai, name, ministry, academy, format_private_status(private_code), *establishment_indicator_data(uai)]
-      end
-    end
-
     def establishments
       Establishment.distinct
                    .order(:uai)
@@ -119,10 +131,6 @@ module Stats
 
     def format_private_status(private_code)
       private_code == "99" ? "Public" : "Privé"
-    end
-
-    def establishment_indicator_data(uai)
-      indicators.map { |indicator| indicator.establishments_data[uai] }
     end
 
     def number_string(ratio)
