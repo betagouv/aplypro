@@ -34,9 +34,6 @@ module CacheWarmer
     end
 
     def warm_academic_caches
-      latest_report = Report.latest
-      return unless latest_report
-
       school_years = SchoolYear.all
       academy_codes = Establishment::ACADEMY_LABELS.keys
 
@@ -44,6 +41,9 @@ module CacheWarmer
         Rails.logger.info "[CacheWarmer] Warming caches for academy #{academy_code}..."
 
         school_years.each do |school_year|
+          latest_report = Report.for_school_year(school_year).latest
+          next unless latest_report
+
           warm_stats_caches(academy_code, school_year, latest_report)
           warm_map_cache(academy_code, school_year)
         end

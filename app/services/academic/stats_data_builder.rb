@@ -15,10 +15,7 @@ module Academic
     end
 
     def calculate_academy_stats(report)
-      establishments = current_academy_establishments
-      establishment_ids = establishments.pluck(:id)
-      calculator = StatsProgressionCalculator.new(report, @academy_code, {})
-      calculator.calculate_current_stats(establishments, establishment_ids, @school_year)
+      StatsProgressionCalculator.new(report, @academy_code, {}).extract_stats_from_report(report)
     end
 
     def filter_establishments_data(full_data)

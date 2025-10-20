@@ -11,25 +11,52 @@ module Academic
     def calculate
       return {} unless @current_report.previous_report
 
-      previous_stats = calculate_previous_stats
+      previous_stats = extract_stats_from_report(@current_report.previous_report)
       calculate_progressions(previous_stats)
     end
 
-    def calculate_current_stats(establishments, establishment_ids, school_year)
-      build_stats_hash(establishments, establishment_ids, school_year)
+    def extract_stats_from_report(report)
+      academy_row = find_academy_row(report)
+      return {} if academy_row.nil?
+
+      build_stats_from_row(academy_row, report)
     end
 
     private
 
-    def calculate_previous_stats
-      previous_report = @current_report.previous_report
-      establishments = Establishment.joins(:classes)
-                                    .where(academy_code: @academy_code,
-                                           "classes.school_year_id": previous_report.school_year)
-                                    .distinct
-      establishment_ids = establishments.pluck(:id)
+    def find_academy_row(report)
+      menj_data = report.data["menj_academies_data"]
+      return nil if menj_data.blank?
 
-      build_stats_hash(establishments, establishment_ids, previous_report.school_year)
+      academy_label = academy_label_for_code
+      menj_data[1..].find { |row| row[0] == academy_label }
+    end
+
+    def build_stats_from_row(academy_row, report)
+      establishments_count = count_academy_establishments(report.data["establishments_data"])
+
+      {
+        total_establishments: establishments_count,
+        total_students: academy_row[7].to_i,
+        total_pfmps: academy_row[8].to_i,
+        validated_pfmps: calculate_validated_pfmps(academy_row),
+        total_validated_amount: academy_row[6].to_f,
+        total_paid_amount: academy_row[12].to_f
+      }
+    end
+
+    def calculate_validated_pfmps(academy_row)
+      (academy_row[3].to_f * academy_row[8].to_i).round
+    end
+
+    def academy_label_for_code
+      Establishment::ACADEMY_LABELS[@academy_code]
+    end
+
+    def count_academy_establishments(establishments_data)
+      return 0 if establishments_data.blank?
+
+      establishments_data[1..].count { |row| row[3] == academy_label_for_code }
     end
 
     def calculate_progressions(previous_stats)
@@ -42,28 +69,6 @@ module Academic
         progressions[key] = progression unless progression.zero?
       end
       progressions
-    end
-
-    def build_stats_hash(establishments, establishment_ids, school_year)
-      base_conditions = { classes: { school_year_id: school_year, establishment_id: establishment_ids } }
-      pfmp_base = Pfmp.joins(schooling: { classe: :school_year }).where(base_conditions)
-      validated_pfmps = pfmp_base.joins(:transitions)
-                                 .where(pfmp_transitions: { to_state: "validated", most_recent: true })
-      paid_conditions = base_conditions.merge(
-        asp_payment_request_transitions: { to_state: "paid", most_recent: true }
-      )
-
-      {
-        total_establishments: establishments.count,
-        total_students: Schooling.joins(:classe).where(base_conditions).count,
-        total_pfmps: pfmp_base.count,
-        validated_pfmps: validated_pfmps.count,
-        total_validated_amount: validated_pfmps.sum(:amount),
-        total_paid_amount: Pfmp.joins(schooling: { classe: :school_year },
-                                      payment_requests: :asp_payment_request_transitions)
-                               .where(paid_conditions)
-                               .sum(:amount)
-      }
     end
   end
 end
