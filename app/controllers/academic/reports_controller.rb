@@ -76,21 +76,12 @@ module Academic
     end
 
     def academy_statistics
-      cache_key = "academy_stats/#{selected_academy}/report/#{@report.id}/school_year/#{@report.school_year.id}"
-
-      Rails.cache.fetch(cache_key, expires_in: 1.week) do
-        stats_builder.calculate_academy_stats(@report)
-      end
+      stats_builder.calculate_academy_stats(@report)
     end
 
     def filtered_establishments_data_from_report
-      cache_key = "filtered_establishments_data/#{selected_academy}/report/#{@report.id}/" \
-                  "school_year/#{@report.school_year.id}"
-
-      Rails.cache.fetch(cache_key, expires_in: 1.week) do
-        full_data = @report.data["establishments_data"]
-        stats_builder.filter_establishments_data(full_data)
-      end
+      full_data = @report.data["establishments_data"]
+      stats_builder.filter_establishments_data(full_data)
     end
 
     def calculate_academy_progressions
