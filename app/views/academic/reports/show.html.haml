@@ -87,23 +87,22 @@
       %table
         %thead
           %tr
-            - visible_columns(@establishments_data).each do |index|
-              - header = @establishments_data.first[index]
+            - @establishments_data.each_with_index do |(key, _), index|
               %th{scope: "col"}
-                = header
-                - if index > 4 && @indicators_metadata[index - 5]&.dig(:tooltip_key)
+                = key
+                - if @indicators_metadata[key.to_sym][:tooltip_key]
                   %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-establishments-#{index}", type: "button"}
                     %span.fr-tooltip.fr-placement{id: "tooltip-establishments-#{index}", role: "tooltip", "aria-hidden" => "true"}
-                      = t("tooltips.#{@indicators_metadata[index - 5][:tooltip_key]}")
+                      = t("tooltips.#{@indicators_metadata[key.to_sym][:tooltip_key]}")
         %tbody
-          - @establishments_data[1..].each do |row|
-            - establishment = Establishment.find_by(uai: row[0])
+          - @establishments_data.each do |lines|
             %tr
-              - visible_columns(@establishments_data).each do |index|
-                - value = row[index]
-                - indicator_type = index > 4 ? @indicators_metadata[index - 5]&.dig(:type) : nil
-                %td{class: (index <= 1 ? "fr-text--sm" : ""), style: (index > 4 ? cell_background_color(value) : "")}
-                  - if index == 1 && establishment
+            - lines.each do |key, value|
+              - establishment = Establishment.find_by(uai: key["UAI"])
+              %tr
+                - indicator_type = @indicators_metadata[key.to_sym] ? @indicators_metadata[key][:type] : nil
+                %td{class: "fr-text--sm", style: cell_background_color(value)}
+                  - if key["Nom de l'établissement"] && establishment
                     = link_to value, academic_establishment_path(establishment)
                   - else
                     = format_stat_value(value, indicator_type: indicator_type)
@@ -121,19 +120,17 @@
     %table
       %thead
         %tr
-          - visible_columns(@global_data).each do |index|
-            - header = @global_data.first[index]
+          - @global_data.each_with_index do |(key, _), index|
             %th{scope: "col"}
-              = header
-              - if @indicators_metadata[index]&.dig(:tooltip_key)
+              = key
+              - if @indicators_metadata[key.to_sym] && @indicators_metadata[key.to_sym][:tooltip_key]
                 %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-stats-#{index}", type: "button"}
                   %span.fr-tooltip.fr-placement{id: "tooltip-stats-#{index}", role: "tooltip", "aria-hidden" => "true"}
-                    = t("tooltips.#{@indicators_metadata[index][:tooltip_key]}")
+                    = t("tooltips.#{@indicators_metadata[key.to_sym][:tooltip_key]}")
       %tbody
         %tr
-          - visible_columns(@global_data).each do |index|
-            - value = @global_data.last[index]
-            - indicator_type = @indicators_metadata[index]&.dig(:type)
+          - @global_data.each do |key, value|
+            - indicator_type = @indicators_metadata[key.to_sym] ? @indicators_metadata[key.to_sym][:type] : nil
             %td{style: cell_background_color(value)}= format_stat_value(value, indicator_type: indicator_type)
 
   .fr-container
@@ -145,21 +142,19 @@
     %table
       %thead
         %tr
-          - visible_columns(@bops_data).each do |index|
-            - header = @bops_data.first[index]
+          - @bops_data.first.each_with_index do |(key, _), index|
             %th{scope: "col"}
-              = header
-              - if index > 0 && @indicators_metadata[index - 1]&.dig(:tooltip_key)
+              = key
+              - if @indicators_metadata[key.to_sym] && @indicators_metadata[key.to_sym][:tooltip_key]
                 %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-bops-#{index}", type: "button"}
                   %span.fr-tooltip.fr-placement{id: "tooltip-bops-#{index}", role: "tooltip", "aria-hidden" => "true"}
-                    = t("tooltips.#{@indicators_metadata[index - 1][:tooltip_key]}")
+                    = t("tooltips.#{@indicators_metadata[key.to_sym][:tooltip_key]}")
       %tbody
-        - @bops_data[1..].each do |row|
+        - @bops_data.each do |lines|
           %tr
-            - visible_columns(@bops_data).each do |index|
-              - value = row[index]
-              - indicator_type = index > 0 ? @indicators_metadata[index - 1]&.dig(:type) : nil
-              %td{style: (index > 0 ? cell_background_color(value) : "")}= format_stat_value(value, indicator_type: indicator_type)
+            - lines.each do |key, value|
+              - indicator_type = @indicators_metadata[key.to_sym] ? @indicators_metadata[key.to_sym][:type] : nil
+              %td{class: (key == "BOP" ? "fr-text--bold" : ""), style: (key != "BOP" ? cell_background_color(value) : "")}= format_stat_value(value, indicator_type: indicator_type)
 
   .fr-container
     .fr-grid-row.fr-grid-row--gutters
@@ -170,21 +165,19 @@
     %table
       %thead
         %tr
-          - visible_columns(@menj_academies_data).each do |index|
-            - header = @menj_academies_data.first[index]
+          - @menj_academies_data.first.each_with_index do |(key, _), index|
             %th{scope: "col"}
-              = header
-              - if index > 0 && @indicators_metadata[index - 1]&.dig(:tooltip_key)
+              = key
+              - if @indicators_metadata[key.to_sym] && @indicators_metadata[key.to_sym][:tooltip_key]
                 %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-academies-#{index}", type: "button"}
                   %span.fr-tooltip.fr-placement{id: "tooltip-academies-#{index}", role: "tooltip", "aria-hidden" => "true"}
-                    = t("tooltips.#{@indicators_metadata[index - 1][:tooltip_key]}")
+                    = t("tooltips.#{@indicators_metadata[key.to_sym][:tooltip_key]}")
       %tbody
-        - @menj_academies_data[1..].each do |row|
+        - @menj_academies_data.each do |lines|
           %tr
-            - visible_columns(@menj_academies_data).each do |index|
-              - value = row[index]
-              - indicator_type = index > 0 ? @indicators_metadata[index - 1]&.dig(:type) : nil
-              %td{class: (index == 0 ? "fr-text--bold" : ""), style: (index > 0 ? cell_background_color(value) : "")}= format_stat_value(value, indicator_type: indicator_type)
+            - lines.each do |key, value|
+              - indicator_type = @indicators_metadata[key.to_sym] ? @indicators_metadata[key.to_sym][:type] : nil
+              %td{class: (key == "Académie" ? "fr-text--bold" : ""), style: (key != "Académie" ? cell_background_color(value) : "")}= format_stat_value(value, indicator_type: indicator_type)
 
 :javascript
   function toggleEstablishments() {

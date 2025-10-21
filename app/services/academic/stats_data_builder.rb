@@ -22,17 +22,9 @@ module Academic
     end
 
     def filter_establishments_data(full_data)
-      titles = full_data.first
-      establishment_rows = full_data[1..]
-
-      academy_establishments = current_academy_establishments.pluck(:uai)
-
-      filtered_rows = establishment_rows.select do |row|
-        uai = row[0]
-        academy_establishments.include?(uai)
+      full_data.select do |row|
+        current_academy_establishments.pluck(:uai).include?(row["UAI"])
       end
-
-      [titles, *filtered_rows]
     end
 
     def calculate_progressions(report, academy_stats)
