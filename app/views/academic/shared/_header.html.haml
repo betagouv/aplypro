@@ -23,6 +23,10 @@
                   %div
                     .fr-px-2w.fr-pb-1w
                       = current_user.name
+                      - if current_user.admin?
+                        .fr-text--xs.fr-mt-1v{style: "color: var(--text-default-error);"}
+                          %i.fr-icon-shield-line.fr-icon--sm{"aria-hidden": "true"}
+                          Administrateur
                     = button_to 'Se déconnecter', @logout_path || destroy_user_session_path, method: :delete, class: "fr-btn fr-icon-lock-line"
 
   #modal-476.fr-header__menu.fr-modal{"aria-labelledby" => "button-477"}
