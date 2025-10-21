@@ -52,14 +52,14 @@ module Academic
       @academy_stats = academy_statistics
       set_report_data
       @establishments_data = filtered_establishments_data_from_report
-      @academy_stats_progressions = calculate_progressions
+      @academy_stats_progressions = calculate_academy_progressions
     end
 
     def prepare_global_statistics_data
       set_report_data
       @establishments_data = @report.data["establishments_data"]
       @global_stats = Reports::StatsExtractor.extract_global_stats(@report)
-      @global_stats_progressions = Reports::StatsExtractor.calculate_global_progressions(@report, @global_stats)
+      @global_stats_progressions = calculate_global_progressions
     end
 
     def set_report_data
@@ -87,8 +87,18 @@ module Academic
       end
     end
 
-    def calculate_progressions
-      stats_builder.calculate_progressions(@report, @academy_stats)
+    def calculate_academy_progressions
+      previous_report = @report.previous_report
+      return {} unless previous_report
+
+      Academic::ReportsProgressionComparator.compare(@report, previous_report, selected_academy)
+    end
+
+    def calculate_global_progressions
+      previous_report = @report.previous_report
+      return {} unless previous_report
+
+      Reports::GlobalProgressionComparator.compare(@report, previous_report)
     end
 
     def stats_builder

@@ -1,20 +1,24 @@
 # frozen_string_literal: true
 
 module Academic
-  class StatsProgressionCalculator
-    def initialize(report, academy_code, _unused = nil)
-      @report = report
-      @academy_code = academy_code
+  class ReportsProgressionComparator < Reports::ProgressionComparator
+    def self.compare(current_report, previous_report, academy_code)
+      new(current_report, previous_report, academy_code).compare
     end
 
-    def extract_stats_from_report(report = @report)
+    def initialize(current_report, previous_report, academy_code)
+      @academy_code = academy_code
+      super(current_report, previous_report)
+    end
+
+    private
+
+    def extract_stats(report)
       academy_row = find_academy_row(report)
       return {} if academy_row.nil?
 
       build_stats_from_row(academy_row, report)
     end
-
-    private
 
     def find_academy_row(report)
       menj_data = report.data["menj_academies_data"]

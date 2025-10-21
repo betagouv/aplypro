@@ -1,26 +1,18 @@
 # frozen_string_literal: true
 
 module Reports
-  class StatsExtractor
-    def self.extract_global_stats(report)
-      new(report).extract_global_stats
-    end
-
-    def initialize(report)
-      @report = report
-    end
-
-    def extract_global_stats
-      global_data = @report.data["global_data"]
-      return {} if global_data.blank? || global_data.length < 2
-
-      build_stats_hash(global_data[1], total_establishments_count)
-    end
-
+  class GlobalProgressionComparator < ProgressionComparator
     private
 
-    def total_establishments_count
-      establishments_data = @report.data["establishments_data"]
+    def extract_stats(report)
+      global_data = report.data["global_data"]
+      return {} if global_data.blank? || global_data.length < 2
+
+      build_stats_hash(global_data[1], total_establishments_count(report))
+    end
+
+    def total_establishments_count(report)
+      establishments_data = report.data["establishments_data"]
       establishments_data&.length.to_i - 1
     end
 
