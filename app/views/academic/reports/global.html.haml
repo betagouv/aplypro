@@ -7,7 +7,7 @@
 
       .fr-grid-row.fr-grid-row--gutters
         .fr-col-12
-          %h1.fr-h3= "Statistiques de l'académie #{Establishment::ACADEMY_LABELS[selected_academy]} (#{selected_academy}) - Année scolaire #{@current_year} - #{@current_year + 1}"
+          %h1.fr-h3= "Statistiques globales - Année scolaire #{@current_year} - #{@current_year + 1}"
 
     .fr-grid-row.fr-grid-row--gutters
       .fr-col-12
@@ -18,47 +18,43 @@
               = "Rapport du #{l(@report.created_at, format: :long)} (id: #{@report.id})"
           .fr-col-md-6.fr-text--right
             .fr-btns-group.fr-btns-group--right.fr-btns-group--inline-sm
-              - if current_user.admin?
-                = link_to "Vue globale", global_academic_report_path(@report), class: "fr-btn fr-btn--sm fr-btn--secondary"
-                = button_to export_academic_report_path(@report), method: :post, class: "fr-btn fr-btn--sm fr-btn--secondary", data: { turbo: false } do
-                  %i.fr-icon-download-line.fr-icon--sm.fr-mr-1w{"aria-hidden": "true"}
-                  Exporter en CSV
+              = link_to "← Vue académie", academic_report_path(@report), class: "fr-btn fr-btn--sm fr-btn--secondary"
               - if @report.previous_report
-                = link_to "← Rapport précédent", academic_report_path(@report.previous_report), class: "fr-btn fr-btn--sm fr-btn--secondary"
+                = link_to "← Rapport précédent", global_academic_report_path(@report.previous_report), class: "fr-btn fr-btn--sm fr-btn--secondary"
               - if @report.next_report
-                = link_to "Rapport suivant →", academic_report_path(@report.next_report), class: "fr-btn fr-btn--sm fr-btn--secondary"
+                = link_to "Rapport suivant →", global_academic_report_path(@report.next_report), class: "fr-btn fr-btn--sm fr-btn--secondary"
     .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
       .fr-col-md-3
         .fr-card
           .fr-card__body
             .fr-card__content.position-relative
               %h3.fr-card__title.fr-h5 Établissements
-              %p.fr-text--lead.fr-mb-0= number_with_delimiter(@academy_stats[:total_establishments])
-              = progression_indicator(:total_establishments, @academy_stats_progressions)
+              %p.fr-text--lead.fr-mb-0= number_with_delimiter(@global_stats[:total_establishments])
+              = progression_indicator(:total_establishments, @global_stats_progressions)
 
       .fr-col-md-3
         .fr-card
           .fr-card__body
             .fr-card__content.position-relative
               %h3.fr-card__title.fr-h5 Élèves
-              %p.fr-text--lead.fr-mb-0= number_with_delimiter(@academy_stats[:total_students])
-              = progression_indicator(:total_students, @academy_stats_progressions)
+              %p.fr-text--lead.fr-mb-0= number_with_delimiter(@global_stats[:total_students])
+              = progression_indicator(:total_students, @global_stats_progressions)
 
       .fr-col-md-3
         .fr-card
           .fr-card__body
             .fr-card__content.position-relative
               %h3.fr-card__title.fr-h5 PFMP totales
-              %p.fr-text--lead.fr-mb-0= number_with_delimiter(@academy_stats[:total_pfmps])
-              = progression_indicator(:total_pfmps, @academy_stats_progressions)
+              %p.fr-text--lead.fr-mb-0= number_with_delimiter(@global_stats[:total_pfmps])
+              = progression_indicator(:total_pfmps, @global_stats_progressions)
 
       .fr-col-md-3
         .fr-card
           .fr-card__body
             .fr-card__content.position-relative
               %h3.fr-card__title.fr-h5 PFMP validées
-              %p.fr-text--lead.fr-mb-0= number_with_delimiter(@academy_stats[:validated_pfmps])
-              = progression_indicator(:validated_pfmps, @academy_stats_progressions)
+              %p.fr-text--lead.fr-mb-0= number_with_delimiter(@global_stats[:validated_pfmps])
+              = progression_indicator(:validated_pfmps, @global_stats_progressions)
 
     .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
       .fr-col-md-6
@@ -66,16 +62,16 @@
           .fr-card__body
             .fr-card__content.position-relative
               %h3.fr-card__title.fr-h5 Montant validé total
-              %p.fr-text--lead.fr-mb-0= number_to_currency(@academy_stats[:total_validated_amount], unit: "€", separator: ",", delimiter: " ")
-              = progression_indicator(:total_validated_amount, @academy_stats_progressions)
+              %p.fr-text--lead.fr-mb-0= number_to_currency(@global_stats[:total_validated_amount], unit: "€", separator: ",", delimiter: " ")
+              = progression_indicator(:total_validated_amount, @global_stats_progressions)
 
       .fr-col-md-6
         .fr-card
           .fr-card__body
             .fr-card__content.position-relative
               %h3.fr-card__title.fr-h5 Montant payé total
-              %p.fr-text--lead.fr-mb-0= number_to_currency(@academy_stats[:total_paid_amount], unit: "€", separator: ",", delimiter: " ")
-              = progression_indicator(:total_paid_amount, @academy_stats_progressions)
+              %p.fr-text--lead.fr-mb-0= number_to_currency(@global_stats[:total_paid_amount], unit: "€", separator: ",", delimiter: " ")
+              = progression_indicator(:total_paid_amount, @global_stats_progressions)
 
     .fr-grid-row.fr-grid-row--gutters.fr-mt-4w
       .fr-col-12

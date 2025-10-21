@@ -68,6 +68,7 @@ Rails.application.routes.draw do
 
     resources :reports, only: %i[index show] do
       member do
+        get :global
         post :export
       end
     end

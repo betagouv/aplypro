@@ -4,6 +4,8 @@ module Academic
   class ReportsController < Academic::ApplicationController
     include Zipline
 
+    before_action :set_report_context, only: %i[show global export]
+
     def index
       infer_page_title
       @inhibit_banner = true
@@ -16,36 +18,54 @@ module Academic
     end
 
     def show
-      infer_page_title
-      @inhibit_banner = true
-      @inhibit_breadcrumb = true
-      @report = Report.find(params[:id])
-      @current_year = @report.school_year.start_year
-      @stats = Stats::Main.new(@current_year)
-
       prepare_statistics_data
     end
 
-    def export
-      @report = Report.find(params[:id])
+    def global
+      return redirect_unauthorized unless current_user.admin?
 
-      unless current_user.admin?
-        redirect_to academic_report_path(@report), alert: t(".unauthorized")
-        return
-      end
+      prepare_global_statistics_data
+    end
+
+    def export
+      return redirect_unauthorized unless current_user.admin?
 
       zipline(export_files, export_filename)
     end
 
     private
 
+    def set_report_context
+      infer_page_title
+      @inhibit_banner = true
+      @inhibit_breadcrumb = true
+      @report = Report.find(params[:id])
+      @current_year = @report.school_year.start_year
+      @stats = Stats::Main.new(@current_year)
+    end
+
+    def redirect_unauthorized
+      redirect_to academic_report_path(params[:id]), alert: t("academic.reports.export.unauthorized")
+    end
+
     def prepare_statistics_data
       @academy_stats = academy_statistics
+      set_report_data
+      @establishments_data = filtered_establishments_data_from_report
+      @academy_stats_progressions = calculate_progressions
+    end
+
+    def prepare_global_statistics_data
+      set_report_data
+      @establishments_data = @report.data["establishments_data"]
+      @global_stats = Reports::StatsExtractor.extract_global_stats(@report)
+      @global_stats_progressions = Reports::StatsExtractor.calculate_global_progressions(@report, @global_stats)
+    end
+
+    def set_report_data
       @global_data = @report.data["global_data"]
       @bops_data = @report.data["bops_data"]
       @menj_academies_data = @report.data["menj_academies_data"]
-      @establishments_data = filtered_establishments_data_from_report
-      @academy_stats_progressions = calculate_progressions
       @indicators_metadata = @stats.indicators_with_metadata
     end
 
