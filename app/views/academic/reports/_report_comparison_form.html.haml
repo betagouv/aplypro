@@ -1,0 +1,11 @@
+- if @comparable_reports.any?
+  = form_with url: form_url, method: :get, class: "fr-form-group" do |f|
+    = f.label :comparison_report_id, class: "fr-label fr-text--xs fr-mb-1v" do
+      %i.fr-icon-arrow-go-forward-line.fr-icon--sm{"aria-hidden": "true"}
+      Comparé au rapport :
+    = f.select :comparison_report_id,
+               options_for_select(@comparable_reports.map { |r| ["#{l(r.created_at, format: :short)}", r.id] }, @comparison_report&.id),
+               {},
+               class: "fr-select fr-select--sm",
+               onchange: "this.form.submit()",
+               style: "max-width: 250px;"

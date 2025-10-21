@@ -17,17 +17,7 @@
               %i.fr-icon-refresh-line.fr-icon--sm
               = "Rapport du #{l(@report.created_at, format: :long)} (id: #{@report.id})"
 
-            - if @comparable_reports.any?
-              = form_with url: academic_report_path(@report), method: :get, class: "fr-form-group" do |f|
-                = f.label :comparison_report_id, class: "fr-label fr-text--xs fr-mb-1v" do
-                  %i.fr-icon-arrow-go-forward-line.fr-icon--sm{"aria-hidden": "true"}
-                  Comparé au rapport :
-                = f.select :comparison_report_id,
-                           options_for_select(@comparable_reports.map { |r| ["#{l(r.created_at, format: :short)}", r.id] }, @comparison_report&.id),
-                           {},
-                           class: "fr-select fr-select--sm",
-                           onchange: "this.form.submit()",
-                           style: "max-width: 250px;"
+            = render "report_comparison_form", form_url: academic_report_path(@report)
           .fr-col-md-6.fr-text--right
             .fr-btns-group.fr-btns-group--right.fr-btns-group--inline-sm
               - if current_user.admin?
@@ -91,37 +81,7 @@
               %p.fr-text--lead.fr-mb-0= number_to_currency(@academy_stats[:total_paid_amount], unit: "€", separator: ",", delimiter: " ")
               = progression_indicator(:total_paid_amount, @academy_stats_progressions)
 
-    .fr-grid-row.fr-grid-row--gutters.fr-mt-4w
-      .fr-col-12
-        %button.fr-btn.fr-btn--secondary#toggle-establishments-btn{type: "button", onclick: "toggleEstablishments()"}
-          %span#establishments-toggle-text
-            = "Afficher le détail des établissements (#{@establishments_data.length - 1})"
-
-  #establishments-table-wrapper.hidden
-    .fr-table.fr-table--bordered.stats-table-container
-      %table
-        %thead
-          %tr
-            - visible_columns(@establishments_data).each do |index|
-              - header = @establishments_data.first[index]
-              %th{scope: "col"}
-                = header
-                - if index > 4 && @indicators_metadata[index - 5]&.dig(:tooltip_key)
-                  %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-establishments-#{index}", type: "button"}
-                    %span.fr-tooltip.fr-placement{id: "tooltip-establishments-#{index}", role: "tooltip", "aria-hidden" => "true"}
-                      = t("tooltips.#{@indicators_metadata[index - 5][:tooltip_key]}")
-        %tbody
-          - @establishments_data[1..].each do |row|
-            - establishment = Establishment.find_by(uai: row[0])
-            %tr
-              - visible_columns(@establishments_data).each do |index|
-                - value = row[index]
-                - indicator_type = index > 4 ? @indicators_metadata[index - 5]&.dig(:type) : nil
-                %td{class: (index <= 1 ? "fr-text--sm" : ""), style: (index > 4 ? cell_background_color(value) : "")}
-                  - if index == 1 && establishment
-                    = link_to value, academic_establishment_path(establishment)
-                  - else
-                    = format_stat_value(value, indicator_type: indicator_type)
+    = render "establishments_table"
 
   .fr-container
     .fr-grid-row.fr-grid-row--gutters.fr-mt-6w
@@ -200,19 +160,3 @@
               - value = row[index]
               - indicator_type = index > 0 ? @indicators_metadata[index - 1]&.dig(:type) : nil
               %td{class: (index == 0 ? "fr-text--bold" : ""), style: (index > 0 ? cell_background_color(value) : "")}= format_stat_value(value, indicator_type: indicator_type)
-
-:javascript
-  function toggleEstablishments() {
-    const wrapper = document.getElementById('establishments-table-wrapper');
-    const text = document.getElementById('establishments-toggle-text');
-    const count = #{@establishments_data.length - 1};
-
-    if (wrapper.classList.contains('hidden')) {
-      wrapper.classList.remove('hidden');
-      text.textContent = 'Masquer le détail des établissements (' + count + ')';
-    } else {
-      wrapper.classList.add('hidden');
-      text.textContent = 'Afficher le détail des établissements (' + count + ')';
-    }
-  }
-
