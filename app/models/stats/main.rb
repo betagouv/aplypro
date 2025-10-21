@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Stats
-  # rubocop:disable Metrics/ClassLength
   class Main
     attr_reader :indicators
 
@@ -15,7 +14,7 @@ module Stats
         Indicator::Ratio::PfmpsPaidPayable,
         Indicator::Ratio::Ribs,
         Indicator::Ratio::StudentsData,
-        Indicator::Ratio::ValidatedPfmps,
+        Indicator::Ratio::PfmpsValidated,
         Indicator::Sum::PfmpsSendable,
         Indicator::Sum::Yearly
       ].map { |indicator_class| indicator_class.new(start_year) }
@@ -30,7 +29,7 @@ module Stats
     end
 
     def indicators_with_metadata
-      indicators.values do |indicator|
+      indicators.transform_values do |indicator|
         {
           title: indicator.title,
           tooltip_key: indicator.respond_to?(:tooltip_key) ? indicator.tooltip_key : nil,
@@ -58,48 +57,31 @@ module Stats
     end
 
     def global_data
-      indicators.transform_values(&:global_data)
+      [indicators.transform_values(&:global_data)]
     end
 
     def bops_data
       %w[ENPU ENPR MASA MER].map do |bop|
-        indicators[:BOP] = bop
-
-        indicators.transform_values do |indicator|
-          indicator.bops_data[bop]
-        rescue NoMethodError
-          indicator
-        end
+        initialize_indicators({ BOP: bop }, :bops_data)
       end
     end
 
     def menj_academies_data
       academies.map do |academy|
-        indicators[:Académie] = academy
-
-        indicators.transform_values do |indicator|
-          indicator.menj_academies_data[academy]
-        rescue NoMethodError
-          indicator
-        end
+        initialize_indicators({ Académie: academy }, :menj_academies_data)
       end
     end
 
     def establishments_data
       establishments.map do |uai, name, academy, private_code, ministry|
-        indicators.merge!(
+        specific_indicators = {
           UAI: uai,
           "Nom de l'établissement": name,
           Ministère: ministry,
           Académie: academy,
           "Privé/Public": format_private_status(private_code)
-        )
-
-        indicators.transform_values do |indicator|
-          indicator.establishments_data[uai]
-        rescue NoMethodError
-          indicator
-        end
+        }
+        initialize_indicators(specific_indicators, :establishments_data)
       end
     end
 
@@ -107,12 +89,6 @@ module Stats
 
     def format_cell_for_csv(cell)
       cell.is_a?(Float) || cell.nil? ? number_string(cell) : cell
-    end
-
-    def academy_lines
-      academies.map do |academy|
-        [academy, *indicators.map { |indicator| indicator.menj_academies_data[academy] }]
-      end
     end
 
     def academies
@@ -129,6 +105,18 @@ module Stats
                    .map { |e| [e.uai, e.name, e.academy_label, e.private_contract_type_code, e.ministry] }
     end
 
+    def initialize_indicators(specific_indicators, method)
+      id = specific_indicators.values.first
+
+      all_indicators = specific_indicators.merge!(indicators)
+
+      all_indicators.transform_values do |indicator|
+        indicator.send(method)[id]
+      rescue NoMethodError
+        indicator
+      end
+    end
+
     def format_private_status(private_code)
       private_code == "99" ? "Public" : "Privé"
     end
@@ -140,5 +128,4 @@ module Stats
       ratio.to_s.gsub(".", ",")
     end
   end
-  # rubocop:enable Metrics/ClassLength
 end

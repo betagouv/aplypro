@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Report < ApplicationRecord
+  GENERIC_DATA_KEYS = ["DA", "Coord. bancaires", "PFMPs validées", "Données élèves", "Mt. prêt envoi",
+                       "Mt. annuel total", "Scolarités", "Toutes PFMPs", "Dem. envoyées", "Dem. intégrées"].freeze
+
   belongs_to :school_year
 
   validates :data, presence: true
@@ -40,11 +43,24 @@ class Report < ApplicationRecord
       current_school_year = SchoolYear.current.start_year
       stats = Stats::Main.new(current_school_year)
       {
-        global_data: stats.global_data,
-        bops_data: stats.bops_data,
-        menj_academies_data: stats.menj_academies_data,
-        establishments_data: stats.establishments_data
+        global_data: serialize_data(stats.global_data),
+        bops_data: serialize_data(stats.bops_data, ["BOP"]),
+        menj_academies_data: serialize_data(stats.menj_academies_data, ["Académie"]),
+        establishments_data: serialize_data(stats.establishments_data, ["UAI", "Nom de l'établissement",
+                                                                        "Ministère", "Académie", "Privé/Public"])
       }
+    end
+
+    def serialize_data(data, specific_keys = [])
+      keys = specific_keys + GENERIC_DATA_KEYS
+      rows = data.presence || [{}]
+
+      [
+        keys,
+        *rows.map do |row|
+          keys.map { |k| row[k.to_sym].presence }
+        end
+      ]
     end
   end
 end

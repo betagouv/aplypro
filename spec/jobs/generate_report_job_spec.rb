@@ -8,12 +8,14 @@ RSpec.describe GenerateReportJob do
     let(:date) { Time.current }
 
     before do
+      allow(Report).to receive(:create_for_date).and_call_original
       allow(SchoolYear).to receive(:current).and_return(school_year)
-      allow(Stats::Main).to receive(:new).and_return(instance_double(Stats::Main,
-                                                                     global_data: [["Global"]],
-                                                                     bops_data: [["BOP"]],
-                                                                     menj_academies_data: [["Academy"]],
-                                                                     establishments_data: [["Establishment"]]))
+      allow(Stats::Main).to receive(:new)
+        .and_return(instance_double(Stats::Main,
+                                    global_data: [],
+                                    bops_data: [{ BOP: "ENPR", "Coord. bancaires": 4 }],
+                                    menj_academies_data: [{ Académie: "Data1" }, { Académie: "Data2" }],
+                                    establishments_data: [{ UAI: "123456", "Nom de l'établissement": "Test" }]))
     end
 
     it "creates a report with the provided date" do

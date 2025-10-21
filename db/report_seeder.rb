@@ -233,7 +233,7 @@ class ReportSeeder
     case indicator.class.name
     when "Stats::Indicator::Ribs"
       establishment.ribs.count
-    when "Stats::Indicator::ValidatedPfmps"
+    when "Stats::Indicator::PfmpsValidated"
       finished_pfmps = establishment.pfmps.joins(schooling: { classe: :school_year })
                                     .where(classes: { school_year_id: school_year.id })
                                     .finished
