@@ -34,9 +34,6 @@ module CacheWarmer
     end
 
     def warm_academic_caches
-      latest_report = Report.latest
-      return unless latest_report
-
       school_years = SchoolYear.all
       academy_codes = Establishment::ACADEMY_LABELS.keys
 
@@ -44,6 +41,9 @@ module CacheWarmer
         Rails.logger.info "[CacheWarmer] Warming caches for academy #{academy_code}..."
 
         school_years.each do |school_year|
+          latest_report = Report.for_school_year(school_year).latest
+          next unless latest_report
+
           warm_stats_caches(academy_code, school_year, latest_report)
           warm_map_cache(academy_code, school_year)
         end
@@ -55,9 +55,8 @@ module CacheWarmer
     def warm_stats_caches(academy_code, school_year, report)
       builder = Academic::StatsDataBuilder.new(academy_code, school_year)
 
-      academy_stats = warm_academy_stats(builder, academy_code, school_year, report)
+      warm_academy_stats(builder, academy_code, school_year, report)
       warm_filtered_establishments(builder, academy_code, school_year, report)
-      warm_stats_progressions(builder, academy_code, school_year, report, academy_stats)
     end
 
     def warm_academy_stats(builder, academy_code, school_year, report)
@@ -72,13 +71,6 @@ module CacheWarmer
       warm_cache(cache_key) do
         full_data = report.data["establishments_data"]
         builder.filter_establishments_data(full_data)
-      end
-    end
-
-    def warm_stats_progressions(builder, academy_code, school_year, report, academy_stats)
-      cache_key = stats_cache_key("academy_stats_progressions", academy_code, report.id, school_year.id)
-      warm_cache(cache_key) do
-        builder.calculate_progressions(report, academy_stats)
       end
     end
 

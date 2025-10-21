@@ -1,6 +1,16 @@
 .fr-container
   %h1.fr-h3 Historique des rapports
 
+  .fr-grid-row.fr-mb-3w
+    .fr-col-12.fr-col-md-6
+      = form_with url: academic_reports_path, method: :get, builder: DsfrFormBuilder do |form|
+        .fr-select-group
+          = form.label :school_year_id, "Filtrer par année scolaire", class: 'fr-label'
+          = form.select :school_year_id,
+              [["Toutes les années", ""]] + @school_years.map { |sy| [sy.to_s, sy.id] },
+              { selected: @selected_school_year_id },
+              { class: 'fr-select', onchange: 'this.form.submit()' }
+
   - if @reports.any?
     .fr-grid-row.fr-grid-row--gutters
       .fr-col-12
@@ -15,7 +25,7 @@
               - @reports.each do |report|
                 %tr
                   %td= l(report.created_at, format: :long)
-                  %td= "#{report.school_year.start_year} - #{report.school_year.start_year + 1}"
+                  %td= report.school_year.to_s
                   %td
                     = link_to "Voir les statistiques", academic_report_path(report), class: "fr-btn fr-btn--sm"
   - else
