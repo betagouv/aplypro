@@ -5,14 +5,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="robots" content="noindex, nofollow">
   <title>Modification rejetée (422)</title>
-  <link rel="stylesheet" href="/assets/dsfr.min.css">
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
+      font-family: "Marianne", arial, sans-serif;
+      line-height: 1.5;
+      color: #161616;
+      background-color: #fff;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
     }
+    .fr-container {
+      width: 100%;
+      max-width: 78rem;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .fr-grid-row {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 -0.5rem;
+    }
+    .fr-grid-row--center { justify-content: center; }
+    .fr-col-12 { flex: 0 0 100%; max-width: 100%; padding: 0 0.5rem; }
+    @media (min-width: 768px) {
+      .fr-col-md-8 { flex: 0 0 66.666%; max-width: 66.666%; }
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    p { margin-bottom: 1rem; }
+    .fr-text--lg { font-size: 1.25rem; }
+    .fr-text--sm { font-size: 0.875rem; }
+    .fr-my-7w { margin-top: 3.5rem; margin-bottom: 3.5rem; }
+    .fr-mb-3w { margin-bottom: 1.5rem; }
+    @media (min-width: 768px) {
+      .fr-mt-md-12w { margin-top: 6rem; }
+      .fr-mb-md-10w { margin-bottom: 5rem; }
+    }
+    .fr-btns-group {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .fr-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.625rem 1.5rem;
+      background-color: #000091;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 0.25rem;
+      transition: background-color 0.2s;
+    }
+    .fr-btn:hover { background-color: #1212ff; }
   </style>
 </head>
 <body>

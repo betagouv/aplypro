@@ -1,0 +1,46 @@
+.fr-grid-row.fr-grid-row--gutters.fr-mt-4w
+  .fr-col-12
+    %button.fr-btn.fr-btn--secondary#toggle-establishments-btn{type: "button", onclick: "toggleEstablishments()"}
+      %span#establishments-toggle-text
+        = "Afficher le détail des établissements (#{@establishments_data.length - 1})"
+
+#establishments-table-wrapper.hidden
+  .fr-table.fr-table--bordered.stats-table-container
+    %table
+      %thead
+        %tr
+          - visible_columns(@establishments_data).each do |index|
+            - header = @establishments_data.first[index]
+            %th{scope: "col"}
+              = header
+              - if index > 4 && @indicators_metadata[index - 5]&.dig(:tooltip_key)
+                %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-establishments-#{index}", type: "button"}
+                  %span.fr-tooltip.fr-placement{id: "tooltip-establishments-#{index}", role: "tooltip", "aria-hidden" => "true"}
+                    = t("tooltips.#{@indicators_metadata[index - 5][:tooltip_key]}")
+      %tbody
+        - @establishments_data[1..].each do |row|
+          - establishment = Establishment.find_by(uai: row[0])
+          %tr
+            - visible_columns(@establishments_data).each do |index|
+              - value = row[index]
+              - indicator_type = index > 4 ? @indicators_metadata[index - 5]&.dig(:type) : nil
+              %td{class: (index <= 1 ? "fr-text--sm" : ""), style: (index > 4 ? cell_background_color(value) : "")}
+                - if index == 1 && establishment
+                  = link_to value, academic_establishment_path(establishment)
+                - else
+                  = format_stat_value(value, indicator_type: indicator_type)
+
+:javascript
+  function toggleEstablishments() {
+    const wrapper = document.getElementById('establishments-table-wrapper');
+    const text = document.getElementById('establishments-toggle-text');
+    const count = #{@establishments_data.length - 1};
+
+    if (wrapper.classList.contains('hidden')) {
+      wrapper.classList.remove('hidden');
+      text.textContent = 'Masquer le détail des établissements (' + count + ')';
+    } else {
+      wrapper.classList.add('hidden');
+      text.textContent = 'Afficher le détail des établissements (' + count + ')';
+    }
+  }

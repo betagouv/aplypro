@@ -15,7 +15,8 @@ module Academic
     end
 
     def calculate_academy_stats(report)
-      StatsProgressionCalculator.new(report, @academy_code, {}).extract_stats_from_report(report)
+      extractor = StatsProgressionCalculator.new(report, @academy_code, {})
+      extractor.extract_stats_from_report(report)
     end
 
     def filter_establishments_data(full_data)
@@ -30,10 +31,6 @@ module Academic
       end
 
       [titles, *filtered_rows]
-    end
-
-    def calculate_progressions(report, academy_stats)
-      StatsProgressionCalculator.new(report, @academy_code, academy_stats).calculate
     end
 
     def establishments_data_summary(establishment_ids)

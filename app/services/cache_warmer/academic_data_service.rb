@@ -41,42 +41,12 @@ module CacheWarmer
         Rails.logger.info "[CacheWarmer] Warming caches for academy #{academy_code}..."
 
         school_years.each do |school_year|
-          latest_report = Report.for_school_year(school_year).latest
-          next unless latest_report
-
-          warm_stats_caches(academy_code, school_year, latest_report)
           warm_map_cache(academy_code, school_year)
         end
       end
     end
 
     private
-
-    def warm_stats_caches(academy_code, school_year, report)
-      builder = Academic::StatsDataBuilder.new(academy_code, school_year)
-
-      warm_academy_stats(builder, academy_code, school_year, report)
-      warm_filtered_establishments(builder, academy_code, school_year, report)
-    end
-
-    def warm_academy_stats(builder, academy_code, school_year, report)
-      cache_key = stats_cache_key("academy_stats", academy_code, report.id, school_year.id)
-      warm_cache(cache_key) do
-        builder.calculate_academy_stats(report)
-      end
-    end
-
-    def warm_filtered_establishments(builder, academy_code, school_year, report)
-      cache_key = stats_cache_key("filtered_establishments_data", academy_code, report.id, school_year.id)
-      warm_cache(cache_key) do
-        full_data = report.data["establishments_data"]
-        builder.filter_establishments_data(full_data)
-      end
-    end
-
-    def stats_cache_key(prefix, academy_code, report_id, school_year_id)
-      "#{prefix}/#{academy_code}/report/#{report_id}/school_year/#{school_year_id}"
-    end
 
     def warm_map_cache(academy_code, school_year)
       builder = Academic::StatsDataBuilder.new(academy_code, school_year)
@@ -92,6 +62,7 @@ module CacheWarmer
     end
 
     def warm_cache(cache_key, expires_in: 1.week, &)
+      Rails.cache.delete(cache_key)
       Rails.cache.fetch(cache_key, expires_in: expires_in, &)
     end
 
