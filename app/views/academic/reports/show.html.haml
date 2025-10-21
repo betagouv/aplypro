@@ -3,7 +3,7 @@
     .fr-px-3w
       .fr-grid-row.fr-grid-row--gutters
         .fr-col-12.fr-mb-2w
-          = link_to "← Historique des rapports", academic_reports_path, class: "fr-btn fr-btn--sm fr-btn--tertiary"
+          = link_to t("academic.reports.back_to_index"), academic_reports_path, class: "fr-btn fr-btn--sm fr-btn--tertiary"
 
       .fr-grid-row.fr-grid-row--gutters
         .fr-col-12
@@ -23,14 +23,14 @@
               - if current_user.admin?
                 = link_to global_academic_report_path(@report, comparison_report_id: params[:comparison_report_id]), class: "fr-btn fr-btn--sm fr-btn--secondary" do
                   %i.fr-icon-earth-line.fr-icon--sm.fr-mr-1w{"aria-hidden": "true"}
-                  Vue globale
+                  = t("academic.reports.global_view")
                 = button_to export_academic_report_path(@report), method: :post, class: "fr-btn fr-btn--sm fr-btn--secondary", data: { turbo: false } do
                   %i.fr-icon-download-line.fr-icon--sm.fr-mr-1w{"aria-hidden": "true"}
-                  Exporter en CSV
+                  = t("academic.reports.export_csv")
               - if @report.previous_report
-                = link_to "← Rapport précédent", academic_report_path(@report.previous_report), class: "fr-btn fr-btn--sm fr-btn--secondary"
+                = link_to t("academic.reports.previous_report"), academic_report_path(@report.previous_report), class: "fr-btn fr-btn--sm fr-btn--secondary"
               - if @report.next_report
-                = link_to "Rapport suivant →", academic_report_path(@report.next_report), class: "fr-btn fr-btn--sm fr-btn--secondary"
+                = link_to t("academic.reports.next_report"), academic_report_path(@report.next_report), class: "fr-btn fr-btn--sm fr-btn--secondary"
     = render "stats_cards", stats: @academy_stats, progressions: @academy_stats_progressions
 
     = render "establishments_table"

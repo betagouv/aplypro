@@ -208,6 +208,7 @@ fr:
         reports:
           index: Historique des rapports
           show: Statistiques de l'académie
+          global: Statistiques globales
       stats:
         index: Statistiques
       school_years:
@@ -527,6 +528,14 @@ fr:
         success: L'invitation a été supprimée avec succès.
         unauthorized: Vous n'êtes pas autorisé à supprimer cette invitation.
     reports:
+      back_to_index: "← Historique des rapports"
+      global_view: Vue globale
+      academy_view: "← Vue académie"
+      previous_report: "← Rapport précédent"
+      next_report: "Rapport suivant →"
+      export_csv: Exporter en CSV
+      compared_to: "Comparé au rapport :"
+      admin_badge: Administrateur
       export:
         unauthorized: Accès non autorisé
     welcome:
