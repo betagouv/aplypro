@@ -13,13 +13,25 @@
       .fr-col-12
         .fr-grid-row.fr-grid-row--gutters.fr-mb-3w
           .fr-col-md-6
-            %p.fr-text--sm.fr-mb-0
+            %p.fr-text--sm.fr-mb-2w
               %i.fr-icon-refresh-line.fr-icon--sm
               = "Rapport du #{l(@report.created_at, format: :long)} (id: #{@report.id})"
+
+            - if @comparable_reports.any?
+              = form_with url: academic_report_path(@report), method: :get, class: "fr-form-group" do |f|
+                = f.label :comparison_report_id, class: "fr-label fr-text--xs fr-mb-1v" do
+                  %i.fr-icon-arrow-go-forward-line.fr-icon--sm{"aria-hidden": "true"}
+                  Comparé au rapport :
+                = f.select :comparison_report_id,
+                           options_for_select(@comparable_reports.map { |r| ["#{l(r.created_at, format: :short)}", r.id] }, @comparison_report&.id),
+                           {},
+                           class: "fr-select fr-select--sm",
+                           onchange: "this.form.submit()",
+                           style: "max-width: 250px;"
           .fr-col-md-6.fr-text--right
             .fr-btns-group.fr-btns-group--right.fr-btns-group--inline-sm
               - if current_user.admin?
-                = link_to global_academic_report_path(@report), class: "fr-btn fr-btn--sm fr-btn--secondary" do
+                = link_to global_academic_report_path(@report, comparison_report_id: params[:comparison_report_id]), class: "fr-btn fr-btn--sm fr-btn--secondary" do
                   %i.fr-icon-earth-line.fr-icon--sm.fr-mr-1w{"aria-hidden": "true"}
                   Vue globale
                 = button_to export_academic_report_path(@report), method: :post, class: "fr-btn fr-btn--sm fr-btn--secondary", data: { turbo: false } do

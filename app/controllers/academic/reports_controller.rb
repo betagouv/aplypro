@@ -42,6 +42,12 @@ module Academic
       @report = Report.find(params[:id])
       @current_year = @report.school_year.start_year
       @stats = Stats::Main.new(@current_year)
+
+      @comparable_reports = Report.where(school_year: @report.school_year)
+                                  .where(created_at: ...@report.created_at)
+                                  .order(created_at: :desc)
+
+      @comparison_report = determine_comparison_report
     end
 
     def redirect_unauthorized
@@ -88,17 +94,23 @@ module Academic
     end
 
     def calculate_academy_progressions
-      previous_report = @report.previous_report
-      return {} unless previous_report
+      return {} unless @comparison_report
 
-      Academic::ReportsProgressionComparator.compare(@report, previous_report, selected_academy)
+      Academic::ReportsProgressionComparator.compare(@report, @comparison_report, selected_academy)
     end
 
     def calculate_global_progressions
-      previous_report = @report.previous_report
-      return {} unless previous_report
+      return {} unless @comparison_report
 
-      Reports::GlobalProgressionComparator.compare(@report, previous_report)
+      Reports::GlobalProgressionComparator.compare(@report, @comparison_report)
+    end
+
+    def determine_comparison_report
+      if params[:comparison_report_id].present?
+        @comparable_reports.find_by(id: params[:comparison_report_id])
+      else
+        @comparable_reports.first
+      end
     end
 
     def stats_builder

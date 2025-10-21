@@ -13,12 +13,24 @@
       .fr-col-12
         .fr-grid-row.fr-grid-row--gutters.fr-mb-3w
           .fr-col-md-6
-            %p.fr-text--sm.fr-mb-0
+            %p.fr-text--sm.fr-mb-2w
               %i.fr-icon-refresh-line.fr-icon--sm
               = "Rapport du #{l(@report.created_at, format: :long)} (id: #{@report.id})"
+
+            - if @comparable_reports.any?
+              = form_with url: global_academic_report_path(@report), method: :get, class: "fr-form-group" do |f|
+                = f.label :comparison_report_id, class: "fr-label fr-text--xs fr-mb-1v" do
+                  %i.fr-icon-arrow-go-forward-line.fr-icon--sm{"aria-hidden": "true"}
+                  Comparé au rapport :
+                = f.select :comparison_report_id,
+                           options_for_select(@comparable_reports.map { |r| ["#{l(r.created_at, format: :short)}", r.id] }, @comparison_report&.id),
+                           {},
+                           class: "fr-select fr-select--sm",
+                           onchange: "this.form.submit()",
+                           style: "max-width: 250px;"
           .fr-col-md-6.fr-text--right
             .fr-btns-group.fr-btns-group--right.fr-btns-group--inline-sm
-              = link_to "← Vue académie", academic_report_path(@report), class: "fr-btn fr-btn--sm fr-btn--secondary"
+              = link_to "← Vue académie", academic_report_path(@report, comparison_report_id: params[:comparison_report_id]), class: "fr-btn fr-btn--sm fr-btn--secondary"
               - if @report.previous_report
                 = link_to "← Rapport précédent", global_academic_report_path(@report.previous_report), class: "fr-btn fr-btn--sm fr-btn--secondary"
               - if @report.next_report
