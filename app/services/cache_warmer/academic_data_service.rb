@@ -92,6 +92,7 @@ module CacheWarmer
     end
 
     def warm_cache(cache_key, expires_in: 1.week, &)
+      Rails.cache.delete(cache_key)
       Rails.cache.fetch(cache_key, expires_in: expires_in, &)
     end
 
