@@ -29,10 +29,10 @@ module Academic
 
       {
         total_establishments: establishments_count,
-        total_students: academy_row[7].to_i,
+        total_students: academy_row[4].to_i,
         total_pfmps: academy_row[8].to_i,
         validated_pfmps: calculate_validated_pfmps(academy_row),
-        total_validated_amount: academy_row[6].to_f,
+        total_validated_amount: academy_row[5].to_f,
         total_paid_amount: academy_row[12].to_f
       }
     end
