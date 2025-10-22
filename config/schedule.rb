@@ -31,12 +31,6 @@ every :weekday, at: "7AM" do
   runner "PollPaymentsServerJob.perform_later"
 end
 
-# NOTE: refresh the materialized view that holds our paid requests
-# stats.
-every :weekday, at: "6AM" do
-  runner "PaidPfmp.refresh"
-end
-
 # NOTE: reset the attributive_decision_version for all
 # Schooling records that have a version higher than 9.
 #
