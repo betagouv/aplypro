@@ -527,6 +527,18 @@ fr:
       destroy:
         success: L'invitation a été supprimée avec succès.
         unauthorized: Vous n'êtes pas autorisé à supprimer cette invitation.
+    tools:
+      unauthorized: Accès non autorisé. Seuls les administrateurs peuvent effectuer cette action.
+      remove_keycloak_user:
+        invalid_email: L'adresse email fournie n'est pas valide.
+      invite_keycloak_user:
+        invalid_email: L'adresse email fournie n'est pas valide.
+    users:
+      set_selected_academy:
+        unauthorized_academy: Vous n'êtes pas autorisé à accéder à cette académie.
+    school_years:
+      selected:
+        invalid_school_year: L'année scolaire sélectionnée n'est pas valide.
     reports:
       back_to_index: "← Historique des rapports"
       global_view: Vue globale
