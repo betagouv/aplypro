@@ -13,6 +13,7 @@ class GenerateReportJob < ApplicationJob
       school_year: school_year
     )
     WarmCachesJob.perform_later
+    PaidPfmp.refresh
   end
 
   private
