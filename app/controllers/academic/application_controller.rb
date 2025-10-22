@@ -78,7 +78,9 @@ module Academic
     private
 
     def establishments_data_summary(ids)
-      cache_key = "establishments_data_summary/#{ids.sort.join('-')}/school_year/#{selected_school_year}"
+      sorted_ids = ids.sort
+      ids_hash = Digest::SHA256.hexdigest(sorted_ids.join("-"))
+      cache_key = "establishments_data_summary/#{ids_hash}/school_year/#{selected_school_year}"
 
       Rails.cache.fetch(cache_key, expires_in: 1.week) do
         Academic::StatsDataBuilder.new(selected_academy, selected_school_year).establishments_data_summary(ids)

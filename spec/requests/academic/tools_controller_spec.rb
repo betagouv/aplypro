@@ -9,6 +9,7 @@ RSpec.describe Academic::ToolsController do
     sign_in(user)
     allow_any_instance_of(described_class).to receive(:authorised_academy_codes).and_return(["01"]) # rubocop:disable RSpec/AnyInstance
     allow_any_instance_of(described_class).to receive(:selected_academy).and_return("01") # rubocop:disable RSpec/AnyInstance
+    allow(user).to receive(:admin?).and_return(true)
     allow(Keycloak::RemoveUserJob).to receive(:perform_later)
   end
 
