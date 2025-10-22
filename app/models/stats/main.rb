@@ -14,7 +14,7 @@ module Stats
         Indicator::Ratio::PfmpsPaidPayable,
         Indicator::Ratio::Ribs,
         Indicator::Ratio::StudentsData,
-        Indicator::Ratio::ValidatedPfmps,
+        Indicator::Ratio::PfmpsValidated,
         Indicator::Sum::PfmpsSendable,
         Indicator::Sum::Yearly
       ].map { |indicator_class| indicator_class.new(start_year) }
@@ -57,7 +57,7 @@ module Stats
     end
 
     def global_data
-      indicators.transform_values(&:global_data)
+      [indicators.transform_values(&:global_data)]
     end
 
     def bops_data
