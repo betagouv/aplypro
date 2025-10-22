@@ -12,23 +12,23 @@ RSpec.describe Stats::Main do
     include_context "when there is data for global stats"
 
     it "computes the right percentages" do # rubocop:disable RSpec/ExampleLength
-      expect(data).to eq(
-        {
-          DA: 0.4,
-          "Coord. bancaires": 0.4,
-          "PFMPs validées": 0.4,
-          "Données élèves": 0.4,
-          "Mt. prêt envoi": 10.0,
-          "Mt. annuel total": 500,
-          Scolarités: 5,
-          "Toutes PFMPs": 5,
-          "Dem. envoyées": 2,
-          "Dem. intégrées": 0,
-          "Dem. payées": 0,
-          "Mt. payé": 0,
-          "Ratio PFMPs payées/payables": 0.0
-        }
-      )
+      expect(data).to eq([
+                           {
+                             DA: 0.4,
+                             "Coord. bancaires": 0.4,
+                             "PFMPs validées": 0.4,
+                             "Données élèves": 0.4,
+                             "Mt. prêt envoi": 10.0,
+                             "Mt. annuel total": 500,
+                             Scolarités: 5,
+                             "Toutes PFMPs": 5,
+                             "Dem. envoyées": 2,
+                             "Dem. intégrées": 0,
+                             "Dem. payées": 0,
+                             "Mt. payé": 0,
+                             "Ratio PFMPs payées/payables": 0.0
+                           }
+                         ])
     end
   end
 

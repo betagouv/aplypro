@@ -3,7 +3,7 @@
 module Stats
   module Indicator
     module Ratio
-      class ValidatedPfmps < Stats::Ratio
+      class PfmpsValidated < Stats::Ratio
         def initialize(start_year)
           finished_pfmps = Pfmp.for_year(start_year).finished
 

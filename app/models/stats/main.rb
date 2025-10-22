@@ -57,7 +57,7 @@ module Stats
     end
 
     def global_data
-      indicators.transform_values(&:global_data)
+      [indicators.transform_values(&:global_data)]
     end
 
     def bops_data

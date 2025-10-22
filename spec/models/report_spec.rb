@@ -94,10 +94,10 @@ RSpec.describe Report do
       before do
         allow(SchoolYear).to receive(:current).and_return(create_for_date_school_year)
         allow(Stats::Main).to receive(:new).and_return(instance_double(Stats::Main,
-                                                                       global_data: [["Global"]],
-                                                                       bops_data: [["BOP"]],
-                                                                       menj_academies_data: [["Academy"]],
-                                                                       establishments_data: [["Establishment"]]))
+                                                                       global_data: [],
+                                                                       bops_data: [{ BOP: "ENPR", "Coord. bancaires": 4 }],
+                                                                       menj_academies_data: [{ Académie: "Data1" }, { Académie: "Data2" }],
+                                                                       establishments_data: [{ UAI: "123456", "Nom de l'établissement": "Test" }]))
       end
 
       it "creates a new report" do
@@ -106,12 +106,18 @@ RSpec.describe Report do
 
       it "sets the correct data" do
         described_class.create_for_date(date)
+
         report = described_class.last
+        keys = Report::GENERIC_DATA_KEYS
+
         expect(report.data).to include(
-          "global_data" => [["Global"]],
-          "bops_data" => [["BOP"]],
-          "menj_academies_data" => [["Academy"]],
-          "establishments_data" => [["Establishment"]]
+         "global_data" => [keys, Array.new(keys.size, nil)],
+          "bops_data" => [["BOP"] + keys, ["ENPR", nil, "4"] + Array.new(keys.size - 2, nil)],
+          "menj_academies_data" => [["Académie"] + keys,
+                                    ["Data1"] + Array.new(keys.size, nil),
+                                    ["Data2"] + Array.new(keys.size, nil)],
+          "establishments_data" => [["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public"] + keys,
+                                    %w[123456 Test] + Array.new(keys.size + 3, nil)]
         )
       end
     end
