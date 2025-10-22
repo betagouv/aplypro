@@ -25,7 +25,10 @@ module Academic
     end
 
     def set_student
-      @student = Student.find(params[:id])
+      @student = Student.joins(schoolings: :establishment)
+                       .where(establishments: { academy_code: selected_academy })
+                       .distinct
+                       .find(params[:id])
     end
 
     def set_search_result
