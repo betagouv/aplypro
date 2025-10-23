@@ -81,7 +81,21 @@ module Academic
 
     def filtered_establishments_data_from_report
       full_data = @report.data["establishments_data"]
-      stats_builder.filter_establishments_data(full_data)
+      titles = full_data.first
+      establishment_rows = full_data[1..]
+
+      academy_establishments = Establishment.joins(:classes)
+                                            .where(academy_code: selected_academy,
+                                                   "classes.school_year_id": @report.school_year)
+                                            .distinct
+                                            .pluck(:uai)
+
+      filtered_rows = establishment_rows.select do |row|
+        uai = row[0]
+        academy_establishments.include?(uai)
+      end
+
+      [titles, *filtered_rows]
     end
 
     def calculate_academy_progressions
@@ -102,10 +116,6 @@ module Academic
       else
         @comparable_reports.first
       end
-    end
-
-    def stats_builder
-      @stats_builder ||= Academic::StatsDataBuilder.new(selected_academy, @report.school_year)
     end
 
     def export_files
