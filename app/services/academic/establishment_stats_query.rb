@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Used to fetch live data for the Establishment show page
+# Used to fetch live data for the Establishment show page and the academic map (data is cached)
 module Academic
   class EstablishmentStatsQuery
     def initialize(academy_code, school_year)
