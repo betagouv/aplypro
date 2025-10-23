@@ -3,7 +3,7 @@
 require "rails_helper"
 require "./spec/models/stats/shared_contexts"
 
-describe Stats::Indicator::Ribs do
+describe Stats::Indicator::Ratio::StudentsData do
   describe "#global_data" do
     subject { described_class.new(SchoolYear.current.start_year).global_data }
 
