@@ -11,10 +11,14 @@ RSpec.describe Academic::EstablishmentStatsQuery do
 
   describe "#establishments_data_summary" do
     context "with establishments having PFMPs" do
+      let(:mef) { create(:mef, school_year: school_year, yearly_cap: 5000) }
+
       before do
-        classe = create(:classe, establishment: establishment, school_year: school_year)
+        classe = create(:classe, establishment: establishment, school_year: school_year, mef: mef)
         schooling = create(:schooling, classe: classe)
-        pfmp = create(:pfmp, schooling: schooling, amount: 1000).tap(&:validate!)
+        pfmp = create(:pfmp, :validated, schooling: schooling, day_count: 10,
+                                         start_date: "#{school_year.start_year}-09-03",
+                                         end_date: "#{school_year.start_year}-09-18")
         create(:asp_payment_request, :paid, pfmp: pfmp)
       end
 
@@ -38,19 +42,21 @@ RSpec.describe Academic::EstablishmentStatsQuery do
 
       it "includes validated amount" do
         result = query.establishments_data_summary([establishment.id])
-        expect(result[establishment.uai][:payable_amount]).to eq(1000)
+        expect(result[establishment.uai][:payable_amount]).to eq(10)
       end
 
       it "includes paid amount" do
         result = query.establishments_data_summary([establishment.id])
-        expect(result[establishment.uai][:paid_amount]).to eq(1000)
+        expect(result[establishment.uai][:paid_amount]).to eq(10)
       end
 
       it "sorts by paid amount descending" do
         establishment2 = create(:establishment, academy_code: academy_code)
-        classe2 = create(:classe, establishment: establishment2, school_year: school_year)
+        classe2 = create(:classe, establishment: establishment2, school_year: school_year, mef: mef)
         schooling2 = create(:schooling, classe: classe2)
-        pfmp2 = create(:pfmp, schooling: schooling2, amount: 2000).tap(&:validate!)
+        pfmp2 = create(:pfmp, :validated, schooling: schooling2, day_count: 15,
+                                          start_date: "#{school_year.start_year}-09-03",
+                                          end_date: "#{school_year.start_year}-09-18")
         create(:asp_payment_request, :paid, pfmp: pfmp2)
 
         result = query.establishments_data_summary([establishment.id, establishment2.id])
