@@ -2,7 +2,7 @@
 
 module Academic
   class StatsProgressionCalculator
-    def initialize(report, academy_code, _unused = nil)
+    def initialize(report, academy_code)
       @report = report
       @academy_code = academy_code
     end

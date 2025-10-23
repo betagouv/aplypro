@@ -83,7 +83,7 @@ module Academic
       cache_key = "establishments_data_summary/#{ids_hash}/school_year/#{selected_school_year}"
 
       Rails.cache.fetch(cache_key, expires_in: 1.week) do
-        Academic::StatsDataBuilder.new(selected_academy, selected_school_year).establishments_data_summary(ids)
+        Academic::EstablishmentStatsQuery.new(selected_academy, selected_school_year).establishments_data_summary(ids)
       end
     end
   end

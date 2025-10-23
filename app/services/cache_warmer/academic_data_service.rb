@@ -57,7 +57,7 @@ module CacheWarmer
 
       cache_key = "establishments_data_summary/#{establishment_ids.sort.join('-')}/school_year/#{school_year.id}"
       warm_cache(cache_key) do
-        builder.establishments_data_summary(establishment_ids)
+        Academic::EstablishmentStatsQuery.new(academy_code, school_year).establishments_data_summary(establishment_ids)
       end
     end
 
