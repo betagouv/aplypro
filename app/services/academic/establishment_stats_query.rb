@@ -1,36 +1,11 @@
 # frozen_string_literal: true
 
+# Used to fetch live data for the Establishment show page and the academic map (data is cached)
 module Academic
-  class StatsDataBuilder
+  class EstablishmentStatsQuery
     def initialize(academy_code, school_year)
       @academy_code = academy_code
       @school_year = school_year
-    end
-
-    def current_academy_establishments
-      Establishment.joins(:classes)
-                   .where(academy_code: @academy_code,
-                          "classes.school_year_id": @school_year)
-                   .distinct
-    end
-
-    def calculate_academy_stats(report)
-      extractor = StatsProgressionCalculator.new(report, @academy_code, {})
-      extractor.extract_stats_from_report(report)
-    end
-
-    def filter_establishments_data(full_data)
-      titles = full_data.first
-      establishment_rows = full_data[1..]
-
-      academy_establishments = current_academy_establishments.pluck(:uai)
-
-      filtered_rows = establishment_rows.select do |row|
-        uai = row[0]
-        academy_establishments.include?(uai)
-      end
-
-      [titles, *filtered_rows]
     end
 
     def establishments_data_summary(establishment_ids)

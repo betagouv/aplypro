@@ -49,15 +49,17 @@ module CacheWarmer
     private
 
     def warm_map_cache(academy_code, school_year)
-      builder = Academic::StatsDataBuilder.new(academy_code, school_year)
-      establishments = builder.current_academy_establishments
+      establishments = Establishment.joins(:classes)
+                                    .where(academy_code: academy_code,
+                                           "classes.school_year_id": school_year)
+                                    .distinct
       establishment_ids = establishments.pluck(:id)
 
       return if establishment_ids.empty?
 
       cache_key = "establishments_data_summary/#{establishment_ids.sort.join('-')}/school_year/#{school_year.id}"
       warm_cache(cache_key) do
-        builder.establishments_data_summary(establishment_ids)
+        Academic::EstablishmentStatsQuery.new(academy_code, school_year).establishments_data_summary(establishment_ids)
       end
     end
 
