@@ -9,7 +9,8 @@ module ASP
       "Place" => "Plc",
       "Chemin" => "Ch",
       "Impasse" => "Imp",
-      "Résidence" => "Rdce"
+      "Résidence" => "Rdce",
+      "Avenue" => "Avn"
     }.freeze
 
     def self.abbreviate(text, max_length:)
