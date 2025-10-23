@@ -14,7 +14,7 @@ module Academic
     private
 
     def extract_stats(report)
-      StatsProgressionCalculator.new(report, @academy_code).extract_stats_from_report
+      StatsExtractor.new(report, @academy_code).extract_stats_from_report
     end
   end
 end

@@ -76,7 +76,7 @@ module Academic
     end
 
     def academy_statistics
-      Academic::StatsProgressionCalculator.new(@report, selected_academy).extract_stats_from_report
+      Academic::StatsExtractor.new(@report, selected_academy).extract_stats_from_report
     end
 
     def filtered_establishments_data_from_report

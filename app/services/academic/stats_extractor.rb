@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Academic
-  class StatsProgressionCalculator
+  class StatsExtractor
     def initialize(report, academy_code)
       @report = report
       @academy_code = academy_code
