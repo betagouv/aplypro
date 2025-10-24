@@ -26,18 +26,13 @@ module Reports
     end
 
     def format_cell_for_csv(cell)
-      return handle_special_values(cell) unless valid_numeric?(cell)
+      return "0" if cell.nil?
+      return "Infini" if cell.respond_to?(:infinite?) && cell.infinite?
+      return "0" if cell.respond_to?(:nan?) && cell.nan?
+      return cell.to_s unless valid_numeric?(cell)
 
       rounded_value = round_value(cell)
       rounded_value.to_s.gsub(".", ",")
-    end
-
-    def handle_special_values(value)
-      return "0" if value.nil?
-      return "Infini" if value.respond_to?(:infinite?) && value.infinite?
-      return "0" if value.respond_to?(:nan?) && value.nan?
-
-      value.to_s
     end
 
     def valid_numeric?(value)
