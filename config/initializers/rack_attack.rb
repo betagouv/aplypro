@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Aplypro
-  RATE_LIMIT_PER_IP = 300
+  RATE_LIMIT_PER_IP = ENV.fetch("RATE_LIMIT_PER_IP", 300).to_i
 end
 
 Rack::Attack.cache.store = ActiveSupport::Cache.lookup_store(:redis_cache_store)
