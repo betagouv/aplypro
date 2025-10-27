@@ -124,6 +124,23 @@ class Student
       def inspect
         "#{self.class}<UAI: #{uai}>"
       end
+
+      def manage_end_date(schooling)
+        return if schooling.nil?
+
+        student = schooling.student
+        current_schooling = student.current_schooling
+
+        if schooling.open? && !current_schooling.eql?(schooling)
+          date = if current_schooling.school_year.eql?(schooling.school_year)
+                   schooling.start_date - 1.day
+                 else
+                   establishment.school_year_range(current_schooling.school_year.start_year).last - 1.day
+                 end
+
+          student.close_current_schooling!(date)
+        end
+      end
     end
   end
 end

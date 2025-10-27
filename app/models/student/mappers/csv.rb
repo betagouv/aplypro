@@ -10,7 +10,7 @@ class Student
           sc.status = :student
         end
 
-        student.close_current_schooling! if schooling.open? && schooling != student.current_schooling
+        manage_end_date(schooling)
 
         schooling.save!
       end
