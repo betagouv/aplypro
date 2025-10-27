@@ -47,6 +47,7 @@ RSpec.configure do |config|
 
   config.before do
     mock_data_gouv_calendar_api
+    Rack::Attack.enabled = false
   end
 
   # TODO: Remove when Devise fixes https://github.com/heartcombo/devise/issues/5705
