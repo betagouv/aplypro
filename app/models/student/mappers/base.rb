@@ -5,7 +5,7 @@
 # the aggregate call for all 3 different models
 class Student
   module Mappers
-    class Base
+    class Base # rubocop:disable Metrics/ClassLength
       include Student::Mappers::Errors
 
       attr_reader :payload, :uai, :establishment
@@ -125,21 +125,21 @@ class Student
         "#{self.class}<UAI: #{uai}>"
       end
 
-      def manage_end_date(schooling)
+      def manage_end_date(schooling) # rubocop:disable Metrics/AbcSize
         return if schooling.nil?
 
         student = schooling.student
         current_schooling = student.current_schooling
 
-        if schooling.open? && !current_schooling.eql?(schooling)
-          date = if current_schooling.school_year.eql?(schooling.school_year)
-                   schooling.start_date - 1.day
-                 else
-                   establishment.school_year_range(current_schooling.school_year.start_year).last - 1.day
-                 end
+        return if current_schooling.nil? || schooling.closed? || current_schooling.eql?(schooling)
 
-          student.close_current_schooling!(date)
-        end
+        date = if current_schooling.school_year.eql?(schooling.school_year)
+                 schooling.start_date - 1.day
+               else
+                 establishment.school_year_range(current_schooling.school_year.start_year).last - 1.day
+               end
+
+        student.close_current_schooling!(date)
       end
     end
   end
