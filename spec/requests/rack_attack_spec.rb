@@ -13,7 +13,7 @@ RSpec.describe "Rack::Attack" do
   end
 
   describe "throttle by ip" do
-    let(:limit) { 300 }
+    let(:limit) { Aplypro::RATE_LIMIT_PER_IP }
 
     it "allows requests under the limit" do
       limit.times do
