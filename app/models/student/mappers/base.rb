@@ -125,7 +125,7 @@ class Student
         "#{self.class}<UAI: #{uai}>"
       end
 
-      def manage_end_date(schooling) # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
+      def current_schooling_end_date(schooling) # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
         return if schooling.nil?
 
         student = schooling.student

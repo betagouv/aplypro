@@ -10,7 +10,7 @@ class Student
           sc.status = :student
         end
 
-        manage_end_date(schooling)
+        current_schooling_end_date(schooling)
 
         schooling.save!
       end
