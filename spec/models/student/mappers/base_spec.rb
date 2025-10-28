@@ -19,7 +19,7 @@ describe Student::Mappers::Base do
     context "when the schooling is nil" do
       let(:schooling) { nil }
 
-      it { expect { method }.not_to change(current_schooling.reload.end_date) }
+      it { expect { method }.not_to(change { current_schooling.reload.end_date }) }
     end
 
     context "when the schooling is closed" do
@@ -30,7 +30,7 @@ describe Student::Mappers::Base do
                                         end_date: Date.parse("#{SchoolYear.current.start_year}-10-01"))
       end
 
-      it { expect { method }.not_to change(current_schooling.reload.end_date) }
+      it { expect { method }.not_to(change { current_schooling.reload.end_date }) }
     end
 
     context "when the schooling is open and in the same school year" do
@@ -45,13 +45,23 @@ describe Student::Mappers::Base do
       end
     end
 
+    context "when the schooling is open, in the same school year, and start year before current schooling start date" do
+      let(:schooling) do
+        Schooling.find_or_initialize_by(classe:, student:, start_date: current_schooling.start_date - 2.days)
+      end
+
+      it "sets the current schooling end date to today date" do
+        expect { method }.to change { current_schooling.reload.end_date }.from(nil).to(Time.zone.today)
+      end
+    end
+
     context "when the schooling is open but not in the same school year" do
       let(:another_school_year) { create(:school_year, start_year: 2030) }
       let(:another_classe) { create(:classe, school_year: another_school_year) }
       let(:schooling) do
         Schooling.find_or_initialize_by(classe: another_classe,
                                         student:,
-                                        start_date: Date.parse("#2030-09-15"))
+                                        start_date: Date.parse("2030-09-15"))
       end
 
       it "sets the current schooling end date to the end of the school year range" do
