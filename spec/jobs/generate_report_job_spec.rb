@@ -8,7 +8,7 @@ RSpec.describe GenerateReportJob do
     let(:date) { Time.current }
 
     before do
-      allow(Report).to receive(:create_for_date).and_call_original
+      allow(Report).to receive(:create_for_school_year).and_call_original
       allow(SchoolYear).to receive(:current).and_return(school_year)
       allow(Stats::Main).to receive(:new)
         .and_return(instance_double(Stats::Main,

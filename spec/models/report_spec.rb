@@ -3,15 +3,6 @@
 require "rails_helper"
 
 RSpec.describe Report do
-  let(:sample_data) do
-    {
-      "global_data" => [["Header"], ["Data"]],
-      "bops_data" => [["BOP Header"], ["BOP Data"]],
-      "menj_academies_data" => [["Academy Header"], ["Academy Data"]],
-      "establishments_data" => [["Establishment Header"], ["Establishment Data"]]
-    }
-  end
-
   describe "validations" do
     subject { build(:report) }
 
@@ -92,7 +83,6 @@ RSpec.describe Report do
 
     context "when no report exists for the date" do
       before do
-        allow(SchoolYear).to receive(:current).and_return(create_for_date_school_year)
         allow(Stats::Main).to receive(:new)
           .and_return(instance_double(Stats::Main,
                                       global_data: [],
@@ -102,11 +92,12 @@ RSpec.describe Report do
       end
 
       it "creates a new report" do
-        expect { described_class.create_for_date(date) }.to change(described_class, :count).by(1)
+        expect { described_class.create_for_school_year(create_for_date_school_year, date) }
+          .to change(described_class, :count).by(1)
       end
 
       it "sets the correct data" do # rubocop:disable RSpec/ExampleLength
-        described_class.create_for_date(date)
+        described_class.create_for_school_year(create_for_date_school_year, date)
 
         report = described_class.last
         keys = Report::GENERIC_DATA_KEYS
@@ -125,12 +116,12 @@ RSpec.describe Report do
 
     context "when a report already exists for the date" do
       before do
-        allow(SchoolYear).to receive(:current).and_return(create_for_date_school_year)
         create(:report, created_at: date, school_year: create_for_date_school_year)
       end
 
       it "does not create a new report" do
-        expect { described_class.create_for_date(date) }.not_to change(described_class, :count)
+        expect { described_class.create_for_school_year(create_for_date_school_year, date) }
+          .not_to change(described_class, :count)
       end
     end
   end
