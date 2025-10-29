@@ -32,6 +32,8 @@ require "cucumber/rails"
 #
 ActionController::Base.allow_rescue = false
 
+Rack::Attack.enabled = false
+
 # You may also want to configure DatabaseCleaner to use different strategies for certain features and scenarios.
 # See the DatabaseCleaner documentation for details. Example:
 
