@@ -125,23 +125,34 @@ class Student
         "#{self.class}<UAI: #{uai}>"
       end
 
-      def current_schooling_end_date(schooling) # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
-        return if schooling.nil?
-
+      def current_schooling_end_date(schooling)
         student = schooling.student
         current_schooling = student.current_schooling
 
         return if current_schooling.nil? || schooling.closed? || current_schooling.eql?(schooling)
 
-        date = if current_schooling.school_year.eql?(schooling.school_year)
-                 if schooling.start_date > current_schooling.start_date
-                   schooling.start_date - 1.day
-                 else
-                   Time.zone.today
-                 end
-               else
-                 establishment.school_year_range(current_schooling.school_year.start_year).last - 1.day
-               end
+        if current_schooling.school_year.eql?(schooling.school_year)
+          handle_same_schooling_year(schooling)
+        else
+          close_current_schooling(student)
+        end
+      end
+
+      private
+
+      def handle_same_schooling_year(schooling)
+        student = schooling.student
+        current_schooling = student.current_schooling
+
+        if schooling.start_date > current_schooling.start_date
+          student.close_current_schooling!(schooling.start_date - 1.day)
+        else
+          schooling.end_date = current_schooling.start_date - 1.day
+        end
+      end
+
+      def close_current_schooling(student)
+        date = establishment.school_year_range(student.current_schooling.school_year.start_year).last - 1.day
 
         student.close_current_schooling!(date)
       end
