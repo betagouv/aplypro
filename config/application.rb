@@ -48,5 +48,7 @@ module Aplypro
     config.i18n.default_locale = :fr
     config.i18n.fallbacks = [:en]
     config.active_job.queue_adapter = :sidekiq
+
+    config.middleware.use Rack::Attack
   end
 end
