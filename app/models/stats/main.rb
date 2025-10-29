@@ -29,12 +29,17 @@ module Stats
     end
 
     def indicators_with_metadata
-      indicators.transform_values do |indicator|
-        {
-          title: indicator.title,
-          tooltip_key: indicator.respond_to?(:tooltip_key) ? indicator.tooltip_key : nil,
-          type: indicator.class.superclass.name
-        }
+      Report::GENERIC_DATA_KEYS.map do |title|
+        indicator = indicators[title.to_sym]
+        if indicator
+          {
+            title: indicator.title,
+            tooltip_key: indicator.respond_to?(:tooltip_key) ? indicator.tooltip_key : nil,
+            type: indicator.class.superclass.name
+          }
+        else
+          nil
+        end
       end
     end
 
