@@ -31,6 +31,16 @@ RSpec.describe "Rack::Attack" do
       (rate_limit + 1).times { get "/legal" }
       expect(response).to have_http_status(:too_many_requests)
     end
+
+    it "sends notification to Sentry when throttling" do
+      allow(Sentry).to receive(:capture_message)
+      (rate_limit + 1).times { get "/legal" }
+
+      expected_extra = hash_including(discriminator: "127.0.0.1", matched: "req/ip", ip: "127.0.0.1", path: "/legal")
+      expect(Sentry).to have_received(:capture_message).with(
+        "Rate limit exceeded", hash_including(level: :warning, extra: expected_extra)
+      )
+    end
   end
 
   describe "block scanners" do
