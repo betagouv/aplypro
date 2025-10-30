@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Stats
-  class Main
+  class Main # rubocop:disable Metrics/ClassLength
     attr_reader :indicators
 
     def initialize(start_year)
@@ -31,15 +31,13 @@ module Stats
     def indicators_with_metadata
       Report::GENERIC_DATA_KEYS.map do |title|
         indicator = indicators[title.to_sym]
-        if indicator
-          {
-            title: indicator.title,
-            tooltip_key: indicator.respond_to?(:tooltip_key) ? indicator.tooltip_key : nil,
-            type: indicator.class.superclass.name
-          }
-        else
-          nil
-        end
+        next unless indicator
+
+        {
+          title: indicator.title,
+          tooltip_key: indicator.respond_to?(:tooltip_key) ? indicator.tooltip_key : nil,
+          type: indicator.class.superclass.name
+        }
       end
     end
 
