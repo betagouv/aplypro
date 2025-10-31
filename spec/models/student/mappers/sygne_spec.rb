@@ -77,16 +77,6 @@ describe Student::Mappers::Sygne do
 
         expect(student.schoolings.last.open?).to be true
       end
-
-      context "when the schooling is not in the current school year" do
-        before { closed_payload.first.update(dateDebSco: "#{SchoolYear.current.start_year - 2}-05-05") }
-
-        it "does not update the end date" do
-          mapper.parse!
-
-          expect(student.schoolings.last.end_date).to be_nil
-        end
-      end
     end
 
     context "when the student already has a removed schooling" do

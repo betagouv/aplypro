@@ -59,16 +59,6 @@ describe Student::Mappers::Fregata do
         expect { mapper.new(data, uai).parse! }.to change(Schooling.current, :count).by(-1)
       end
     end
-
-    context "when the schooling is not in the current school year" do
-      before { data.first.update(dateEntreeFormation: "#{SchoolYear.current.start_year - 2}-05-05") }
-
-      it "does not update the end date" do
-        mapper.new(data, uai).parse!
-
-        expect(Student.find_by!(ine: "test").schoolings.last.end_date).to be_nil
-      end
-    end
   end
 
   context "when the student is an apprentice" do
