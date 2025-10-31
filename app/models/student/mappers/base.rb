@@ -131,30 +131,23 @@ class Student
 
         return if current_schooling.nil? || schooling.closed? || current_schooling.eql?(schooling)
 
-        if current_schooling.school_year.eql?(schooling.school_year)
-          handle_same_schooling_year(schooling)
-        else
-          close_current_schooling(student)
-        end
+        end_date = manage_end_date(schooling, current_schooling)
+        student.close_current_schooling!(end_date)
       end
 
       private
 
-      def handle_same_schooling_year(schooling)
-        student = schooling.student
-        current_schooling = student.current_schooling
+      def manage_end_date(schooling, current_schooling)
+        same_year       = schooling.school_year.start_year == current_schooling.school_year.start_year
+        current_year    = SchoolYear.current == current_schooling.school_year
+        has_later_start = schooling.start_date&.> current_schooling.start_date
+        end_of_year     = establishment.school_year_range(current_schooling.school_year.start_year).last - 1.day
 
-        if schooling.start_date > current_schooling.start_date
-          student.close_current_schooling!(schooling.start_date - 1.day)
+        if has_later_start
+          same_year ? schooling.start_date - 1.day : end_of_year
         else
-          schooling.end_date = current_schooling.start_date - 1.day
+          current_year ? Time.zone.today : end_of_year
         end
-      end
-
-      def close_current_schooling(student)
-        date = establishment.school_year_range(student.current_schooling.school_year.start_year).last - 1.day
-
-        student.close_current_schooling!(date)
       end
     end
   end
