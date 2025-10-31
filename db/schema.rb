@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_17_154338) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_31_102026) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "unaccent"
@@ -231,7 +231,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_17_154338) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "school_year_id", null: false
-    t.index ["created_at"], name: "index_reports_on_created_at", unique: true
+    t.index ["created_at", "school_year_id"], name: "index_reports_on_created_at_and_school_year_id", unique: true
     t.index ["data"], name: "index_reports_on_data", using: :gin
     t.index ["school_year_id"], name: "index_reports_on_school_year_id"
   end

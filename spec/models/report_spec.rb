@@ -12,7 +12,7 @@ RSpec.describe Report do
     describe "uniqueness of created_at" do
       before { create(:report, school_year: create(:school_year, start_year: 2060)) }
 
-      it { is_expected.to validate_uniqueness_of(:created_at) }
+      it { is_expected.to validate_uniqueness_of(:created_at).scoped_to(:school_year_id) }
     end
   end
 

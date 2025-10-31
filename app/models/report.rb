@@ -8,7 +8,7 @@ class Report < ApplicationRecord
   belongs_to :school_year
 
   validates :data, presence: true
-  validates :created_at, presence: true, uniqueness: true
+  validates :created_at, presence: true, uniqueness: { scope: :school_year_id }
 
   scope :ordered, -> { order(created_at: :desc) }
   scope :for_school_year, ->(school_year) { where(school_year: school_year) }
