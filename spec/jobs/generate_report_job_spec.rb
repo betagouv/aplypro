@@ -36,5 +36,30 @@ RSpec.describe GenerateReportJob do
       create(:report, created_at: date, school_year: school_year)
       expect { described_class.new.perform(school_year, date) }.not_to change(Report, :count)
     end
+
+    context "when previous school year exists" do
+      let!(:previous_school_year) { create(:school_year, start_year: school_year.start_year - 1) }
+
+      it "creates reports for both current and previous year" do
+        expect { described_class.new.perform(school_year, date) }.to change(Report, :count).by(2)
+        expect(Report.where(school_year: school_year).count).to eq(1)
+        expect(Report.where(school_year: previous_school_year).count).to eq(1)
+      end
+
+      it "creates both reports with the same date" do
+        described_class.new.perform(school_year, date)
+        current_report = Report.find_by(school_year: school_year)
+        previous_report = Report.find_by(school_year: previous_school_year)
+        expect(current_report.created_at).to be_within(1.second).of(date)
+        expect(previous_report.created_at).to be_within(1.second).of(date)
+      end
+    end
+
+    context "when previous school year does not exist" do
+      it "only creates report for current year" do
+        expect { described_class.new.perform(school_year, date) }.to change(Report, :count).by(1)
+        expect(Report.last.school_year).to eq(school_year)
+      end
+    end
   end
 end
