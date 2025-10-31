@@ -1,38 +1,38 @@
 # frozen_string_literal: true
 
 module Stats
-  # rubocop:disable Metrics/ClassLength
-  class Main
+  class Main # rubocop:disable Metrics/ClassLength
     attr_reader :indicators
 
     def initialize(start_year)
       @school_year = SchoolYear.find_by!(start_year:)
 
-      @indicators = [
-        Indicator::AttributiveDecisions,
-        Indicator::Ribs,
-        Indicator::ValidatedPfmps,
-        Indicator::StudentsData,
-        Indicator::SendableAmounts,
-        Indicator::YearlyAmounts,
-        Indicator::Schoolings,
-        Indicator::Pfmps
+      indicators_class = [
+        Indicator::Count::Pfmps,
+        Indicator::Count::Schoolings,
+        Indicator::Ratio::AttributiveDecisions,
+        Indicator::Ratio::PfmpsPaidPayable,
+        Indicator::Ratio::Ribs,
+        Indicator::Ratio::StudentsData,
+        Indicator::Ratio::PfmpsValidated,
+        Indicator::Sum::PfmpsSendable,
+        Indicator::Sum::Yearly
       ].map { |indicator_class| indicator_class.new(start_year) }
 
       %i[sent integrated paid].each do |state|
-        @indicators.push Indicator::PaymentRequestStates.new(start_year, state)
+        indicators_class << Indicator::Count::PaymentRequestStates.new(start_year, state)
       end
 
-      @indicators.push Indicator::PaymentRequestStateAmounts.new(start_year, :paid)
-      @indicators.push Indicator::PfmpPaidPayableRatio.new(start_year)
-    end
+      indicators_class << Indicator::Sum::PaymentRequestsStates.new(start_year, :paid)
 
-    def indicators_titles
-      indicators.map(&:title)
+      @indicators = indicators_class.index_by { |indicator| indicator.title.to_sym }
     end
 
     def indicators_with_metadata
-      indicators.map do |indicator|
+      Report::GENERIC_DATA_KEYS.map do |title|
+        indicator = indicators[title.to_sym]
+        next unless indicator
+
         {
           title: indicator.title,
           tooltip_key: indicator.respond_to?(:tooltip_key) ? indicator.tooltip_key : nil,
@@ -60,37 +60,38 @@ module Stats
     end
 
     def global_data
-      [indicators_titles, indicators.map(&:global_data)]
+      [indicators.transform_values(&:global_data)]
     end
 
     def bops_data
-      [["BOP", *indicators_titles], *bop_lines]
+      %w[ENPU ENPR MASA MER].map do |bop|
+        initialize_indicators({ BOP: bop }, :bops_data)
+      end
     end
 
     def menj_academies_data
-      [["Académie", *indicators_titles], *academy_lines]
+      academies.map do |academy|
+        initialize_indicators({ Académie: academy }, :menj_academies_data)
+      end
     end
 
     def establishments_data
-      [establishment_titles, *establishment_lines]
+      establishments.map do |uai, name, academy, private_code, ministry|
+        specific_indicators = {
+          UAI: uai,
+          "Nom de l'établissement": name,
+          Ministère: ministry,
+          Académie: academy,
+          "Privé/Public": format_private_status(private_code)
+        }
+        initialize_indicators(specific_indicators, :establishments_data)
+      end
     end
 
     private
 
     def format_cell_for_csv(cell)
       cell.is_a?(Float) || cell.nil? ? number_string(cell) : cell
-    end
-
-    def bop_lines
-      %w[ENPU ENPR MASA MER].map do |bop|
-        [bop, *indicators.map { |indicator| indicator.bops_data[bop] }]
-      end
-    end
-
-    def academy_lines
-      academies.map do |academy|
-        [academy, *indicators.map { |indicator| indicator.menj_academies_data[academy] }]
-      end
     end
 
     def academies
@@ -100,16 +101,6 @@ module Stats
                    .map(&:academy_label).uniq
     end
 
-    def establishment_titles
-      ["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public", *indicators_titles]
-    end
-
-    def establishment_lines
-      establishments.map do |uai, name, academy, private_code, ministry|
-        [uai, name, ministry, academy, format_private_status(private_code), *establishment_indicator_data(uai)]
-      end
-    end
-
     def establishments
       Establishment.distinct
                    .order(:uai)
@@ -117,12 +108,20 @@ module Stats
                    .map { |e| [e.uai, e.name, e.academy_label, e.private_contract_type_code, e.ministry] }
     end
 
-    def format_private_status(private_code)
-      private_code == "99" ? "Public" : "Privé"
+    def initialize_indicators(specific_indicators, method)
+      id = specific_indicators.values.first
+
+      all_indicators = specific_indicators.merge!(indicators)
+
+      all_indicators.transform_values do |indicator|
+        indicator.send(method)[id]
+      rescue NoMethodError
+        indicator
+      end
     end
 
-    def establishment_indicator_data(uai)
-      indicators.map { |indicator| indicator.establishments_data[uai] }
+    def format_private_status(private_code)
+      private_code == "99" ? "Public" : "Privé"
     end
 
     def number_string(ratio)
@@ -132,5 +131,4 @@ module Stats
       ratio.to_s.gsub(".", ",")
     end
   end
-  # rubocop:enable Metrics/ClassLength
 end
