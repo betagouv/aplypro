@@ -137,7 +137,7 @@ class Student
 
       private
 
-      def manage_end_date(schooling, current_schooling)
+      def manage_end_date(schooling, current_schooling) # rubocop:disable Metrics/AbcSize
         same_year       = schooling.school_year.start_year == current_schooling.school_year.start_year
         current_year    = SchoolYear.current == current_schooling.school_year
         has_later_start = schooling.start_date&.> current_schooling.start_date
