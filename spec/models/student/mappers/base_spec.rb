@@ -72,7 +72,7 @@ describe Student::Mappers::Base do
       it "sets the current schooling end date to the end of the school year range" do
         expect { method }
           .to change { current_schooling.reload.end_date }
-          .from(nil).to(Date.parse("#{current_schooling.school_year.end_year}-08-31"))
+          .from(nil).to(Date.parse("#{current_schooling.school_year.end_year}-09-01"))
       end
     end
 
@@ -110,7 +110,7 @@ describe Student::Mappers::Base do
       it "sets the current schooling end date to the end of the school year range" do
         expect { method }
           .to change { current_schooling.reload.end_date }
-          .from(nil).to(Date.parse("#{current_schooling.school_year.end_year}-08-31"))
+          .from(nil).to(Date.parse("#{current_schooling.school_year.end_year}-09-01"))
       end
     end
 
@@ -129,7 +129,7 @@ describe Student::Mappers::Base do
       it "sets the current schooling end date to the end of the school year range" do
         expect { method }
           .to change { current_schooling.reload.end_date }
-          .from(nil).to(Date.parse("#{current_schooling.school_year.end_year}-08-31"))
+          .from(nil).to(Date.parse("#{current_schooling.school_year.end_year}-09-01"))
       end
     end
   end

@@ -141,7 +141,7 @@ class Student
         same_year       = schooling.school_year.start_year == current_schooling.school_year.start_year
         current_year    = SchoolYear.current == current_schooling.school_year
         has_later_start = schooling.start_date&.> current_schooling.start_date
-        end_of_year     = establishment.school_year_range(current_schooling.school_year.start_year).last - 1.day
+        end_of_year     = establishment.school_year_range(current_schooling.school_year.start_year).last
 
         if has_later_start
           same_year ? schooling.start_date - 1.day : end_of_year
