@@ -131,13 +131,13 @@ class Student
 
         return if current_schooling.nil? || schooling.closed? || current_schooling.eql?(schooling)
 
-        end_date = manage_end_date(schooling, current_schooling)
+        end_date = infer_schooling_closing_date(schooling, current_schooling)
         student.close_current_schooling!(end_date)
       end
 
       private
 
-      def manage_end_date(schooling, current_schooling) # rubocop:disable Metrics/AbcSize
+      def infer_schooling_closing_date(schooling, current_schooling) # rubocop:disable Metrics/AbcSize
         same_year       = schooling.school_year.start_year == current_schooling.school_year.start_year
         current_year    = SchoolYear.current == current_schooling.school_year
         has_later_start = schooling.start_date&.> current_schooling.start_date
