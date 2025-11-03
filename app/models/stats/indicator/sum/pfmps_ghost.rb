@@ -13,6 +13,10 @@ module Stats
           )
         end
 
+        def key
+          :pfmps_ghost_sum
+        end
+
         def title
           "Mt. PFMPs fantômes"
         end

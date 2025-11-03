@@ -15,6 +15,10 @@ module Stats
           )
         end
 
+        def key
+          :payment_requests_recovery_sum
+        end
+
         def title
           "Mt. OR"
         end

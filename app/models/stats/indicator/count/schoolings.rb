@@ -10,6 +10,10 @@ module Stats
           )
         end
 
+        def key
+          :schoolings_count
+        end
+
         def title
           "Nb. scolarités"
         end

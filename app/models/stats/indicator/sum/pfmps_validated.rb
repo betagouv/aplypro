@@ -9,9 +9,13 @@ module Stats
 
           # TODO: paid_amount
           super(
-            subset: finished_pfmps.in_state(:validated),
+            # subset: finished_pfmps.in_state(:validated),
             all: finished_pfmps
           )
+        end
+
+        def key
+          :pfmps_validated_sum
         end
 
         def title

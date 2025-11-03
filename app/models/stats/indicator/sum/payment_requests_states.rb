@@ -23,6 +23,10 @@ module Stats
           )
         end
 
+        def key
+          :"payment_requests_#{@state}_sum"
+        end
+
         def title
           "Mt. #{STATE_FOR_TITLE[@state]}"
         end

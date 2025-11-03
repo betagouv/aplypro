@@ -11,6 +11,10 @@ module Stats
           )
         end
 
+        def key
+          :pfmps_report_count
+        end
+
         def title
           "Nb. PFMPs reportées"
         end

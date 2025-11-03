@@ -13,6 +13,10 @@ module Stats
           )
         end
 
+        def key
+          :pfmps_completed_sum
+        end
+
         def title
           "Mt. PFMPs complétées"
         end

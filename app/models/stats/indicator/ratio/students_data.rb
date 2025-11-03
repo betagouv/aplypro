@@ -13,6 +13,10 @@ module Stats
           )
         end
 
+        def key
+          :students_data_ratio
+        end
+
         def title
           "Part données élèves"
         end

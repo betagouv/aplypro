@@ -1,9 +1,36 @@
 # frozen_string_literal: true
 
 class Report < ApplicationRecord
-  HEADERS = ["Part DA", "Part coord. bancaires", "Part PFMPs validées", "Part données élèves",
-             "Mt. prêt envoi", "Mt. annuel total", "Nb. scolarités", "Toutes PFMPs", "Dem. envoyées",
-             "Dem. intégrées", "Dem. payées", "Mt. payé", "Part PFMPs payées/payables"].freeze
+  HEADERS = %i[
+    yearly_sum
+    schoolings_count
+    attributive_decisions_count
+    attributive_decisions_ratio
+    students_count
+    ribs_count
+    ribs_ratio
+    students_data_count
+    students_data_ratio
+    pfmps_count
+    pfmps_validated_count
+    pfmps_validated_sum
+    pfmps_completed_count
+    pfmps_completed_sum
+    pfmps_incompleted_count
+    pfmps_incompleted_sum
+    pfmps_ghost_count
+    pfmps_ghost_sum
+    payment_requests_paid_count
+    payment_requests_paid_sum
+    payment_requests_recovery_sum
+    students_paid_count
+    students_paid_ratio
+    pfmps_paid_count
+    pfmps_payable_count
+    pfmps_paid_payable_ratio
+    pfmps_report_count
+    pfmps_report_sum
+  ].freeze
 
   ReportDataSchema = Dry::Schema.JSON do
     required(:global_data).value(:array, size?: 2).each(:array)
@@ -98,10 +125,10 @@ class Report < ApplicationRecord
       stats = Stats::Main.new(school_year.start_year)
       {
         global_data: serialize_data(stats.global_data),
-        bops_data: serialize_data(stats.bops_data, ["BOP"]),
-        menj_academies_data: serialize_data(stats.menj_academies_data, ["Académie"]),
-        establishments_data: serialize_data(stats.establishments_data, ["UAI", "Nom de l'établissement",
-                                                                        "Ministère", "Académie", "Privé/Public"])
+        bops_data: serialize_data(stats.bops_data, %i[bop]),
+        menj_academies_data: serialize_data(stats.menj_academies_data, %i[academy]),
+        establishments_data: serialize_data(stats.establishments_data,
+                                            %i[uai establishment_name ministry academy private_or_public])
       }
     end
 
@@ -113,7 +140,7 @@ class Report < ApplicationRecord
       [
         keys,
         *rows.map do |row|
-          keys.map { |k| row[k.to_sym].presence }
+          keys.map { |k| row[k].presence }
         end
       ]
     end

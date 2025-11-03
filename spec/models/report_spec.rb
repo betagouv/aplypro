@@ -199,14 +199,15 @@ RSpec.describe Report do
         keys = Report::HEADERS
 
         expect(report.data).to include("global_data" => [keys, Array.new(keys.size, nil)],
-                                       "bops_data" => [["BOP"] + keys,
+                                       "bops_data" => [%i[bop] + keys,
                                                        ["ENPR", nil, 4] + Array.new(keys.size - 2, nil)],
-                                       "menj_academies_data" => [["Académie"] + keys,
+                                       "menj_academies_data" => [%i[academy] + keys,
                                                                  ["Data1"] + Array.new(keys.size, nil),
                                                                  ["Data2"] + Array.new(keys.size, nil)],
-                                       "establishments_data" => [["UAI", "Nom de l'établissement", "Ministère",
-                                                                  "Académie", "Privé/Public"] + keys,
-                                                                 %w[123456 Test] + Array.new(keys.size + 3, nil)])
+                                       "establishments_data" => [
+                                         %i[uai establishment_name ministry academy private_or_public] + keys,
+                                         %w[123456 Test] + Array.new(keys.size + 3, nil)
+                                       ])
       end
     end
 

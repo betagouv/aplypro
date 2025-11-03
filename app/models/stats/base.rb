@@ -2,6 +2,10 @@
 
 module Stats
   class Base
+    def key
+      raise NotImplementedError
+    end
+
     def title
       raise NotImplementedError
     end

@@ -11,6 +11,10 @@ module Stats
           )
         end
 
+        def key
+          :students_paid_count
+        end
+
         def title
           "Nb. élèves payés"
         end

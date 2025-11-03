@@ -11,6 +11,10 @@ module Stats
           )
         end
 
+        def key
+          :attributive_decisions_count
+        end
+
         def title
           "Nb. DA"
         end

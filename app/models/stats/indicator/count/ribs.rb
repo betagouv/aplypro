@@ -11,6 +11,10 @@ module Stats
           )
         end
 
+        def key
+          :ribs_count
+        end
+
         def title
           "Nb. coord. bancaires"
         end

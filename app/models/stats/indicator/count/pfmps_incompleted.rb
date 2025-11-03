@@ -13,6 +13,10 @@ module Stats
           )
         end
 
+        def key
+          :pfmps_incompleted_count
+        end
+
         def title
           "Nb. PFMPs incomplètes"
         end

@@ -13,6 +13,10 @@ module Stats
           )
         end
 
+        def key
+          :pfmps_validated_ratio
+        end
+
         def title
           "Part PFMPs validées"
         end

@@ -43,12 +43,12 @@ module Stats
 
       indicators_class << Indicator::Sum::PaymentRequestsStates.new(start_year, :paid)
 
-      @indicators = indicators_class.index_by { |indicator| indicator.title.to_sym }
+      @indicators = indicators_class.index_by(&:key)
     end
 
     def indicators_with_metadata
-      Report::HEADERS.map do |title|
-        indicator = indicators[title.to_sym]
+      Report::HEADERS.map do |key|
+        indicator = indicators[key]
         next unless indicator
 
         {

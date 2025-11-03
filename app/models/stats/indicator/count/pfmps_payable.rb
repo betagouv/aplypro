@@ -16,6 +16,10 @@ module Stats
           )
         end
 
+        def key
+          :pfmps_payable_count
+        end
+
         def title
           "Nb. PFMPs payables"
         end

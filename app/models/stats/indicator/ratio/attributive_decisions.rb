@@ -12,6 +12,10 @@ module Stats
           )
         end
 
+        def key
+          :attributive_decisions_ratio
+        end
+
         def title
           "Part DA"
         end

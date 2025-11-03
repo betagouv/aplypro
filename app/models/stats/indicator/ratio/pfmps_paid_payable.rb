@@ -24,6 +24,10 @@ module Stats
           )
         end
 
+        def key
+          :pfmps_paid_payable_ratio
+        end
+
         def title
           "Part PFMPs payées/payables"
         end

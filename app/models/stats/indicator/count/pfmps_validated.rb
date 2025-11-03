@@ -12,6 +12,10 @@ module Stats
           )
         end
 
+        def key
+          :pfmps_validated_count
+        end
+
         def title
           "Nb. PFMPs validées"
         end

@@ -14,6 +14,10 @@ module Stats
           )
         end
 
+        def key
+          :students_paid_ratio
+        end
+
         def title
           "Part élèves payés"
         end

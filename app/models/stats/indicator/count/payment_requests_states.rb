@@ -21,6 +21,10 @@ module Stats
           )
         end
 
+        def key
+          :"payment_requests_#{@state}_count"
+        end
+
         def title
           "Dem. #{STATE_FOR_TITLE[@state]}"
         end

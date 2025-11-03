@@ -10,6 +10,10 @@ module Stats
           )
         end
 
+        def key
+          :students_count
+        end
+
         def title
           "Nb. élèves"
         end

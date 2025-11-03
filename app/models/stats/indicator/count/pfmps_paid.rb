@@ -14,6 +14,10 @@ module Stats
           )
         end
 
+        def key
+          :pfmps_paid_count
+        end
+
         def title
           "Nb. PFMPs payées"
         end

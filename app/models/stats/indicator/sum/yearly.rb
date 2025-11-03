@@ -12,6 +12,10 @@ module Stats
           )
         end
 
+        def key
+          :yearly_sum
+        end
+
         def title
           "Mt. annuel total"
         end

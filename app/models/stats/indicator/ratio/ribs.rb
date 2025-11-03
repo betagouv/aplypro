@@ -12,6 +12,10 @@ module Stats
           )
         end
 
+        def key
+          :ribs_ratio
+        end
+
         def title
           "Part coord. bancaires"
         end

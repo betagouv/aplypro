@@ -12,6 +12,10 @@ module Stats
           )
         end
 
+        def key
+          :pfmps_completed_count
+        end
+
         def title
           "Nb. PFMPs complétées"
         end

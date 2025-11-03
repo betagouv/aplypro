@@ -10,6 +10,10 @@ module Stats
           )
         end
 
+        def key
+          :pfmps_count
+        end
+
         def title
           "Toutes PFMPs"
         end
