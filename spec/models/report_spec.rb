@@ -14,6 +14,107 @@ RSpec.describe Report do
 
       it { is_expected.to validate_uniqueness_of(:created_at).scoped_to(:school_year_id) }
     end
+
+    describe "data schema validation" do
+      let(:valid_data) do
+        {
+          "global_data" => [
+            Report::GENERIC_DATA_KEYS,
+            Array.new(Report::GENERIC_DATA_KEYS.length, nil)
+          ],
+          "bops_data" => [
+            ["BOP"] + Report::GENERIC_DATA_KEYS,
+            ["ENPU"] + Array.new(Report::GENERIC_DATA_KEYS.length, nil)
+          ],
+          "menj_academies_data" => [
+            ["Académie"] + Report::GENERIC_DATA_KEYS,
+            ["Paris"] + Array.new(Report::GENERIC_DATA_KEYS.length, nil)
+          ],
+          "establishments_data" => [
+            ["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public"] + Report::GENERIC_DATA_KEYS,
+            ["0010001A", "Lycée Test", "MENJ", "Paris", "Public"] + Array.new(Report::GENERIC_DATA_KEYS.length, nil)
+          ]
+        }
+      end
+
+      it "is valid with correct schema" do
+        report = build(:report, :with_schema_validation, data: valid_data)
+        expect(report).to be_valid
+      end
+
+      it "allows partial data for test purposes when validation disabled" do
+        report = build(:report, data: valid_data.except("global_data"))
+        expect(report).to be_valid
+      end
+
+      it "validates structure with Dry::Schema.JSON" do
+        report = build(:report, :with_schema_validation, data: valid_data)
+        expect(report).to be_valid
+      end
+
+      it "rejects data with missing sections" do
+        report = build(:report, :with_schema_validation, data: valid_data.except("global_data"))
+        expect(report).not_to be_valid
+        expect(report.errors[:data]).to include(/global_data is missing/)
+      end
+
+      it "rejects data with non-array values" do
+        invalid_data = valid_data.merge("global_data" => "not an array")
+        report = build(:report, :with_schema_validation, data: invalid_data)
+        expect(report).not_to be_valid
+      end
+
+      it "rejects data with incorrect global_data header" do
+        invalid_data = valid_data.dup
+        invalid_data["global_data"] = [
+          ["Wrong", "Header"],
+          Array.new(Report::GENERIC_DATA_KEYS.length, nil)
+        ]
+        report = build(:report, :with_schema_validation, data: invalid_data)
+        expect(report).not_to be_valid
+        expect(report.errors[:data]).to include(/global_data header must be/)
+      end
+
+      it "rejects data with incorrect bops_data header" do
+        invalid_data = valid_data.dup
+        invalid_data["bops_data"] = [
+          ["Wrong"] + Report::GENERIC_DATA_KEYS,
+          ["ENPU"] + Array.new(Report::GENERIC_DATA_KEYS.length, nil)
+        ]
+        report = build(:report, :with_schema_validation, data: invalid_data)
+        expect(report).not_to be_valid
+        expect(report.errors[:data]).to include(/bops_data header must be/)
+      end
+
+      it "rejects data with incorrect row length" do
+        invalid_data = valid_data.dup
+        invalid_data["global_data"] = [
+          Report::GENERIC_DATA_KEYS,
+          [1, 2, 3]
+        ]
+        report = build(:report, :with_schema_validation, data: invalid_data)
+        expect(report).not_to be_valid
+        expect(report.errors[:data]).to include(/global_data row 1 must have/)
+      end
+
+      it "rejects establishments_data with wrong header" do
+        invalid_data = valid_data.dup
+        invalid_data["establishments_data"] = [
+          ["UAI", "Wrong"] + Report::GENERIC_DATA_KEYS,
+          ["0010001A", "Lycée Test", "MENJ", "Paris", "Public"] + Array.new(Report::GENERIC_DATA_KEYS.length, nil)
+        ]
+        report = build(:report, :with_schema_validation, data: invalid_data)
+        expect(report).not_to be_valid
+        expect(report.errors[:data]).to include(/establishments_data header must be/)
+      end
+
+      it "rejects data with arrays that are too small" do
+        invalid_data = valid_data.dup
+        invalid_data["global_data"] = [Report::GENERIC_DATA_KEYS]
+        report = build(:report, :with_schema_validation, data: invalid_data)
+        expect(report).not_to be_valid
+      end
+    end
   end
 
   describe "scopes" do

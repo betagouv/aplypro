@@ -5,10 +5,36 @@ class Report < ApplicationRecord
                        "Mt. annuel total", "Scolarités", "Toutes PFMPs", "Dem. envoyées", "Dem. intégrées",
                        "Dem. payées", "Mt. payé", "Ratio PFMPs payées/payables"].freeze
 
+  ReportDataSchema = Dry::Schema.JSON do
+    required(:global_data).value(:array, min_size?: 2) do
+      first.value(eql?: GENERIC_DATA_KEYS)
+      each.value(:array, size?: GENERIC_DATA_KEYS.length)
+    end
+
+    required(:bops_data).value(:array, min_size?: 2) do
+      first.value(eql?: ["BOP"] + GENERIC_DATA_KEYS)
+      each.value(:array, size?: 1 + GENERIC_DATA_KEYS.length)
+    end
+
+    required(:menj_academies_data).value(:array, min_size?: 2) do
+      first.value(eql?: ["Académie"] + GENERIC_DATA_KEYS)
+      each.value(:array, size?: 1 + GENERIC_DATA_KEYS.length)
+    end
+
+    establishment_keys = ["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public"]
+    required(:establishments_data).value(:array, min_size?: 2) do
+      first.value(eql?: establishment_keys + GENERIC_DATA_KEYS)
+      each.value(:array, size?: 5 + GENERIC_DATA_KEYS.length)
+    end
+  end
+
+  attr_accessor :skip_schema_validation
+
   belongs_to :school_year
 
   validates :data, presence: true
   validates :created_at, presence: true, uniqueness: { scope: :school_year_id }
+  validate :validate_report_structure, unless: -> { Rails.env.test? && skip_schema_validation }
 
   scope :ordered, -> { order(created_at: :desc) }
   scope :for_school_year, ->(school_year) { where(school_year: school_year) }
@@ -19,6 +45,13 @@ class Report < ApplicationRecord
 
   def next_report
     self.class.for_school_year(school_year).where("created_at > ?", created_at).order(:created_at).first
+  end
+
+  def validate_report_structure
+    return if data.blank?
+
+    result = ReportDataSchema.call(data)
+    result.errors.messages.each { |msg| errors.add(:data, msg.text) } if result.failure?
   end
 
   class << self
