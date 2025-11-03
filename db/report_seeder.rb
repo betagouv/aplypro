@@ -231,27 +231,27 @@ class ReportSeeder
     return 0 unless school_year
 
     case indicator.class.name
-    when "Stats::Indicator::Ribs"
+    when "Stats::Indicator::Ratio::Ribs"
       establishment.ribs.count
-    when "Stats::Indicator::PfmpsValidated"
+    when "Stats::Indicator::Ratio::PfmpsValidated"
       finished_pfmps = establishment.pfmps.joins(schooling: { classe: :school_year })
                                     .where(classes: { school_year_id: school_year.id })
                                     .finished
       validated = finished_pfmps.in_state(:validated).count
       total = finished_pfmps.count
       total.zero? ? 0.0 : validated.to_f / total
-    when "Stats::Indicator::StudentsData"
+    when "Stats::Indicator::Ratio::StudentsData"
       establishment.students.joins(:schoolings).where(schoolings: { classe_id: establishment.classes.where(school_year: school_year) }).distinct.count
-    when "Stats::Indicator::YearlyAmounts"
+    when "Stats::Indicator::Sum::Yearly"
       establishment.schoolings.joins(classe: :mef)
                    .where(classes: { school_year_id: school_year.id })
                    .merge(Mef.with_wages)
                    .sum("wages.yearly_cap")
-    when "Stats::Indicator::Schoolings"
+    when "Stats::Indicator::Count::Schoolings"
       establishment.schoolings.joins(:classe).where(classes: { school_year_id: school_year.id }).count
-    when "Stats::Indicator::Pfmps"
+    when "Stats::Indicator::Count::Pfmps"
       establishment.pfmps.joins(schooling: { classe: :school_year }).where(classes: { school_year_id: school_year.id }).count
-    when "Stats::Indicator::PfmpPaidPayableRatio"
+    when "Stats::Indicator::Ratio::PfmpPaidPayable"
       pfmps = establishment.pfmps.joins(schooling: { classe: :school_year })
                            .where(classes: { school_year_id: school_year.id })
       paid_count = pfmps.joins(:payment_requests).merge(ASP::PaymentRequest.in_state(:paid)).distinct.count
