@@ -13,12 +13,12 @@ class StatsController < ApplicationController
     current_year = SchoolYear.current.start_year
 
     @schoolings_per_academy = Rails.cache.fetch("schoolings_per_academy/#{current_year}", expires_in: 1.week) do
-      schoolings_stats = Stats::Indicator::Schoolings.new(current_year)
+      schoolings_stats = Stats::Indicator::Count::Schoolings.new(current_year)
       academies_data(schoolings_stats, :count)
     end
 
     @amounts_per_academy = Rails.cache.fetch("amounts_per_academy/#{current_year}", expires_in: 1.week) do
-      sendable_amounts_stats = Stats::Indicator::SendableAmounts.new(current_year)
+      sendable_amounts_stats = Stats::Indicator::Sum::PfmpsSendable.new(current_year)
       academies_data(sendable_amounts_stats, :sum)
     end
   end
