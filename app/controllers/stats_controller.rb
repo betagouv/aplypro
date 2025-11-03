@@ -5,7 +5,7 @@ class StatsController < ApplicationController
 
   skip_before_action :authenticate_user!
 
-  def index # rubocop:disable Metrics/AbcSize
+  def index
     @total_paid = PaidPfmp.paid.sum(:amount)
     @total_paid_students = PaidPfmp.paid.distinct.count(:student_id)
     @total_paid_pfmps = PaidPfmp.paid.count
@@ -15,11 +15,6 @@ class StatsController < ApplicationController
     @schoolings_per_academy = Rails.cache.fetch("schoolings_per_academy/#{current_year}", expires_in: 1.week) do
       schoolings_stats = Stats::Indicator::Count::Schoolings.new(current_year)
       academies_data(schoolings_stats, :count)
-    end
-
-    @amounts_per_academy = Rails.cache.fetch("amounts_per_academy/#{current_year}", expires_in: 1.week) do
-      sendable_amounts_stats = Stats::Indicator::Sum::PfmpsSendable.new(current_year)
-      academies_data(sendable_amounts_stats, :sum)
     end
   end
 

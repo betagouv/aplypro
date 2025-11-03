@@ -15,7 +15,6 @@ module Stats
         Indicator::Ratio::Ribs,
         Indicator::Ratio::StudentsData,
         Indicator::Ratio::PfmpsValidated,
-        Indicator::Sum::PfmpsSendable,
         Indicator::Sum::Yearly
       ].map { |indicator_class| indicator_class.new(start_year) }
 

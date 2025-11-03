@@ -5,7 +5,6 @@ module Stats
     module Sum
       class Yearly < Stats::Sum
         def initialize(start_year)
-          # TODO: ça correspond à quoi ?
           super(
             column: :yearly_cap,
             all: Schooling.for_year(start_year).joins(classe: :mef)

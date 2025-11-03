@@ -11,7 +11,7 @@ fr:
         pfmps_ghost: "Nombre de PFMPs fantômes"
         pfmps_incompleted: "Nombre de PFMPs incomplètes"
         pfmps_paid: "Nombre de PFMPs payées"
-        pfmps_payable: "Nombre de PFMPs \"payables\" (validées)"
+        pfmps_payable: "Nombre de PFMPs \"payables\" (prêtes à l'envoi)"
         pfmps_report: "Nombre de PFMPs sur report de DA"
         pfmps_validated: "Nombre de PFMPs terminées et validées"
         ribs: "Nombre d'élèves avec des coordonnées bancaires renseignées"
@@ -21,7 +21,7 @@ fr:
         students_paid: "Nombre d'élèves payés"
       ratio:
         attributive_decisions: "Part des décisions d'attributions éditées"
-        pfmps_paid_payable: "Part des PFMPs payées par rapport aux PFMPs payables (validées)"
+        pfmps_paid_payable: "Part des PFMPs payées par rapport aux PFMPs payables (prêtes à l'envoi)"
         pfmps_validated: "Part des PFMPs terminées et validées"
         ribs: "Part des coordonnées bancaires renseignées"
         students_data: "Part des élèves avec les données présentes"
@@ -35,7 +35,6 @@ fr:
         pfmps_ghost: "Montant théorique des PFMPs fantômes"
         pfmps_incompleted: "Montant théorique des PFMPs incomplètes"
         pfmps_report: "Montant des PFMPs sur report de DA"
-        pfmps_sendable: "Somme des PFMPs terminées validées avec RIB, DA & données élèves (prêtes à l'envoi)"
         pfmps_validated: "Montant des PFMPs terminées et validées"
         yearly: "Somme maximale des montants annuels versables (en additionnant les plafonds)"
     extended: |

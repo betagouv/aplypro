@@ -24,7 +24,6 @@ module CacheWarmer
       warm_indicator_cache(
         "schoolings_per_academy", current_year, Stats::Indicator::Count::Schoolings, :count
       )
-      warm_indicator_cache("amounts_per_academy", current_year, Stats::Indicator::Sum::PfmpsSendable, :sum)
     end
 
     def warm_indicator_cache(cache_prefix, year, indicator_class, operation)
