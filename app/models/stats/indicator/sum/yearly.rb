@@ -5,6 +5,7 @@ module Stats
     module Sum
       class Yearly < Stats::Sum
         def initialize(start_year)
+          # TODO: ça correspond à quoi ?
           super(
             column: :yearly_cap,
             all: Schooling.for_year(start_year).joins(classe: :mef)
@@ -13,11 +14,11 @@ module Stats
         end
 
         def title
-          "Mt. annuel total"
+          "Mt annuel total"
         end
 
         def tooltip_key
-          "stats.yearly_amounts"
+          "stats.sum.yearly"
         end
 
         def with_mef_and_establishment

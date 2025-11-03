@@ -24,11 +24,11 @@ module Stats
         end
 
         def title
-          "Mt. #{STATE_FOR_TITLE[@state]}"
+          "Mt #{STATE_FOR_TITLE[@state]}"
         end
 
         def tooltip_key
-          "stats.payment_amount_#{@state}"
+          "stats.amount.payment_request_#{@state}"
         end
 
         def with_mef_and_establishment

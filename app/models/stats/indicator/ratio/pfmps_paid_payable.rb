@@ -24,7 +24,7 @@ module Stats
         end
 
         def tooltip_key
-          "stats.pfmp_paid_payable_ratio"
+          "stats.ratio.pfmps_paid_payable"
         end
 
         def with_mef_and_establishment

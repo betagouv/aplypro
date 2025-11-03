@@ -2,22 +2,21 @@
 
 module Stats
   module Indicator
-    module Ratio
-      class AttributiveDecisions < Stats::Ratio
+    module Count
+      class AttributiveDecisions < Stats::Count
         def initialize(start_year)
           schoolings = Schooling.for_year(start_year)
           super(
-            subset: schoolings.with_attributive_decisions,
-            all: schoolings.all
+            all: schoolings.with_attributive_decisions
           )
         end
 
         def title
-          "Part DA"
+          "Nb DA"
         end
 
         def tooltip_key
-          "stats.ratio.attributive_decisions"
+          "stats.count.attributive_decisions"
         end
 
         def with_mef_and_establishment

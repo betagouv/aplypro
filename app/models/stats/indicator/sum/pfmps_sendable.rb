@@ -5,6 +5,7 @@ module Stats
     module Sum
       class PfmpsSendable < Stats::Sum
         def initialize(start_year)
+          # TODO: ça correspond à quoi ?
           super(
             column: :amount,
             all: Pfmp.for_year(start_year).in_state(:validated).finished.distinct
@@ -15,11 +16,11 @@ module Stats
         end
 
         def title
-          "Mt. prêt envoi"
+          "Mt prêt envoi"
         end
 
         def tooltip_key
-          "stats.sendable_amounts"
+          "stats.sum.pfmps_sendable"
         end
 
         def with_mef_and_establishment

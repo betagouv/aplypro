@@ -2,22 +2,21 @@
 
 module Stats
   module Indicator
-    module Ratio
-      class Ribs < Stats::Ratio
+    module Count
+      class Ribs < Stats::Count
         def initialize(start_year)
           students = Student.for_year(start_year)
           super(
-            subset: students.with_rib,
-            all: students.all
+            all: students.with_rib
           )
         end
 
         def title
-          "Nb coord. bancaires"
+          "Part coord. bancaires"
         end
 
         def tooltip_key
-          "stats.ratio.ribs"
+          "stats.count.ribs"
         end
 
         def with_mef_and_establishment

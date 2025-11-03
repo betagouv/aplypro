@@ -3,19 +3,23 @@
 module Stats
   module Indicator
     module Count
-      class Pfmps < Stats::Count
+      class PfmpsPaid < Stats::Count
         def initialize(start_year)
+          pfmp = Pfmp.for_year(start_year)
+
           super(
-            all: Pfmp.for_year(start_year)
+            all: pfmp.joins(:payment_requests)
+                     .merge(ASP::PaymentRequest.in_state(:paid))
+                     .distinct
           )
         end
 
         def title
-          "Toutes PFMPs"
+          "Nb PFMPs payées"
         end
 
         def tooltip_key
-          "stats.count.pfmps"
+          "stats.count.pfmps_paid"
         end
 
         def with_mef_and_establishment

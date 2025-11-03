@@ -3,19 +3,22 @@
 module Stats
   module Indicator
     module Count
-      class Pfmps < Stats::Count
+      class PfmpsGhost < Stats::Count
         def initialize(start_year)
+          finished_pfmps = Pfmp.for_year(start_year).finished
+
+          # TODO
           super(
-            all: Pfmp.for_year(start_year)
+            all: finished_pfmps.in_state(:validated)
           )
         end
 
         def title
-          "Toutes PFMPs"
+          "Nb PFMPs fantômes"
         end
 
         def tooltip_key
-          "stats.count.pfmps"
+          "stats.count.pfmps_ghost"
         end
 
         def with_mef_and_establishment

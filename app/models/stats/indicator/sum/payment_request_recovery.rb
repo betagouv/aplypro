@@ -2,31 +2,25 @@
 
 module Stats
   module Indicator
-    module Count
-      class PaymentRequestStates < Stats::Count
-        STATE_FOR_TITLE = {
-          sent: "envoyées",
-          integrated: "intégrées",
-          paid: "payées"
-        }.freeze
-
-        def initialize(start_year, state)
-          @state = state
-
+    module Sum
+      class PaymentRequestRecovery < Stats::Sum
+        def initialize(start_year)
+          # TODO
           super(
+            column: "pfmps.amount",
             all: ASP::PaymentRequest
               .for_year(start_year)
+              .joins(:pfmp)
               .joins(:asp_payment_request_transitions)
-              .where("asp_payment_request_transitions.to_state": state)
           )
         end
 
         def title
-          "Dem. #{STATE_FOR_TITLE[@state]}"
+          "Mt OR"
         end
 
         def tooltip_key
-          "stats.count.payment_request_#{@state}"
+          "stats.amount.payment_request_recovery"
         end
 
         def with_mef_and_establishment

@@ -2,22 +2,22 @@
 
 module Stats
   module Indicator
-    module Ratio
-      class Ribs < Stats::Ratio
+    module Count
+      class StudentsData < Stats::Count
         def initialize(start_year)
           students = Student.for_year(start_year)
+
           super(
-            subset: students.with_rib,
-            all: students.all
+            all: students.asp_ready
           )
         end
 
         def title
-          "Nb coord. bancaires"
+          "Nb données élèves"
         end
 
         def tooltip_key
-          "stats.ratio.ribs"
+          "stats.count.students_data"
         end
 
         def with_mef_and_establishment

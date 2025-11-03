@@ -3,27 +3,28 @@
 module Stats
   module Indicator
     module Count
-      class Schoolings < Stats::Count
+      class PfmpsReport < Stats::Count
         def initialize(start_year)
+          # TODO
           super(
-            all: Schooling.for_year(start_year).all
+            all: Pfmp.for_year(start_year)
           )
         end
 
         def title
-          "Nb scolarités"
+          "Nb PFMPs reportées"
         end
 
         def tooltip_key
-          "stats.count.schoolings"
+          "stats.count.pfmps_report"
         end
 
         def with_mef_and_establishment
-          Schooling.joins(classe: %i[mef establishment])
+          Pfmp.joins(schooling: { classe: %i[mef establishment] })
         end
 
         def with_establishment
-          Schooling.joins(classe: :establishment)
+          Pfmp.joins(schooling: { classe: :establishment })
         end
       end
     end

@@ -14,11 +14,11 @@ module Stats
         end
 
         def title
-          "Données élèves"
+          "Part données élèves"
         end
 
         def tooltip_key
-          "stats.students_data"
+          "stats.ratio.students_data"
         end
 
         def with_mef_and_establishment

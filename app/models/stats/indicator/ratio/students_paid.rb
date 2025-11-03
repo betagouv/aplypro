@@ -3,21 +3,23 @@
 module Stats
   module Indicator
     module Ratio
-      class Ribs < Stats::Ratio
+      class StudentsPaid < Stats::Ratio
         def initialize(start_year)
           students = Student.for_year(start_year)
+
+          # TODO
           super(
-            subset: students.with_rib,
+            subset: students.asp_ready,
             all: students.all
           )
         end
 
         def title
-          "Nb coord. bancaires"
+          "Part élèves payés"
         end
 
         def tooltip_key
-          "stats.ratio.ribs"
+          "stats.ratio.students_paid"
         end
 
         def with_mef_and_establishment

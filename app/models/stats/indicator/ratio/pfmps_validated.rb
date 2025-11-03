@@ -14,11 +14,11 @@ module Stats
         end
 
         def title
-          "PFMPs validées"
+          "Part PFMPs validées"
         end
 
         def tooltip_key
-          "stats.validated_pfmps"
+          "stats.ratio.pfmps_validated"
         end
 
         def with_mef_and_establishment
