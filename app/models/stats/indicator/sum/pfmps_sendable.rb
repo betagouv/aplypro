@@ -16,7 +16,7 @@ module Stats
         end
 
         def title
-          "Mt prêt envoi"
+          "Mt. prêt envoi"
         end
 
         def tooltip_key

@@ -13,7 +13,7 @@ module Stats
         end
 
         def title
-          "Nb PFMPs payables"
+          "Nb. PFMPs payables"
         end
 
         def tooltip_key

@@ -14,19 +14,19 @@ RSpec.describe Stats::Main do
     it "computes the right percentages" do # rubocop:disable RSpec/ExampleLength
       expect(data).to eq([
                            {
-                             DA: 0.4,
-                             "Coord. bancaires": 0.4,
-                             "PFMPs validées": 0.4,
-                             "Données élèves": 0.4,
+                             "Part DA": 0.4,
+                             "Part coord. bancaires": 0.4,
+                             "Part PFMPs validées": 0.4,
+                             "Part données élèves": 0.4,
                              "Mt. prêt envoi": 10.0,
                              "Mt. annuel total": 500,
-                             Scolarités: 5,
+                             "Nb. scolarités": 5,
                              "Toutes PFMPs": 5,
                              "Dem. envoyées": 2,
                              "Dem. intégrées": 0,
                              "Dem. payées": 0,
                              "Mt. payé": 0,
-                             "Ratio PFMPs payées/payables": 0.0
+                             "Part PFMPs payées/payables": 0.0
                            }
                          ])
     end
@@ -41,67 +41,67 @@ RSpec.describe Stats::Main do
       expect(data).to eq([
                            {
                              BOP: "ENPU",
-                             DA: 0.25,
-                             "Coord. bancaires": 0.25,
-                             "PFMPs validées": 0.25,
-                             "Données élèves": 0.25,
+                             "Part DA": 0.25,
+                             "Part coord. bancaires": 0.25,
+                             "Part PFMPs validées": 0.25,
+                             "Part données élèves": 0.25,
                              "Mt. prêt envoi": 5.0,
                              "Mt. annuel total": 400,
-                             Scolarités: 4,
+                             "Nb. scolarités": 4,
                              "Toutes PFMPs": 4,
                              "Dem. envoyées": 1,
                              "Dem. intégrées": 1,
                              "Dem. payées": nil,
                              "Mt. payé": nil,
-                             "Ratio PFMPs payées/payables": nil
+                             "Part PFMPs payées/payables": nil
                            },
                            {
                              BOP: "ENPR",
-                             DA: 0.8,
-                             "Coord. bancaires": 0.8,
-                             "PFMPs validées": 0.8,
-                             "Données élèves": 0.8,
+                             "Part DA": 0.8,
+                             "Part coord. bancaires": 0.8,
+                             "Part PFMPs validées": 0.8,
+                             "Part données élèves": 0.8,
                              "Mt. prêt envoi": 20.0,
                              "Mt. annuel total": 500,
-                             Scolarités: 5,
+                             "Nb. scolarités": 5,
                              "Toutes PFMPs": 5,
                              "Dem. envoyées": 4,
                              "Dem. intégrées": 4,
                              "Dem. payées": nil,
                              "Mt. payé": nil,
-                             "Ratio PFMPs payées/payables": nil
+                             "Part PFMPs payées/payables": nil
                            },
                            {
                              BOP: "MASA",
-                             DA: 0.4,
-                             "Coord. bancaires": 0.4,
-                             "PFMPs validées": 0.4,
-                             "Données élèves": 0.4,
+                             "Part DA": 0.4,
+                             "Part coord. bancaires": 0.4,
+                             "Part PFMPs validées": 0.4,
+                             "Part données élèves": 0.4,
                              "Mt. prêt envoi": 10.0,
                              "Mt. annuel total": 500,
-                             Scolarités: 5,
+                             "Nb. scolarités": 5,
                              "Toutes PFMPs": 5,
                              "Dem. envoyées": 2,
                              "Dem. intégrées": 2,
                              "Dem. payées": nil,
                              "Mt. payé": nil,
-                             "Ratio PFMPs payées/payables": nil
+                             "Part PFMPs payées/payables": nil
                            },
                            {
                              BOP: "MER",
-                             DA: 4.0 / 7,
-                             "Coord. bancaires": 4.0 / 7,
-                             "PFMPs validées": 4.0 / 7,
-                             "Données élèves": 4.0 / 7,
+                             "Part DA": 4.0 / 7,
+                             "Part coord. bancaires": 4.0 / 7,
+                             "Part PFMPs validées": 4.0 / 7,
+                             "Part données élèves": 4.0 / 7,
                              "Mt. prêt envoi": 20.0,
                              "Mt. annuel total": 700,
-                             Scolarités: 7,
+                             "Nb. scolarités": 7,
                              "Toutes PFMPs": 7,
                              "Dem. envoyées": 4,
                              "Dem. intégrées": 4,
                              "Dem. payées": nil,
                              "Mt. payé": nil,
-                             "Ratio PFMPs payées/payables": nil
+                             "Part PFMPs payées/payables": nil
                            }
                          ])
     end
@@ -116,51 +116,51 @@ RSpec.describe Stats::Main do
       expect(data).to eq([
                            {
                              Académie: "Bordeaux",
-                             DA: 0.25,
-                             "Coord. bancaires": 0.25,
-                             "PFMPs validées": 0.25,
-                             "Données élèves": 0.25,
+                             "Part DA": 0.25,
+                             "Part coord. bancaires": 0.25,
+                             "Part PFMPs validées": 0.25,
+                             "Part données élèves": 0.25,
                              "Mt. prêt envoi": 5.0,
                              "Mt. annuel total": 400,
-                             Scolarités: 4,
+                             "Nb. scolarités": 4,
                              "Toutes PFMPs": 4,
                              "Dem. envoyées": 1,
                              "Dem. intégrées": 1,
                              "Dem. payées": 1,
                              "Mt. payé": 5,
-                             "Ratio PFMPs payées/payables": 1.0
+                             "Part PFMPs payées/payables": 1.0
                            },
                            {
                              Académie: "Montpellier",
-                             DA: 0.5,
-                             "Coord. bancaires": 0.5,
-                             "PFMPs validées": 0.5,
-                             "Données élèves": 0.5,
+                             "Part DA": 0.5,
+                             "Part coord. bancaires": 0.5,
+                             "Part PFMPs validées": 0.5,
+                             "Part données élèves": 0.5,
                              "Mt. prêt envoi": 15.0,
                              "Mt. annuel total": 600,
-                             Scolarités: 6,
+                             "Nb. scolarités": 6,
                              "Toutes PFMPs": 6,
                              "Dem. envoyées": 3,
                              "Dem. intégrées": 3,
                              "Dem. payées": 3,
                              "Mt. payé": 15,
-                             "Ratio PFMPs payées/payables": 1.0
+                             "Part PFMPs payées/payables": 1.0
                            },
                            {
                              Académie: "Paris",
-                             DA: 0.4,
-                             "Coord. bancaires": 0.4,
-                             "PFMPs validées": 0.4,
-                             "Données élèves": 0.4,
+                             "Part DA": 0.4,
+                             "Part coord. bancaires": 0.4,
+                             "Part PFMPs validées": 0.4,
+                             "Part données élèves": 0.4,
                              "Mt. prêt envoi": 10.0,
                              "Mt. annuel total": 500,
-                             Scolarités: 5,
+                             "Nb. scolarités": 5,
                              "Toutes PFMPs": 5,
                              "Dem. envoyées": 2,
                              "Dem. intégrées": 2,
                              "Dem. payées": 2,
                              "Mt. payé": 10,
-                             "Ratio PFMPs payées/payables": 1.0
+                             "Part PFMPs payées/payables": 1.0
                            }
                          ])
     end
@@ -179,19 +179,19 @@ RSpec.describe Stats::Main do
                              Ministère: "MINISTERE DE L'EDUCATION NATIONALE",
                              Académie: "Marseille",
                              "Privé/Public": "Public",
-                             DA: 0.25,
-                             "Coord. bancaires": 0.25,
-                             "PFMPs validées": 0.25,
-                             "Données élèves": 0.25,
+                             "Part DA": 0.25,
+                             "Part coord. bancaires": 0.25,
+                             "Part PFMPs validées": 0.25,
+                             "Part données élèves": 0.25,
                              "Mt. prêt envoi": 5.0,
                              "Mt. annuel total": 400,
-                             Scolarités: 4,
+                             "Nb. scolarités": 4,
                              "Toutes PFMPs": 4,
                              "Dem. envoyées": 1,
                              "Dem. intégrées": 1,
                              "Dem. payées": 1,
                              "Mt. payé": 5,
-                             "Ratio PFMPs payées/payables": 1.0
+                             "Part PFMPs payées/payables": 1.0
                            },
                            {
                              UAI: "0000000B",
@@ -199,19 +199,19 @@ RSpec.describe Stats::Main do
                              Ministère: "MINISTERE DE L'EDUCATION NATIONALE",
                              Académie: "Marseille",
                              "Privé/Public": "Public",
-                             DA: 0.5,
-                             "Coord. bancaires": 0.5,
-                             "PFMPs validées": 0.5,
-                             "Données élèves": 0.5,
+                             "Part DA": 0.5,
+                             "Part coord. bancaires": 0.5,
+                             "Part PFMPs validées": 0.5,
+                             "Part données élèves": 0.5,
                              "Mt. prêt envoi": 15.0,
                              "Mt. annuel total": 600,
-                             Scolarités: 6,
+                             "Nb. scolarités": 6,
                              "Toutes PFMPs": 6,
                              "Dem. envoyées": 3,
                              "Dem. intégrées": 3,
                              "Dem. payées": 3,
                              "Mt. payé": 15,
-                             "Ratio PFMPs payées/payables": 1.0
+                             "Part PFMPs payées/payables": 1.0
                            },
                            {
                              UAI: "0000000C",
@@ -219,19 +219,19 @@ RSpec.describe Stats::Main do
                              Ministère: "MINISTERE DE L'EDUCATION NATIONALE",
                              Académie: "Marseille",
                              "Privé/Public": "Public",
-                             DA: 0.4,
-                             "Coord. bancaires": 0.4,
-                             "PFMPs validées": 0.4,
-                             "Données élèves": 0.4,
+                             "Part DA": 0.4,
+                             "Part coord. bancaires": 0.4,
+                             "Part PFMPs validées": 0.4,
+                             "Part données élèves": 0.4,
                              "Mt. prêt envoi": 10.0,
                              "Mt. annuel total": 500,
-                             Scolarités: 5,
+                             "Nb. scolarités": 5,
                              "Toutes PFMPs": 5,
                              "Dem. envoyées": 2,
                              "Dem. intégrées": 2,
                              "Dem. payées": 2,
                              "Mt. payé": 10,
-                             "Ratio PFMPs payées/payables": 1.0
+                             "Part PFMPs payées/payables": 1.0
                            }
                          ])
     end

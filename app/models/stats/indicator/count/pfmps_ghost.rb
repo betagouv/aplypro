@@ -14,7 +14,7 @@ module Stats
         end
 
         def title
-          "Nb PFMPs fantômes"
+          "Nb. PFMPs fantômes"
         end
 
         def tooltip_key

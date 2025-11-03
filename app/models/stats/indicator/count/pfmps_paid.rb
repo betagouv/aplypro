@@ -15,7 +15,7 @@ module Stats
         end
 
         def title
-          "Nb PFMPs payées"
+          "Nb. PFMPs payées"
         end
 
         def tooltip_key

@@ -7,14 +7,14 @@ module Stats
         def initialize(start_year)
           pfmps = Pfmp.for_year(start_year)
 
-          # TODO:
+          # TODO
           super(
             all: pfmps.in_state(:completed)
           )
         end
 
         def title
-          "Nb PFMPs incomplètes"
+          "Nb. PFMPs incomplètes"
         end
 
         def tooltip_key

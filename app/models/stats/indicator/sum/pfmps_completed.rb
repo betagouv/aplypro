@@ -14,7 +14,7 @@ module Stats
         end
 
         def title
-          "Mt PFMPs complétées"
+          "Mt. PFMPs complétées"
         end
 
         def tooltip_key

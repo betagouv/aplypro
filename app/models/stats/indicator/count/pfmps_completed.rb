@@ -13,7 +13,7 @@ module Stats
         end
 
         def title
-          "Nb PFMPs complétées"
+          "Nb. PFMPs complétées"
         end
 
         def tooltip_key

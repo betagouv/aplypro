@@ -15,7 +15,7 @@ module Stats
         end
 
         def title
-          "Mt PFMPs validées"
+          "Mt. PFMPs validées"
         end
 
         def tooltip_key

@@ -12,7 +12,7 @@ module Stats
         end
 
         def title
-          "Nb DA"
+          "Nb. DA"
         end
 
         def tooltip_key

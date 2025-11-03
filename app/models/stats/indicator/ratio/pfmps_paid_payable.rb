@@ -20,7 +20,7 @@ module Stats
         end
 
         def title
-          "Ratio PFMPs payées/payables"
+          "Part PFMPs payées/payables"
         end
 
         def tooltip_key

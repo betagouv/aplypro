@@ -24,7 +24,7 @@ module Stats
         end
 
         def title
-          "Mt #{STATE_FOR_TITLE[@state]}"
+          "Mt. #{STATE_FOR_TITLE[@state]}"
         end
 
         def tooltip_key

@@ -13,7 +13,7 @@ module Stats
         end
 
         def title
-          "Nb coord. bancaires"
+          "Part coord. bancaires"
         end
 
         def tooltip_key

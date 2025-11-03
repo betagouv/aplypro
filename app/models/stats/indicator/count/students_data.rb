@@ -13,7 +13,7 @@ module Stats
         end
 
         def title
-          "Nb données élèves"
+          "Nb. données élèves"
         end
 
         def tooltip_key

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Report < ApplicationRecord
-  HEADERS = ["DA", "Coord. bancaires", "PFMPs validées", "Données élèves", "Mt. prêt envoi",
-             "Mt. annuel total", "Scolarités", "Toutes PFMPs", "Dem. envoyées", "Dem. intégrées",
-             "Dem. payées", "Mt. payé", "Ratio PFMPs payées/payables"].freeze
+  HEADERS = ["Part DA", "Part coord. bancaires", "Part PFMPs validées", "Part données élèves",
+             "Mt. prêt envoi", "Mt. annuel total", "Nb. scolarités", "Toutes PFMPs", "Dem. envoyées",
+             "Dem. intégrées", "Dem. payées", "Mt. payé", "Part PFMPs payées/payables"].freeze
 
   ReportDataSchema = Dry::Schema.JSON do
     required(:global_data).value(:array, size?: 2).each(:array)

@@ -16,7 +16,7 @@ module Stats
         end
 
         def title
-          "Mt OR"
+          "Mt. OR"
         end
 
         def tooltip_key
