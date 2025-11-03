@@ -19,20 +19,20 @@ RSpec.describe Report do
       let(:valid_data) do
         {
           "global_data" => [
-            Report::GENERIC_DATA_KEYS,
-            Array.new(Report::GENERIC_DATA_KEYS.length, nil)
+            Report::HEADERS,
+            Array.new(Report::HEADERS.length, nil)
           ],
           "bops_data" => [
-            ["BOP"] + Report::GENERIC_DATA_KEYS,
-            ["ENPU"] + Array.new(Report::GENERIC_DATA_KEYS.length, nil)
+            ["BOP"] + Report::HEADERS,
+            ["ENPU"] + Array.new(Report::HEADERS.length, nil)
           ],
           "menj_academies_data" => [
-            ["Académie"] + Report::GENERIC_DATA_KEYS,
-            ["Paris"] + Array.new(Report::GENERIC_DATA_KEYS.length, nil)
+            ["Académie"] + Report::HEADERS,
+            ["Paris"] + Array.new(Report::HEADERS.length, nil)
           ],
           "establishments_data" => [
-            ["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public"] + Report::GENERIC_DATA_KEYS,
-            ["0010001A", "Lycée Test", "MENJ", "Paris", "Public"] + Array.new(Report::GENERIC_DATA_KEYS.length, nil)
+            ["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public"] + Report::HEADERS,
+            ["0010001A", "Lycée Test", "MENJ", "Paris", "Public"] + Array.new(Report::HEADERS.length, nil)
           ]
         }
       end
@@ -68,7 +68,7 @@ RSpec.describe Report do
         invalid_data = valid_data.dup
         invalid_data["global_data"] = [
           ["Wrong", "Header"],
-          Array.new(Report::GENERIC_DATA_KEYS.length, nil)
+          Array.new(Report::HEADERS.length, nil)
         ]
         report = build(:report, :with_schema_validation, data: invalid_data)
         expect(report).not_to be_valid
@@ -78,8 +78,8 @@ RSpec.describe Report do
       it "rejects data with incorrect bops_data header" do
         invalid_data = valid_data.dup
         invalid_data["bops_data"] = [
-          ["Wrong"] + Report::GENERIC_DATA_KEYS,
-          ["ENPU"] + Array.new(Report::GENERIC_DATA_KEYS.length, nil)
+          ["Wrong"] + Report::HEADERS,
+          ["ENPU"] + Array.new(Report::HEADERS.length, nil)
         ]
         report = build(:report, :with_schema_validation, data: invalid_data)
         expect(report).not_to be_valid
@@ -89,7 +89,7 @@ RSpec.describe Report do
       it "rejects data with incorrect row length" do
         invalid_data = valid_data.dup
         invalid_data["global_data"] = [
-          Report::GENERIC_DATA_KEYS,
+          Report::HEADERS,
           [1, 2, 3]
         ]
         report = build(:report, :with_schema_validation, data: invalid_data)
@@ -100,8 +100,8 @@ RSpec.describe Report do
       it "rejects establishments_data with wrong header" do
         invalid_data = valid_data.dup
         invalid_data["establishments_data"] = [
-          ["UAI", "Wrong"] + Report::GENERIC_DATA_KEYS,
-          ["0010001A", "Lycée Test", "MENJ", "Paris", "Public"] + Array.new(Report::GENERIC_DATA_KEYS.length, nil)
+          ["UAI", "Wrong"] + Report::HEADERS,
+          ["0010001A", "Lycée Test", "MENJ", "Paris", "Public"] + Array.new(Report::HEADERS.length, nil)
         ]
         report = build(:report, :with_schema_validation, data: invalid_data)
         expect(report).not_to be_valid
@@ -110,7 +110,7 @@ RSpec.describe Report do
 
       it "rejects data with arrays that are too small" do
         invalid_data = valid_data.dup
-        invalid_data["global_data"] = [Report::GENERIC_DATA_KEYS]
+        invalid_data["global_data"] = [Report::HEADERS]
         report = build(:report, :with_schema_validation, data: invalid_data)
         expect(report).not_to be_valid
       end
@@ -201,7 +201,7 @@ RSpec.describe Report do
         described_class.create_for_school_year(create_for_date_school_year, date)
 
         report = described_class.last
-        keys = Report::GENERIC_DATA_KEYS
+        keys = Report::HEADERS
 
         expect(report.data).to include("global_data" => [keys, Array.new(keys.size, nil)],
                                        "bops_data" => [["BOP"] + keys,

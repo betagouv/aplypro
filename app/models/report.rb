@@ -1,30 +1,30 @@
 # frozen_string_literal: true
 
 class Report < ApplicationRecord
-  GENERIC_DATA_KEYS = ["DA", "Coord. bancaires", "PFMPs validées", "Données élèves", "Mt. prêt envoi",
-                       "Mt. annuel total", "Scolarités", "Toutes PFMPs", "Dem. envoyées", "Dem. intégrées",
-                       "Dem. payées", "Mt. payé", "Ratio PFMPs payées/payables"].freeze
+  HEADERS = ["DA", "Coord. bancaires", "PFMPs validées", "Données élèves", "Mt. prêt envoi",
+             "Mt. annuel total", "Scolarités", "Toutes PFMPs", "Dem. envoyées", "Dem. intégrées",
+             "Dem. payées", "Mt. payé", "Ratio PFMPs payées/payables"].freeze
 
   ReportDataSchema = Dry::Schema.JSON do
     required(:global_data).value(:array, min_size?: 2) do
-      first.value(eql?: GENERIC_DATA_KEYS)
-      each.value(:array, size?: GENERIC_DATA_KEYS.length)
+      first.value(eql?: HEADERS)
+      each.value(:array, size?: HEADERS.length)
     end
 
     required(:bops_data).value(:array, min_size?: 2) do
-      first.value(eql?: ["BOP"] + GENERIC_DATA_KEYS)
-      each.value(:array, size?: 1 + GENERIC_DATA_KEYS.length)
+      first.value(eql?: ["BOP"] + HEADERS)
+      each.value(:array, size?: 1 + HEADERS.length)
     end
 
     required(:menj_academies_data).value(:array, min_size?: 2) do
-      first.value(eql?: ["Académie"] + GENERIC_DATA_KEYS)
-      each.value(:array, size?: 1 + GENERIC_DATA_KEYS.length)
+      first.value(eql?: ["Académie"] + HEADERS)
+      each.value(:array, size?: 1 + HEADERS.length)
     end
 
     establishment_keys = ["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public"]
     required(:establishments_data).value(:array, min_size?: 2) do
-      first.value(eql?: establishment_keys + GENERIC_DATA_KEYS)
-      each.value(:array, size?: 5 + GENERIC_DATA_KEYS.length)
+      first.value(eql?: establishment_keys + HEADERS)
+      each.value(:array, size?: 5 + HEADERS.length)
     end
   end
 
@@ -81,7 +81,7 @@ class Report < ApplicationRecord
     end
 
     def serialize_data(data, specific_keys = [])
-      keys = specific_keys + GENERIC_DATA_KEYS
+      keys = specific_keys + HEADERS
       rows = data.presence || [{}]
 
       [

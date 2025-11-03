@@ -7,20 +7,20 @@ FactoryBot.define do
     data do
       {
         "global_data" => [
-          Report::GENERIC_DATA_KEYS,
-          Array.new(Report::GENERIC_DATA_KEYS.length, nil)
+          Report::HEADERS,
+          Array.new(Report::HEADERS.length, nil)
         ],
         "bops_data" => [
-          ["BOP"] + Report::GENERIC_DATA_KEYS,
-          ["ENPU"] + Array.new(Report::GENERIC_DATA_KEYS.length, nil)
+          ["BOP"] + Report::HEADERS,
+          ["ENPU"] + Array.new(Report::HEADERS.length, nil)
         ],
         "menj_academies_data" => [
-          ["Académie"] + Report::GENERIC_DATA_KEYS,
-          ["Paris"] + Array.new(Report::GENERIC_DATA_KEYS.length, nil)
+          ["Académie"] + Report::HEADERS,
+          ["Paris"] + Array.new(Report::HEADERS.length, nil)
         ],
         "establishments_data" => [
-          ["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public"] + Report::GENERIC_DATA_KEYS,
-          ["0010001A", "Lycée Test", "MENJ", "Paris", "Public"] + Array.new(Report::GENERIC_DATA_KEYS.length, nil)
+          ["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public"] + Report::HEADERS,
+          ["0010001A", "Lycée Test", "MENJ", "Paris", "Public"] + Array.new(Report::HEADERS.length, nil)
         ]
       }
     end
