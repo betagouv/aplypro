@@ -5,7 +5,7 @@
 # the aggregate call for all 3 different models
 class Student
   module Mappers
-    class Base
+    class Base # rubocop:disable Metrics/ClassLength
       include Student::Mappers::Errors
 
       attr_reader :payload, :uai, :establishment
@@ -123,6 +123,31 @@ class Student
 
       def inspect
         "#{self.class}<UAI: #{uai}>"
+      end
+
+      def current_schooling_end_date(schooling)
+        student = schooling.student
+        current_schooling = student.current_schooling
+
+        return if current_schooling.nil? || schooling.closed? || current_schooling.eql?(schooling)
+
+        end_date = infer_schooling_closing_date(schooling, current_schooling)
+        student.close_current_schooling!(end_date)
+      end
+
+      private
+
+      def infer_schooling_closing_date(schooling, current_schooling) # rubocop:disable Metrics/AbcSize
+        same_year       = schooling.school_year.start_year == current_schooling.school_year.start_year
+        current_year    = SchoolYear.current == current_schooling.school_year
+        has_later_start = schooling.start_date&.> current_schooling.start_date
+        end_of_year     = establishment.school_year_range(current_schooling.school_year.start_year).last
+
+        if has_later_start
+          same_year ? schooling.start_date - 1.day : end_of_year
+        else
+          current_year ? Time.zone.today : end_of_year
+        end
       end
     end
   end

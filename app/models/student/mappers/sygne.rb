@@ -6,21 +6,14 @@ class Student
       def map_schooling!(classe, student, entry)
         attributes = map_schooling_attributes(entry)
 
-        school_year_is_current = @establishment.in_current_school_year_range?(Date.parse(attributes[:start_date]))
-
-        attributes.delete(:end_date) unless school_year_is_current
-
         schooling = Schooling
                     .find_or_initialize_by(classe: classe, student: student)
                     .tap { |sc| sc.assign_attributes(attributes) }
 
-        if school_year_is_current
-          if schooling.open?
-            student.close_current_schooling! if student.current_schooling != schooling
-          elsif attributes[:end_date].nil?
-            schooling.reopen!
-          end
-        end
+        current_schooling_end_date(schooling)
+
+        school_year_is_current = @establishment.in_current_school_year_range?(Date.parse(attributes[:start_date]))
+        schooling.reopen! if school_year_is_current && attributes[:end_date].nil?
 
         schooling.save!
       end
