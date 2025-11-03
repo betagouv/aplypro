@@ -29,12 +29,13 @@ module Academic
     end
 
     def indicator_indices
+      offset = 1 # menj_academies_data has "Académie" prefix column
       {
-        students: 7,
-        pfmps: 8,
-        validated_pfmps_ratio: 3,
-        validated_amount: 5,
-        paid_amount: 12
+        students: offset + Report::HEADERS.index("Scolarités"),
+        pfmps: offset + Report::HEADERS.index("Toutes PFMPs"),
+        validated_pfmps_ratio: offset + Report::HEADERS.index("PFMPs validées"),
+        validated_amount: offset + Report::HEADERS.index("Mt. prêt envoi"),
+        paid_amount: offset + Report::HEADERS.index("Mt. payé")
       }
     end
 

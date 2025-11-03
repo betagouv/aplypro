@@ -47,11 +47,6 @@ RSpec.describe Report do
         expect(report).to be_valid
       end
 
-      it "validates structure with Dry::Schema.JSON" do
-        report = build(:report, :with_schema_validation, data: valid_data)
-        expect(report).to be_valid
-      end
-
       it "rejects data with missing sections" do
         report = build(:report, :with_schema_validation, data: valid_data.except("global_data"))
         expect(report).not_to be_valid
@@ -67,7 +62,7 @@ RSpec.describe Report do
       it "rejects data with incorrect global_data header" do
         invalid_data = valid_data.dup
         invalid_data["global_data"] = [
-          ["Wrong", "Header"],
+          %w[Wrong Header],
           Array.new(Report::HEADERS.length, nil)
         ]
         report = build(:report, :with_schema_validation, data: invalid_data)
@@ -100,7 +95,7 @@ RSpec.describe Report do
       it "rejects establishments_data with wrong header" do
         invalid_data = valid_data.dup
         invalid_data["establishments_data"] = [
-          ["UAI", "Wrong"] + Report::HEADERS,
+          %w[UAI Wrong] + Report::HEADERS,
           ["0010001A", "Lycée Test", "MENJ", "Paris", "Public"] + Array.new(Report::HEADERS.length, nil)
         ]
         report = build(:report, :with_schema_validation, data: invalid_data)
