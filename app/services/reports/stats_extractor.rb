@@ -26,7 +26,7 @@ module Reports
 
     def indicator_indices
       {
-        students: 3,
+        students: 6,
         pfmps: 7,
         validated_pfmps_ratio: 2,
         validated_amount: 4,

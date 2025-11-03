@@ -20,7 +20,7 @@ RSpec.describe Reports::StatsExtractor do
         create(:report, data: {
                  "global_data" => [
                    ["Headers"],
-                   [nil, nil, 0.85, 1500, 120_000, nil, nil, 1000, nil, nil, nil, 100_000] # indices matter
+                   [nil, nil, 0.85, 0.95, 120_000, 180_000, 1500, 1000, nil, nil, nil, 100_000] # indices matter
                  ],
                  "establishments_data" => [
                    ["Header"],
@@ -35,7 +35,7 @@ RSpec.describe Reports::StatsExtractor do
 
         expect(result).to include(
           total_establishments: 2,
-          total_students: kind_of(Integer),
+          total_students: 1500,
           total_pfmps: 1000,
           validated_pfmps: 850,
           total_validated_amount: 120_000.0,
@@ -65,7 +65,7 @@ RSpec.describe Reports::StatsExtractor do
         create(:report, data: {
                  "global_data" => [
                    ["Headers"],
-                   [nil, nil, 0.85, 1500, 120_000, nil, nil, 1000, nil, nil, nil, 100_000]
+                   [nil, nil, 0.85, 0.95, 120_000, 180_000, 1500, 1000, nil, nil, nil, 100_000]
                  ],
                  "establishments_data" => nil
                })

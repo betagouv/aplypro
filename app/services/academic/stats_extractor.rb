@@ -30,7 +30,7 @@ module Academic
 
     def indicator_indices
       {
-        students: 4,
+        students: 7,
         pfmps: 8,
         validated_pfmps_ratio: 3,
         validated_amount: 5,
