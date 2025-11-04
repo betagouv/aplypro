@@ -14,6 +14,102 @@ RSpec.describe Report do
 
       it { is_expected.to validate_uniqueness_of(:created_at).scoped_to(:school_year_id) }
     end
+
+    describe "data schema validation" do
+      let(:valid_data) do
+        {
+          "global_data" => [
+            Report::HEADERS,
+            Array.new(Report::HEADERS.length, nil)
+          ],
+          "bops_data" => [
+            ["BOP"] + Report::HEADERS,
+            ["ENPU"] + Array.new(Report::HEADERS.length, nil)
+          ],
+          "menj_academies_data" => [
+            ["Académie"] + Report::HEADERS,
+            ["Paris"] + Array.new(Report::HEADERS.length, nil)
+          ],
+          "establishments_data" => [
+            ["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public"] + Report::HEADERS,
+            ["0010001A", "Lycée Test", "MENJ", "Paris", "Public"] + Array.new(Report::HEADERS.length, nil)
+          ]
+        }
+      end
+
+      it "is valid with correct schema" do
+        report = build(:report, :with_schema_validation, data: valid_data)
+        expect(report).to be_valid
+      end
+
+      it "allows partial data for test purposes when validation disabled" do
+        report = build(:report, data: valid_data.except("global_data"))
+        expect(report).to be_valid
+      end
+
+      it "rejects data with missing sections" do
+        report = build(:report, :with_schema_validation, data: valid_data.except("global_data"))
+        expect(report).not_to be_valid
+        expect(report.errors[:data]).to include(/global_data is missing/)
+      end
+
+      it "rejects data with non-array values" do
+        invalid_data = valid_data.merge("global_data" => "not an array")
+        report = build(:report, :with_schema_validation, data: invalid_data)
+        expect(report).not_to be_valid
+      end
+
+      it "rejects data with incorrect global_data header" do
+        invalid_data = valid_data.dup
+        invalid_data["global_data"] = [
+          %w[Wrong Header],
+          Array.new(Report::HEADERS.length, nil)
+        ]
+        report = build(:report, :with_schema_validation, data: invalid_data)
+        expect(report).not_to be_valid
+        expect(report.errors[:data]).to include(/global_data header must be/)
+      end
+
+      it "rejects data with incorrect bops_data header" do
+        invalid_data = valid_data.dup
+        invalid_data["bops_data"] = [
+          ["Wrong"] + Report::HEADERS,
+          ["ENPU"] + Array.new(Report::HEADERS.length, nil)
+        ]
+        report = build(:report, :with_schema_validation, data: invalid_data)
+        expect(report).not_to be_valid
+        expect(report.errors[:data]).to include(/bops_data header must be/)
+      end
+
+      it "rejects data with incorrect row length" do
+        invalid_data = valid_data.dup
+        invalid_data["global_data"] = [
+          Report::HEADERS,
+          [1, 2, 3]
+        ]
+        report = build(:report, :with_schema_validation, data: invalid_data)
+        expect(report).not_to be_valid
+        expect(report.errors[:data]).to include(/global_data row 1 must have/)
+      end
+
+      it "rejects establishments_data with wrong header" do
+        invalid_data = valid_data.dup
+        invalid_data["establishments_data"] = [
+          %w[UAI Wrong] + Report::HEADERS,
+          ["0010001A", "Lycée Test", "MENJ", "Paris", "Public"] + Array.new(Report::HEADERS.length, nil)
+        ]
+        report = build(:report, :with_schema_validation, data: invalid_data)
+        expect(report).not_to be_valid
+        expect(report.errors[:data]).to include(/establishments_data header must be/)
+      end
+
+      it "rejects data with arrays that are too small" do
+        invalid_data = valid_data.dup
+        invalid_data["global_data"] = [Report::HEADERS]
+        report = build(:report, :with_schema_validation, data: invalid_data)
+        expect(report).not_to be_valid
+      end
+    end
   end
 
   describe "scopes" do
@@ -100,7 +196,7 @@ RSpec.describe Report do
         described_class.create_for_school_year(create_for_date_school_year, date)
 
         report = described_class.last
-        keys = Report::GENERIC_DATA_KEYS
+        keys = Report::HEADERS
 
         expect(report.data).to include("global_data" => [keys, Array.new(keys.size, nil)],
                                        "bops_data" => [["BOP"] + keys,

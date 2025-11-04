@@ -29,7 +29,7 @@ module Stats
     end
 
     def indicators_with_metadata
-      Report::GENERIC_DATA_KEYS.map do |title|
+      Report::HEADERS.map do |title|
         indicator = indicators[title.to_sym]
         next unless indicator
 

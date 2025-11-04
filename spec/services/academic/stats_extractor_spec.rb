@@ -13,8 +13,8 @@ RSpec.describe Academic::StatsExtractor do
       let(:report) do
         create(:report, data: {
                  "menj_academies_data" => [
-                   ["Académie", "DA", "RIBs", "PFMPs validées", "Données élèves", "Mt. prêt envoi", "Scolarités", "Élèves", "Toutes PFMPs", "Sent", "Integrated", "Paid", "Mt. payé"], # rubocop:disable Layout/LineLength
-                   ["Lyon", 100, 95, 0.85, 1500, 120_000, 50, 1400, 1000, 80, 75, 70, 100_000]
+                   ["Académie", "DA", "RIBs", "PFMPs validées", "Données élèves", "Mt. prêt envoi", "Mt. annuel total", "Scolarités", "Toutes PFMPs", "Sent", "Integrated", "Paid", "Mt. payé"], # rubocop:disable Layout/LineLength
+                   ["Lyon", 100, 95, 0.85, 0.95, 120_000, 180_000, 1500, 1000, 80, 75, 70, 100_000]
                  ],
                  "establishments_data" => [
                    ["UAI", "Nom", "Ministère", "Lyon", "Public"],
@@ -66,9 +66,9 @@ RSpec.describe Academic::StatsExtractor do
         create(:report, data: {
                  "menj_academies_data" => [
                    # rubocop:disable Layout/LineLength
-                   ["Académie", "DA", "RIBs", "PFMPs validées", "Données élèves", "Mt. prêt envoi", "Scolarités", "Élèves", "Toutes PFMPs", "Sent", "Integrated", "Paid", "Mt. payé"],
+                   ["Académie", "DA", "RIBs", "PFMPs validées", "Données élèves", "Mt. prêt envoi", "Mt. annuel total", "Scolarités", "Toutes PFMPs", "Sent", "Integrated", "Paid", "Mt. payé"],
                    # rubocop:enable Layout/LineLength
-                   ["Lyon", 100, 95, 0.85, 1500, 120_000, 50, 1400, 1000, 80, 75, 70, 100_000]
+                   ["Lyon", 100, 95, 0.85, 0.95, 120_000, 180_000, 1500, 1000, 80, 75, 70, 100_000]
                  ],
                  "establishments_data" => nil
                })

@@ -80,6 +80,7 @@ gem "sidekiq"
 
 gem "rack-attack"
 
+gem "dry-schema"
 gem "dry-transformer"
 
 gem "zipline", git: "https://github.com/alhajrahmoun/zipline.git", branch: "support-rails-8.0"
