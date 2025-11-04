@@ -32,7 +32,7 @@ module Stats
         end
 
         def tooltip_key
-          "stats.amount.payment_request_#{@state}"
+          "stats.sum.payment_request_#{@state}"
         end
 
         def with_mef_and_establishment

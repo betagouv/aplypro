@@ -22,7 +22,7 @@ module Stats
         end
 
         def tooltip_key
-          "stats.amount.payment_request_recovery"
+          "stats.sum.payment_request_recovery"
         end
 
         def with_mef_and_establishment
