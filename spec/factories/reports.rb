@@ -8,19 +8,19 @@ FactoryBot.define do
       {
         "global_data" => [
           Report::HEADERS,
-          Array.new(Report::HEADERS.length, nil)
+          Array.new(Report::HEADERS.length, 0)
         ],
         "bops_data" => [
           ["BOP"] + Report::HEADERS,
-          ["ENPU"] + Array.new(Report::HEADERS.length, nil)
+          ["ENPU"] + Array.new(Report::HEADERS.length, 0)
         ],
         "menj_academies_data" => [
           ["Académie"] + Report::HEADERS,
-          ["Paris"] + Array.new(Report::HEADERS.length, nil)
+          ["Paris"] + Array.new(Report::HEADERS.length, 0)
         ],
         "establishments_data" => [
           ["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public"] + Report::HEADERS,
-          ["0010001A", "Lycée Test", "MENJ", "Paris", "Public"] + Array.new(Report::HEADERS.length, nil)
+          ["0010001A", "Lycée Test", "MENJ", "Paris", "Public"] + Array.new(Report::HEADERS.length, 0)
         ]
       }
     end

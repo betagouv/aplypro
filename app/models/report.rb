@@ -6,26 +6,13 @@ class Report < ApplicationRecord
              "Dem. payées", "Mt. payé", "Ratio PFMPs payées/payables"].freeze
 
   ReportDataSchema = Dry::Schema.JSON do
-    required(:global_data).value(:array, min_size?: 2) do
-      first.value(eql?: HEADERS)
-      each.value(:array, size?: HEADERS.length)
-    end
+    required(:global_data).value(:array, size?: 2).each(:array)
 
-    required(:bops_data).value(:array, min_size?: 2) do
-      first.value(eql?: ["BOP"] + HEADERS)
-      each.value(:array, size?: 1 + HEADERS.length)
-    end
+    required(:bops_data).value(:array, min_size?: 2).each(:array)
 
-    required(:menj_academies_data).value(:array, min_size?: 2) do
-      first.value(eql?: ["Académie"] + HEADERS)
-      each.value(:array, size?: 1 + HEADERS.length)
-    end
+    required(:menj_academies_data).value(:array, min_size?: 2).each(:array)
 
-    establishment_keys = ["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public"]
-    required(:establishments_data).value(:array, min_size?: 2) do
-      first.value(eql?: establishment_keys + HEADERS)
-      each.value(:array, size?: 5 + HEADERS.length)
-    end
+    required(:establishments_data).value(:array, min_size?: 2).each(:array)
   end
 
   attr_accessor :skip_schema_validation
@@ -51,7 +38,45 @@ class Report < ApplicationRecord
     return if data.blank?
 
     result = ReportDataSchema.call(data)
-    result.errors.messages.each { |msg| errors.add(:data, msg.text) } if result.failure?
+    return process_schema_errors(result) if result.failure?
+
+    validate_data_structures
+  end
+
+  def validate_data_structures
+    validate_array_structure(:global_data, HEADERS)
+    validate_array_structure(:bops_data, ["BOP"] + HEADERS)
+    validate_array_structure(:menj_academies_data, ["Académie"] + HEADERS)
+    establishment_keys = ["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public"]
+    validate_array_structure(:establishments_data, establishment_keys + HEADERS)
+  end
+
+  def process_schema_errors(result)
+    result.errors.each do |error|
+      errors.add(:data, "#{error.path.join('.')} #{error.text}")
+    end
+  end
+
+  def validate_array_structure(key, expected_headers)
+    array_data = data[key.to_s]
+    return unless array_data.is_a?(Array) && array_data.any?
+
+    validate_header(key, array_data, expected_headers)
+    validate_row_sizes(key, array_data, expected_headers)
+  end
+
+  def validate_header(key, array_data, expected_headers)
+    return if array_data.first == expected_headers
+
+    errors.add(:data, "#{key} header must be #{expected_headers}")
+  end
+
+  def validate_row_sizes(key, array_data, expected_headers)
+    array_data.each_with_index do |row, index|
+      next if index.zero? || row.size == expected_headers.length
+
+      errors.add(:data, "#{key} row #{index} must have #{expected_headers.length} elements")
+    end
   end
 
   class << self
@@ -80,6 +105,7 @@ class Report < ApplicationRecord
       }
     end
 
+    # NOTE: serialize from hash like human readable structure to array like for storage
     def serialize_data(data, specific_keys = [])
       keys = specific_keys + HEADERS
       rows = data.presence || [{}]
