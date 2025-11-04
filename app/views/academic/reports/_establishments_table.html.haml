@@ -10,7 +10,7 @@
       %thead
         %tr
           - visible_columns(@establishments_data).each do |index|
-            - header = @establishments_data.first[index]
+            - header = index > 4 ? (@indicators_metadata[index - 5]&.dig(:title) || @establishments_data.first[index]) : format_table_header(@establishments_data.first[index])
             %th{scope: "col"}
               = header
               - if index > 4 && @indicators_metadata[index - 5]&.dig(:tooltip_key)
