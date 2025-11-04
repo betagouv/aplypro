@@ -2,27 +2,27 @@
 
 module Stats
   module Indicator
-    module Sum
-      class PfmpsGhost < Stats::Sum
+    module Count
+      class PfmpsExtended < Stats::Count
         def initialize(start_year)
-          pfmps = Pfmp.for_year(start_year)
-
-          # TODO
           super(
-            all: pfmps.in_state(:completed)
+            all: Pfmp.for_year(start_year)
+                     .joins(:schooling)
+                     .where.not(schoolings: { end_date: nil })
+                     .where("pfmps.end_date > schoolings.end_date")
           )
         end
 
         def key
-          :pfmps_ghost_sum
+          :pfmps_extended_count
         end
 
         def title
-          "Mt. PFMPs fantômes"
+          "Nb. PFMPs reportées"
         end
 
         def tooltip_key
-          "stats.sum.pfmps_ghost"
+          "stats.count.pfmps_extended"
         end
 
         def with_mef_and_establishment

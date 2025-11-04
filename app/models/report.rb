@@ -18,8 +18,6 @@ class Report < ApplicationRecord
     pfmps_completed_sum
     pfmps_incompleted_count
     pfmps_incompleted_sum
-    pfmps_ghost_count
-    pfmps_ghost_sum
     payment_requests_paid_count
     payment_requests_paid_sum
     payment_requests_recovery_sum
@@ -27,9 +25,9 @@ class Report < ApplicationRecord
     students_paid_ratio
     pfmps_paid_count
     pfmps_payable_count
-    pfmps_paid_payable_ratio
-    pfmps_report_count
-    pfmps_report_sum
+    pfmp_paid_payable_ratio
+    pfmps_extended_count
+    pfmps_extended_sum
   ].freeze
 
   ReportDataSchema = Dry::Schema.JSON do

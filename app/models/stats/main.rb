@@ -11,11 +11,10 @@ module Stats
         Indicator::Count::AttributiveDecisions,
         Indicator::Count::Pfmps,
         Indicator::Count::PfmpsCompleted,
-        Indicator::Count::PfmpsGhost,
         Indicator::Count::PfmpsIncompleted,
         Indicator::Count::PfmpsPaid,
         Indicator::Count::PfmpsPayable,
-        Indicator::Count::PfmpsReport,
+        Indicator::Count::PfmpsExtended,
         Indicator::Count::PfmpsValidated,
         Indicator::Count::Ribs,
         Indicator::Count::Schoolings,
@@ -30,9 +29,8 @@ module Stats
         Indicator::Ratio::StudentsPaid,
         Indicator::Sum::PaymentRequestsRecovery,
         Indicator::Sum::PfmpsCompleted,
-        Indicator::Sum::PfmpsGhost,
         Indicator::Sum::PfmpsIncompleted,
-        Indicator::Sum::PfmpsReport,
+        Indicator::Sum::PfmpsExtended,
         Indicator::Sum::PfmpsValidated,
         Indicator::Sum::Yearly
       ].map { |indicator_class| indicator_class.new(start_year) }

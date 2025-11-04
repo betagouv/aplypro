@@ -5,9 +5,11 @@ module Stats
     module Count
       class StudentsPaid < Stats::Count
         def initialize(start_year)
-          # TODO
           super(
-            all: Student.for_year(start_year).all
+            all: Student.for_year(start_year)
+                        .joins(:schoolings)
+                        .joins(pfmps: { payment_requests: :asp_payment_request_transitions })
+                        .where("asp_payment_request_transitions.to_state": :paid)
           )
         end
 

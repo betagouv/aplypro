@@ -7,9 +7,12 @@ module Stats
         def initialize(start_year)
           students = Student.for_year(start_year)
 
-          # TODO
+          students_paid = students.joins(:schoolings)
+                                  .joins(pfmps: { payment_requests: :asp_payment_request_transitions })
+                                  .where("asp_payment_request_transitions.to_state": :paid)
+
           super(
-            subset: students.asp_ready,
+            subset: students_paid,
             all: students.all
           )
         end

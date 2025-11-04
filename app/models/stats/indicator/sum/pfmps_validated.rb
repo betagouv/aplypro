@@ -7,10 +7,9 @@ module Stats
         def initialize(start_year)
           finished_pfmps = Pfmp.for_year(start_year).finished
 
-          # TODO: paid_amount
           super(
-            # subset: finished_pfmps.in_state(:validated),
-            all: finished_pfmps
+            column: :amount,
+            all: finished_pfmps.in_state(:validated)
           )
         end
 

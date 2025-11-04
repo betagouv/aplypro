@@ -5,13 +5,11 @@ module Stats
     module Sum
       class PaymentRequestsRecovery < Stats::Sum
         def initialize(start_year)
-          # TODO
           super(
             column: "pfmps.amount",
-            all: ASP::PaymentRequest
-              .for_year(start_year)
-              .joins(:pfmp)
-              .joins(:asp_payment_request_transitions)
+            all: ASP::PaymentRequest.for_year(start_year)
+                                    .joins(:pfmp)
+                                    .select(&:recovery?)
           )
         end
 
