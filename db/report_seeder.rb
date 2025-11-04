@@ -93,7 +93,6 @@ class ReportSeeder
 
   def self.generate_bogus_data(start_year, seed_offset = 0)
     stats = Stats::Main.new(start_year)
-    indicators_titles = stats.indicators_titles
     academies = Establishment.distinct.pluck(:academy_label).compact.uniq.sort
 
     establishments = []
@@ -129,7 +128,7 @@ class ReportSeeder
     end
 
     bops_data = [
-      ["BOP", *indicators_titles],
+      [:bop] + Report::HEADERS,
       ["ENPU", *generate_bop_row(stats, seed_offset)],
       ["ENPR", *generate_bop_row(stats, seed_offset)],
       ["MASA", *generate_bop_row(stats, seed_offset)],
@@ -137,12 +136,12 @@ class ReportSeeder
     ]
 
     menj_academies_data = [
-      ["Académie", *indicators_titles],
+      [:academy] + Report::HEADERS,
       *academies.map { |academy| [academy, *generate_academy_row(stats, seed_offset)] }
     ]
 
     global_data = [
-      indicators_titles,
+      Report::HEADERS,
       stats.indicators.map do |indicator|
         generate_global_value(indicator, seed_offset)
       end
@@ -153,7 +152,7 @@ class ReportSeeder
       bops_data: bops_data,
       menj_academies_data: menj_academies_data,
       establishments_data: [
-        ["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public", *indicators_titles], *establishments
+        %i[uai establishment_name ministry academy private_or_public] + Report::HEADERS, *establishments
       ]
     }
   end
