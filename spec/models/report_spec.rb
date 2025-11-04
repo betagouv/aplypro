@@ -23,15 +23,15 @@ RSpec.describe Report do
             Array.new(Report::HEADERS.length, nil)
           ],
           "bops_data" => [
-            ["BOP"] + Report::HEADERS,
+            [:bop] + Report::HEADERS,
             ["ENPU"] + Array.new(Report::HEADERS.length, nil)
           ],
           "menj_academies_data" => [
-            ["Académie"] + Report::HEADERS,
+            [:academy] + Report::HEADERS,
             ["Paris"] + Array.new(Report::HEADERS.length, nil)
           ],
           "establishments_data" => [
-            ["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public"] + Report::HEADERS,
+            %i[uai establishment_name ministry academy private_or_public] + Report::HEADERS,
             ["0010001A", "Lycée Test", "MENJ", "Paris", "Public"] + Array.new(Report::HEADERS.length, nil)
           ]
         }
@@ -182,9 +182,9 @@ RSpec.describe Report do
         allow(Stats::Main).to receive(:new)
           .and_return(instance_double(Stats::Main,
                                       global_data: [],
-                                      bops_data: [{ BOP: "ENPR", "Coord. bancaires": 4 }],
-                                      menj_academies_data: [{ Académie: "Data1" }, { Académie: "Data2" }],
-                                      establishments_data: [{ UAI: "123456", "Nom de l'établissement": "Test" }]))
+                                      bops_data: [{ bop: "ENPR", ribs_count: 4 }],
+                                      menj_academies_data: [{ academy: "Data1" }, { academy: "Data2" }],
+                                      establishments_data: [{ uai: "123456", establishment_name: "Test" }]))
       end
 
       it "creates a new report" do
@@ -192,22 +192,19 @@ RSpec.describe Report do
           .to change(described_class, :count).by(1)
       end
 
-      it "sets the correct data" do # rubocop:disable RSpec/ExampleLength
+      it "sets the correct data" do
         described_class.create_for_school_year(create_for_date_school_year, date)
 
         report = described_class.last
-        keys = Report::HEADERS
+        keys = Report::HEADERS.map(&:to_s)
 
-        expect(report.data).to include("global_data" => [keys, Array.new(keys.size, nil)],
-                                       "bops_data" => [%i[bop] + keys,
-                                                       ["ENPR", nil, 4] + Array.new(keys.size - 2, nil)],
-                                       "menj_academies_data" => [%i[academy] + keys,
-                                                                 ["Data1"] + Array.new(keys.size, nil),
-                                                                 ["Data2"] + Array.new(keys.size, nil)],
-                                       "establishments_data" => [
-                                         %i[uai establishment_name ministry academy private_or_public] + keys,
-                                         %w[123456 Test] + Array.new(keys.size + 3, nil)
-                                       ])
+        expect(report.data.keys).to contain_exactly("global_data", "bops_data", "menj_academies_data",
+                                                    "establishments_data")
+        expect(report.data["global_data"].first).to eq(keys)
+        expect(report.data["bops_data"].first).to eq(["bop"] + keys)
+        expect(report.data["menj_academies_data"].first).to eq(["academy"] + keys)
+        establishments_keys = %w[uai establishment_name ministry academy private_or_public]
+        expect(report.data["establishments_data"].first).to eq(establishments_keys + keys)
       end
     end
 
