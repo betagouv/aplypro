@@ -9,8 +9,8 @@
     %table
       %thead
         %tr
-          - visible_columns(@establishments_data).each do |index|
-            - header = index > 4 ? (@indicators_metadata[index - 5]&.dig(:title) || @establishments_data.first[index]) : format_table_header(@establishments_data.first[index])
+          - @establishments_data.first.each_with_index do |header_value, index|
+            - header = index > 4 ? (@indicators_metadata[index - 5]&.dig(:title) || header_value) : format_table_header(header_value)
             %th{scope: "col"}
               = header
               - if index > 4 && @indicators_metadata[index - 5]&.dig(:tooltip_key)
@@ -21,10 +21,9 @@
         - @establishments_data[1..].each do |row|
           - establishment = Establishment.find_by(uai: row[0])
           %tr
-            - visible_columns(@establishments_data).each do |index|
-              - value = row[index]
+            - row.each_with_index do |value, index|
               - indicator_type = index > 4 ? @indicators_metadata[index - 5]&.dig(:type) : nil
-              %td{class: (index <= 1 ? "fr-text--sm" : ""), style: (index > 4 ? cell_background_color(value) : "")}
+              %td{class: (index <= 1 ? "fr-text--sm" : ""), style: (index > 4 ? cell_background_color(value, indicator_type: indicator_type) : "")}
                 - if index == 1 && establishment
                   = link_to value, academic_establishment_path(establishment)
                 - else

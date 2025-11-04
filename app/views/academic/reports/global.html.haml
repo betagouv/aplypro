@@ -45,8 +45,8 @@
     %table
       %thead
         %tr
-          - visible_columns(@global_data).each do |index|
-            - header = @indicators_metadata[index]&.dig(:title) || @global_data.first[index]
+          - @global_data.first.each_with_index do |header_value, index|
+            - header = @indicators_metadata[index]&.dig(:title) || header_value
             %th{scope: "col"}
               = header
               - if @indicators_metadata[index]&.dig(:tooltip_key)
@@ -55,10 +55,9 @@
                     = t("tooltips.#{@indicators_metadata[index][:tooltip_key]}")
       %tbody
         %tr
-          - visible_columns(@global_data).each do |index|
-            - value = @global_data.last[index]
+          - @global_data.last.each_with_index do |value, index|
             - indicator_type = @indicators_metadata[index]&.dig(:type)
-            %td{style: cell_background_color(value)}= format_stat_value(value, indicator_type: indicator_type)
+            %td{style: cell_background_color(value, indicator_type: indicator_type)}= format_stat_value(value, indicator_type: indicator_type)
 
   .fr-container
     .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
@@ -69,8 +68,8 @@
     %table
       %thead
         %tr
-          - visible_columns(@bops_data).each do |index|
-            - header = index > 0 ? (@indicators_metadata[index - 1]&.dig(:title) || @bops_data.first[index]) : format_table_header(@bops_data.first[index])
+          - @bops_data.first.each_with_index do |header_value, index|
+            - header = index > 0 ? (@indicators_metadata[index - 1]&.dig(:title) || header_value) : format_table_header(header_value)
             %th{scope: "col"}
               = header
               - if index > 0 && @indicators_metadata[index - 1]&.dig(:tooltip_key)
@@ -80,10 +79,9 @@
       %tbody
         - @bops_data[1..].each do |row|
           %tr
-            - visible_columns(@bops_data).each do |index|
-              - value = row[index]
+            - row.each_with_index do |value, index|
               - indicator_type = index > 0 ? @indicators_metadata[index - 1]&.dig(:type) : nil
-              %td{style: (index > 0 ? cell_background_color(value) : "")}= format_stat_value(value, indicator_type: indicator_type)
+              %td{style: (index > 0 ? cell_background_color(value, indicator_type: indicator_type) : "")}= format_stat_value(value, indicator_type: indicator_type)
 
   .fr-container
     .fr-grid-row.fr-grid-row--gutters
@@ -94,8 +92,8 @@
     %table
       %thead
         %tr
-          - visible_columns(@menj_academies_data).each do |index|
-            - header = index > 0 ? (@indicators_metadata[index - 1]&.dig(:title) || @menj_academies_data.first[index]) : format_table_header(@menj_academies_data.first[index])
+          - @menj_academies_data.first.each_with_index do |header_value, index|
+            - header = index > 0 ? (@indicators_metadata[index - 1]&.dig(:title) || header_value) : format_table_header(header_value)
             %th{scope: "col"}
               = header
               - if index > 0 && @indicators_metadata[index - 1]&.dig(:tooltip_key)
@@ -105,7 +103,6 @@
       %tbody
         - @menj_academies_data[1..].each do |row|
           %tr
-            - visible_columns(@menj_academies_data).each do |index|
-              - value = row[index]
+            - row.each_with_index do |value, index|
               - indicator_type = index > 0 ? @indicators_metadata[index - 1]&.dig(:type) : nil
-              %td{class: (index == 0 ? "fr-text--bold" : ""), style: (index > 0 ? cell_background_color(value) : "")}= format_stat_value(value, indicator_type: indicator_type)
+              %td{class: (index == 0 ? "fr-text--bold" : ""), style: (index > 0 ? cell_background_color(value, indicator_type: indicator_type) : "")}= format_stat_value(value, indicator_type: indicator_type)

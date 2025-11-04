@@ -7,16 +7,17 @@ module Academic
 
       if currency_indicator?(indicator_type)
         number_to_currency(value, unit: "€", separator: ",", delimiter: " ", precision: 2)
-      elsif ratio_value?(value)
+      elsif indicator_type == "Stats::Ratio"
         number_to_percentage(value * 100, precision: 2, separator: ",")
-      elsif integer_value?(value)
+      elsif indicator_type == "Stats::Count" || integer_value?(value)
         number_with_delimiter(value.to_i, delimiter: " ")
       else
         number_with_precision(value, precision: 2, separator: ",", delimiter: " ")
       end
     end
 
-    def cell_background_color(value)
+    def cell_background_color(value, indicator_type: nil)
+      return "" unless indicator_type == "Stats::Ratio"
       return "" unless value.is_a?(Numeric) && ratio_value?(value)
 
       if value >= 0.8
@@ -28,13 +29,6 @@ module Academic
       else
         "background-color: var(--red-marianne-950-100);"
       end
-    end
-
-    def visible_columns(data)
-      return [] if data.empty?
-
-      headers = data.first
-      (0...headers.length).reject { |index| column_empty?(data, index) }
     end
 
     def format_table_header(key)
@@ -68,13 +62,6 @@ module Academic
 
     def integer_value?(value)
       value.is_a?(Integer) || (value.is_a?(Numeric) && value == value.to_i)
-    end
-
-    def column_empty?(data, column_index)
-      data[1..].all? do |row|
-        value = row[column_index]
-        value.nil? || (value.respond_to?(:nan?) && value.nan?)
-      end
     end
   end
 end

@@ -43,19 +43,19 @@ RSpec.describe Academic::StatsHelper do
 
     context "with ratio values" do
       it "formats values between 0 and 1 as percentages" do
-        expect(helper.format_stat_value(0.8567)).to eq("85,67%")
+        expect(helper.format_stat_value(0.8567, indicator_type: "Stats::Ratio")).to eq("85,67%")
       end
 
       it "formats 0 as percentage" do
-        expect(helper.format_stat_value(0.0)).to eq("0,00%")
+        expect(helper.format_stat_value(0.0, indicator_type: "Stats::Ratio")).to eq("0,00%")
       end
 
       it "formats 1 as percentage" do
-        expect(helper.format_stat_value(1.0)).to eq("100,00%")
+        expect(helper.format_stat_value(1.0, indicator_type: "Stats::Ratio")).to eq("100,00%")
       end
 
       it "formats small ratio values as percentages" do
-        expect(helper.format_stat_value(0.05)).to eq("5,00%")
+        expect(helper.format_stat_value(0.05, indicator_type: "Stats::Ratio")).to eq("5,00%")
       end
     end
 
@@ -107,172 +107,39 @@ RSpec.describe Academic::StatsHelper do
 
     context "with ratio values" do
       it "returns success color for value >= 0.8" do
-        expect(helper.send(:cell_background_color, 0.8))
+        expect(helper.send(:cell_background_color, 0.8, indicator_type: "Stats::Ratio"))
           .to eq("background-color: var(--success-950-100);")
-        expect(helper.send(:cell_background_color, 0.95))
+        expect(helper.send(:cell_background_color, 0.95, indicator_type: "Stats::Ratio"))
           .to eq("background-color: var(--success-950-100);")
-        expect(helper.send(:cell_background_color, 1.0))
+        expect(helper.send(:cell_background_color, 1.0, indicator_type: "Stats::Ratio"))
           .to eq("background-color: var(--success-950-100);")
       end
 
       it "returns yellow light color for value >= 0.5 and < 0.8" do
-        expect(helper.send(:cell_background_color, 0.5))
+        expect(helper.send(:cell_background_color, 0.5, indicator_type: "Stats::Ratio"))
           .to eq("background-color: var(--yellow-tournesol-975-75);")
-        expect(helper.send(:cell_background_color, 0.7))
+        expect(helper.send(:cell_background_color, 0.7, indicator_type: "Stats::Ratio"))
           .to eq("background-color: var(--yellow-tournesol-975-75);")
-        expect(helper.send(:cell_background_color, 0.79))
+        expect(helper.send(:cell_background_color, 0.79, indicator_type: "Stats::Ratio"))
           .to eq("background-color: var(--yellow-tournesol-975-75);")
       end
 
       it "returns yellow dark color for value >= 0.2 and < 0.5" do
-        expect(helper.send(:cell_background_color, 0.2))
+        expect(helper.send(:cell_background_color, 0.2, indicator_type: "Stats::Ratio"))
           .to eq("background-color: var(--yellow-tournesol-850-200);")
-        expect(helper.send(:cell_background_color, 0.35))
+        expect(helper.send(:cell_background_color, 0.35, indicator_type: "Stats::Ratio"))
           .to eq("background-color: var(--yellow-tournesol-850-200);")
-        expect(helper.send(:cell_background_color, 0.49))
+        expect(helper.send(:cell_background_color, 0.49, indicator_type: "Stats::Ratio"))
           .to eq("background-color: var(--yellow-tournesol-850-200);")
       end
 
       it "returns red color for value < 0.2" do
-        expect(helper.send(:cell_background_color, 0.0))
+        expect(helper.send(:cell_background_color, 0.0, indicator_type: "Stats::Ratio"))
           .to eq("background-color: var(--red-marianne-950-100);")
-        expect(helper.send(:cell_background_color, 0.1))
+        expect(helper.send(:cell_background_color, 0.1, indicator_type: "Stats::Ratio"))
           .to eq("background-color: var(--red-marianne-950-100);")
-        expect(helper.send(:cell_background_color, 0.19))
+        expect(helper.send(:cell_background_color, 0.19, indicator_type: "Stats::Ratio"))
           .to eq("background-color: var(--red-marianne-950-100);")
-      end
-    end
-  end
-
-  describe "#column_empty?" do
-    let(:data_with_values) do
-      [
-        ["Header 1", "Header 2", "Header 3"],
-        [100, 200, 300],
-        [150, 250, 350]
-      ]
-    end
-
-    let(:data_with_nil_column) do
-      [
-        ["Header 1", "Header 2", "Header 3"],
-        [100, nil, 300],
-        [150, nil, 350]
-      ]
-    end
-
-    let(:data_with_nan_column) do
-      [
-        ["Header 1", "Header 2", "Header 3"],
-        [100, Float::NAN, 300],
-        [150, Float::NAN, 350]
-      ]
-    end
-
-    let(:data_with_mixed_empty_column) do
-      [
-        ["Header 1", "Header 2", "Header 3"],
-        [100, nil, 300],
-        [150, Float::NAN, 350]
-      ]
-    end
-
-    let(:data_with_partial_values) do
-      [
-        ["Header 1", "Header 2", "Header 3"],
-        [100, nil, 300],
-        [150, 250, 350]
-      ]
-    end
-
-    it "returns false when column has values" do
-      expect(helper.send(:column_empty?, data_with_values, 1)).to be false
-    end
-
-    it "returns true when column has only nil values" do
-      expect(helper.send(:column_empty?, data_with_nil_column, 1)).to be true
-    end
-
-    it "returns true when column has only NaN values" do
-      expect(helper.send(:column_empty?, data_with_nan_column, 1)).to be true
-    end
-
-    it "returns true when column has mix of nil and NaN values" do
-      expect(helper.send(:column_empty?, data_with_mixed_empty_column, 1)).to be true
-    end
-
-    it "returns false when column has at least one real value" do
-      expect(helper.send(:column_empty?, data_with_partial_values, 1)).to be false
-    end
-
-    it "skips the header row when checking" do
-      data_with_header_value = [
-        ["Header 1", "Actual Value", "Header 3"],
-        [100, nil, 300],
-        [150, nil, 350]
-      ]
-      expect(helper.send(:column_empty?, data_with_header_value, 1)).to be true
-    end
-  end
-
-  describe "#visible_columns" do
-    context "with empty data" do
-      it "returns empty array" do
-        expect(helper.send(:visible_columns, [])).to eq([])
-      end
-    end
-
-    context "with all visible columns" do
-      let(:data) do
-        [
-          ["Header 1", "Header 2", "Header 3"],
-          [100, 200, 300],
-          [150, 250, 350]
-        ]
-      end
-
-      it "returns all column indices" do
-        expect(helper.send(:visible_columns, data)).to eq([0, 1, 2])
-      end
-    end
-
-    context "with some empty columns" do
-      let(:data) do
-        [
-          ["Header 1", "Header 2", "Header 3", "Header 4"],
-          [100, nil, 300, Float::NAN],
-          [150, nil, 350, Float::NAN]
-        ]
-      end
-
-      it "returns only non-empty column indices" do
-        expect(helper.send(:visible_columns, data)).to eq([0, 2])
-      end
-    end
-
-    context "with mixed empty columns" do
-      let(:data) do
-        [
-          %w[H1 H2 H3 H4 H5],
-          [100, nil, 300, Float::NAN, 500],
-          [150, Float::NAN, 350, nil, 550]
-        ]
-      end
-
-      it "returns indices of columns with at least one value" do
-        expect(helper.send(:visible_columns, data)).to eq([0, 2, 4])
-      end
-    end
-
-    context "with only headers" do
-      let(:data) do
-        [
-          ["Header 1", "Header 2", "Header 3"]
-        ]
-      end
-
-      it "returns empty array when no data rows exist" do
-        expect(helper.send(:visible_columns, data)).to eq([])
       end
     end
   end
