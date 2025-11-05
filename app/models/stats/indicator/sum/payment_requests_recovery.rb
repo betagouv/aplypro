@@ -9,7 +9,9 @@ module Stats
             column: "pfmps.amount",
             all: ASP::PaymentRequest.for_year(start_year)
                                     .joins(:pfmp)
-                                    .select(&:recovery?)
+                                    .joins(:asp_payment_request_transitions)
+                                    .where(asp_payment_request_transitions: { most_recent: true })
+                                    .where("asp_payment_request_transitions.metadata LIKE ?", "%ORDREREVERSEMENT%")
           )
         end
 
