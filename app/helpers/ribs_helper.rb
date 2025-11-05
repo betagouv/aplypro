@@ -2,7 +2,7 @@
 
 module RibsHelper
   def rib_badge(student)
-    success_badge(student.rib.present?, "Coordonnées bancaires")
+    success_badge(student.rib(current_establishment).present?, "Coordonnées bancaires")
   end
 
   def format_iban(iban)
