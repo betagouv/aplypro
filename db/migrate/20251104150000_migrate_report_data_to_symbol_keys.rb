@@ -58,7 +58,7 @@ class MigrateReportDataToSymbolKeys < ActiveRecord::Migration[8.0]
 
     prefix = row[0...prefix_count]
     old_values = row[prefix_count...(prefix_count + OLD_HEADERS.length)] || []
-    old_values = old_values.ljust(OLD_HEADERS.length, nil) if old_values.length < OLD_HEADERS.length
+    old_values += [nil] * (OLD_HEADERS.length - old_values.length) if old_values.length < OLD_HEADERS.length
     new_values = Array.new(NEW_HEADERS.length, nil)
 
     { 0 => 5, 1 => 6, 2 => 0, 5 => 1, 7 => 3, 9 => 7, 10 => 2, 11 => 4,
