@@ -11,7 +11,18 @@
         %span= @student.rib(current_establishment).name
       %li
         IBAN :
-        %code= @student.rib(current_establishment).iban_to_s
+        - iban = @student.rib(current_establishment).iban_to_s
+        - hide = hide_iban(iban)
+        %code{
+          data: {
+            controller: "hide-iban",
+            hide_iban_target: "text",
+            hide: hide,
+            full: iban,
+            action: "click->hide-iban#toggle"
+          },
+          style: "cursor:pointer;"
+        }= hide
       %li
         BIC :
         %code= @student.rib(current_establishment).bic
