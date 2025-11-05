@@ -56,19 +56,33 @@ describe Stats::Indicator::Count::PfmpsPayable do
     it { is_expected.to eq({ "ENPU" => 1, "MASA" => 2, "ARMEE" => 3, "MER" => 4, "ENPR" => 4 }) }
   end
 
-  describe "#menj_academies_data" do
-    subject { described_class.new(current_start_year).menj_academies_data }
+  describe "excluding paid PFMPs" do
+    before do
+      mef = create(:mef, daily_rate: 1, yearly_cap: 100)
+      establishment = create(:establishment)
+      classe = create(:classe, mef: mef, establishment: establishment)
+      school_year_range = establishment.school_year_range(classe.school_year.start_year)
 
-    include_context "when there is data for payable stats per MENJ academies"
+      3.times do
+        student = create(:student, :asp_ready, establishment: establishment)
+        schooling = create(:schooling, :with_attributive_decision, classe: classe, student: student)
+        schooling.update!(start_date: school_year_range.first, end_date: school_year_range.last)
+        create(:pfmp, :validated, schooling: schooling, day_count: 5,
+                                  start_date: 1.month.ago, end_date: 1.week.ago)
+      end
 
-    it { is_expected.to eq({ "Bordeaux" => 1, "Montpellier" => 3, "Paris" => 2 }) }
-  end
+      2.times do
+        student = create(:student, :asp_ready, establishment: establishment)
+        schooling = create(:schooling, :with_attributive_decision, classe: classe, student: student)
+        schooling.update!(start_date: school_year_range.first, end_date: school_year_range.last)
+        pfmp = create(:pfmp, :validated, schooling: schooling, day_count: 5,
+                                         start_date: 1.month.ago, end_date: 1.week.ago)
+        create(:asp_payment_request, :paid, pfmp: pfmp)
+      end
+    end
 
-  describe "#establishments_data" do
-    subject { described_class.new(current_start_year).establishments_data }
-
-    include_context "when there is data for payable stats per establishments"
-
-    it { is_expected.to eq({ "0000000A" => 1, "0000000B" => 3, "0000000C" => 2 }) }
+    it "excludes already paid PFMPs" do
+      expect(described_class.new(current_start_year).global_data).to eq(3)
+    end
   end
 end
