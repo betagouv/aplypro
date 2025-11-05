@@ -27,7 +27,7 @@ class Report < ApplicationRecord
     students_paid_ratio
     pfmps_paid_count
     pfmps_payable_count
-    pfmp_paid_payable_ratio
+    pfmps_paid_payable_ratio
     pfmps_extended_count
     pfmps_extended_sum
   ].freeze
