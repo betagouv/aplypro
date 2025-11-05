@@ -29,15 +29,15 @@ RSpec.describe Stats::Main do
 
     it "computes the correct percentages" do
       expect(data.length).to eq(4)
-      expect(data.pluck(:BOP)).to contain_exactly("ENPU", "ENPR", "MASA", "MER")
+      expect(data.pluck(:bop)).to contain_exactly("ENPU", "ENPR", "MASA", "MER")
 
-      enpu = data.find { |r| r[:BOP] == "ENPU" }
+      enpu = data.find { |r| r[:bop] == "ENPU" }
       expect(enpu[:attributive_decisions_ratio]).to eq(0.25)
       expect(enpu[:yearly_sum]).to eq(400)
       expect(enpu[:schoolings_count]).to eq(4)
       expect(enpu[:payment_requests_sent_count]).to eq(1)
 
-      enpr = data.find { |r| r[:BOP] == "ENPR" }
+      enpr = data.find { |r| r[:bop] == "ENPR" }
       expect(enpr[:attributive_decisions_ratio]).to eq(0.8)
       expect(enpr[:yearly_sum]).to eq(500)
     end
@@ -50,9 +50,9 @@ RSpec.describe Stats::Main do
 
     it "computes the correct percentages" do
       expect(data.length).to eq(3)
-      expect(data.pluck(:Académie)).to contain_exactly("Bordeaux", "Montpellier", "Paris")
+      expect(data.pluck(:academy)).to contain_exactly("Bordeaux", "Montpellier", "Paris")
 
-      bordeaux = data.find { |r| r[:Académie] == "Bordeaux" }
+      bordeaux = data.find { |r| r[:academy] == "Bordeaux" }
       expect(bordeaux).to include(
         attributive_decisions_ratio: 0.25,
         yearly_sum: 400,
@@ -69,11 +69,11 @@ RSpec.describe Stats::Main do
 
     it "computes the correct percentages" do
       expect(data.length).to eq(3)
-      expect(data.pluck(:UAI)).to contain_exactly("0000000A", "0000000B", "0000000C")
-      establishment_a = data.find { |r| r[:UAI] == "0000000A" }
+      expect(data.pluck(:uai)).to contain_exactly("0000000A", "0000000B", "0000000C")
+      establishment_a = data.find { |r| r[:uai] == "0000000A" }
       expect(establishment_a).to include(
-        "Nom de l'établissement": "0000000A", Ministère: "MINISTERE DE L'EDUCATION NATIONALE",
-        Académie: "Marseille", "Privé/Public": "Public", attributive_decisions_ratio: 0.25,
+        establishment_name: "0000000A", ministry: "MINISTERE DE L'EDUCATION NATIONALE",
+        academy: "Marseille", private_or_public: "Public", attributive_decisions_ratio: 0.25,
         yearly_sum: 400, schoolings_count: 4
       )
     end
