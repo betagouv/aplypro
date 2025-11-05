@@ -10,6 +10,7 @@ module Stats
           students_paid = students.joins(:schoolings)
                                   .joins(pfmps: { payment_requests: :asp_payment_request_transitions })
                                   .where("asp_payment_request_transitions.to_state": :paid)
+                                  .distinct
 
           super(
             subset: students_paid,
