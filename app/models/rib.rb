@@ -50,8 +50,4 @@ class Rib < ApplicationRecord
   def ==(other)
     iban.eql?(other.iban) && bic.eql?(other.bic) && name.eql?(other.name) && owner_type.eql?(other.owner_type)
   end
-
-  def iban_to_s
-    iban&.gsub(/(.{4})/, '\1 ')
-  end
 end

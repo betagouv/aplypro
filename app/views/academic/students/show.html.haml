@@ -1,22 +1,23 @@
 %section.fr-pb-3w
   %h2.fr-h4 Coordonnées bancaires
-  - if @student.rib(current_establishment).nil?
+  - rib = @student.rib(current_establishment)
+  - if rib.nil?
     %p Aucune coordonnée bancaire enregistrée pour le moment.
 
   - else
     %ul
       %li
         Titulaire du compte :
-        %span= @student.rib(current_establishment).name
+        %span= rib.name
       %li
         IBAN :
-        %code= @student.rib(current_establishment).iban_to_s
+        %code= format_iban(rib.iban)
       %li
         BIC :
-        %code= @student.rib(current_establishment).bic
+        %code= rib.bic
       %li
         Dernière modification :
-        %span= format_date @student.rib(current_establishment).updated_at
+        %span= format_date rib.updated_at
 
 %section.fr-pb-3w
   %h2.fr-h4 PFMPs de l'élève
