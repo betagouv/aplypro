@@ -3,7 +3,7 @@
 module Stats
   module Indicator
     module Count
-      class PaymentRequestStates < Stats::Count
+      class PaymentRequestsStates < Stats::Count
         STATE_FOR_TITLE = {
           sent: "envoyées",
           integrated: "intégrées",
@@ -21,12 +21,16 @@ module Stats
           )
         end
 
+        def key
+          :"payment_requests_#{@state}_count"
+        end
+
         def title
           "Dem. #{STATE_FOR_TITLE[@state]}"
         end
 
         def tooltip_key
-          "stats.payment_request_#{@state}"
+          "stats.count.payment_request_#{@state}"
         end
 
         def with_mef_and_establishment

@@ -3,31 +3,32 @@
 module Stats
   module Indicator
     module Count
-      class Pfmps < Stats::Count
+      class AttributiveDecisions < Stats::Count
         def initialize(start_year)
+          schoolings = Schooling.for_year(start_year)
           super(
-            all: Pfmp.for_year(start_year)
+            all: schoolings.with_attributive_decisions
           )
         end
 
         def key
-          :pfmps_count
+          :attributive_decisions_count
         end
 
         def title
-          "Toutes PFMPs"
+          "Nb. DA"
         end
 
         def tooltip_key
-          "stats.count.pfmps"
+          "stats.count.attributive_decisions"
         end
 
         def with_mef_and_establishment
-          Pfmp.joins(schooling: { classe: %i[mef establishment] })
+          Schooling.joins(classe: %i[mef establishment])
         end
 
         def with_establishment
-          Pfmp.joins(schooling: { classe: :establishment })
+          Schooling.joins(classe: :establishment)
         end
       end
     end

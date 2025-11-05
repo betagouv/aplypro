@@ -2,24 +2,27 @@
 
 module Stats
   module Indicator
-    module Count
-      class Pfmps < Stats::Count
+    module Sum
+      class PfmpsValidated < Stats::Sum
         def initialize(start_year)
+          finished_pfmps = Pfmp.for_year(start_year).finished
+
           super(
-            all: Pfmp.for_year(start_year)
+            column: :amount,
+            all: finished_pfmps.in_state(:validated)
           )
         end
 
         def key
-          :pfmps_count
+          :pfmps_validated_sum
         end
 
         def title
-          "Toutes PFMPs"
+          "Mt. PFMPs validées"
         end
 
         def tooltip_key
-          "stats.count.pfmps"
+          "stats.sum.pfmps_validated"
         end
 
         def with_mef_and_establishment

@@ -12,12 +12,16 @@ module Stats
           )
         end
 
+        def key
+          :yearly_sum
+        end
+
         def title
           "Mt. annuel total"
         end
 
         def tooltip_key
-          "stats.yearly_amounts"
+          "stats.sum.yearly"
         end
 
         def with_mef_and_establishment

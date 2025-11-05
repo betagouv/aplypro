@@ -18,8 +18,8 @@ class StatsController < ApplicationController
     end
 
     @amounts_per_academy = Rails.cache.fetch("amounts_per_academy/#{current_year}", expires_in: 1.week) do
-      sendable_amounts_stats = Stats::Indicator::Sum::PfmpsSendable.new(current_year)
-      academies_data(sendable_amounts_stats, :sum)
+      validated_amounts_stats = Stats::Indicator::Sum::PfmpsValidated.new(current_year)
+      academies_data(validated_amounts_stats, :sum)
     end
   end
 

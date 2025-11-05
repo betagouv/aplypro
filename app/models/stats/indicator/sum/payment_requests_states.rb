@@ -23,12 +23,16 @@ module Stats
           )
         end
 
+        def key
+          :"payment_requests_#{@state}_sum"
+        end
+
         def title
           "Mt. #{STATE_FOR_TITLE[@state]}"
         end
 
         def tooltip_key
-          "stats.payment_amount_#{@state}"
+          "stats.sum.payment_request_#{@state}"
         end
 
         def with_mef_and_establishment

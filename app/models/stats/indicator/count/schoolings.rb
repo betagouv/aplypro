@@ -10,12 +10,16 @@ module Stats
           )
         end
 
+        def key
+          :schoolings_count
+        end
+
         def title
-          "Scolarités"
+          "Nb. scolarités"
         end
 
         def tooltip_key
-          "stats.schoolings"
+          "stats.count.schoolings"
         end
 
         def with_mef_and_establishment

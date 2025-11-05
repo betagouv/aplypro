@@ -3,7 +3,7 @@
 require "rails_helper"
 require "./spec/models/stats/shared_contexts"
 
-describe Stats::Indicator::Count::PaymentRequestStates do
+describe Stats::Indicator::Count::PaymentRequestsStates do
   describe "#global_data" do
     subject { described_class.new(SchoolYear.current.start_year, :sent).global_data }
 

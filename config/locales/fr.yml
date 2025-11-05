@@ -166,6 +166,13 @@ fr:
       establishment:
         uai: "UAI"
         name: "Nom"
+      report:
+        uai: "UAI"
+        establishment_name: "Nom de l'établissement"
+        ministry: "Ministère"
+        academy: "Académie"
+        private_or_public: "Privé/Public"
+        bop: "BOP"
     save_label: "L'enregistrement %{cod} a échoué car :"
     save_labels:
       pfmp: "de la PFMP"

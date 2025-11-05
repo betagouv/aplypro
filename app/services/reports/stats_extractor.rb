@@ -26,11 +26,11 @@ module Reports
 
     def indicator_indices
       {
-        students: Report::HEADERS.index("Scolarités"),
-        pfmps: Report::HEADERS.index("Toutes PFMPs"),
-        validated_pfmps_ratio: Report::HEADERS.index("PFMPs validées"),
-        validated_amount: Report::HEADERS.index("Mt. prêt envoi"),
-        paid_amount: Report::HEADERS.index("Mt. payé")
+        students: Report::HEADERS.index(:schoolings_count),
+        pfmps: Report::HEADERS.index(:pfmps_count),
+        validated_pfmps_count: Report::HEADERS.index(:pfmps_validated_count),
+        validated_amount: Report::HEADERS.index(:pfmps_validated_sum),
+        paid_amount: Report::HEADERS.index(:payment_requests_paid_sum)
       }
     end
   end

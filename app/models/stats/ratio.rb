@@ -33,9 +33,13 @@ module Stats
       subset_counted_per_attribute.to_h do |attribute, subset_count|
         all_count = all_counted_per_attribute[attribute]
         attribute = send(key_map, attribute) if key_map.present?
-        ratio = subset_count.to_f / all_count
+        ratio = calculate_ratio(subset_count, all_count)
         [attribute, ratio]
       end
+    end
+
+    def calculate_ratio(subset_count, all_count)
+      all_count.nil? || all_count.zero? ? 0.0 / 0 : subset_count.to_f / all_count
     end
   end
 end

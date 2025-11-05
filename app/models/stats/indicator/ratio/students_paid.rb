@@ -3,26 +3,30 @@
 module Stats
   module Indicator
     module Ratio
-      class StudentsData < Stats::Ratio
+      class StudentsPaid < Stats::Ratio
         def initialize(start_year)
           students = Student.for_year(start_year)
 
+          students_paid = students.joins(:schoolings)
+                                  .joins(pfmps: { payment_requests: :asp_payment_request_transitions })
+                                  .where("asp_payment_request_transitions.to_state": :paid)
+
           super(
-            subset: students.asp_ready,
+            subset: students_paid,
             all: students.all
           )
         end
 
         def key
-          :students_data_ratio
+          :students_paid_ratio
         end
 
         def title
-          "Part données élèves"
+          "Part élèves payés"
         end
 
         def tooltip_key
-          "stats.ratio.students_data"
+          "stats.ratio.students_paid"
         end
 
         def with_mef_and_establishment

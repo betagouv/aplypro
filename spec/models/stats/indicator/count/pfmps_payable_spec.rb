@@ -3,7 +3,7 @@
 require "rails_helper"
 require "./spec/models/stats/shared_contexts"
 
-describe Stats::Indicator::Sum::PfmpsSendable do
+describe Stats::Indicator::Count::PfmpsPayable do
   let(:current_start_year) { SchoolYear.current.start_year }
 
   describe "#global_data" do
@@ -16,9 +16,9 @@ describe Stats::Indicator::Sum::PfmpsSendable do
     let(:previous_start_year) { current_start_year - 1 }
 
     context "when one school year" do
-      include_context "when there is data for global stats"
+      include_context "when there is data for payable stats globally"
 
-      it { is_expected.to eq 10 }
+      it { is_expected.to eq 2 }
     end
 
     context "when there are PFMPs from different school years" do
@@ -43,7 +43,7 @@ describe Stats::Indicator::Sum::PfmpsSendable do
       end
 
       it "only counts PFMPs from the selected school year" do
-        expect(described_class.new(previous_start_year).global_data).to eq(150)
+        expect(described_class.new(previous_start_year).global_data).to eq(1)
       end
     end
   end
@@ -51,24 +51,24 @@ describe Stats::Indicator::Sum::PfmpsSendable do
   describe "#bops_data" do
     subject { described_class.new(current_start_year).bops_data }
 
-    include_context "when there is data for stats per bops"
+    include_context "when there is data for payable stats per bops"
 
-    it { is_expected.to eq({ "ENPU" => 5.0, "ENPR" => 20, "MASA" => 10.0, "MER" => 20.0, "ARMEE" => 15.0 }) }
+    it { is_expected.to eq({ "ENPU" => 1, "MASA" => 2, "ARMEE" => 3, "MER" => 4, "ENPR" => 4 }) }
   end
 
   describe "#menj_academies_data" do
     subject { described_class.new(current_start_year).menj_academies_data }
 
-    include_context "when there is data for stats per MENJ academies"
+    include_context "when there is data for payable stats per MENJ academies"
 
-    it { is_expected.to eq({ "Bordeaux" => 5.0, "Montpellier" => 15.0, "Paris" => 10.0 }) }
+    it { is_expected.to eq({ "Bordeaux" => 1, "Montpellier" => 3, "Paris" => 2 }) }
   end
 
   describe "#establishments_data" do
     subject { described_class.new(current_start_year).establishments_data }
 
-    include_context "when there is data for stats per establishments"
+    include_context "when there is data for payable stats per establishments"
 
-    it { is_expected.to eq({ "0000000A" => 5.0, "0000000B" => 15.0, "0000000C" => 10.0 }) }
+    it { is_expected.to eq({ "0000000A" => 1, "0000000B" => 3, "0000000C" => 2 }) }
   end
 end

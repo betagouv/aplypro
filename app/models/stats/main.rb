@@ -4,33 +4,49 @@ module Stats
   class Main # rubocop:disable Metrics/ClassLength
     attr_reader :indicators
 
-    def initialize(start_year)
+    def initialize(start_year) # rubocop:disable Metrics/MethodLength
       @school_year = SchoolYear.find_by!(start_year:)
 
       indicators_class = [
+        Indicator::Count::AttributiveDecisions,
         Indicator::Count::Pfmps,
+        Indicator::Count::PfmpsCompleted,
+        Indicator::Count::PfmpsIncompleted,
+        Indicator::Count::PfmpsPaid,
+        Indicator::Count::PfmpsPayable,
+        Indicator::Count::PfmpsExtended,
+        Indicator::Count::PfmpsValidated,
+        Indicator::Count::Ribs,
         Indicator::Count::Schoolings,
+        Indicator::Count::Students,
+        Indicator::Count::StudentsData,
+        Indicator::Count::StudentsPaid,
         Indicator::Ratio::AttributiveDecisions,
         Indicator::Ratio::PfmpsPaidPayable,
+        Indicator::Ratio::PfmpsValidated,
         Indicator::Ratio::Ribs,
         Indicator::Ratio::StudentsData,
-        Indicator::Ratio::PfmpsValidated,
-        Indicator::Sum::PfmpsSendable,
+        Indicator::Ratio::StudentsPaid,
+        Indicator::Sum::PaymentRequestsRecovery,
+        Indicator::Sum::PfmpsCompleted,
+        Indicator::Sum::PfmpsIncompleted,
+        Indicator::Sum::PfmpsExtended,
+        Indicator::Sum::PfmpsValidated,
         Indicator::Sum::Yearly
       ].map { |indicator_class| indicator_class.new(start_year) }
 
       %i[sent integrated paid].each do |state|
-        indicators_class << Indicator::Count::PaymentRequestStates.new(start_year, state)
+        indicators_class << Indicator::Count::PaymentRequestsStates.new(start_year, state)
       end
 
       indicators_class << Indicator::Sum::PaymentRequestsStates.new(start_year, :paid)
 
-      @indicators = indicators_class.index_by { |indicator| indicator.title.to_sym }
+      @indicators = indicators_class.index_by(&:key)
     end
 
     def indicators_with_metadata
-      Report::HEADERS.map do |title|
-        indicator = indicators[title.to_sym]
+      Report::HEADERS.map do |key|
+        indicator = indicators[key]
         next unless indicator
 
         {

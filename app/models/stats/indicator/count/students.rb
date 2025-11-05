@@ -3,31 +3,31 @@
 module Stats
   module Indicator
     module Count
-      class Pfmps < Stats::Count
+      class Students < Stats::Count
         def initialize(start_year)
           super(
-            all: Pfmp.for_year(start_year)
+            all: Student.for_year(start_year).all
           )
         end
 
         def key
-          :pfmps_count
+          :students_count
         end
 
         def title
-          "Toutes PFMPs"
+          "Nb. élèves"
         end
 
         def tooltip_key
-          "stats.count.pfmps"
+          "stats.count.students"
         end
 
         def with_mef_and_establishment
-          Pfmp.joins(schooling: { classe: %i[mef establishment] })
+          Student.joins(schoolings: { classe: %i[mef establishment] })
         end
 
         def with_establishment
-          Pfmp.joins(schooling: { classe: :establishment })
+          Student.joins(schoolings: { classe: :establishment })
         end
       end
     end

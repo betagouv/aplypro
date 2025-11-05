@@ -73,7 +73,7 @@ RSpec.describe Academic::ReportsController do
 
       it "displays tooltip content for indicators" do
         get academic_report_path(report)
-        expect(response.body).to include("Décisions d&#39;attributions éditées")
+        expect(response.body).to include("Part des décisions d&#39;attributions éditées")
       end
     end
 

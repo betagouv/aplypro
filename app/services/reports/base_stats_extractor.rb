@@ -35,14 +35,10 @@ module Reports
         total_establishments: establishments_count,
         total_students: data_row[indices[:students]].to_i,
         total_pfmps: data_row[indices[:pfmps]].to_i,
-        validated_pfmps: calculate_validated_pfmps(data_row, indices),
+        validated_pfmps: data_row[indices[:validated_pfmps_count]].to_i,
         total_validated_amount: data_row[indices[:validated_amount]].to_f,
         total_paid_amount: data_row[indices[:paid_amount]].to_f
       }
-    end
-
-    def calculate_validated_pfmps(data_row, indices)
-      (data_row[indices[:validated_pfmps_ratio]].to_f * data_row[indices[:pfmps]].to_i).round
     end
   end
 end

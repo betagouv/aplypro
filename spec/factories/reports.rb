@@ -11,15 +11,15 @@ FactoryBot.define do
           Array.new(Report::HEADERS.length, 0)
         ],
         "bops_data" => [
-          ["BOP"] + Report::HEADERS,
+          [:bop] + Report::HEADERS,
           ["ENPU"] + Array.new(Report::HEADERS.length, 0)
         ],
         "menj_academies_data" => [
-          ["Académie"] + Report::HEADERS,
+          [:academy] + Report::HEADERS,
           ["Paris"] + Array.new(Report::HEADERS.length, 0)
         ],
         "establishments_data" => [
-          ["UAI", "Nom de l'établissement", "Ministère", "Académie", "Privé/Public"] + Report::HEADERS,
+          %i[uai establishment_name ministry academy private_or_public] + Report::HEADERS,
           ["0010001A", "Lycée Test", "MENJ", "Paris", "Public"] + Array.new(Report::HEADERS.length, 0)
         ]
       }

@@ -2,24 +2,27 @@
 
 module Stats
   module Indicator
-    module Count
-      class Pfmps < Stats::Count
+    module Sum
+      class PfmpsIncompleted < Stats::Sum
         def initialize(start_year)
+          pfmps = Pfmp.for_year(start_year)
+
           super(
-            all: Pfmp.for_year(start_year)
+            column: :amount,
+            all: pfmps.in_state(:pending)
           )
         end
 
         def key
-          :pfmps_count
+          :pfmps_incompleted_sum
         end
 
         def title
-          "Toutes PFMPs"
+          "Mt. PFMPs incomplètes"
         end
 
         def tooltip_key
-          "stats.count.pfmps"
+          "stats.sum.pfmps_incompleted"
         end
 
         def with_mef_and_establishment

@@ -12,12 +12,16 @@ module Stats
           )
         end
 
+        def key
+          :attributive_decisions_ratio
+        end
+
         def title
-          "DA"
+          "Part DA"
         end
 
         def tooltip_key
-          "stats.attributive_decisions"
+          "stats.ratio.attributive_decisions"
         end
 
         def with_mef_and_establishment

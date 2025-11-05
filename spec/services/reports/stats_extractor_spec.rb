@@ -17,13 +17,20 @@ RSpec.describe Reports::StatsExtractor do
   describe "#extract_global_stats" do
     context "when report has valid global data" do
       let(:report) do
+        data_row = Array.new(Report::HEADERS.length, 0)
+        data_row[Report::HEADERS.index(:schoolings_count)] = 1500
+        data_row[Report::HEADERS.index(:pfmps_count)] = 1000
+        data_row[Report::HEADERS.index(:pfmps_validated_count)] = 850
+        data_row[Report::HEADERS.index(:pfmps_validated_sum)] = 120_000
+        data_row[Report::HEADERS.index(:payment_requests_paid_sum)] = 100_000
+
         create(:report, data: {
                  "global_data" => [
-                   ["Headers"],
-                   [nil, nil, 0.85, 0.95, 120_000, 180_000, 1500, 1000, nil, nil, nil, 100_000] # indices matter
+                   Report::HEADERS,
+                   data_row
                  ],
                  "establishments_data" => [
-                   ["Header"],
+                   %i[uai establishment_name ministry academy private_or_public] + Report::HEADERS,
                    ["Row1"],
                    ["Row2"]
                  ]
@@ -62,10 +69,17 @@ RSpec.describe Reports::StatsExtractor do
 
     context "when establishments_data is nil" do
       let(:report) do
+        data_row = Array.new(Report::HEADERS.length, 0)
+        data_row[Report::HEADERS.index(:schoolings_count)] = 1500
+        data_row[Report::HEADERS.index(:pfmps_count)] = 1000
+        data_row[Report::HEADERS.index(:pfmps_validated_count)] = 850
+        data_row[Report::HEADERS.index(:pfmps_validated_sum)] = 120_000
+        data_row[Report::HEADERS.index(:payment_requests_paid_sum)] = 100_000
+
         create(:report, data: {
                  "global_data" => [
-                   ["Headers"],
-                   [nil, nil, 0.85, 0.95, 120_000, 180_000, 1500, 1000, nil, nil, nil, 100_000]
+                   Report::HEADERS,
+                   data_row
                  ],
                  "establishments_data" => nil
                })

@@ -2,24 +2,28 @@
 
 module Stats
   module Indicator
-    module Count
-      class Pfmps < Stats::Count
+    module Sum
+      class PfmpsExtended < Stats::Sum
         def initialize(start_year)
           super(
+            column: :amount,
             all: Pfmp.for_year(start_year)
+                     .joins(:schooling)
+                     .where.not(schoolings: { end_date: nil })
+                     .where("pfmps.end_date > schoolings.end_date")
           )
         end
 
         def key
-          :pfmps_count
+          :pfmps_extended_sum
         end
 
         def title
-          "Toutes PFMPs"
+          "Mt. PFMPs reportées"
         end
 
         def tooltip_key
-          "stats.count.pfmps"
+          "stats.sum.pfmps_extended"
         end
 
         def with_mef_and_establishment

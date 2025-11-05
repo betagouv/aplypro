@@ -11,13 +11,20 @@ RSpec.describe Academic::StatsExtractor do
   describe "#extract_stats_from_report" do
     context "when report has valid academy data" do
       let(:report) do
+        data_row = Array.new(Report::HEADERS.length, 0)
+        data_row[Report::HEADERS.index(:schoolings_count)] = 1500
+        data_row[Report::HEADERS.index(:pfmps_count)] = 1000
+        data_row[Report::HEADERS.index(:pfmps_validated_count)] = 850
+        data_row[Report::HEADERS.index(:pfmps_validated_sum)] = 120_000
+        data_row[Report::HEADERS.index(:payment_requests_paid_sum)] = 100_000
+
         create(:report, data: {
                  "menj_academies_data" => [
-                   ["Académie", "DA", "RIBs", "PFMPs validées", "Données élèves", "Mt. prêt envoi", "Mt. annuel total", "Scolarités", "Toutes PFMPs", "Sent", "Integrated", "Paid", "Mt. payé"], # rubocop:disable Layout/LineLength
-                   ["Lyon", 100, 95, 0.85, 0.95, 120_000, 180_000, 1500, 1000, 80, 75, 70, 100_000]
+                   [:Académie] + Report::HEADERS,
+                   ["Lyon"] + data_row
                  ],
                  "establishments_data" => [
-                   ["UAI", "Nom", "Ministère", "Lyon", "Public"],
+                   %i[uai establishment_name ministry academy private_or_public] + Report::HEADERS,
                    ["0010001A", "Lycée 1", "MENJ", "Lyon", "Public"],
                    ["0010002B", "Lycée 2", "MENJ", "Lyon", "Public"]
                  ]
@@ -63,12 +70,17 @@ RSpec.describe Academic::StatsExtractor do
 
     context "when establishments_data is blank" do
       let(:report) do
+        data_row = Array.new(Report::HEADERS.length, 0)
+        data_row[Report::HEADERS.index(:schoolings_count)] = 1500
+        data_row[Report::HEADERS.index(:pfmps_count)] = 1000
+        data_row[Report::HEADERS.index(:pfmps_validated_count)] = 850
+        data_row[Report::HEADERS.index(:pfmps_validated_sum)] = 120_000
+        data_row[Report::HEADERS.index(:payment_requests_paid_sum)] = 100_000
+
         create(:report, data: {
                  "menj_academies_data" => [
-                   # rubocop:disable Layout/LineLength
-                   ["Académie", "DA", "RIBs", "PFMPs validées", "Données élèves", "Mt. prêt envoi", "Mt. annuel total", "Scolarités", "Toutes PFMPs", "Sent", "Integrated", "Paid", "Mt. payé"],
-                   # rubocop:enable Layout/LineLength
-                   ["Lyon", 100, 95, 0.85, 0.95, 120_000, 180_000, 1500, 1000, 80, 75, 70, 100_000]
+                   [:Académie] + Report::HEADERS,
+                   ["Lyon"] + data_row
                  ],
                  "establishments_data" => nil
                })

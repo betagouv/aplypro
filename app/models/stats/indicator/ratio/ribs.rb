@@ -12,12 +12,16 @@ module Stats
           )
         end
 
+        def key
+          :ribs_ratio
+        end
+
         def title
-          "Coord. bancaires"
+          "Part coord. bancaires"
         end
 
         def tooltip_key
-          "stats.ribs"
+          "stats.ratio.ribs"
         end
 
         def with_mef_and_establishment
