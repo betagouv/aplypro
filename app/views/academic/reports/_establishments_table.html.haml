@@ -19,7 +19,7 @@
                     = t("tooltips.#{@indicators_metadata[index - 5][:tooltip_key]}")
       %tbody
         - @establishments_data[1..].each do |row|
-          - establishment = Establishment.find_by(uai: row[0])
+          - establishment = @establishments_hash[row[0]]
           %tr
             - row.each_with_index do |value, index|
               - indicator_type = index > 4 ? @indicators_metadata[index - 5]&.dig(:type) : nil

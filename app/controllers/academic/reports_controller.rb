@@ -58,6 +58,7 @@ module Academic
       @academy_stats = academy_statistics
       set_report_data
       @establishments_data = filtered_establishments_data_from_report
+      @establishments_hash = load_establishments_hash
       @academy_stats_progressions = calculate_academy_progressions
     end
 
@@ -96,6 +97,11 @@ module Academic
       end
 
       [titles, *filtered_rows]
+    end
+
+    def load_establishments_hash
+      establishment_uais = @establishments_data[1..].map(&:first)
+      Establishment.where(uai: establishment_uais).index_by(&:uai)
     end
 
     def calculate_academy_progressions
