@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Academic
-  class ReportsController < Academic::ApplicationController
+  class ReportsController < Academic::ApplicationController # rubocop:disable Metrics/ClassLength
     include Zipline
 
     before_action :set_report_context, only: %i[show global export]
