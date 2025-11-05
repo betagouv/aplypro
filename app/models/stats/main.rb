@@ -81,24 +81,24 @@ module Stats
 
     def bops_data
       %w[ENPU ENPR MASA MER].map do |bop|
-        initialize_indicators({ BOP: bop }, :bops_data)
+        initialize_indicators({ bop: bop }, :bops_data)
       end
     end
 
     def menj_academies_data
       academies.map do |academy|
-        initialize_indicators({ Académie: academy }, :menj_academies_data)
+        initialize_indicators({ academy: academy }, :menj_academies_data)
       end
     end
 
     def establishments_data
       establishments.map do |uai, name, academy, private_code, ministry|
         specific_indicators = {
-          UAI: uai,
-          "Nom de l'établissement": name,
-          Ministère: ministry,
-          Académie: academy,
-          "Privé/Public": format_private_status(private_code)
+          uai: uai,
+          establishment_name: name,
+          ministry: ministry,
+          academy: academy,
+          private_or_public: format_private_status(private_code)
         }
         initialize_indicators(specific_indicators, :establishments_data)
       end
