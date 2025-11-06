@@ -33,7 +33,17 @@
                 = link_to t("academic.reports.next_report"), academic_report_path(@report.next_report), class: "fr-btn fr-btn--sm fr-btn--secondary"
     = render "stats_cards", stats: @academy_stats, progressions: @academy_stats_progressions
 
-    = render "establishments_table"
+    .fr-grid-row.fr-grid-row--gutters.fr-mt-4w{data: { controller: "establishments-table", "establishments-table-src-value": establishments_table_academic_report_path(@report) }}
+      .fr-col-12
+        %button.fr-btn.fr-btn--secondary{type: "button", data: { action: "click->establishments-table#toggle" }}
+          %span{data: { "establishments-table-target": "toggleText" }}
+            Afficher le détail des établissements
+
+      .fr-col-12.hidden{data: { "establishments-table-target": "wrapper" }}
+        = turbo_frame_tag "establishments-table-frame", data: { "establishments-table-target": "frame" } do
+          .loading-container{style: "min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center;"}
+            %i.fr-icon-refresh-line.fr-icon--lg{style: "margin-bottom: 1rem;"}
+            %p.fr-text--lg Chargement du détail des établissements...
 
   .fr-container
     .fr-grid-row.fr-grid-row--gutters.fr-mt-6w

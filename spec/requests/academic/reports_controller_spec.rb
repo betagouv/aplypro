@@ -75,6 +75,47 @@ RSpec.describe Academic::ReportsController do
         get academic_report_path(report)
         expect(response.body).to include("Part des décisions d&#39;attributions éditées")
       end
+
+      it "displays toggle button for establishments table" do
+        get academic_report_path(report)
+        expect(response).to have_http_status(:success)
+        expect(response.body).to include("Afficher le détail des établissements")
+        expect(response.body).to include("establishments-table")
+      end
+
+      it "includes turbo frame for lazy-loading establishments" do
+        get academic_report_path(report)
+        expect(response).to have_http_status(:success)
+        expect(response.body).to include("turbo-frame")
+        expect(response.body).to include("establishments-table-frame")
+      end
+    end
+
+    context "when accessing establishments table endpoint" do
+      let(:report) { create(:report) }
+
+      before { report }
+
+      it "renders the establishments table without layout" do
+        get establishments_table_academic_report_path(report)
+        expect(response).to have_http_status(:success)
+        expect(response.body).to include("turbo-frame")
+        expect(response.body).to include("establishments-table-frame")
+        expect(response.body).not_to include("Chargement du détail")
+      end
+
+      context "when accessing global view as admin" do
+        before do
+          allow_any_instance_of(Academic::User).to receive(:admin?).and_return(true) # rubocop:disable RSpec/AnyInstance
+        end
+
+        it "renders the establishments table for global view" do
+          get establishments_table_academic_report_path(report, view_type: "global")
+          expect(response).to have_http_status(:success)
+          expect(response.body).to include("turbo-frame")
+          expect(response.body).to include("establishments-table-frame")
+        end
+      end
     end
 
     context "when accessing a specific report" do
