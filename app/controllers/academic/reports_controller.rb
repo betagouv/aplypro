@@ -4,7 +4,7 @@ module Academic
   class ReportsController < Academic::ApplicationController # rubocop:disable Metrics/ClassLength
     include Zipline
 
-    before_action :set_report_context, only: %i[show global export]
+    before_action :set_report_context, only: %i[show global export establishments_table]
 
     def index
       infer_page_title
@@ -33,6 +33,24 @@ module Academic
       zipline(export_files, export_filename)
     end
 
+    def establishments_table
+      set_report_data
+
+      if params[:view_type] == "global"
+        return redirect_unauthorized unless current_user.admin?
+
+        @establishments_data = @report.data["establishments_data"]
+      else
+        @establishments_data = filtered_establishments_data_from_report
+      end
+
+      @establishments_hash = load_establishments_hash
+
+      respond_to do |format|
+        format.html { render "establishments_table", layout: false }
+      end
+    end
+
     private
 
     def set_report_context
@@ -57,14 +75,11 @@ module Academic
     def prepare_statistics_data
       @academy_stats = academy_statistics
       set_report_data
-      @establishments_data = filtered_establishments_data_from_report
-      @establishments_hash = load_establishments_hash
       @academy_stats_progressions = calculate_academy_progressions
     end
 
     def prepare_global_statistics_data
       set_report_data
-      @establishments_data = @report.data["establishments_data"]
       @global_stats = Reports::StatsExtractor.extract_global_stats(@report)
       @global_stats_progressions = calculate_global_progressions
     end

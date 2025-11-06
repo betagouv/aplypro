@@ -1,10 +1,4 @@
-.fr-grid-row.fr-grid-row--gutters.fr-mt-4w
-  .fr-col-12
-    %button.fr-btn.fr-btn--secondary#toggle-establishments-btn{type: "button", onclick: "toggleEstablishments()"}
-      %span#establishments-toggle-text
-        = "Afficher le détail des établissements (#{@establishments_data.length - 1})"
-
-#establishments-table-wrapper.hidden
+= turbo_frame_tag "establishments-table-frame" do
   .fr-table.fr-table--bordered.stats-table-container
     %table
       %thead
@@ -28,18 +22,3 @@
                   = link_to value, academic_establishment_path(establishment)
                 - else
                   = format_stat_value(value, indicator_type: indicator_type)
-
-:javascript
-  function toggleEstablishments() {
-    const wrapper = document.getElementById('establishments-table-wrapper');
-    const text = document.getElementById('establishments-toggle-text');
-    const count = #{@establishments_data.length - 1};
-
-    if (wrapper.classList.contains('hidden')) {
-      wrapper.classList.remove('hidden');
-      text.textContent = 'Masquer le détail des établissements (' + count + ')';
-    } else {
-      wrapper.classList.add('hidden');
-      text.textContent = 'Afficher le détail des établissements (' + count + ')';
-    }
-  }

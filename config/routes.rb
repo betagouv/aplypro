@@ -70,6 +70,7 @@ Rails.application.routes.draw do
       member do
         get :global
         post :export
+        get :establishments_table
       end
     end
 
