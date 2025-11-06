@@ -12,18 +12,15 @@
         %span= rib.name
       %li
         IBAN :
-        - iban = format_iban(rib.iban)
-        - hide = hide_format_iban(iban)
         %code{
           data: {
             controller: "hide-iban",
             hide_iban_target: "text",
-            hide: hide,
-            full: iban,
             action: "click->hide-iban#toggle"
           },
+          class: "iban-blur",
           style: "cursor:pointer;"
-        }= hide
+        }= format_iban(rib.iban)
       %li
         BIC :
         %code= rib.bic

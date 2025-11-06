@@ -393,3 +393,12 @@ nav {
   padding: 0.25rem;
   margin-left: 0.25rem;
 }
+
+ .iban-blur {
+   filter: blur(6px);
+   transition: filter 0.2s ease;
+ }
+
+ .iban-blur:hover {
+   filter: blur(0px);
+ }
