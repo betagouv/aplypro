@@ -17,7 +17,8 @@
 
     .fr-mt-2w.gray-text
       Coordonnées bancaires utilisées :
-      %strong= format_iban(payment_request.rib&.iban) || format_iban(payment_request.reconstructed_iban) || format_iban(payment_request.student.rib(current_establishment)&.iban) || "manquantes"
+      - iban = [payment_request.rib&.iban, payment_request.reconstructed_iban, payment_request.student&.rib(current_establishment)&.iban].compact_blank.first
+      %strong= iban ? format_iban(iban) : "manquantes"
 
     .fr-mt-2w.gray-text
       - num_presta_doss = @pfmp.num_presta_doss

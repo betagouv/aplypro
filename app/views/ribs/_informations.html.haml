@@ -1,0 +1,39 @@
+%section.fr-pb-3w
+  %h2.fr-h4 Coordonnées bancaires
+  - rib = student.rib(current_establishment)
+  - if rib.nil?
+    %p Aucune coordonnée bancaire enregistrée pour le moment.
+
+    - if display_buttons
+      = button_to "Saisir les coordonnées bancaires", new_student_rib_path(student), class: 'fr-btn', disabled: !student.any_classes_in_establishment?(current_establishment), method: :get
+  - else
+    %ul
+      %li
+        Titulaire du compte :
+        %span= rib.name
+      %li
+        IBAN :
+        %code{
+          data: {
+            controller: "hide-iban",
+            hide_iban_target: "text",
+            action: "click->hide-iban#toggle"
+          },
+          class: "iban-blur",
+          style: "cursor:pointer;"
+        }= format_iban(rib.iban)
+      %li
+        BIC :
+        %code= rib.bic
+      %li
+        Dernière modification :
+        %span= format_date rib.updated_at
+
+    - if display_buttons
+      .fr-col-md-7
+      - if rib.readonly?
+        = dsfr_alert(type: :warning, size: :sm, html_attributes: { class: 'fr-my-3w' }) do
+          %p Ces coordonnées bancaires ne sont pas modifiables car elles sont actuellement utilisées dans une ou plusieurs requêtes de paiement.
+
+      .fr-btns-group.fr-btns-group--inline
+        %li= button_to "Modifier les coordonnées bancaires", edit_student_rib_path(student, rib), class: 'fr-btn fr-btn--secondary', method: :get
