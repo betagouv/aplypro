@@ -8,8 +8,8 @@ module Stats
           pfmp = Pfmp.for_year(start_year)
 
           super(
-            all: pfmp.joins(:payment_requests)
-                     .merge(ASP::PaymentRequest.in_state(:paid))
+            all: pfmp.joins(payment_requests: :asp_payment_request_transitions)
+                     .where(asp_payment_request_transitions: { most_recent: true, to_state: "paid" })
                      .distinct
           )
         end
