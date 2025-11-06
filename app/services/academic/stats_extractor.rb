@@ -14,7 +14,7 @@ module Academic
     private
 
     def extract_data_row
-      menj_data = @report.data["menj_academies_data"]
+      menj_data = data_extractor.extract(:menj_academies_data)
       return nil if menj_data.blank?
 
       academy_label = academy_label_for_code
@@ -22,7 +22,7 @@ module Academic
     end
 
     def count_establishments
-      establishments_data = @report.data["establishments_data"]
+      establishments_data = data_extractor.extract(:establishments_data)
       return 0 if establishments_data.blank?
 
       establishments_data[1..].count { |row| row[3] == academy_label_for_code }

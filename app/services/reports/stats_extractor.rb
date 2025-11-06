@@ -13,14 +13,14 @@ module Reports
     private
 
     def extract_data_row
-      global_data = @report.data["global_data"]
+      global_data = data_extractor.extract(:global_data)
       return nil if global_data.blank? || global_data.length < 2
 
       global_data[1]
     end
 
     def count_establishments
-      establishments_data = @report.data["establishments_data"]
+      establishments_data = data_extractor.extract(:establishments_data)
       establishments_data&.length.to_i - 1
     end
 

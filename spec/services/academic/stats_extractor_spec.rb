@@ -6,11 +6,12 @@ RSpec.describe Academic::StatsExtractor do
   subject(:extractor) { described_class.new(report, academy_code) }
 
   let(:academy_code) { "10" }
-  let(:report) { create(:report) }
+  let!(:full_report) { create(:report) }
+  let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
   describe "#extract_stats_from_report" do
     context "when report has valid academy data" do
-      let(:report) do
+      let!(:full_report) do
         data_row = Array.new(Report::HEADERS.length, 0)
         data_row[Report::HEADERS.index(:schoolings_count)] = 1500
         data_row[Report::HEADERS.index(:pfmps_count)] = 1000
@@ -30,6 +31,7 @@ RSpec.describe Academic::StatsExtractor do
                  ]
                })
       end
+      let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
       it "returns stats hash for the academy" do
         result = extractor.extract_stats_from_report
@@ -46,7 +48,7 @@ RSpec.describe Academic::StatsExtractor do
     end
 
     context "when academy is not found in data" do
-      let(:report) do
+      let!(:full_report) do
         create(:report, data: {
                  "menj_academies_data" => [
                    %w[Académie Stats],
@@ -54,6 +56,7 @@ RSpec.describe Academic::StatsExtractor do
                  ]
                })
       end
+      let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
       it "returns empty hash" do
         expect(extractor.extract_stats_from_report).to eq({})
@@ -61,7 +64,8 @@ RSpec.describe Academic::StatsExtractor do
     end
 
     context "when menj_academies_data is blank" do
-      let(:report) { create(:report, data: { "menj_academies_data" => nil }) }
+      let!(:full_report) { create(:report, data: { "menj_academies_data" => nil }) }
+      let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
       it "returns empty hash" do
         expect(extractor.extract_stats_from_report).to eq({})
@@ -69,7 +73,7 @@ RSpec.describe Academic::StatsExtractor do
     end
 
     context "when establishments_data is blank" do
-      let(:report) do
+      let!(:full_report) do
         data_row = Array.new(Report::HEADERS.length, 0)
         data_row[Report::HEADERS.index(:schoolings_count)] = 1500
         data_row[Report::HEADERS.index(:pfmps_count)] = 1000
@@ -85,6 +89,7 @@ RSpec.describe Academic::StatsExtractor do
                  "establishments_data" => nil
                })
       end
+      let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
       it "counts establishments as 0" do
         result = extractor.extract_stats_from_report

@@ -5,6 +5,7 @@ module Academic
     include Zipline
 
     before_action :set_report_context, only: %i[show global export establishments_table]
+    before_action :set_data_extractor, only: %i[show global export establishments_table]
 
     def index
       infer_page_title
@@ -39,7 +40,7 @@ module Academic
       if params[:view_type] == "global"
         return redirect_unauthorized unless current_user.admin?
 
-        @establishments_data = @report.data["establishments_data"]
+        @establishments_data = @data_extractor.extract(:establishments_data)
       else
         @establishments_data = filtered_establishments_data_from_report
       end
@@ -57,15 +58,20 @@ module Academic
       infer_page_title
       @inhibit_banner = true
       @inhibit_breadcrumb = true
-      @report = Report.find(params[:id])
+      @report = Report.select(:id, :school_year_id, :created_at).find(params[:id])
       @current_year = @report.school_year.start_year
       @stats = Stats::Main.new(@current_year)
 
-      @comparable_reports = Report.where(school_year: @report.school_year)
+      @comparable_reports = Report.select(:id, :school_year_id, :created_at)
+                                  .where(school_year: @report.school_year)
                                   .where(created_at: ...@report.created_at)
                                   .order(created_at: :desc)
 
       @comparison_report = determine_comparison_report
+    end
+
+    def set_data_extractor
+      @data_extractor = Reports::DataExtractor.new(@report)
     end
 
     def redirect_unauthorized
@@ -85,9 +91,10 @@ module Academic
     end
 
     def set_report_data
-      @global_data = @report.data["global_data"]
-      @bops_data = @report.data["bops_data"]
-      @menj_academies_data = @report.data["menj_academies_data"]
+      extracted_data = @data_extractor.extract(:global_data, :bops_data, :menj_academies_data)
+      @global_data = extracted_data[:global_data]
+      @bops_data = extracted_data[:bops_data]
+      @menj_academies_data = extracted_data[:menj_academies_data]
       @indicators_metadata = @stats.indicators_with_metadata
     end
 
@@ -96,7 +103,7 @@ module Academic
     end
 
     def filtered_establishments_data_from_report
-      full_data = @report.data["establishments_data"]
+      full_data = @data_extractor.extract(:establishments_data)
       titles = full_data.first
       establishment_rows = full_data[1..]
 
@@ -140,8 +147,7 @@ module Academic
     end
 
     def export_files
-      csv_exporter = Reports::CSVExporter.new(@report)
-      csv_exporter.csv_files.map do |filename, content|
+      Reports::CSVExporter.new(@report).csv_files.map do |filename, content|
         [StringIO.new(content), filename]
       end
     end
