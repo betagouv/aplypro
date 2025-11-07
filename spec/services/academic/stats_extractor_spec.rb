@@ -9,7 +9,7 @@ RSpec.describe Academic::StatsExtractor do
   let!(:full_report) { create(:report) }
   let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
-  describe "#extract_stats_from_report" do
+  describe "#calculate_stats" do
     context "when report has valid academy data" do
       let!(:full_report) do
         data_row = Array.new(Report::HEADERS.length, 0)
@@ -34,7 +34,7 @@ RSpec.describe Academic::StatsExtractor do
       let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
       it "returns stats hash for the academy" do
-        result = extractor.extract_stats_from_report
+        result = extractor.calculate_stats
 
         expect(result).to include(
           total_establishments: 2,
@@ -59,7 +59,7 @@ RSpec.describe Academic::StatsExtractor do
       let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
       it "returns empty hash" do
-        expect(extractor.extract_stats_from_report).to eq({})
+        expect(extractor.calculate_stats).to eq({})
       end
     end
 
@@ -68,7 +68,7 @@ RSpec.describe Academic::StatsExtractor do
       let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
       it "returns empty hash" do
-        expect(extractor.extract_stats_from_report).to eq({})
+        expect(extractor.calculate_stats).to eq({})
       end
     end
 
@@ -92,7 +92,7 @@ RSpec.describe Academic::StatsExtractor do
       let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
       it "counts establishments as 0" do
-        result = extractor.extract_stats_from_report
+        result = extractor.calculate_stats
         expect(result[:total_establishments]).to eq(0)
       end
     end

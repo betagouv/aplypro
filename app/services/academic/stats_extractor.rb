@@ -1,20 +1,16 @@
 # frozen_string_literal: true
 
 module Academic
-  class StatsExtractor < Reports::BaseStatsExtractor
+  class StatsExtractor < Reports::BaseExtractor
     def initialize(report, academy_code)
       super(report)
       @academy_code = academy_code
     end
 
-    def extract_stats_from_report(_report = @report)
-      extract_stats
-    end
-
     private
 
     def extract_data_row
-      menj_data = data_extractor.extract(:menj_academies_data)
+      menj_data = extract(:menj_academies_data)
       return nil if menj_data.blank?
 
       academy_label = academy_label_for_code
@@ -22,7 +18,7 @@ module Academic
     end
 
     def count_establishments
-      establishments_data = data_extractor.extract(:establishments_data)
+      establishments_data = extract(:establishments_data)
       return 0 if establishments_data.blank?
 
       establishments_data[1..].count { |row| row[3] == academy_label_for_code }

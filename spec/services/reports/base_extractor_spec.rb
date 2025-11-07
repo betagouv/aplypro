@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Reports::DataExtractor do
+RSpec.describe Reports::BaseExtractor do
   subject(:extractor) { described_class.new(report) }
 
   let(:school_year) { SchoolYear.find_or_create_by(start_year: 2024) }
@@ -73,7 +73,7 @@ RSpec.describe Reports::DataExtractor do
 
       it "raises DataAlreadyLoadedError" do
         expect { extractor }.to raise_error(
-          Reports::DataExtractor::DataAlreadyLoadedError,
+          Reports::BaseExtractor::DataAlreadyLoadedError,
           /Report was loaded with data column/
         )
       end

@@ -1,23 +1,43 @@
 # frozen_string_literal: true
 
 module Reports
-  class BaseStatsExtractor
+  class BaseExtractor
+    class DataAlreadyLoadedError < StandardError; end
+
     def initialize(report)
       @report = report
-      @data_extractor = Reports::DataExtractor.new(report)
+      validate_report_not_loaded!
+      @cache = {}
     end
 
-    def extract_stats
+    def extract(*keys)
+      keys_to_fetch = keys.reject { |key| @cache.key?(key) }
+      fetch_from_database(keys_to_fetch) if keys_to_fetch.any?
+
+      keys.size == 1 ? @cache[keys.first] : @cache.slice(*keys)
+    end
+
+    def calculate_stats
       data_row = extract_data_row
       return {} if data_row.nil?
 
       establishments_count = count_establishments
-      build_stats_hash(data_row, establishments_count)
+      build_aggregated_stats(data_row, establishments_count)
     end
 
     private
 
-    attr_reader :data_extractor
+    def validate_report_not_loaded!
+      return unless @report.has_attribute?(:data)
+
+      raise DataAlreadyLoadedError, "Report was loaded with data column"
+    end
+
+    def fetch_from_database(keys)
+      select_clauses = keys.map { |key| "data -> '#{key}' as #{key}" }.join(", ")
+      result = @report.class.select(select_clauses).find(@report.id)
+      keys.each { |key| @cache[key] = result.public_send(key) }
+    end
 
     def extract_data_row
       raise NotImplementedError, "Subclasses must implement extract_data_row"
@@ -31,7 +51,7 @@ module Reports
       raise NotImplementedError, "Subclasses must implement indicator_indices"
     end
 
-    def build_stats_hash(data_row, establishments_count)
+    def build_aggregated_stats(data_row, establishments_count)
       indices = indicator_indices
 
       {
