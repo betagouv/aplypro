@@ -4,6 +4,7 @@ module Reports
   class BaseStatsExtractor
     def initialize(report)
       @report = report
+      @data_extractor = Reports::DataExtractor.new(report)
     end
 
     def extract_stats
@@ -15,6 +16,8 @@ module Reports
     end
 
     private
+
+    attr_reader :data_extractor
 
     def extract_data_row
       raise NotImplementedError, "Subclasses must implement extract_data_row"

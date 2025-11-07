@@ -5,7 +5,8 @@ require "rails_helper"
 RSpec.describe Reports::StatsExtractor do
   subject(:extractor) { described_class.new(report) }
 
-  let(:report) { create(:report) }
+  let!(:full_report) { create(:report) }
+  let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
   describe ".extract_global_stats" do
     it "delegates to instance method" do
@@ -16,7 +17,7 @@ RSpec.describe Reports::StatsExtractor do
 
   describe "#extract_global_stats" do
     context "when report has valid global data" do
-      let(:report) do
+      let!(:full_report) do
         data_row = Array.new(Report::HEADERS.length, 0)
         data_row[Report::HEADERS.index(:schoolings_count)] = 1500
         data_row[Report::HEADERS.index(:pfmps_count)] = 1000
@@ -36,6 +37,7 @@ RSpec.describe Reports::StatsExtractor do
                  ]
                })
       end
+      let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
       it "returns stats hash" do
         result = extractor.extract_global_stats
@@ -52,7 +54,8 @@ RSpec.describe Reports::StatsExtractor do
     end
 
     context "when global_data is blank" do
-      let(:report) { create(:report, data: { "global_data" => [] }) }
+      let!(:full_report) { create(:report, data: { "global_data" => [] }) }
+      let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
       it "returns empty hash" do
         expect(extractor.extract_global_stats).to eq({})
@@ -60,7 +63,8 @@ RSpec.describe Reports::StatsExtractor do
     end
 
     context "when global_data has only headers" do
-      let(:report) { create(:report, data: { "global_data" => [["Headers"]] }) }
+      let!(:full_report) { create(:report, data: { "global_data" => [["Headers"]] }) }
+      let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
       it "returns empty hash" do
         expect(extractor.extract_global_stats).to eq({})
@@ -68,7 +72,7 @@ RSpec.describe Reports::StatsExtractor do
     end
 
     context "when establishments_data is nil" do
-      let(:report) do
+      let!(:full_report) do
         data_row = Array.new(Report::HEADERS.length, 0)
         data_row[Report::HEADERS.index(:schoolings_count)] = 1500
         data_row[Report::HEADERS.index(:pfmps_count)] = 1000
@@ -84,6 +88,7 @@ RSpec.describe Reports::StatsExtractor do
                  "establishments_data" => nil
                })
       end
+      let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
       it "counts establishments as 0" do
         result = extractor.extract_global_stats

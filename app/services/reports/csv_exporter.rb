@@ -9,11 +9,13 @@ module Reports
     end
 
     def csv_files
+      data_extractor = Reports::DataExtractor.new(report)
+      extracted_data = data_extractor.extract(:global_data, :bops_data, :menj_academies_data, :establishments_data)
       {
-        "statistiques_globales.csv" => convert_to_csv(report.data["global_data"]),
-        "statistiques_bops.csv" => convert_to_csv(report.data["bops_data"]),
-        "statistiques_academies_menj.csv" => convert_to_csv(report.data["menj_academies_data"]),
-        "statistiques_etablissements.csv" => convert_to_csv(report.data["establishments_data"])
+        "statistiques_globales.csv" => convert_to_csv(extracted_data[:global_data]),
+        "statistiques_bops.csv" => convert_to_csv(extracted_data[:bops_data]),
+        "statistiques_academies_menj.csv" => convert_to_csv(extracted_data[:menj_academies_data]),
+        "statistiques_etablissements.csv" => convert_to_csv(extracted_data[:establishments_data])
       }
     end
 
