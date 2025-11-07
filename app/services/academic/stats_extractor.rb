@@ -17,13 +17,6 @@ module Academic
       menj_data[1..].find { |row| row[0] == academy_label }
     end
 
-    def count_establishments
-      establishments_data = extract(:establishments_data)
-      return 0 if establishments_data.blank?
-
-      establishments_data[1..].count { |row| row[3] == academy_label_for_code }
-    end
-
     def indicator_indices
       offset = 1 # menj_academies_data has "Académie" prefix column
       {
