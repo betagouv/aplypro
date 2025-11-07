@@ -31,8 +31,7 @@ module Reports
       data_row = extract_data_row
       return {} if data_row.nil?
 
-      establishments_count = count_establishments
-      build_aggregated_stats(data_row, establishments_count)
+      build_aggregated_stats(data_row)
     end
 
     private
@@ -67,19 +66,14 @@ module Reports
       raise NotImplementedError, "Subclasses must implement extract_data_row"
     end
 
-    def count_establishments
-      raise NotImplementedError, "Subclasses must implement count_establishments"
-    end
-
     def indicator_indices
       raise NotImplementedError, "Subclasses must implement indicator_indices"
     end
 
-    def build_aggregated_stats(data_row, establishments_count)
+    def build_aggregated_stats(data_row)
       indices = indicator_indices
 
       {
-        total_establishments: establishments_count,
         total_students: data_row[indices[:students]].to_i,
         total_pfmps: data_row[indices[:pfmps]].to_i,
         validated_pfmps: data_row[indices[:validated_pfmps_count]].to_i,

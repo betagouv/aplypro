@@ -36,7 +36,6 @@ RSpec.describe Reports::StatsExtractor do
         result = extractor.calculate_stats
 
         expect(result).to include(
-          total_establishments: 2,
           total_students: 1500,
           total_pfmps: 1000,
           validated_pfmps: 850,
@@ -61,31 +60,6 @@ RSpec.describe Reports::StatsExtractor do
 
       it "returns empty hash" do
         expect(extractor.calculate_stats).to eq({})
-      end
-    end
-
-    context "when establishments_data is nil" do
-      let!(:full_report) do
-        data_row = Array.new(Report::HEADERS.length, 0)
-        data_row[Report::HEADERS.index(:schoolings_count)] = 1500
-        data_row[Report::HEADERS.index(:pfmps_count)] = 1000
-        data_row[Report::HEADERS.index(:pfmps_validated_count)] = 850
-        data_row[Report::HEADERS.index(:pfmps_validated_sum)] = 120_000
-        data_row[Report::HEADERS.index(:payment_requests_paid_sum)] = 100_000
-
-        create(:report, data: {
-                 "global_data" => [
-                   Report::HEADERS,
-                   data_row
-                 ],
-                 "establishments_data" => nil
-               })
-      end
-      let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
-
-      it "counts establishments as 0" do
-        result = extractor.calculate_stats
-        expect(result[:total_establishments]).to eq(-1)
       end
     end
   end

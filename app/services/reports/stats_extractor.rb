@@ -11,11 +11,6 @@ module Reports
       global_data[1]
     end
 
-    def count_establishments
-      establishments_data = extract(:establishments_data)
-      establishments_data&.length.to_i - 1
-    end
-
     def indicator_indices
       {
         students: Report::HEADERS.index(:schoolings_count),

@@ -3,14 +3,6 @@
     .fr-card
       .fr-card__body
         .fr-card__content.position-relative
-          %h3.fr-card__title.fr-h5 Établissements
-          %p.fr-text--lead.fr-mb-0= number_with_delimiter(stats[:total_establishments])
-          = progression_indicator(:total_establishments, progressions)
-
-  .fr-col-md-3
-    .fr-card
-      .fr-card__body
-        .fr-card__content.position-relative
           %h3.fr-card__title.fr-h5 Élèves
           %p.fr-text--lead.fr-mb-0= number_with_delimiter(stats[:total_students])
           = progression_indicator(:total_students, progressions)
