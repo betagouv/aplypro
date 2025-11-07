@@ -3,36 +3,28 @@
 module Stats
   module Indicator
     module Sum
-      class PaymentRequestsStates < Stats::Sum
-        STATE_FOR_TITLE = {
-          sent: "envoyé",
-          integrated: "intégré",
-          paid: "payé"
-        }.freeze
-
-        def initialize(start_year, state)
-          @state = state
-
+      class PaymentRequestsPaid < Stats::Sum
+        def initialize(start_year)
           super(
             column: "pfmps.amount",
             all: ASP::PaymentRequest
               .for_year(start_year)
               .joins(:pfmp)
               .joins(:asp_payment_request_transitions)
-              .where("asp_payment_request_transitions.to_state": state)
+              .where("asp_payment_request_transitions.to_state": :paid)
           )
         end
 
-        def key
-          :"payment_requests_#{@state}_sum"
+        def self.key
+          :payment_requests_paid_sum
         end
 
-        def title
-          "Mt. #{STATE_FOR_TITLE[@state]}"
+        def self.title
+          "Mt. payé"
         end
 
-        def tooltip_key
-          "stats.sum.payment_request_#{@state}"
+        def self.tooltip_key
+          "stats.sum.payment_request_paid"
         end
 
         def with_mef_and_establishment

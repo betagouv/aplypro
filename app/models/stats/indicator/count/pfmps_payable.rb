@@ -24,15 +24,15 @@ module Stats
           )
         end
 
-        def key
+        def self.key
           :pfmps_payable_count
         end
 
-        def title
+        def self.title
           "Nb. PFMPs payables"
         end
 
-        def tooltip_key
+        def self.tooltip_key
           "stats.count.pfmps_payable"
         end
 

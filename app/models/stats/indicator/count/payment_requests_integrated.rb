@@ -3,34 +3,26 @@
 module Stats
   module Indicator
     module Count
-      class PaymentRequestsStates < Stats::Count
-        STATE_FOR_TITLE = {
-          sent: "envoyées",
-          integrated: "intégrées",
-          paid: "payées"
-        }.freeze
-
-        def initialize(start_year, state)
-          @state = state
-
+      class PaymentRequestsIntegrated < Stats::Count
+        def initialize(start_year)
           super(
             all: ASP::PaymentRequest
               .for_year(start_year)
               .joins(:asp_payment_request_transitions)
-              .where("asp_payment_request_transitions.to_state": state)
+              .where("asp_payment_request_transitions.to_state": :integrated)
           )
         end
 
-        def key
-          :"payment_requests_#{@state}_count"
+        def self.key
+          :payment_requests_integrated_count
         end
 
-        def title
-          "Dem. #{STATE_FOR_TITLE[@state]}"
+        def self.title
+          "Dem. intégrées"
         end
 
-        def tooltip_key
-          "stats.count.payment_request_#{@state}"
+        def self.tooltip_key
+          "stats.count.payment_request_integrated"
         end
 
         def with_mef_and_establishment

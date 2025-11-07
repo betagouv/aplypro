@@ -11,15 +11,15 @@ module Stats
           )
         end
 
-        def key
+        def self.key
           :ribs_count
         end
 
-        def title
+        def self.title
           "Nb. coord. bancaires"
         end
 
-        def tooltip_key
+        def self.tooltip_key
           "stats.count.ribs"
         end
 

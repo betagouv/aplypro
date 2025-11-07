@@ -13,15 +13,15 @@ module Stats
           )
         end
 
-        def key
+        def self.key
           :students_data_ratio
         end
 
-        def title
+        def self.title
           "Part données élèves"
         end
 
-        def tooltip_key
+        def self.tooltip_key
           "stats.ratio.students_data"
         end
 

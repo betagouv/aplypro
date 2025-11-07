@@ -12,15 +12,15 @@ module Stats
           )
         end
 
-        def key
+        def self.key
           :ribs_ratio
         end
 
-        def title
+        def self.title
           "Part coord. bancaires"
         end
 
-        def tooltip_key
+        def self.tooltip_key
           "stats.ratio.ribs"
         end
 

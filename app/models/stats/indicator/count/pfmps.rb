@@ -10,15 +10,15 @@ module Stats
           )
         end
 
-        def key
+        def self.key
           :pfmps_count
         end
 
-        def title
+        def self.title
           "Toutes PFMPs"
         end
 
-        def tooltip_key
+        def self.tooltip_key
           "stats.count.pfmps"
         end
 
