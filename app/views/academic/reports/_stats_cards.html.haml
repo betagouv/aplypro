@@ -1,5 +1,5 @@
 .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
-  .fr-col-md-3
+  .fr-col-md-4
     .fr-card
       .fr-card__body
         .fr-card__content.position-relative
@@ -7,7 +7,7 @@
           %p.fr-text--lead.fr-mb-0= number_with_delimiter(stats[:total_students])
           = progression_indicator(:total_students, progressions)
 
-  .fr-col-md-3
+  .fr-col-md-4
     .fr-card
       .fr-card__body
         .fr-card__content.position-relative
@@ -15,7 +15,7 @@
           %p.fr-text--lead.fr-mb-0= number_with_delimiter(stats[:total_pfmps])
           = progression_indicator(:total_pfmps, progressions)
 
-  .fr-col-md-3
+  .fr-col-md-4
     .fr-card
       .fr-card__body
         .fr-card__content.position-relative
