@@ -5,7 +5,7 @@ module Reports
     private
 
     def extract_stats(report)
-      StatsExtractor.new(report).extract_global_stats
+      StatsExtractor.new(report).calculate_stats
     end
   end
 end

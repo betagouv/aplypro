@@ -5,7 +5,7 @@ module Academic
     include Zipline
 
     before_action :set_report_context, only: %i[show global export establishments_table]
-    before_action :set_data_extractor, only: %i[show global export establishments_table]
+    before_action :set_extractor, only: %i[show global export establishments_table]
 
     def index
       infer_page_title
@@ -40,7 +40,7 @@ module Academic
       if params[:view_type] == "global"
         return redirect_unauthorized unless current_user.admin?
 
-        @establishments_data = @data_extractor.extract(:establishments_data)
+        @establishments_data = @extractor.extract(:establishments_data)
       else
         @establishments_data = filtered_establishments_data_from_report
       end
@@ -70,8 +70,8 @@ module Academic
       @comparison_report = determine_comparison_report
     end
 
-    def set_data_extractor
-      @data_extractor = Reports::DataExtractor.new(@report)
+    def set_extractor
+      @extractor = Reports::BaseExtractor.new(@report)
     end
 
     def redirect_unauthorized
@@ -86,12 +86,12 @@ module Academic
 
     def prepare_global_statistics_data
       set_report_data
-      @global_stats = Reports::StatsExtractor.extract_global_stats(@report)
+      @global_stats = Reports::StatsExtractor.new(@report).calculate_stats
       @global_stats_progressions = calculate_global_progressions
     end
 
     def set_report_data
-      extracted_data = @data_extractor.extract(:global_data, :bops_data, :menj_academies_data)
+      extracted_data = @extractor.extract(:global_data, :bops_data, :menj_academies_data)
       @global_data = extracted_data[:global_data]
       @bops_data = extracted_data[:bops_data]
       @menj_academies_data = extracted_data[:menj_academies_data]
@@ -99,11 +99,11 @@ module Academic
     end
 
     def academy_statistics
-      Academic::StatsExtractor.new(@report, selected_academy).extract_stats_from_report
+      Academic::StatsExtractor.new(@report, selected_academy).calculate_stats
     end
 
     def filtered_establishments_data_from_report
-      full_data = @data_extractor.extract(:establishments_data)
+      full_data = @extractor.extract(:establishments_data)
       titles = full_data.first
       establishment_rows = full_data[1..]
 

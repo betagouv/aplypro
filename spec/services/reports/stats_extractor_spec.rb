@@ -8,14 +8,7 @@ RSpec.describe Reports::StatsExtractor do
   let!(:full_report) { create(:report) }
   let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
-  describe ".extract_global_stats" do
-    it "delegates to instance method" do
-      expect_any_instance_of(described_class).to receive(:extract_stats) # rubocop:disable RSpec/AnyInstance
-      described_class.extract_global_stats(report)
-    end
-  end
-
-  describe "#extract_global_stats" do
+  describe "#calculate_stats" do
     context "when report has valid global data" do
       let!(:full_report) do
         data_row = Array.new(Report::HEADERS.length, 0)
@@ -40,7 +33,7 @@ RSpec.describe Reports::StatsExtractor do
       let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
       it "returns stats hash" do
-        result = extractor.extract_global_stats
+        result = extractor.calculate_stats
 
         expect(result).to include(
           total_establishments: 2,
@@ -58,7 +51,7 @@ RSpec.describe Reports::StatsExtractor do
       let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
       it "returns empty hash" do
-        expect(extractor.extract_global_stats).to eq({})
+        expect(extractor.calculate_stats).to eq({})
       end
     end
 
@@ -67,7 +60,7 @@ RSpec.describe Reports::StatsExtractor do
       let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
       it "returns empty hash" do
-        expect(extractor.extract_global_stats).to eq({})
+        expect(extractor.calculate_stats).to eq({})
       end
     end
 
@@ -91,7 +84,7 @@ RSpec.describe Reports::StatsExtractor do
       let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
       it "counts establishments as 0" do
-        result = extractor.extract_global_stats
+        result = extractor.calculate_stats
         expect(result[:total_establishments]).to eq(-1)
       end
     end
