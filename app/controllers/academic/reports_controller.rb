@@ -60,7 +60,6 @@ module Academic
       @inhibit_breadcrumb = true
       @report = Report.select(:id, :school_year_id, :created_at).find(params[:id])
       @current_year = @report.school_year.start_year
-      @stats = Stats::Main.new(@current_year)
 
       @comparable_reports = Report.select(:id, :school_year_id, :created_at)
                                   .where(school_year: @report.school_year)
@@ -95,7 +94,7 @@ module Academic
       @global_data = extracted_data[:global_data]
       @bops_data = extracted_data[:bops_data]
       @menj_academies_data = extracted_data[:menj_academies_data]
-      @indicators_metadata = @stats.indicators_with_metadata
+      @indicators_metadata = Stats::Main.indicators_metadata
     end
 
     def academy_statistics

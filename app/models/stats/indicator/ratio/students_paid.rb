@@ -18,15 +18,15 @@ module Stats
           )
         end
 
-        def key
+        def self.key
           :students_paid_ratio
         end
 
-        def title
+        def self.title
           "Part élèves payés"
         end
 
-        def tooltip_key
+        def self.tooltip_key
           "stats.ratio.students_paid"
         end
 

@@ -11,15 +11,15 @@ module Stats
           )
         end
 
-        def key
+        def self.key
           :attributive_decisions_count
         end
 
-        def title
+        def self.title
           "Nb. DA"
         end
 
-        def tooltip_key
+        def self.tooltip_key
           "stats.count.attributive_decisions"
         end
 

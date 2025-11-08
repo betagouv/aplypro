@@ -10,15 +10,15 @@ module Stats
           )
         end
 
-        def key
+        def self.key
           :students_count
         end
 
-        def title
+        def self.title
           "Nb. élèves"
         end
 
-        def tooltip_key
+        def self.tooltip_key
           "stats.count.students"
         end
 

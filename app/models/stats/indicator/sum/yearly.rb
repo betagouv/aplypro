@@ -12,15 +12,15 @@ module Stats
           )
         end
 
-        def key
+        def self.key
           :yearly_sum
         end
 
-        def title
+        def self.title
           "Mt. annuel total"
         end
 
-        def tooltip_key
+        def self.tooltip_key
           "stats.sum.yearly"
         end
 

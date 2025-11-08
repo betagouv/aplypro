@@ -15,15 +15,15 @@ module Stats
           )
         end
 
-        def key
+        def self.key
           :payment_requests_recovery_sum
         end
 
-        def title
+        def self.title
           "Mt. OR"
         end
 
-        def tooltip_key
+        def self.tooltip_key
           "stats.sum.payment_request_recovery"
         end
 

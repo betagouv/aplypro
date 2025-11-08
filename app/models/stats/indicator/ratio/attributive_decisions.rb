@@ -12,15 +12,15 @@ module Stats
           )
         end
 
-        def key
+        def self.key
           :attributive_decisions_ratio
         end
 
-        def title
+        def self.title
           "Part DA"
         end
 
-        def tooltip_key
+        def self.tooltip_key
           "stats.ratio.attributive_decisions"
         end
 

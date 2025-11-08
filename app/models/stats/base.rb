@@ -2,13 +2,19 @@
 
 module Stats
   class Base
-    def key
+    def self.key
       raise NotImplementedError
     end
 
-    def title
+    def self.title
       raise NotImplementedError
     end
+
+    def self.tooltip_key
+      nil
+    end
+
+    delegate :key, :title, :tooltip_key, to: :class
 
     def with_mef_and_establishment
       raise NotImplementedError

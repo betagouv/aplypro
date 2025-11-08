@@ -4,57 +4,58 @@ module Stats
   class Main # rubocop:disable Metrics/ClassLength
     attr_reader :indicators
 
-    def initialize(start_year) # rubocop:disable Metrics/MethodLength
-      @school_year = SchoolYear.find_by!(start_year:)
+    INDICATOR_CLASSES = [
+      Indicator::Count::AttributiveDecisions,
+      Indicator::Count::Pfmps,
+      Indicator::Count::PfmpsCompleted,
+      Indicator::Count::PfmpsIncompleted,
+      Indicator::Count::PfmpsPaid,
+      Indicator::Count::PfmpsPayable,
+      Indicator::Count::PfmpsExtended,
+      Indicator::Count::PfmpsValidated,
+      Indicator::Count::Ribs,
+      Indicator::Count::Schoolings,
+      Indicator::Count::Students,
+      Indicator::Count::StudentsData,
+      Indicator::Count::StudentsPaid,
+      Indicator::Count::PaymentRequestsSent,
+      Indicator::Count::PaymentRequestsIntegrated,
+      Indicator::Count::PaymentRequestsPaid,
+      Indicator::Ratio::AttributiveDecisions,
+      Indicator::Ratio::PfmpsPaidPayable,
+      Indicator::Ratio::PfmpsValidated,
+      Indicator::Ratio::Ribs,
+      Indicator::Ratio::StudentsData,
+      Indicator::Ratio::StudentsPaid,
+      Indicator::Sum::PaymentRequestsRecovery,
+      Indicator::Sum::PaymentRequestsPaid,
+      Indicator::Sum::PfmpsCompleted,
+      Indicator::Sum::PfmpsIncompleted,
+      Indicator::Sum::PfmpsExtended,
+      Indicator::Sum::PfmpsValidated,
+      Indicator::Sum::Yearly
+    ].freeze
 
-      indicators_class = [
-        Indicator::Count::AttributiveDecisions,
-        Indicator::Count::Pfmps,
-        Indicator::Count::PfmpsCompleted,
-        Indicator::Count::PfmpsIncompleted,
-        Indicator::Count::PfmpsPaid,
-        Indicator::Count::PfmpsPayable,
-        Indicator::Count::PfmpsExtended,
-        Indicator::Count::PfmpsValidated,
-        Indicator::Count::Ribs,
-        Indicator::Count::Schoolings,
-        Indicator::Count::Students,
-        Indicator::Count::StudentsData,
-        Indicator::Count::StudentsPaid,
-        Indicator::Ratio::AttributiveDecisions,
-        Indicator::Ratio::PfmpsPaidPayable,
-        Indicator::Ratio::PfmpsValidated,
-        Indicator::Ratio::Ribs,
-        Indicator::Ratio::StudentsData,
-        Indicator::Ratio::StudentsPaid,
-        Indicator::Sum::PaymentRequestsRecovery,
-        Indicator::Sum::PfmpsCompleted,
-        Indicator::Sum::PfmpsIncompleted,
-        Indicator::Sum::PfmpsExtended,
-        Indicator::Sum::PfmpsValidated,
-        Indicator::Sum::Yearly
-      ].map { |indicator_class| indicator_class.new(start_year) }
+    def self.indicators_metadata
+      @indicators_metadata ||= begin
+        indicators_map = INDICATOR_CLASSES.index_by(&:key)
 
-      %i[sent integrated paid].each do |state|
-        indicators_class << Indicator::Count::PaymentRequestsStates.new(start_year, state)
+        Report::HEADERS.map do |key|
+          indicator_class = indicators_map[key]
+          next unless indicator_class
+
+          {
+            title: indicator_class.title,
+            tooltip_key: indicator_class.tooltip_key,
+            type: indicator_class.superclass.name
+          }
+        end
       end
-
-      indicators_class << Indicator::Sum::PaymentRequestsStates.new(start_year, :paid)
-
-      @indicators = indicators_class.index_by(&:key)
     end
 
-    def indicators_with_metadata
-      Report::HEADERS.map do |key|
-        indicator = indicators[key]
-        next unless indicator
-
-        {
-          title: indicator.title,
-          tooltip_key: indicator.respond_to?(:tooltip_key) ? indicator.tooltip_key : nil,
-          type: indicator.class.superclass.name
-        }
-      end
+    def initialize(start_year)
+      @school_year = SchoolYear.find_by!(start_year:)
+      @indicators = INDICATOR_CLASSES.map { |indicator_class| indicator_class.new(start_year) }.index_by(&:key)
     end
 
     def method_missing(method)

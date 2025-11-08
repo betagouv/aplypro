@@ -3,9 +3,9 @@
 require "rails_helper"
 require "./spec/models/stats/shared_contexts"
 
-describe Stats::Indicator::Count::PaymentRequestsStates do
+describe Stats::Indicator::Count::PaymentRequestsSent do
   describe "#global_data" do
-    subject { described_class.new(SchoolYear.current.start_year, :sent).global_data }
+    subject { described_class.new(SchoolYear.current.start_year).global_data }
 
     include_context "when there is data for global stats"
 
@@ -13,7 +13,7 @@ describe Stats::Indicator::Count::PaymentRequestsStates do
   end
 
   describe "#bops_data" do
-    subject { described_class.new(SchoolYear.current.start_year, :integrated).bops_data }
+    subject { described_class.new(SchoolYear.current.start_year).bops_data }
 
     include_context "when there is data for stats per bops"
 
@@ -21,7 +21,7 @@ describe Stats::Indicator::Count::PaymentRequestsStates do
   end
 
   describe "#menj_academies_data" do
-    subject { described_class.new(SchoolYear.current.start_year, :paid).menj_academies_data }
+    subject { described_class.new(SchoolYear.current.start_year).menj_academies_data }
 
     include_context "when there is data for stats per MENJ academies"
 
@@ -29,7 +29,7 @@ describe Stats::Indicator::Count::PaymentRequestsStates do
   end
 
   describe "#establishments_data" do
-    subject { described_class.new(SchoolYear.current.start_year, :sent).establishments_data }
+    subject { described_class.new(SchoolYear.current.start_year).establishments_data }
 
     include_context "when there is data for stats per establishments"
 

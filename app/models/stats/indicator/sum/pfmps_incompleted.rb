@@ -13,15 +13,15 @@ module Stats
           )
         end
 
-        def key
+        def self.key
           :pfmps_incompleted_sum
         end
 
-        def title
+        def self.title
           "Mt. PFMPs incomplètes"
         end
 
-        def tooltip_key
+        def self.tooltip_key
           "stats.sum.pfmps_incompleted"
         end
 
