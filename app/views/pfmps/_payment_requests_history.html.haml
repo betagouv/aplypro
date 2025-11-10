@@ -17,7 +17,7 @@
 
     .fr-mt-2w.gray-text
       Coordonnées bancaires utilisées :
-      - iban = [payment_request.rib&.iban, payment_request.reconstructed_iban, payment_request.student&.rib(current_establishment)&.iban].compact_blank.first
+      - iban = payment_request.rib&.iban || payment_request.reconstructed_iban || payment_request.student&.rib(current_establishment)&.iban
       %strong= iban ? format_iban(iban) : "manquantes"
 
     .fr-mt-2w.gray-text
