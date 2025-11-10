@@ -32,7 +32,7 @@
               %td= payment_request.rib.name
             %tr
               %td IBAN
-              %td= payment_request.rib.iban_to_s
+              %td= format_iban(payment_request.rib.iban)
             %tr
               %td "SWIFT/BIC"
               %td= payment_request.rib.bic

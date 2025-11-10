@@ -111,7 +111,7 @@
           %td= rib.name
         %tr
           %td IBAN
-          %td= rib.iban_to_s
+          %td= format_iban(rib.iban)
         %tr
           %td BIC
           %td= rib.bic
