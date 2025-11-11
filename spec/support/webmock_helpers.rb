@@ -24,7 +24,7 @@ module WebmockHelpers
                "Accept" => "*/*",
                "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
                "Authorization" => "Bearer foobar",
-               "User-Agent" => "Rack::OAuth2::AccessToken::Bearer (2.2.1)"
+               "User-Agent" => /Rack::OAuth2::AccessToken::Bearer \([\d.]+\)/
              }
            )
            .to_return(status: 200, body: payload, headers: { "Content-Type" => "application/json" })
@@ -39,14 +39,14 @@ module WebmockHelpers
                "Accept" => "*/*",
                "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
                "Authorization" => "Bearer foobar",
-               "User-Agent" => "Rack::OAuth2::AccessToken::Bearer (2.2.1)"
+               "User-Agent" => /Rack::OAuth2::AccessToken::Bearer \([\d.]+\)/
              }
            )
            .to_return(status: 200, body: payload, headers: { "Content-Type" => "application/json" })
   end
 
   def mock_sygne_students_endpoint(uai, payload, school_year = SchoolYear.current.start_year)
-    url = StudentsApi::Sygne::Api.establishment_students_endpoint(uai: uai, school_year: school_year)
+    url = StudentsApi::Sygne::Api.establishment_students_endpoint(uai: uai, start_year: school_year)
 
     WebMock.stub_request(:get, url)
            .with(
@@ -55,7 +55,7 @@ module WebmockHelpers
                "Accept" => "*/*",
                "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
                "Authorization" => "Bearer foobar",
-               "User-Agent" => "Rack::OAuth2::AccessToken::Bearer (2.2.1)"
+               "User-Agent" => /Rack::OAuth2::AccessToken::Bearer \([\d.]+\)/
              }
            )
            .to_return(status: 200, body: payload, headers: { "Content-Type" => "application/json" })

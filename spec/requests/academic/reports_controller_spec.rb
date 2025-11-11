@@ -67,8 +67,8 @@ RSpec.describe Academic::ReportsController do
         get academic_report_path(report)
         expect(response).to have_http_status(:success)
         expect(response.body).to include("fr-btn--tooltip")
-        expect(response.body).to include("role='tooltip'")
-        expect(response.body).to include("aria-describedby='tooltip-stats-")
+        expect(response.body).to include('role="tooltip"')
+        expect(response.body).to include('aria-describedby="tooltip-stats-')
       end
 
       it "displays tooltip content for indicators" do
