@@ -8,7 +8,7 @@ module Stats
           finished_pfmps = Pfmp.for_year(start_year).finished
 
           super(
-            all: finished_pfmps.in_state(:validated)
+            all: finished_pfmps.in_state(:validated, :rectified)
           )
         end
 
@@ -25,11 +25,11 @@ module Stats
         end
 
         def with_mef_and_establishment
-          Pfmp.joins(schooling: { classe: %i[mef establishment] })
+          Pfmp.joins(schooling: { classe: %i[mef establishment school_year] })
         end
 
         def with_establishment
-          Pfmp.joins(schooling: { classe: :establishment })
+          Pfmp.joins(schooling: { classe: %i[establishment school_year] })
         end
       end
     end

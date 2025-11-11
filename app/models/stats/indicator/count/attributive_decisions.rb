@@ -24,11 +24,11 @@ module Stats
         end
 
         def with_mef_and_establishment
-          Schooling.joins(classe: %i[mef establishment])
+          Schooling.joins(classe: %i[mef establishment school_year])
         end
 
         def with_establishment
-          Schooling.joins(classe: :establishment)
+          Schooling.joins(classe: %i[establishment school_year])
         end
       end
     end

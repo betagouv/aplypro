@@ -9,7 +9,7 @@ module Stats
             column: :amount,
             all: Pfmp.for_year(start_year)
                      .joins(:schooling)
-                     .where.not(schoolings: { end_date: nil })
+                     .where.not(schoolings: { extended_end_date: nil })
                      .where("pfmps.end_date > schoolings.end_date")
           )
         end
@@ -27,11 +27,11 @@ module Stats
         end
 
         def with_mef_and_establishment
-          Pfmp.joins(schooling: { classe: %i[mef establishment] })
+          Pfmp.joins(schooling: { classe: %i[mef establishment school_year] })
         end
 
         def with_establishment
-          Pfmp.joins(schooling: { classe: :establishment })
+          Pfmp.joins(schooling: { classe: %i[establishment school_year] })
         end
       end
     end

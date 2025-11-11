@@ -4,14 +4,12 @@ module Stats
   module Indicator
     module Count
       class PfmpsPayable < Stats::Count
-        def initialize(start_year) # rubocop:disable Metrics/AbcSize
-          payable_base = Pfmp.for_year(start_year).in_state(:validated).finished.distinct
-                             .joins(schooling: { student: :ribs })
+        def initialize(start_year)
+          payable_base = Pfmp.for_year(start_year).finished.distinct
+                             .in_state(:validated, :rectified)
+                             .joins(:schooling)
                              .merge(Schooling.with_attributive_decisions)
-                             .merge(Student.asp_ready)
                              .where(schoolings: { status: 0 })
-                             .where("pfmps.start_date >= schoolings.start_date")
-                             .where("pfmps.end_date <= schoolings.end_date")
 
           paid_pfmp_ids = payable_base
                           .joins(payment_requests: :asp_payment_request_transitions)
@@ -37,11 +35,11 @@ module Stats
         end
 
         def with_mef_and_establishment
-          Pfmp.joins(schooling: { classe: %i[mef establishment] })
+          Pfmp.joins(schooling: { classe: %i[mef establishment school_year] })
         end
 
         def with_establishment
-          Pfmp.joins(schooling: { classe: :establishment })
+          Pfmp.joins(schooling: { classe: %i[establishment school_year] })
         end
       end
     end
