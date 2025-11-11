@@ -13,7 +13,7 @@
       "command": "30 0 * * 1-5 /bin/bash -l -c 'cd /app && bundle exec bin/rails runner -e production '\\''JanitorJob.perform_later'\\'''"
     },
     {
-      "command": "0 16 * * 0 /bin/bash -l -c 'cd /app && bundle exec bin/rails runner -e production '\\''GenerateReportJob.perform_later'\\'''"
+      "command": "0 8 * * 6 /bin/bash -l -c 'cd /app && bundle exec bin/rails runner -e production '\\''GenerateReportJob.perform_later'\\'''"
     }
   ]
 }
