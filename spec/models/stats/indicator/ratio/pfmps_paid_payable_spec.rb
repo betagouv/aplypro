@@ -5,9 +5,10 @@ require "./spec/models/stats/shared_contexts"
 
 describe Stats::Indicator::Ratio::PfmpsPaidPayable do
   let(:current_start_year) { SchoolYear.current.start_year }
+  let(:indicator) { Stats::Main.new(current_start_year).indicators[:pfmps_paid_payable_ratio] }
 
   describe "#global_data" do
-    subject(:ratio_data) { described_class.new(current_start_year).global_data }
+    subject(:ratio_data) { indicator.global_data }
 
     context "when no PFMPs are payable" do
       it { is_expected.to be_nan }
@@ -135,11 +136,11 @@ describe Stats::Indicator::Ratio::PfmpsPaidPayable do
   end
 
   describe "#bops_data" do
-    subject(:bops_ratio_data) { described_class.new(current_start_year).bops_data }
+    subject(:bops_ratio_data) { indicator.bops_data }
 
     include_context "when there is data for payable stats per bops"
 
-    it { is_expected.to eq({}) }
+    it { is_expected.to eq({ "ARMEE" => 0.0, "ENPR" => 0.0, "ENPU" => 0.0, "MASA" => 0.0, "MER" => 0.0 }) }
 
     it "never has ratios exceeding 100%" do
       bops_ratio_data.each_value do |ratio|
@@ -149,7 +150,7 @@ describe Stats::Indicator::Ratio::PfmpsPaidPayable do
   end
 
   describe "#menj_academies_data" do
-    subject(:academies_ratio_data) { described_class.new(current_start_year).menj_academies_data }
+    subject(:academies_ratio_data) { indicator.menj_academies_data }
 
     include_context "when there is data for payable stats per MENJ academies"
 
@@ -163,7 +164,7 @@ describe Stats::Indicator::Ratio::PfmpsPaidPayable do
   end
 
   describe "#establishments_data" do
-    subject(:establishments_ratio_data) { described_class.new(current_start_year).establishments_data }
+    subject(:establishments_ratio_data) { indicator.establishments_data }
 
     include_context "when there is data for payable stats per establishments"
 

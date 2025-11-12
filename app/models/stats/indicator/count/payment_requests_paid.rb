@@ -8,8 +8,7 @@ module Stats
           super(
             all: ASP::PaymentRequest
               .for_year(start_year)
-              .joins(:asp_payment_request_transitions)
-              .where("asp_payment_request_transitions.to_state": :paid)
+              .in_state(:paid)
           )
         end
 
@@ -26,11 +25,11 @@ module Stats
         end
 
         def with_mef_and_establishment
-          ASP::PaymentRequest.joins(schooling: { classe: %i[mef establishment] })
+          ASP::PaymentRequest.joins(schooling: { classe: %i[mef establishment school_year] })
         end
 
         def with_establishment
-          ASP::PaymentRequest.joins(schooling: { classe: :establishment })
+          ASP::PaymentRequest.joins(schooling: { classe: %i[establishment school_year] })
         end
       end
     end

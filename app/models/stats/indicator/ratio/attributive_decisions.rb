@@ -4,12 +4,18 @@ module Stats
   module Indicator
     module Ratio
       class AttributiveDecisions < Stats::Ratio
-        def initialize(start_year)
-          schoolings = Schooling.for_year(start_year)
+        def initialize(attributive_decisions_indicator:, schoolings_indicator:)
           super(
-            subset: schoolings.with_attributive_decisions,
-            all: schoolings.all
+            numerator_indicator: attributive_decisions_indicator,
+            denominator_indicator: schoolings_indicator
           )
+        end
+
+        def self.dependencies
+          {
+            attributive_decisions_indicator: :attributive_decisions_count,
+            schoolings_indicator: :schoolings_count
+          }
         end
 
         def self.key

@@ -4,18 +4,18 @@ module Stats
   module Indicator
     module Ratio
       class StudentsPaid < Stats::Ratio
-        def initialize(start_year)
-          students = Student.for_year(start_year)
-
-          students_paid = students.joins(:schoolings)
-                                  .joins(pfmps: { payment_requests: :asp_payment_request_transitions })
-                                  .where("asp_payment_request_transitions.to_state": :paid)
-                                  .distinct
-
+        def initialize(students_paid_indicator:, students_indicator:)
           super(
-            subset: students_paid,
-            all: students.all
+            numerator_indicator: students_paid_indicator,
+            denominator_indicator: students_indicator
           )
+        end
+
+        def self.dependencies
+          {
+            students_paid_indicator: :students_paid_count,
+            students_indicator: :students_count
+          }
         end
 
         def self.key

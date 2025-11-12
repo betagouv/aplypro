@@ -4,13 +4,18 @@ module Stats
   module Indicator
     module Ratio
       class PfmpsValidated < Stats::Ratio
-        def initialize(start_year)
-          finished_pfmps = Pfmp.for_year(start_year).finished
-
+        def initialize(validated_indicator:, pfmps_indicator:)
           super(
-            subset: finished_pfmps.in_state(:validated),
-            all: finished_pfmps
+            numerator_indicator: validated_indicator,
+            denominator_indicator: pfmps_indicator
           )
+        end
+
+        def self.dependencies
+          {
+            validated_indicator: :pfmps_validated_count,
+            pfmps_indicator: :pfmps_count
+          }
         end
 
         def self.key

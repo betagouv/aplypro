@@ -4,8 +4,10 @@ require "rails_helper"
 require "./spec/models/stats/shared_contexts"
 
 describe Stats::Indicator::Ratio::Ribs do
+  let(:indicator) { Stats::Main.new(SchoolYear.current.start_year).indicators[:ribs_ratio] }
+
   describe "#global_data" do
-    subject { described_class.new(SchoolYear.current.start_year).global_data }
+    subject { indicator.global_data }
 
     include_context "when there is data for global stats"
 
@@ -13,7 +15,7 @@ describe Stats::Indicator::Ratio::Ribs do
   end
 
   describe "#bops_data" do
-    subject { described_class.new(SchoolYear.current.start_year).bops_data }
+    subject { indicator.bops_data }
 
     include_context "when there is data for stats per bops"
 
@@ -21,7 +23,7 @@ describe Stats::Indicator::Ratio::Ribs do
   end
 
   describe "#menj_academies_data" do
-    subject { described_class.new(SchoolYear.current.start_year).menj_academies_data }
+    subject { indicator.menj_academies_data }
 
     include_context "when there is data for stats per MENJ academies"
 
@@ -29,7 +31,7 @@ describe Stats::Indicator::Ratio::Ribs do
   end
 
   describe "#establishments_data" do
-    subject { described_class.new(SchoolYear.current.start_year).establishments_data }
+    subject { indicator.establishments_data }
 
     include_context "when there is data for stats per establishments"
 

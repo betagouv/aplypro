@@ -23,7 +23,8 @@ describe Stats::Indicator::Ratio::StudentsPaid do
     end
 
     it "does not exceed 100%" do
-      ratio = described_class.new(current_start_year).global_data
+      indicator = Stats::Main.new(current_start_year).indicators[:students_paid_ratio]
+      ratio = indicator.global_data
       expect(ratio).to be <= 1.0
     end
   end
