@@ -11,8 +11,9 @@ module Stats
                     "pfmps.amount)",
             all: ASP::PaymentRequest
               .for_year(start_year)
-              .in_state(:paid)
               .joins(:pfmp)
+              .joins(:asp_payment_request_transitions)
+              .where(asp_payment_request_transitions: { to_state: :paid, most_recent: true })
           )
         end
 

@@ -4,12 +4,18 @@ module Stats
   module Indicator
     module Ratio
       class Ribs < Stats::Ratio
-        def initialize(start_year)
-          students = Student.for_year(start_year)
+        def initialize(ribs_indicator:, students_indicator:)
           super(
-            subset: students.with_rib,
-            all: students.all
+            numerator_indicator: ribs_indicator,
+            denominator_indicator: students_indicator
           )
+        end
+
+        def self.dependencies
+          {
+            ribs_indicator: :ribs_count,
+            students_indicator: :students_count
+          }
         end
 
         def self.key

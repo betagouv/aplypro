@@ -4,13 +4,18 @@ module Stats
   module Indicator
     module Ratio
       class StudentsData < Stats::Ratio
-        def initialize(start_year)
-          students = Student.for_year(start_year)
-
+        def initialize(students_data_indicator:, students_indicator:)
           super(
-            subset: students.asp_ready,
-            all: students.all
+            numerator_indicator: students_data_indicator,
+            denominator_indicator: students_indicator
           )
+        end
+
+        def self.dependencies
+          {
+            students_data_indicator: :students_data_count,
+            students_indicator: :students_count
+          }
         end
 
         def self.key

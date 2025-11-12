@@ -55,7 +55,7 @@ module Stats
 
     def initialize(start_year)
       @school_year = SchoolYear.find_by!(start_year:)
-      @indicators = INDICATOR_CLASSES.map { |indicator_class| indicator_class.new(start_year) }.index_by(&:key)
+      @indicators = build_indicators(start_year)
     end
 
     def method_missing(method)
@@ -106,6 +106,33 @@ module Stats
     end
 
     private
+
+    def build_indicators(start_year)
+      indicators = {}
+      build_count_indicators(indicators, start_year)
+      build_sum_indicators(indicators, start_year)
+      build_ratio_indicators(indicators)
+      indicators
+    end
+
+    def build_count_indicators(indicators, start_year)
+      Stats::Count.descendants.each do |indicator_class|
+        indicators[indicator_class.key] = indicator_class.new(start_year)
+      end
+    end
+
+    def build_sum_indicators(indicators, start_year)
+      Stats::Sum.descendants.each do |indicator_class|
+        indicators[indicator_class.key] = indicator_class.new(start_year)
+      end
+    end
+
+    def build_ratio_indicators(indicators)
+      Stats::Ratio.descendants.each do |indicator_class|
+        dependencies = indicator_class.dependencies.transform_values { |key| indicators[key] }
+        indicators[indicator_class.key] = indicator_class.new(**dependencies)
+      end
+    end
 
     def format_cell_for_csv(cell)
       cell.is_a?(Float) || cell.nil? ? number_string(cell) : cell
