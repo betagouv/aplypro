@@ -75,4 +75,15 @@ describe StudentsApi::Sygne::Mappers::SchoolingMapper do
       expect(mapped).to include(mef_code: "123")
     end
   end
+
+  context "when start date before school year range" do
+    before do
+      data["anneeScolaire"] = "2020"
+      data["dateDebSco"] = "2020-08-25"
+    end
+
+    it "maps it correctly" do
+      expect(mapped[:start_date]).to eq "2020-08-25"
+    end
+  end
 end

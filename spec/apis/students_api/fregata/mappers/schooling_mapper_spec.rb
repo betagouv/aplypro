@@ -41,4 +41,15 @@ describe StudentsApi::Fregata::Mappers::SchoolingMapper do
       end
     end
   end
+
+  context "when start date before school year range" do
+    before do
+      data["sectionReference"]["anneeScolaireId"] = "24"
+      data["dateEntreeFormation"] = "2020-08-25"
+    end
+
+    it "maps it correctly" do
+      expect(mapped[:start_date]).to eq "2020-08-25"
+    end
+  end
 end
