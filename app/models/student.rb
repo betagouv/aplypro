@@ -173,4 +173,10 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def first_names
     [first_name, first_name2, first_name3].compact.join(", ")
   end
+
+  def last_schooling
+    @last_schooling ||= schoolings.includes(classe: :establishment)
+                                  .order(end_date: :desc, start_date: :desc)
+                                  .first
+  end
 end

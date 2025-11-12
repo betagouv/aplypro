@@ -82,5 +82,47 @@ RSpec.describe Academic::UsersController do
 
       expect(response.body).not_to include(other_academy_user.name)
     end
+
+    it "sorts users by name by default" do
+      create(:user, :director, establishment: establishment, name: "Zorro Diego")
+      create(:user, :director, establishment: establishment, name: "Alvarez Ana")
+
+      get academic_users_path
+
+      body_text = response.body.gsub(/\s+/, " ")
+      expect(body_text.index("Alvarez Ana")).to be < body_text.index("Zorro Diego")
+    end
+
+    it "sorts users by establishment name when UAI sort specified" do
+      establishment_z = create(:establishment, academy_code: "01", name: "Lycée Zola")
+      establishment_a = create(:establishment, academy_code: "01", name: "Lycée Ampère")
+      create(:user, :director, establishment: establishment_z, name: "User Z")
+      create(:user, :director, establishment: establishment_a, name: "User A")
+
+      get academic_users_path(sort: "uai")
+
+      body_text = response.body.gsub(/\s+/, " ")
+      expect(body_text.index("Lycée Ampère")).to be < body_text.index("Lycée Zola")
+    end
+
+    it "sorts users by email when specified" do
+      create(:user, :director, establishment: establishment, email: "zzz@example.com")
+      create(:user, :director, establishment: establishment, email: "aaa@example.com")
+
+      get academic_users_path(sort: "email")
+
+      body_text = response.body.gsub(/\s+/, " ")
+      expect(body_text.index("aaa@example.com")).to be < body_text.index("zzz@example.com")
+    end
+
+    it "sorts users by last sign in when specified" do
+      user_recent = create(:user, :director, establishment: establishment, last_sign_in_at: 1.day.ago)
+      user_old = create(:user, :director, establishment: establishment, last_sign_in_at: 10.days.ago)
+
+      get academic_users_path(sort: "last_sign_in")
+
+      body_text = response.body.gsub(/\s+/, " ")
+      expect(body_text.index(user_recent.name)).to be < body_text.index(user_old.name)
+    end
   end
 end

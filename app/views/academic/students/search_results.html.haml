@@ -1,24 +1,38 @@
 - if @students.none?
   %p Aucun résultat trouvé pour la recherche : #{@name}
 - else
+  = sortable_table_hint
   .fr-table
     %table
-      %caption #{@students.count} résultats trouvés pour la recherche : #{@name}
+      %caption #{@students.total_count} résultats trouvés pour la recherche : #{@name}
       %thead
-        %th{scope: "col"} Élèves
-        %th{scope: "col"} Établissement
+        %th{scope: "col"}
+          = sortable_column_header(column: "name", label: "Élèves", path: search_results_students_path(name: @name, sort: "name"), current_sort: params[:sort])
+        %th{scope: "col"}
+          = sortable_column_header(column: "establishment", label: "Établissement", path: search_results_students_path(name: @name, sort: "establishment"), current_sort: params[:sort])
         %th{scope: "col"} Dernière classe
       %tbody
         - @students.each do |student|
           %tr
             %td= dsfr_link_to student.full_name, academic_student_path(student)
             %td
-              - if student.current_schooling.nil?
-                Aucun établissement
-              - else
+              - if student.current_schooling.present?
                 = student.current_schooling.classe.establishment.name
-            %td
-              - if student.current_schooling.nil?
-                Aucune scolarité active
+              - elsif student.last_schooling.present?
+                = student.last_schooling.classe.establishment.name
+                %br
+                %span.fr-text--xs.fr-text--mention-grey (dernier établissement fréquenté)
               - else
+                Aucun établissement
+            %td
+              - if student.current_schooling.present?
                 = student.current_schooling.classe.label
+              - elsif student.last_schooling.present?
+                = student.last_schooling.classe.label
+                %br
+                %span.fr-text--xs.fr-text--mention-grey (dernière classe)
+              - else
+                Aucune scolarité
+
+  .fr-mt-3w.d-flex.justify-content-center
+    = paginate @students, params: { name: @name, sort: params[:sort] }
