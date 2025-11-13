@@ -19,6 +19,6 @@
               - indicator_type = index > 4 ? @indicators_metadata[index - 5]&.dig(:type) : nil
               %td{class: (index <= 1 ? "fr-text--sm" : ""), style: (index > 4 ? cell_background_color(value, indicator_type: indicator_type) : "")}
                 - if index == 1 && establishment
-                  = link_to value, academic_establishment_path(establishment)
+                  = link_to value, academic_establishment_path(establishment), target: "_blank", rel: "noopener"
                 - else
                   = format_stat_value(value, indicator_type: indicator_type)

@@ -45,7 +45,7 @@
                   %ul.fr-raw-list
                     - establishments.each do |establishment|
                       %li
-                        = link_to establishment.name, academic_establishment_path(establishment), class: "fr-link"
+                        = link_to establishment.name, academic_establishment_path(establishment), class: "fr-link", target: "_blank", rel: "noopener"
                         %br
                         %span.fr-text--xs.fr-text--mention-grey UAI : #{establishment.uai}
                         - if establishment.confirmed_director_id == user.id
