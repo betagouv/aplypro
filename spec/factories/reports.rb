@@ -7,19 +7,19 @@ FactoryBot.define do
     data do
       {
         "global_data" => [
-          Report::HEADERS,
+          Report::HEADERS.map(&:to_s),
           Array.new(Report::HEADERS.length, 0)
         ],
         "bops_data" => [
-          [:bop] + Report::HEADERS,
+          ["bop"] + Report::HEADERS.map(&:to_s),
           ["ENPU"] + Array.new(Report::HEADERS.length, 0)
         ],
         "menj_academies_data" => [
-          [:academy] + Report::HEADERS,
+          ["academy"] + Report::HEADERS.map(&:to_s),
           ["Paris"] + Array.new(Report::HEADERS.length, 0)
         ],
         "establishments_data" => [
-          %i[uai establishment_name ministry academy private_or_public] + Report::HEADERS,
+          %w[uai establishment_name ministry academy private_or_public] + Report::HEADERS.map(&:to_s),
           ["0010001A", "Lycée Test", "MENJ", "Paris", "Public"] + Array.new(Report::HEADERS.length, 0)
         ]
       }
