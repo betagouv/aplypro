@@ -3,10 +3,12 @@
 module Academic
   class StudentsController < Academic::ApplicationController
     before_action :set_student, only: :show
-
     before_action :set_search_result, only: :search_results
 
     helper_method :current_establishment
+
+    VALID_SORT_OPTIONS = %w[name establishment].freeze
+    STUDENTS_PER_PAGE = 50
 
     def show
       @schoolings = @student.schoolings.includes(:classe, :establishment, :pfmps)
@@ -33,8 +35,37 @@ module Academic
 
     def set_search_result
       @name = params[:name]
+      @students = find_and_sort_students
+                  .page(params[:page])
+                  .per(STUDENTS_PER_PAGE)
+    end
 
-      @students = Establishment.find_students(academy_establishments, @name)
+    def find_and_sort_students
+      students = Establishment.find_students(academy_establishments, @name)
+
+      sort_column == "establishment" ? sort_by_establishment(students) : sort_by_name(students)
+    end
+
+    def sort_by_establishment(students)
+      students.joins(<<~SQL.squish)
+        LEFT JOIN schoolings current_sch
+          ON current_sch.student_id = students.id
+          AND current_sch.end_date IS NULL
+        LEFT JOIN classes
+          ON classes.id = current_sch.classe_id
+        LEFT JOIN establishments
+          ON establishments.id = classes.establishment_id
+      SQL
+              .order(Arel.sql("establishments.name ASC NULLS LAST"))
+              .order("students.last_name ASC, students.first_name ASC")
+    end
+
+    def sort_by_name(students)
+      students.order("students.last_name ASC, students.first_name ASC")
+    end
+
+    def sort_column
+      VALID_SORT_OPTIONS.include?(params[:sort]) ? params[:sort] : "name"
     end
 
     def academy_establishments

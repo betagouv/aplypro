@@ -6,6 +6,9 @@ module Academic
 
     helper_method :academies
 
+    VALID_SORT_OPTIONS = %w[name email uai last_sign_in].freeze
+    USERS_PER_PAGE = 50
+
     def select_academy
       @inhibit_banner = true
       @inhibit_nav = true
@@ -26,21 +29,38 @@ module Academic
       @users = User.joins(establishment_user_roles: :establishment)
                    .where(establishments: { academy_code: selected_academy })
                    .then { |relation| filter_by_role(relation) }
+                   .then { |relation| apply_sorting(relation) }
                    .includes(:establishments, :directed_establishments, :establishment_user_roles)
-                   .distinct
                    .page(params[:page])
-                   .per(50)
+                   .per(USERS_PER_PAGE)
     end
 
     private
 
     def filter_by_role(relation)
       return relation if params[:role].blank?
-
-      allowed_roles = EstablishmentUserRole.roles.keys
-      return relation unless allowed_roles.include?(params[:role])
+      return relation unless EstablishmentUserRole.roles.key?(params[:role])
 
       relation.where(establishment_user_roles: { role: params[:role] })
+    end
+
+    def apply_sorting(relation)
+      case sort_column
+      when "uai"
+        relation.select("users.*, MIN(establishments.name) as min_establishment_name")
+                .group("users.id")
+                .order("min_establishment_name ASC, users.name ASC")
+      when "email"
+        relation.distinct.order("users.email ASC")
+      when "last_sign_in"
+        relation.distinct.order(Arel.sql("users.last_sign_in_at DESC NULLS LAST"))
+      else
+        relation.distinct.order("users.name ASC")
+      end
+    end
+
+    def sort_column
+      VALID_SORT_OPTIONS.include?(params[:sort]) ? params[:sort] : "name"
     end
   end
 end

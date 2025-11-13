@@ -11,16 +11,21 @@
     .fr-alert.fr-alert--info
       %p.fr-alert__title Aucun utilisateur trouvé pour cette académie.
   - else
+    = sortable_table_hint
     .fr-table.fr-table--no-caption
       %table
         %caption Liste des utilisateurs de l'académie
         %thead
           %tr
-            %th{scope: "col"} Nom
-            %th{scope: "col"} Email
+            %th{scope: "col"}
+              = sortable_column_header(column: "name", label: "Nom", path: academic_users_path(role: params[:role], sort: "name"), current_sort: params[:sort])
+            %th{scope: "col"}
+              = sortable_column_header(column: "email", label: "Email", path: academic_users_path(role: params[:role], sort: "email"), current_sort: params[:sort])
             %th{scope: "col"} Rôle(s)
-            %th{scope: "col"} Établissement(s)
-            %th{scope: "col"} Dernière connexion
+            %th{scope: "col"}
+              = sortable_column_header(column: "uai", label: "Établissement(s) / UAI", path: academic_users_path(role: params[:role], sort: "uai"), current_sort: params[:sort])
+            %th{scope: "col"}
+              = sortable_column_header(column: "last_sign_in", label: "Dernière connexion", path: academic_users_path(role: params[:role], sort: "last_sign_in"), current_sort: params[:sort])
         %tbody
           - @users.each do |user|
             %tr

@@ -127,7 +127,7 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def self.find_students(establishments, name) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    return [] if name.blank? || establishments.blank?
+    return Student.none if name.blank? || establishments.blank?
 
     search_terms = name
                    .strip
@@ -138,7 +138,7 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     Student
       .joins(:schoolings)
       .where(schoolings: { classe_id: establishments.joins(:classes).select("classes.id") })
-      .includes(current_schooling: :classe)
+      .includes(current_schooling: { classe: :establishment }, schoolings: { classe: :establishment })
       .where(
         search_terms.map do
           "(regexp_replace(unaccent(first_name), '[^[:alnum:]]', '', 'g') ILIKE ? OR " \
