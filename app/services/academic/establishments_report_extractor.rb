@@ -30,7 +30,8 @@ module Academic
       rows = data[1..]
 
       academy_idx = headers.index("academy")
-      rows.select { |row| row[academy_idx] == @academy_code }
+      academy_label = Establishment::ACADEMY_LABELS[@academy_code]
+      rows.select { |row| row[academy_idx] == academy_label }
     end
 
     def extract_column_indexes(headers)

@@ -12,8 +12,8 @@ RSpec.describe Academic::EstablishmentsController do
     data_row = Array.new(Report::HEADERS.length, 0)
     create(:report, school_year: school_year, data: {
              "establishments_data" => [
-               %i[uai establishment_name ministry academy private_or_public] + Report::HEADERS,
-               [establishment.uai, establishment.name, "MENJ", establishment.academy_code, "Public"] + data_row
+               %w[uai establishment_name ministry academy private_or_public] + Report::HEADERS.map(&:to_s),
+               [establishment.uai, establishment.name, "MENJ", establishment.academy_label, "Public"] + data_row
              ]
            })
 

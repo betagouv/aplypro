@@ -20,11 +20,11 @@ RSpec.describe Reports::StatsExtractor do
 
         create(:report, data: {
                  "global_data" => [
-                   Report::HEADERS,
+                   Report::HEADERS.map(&:to_s),
                    data_row
                  ],
                  "establishments_data" => [
-                   %i[uai establishment_name ministry academy private_or_public] + Report::HEADERS,
+                   %w[uai establishment_name ministry academy private_or_public] + Report::HEADERS.map(&:to_s),
                    ["Row1"],
                    ["Row2"]
                  ]

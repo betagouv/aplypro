@@ -19,19 +19,19 @@ RSpec.describe Report do
       let(:valid_data) do
         {
           "global_data" => [
-            Report::HEADERS,
+            Report::HEADERS.map(&:to_s),
             Array.new(Report::HEADERS.length, nil)
           ],
           "bops_data" => [
-            [:bop] + Report::HEADERS,
+            ["bop"] + Report::HEADERS.map(&:to_s),
             ["ENPU"] + Array.new(Report::HEADERS.length, nil)
           ],
           "menj_academies_data" => [
-            [:academy] + Report::HEADERS,
+            ["academy"] + Report::HEADERS.map(&:to_s),
             ["Paris"] + Array.new(Report::HEADERS.length, nil)
           ],
           "establishments_data" => [
-            %i[uai establishment_name ministry academy private_or_public] + Report::HEADERS,
+            %w[uai establishment_name ministry academy private_or_public] + Report::HEADERS.map(&:to_s),
             ["0010001A", "Lycée Test", "MENJ", "Paris", "Public"] + Array.new(Report::HEADERS.length, nil)
           ]
         }
@@ -73,7 +73,7 @@ RSpec.describe Report do
       it "rejects data with incorrect bops_data header" do
         invalid_data = valid_data.dup
         invalid_data["bops_data"] = [
-          ["Wrong"] + Report::HEADERS,
+          ["Wrong"] + Report::HEADERS.map(&:to_s),
           ["ENPU"] + Array.new(Report::HEADERS.length, nil)
         ]
         report = build(:report, :with_schema_validation, data: invalid_data)
@@ -84,7 +84,7 @@ RSpec.describe Report do
       it "rejects data with incorrect row length" do
         invalid_data = valid_data.dup
         invalid_data["global_data"] = [
-          Report::HEADERS,
+          Report::HEADERS.map(&:to_s),
           [1, 2, 3]
         ]
         report = build(:report, :with_schema_validation, data: invalid_data)
@@ -95,7 +95,7 @@ RSpec.describe Report do
       it "rejects establishments_data with wrong header" do
         invalid_data = valid_data.dup
         invalid_data["establishments_data"] = [
-          %w[UAI Wrong] + Report::HEADERS,
+          %w[UAI Wrong] + Report::HEADERS.map(&:to_s),
           ["0010001A", "Lycée Test", "MENJ", "Paris", "Public"] + Array.new(Report::HEADERS.length, nil)
         ]
         report = build(:report, :with_schema_validation, data: invalid_data)
@@ -105,7 +105,7 @@ RSpec.describe Report do
 
       it "rejects data with arrays that are too small" do
         invalid_data = valid_data.dup
-        invalid_data["global_data"] = [Report::HEADERS]
+        invalid_data["global_data"] = [Report::HEADERS.map(&:to_s)]
         report = build(:report, :with_schema_validation, data: invalid_data)
         expect(report).not_to be_valid
       end

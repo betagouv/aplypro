@@ -21,11 +21,11 @@ RSpec.describe Academic::StatsExtractor do
 
         create(:report, data: {
                  "menj_academies_data" => [
-                   [:Académie] + Report::HEADERS,
+                   ["academy"] + Report::HEADERS.map(&:to_s),
                    ["Lyon"] + data_row
                  ],
                  "establishments_data" => [
-                   %i[uai establishment_name ministry academy private_or_public] + Report::HEADERS,
+                   %w[uai establishment_name ministry academy private_or_public] + Report::HEADERS.map(&:to_s),
                    ["0010001A", "Lycée 1", "MENJ", "Lyon", "Public"],
                    ["0010002B", "Lycée 2", "MENJ", "Lyon", "Public"]
                  ]

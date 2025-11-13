@@ -12,7 +12,7 @@ FactoryBot.define do
     address_line2 { Faker::Address.secondary_address }
     private_contract_type_code { "99" }
     academy_code { "10" }
-    academy_label { "Marseille" }
+    academy_label { "Lyon" }
     students_provider { "csv" }
     ministry { "MINISTERE DE L'EDUCATION NATIONALE" }
     confirmed_director { nil }

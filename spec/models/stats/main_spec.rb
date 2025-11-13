@@ -73,7 +73,7 @@ RSpec.describe Stats::Main do
       establishment_a = data.find { |r| r[:uai] == "0000000A" }
       expect(establishment_a).to include(
         establishment_name: "0000000A", ministry: "MINISTERE DE L'EDUCATION NATIONALE",
-        academy: "Marseille", private_or_public: "Public", attributive_decisions_ratio: 0.25,
+        academy: "Lyon", private_or_public: "Public", attributive_decisions_ratio: 0.25,
         yearly_sum: 400, schoolings_count: 4
       )
     end
