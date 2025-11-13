@@ -18,4 +18,4 @@
                 = student.current_schooling.classe.label
 
   .fr-mt-3w.d-flex.justify-content-center
-    = paginate @students
+    = paginate @students, params: { name: @name }

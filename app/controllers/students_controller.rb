@@ -7,6 +7,8 @@ class StudentsController < ApplicationController
 
   before_action :set_search_result, only: :search_results
 
+  STUDENTS_PER_PAGE = 50
+
   def show
     @schoolings = @student.schoolings
 
@@ -36,6 +38,6 @@ class StudentsController < ApplicationController
 
     @students = current_establishment.find_students(@name)
                                      .page(params[:page])
-                                     .per(50)
+                                     .per(STUDENTS_PER_PAGE)
   end
 end

@@ -28,7 +28,7 @@
               = sortable_column_header(column: "last_sign_in", label: "Dernière connexion", path: academic_users_path(role: params[:role], sort: "last_sign_in"), current_sort: params[:sort])
         %tbody
           - @users.each do |user|
-            - academy_eurs = user.establishment_user_roles.select { |eur| eur.establishment.academy_code == selected_academy }
+            - academy_eurs = @academy_eurs_by_user[user.id] || []
             - user_roles = academy_eurs.map(&:role).uniq
             - establishments = academy_eurs.map(&:establishment).uniq
             %tr
