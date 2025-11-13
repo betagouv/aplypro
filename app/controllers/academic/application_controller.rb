@@ -78,7 +78,6 @@ module Academic
 
     def handle_academic_map_error(error)
       Rails.logger.error("Academic map loading failed: #{error.message}")
-      Rails.logger.error(error.backtrace.join("\n"))
 
       respond_to do |format|
         format.html { render "academic_map_error", layout: false, status: :service_unavailable }
@@ -107,7 +106,9 @@ module Academic
     end
 
     def current_report
-      @current_report ||= Report.for_school_year(selected_school_year).latest
+      @current_report ||= Report.select(:id, :school_year_id, :created_at)
+                                .for_school_year(selected_school_year)
+                                .latest
     end
   end
 end
