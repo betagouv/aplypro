@@ -35,5 +35,7 @@ class StudentsController < ApplicationController
     @name = params[:name]
 
     @students = current_establishment.find_students(@name)
+                                     .page(params[:page])
+                                     .per(50)
   end
 end

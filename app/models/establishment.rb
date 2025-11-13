@@ -138,7 +138,7 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
     Student
       .joins(:schoolings)
       .where(schoolings: { classe_id: establishments.joins(:classes).select("classes.id") })
-      .includes(current_schooling: { classe: :establishment }, schoolings: { classe: :establishment })
+      .includes(current_schooling: { classe: :establishment })
       .where(
         search_terms.map do
           "(regexp_replace(unaccent(first_name), '[^[:alnum:]]', '', 'g') ILIKE ? OR " \
