@@ -2,7 +2,8 @@
 
 %section.fr-pb-3w
   %h2.fr-h4 PFMPs de l'élève
-  - if @student.schoolings.none?
+  - schoolings_with_pfmps = @student.schoolings.includes(:classe, :pfmps).select { |s| s.pfmps.any? }
+  - if schoolings_with_pfmps.empty?
     %p Aucune PFMP enregistrée pour le moment.
   - else
     .fr-table.fr-table--layout-fixed.fr-table--no-caption
@@ -17,7 +18,7 @@
           %th{scope: "col"} Nombre de jours
           %th{scope: "col"} Montant
         %tbody
-          - @student.schoolings.includes(:classe, :pfmps).each do |schooling|
+          - schoolings_with_pfmps.each do |schooling|
             - schooling.pfmps.each do |pfmp|
               %tr
                 %td= schooling.classe.school_year.to_s
