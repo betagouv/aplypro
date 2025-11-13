@@ -28,18 +28,19 @@
               = sortable_column_header(column: "last_sign_in", label: "Dernière connexion", path: academic_users_path(role: params[:role], sort: "last_sign_in"), current_sort: params[:sort])
         %tbody
           - @users.each do |user|
+            - academy_eurs = user.establishment_user_roles.select { |eur| eur.establishment.academy_code == selected_academy }
+            - user_roles = academy_eurs.map(&:role).uniq
+            - establishments = academy_eurs.map(&:establishment).uniq
             %tr
               %td
                 %strong= user.name
               %td= user.email
               %td
-                - user_roles = user.establishment_user_roles.select { |eur| eur.establishment.academy_code == selected_academy }.map(&:role).uniq
                 - if user_roles.include?('dir')
                   %span.fr-badge.fr-badge--blue-ecume Directeur
                 - if user_roles.include?('authorised')
                   %span.fr-badge.fr-badge--purple-glycine.fr-ml-1w Habilité
               %td
-                - establishments = user.establishments.select { |e| e.academy_code == selected_academy }
                 - if establishments.any?
                   %ul.fr-raw-list
                     - establishments.each do |establishment|

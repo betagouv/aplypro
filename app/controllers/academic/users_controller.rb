@@ -30,7 +30,11 @@ module Academic
                    .where(establishments: { academy_code: selected_academy })
                    .then { |relation| filter_by_role(relation) }
                    .then { |relation| apply_sorting(relation) }
-                   .includes(:establishments, :directed_establishments, :establishment_user_roles)
+                   .preload(
+                     establishment_user_roles: {
+                       establishment: :confirmed_director
+                     }
+                   )
                    .page(params[:page])
                    .per(USERS_PER_PAGE)
     end
