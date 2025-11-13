@@ -30,9 +30,10 @@ module Academic
                    .where(establishments: { academy_code: selected_academy })
                    .then { |relation| filter_by_role(relation) }
                    .then { |relation| apply_sorting(relation) }
-                   .includes(:establishments, :directed_establishments, :establishment_user_roles)
                    .page(params[:page])
                    .per(USERS_PER_PAGE)
+
+      @academy_eurs_by_user = load_academy_establishment_user_roles
     end
 
     private
@@ -61,6 +62,14 @@ module Academic
 
     def sort_column
       VALID_SORT_OPTIONS.include?(params[:sort]) ? params[:sort] : "name"
+    end
+
+    def load_academy_establishment_user_roles
+      EstablishmentUserRole
+        .joins(:establishment)
+        .where(user_id: @users.map(&:id), establishments: { academy_code: selected_academy })
+        .includes(establishment: :confirmed_director)
+        .group_by(&:user_id)
     end
   end
 end

@@ -216,6 +216,9 @@ fr:
           index: Historique des rapports
           show: Statistiques de l'académie
           global: Statistiques globales
+        students:
+          show: "%{name}"
+          search_results: Recherche d'un élève
       stats:
         index: Statistiques
       school_years:

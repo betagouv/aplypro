@@ -1,0 +1,12 @@
+%h2= "Académie #{selected_academy}"
+
+.fr-alert.fr-alert--error.fr-mt-2w
+  %h3.fr-alert__title Erreur de chargement de la carte
+  %p
+    Une erreur s'est produite lors du chargement des données de la carte académique.
+    Cela peut être dû à un problème temporaire ou à une charge importante du système.
+  %p.fr-text--sm
+    Veuillez réessayer dans quelques instants en rechargeant la page.
+  %button.fr-btn.fr-btn--secondary.fr-mt-2w{onclick: "window.location.reload()"}
+    %i.fr-icon-refresh-line
+    Recharger la page

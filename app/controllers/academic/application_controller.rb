@@ -21,17 +21,16 @@ module Academic
     def home; end
 
     def academic_map
-      establishments = Establishment.joins(:classes)
-                                    .where(academy_code: selected_academy,
-                                           "classes.school_year_id": selected_school_year)
-                                    .distinct
-
-      @establishments_data = establishments_data_summary(establishments.pluck(:id))
+      @establishments_data = establishments_data_from_report
 
       respond_to do |format|
         format.html { render "academic_map", layout: false }
         format.turbo_stream
       end
+    rescue ReportNotFoundError => e
+      handle_missing_report_error(e)
+    rescue ActiveRecord::QueryAborted, ActiveRecord::StatementInvalid, Timeout::Error => e
+      handle_academic_map_error(e)
     end
 
     def login
@@ -77,14 +76,39 @@ module Academic
 
     private
 
-    def establishments_data_summary(ids)
-      sorted_ids = ids.sort
-      ids_hash = Digest::SHA256.hexdigest(sorted_ids.join("-"))
-      cache_key = "establishments_data_summary/#{ids_hash}/school_year/#{selected_school_year}"
+    def handle_academic_map_error(error)
+      Rails.logger.error("Academic map loading failed: #{error.message}")
 
-      Rails.cache.fetch(cache_key, expires_in: 1.week) do
-        Academic::EstablishmentStatsQuery.new(selected_academy, selected_school_year).establishments_data_summary(ids)
+      respond_to do |format|
+        format.html { render "academic_map_error", layout: false, status: :service_unavailable }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("academic_map", partial: "academic_map_error") }
       end
+    end
+
+    def handle_missing_report_error(error)
+      Rails.logger.error("No report available for academic map: #{error.message}")
+
+      respond_to do |format|
+        format.html { render "academic_map_missing_report", layout: false, status: :not_found }
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace("academic_map", partial: "academic_map_missing_report")
+        end
+      end
+    end
+
+    def establishments_data_from_report
+      report = current_report
+      raise ReportNotFoundError, selected_school_year if report.nil?
+
+      Academic::EstablishmentsReportExtractor
+        .new(report, selected_academy, selected_school_year)
+        .extract_establishments_data
+    end
+
+    def current_report
+      @current_report ||= Report.select(:id, :school_year_id, :created_at)
+                                .for_school_year(selected_school_year)
+                                .latest
     end
   end
 end

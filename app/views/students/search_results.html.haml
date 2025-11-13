@@ -3,7 +3,7 @@
 - else
   .fr-table
     %table
-      %caption #{@students.count} résultats trouvés pour la recherche : #{@name}
+      %caption #{@students.total_count} résultats trouvés pour la recherche : #{@name}
       %thead
         %th{scope: "col"} Élèves
         %th{scope: "col"} Dernière classe
@@ -16,3 +16,6 @@
                 Aucune scolarité active
               -else
                 = student.current_schooling.classe.label
+
+  .fr-mt-3w.d-flex.justify-content-center
+    = paginate @students, params: { name: @name }
