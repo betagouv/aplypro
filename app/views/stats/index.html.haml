@@ -1,35 +1,35 @@
 .fr-grid-row.fr-grid-row--gutters
   .fr-col-12
-    %h2 
+    %h2
       Statistiques de paiement des
       %acronym{title: "Période de formation en milieu professionnel"} PFMPs
-  .fr-col-12.fr-col-md-6
-    .fr-grid-row.fr-grid-row--gutters
-      .fr-col-12
-        .stat
-          %h3 Montant total payé
-          %span.fr-display--xl= number_to_currency(@total_paid)
+      - if @current_school_year.present?
+        = "(#{@current_school_year.start_year}-#{@current_school_year.end_year})"
 
-      .fr-col-12
-        .stat
-          %h3 Nombre total d'élèves payés
-          %span.fr-display--xl= number_with_delimiter(@total_paid_students)
+  - if @total_paid.present?
+    .fr-col-12.fr-col-md-6
+      .fr-grid-row.fr-grid-row--gutters
+        .fr-col-12
+          .stat
+            %h3 Montant total payé
+            %span.fr-display--xl= number_to_currency(@total_paid)
 
-      .fr-col-12
-        .stat
-          %h3
-            Nombre total de
-            %acronym{title: "Période de formation en milieu professionnel"} PFMPs
-            payées
-          %span.fr-display--xl= number_with_delimiter(@total_paid_pfmps)
+        .fr-col-12
+          .stat
+            %h3 Nombre total d'élèves payés
+            %span.fr-display--xl= number_with_delimiter(@total_paid_students)
 
-      .fr-col-12
-        .stat
-          %h3
-            Nombre de 
-            %acronym{title: "Période de formation en milieu professionnel"} PFMPs
-            payées par mois
-          = column_chart paid_pfmps_per_month_stats_path, label: "nombre de stages payés"
+        .fr-col-12
+          .stat
+            %h3
+              Nombre total de
+              %acronym{title: "Période de formation en milieu professionnel"} PFMPs
+              payées
+            %span.fr-display--xl= number_with_delimiter(@total_paid_pfmps)
 
-  .fr-col-12.fr-col-md-6
-    = render 'map'
+    .fr-col-12.fr-col-md-6
+      = render 'map'
+  - else
+    .fr-col-12
+      .fr-alert.fr-alert--info
+        %p Aucun rapport disponible pour l'année scolaire en cours.
