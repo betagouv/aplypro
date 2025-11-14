@@ -34,6 +34,8 @@ module Academic
       extractor = Academic::EstablishmentsReportExtractor.new(report, selected_academy, selected_school_year)
       data = extractor.extract_single_establishment_data(@etab.uai)
 
+      return {} if data.nil?
+
       { @etab.uai => data }
     end
   end
