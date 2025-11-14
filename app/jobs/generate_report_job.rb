@@ -10,6 +10,5 @@ class GenerateReportJob < ApplicationJob
     Report.create_for_school_year(previous_school_year, date) if previous_school_year
 
     WarmCachesJob.perform_later
-    PaidPfmp.refresh
   end
 end

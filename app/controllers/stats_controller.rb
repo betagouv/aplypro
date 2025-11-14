@@ -5,38 +5,30 @@ class StatsController < ApplicationController
 
   skip_before_action :authenticate_user!
 
-  def index # rubocop:disable Metrics/AbcSize
-    @total_paid = PaidPfmp.paid.sum(:amount)
-    @total_paid_students = PaidPfmp.paid.distinct.count(:student_id)
-    @total_paid_pfmps = PaidPfmp.paid.count
-
-    current_year = SchoolYear.current.start_year
-
-    @schoolings_per_academy = Rails.cache.fetch("schoolings_per_academy/#{current_year}", expires_in: 1.week) do
-      schoolings_stats = Stats::Indicator::Count::Schoolings.new(current_year)
-      academies_data(schoolings_stats, :count)
-    end
-
-    @amounts_per_academy = Rails.cache.fetch("amounts_per_academy/#{current_year}", expires_in: 1.week) do
-      validated_amounts_stats = Stats::Indicator::Sum::PfmpsValidated.new(current_year)
-      academies_data(validated_amounts_stats, :sum)
-    end
-  end
-
-  def paid_pfmps_per_month
-    render json: PaidPfmp.group_by_month(:paid_at, format: "%B %Y").count
+  def index
+    @current_school_year = SchoolYear.current
+    load_stats_from_report if current_report
   end
 
   private
 
-  def academies_data(stats_indicator, operation_type)
-    collection = stats_indicator.with_mef_and_establishment
-                                .where("mefs.ministry": :menj)
+  def current_report
+    @current_report ||= Report
+                        .select(:id, :school_year_id, :created_at)
+                        .for_school_year(@current_school_year)
+                        .ordered
+                        .first
+  end
 
-    if operation_type == :count
-      collection.group("establishments.academy_code").count
-    else
-      collection.group("establishments.academy_code").sum(:amount)
-    end
+  def load_stats_from_report
+    stats = Reports::StatsExtractor.new(current_report).extract_public_stats
+
+    @total_paid = stats[:total_paid_amount]
+    @total_paid_students = stats[:students_paid_count]
+    @total_paid_pfmps = stats[:pfmps_paid_count]
+
+    academy_extractor = Reports::AcademyDataExtractor.new(current_report)
+    @schoolings_per_academy = academy_extractor.extract_field(:schoolings_count)
+    @amounts_per_academy = academy_extractor.extract_field(:pfmps_validated_sum)
   end
 end
