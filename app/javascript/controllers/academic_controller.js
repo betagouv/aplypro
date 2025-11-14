@@ -71,8 +71,8 @@ export default class extends Controller {
 
     try {
       this.mapContainerTarget.innerHTML = ''
-      
-      this.createMap()
+
+      await this.createMap()
       await this.createMarkerSymbols()
       this.createLegend()
       this.createEtabMarkers()
@@ -155,7 +155,7 @@ export default class extends Controller {
       })
   }
 
-  createMap() {
+  async createMap() {
     this.width = this.mapContainerTarget.offsetWidth
     const tableContainer = document.querySelector('.establishments-table-container')
     const maxHeight = tableContainer ?
@@ -178,17 +178,16 @@ export default class extends Controller {
     this.tileLayout = this.d3Tile.tile().size([this.width, this.height])
     this.path = this.d3.geoPath().projection(this.projection)
 
-    this.createAcademyPath().then(initialTransform => {
-      this.zoom = this.d3.zoom()
-        .scaleExtent([1, Infinity])
-        .on("zoom", this.zoomed.bind(this))
+    const initialTransform = await this.createAcademyPath()
+    this.zoom = this.d3.zoom()
+      .scaleExtent([1, Infinity])
+      .on("zoom", this.zoomed.bind(this))
 
-      this.currentTransform = initialTransform
-      this.svg.call(this.zoom)
-        .call(this.zoom.transform, initialTransform)
+    this.currentTransform = initialTransform
+    this.svg.call(this.zoom)
+      .call(this.zoom.transform, initialTransform)
 
-      this.zoom.scaleExtent([initialTransform.k * 0.8, Infinity])
-    })
+    this.zoom.scaleExtent([initialTransform.k * 0.8, Infinity])
   }
 
   async createAcademyPath() {

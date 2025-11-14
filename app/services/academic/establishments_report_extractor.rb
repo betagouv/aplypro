@@ -62,7 +62,10 @@ module Academic
 
     def fetch_establishments_by_uai(uais)
       Establishment
-        .select(:id, :uai, :name, :address_line1, :address_line2, :city, :postal_code, :academy_code)
+        .select(
+          :id, :uai, :name, :address_line1, :address_line2, :city, :postal_code,
+          :academy_code, :ministry, :private_contract_type_code
+        )
         .where(uai: uais)
         .index_by(&:uai)
     end
