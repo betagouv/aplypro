@@ -24,12 +24,15 @@ module Reports
     end
 
     def build_academy_hash(data, field_index)
+      academy_code_map = Establishment.distinct.pluck(:academy_label, :academy_code).to_h
+
       data[1..].each_with_object({}) do |row, result|
         next unless row.is_a?(Array) && row.length > field_index
 
-        academy = row[0]
+        academy_label = row[0]
         value = row[field_index]
-        result[academy] = value if academy.present? && value.present?
+        academy_code = academy_code_map[academy_label]
+        result[academy_code] = value || 0 if academy_code.present?
       end
     end
   end
