@@ -11,18 +11,16 @@ module CacheWarmer
     end
 
     def warm_public_stats_caches
-      current_year = SchoolYear.current.start_year
+      current_report = Report
+                       .select(:id, :school_year_id, :created_at)
+                       .for_school_year(SchoolYear.current)
+                       .ordered
+                       .first
 
-      warm_indicator_cache(
-        "schoolings_per_academy", current_year, Stats::Indicator::Count::Schoolings, :count
-      )
-    end
+      return unless current_report
 
-    private
-
-    def warm_cache(cache_key, expires_in: 1.week, &)
-      Rails.cache.delete(cache_key)
-      Rails.cache.fetch(cache_key, expires_in: expires_in, &)
+      extractor = Reports::BaseExtractor.new(current_report)
+      extractor.extract(:menj_academies_data, :establishments_data)
     end
   end
 end

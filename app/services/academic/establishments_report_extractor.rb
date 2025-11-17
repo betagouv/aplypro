@@ -86,9 +86,9 @@ module Academic
 
     def build_establishment_entry(establishment, row, indexes)
       establishment.attributes.symbolize_keys.merge(
-        schooling_count: row[indexes[:schoolings_count]] || 0,
-        payable_amount: row[indexes[:pfmps_validated_sum]] || 0,
-        paid_amount: row[indexes[:payment_requests_paid_sum]] || 0
+        schooling_count: row[indexes[:schoolings_count]].to_i,
+        payable_amount: row[indexes[:pfmps_validated_sum]].to_f,
+        paid_amount: row[indexes[:payment_requests_paid_sum]].to_f
       )
     end
   end
