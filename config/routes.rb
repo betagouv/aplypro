@@ -30,7 +30,11 @@ Rails.application.routes.draw do
     get "home", to: "application#home"
     get "academic_map", to: "application#academic_map"
 
-    resources :establishments, only: [:show]
+    resources :establishments, only: [:show] do
+      member do
+        get :users
+      end
+    end
 
     resource :students do
       get :search_results
