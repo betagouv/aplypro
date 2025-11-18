@@ -2,6 +2,8 @@
 
 module Academic
   class EstablishmentsController < Academic::ApplicationController
+    include UserFiltering
+
     before_action :find_establishment
 
     helper_method :current_establishment
@@ -11,6 +13,17 @@ module Academic
                        .where(establishment_user_roles: { role: :dir, establishment_id: @etab.id })
                        .distinct
       @establishment_data = establishment_data_from_report
+    end
+
+    def users
+      @users = User.joins(establishment_user_roles: :establishment)
+                   .where(establishment_user_roles: { establishment_id: @etab.id })
+                   .then { |relation| filter_by_role(relation) }
+                   .then { |relation| apply_user_sorting(relation) }
+                   .page(params[:page])
+                   .per(users_per_page)
+
+      @establishment_eurs_by_user = load_establishment_user_roles
     end
 
     private
@@ -37,6 +50,13 @@ module Academic
       return {} if data.nil?
 
       { @etab.uai => data }
+    end
+
+    def load_establishment_user_roles
+      EstablishmentUserRole
+        .where(user_id: @users.reorder(nil).pluck(:id), establishment_id: @etab.id)
+        .includes(:establishment)
+        .group_by(&:user_id)
     end
   end
 end

@@ -1,0 +1,44 @@
+%section.fr-container.fr-pb-3w
+  %h1.fr-h3 Utilisateurs de l'établissement #{@etab.name} - UAI #{@etab.uai}
+
+  .fr-mb-3w
+    .fr-btns-group.fr-btns-group--inline
+      = link_to "Tous", users_academic_establishment_path(@etab), class: "fr-btn #{params[:role].blank? ? 'fr-btn--secondary' : 'fr-btn--tertiary'}"
+      = link_to "Directeurs", users_academic_establishment_path(@etab, role: :dir), class: "fr-btn #{params[:role] == 'dir' ? 'fr-btn--secondary' : 'fr-btn--tertiary'}"
+      = link_to "Habilités", users_academic_establishment_path(@etab, role: :authorised), class: "fr-btn #{params[:role] == 'authorised' ? 'fr-btn--secondary' : 'fr-btn--tertiary'}"
+
+  - if @users.empty?
+    .fr-alert.fr-alert--info
+      %p.fr-alert__title Aucun utilisateur trouvé pour cet établissement.
+  - else
+    = sortable_table_hint
+    .fr-table.fr-table--no-caption
+      %table
+        %caption Liste des utilisateurs de l'établissement
+        %thead
+          %tr
+            %th{scope: "col"}
+              = sortable_column_header(column: "name", label: "Nom", path: users_academic_establishment_path(@etab, role: params[:role], sort: "name"), current_sort: params[:sort])
+            %th{scope: "col"}
+              = sortable_column_header(column: "email", label: "Email", path: users_academic_establishment_path(@etab, role: params[:role], sort: "email"), current_sort: params[:sort])
+            %th{scope: "col"} Rôle(s)
+            %th{scope: "col"}
+              = sortable_column_header(column: "last_sign_in", label: "Dernière connexion", path: users_academic_establishment_path(@etab, role: params[:role], sort: "last_sign_in"), current_sort: params[:sort])
+        %tbody
+          - @users.each do |user|
+            - establishment_eurs = @establishment_eurs_by_user[user.id] || []
+            - user_roles = establishment_eurs.map(&:role).uniq
+            %tr
+              %td
+                %strong= user.name
+              %td= user.email
+              %td
+                = user_role_badges(user_roles, establishment: @etab, user: user)
+              %td
+                - if user.last_sign_in_at
+                  = l(user.last_sign_in_at, format: :long)
+                - else
+                  %span.fr-text--sm.fr-text--mention-grey Jamais connecté
+
+    .fr-mt-3w.d-flex.justify-content-center
+      = paginate @users

@@ -36,10 +36,7 @@
                 %strong= user.name
               %td= user.email
               %td
-                - if user_roles.include?('dir')
-                  %span.fr-badge.fr-badge--blue-ecume Directeur
-                - if user_roles.include?('authorised')
-                  %span.fr-badge.fr-badge--purple-glycine.fr-ml-1w Habilité
+                = user_role_badges(user_roles)
               %td
                 - if establishments.any?
                   %ul.fr-raw-list

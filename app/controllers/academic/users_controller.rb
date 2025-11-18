@@ -2,12 +2,11 @@
 
 module Academic
   class UsersController < Academic::ApplicationController
+    include UserFiltering
+
     skip_before_action :check_selected_academy, only: :select_academy
 
     helper_method :academies
-
-    VALID_SORT_OPTIONS = %w[name email uai last_sign_in].freeze
-    USERS_PER_PAGE = 50
 
     def select_academy
       @inhibit_banner = true
@@ -29,45 +28,19 @@ module Academic
       @users = User.joins(establishment_user_roles: :establishment)
                    .where(establishments: { academy_code: selected_academy })
                    .then { |relation| filter_by_role(relation) }
-                   .then { |relation| apply_sorting(relation) }
+                   .then { |relation| apply_user_sorting(relation, include_uai: true) }
                    .page(params[:page])
-                   .per(USERS_PER_PAGE)
+                   .per(users_per_page)
 
       @academy_eurs_by_user = load_academy_establishment_user_roles
     end
 
     private
 
-    def filter_by_role(relation)
-      return relation if params[:role].blank?
-      return relation unless EstablishmentUserRole.roles.key?(params[:role])
-
-      relation.where(establishment_user_roles: { role: params[:role] })
-    end
-
-    def apply_sorting(relation)
-      case sort_column
-      when "uai"
-        relation.select("users.*, MIN(establishments.name) as min_establishment_name")
-                .group("users.id")
-                .order("min_establishment_name ASC, users.name ASC")
-      when "email"
-        relation.distinct.order("users.email ASC")
-      when "last_sign_in"
-        relation.distinct.order(Arel.sql("users.last_sign_in_at DESC NULLS LAST"))
-      else
-        relation.distinct.order("users.name ASC")
-      end
-    end
-
-    def sort_column
-      VALID_SORT_OPTIONS.include?(params[:sort]) ? params[:sort] : "name"
-    end
-
     def load_academy_establishment_user_roles
       EstablishmentUserRole
         .joins(:establishment)
-        .where(user_id: @users.map(&:id), establishments: { academy_code: selected_academy })
+        .where(user_id: @users.reorder(nil).pluck(:id), establishments: { academy_code: selected_academy })
         .includes(establishment: :confirmed_director)
         .group_by(&:user_id)
     end

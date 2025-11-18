@@ -48,6 +48,8 @@
                           - else
                             %span.fr-badge.fr-badge--info
                               Directeur non confirmé
+            .fr-mt-3w
+              = link_to "Voir tous les utilisateurs", users_academic_establishment_path(@etab), class: "fr-btn fr-btn--secondary"
 
 .fr-container
   = render 'academic/establishments/establishment_timeline'
