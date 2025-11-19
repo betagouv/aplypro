@@ -40,7 +40,8 @@ module Academic
         academy: headers.index("academy"),
         schoolings_count: headers.index("schoolings_count"),
         pfmps_validated_sum: headers.index("pfmps_validated_sum"),
-        payment_requests_paid_sum: headers.index("payment_requests_paid_sum")
+        payment_requests_paid_sum: headers.index("payment_requests_paid_sum"),
+        attributive_decisions_count: headers.index("attributive_decisions_count")
       }
     end
 
@@ -88,7 +89,8 @@ module Academic
       establishment.attributes.symbolize_keys.merge(
         schooling_count: row[indexes[:schoolings_count]].to_i,
         payable_amount: row[indexes[:pfmps_validated_sum]].to_f,
-        paid_amount: row[indexes[:payment_requests_paid_sum]].to_f
+        paid_amount: row[indexes[:payment_requests_paid_sum]].to_f,
+        attributive_decisions_count: row[indexes[:attributive_decisions_count]].to_i
       )
     end
   end

@@ -36,6 +36,7 @@
                 %td{scope: "col"} UAI
                 %th{scope: "col"} Nom
                 %th{scope: "col"} Scolarités
+                %th{scope: "col"}= Stats::Indicator::Count::AttributiveDecisions.title
                 %th{scope: "col"} Montant payé
               %tbody
                 - @establishments_data.each do |uai, establishment|
@@ -48,4 +49,5 @@
                     %td= uai
                     %td= link_to establishment[:name], academic_establishment_path(establishment[:id]), target: "_blank", rel: "noopener"
                     %td= establishment[:schooling_count]
+                    %td= establishment[:attributive_decisions_count]
                     %td= number_to_currency(establishment[:paid_amount], unit: "€", format: "%n %u")
