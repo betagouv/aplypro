@@ -25,7 +25,7 @@ module Academic
     end
 
     def index
-      @search_query = params[:search]
+      @search_query = normalize_search_query
       @users = filtered_academy_users
       @academy_eurs_by_user = load_academy_establishment_user_roles
     end

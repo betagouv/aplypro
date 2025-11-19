@@ -16,7 +16,7 @@ module Academic
     end
 
     def users
-      @search_query = params[:search]
+      @search_query = normalize_search_query
       @users = filtered_establishment_users
       @establishment_eurs_by_user = load_establishment_user_roles
     end

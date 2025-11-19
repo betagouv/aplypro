@@ -32,6 +32,18 @@ class User < ApplicationRecord
     errors.add(:selected_establishment, "no corresponding roles found") unless legit
   end
 
+  scope :search, lambda { |query|
+    return none if query.blank?
+
+    search_terms = extract_search_terms(query)
+    return none if search_terms.empty?
+
+    where(
+      build_search_conditions(search_terms),
+      *search_terms.flat_map { |term| [term, term] }
+    )
+  }
+
   class << self
     # ideally all these methods would live in some OIDC-factory but I
     # can't figure out a pattern I like quite yet
@@ -46,22 +58,21 @@ class User < ApplicationRecord
       end
     end
 
-    def search(query)
-      return none if query.blank?
+    def extract_search_terms(query)
+      return [] if query.blank?
 
-      search_terms = query
-                     .strip
-                     .gsub(/[^[:alnum:]\s]/, "")
-                     .split
-                     .map { |term| "%#{sanitize_sql_like(term)}%" }
+      normalized = query.strip.gsub(/[^[:alnum:]\s]/, "")
+      return [] if normalized.blank?
 
-      where(
-        search_terms.map do
-          "(regexp_replace(unaccent(users.name), '[^[:alnum:]]', '', 'g') ILIKE ? OR " \
-            "regexp_replace(unaccent(users.email), '[^[:alnum:]]', '', 'g') ILIKE ?)"
-        end.join(" OR "),
-        *search_terms.flat_map { |term| [term, term] }
-      )
+      terms = normalized.split.reject { |term| term.length < 2 }
+      terms.map { |term| "%#{sanitize_sql_like(term)}%" }
+    end
+
+    def build_search_conditions(terms)
+      terms.map do
+        "(regexp_replace(unaccent(users.name), '[^[:alnum:]]', '', 'g') ILIKE ? OR " \
+          "regexp_replace(unaccent(users.email), '[^[:alnum:]]', '', 'g') ILIKE ?)"
+      end.join(" OR ")
     end
   end
 
