@@ -2,10 +2,17 @@
   %h1.fr-h3 Utilisateurs de l'établissement #{@etab.name} - UAI #{@etab.uai}
 
   .fr-mb-3w
+    = form_with method: :get, url: users_academic_establishment_path(@etab), local: true do |form|
+      .fr-search-bar{role: "search"}
+        = form.label :search, "Recherche", class: "fr-label"
+        = form.text_field :search, placeholder: "Rechercher par nom ou email...", value: @search_query, class: "fr-input"
+        = form.button "Rechercher", type: "submit", class: "fr-btn", name: nil
+
+  .fr-mb-3w
     .fr-btns-group.fr-btns-group--inline
-      = link_to "Tous", users_academic_establishment_path(@etab), class: "fr-btn #{params[:role].blank? ? 'fr-btn--secondary' : 'fr-btn--tertiary'}"
-      = link_to "Directeurs", users_academic_establishment_path(@etab, role: :dir), class: "fr-btn #{params[:role] == 'dir' ? 'fr-btn--secondary' : 'fr-btn--tertiary'}"
-      = link_to "Habilités", users_academic_establishment_path(@etab, role: :authorised), class: "fr-btn #{params[:role] == 'authorised' ? 'fr-btn--secondary' : 'fr-btn--tertiary'}"
+      = link_to "Tous", users_academic_establishment_path(@etab, search: @search_query), class: "fr-btn #{params[:role].blank? ? 'fr-btn--secondary' : 'fr-btn--tertiary'}"
+      = link_to "Directeurs", users_academic_establishment_path(@etab, role: :dir, search: @search_query), class: "fr-btn #{params[:role] == 'dir' ? 'fr-btn--secondary' : 'fr-btn--tertiary'}"
+      = link_to "Habilités", users_academic_establishment_path(@etab, role: :authorised, search: @search_query), class: "fr-btn #{params[:role] == 'authorised' ? 'fr-btn--secondary' : 'fr-btn--tertiary'}"
 
   - if @users.empty?
     .fr-alert.fr-alert--info
@@ -18,12 +25,12 @@
         %thead
           %tr
             %th{scope: "col"}
-              = sortable_column_header(column: "name", label: "Nom", path: users_academic_establishment_path(@etab, role: params[:role], sort: "name"), current_sort: params[:sort])
+              = sortable_column_header(column: "name", label: "Nom", path: users_academic_establishment_path(@etab, role: params[:role], search: @search_query, sort: "name"), current_sort: params[:sort])
             %th{scope: "col"}
-              = sortable_column_header(column: "email", label: "Email", path: users_academic_establishment_path(@etab, role: params[:role], sort: "email"), current_sort: params[:sort])
+              = sortable_column_header(column: "email", label: "Email", path: users_academic_establishment_path(@etab, role: params[:role], search: @search_query, sort: "email"), current_sort: params[:sort])
             %th{scope: "col"} Rôle(s)
             %th{scope: "col"}
-              = sortable_column_header(column: "last_sign_in", label: "Dernière connexion", path: users_academic_establishment_path(@etab, role: params[:role], sort: "last_sign_in"), current_sort: params[:sort])
+              = sortable_column_header(column: "last_sign_in", label: "Dernière connexion", path: users_academic_establishment_path(@etab, role: params[:role], search: @search_query, sort: "last_sign_in"), current_sort: params[:sort])
         %tbody
           - @users.each do |user|
             - establishment_eurs = @establishment_eurs_by_user[user.id] || []
@@ -41,4 +48,4 @@
                   %span.fr-text--sm.fr-text--mention-grey Jamais connecté
 
     .fr-mt-3w.d-flex.justify-content-center
-      = paginate @users
+      = paginate @users, params: { search: @search_query, role: params[:role], sort: params[:sort] }

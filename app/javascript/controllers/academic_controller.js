@@ -48,6 +48,8 @@ export default class extends Controller {
     this.selectedAcademy = parseInt(this.element.dataset.selectedAcademyValue)
     this.establishments = JSON.parse(this.element.dataset.establishmentsData)
     this.maxNbSchoolings = Math.max(...Object.values(this.establishments).map(e => e.schooling_count))
+    this.currentSortColumn = 'paid_amount'
+    this.sortAscending = false
     this.bopVisibleStates = {
       masa: true,
       menj: true,
@@ -360,20 +362,45 @@ export default class extends Controller {
   setupTableSorting() {
     const table = document.querySelector('.establishments-table')
     const headers = table.querySelectorAll('thead th')
+    const sortableColumns = {
+      'Nb. DA': 'attributive_decisions_count',
+      'Montant payé': 'paid_amount'
+    }
+
     headers.forEach(header => {
-      if (header.textContent.includes('Montant payé')) {
+      const columnName = Object.keys(sortableColumns).find(name => header.textContent.includes(name))
+      if (columnName) {
+        const columnKey = sortableColumns[columnName]
         header.style.cursor = 'pointer'
         const sortArrow = document.createElement('span')
-        sortArrow.innerHTML = this.arrowDown
+        sortArrow.innerHTML = columnKey === this.currentSortColumn ? (this.sortAscending ? this.arrowUp : this.arrowDown) : ''
         sortArrow.className = 'sort-arrow'
         sortArrow.style.paddingLeft = '5px'
         header.appendChild(sortArrow)
 
         header.addEventListener('click', () => {
-          this.sortAscending = !this.sortAscending
+          if (this.currentSortColumn === columnKey) {
+            this.sortAscending = !this.sortAscending
+          } else {
+            this.currentSortColumn = columnKey
+            this.sortAscending = false
+          }
           this.sortTable(table)
-          sortArrow.innerHTML = this.sortAscending ? this.arrowUp : this.arrowDown
+          this.updateSortArrows(headers, sortableColumns)
         })
+      }
+    })
+  }
+
+  updateSortArrows(headers, sortableColumns) {
+    headers.forEach(header => {
+      const columnName = Object.keys(sortableColumns).find(name => header.textContent.includes(name))
+      if (columnName) {
+        const columnKey = sortableColumns[columnName]
+        const sortArrow = header.querySelector('.sort-arrow')
+        if (sortArrow) {
+          sortArrow.innerHTML = columnKey === this.currentSortColumn ? (this.sortAscending ? this.arrowUp : this.arrowDown) : ''
+        }
       }
     })
   }
@@ -385,12 +412,12 @@ export default class extends Controller {
       const uaiA = rowA.dataset.uai
       const uaiB = rowB.dataset.uai
 
-      const paidAmountA = this.establishments[uaiA]?.paid_amount || 0
-      const paidAmountB = this.establishments[uaiB]?.paid_amount || 0
+      const valueA = this.establishments[uaiA]?.[this.currentSortColumn] || 0
+      const valueB = this.establishments[uaiB]?.[this.currentSortColumn] || 0
 
       return this.sortAscending
-        ? paidAmountA - paidAmountB
-        : paidAmountB - paidAmountA
+        ? valueA - valueB
+        : valueB - valueA
     })
 
     rows.forEach(row => tbody.appendChild(row))

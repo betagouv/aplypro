@@ -12,6 +12,20 @@ module UserFiltering
     USERS_PER_PAGE
   end
 
+  def normalize_search_query
+    return nil if params[:search].blank?
+
+    normalized = params[:search].strip.gsub(/[^[:alnum:]\s]/, "").strip
+    normalized.presence
+  end
+
+  def apply_search(relation)
+    query = normalize_search_query
+    return relation if query.nil?
+
+    relation.merge(User.search(query))
+  end
+
   def filter_by_role(relation)
     return relation if params[:role].blank?
     return relation unless EstablishmentUserRole.roles.key?(params[:role])
