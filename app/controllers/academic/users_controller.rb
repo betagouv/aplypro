@@ -25,17 +25,22 @@ module Academic
     end
 
     def index
-      @users = User.joins(establishment_user_roles: :establishment)
-                   .where(establishments: { academy_code: selected_academy })
-                   .then { |relation| filter_by_role(relation) }
-                   .then { |relation| apply_user_sorting(relation, include_uai: true) }
-                   .page(params[:page])
-                   .per(users_per_page)
-
+      @search_query = params[:search]
+      @users = filtered_academy_users
       @academy_eurs_by_user = load_academy_establishment_user_roles
     end
 
     private
+
+    def filtered_academy_users
+      User.joins(establishment_user_roles: :establishment)
+          .where(establishments: { academy_code: selected_academy })
+          .then { |relation| apply_search(relation) }
+          .then { |relation| filter_by_role(relation) }
+          .then { |relation| apply_user_sorting(relation, include_uai: true) }
+          .page(params[:page])
+          .per(users_per_page)
+    end
 
     def load_academy_establishment_user_roles
       EstablishmentUserRole

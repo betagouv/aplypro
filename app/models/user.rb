@@ -45,6 +45,24 @@ class User < ApplicationRecord
         user.oidc_attributes = attrs
       end
     end
+
+    def search(query)
+      return none if query.blank?
+
+      search_terms = query
+                     .strip
+                     .gsub(/[^[:alnum:]\s]/, "")
+                     .split
+                     .map { |term| "%#{sanitize_sql_like(term)}%" }
+
+      where(
+        search_terms.map do
+          "(regexp_replace(unaccent(users.name), '[^[:alnum:]]', '', 'g') ILIKE ? OR " \
+            "regexp_replace(unaccent(users.email), '[^[:alnum:]]', '', 'g') ILIKE ?)"
+        end.join(" OR "),
+        *search_terms.flat_map { |term| [term, term] }
+      )
+    end
   end
 
   def to_s

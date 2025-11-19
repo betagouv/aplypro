@@ -2,10 +2,17 @@
   %h1.fr-h3 Utilisateurs en établissement - Académie #{Establishment::ACADEMY_LABELS[selected_academy]}
 
   .fr-mb-3w
+    = form_with method: :get, url: academic_users_path, local: true do |form|
+      .fr-search-bar{role: "search"}
+        = form.label :search, "Recherche", class: "fr-label"
+        = form.text_field :search, placeholder: "Rechercher par nom ou email...", value: @search_query, class: "fr-input"
+        = form.button "Rechercher", type: "submit", class: "fr-btn", name: nil
+
+  .fr-mb-3w
     .fr-btns-group.fr-btns-group--inline
-      = link_to "Tous", academic_users_path, class: "fr-btn #{params[:role].blank? ? 'fr-btn--secondary' : 'fr-btn--tertiary'}"
-      = link_to "Directeurs", academic_users_path(role: :dir), class: "fr-btn #{params[:role] == 'dir' ? 'fr-btn--secondary' : 'fr-btn--tertiary'}"
-      = link_to "Habilités", academic_users_path(role: :authorised), class: "fr-btn #{params[:role] == 'authorised' ? 'fr-btn--secondary' : 'fr-btn--tertiary'}"
+      = link_to "Tous", academic_users_path(search: @search_query), class: "fr-btn #{params[:role].blank? ? 'fr-btn--secondary' : 'fr-btn--tertiary'}"
+      = link_to "Directeurs", academic_users_path(role: :dir, search: @search_query), class: "fr-btn #{params[:role] == 'dir' ? 'fr-btn--secondary' : 'fr-btn--tertiary'}"
+      = link_to "Habilités", academic_users_path(role: :authorised, search: @search_query), class: "fr-btn #{params[:role] == 'authorised' ? 'fr-btn--secondary' : 'fr-btn--tertiary'}"
 
   - if @users.empty?
     .fr-alert.fr-alert--info
@@ -18,14 +25,14 @@
         %thead
           %tr
             %th{scope: "col"}
-              = sortable_column_header(column: "name", label: "Nom", path: academic_users_path(role: params[:role], sort: "name"), current_sort: params[:sort])
+              = sortable_column_header(column: "name", label: "Nom", path: academic_users_path(role: params[:role], search: @search_query, sort: "name"), current_sort: params[:sort])
             %th{scope: "col"}
-              = sortable_column_header(column: "email", label: "Email", path: academic_users_path(role: params[:role], sort: "email"), current_sort: params[:sort])
+              = sortable_column_header(column: "email", label: "Email", path: academic_users_path(role: params[:role], search: @search_query, sort: "email"), current_sort: params[:sort])
             %th{scope: "col"} Rôle(s)
             %th{scope: "col"}
-              = sortable_column_header(column: "uai", label: "Établissement(s) / UAI", path: academic_users_path(role: params[:role], sort: "uai"), current_sort: params[:sort])
+              = sortable_column_header(column: "uai", label: "Établissement(s) / UAI", path: academic_users_path(role: params[:role], search: @search_query, sort: "uai"), current_sort: params[:sort])
             %th{scope: "col"}
-              = sortable_column_header(column: "last_sign_in", label: "Dernière connexion", path: academic_users_path(role: params[:role], sort: "last_sign_in"), current_sort: params[:sort])
+              = sortable_column_header(column: "last_sign_in", label: "Dernière connexion", path: academic_users_path(role: params[:role], search: @search_query, sort: "last_sign_in"), current_sort: params[:sort])
         %tbody
           - @users.each do |user|
             - academy_eurs = @academy_eurs_by_user[user.id] || []
@@ -56,4 +63,4 @@
                   %span.fr-text--sm.fr-text--mention-grey Jamais connecté
 
     .fr-mt-3w.d-flex.justify-content-center
-      = paginate @users
+      = paginate @users, params: { search: @search_query, role: params[:role], sort: params[:sort] }

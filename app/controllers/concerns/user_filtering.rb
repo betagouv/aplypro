@@ -12,6 +12,12 @@ module UserFiltering
     USERS_PER_PAGE
   end
 
+  def apply_search(relation)
+    return relation if params[:search].blank?
+
+    relation.merge(User.search(params[:search]))
+  end
+
   def filter_by_role(relation)
     return relation if params[:role].blank?
     return relation unless EstablishmentUserRole.roles.key?(params[:role])

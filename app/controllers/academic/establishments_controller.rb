@@ -16,17 +16,22 @@ module Academic
     end
 
     def users
-      @users = User.joins(establishment_user_roles: :establishment)
-                   .where(establishment_user_roles: { establishment_id: @etab.id })
-                   .then { |relation| filter_by_role(relation) }
-                   .then { |relation| apply_user_sorting(relation) }
-                   .page(params[:page])
-                   .per(users_per_page)
-
+      @search_query = params[:search]
+      @users = filtered_establishment_users
       @establishment_eurs_by_user = load_establishment_user_roles
     end
 
     private
+
+    def filtered_establishment_users
+      User.joins(establishment_user_roles: :establishment)
+          .where(establishment_user_roles: { establishment_id: @etab.id })
+          .then { |relation| apply_search(relation) }
+          .then { |relation| filter_by_role(relation) }
+          .then { |relation| apply_user_sorting(relation) }
+          .page(params[:page])
+          .per(users_per_page)
+    end
 
     def current_establishment
       @current_establishment ||= @etab
