@@ -11,6 +11,10 @@
               %li
                 %strong UAI:
                 = @etab.uai
+              - if @etab.telephone.present?
+                %li
+                  %strong Téléphone:
+                  = @etab.telephone
               %li
                 %strong Nombre de scolarités:
                 = @establishment_data[@etab.uai][:schooling_count]
