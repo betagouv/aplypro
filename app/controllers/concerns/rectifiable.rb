@@ -32,15 +32,25 @@ module Rectifiable
 
   def rectify
     if @pfmp.can_transition_to?(:rectified)
-      @student = @pfmp.student
-      PfmpManager.new(@pfmp).rectify_and_update_attributes!(pfmp_params, address_params)
-      redirect_to school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp),
-                  notice: t("flash.pfmps.rectification.rectified")
+      perform_rectification
+      redirect_to_pfmp(notice: t("flash.pfmps.rectification.rectified"))
     else
-      redirect_to school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp),
-                  alert: t("flash.pfmps.rectification.cannot_rectify")
+      redirect_to_pfmp(alert: t("flash.pfmps.rectification.cannot_rectify"))
     end
   rescue ActiveRecord::RecordInvalid
     render :confirm_rectification, status: :unprocessable_entity
+  end
+
+  private
+
+  def perform_rectification
+    @student = @pfmp.student
+    PfmpManager.new(@pfmp).rectify_and_update_attributes!(pfmp_params, address_params)
+    @pfmp.latest_payment_request.mark_ready!
+  end
+
+  def redirect_to_pfmp(flash_options)
+    redirect_to school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp),
+                **flash_options
   end
 end

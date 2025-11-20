@@ -28,8 +28,7 @@ class PfmpStateMachine
   end
 
   after_transition(to: :rectified) do |pfmp|
-    new_payment_request = PfmpManager.new(pfmp).create_new_payment_request!
-    new_payment_request.mark_ready!
+    PfmpManager.new(pfmp).create_new_payment_request!
     Sync::StudentJob.perform_later(pfmp.schooling)
   end
 

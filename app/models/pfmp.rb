@@ -63,6 +63,7 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validates :administrative_number, length: { within: 20..22 }, if: :persisted?
 
   after_create -> { self.administrative_number = administrative_number }
+  before_destroy :ensure_destroyable?, prepend: true
 
   scope :finished, -> { where("pfmps.end_date <= (?)", Time.zone.today) }
 
@@ -72,8 +73,6 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
                    }
 
   delegate :wage, to: :mef
-
-  before_destroy :ensure_destroyable?, prepend: true
 
   def validate!
     return if in_state?(:validated)

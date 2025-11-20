@@ -42,6 +42,7 @@ module Generate
         next unless pfmp.paid?
 
         PfmpManager.new(pfmp).rectify_and_update_attributes!({ day_count: 0 }, address_params(schooling))
+        pfmp.latest_payment_request.mark_ready!
       end
     end
 
