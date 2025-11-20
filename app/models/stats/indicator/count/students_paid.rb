@@ -6,11 +6,11 @@ module Stats
       class StudentsPaid < Stats::Count
         def initialize(start_year)
           super(
-            all: Student.for_year(start_year)
-                        .joins(:schoolings)
-                        .joins(pfmps: { payment_requests: :asp_payment_request_transitions })
-                        .where("asp_payment_request_transitions.to_state": :paid)
-                        .distinct
+            all: Schooling.for_year(start_year)
+                          .joins(pfmps: { payment_requests: :asp_payment_request_transitions })
+                          .where(asp_payment_request_transitions: { most_recent: true, to_state: "paid" })
+                          .select(:student_id)
+                          .distinct
           )
         end
 
@@ -27,11 +27,11 @@ module Stats
         end
 
         def with_mef_and_establishment
-          Student.joins(schoolings: { classe: %i[mef establishment] })
+          Schooling.joins(classe: %i[mef establishment])
         end
 
         def with_establishment
-          Student.joins(schoolings: { classe: :establishment })
+          Schooling.joins(classe: :establishment)
         end
       end
     end

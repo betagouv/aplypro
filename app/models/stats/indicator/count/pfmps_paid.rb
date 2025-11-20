@@ -5,10 +5,8 @@ module Stats
     module Count
       class PfmpsPaid < Stats::Count
         def initialize(start_year)
-          pfmp = Pfmp.for_year(start_year)
-
           super(
-            all: pfmp.joins(payment_requests: :asp_payment_request_transitions)
+            all: Pfmp.for_year(start_year).joins(payment_requests: :asp_payment_request_transitions)
                      .where(asp_payment_request_transitions: { most_recent: true, to_state: "paid" })
                      .distinct
           )
