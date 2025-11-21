@@ -94,9 +94,16 @@ class Report < ApplicationRecord
       [
         keys,
         *rows.map do |row|
-          keys.map { |k| row[k].presence }
+          keys.map { |k| normalize_value(row[k]) }
         end
       ]
+    end
+
+    def normalize_value(value)
+      return nil if value.blank?
+      return value.to_f if value.is_a?(BigDecimal)
+
+      value
     end
   end
 end
