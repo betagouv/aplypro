@@ -190,6 +190,27 @@ describe PfmpManager do
       end.to change { pfmp.reload.current_state }.from("validated").to("rectified")
                                                  .and change(pfmp, :day_count).to(0)
     end
+
+    context "when rectifying an initially invalid PFMP" do
+      let(:invalid_pfmp) do
+        payment_request = create(:asp_payment_request, :paid)
+        pfmp = payment_request.pfmp
+        pfmp.update_columns(day_count: 0, amount: 0) # rubocop:disable Rails/SkipsModelValidations
+        pfmp
+      end
+      let(:manager) { described_class.new(invalid_pfmp) }
+      let(:rectification_params) do
+        { day_count: 5, start_date: invalid_pfmp.start_date, end_date: invalid_pfmp.end_date }
+      end
+
+      it "creates a pending payment request" do
+        expect do
+          manager.rectify_and_update_attributes!(rectification_params, confirmed_address_params)
+        end.to change { invalid_pfmp.reload.payment_requests.count }.by(1)
+
+        expect(invalid_pfmp.latest_payment_request).to be_in_state(:pending)
+      end
+    end
   end
 
   describe "#calculate_amount" do # rubocop:disable RSpec/MultipleMemoizedHelpers

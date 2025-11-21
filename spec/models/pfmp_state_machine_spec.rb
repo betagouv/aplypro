@@ -88,13 +88,13 @@ describe PfmpStateMachine do
     describe "transition to rectified" do
       let(:pfmp) { create(:asp_payment_request, :paid).pfmp }
 
-      it "recalculates amounts and creates a new payment request and attempts to mark it as ready" do
+      it "creates a new payment request" do
         expect do
           pfmp.state_machine.transition_to!(:rectified)
         end.to change { pfmp.payment_requests.count }.by(1)
 
         expect(pfmp.current_state).to eq("rectified")
-        expect(pfmp.payment_requests.last.reload.current_state).to eq("ready")
+        expect(pfmp.payment_requests.last.reload.current_state).to eq("pending")
       end
     end
   end

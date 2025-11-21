@@ -100,6 +100,7 @@ class MassRectificator # rubocop:disable Metrics/ClassLength
         { day_count: target_pfmp.day_count },
         address_params
       )
+      target_pfmp.latest_payment_request.mark_ready!
 
       results[:rectified] << schooling.id
       Rails.logger.info "Successfully rectified schooling #{schooling.id}"
