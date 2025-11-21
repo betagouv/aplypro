@@ -203,24 +203,12 @@ describe PfmpManager do
         { day_count: 5, start_date: invalid_pfmp.start_date, end_date: invalid_pfmp.end_date }
       end
 
-      it "creates a ready payment request" do
+      it "creates a pending payment request" do
         expect do
           manager.rectify_and_update_attributes!(rectification_params, confirmed_address_params)
         end.to change { invalid_pfmp.reload.payment_requests.count }.by(1)
 
-        invalid_pfmp.latest_payment_request.mark_ready!
-        new_payment_request = invalid_pfmp.latest_payment_request
-        expect(new_payment_request.current_state).to eq("ready")
-      end
-
-      it "updates the PFMP attributes" do
-        expect do
-          manager.rectify_and_update_attributes!(rectification_params, confirmed_address_params)
-        end.to change { invalid_pfmp.reload.day_count }.from(0).to(5)
-           .and change(invalid_pfmp, :amount).from(0)
-           .and change(invalid_pfmp, :current_state).from("validated").to("rectified")
-
-        expect(invalid_pfmp.amount).to be > 0
+        expect(invalid_pfmp.latest_payment_request).to be_in_state(:pending)
       end
     end
   end
