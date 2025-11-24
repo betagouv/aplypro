@@ -2,42 +2,39 @@
 
 module Rnvp
   class Client
-    RNVP_BASE_URL = ENV.fetch("RNVP_BASE_URL")
-    RNVP_SECRET = ENV.fetch("RNVP_SECRET")
+    class << self
+      def address(student)
+        return nil if student.nil? || !student.lives_in_france?
 
-    attr_reader :resource_connection
+        response = authenticated_client!.post("address", header) do |req|
+          req.body = {
+            ligne2: student.address_line1,
+            ligne3: student.address_line2,
+            codePostal: student.address_postal_code,
+            codeInsee: student.address_city_insee_code,
+            localite: student.address_city
+          }.to_json
+        end
 
-    def initialize
-      @resource_connection = connection
-    end
-
-    def address(student)
-      return nil if student.nil? || !student.lives_in_france?
-
-      response = resource_connection.post("address") do |req|
-        req.body = {
-          ligne2: student.address_line1,
-          ligne3: student.address_line2,
-          codePostal: student.address_postal_code,
-          codeInsee: student.address_city_insee_code,
-          localite: student.address_city
-        }.to_json
+        response.body
       end
 
-      response.body
-    end
+      private
 
-    private
+      def client
+        Rack::OAuth2::Client.new(
+          identifier: ENV.fetch("APLYPRO_OMOGEN_CLIENT_ID"),
+          secret: ENV.fetch("APLYPRO_OMOGEN_CLIENT_SECRET"),
+          token_endpoint: ENV.fetch("APLYPRO_OMOGEN_TOKEN_URL")
+        )
+      end
 
-    def connection
-      Faraday.new(
-        url: RNVP_BASE_URL,
-        headers: {
-          "Content-Type" => "application/json",
-          "X-Omogen-Api-Key" => RNVP_SECRET
-        }
-      ) do |f|
-        f.response :json
+      def authenticated_client!
+        client.access_token!
+      end
+
+      def header
+        { "client-uuid": ENV.fetch("RNVP_CLIENT_HEADER") }
       end
     end
   end
