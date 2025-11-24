@@ -363,44 +363,77 @@ export default class extends Controller {
     const table = document.querySelector('.establishments-table')
     const headers = table.querySelectorAll('thead th')
     const sortableColumns = {
+      'Scolarités': 'schooling_count',
       'Nb. DA': 'attributive_decisions_count',
       'Montant payé': 'paid_amount'
     }
 
     headers.forEach(header => {
       const columnName = Object.keys(sortableColumns).find(name => header.textContent.includes(name))
-      if (columnName) {
-        const columnKey = sortableColumns[columnName]
-        header.style.cursor = 'pointer'
-        const sortArrow = document.createElement('span')
-        sortArrow.innerHTML = columnKey === this.currentSortColumn ? (this.sortAscending ? this.arrowUp : this.arrowDown) : ''
-        sortArrow.className = 'sort-arrow'
-        sortArrow.style.paddingLeft = '5px'
-        header.appendChild(sortArrow)
+      if (!columnName) return
 
-        header.addEventListener('click', () => {
-          if (this.currentSortColumn === columnKey) {
-            this.sortAscending = !this.sortAscending
-          } else {
-            this.currentSortColumn = columnKey
-            this.sortAscending = false
-          }
-          this.sortTable(table)
-          this.updateSortArrows(headers, sortableColumns)
-        })
-      }
+      const columnKey = sortableColumns[columnName]
+      header.style.cursor = 'pointer'
+
+      const headerWrapper = this.createHeaderWithIcon(header.textContent, columnKey)
+      header.textContent = ''
+      header.appendChild(headerWrapper)
+
+      header.addEventListener('click', () => {
+        this.updateSortState(columnKey)
+        this.sortTable(table)
+        this.updateSortArrows(headers, sortableColumns)
+      })
     })
+  }
+
+  createHeaderWithIcon(text, columnKey) {
+    const wrapper = document.createElement('div')
+    wrapper.className = 'header-with-icon'
+
+    const textSpan = document.createElement('span')
+    textSpan.textContent = text
+
+    const icon = document.createElement('i')
+    icon.className = 'sort-arrow'
+    icon.setAttribute('aria-hidden', 'true')
+
+    if (columnKey === this.currentSortColumn) {
+      icon.classList.add('fr-icon--sm', this.getSortIconClass())
+    }
+
+    wrapper.appendChild(textSpan)
+    wrapper.appendChild(icon)
+    return wrapper
+  }
+
+  getSortIconClass() {
+    return this.sortAscending ? 'fr-icon-arrow-up-line' : 'fr-icon-arrow-down-line'
+  }
+
+  updateSortState(columnKey) {
+    if (this.currentSortColumn === columnKey) {
+      this.sortAscending = !this.sortAscending
+    } else {
+      this.currentSortColumn = columnKey
+      this.sortAscending = false
+    }
   }
 
   updateSortArrows(headers, sortableColumns) {
     headers.forEach(header => {
       const columnName = Object.keys(sortableColumns).find(name => header.textContent.includes(name))
-      if (columnName) {
-        const columnKey = sortableColumns[columnName]
-        const sortArrow = header.querySelector('.sort-arrow')
-        if (sortArrow) {
-          sortArrow.innerHTML = columnKey === this.currentSortColumn ? (this.sortAscending ? this.arrowUp : this.arrowDown) : ''
-        }
+      if (!columnName) return
+
+      const columnKey = sortableColumns[columnName]
+      const sortIcon = header.querySelector('.sort-arrow')
+      if (!sortIcon) return
+
+      sortIcon.className = 'sort-arrow'
+      sortIcon.setAttribute('aria-hidden', 'true')
+
+      if (columnKey === this.currentSortColumn) {
+        sortIcon.classList.add('fr-icon--sm', this.getSortIconClass())
       }
     })
   }
@@ -421,5 +454,80 @@ export default class extends Controller {
     })
 
     rows.forEach(row => tbody.appendChild(row))
+  }
+
+  toggleUaiSearch(event) {
+    const searchRow = document.getElementById('uai-search-row')
+    const searchInput = document.getElementById('uai-search')
+    const icon = event.currentTarget.querySelector('.uai-filter-icon')
+    const isVisible = searchRow.style.display !== 'none'
+
+    if (isVisible) {
+      this.closeUaiSearch(searchRow, searchInput, icon)
+    } else {
+      this.openUaiSearch(searchRow, icon, searchInput)
+    }
+  }
+
+  closeUaiSearch(searchRow, searchInput, icon) {
+    searchRow.style.display = 'none'
+    icon.classList.replace('fr-icon-arrow-up-line', 'fr-icon-search-line')
+    searchInput.value = ''
+    this.filterByUai({ target: searchInput })
+  }
+
+  openUaiSearch(searchRow, icon, searchInput) {
+    searchRow.style.display = ''
+    icon.classList.replace('fr-icon-search-line', 'fr-icon-arrow-up-line')
+    searchInput.focus()
+  }
+
+  filterByUai(event) {
+    const searchValue = event.target.value.toLowerCase().trim()
+    const tbody = document.getElementById('establishments-tbody')
+    const rows = tbody.querySelectorAll('tr.academic-map')
+
+    const visibleCount = this.filterRowsAndMarkers(rows, searchValue)
+    this.toggleNoResultsMessage(tbody, visibleCount, searchValue)
+  }
+
+  filterRowsAndMarkers(rows, searchValue) {
+    let visibleCount = 0
+
+    rows.forEach(row => {
+      const uai = row.dataset.uai.toLowerCase()
+      const isVisible = uai.includes(searchValue)
+      const marker = document.querySelector(`#marker-${row.dataset.uai}`)
+
+      row.style.display = isVisible ? '' : 'none'
+      if (marker) marker.style.display = isVisible ? '' : 'none'
+
+      if (isVisible) visibleCount++
+    })
+
+    return visibleCount
+  }
+
+  toggleNoResultsMessage(tbody, visibleCount, searchValue) {
+    let noResultsRow = document.getElementById('no-results-row')
+    const shouldShowMessage = visibleCount === 0 && searchValue !== ''
+
+    if (shouldShowMessage) {
+      if (!noResultsRow) {
+        noResultsRow = this.createNoResultsRow()
+        tbody.appendChild(noResultsRow)
+      } else {
+        noResultsRow.style.display = ''
+      }
+    } else if (noResultsRow) {
+      noResultsRow.style.display = 'none'
+    }
+  }
+
+  createNoResultsRow() {
+    const row = document.createElement('tr')
+    row.id = 'no-results-row'
+    row.innerHTML = '<td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-mention-grey);"><em>Aucun établissement ne correspond à votre recherche</em></td>'
+    return row
   }
 }

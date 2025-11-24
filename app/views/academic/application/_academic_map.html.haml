@@ -33,12 +33,19 @@
           .fr-table
             %table.establishments-table
               %thead
-                %td{scope: "col"} UAI
-                %th{scope: "col"} Nom
-                %th{scope: "col"} Scolarités
-                %th{scope: "col"}= Stats::Indicator::Count::AttributiveDecisions.title
-                %th{scope: "col"} Montant payé
-              %tbody
+                %tr
+                  %th{scope: "col", style: "cursor: pointer;", data: { action: "click->academic#toggleUaiSearch" }}
+                    .header-with-icon
+                      %span UAI
+                      %i.uai-filter-icon.fr-icon-search-line.fr-icon--sm{aria: { hidden: "true" }}
+                  %th{scope: "col"} Nom
+                  %th{scope: "col"} Scolarités
+                  %th{scope: "col"}= Stats::Indicator::Count::AttributiveDecisions.title
+                  %th{scope: "col"} Montant payé
+                %tr#uai-search-row{style: "display: none;"}
+                  %th{colspan: "5", style: "padding: 0;"}
+                    %input#uai-search.fr-input{type: "text", placeholder: "Filtrer par UAI...", data: { action: "input->academic#filterByUai" }, style: "margin: 0;"}
+              %tbody#establishments-tbody
                 - @establishments_data.each do |uai, establishment|
                   %tr.academic-map{
                     data: {
