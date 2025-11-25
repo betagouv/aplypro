@@ -1,6 +1,13 @@
 .fr-container
   %h1.fr-h3 Historique des rapports
 
+  - if current_user.admin?
+    .fr-grid-row.fr-mb-3w
+      .fr-col-12
+        = link_to global_evolution_academic_reports_path, class: "fr-btn fr-btn--secondary" do
+          %i.fr-icon-line-chart-line.fr-icon--sm.fr-mr-1w{"aria-hidden": "true"}
+          = t("academic.reports.global_evolution.button")
+
   .fr-grid-row.fr-mb-3w
     .fr-col-12.fr-col-md-6
       = form_with url: academic_reports_path, method: :get, builder: DsfrFormBuilder do |form|

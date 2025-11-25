@@ -1,0 +1,54 @@
+.academic-stats-page
+  .fr-container
+    .fr-px-3w
+      .fr-grid-row.fr-grid-row--gutters
+        .fr-col-12.fr-mb-2w
+          = link_to t("academic.reports.back_to_index"), academic_reports_path, class: "fr-btn fr-btn--sm fr-btn--tertiary"
+
+      .fr-grid-row.fr-grid-row--gutters
+        .fr-col-12
+          %h1.fr-h3= t("academic.reports.global_evolution.title", year: "#{@selected_school_year.start_year} - #{@selected_school_year.start_year + 1}")
+
+    .fr-grid-row.fr-grid-row--gutters.fr-mb-3w
+      .fr-col-12.fr-col-md-6
+        = form_with url: global_evolution_academic_reports_path, method: :get, builder: DsfrFormBuilder do |form|
+          .fr-select-group
+            = form.label :school_year_id, t("academic.reports.global_evolution.select_school_year"), class: 'fr-label'
+            = form.select :school_year_id,
+                @school_years.map { |sy| [sy.to_s, sy.id] },
+                { selected: @selected_school_year&.id },
+                { class: 'fr-select', onchange: 'this.form.submit()' }
+
+    - if @evolution_data.any?
+      .fr-grid-row.fr-grid-row--gutters.fr-mt-4w
+        .fr-col-12
+          %h2.fr-h5= t("academic.reports.global_evolution.table_title")
+
+      .fr-table.fr-table--bordered.stats-table-container
+        %table
+          %thead
+            %tr
+              %th{scope: "col"}= t("academic.reports.global_evolution.report_date")
+              - @indicators_metadata.each_with_index do |metadata, index|
+                - header = metadata&.dig(:title) || "Indicateur #{index + 1}"
+                %th{scope: "col"}
+                  = header
+                  - if metadata&.dig(:tooltip_key)
+                    %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-evolution-#{index}", type: "button"}
+                      %span.fr-tooltip.fr-placement{id: "tooltip-evolution-#{index}", role: "tooltip", "aria-hidden" => "true"}
+                        = t("tooltips.#{metadata[:tooltip_key]}")
+          %tbody
+            - @evolution_data.each do |data|
+              %tr
+                %td.fr-text--bold
+                  = link_to academic_report_path(data[:report]) do
+                    = "Rapport ##{data[:report].id} - #{l(data[:date], format: :short)}"
+                - data[:values].each_with_index do |value, index|
+                  - indicator_type = @indicators_metadata[index]&.dig(:type)
+                  %td{style: cell_background_color(value, indicator_type: indicator_type)}= format_stat_value(value, indicator_type: indicator_type)
+    - else
+      .fr-grid-row.fr-grid-row--gutters
+        .fr-col-12
+          .fr-alert.fr-alert--info
+            %h3.fr-alert__title= t("academic.reports.global_evolution.no_data_title")
+            %p= t("academic.reports.global_evolution.no_data_message")

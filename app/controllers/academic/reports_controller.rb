@@ -6,16 +6,29 @@ module Academic
 
     before_action :set_report_context, only: %i[show global export establishments_table]
     before_action :set_extractor, only: %i[show global export establishments_table]
+    before_action :require_admin, only: %i[global_evolution global export]
+    before_action :set_index_context, only: %i[index global_evolution]
 
     def index
-      infer_page_title
-      @inhibit_banner = true
-      @inhibit_breadcrumb = true
-      @school_years = SchoolYear.order(start_year: :desc)
       @selected_school_year_id = params[:school_year_id]
 
       @reports = Report.includes(:school_year).order(created_at: :desc)
       @reports = @reports.where(school_year_id: @selected_school_year_id) if @selected_school_year_id.present?
+    end
+
+    def global_evolution
+      @selected_school_year = determine_selected_school_year
+      unless @selected_school_year
+        return redirect_to academic_reports_path,
+                           alert: t("academic.school_years.selected.invalid_school_year")
+      end
+
+      @reports = Report.select(:id, :school_year_id, :created_at)
+                       .where(school_year: @selected_school_year)
+                       .order(created_at: :desc)
+
+      @evolution_data = build_evolution_data
+      @indicators_metadata = Stats::Main.indicators_metadata
     end
 
     def show
@@ -23,14 +36,10 @@ module Academic
     end
 
     def global
-      return redirect_unauthorized unless current_user.admin?
-
       prepare_global_statistics_data
     end
 
     def export
-      return redirect_unauthorized unless current_user.admin?
-
       zipline(export_files, export_filename)
     end
 
@@ -73,8 +82,37 @@ module Academic
       @extractor = Reports::BaseExtractor.new(@report)
     end
 
-    def redirect_unauthorized
-      redirect_to academic_report_path(params[:id]), alert: t("academic.reports.export.unauthorized")
+    def require_admin
+      return if current_user.admin?
+
+      redirect_path = action_name == "global_evolution" ? academic_reports_path : academic_report_path(params[:id])
+      redirect_to redirect_path, alert: t("academic.reports.export.unauthorized")
+    end
+
+    def set_index_context
+      infer_page_title
+      @inhibit_banner = true
+      @inhibit_breadcrumb = true
+      @school_years = SchoolYear.order(start_year: :desc)
+    end
+
+    def determine_selected_school_year
+      SchoolYear.find_by(id: params[:school_year_id]) || SchoolYear.order(start_year: :desc).first
+    end
+
+    def build_evolution_data
+      return [] if @reports.empty?
+
+      @reports.map do |report|
+        extractor = Reports::BaseExtractor.new(report)
+        global_data = extractor.extract(:global_data)
+
+        {
+          report: report,
+          date: report.created_at,
+          values: global_data.last
+        }
+      end
     end
 
     def prepare_statistics_data

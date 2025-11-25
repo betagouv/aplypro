@@ -71,6 +71,9 @@ Rails.application.routes.draw do
     resources :academic_invitations, only: [:destroy]
 
     resources :reports, only: %i[index show] do
+      collection do
+        get :global_evolution
+      end
       member do
         get :global
         post :export

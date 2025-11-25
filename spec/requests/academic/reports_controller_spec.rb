@@ -143,4 +143,52 @@ RSpec.describe Academic::ReportsController do
       end
     end
   end
+
+  describe "GET global_evolution" do
+    context "when user is admin" do
+      before do
+        allow_any_instance_of(Academic::User).to receive(:admin?).and_return(true) # rubocop:disable RSpec/AnyInstance
+      end
+
+      it "renders the page successfully" do
+        get global_evolution_academic_reports_path
+        expect(response).to have_http_status(:success)
+      end
+
+      context "when filtering by school year" do
+        let(:first_school_year) { create(:school_year, start_year: 2030) }
+        let(:second_school_year) { create(:school_year, start_year: 2031) }
+        let!(:first_report) { create(:report, school_year: first_school_year) }
+        let!(:second_report) { create(:report, school_year: second_school_year) }
+
+        it "shows reports for the selected school year" do
+          get global_evolution_academic_reports_path(school_year_id: first_school_year.id)
+          expect(assigns(:reports)).to include(first_report)
+          expect(assigns(:reports)).not_to include(second_report)
+        end
+
+        it "defaults to most recent school year when no filter is applied" do
+          get global_evolution_academic_reports_path
+          expect(assigns(:selected_school_year)).to eq(second_school_year)
+        end
+      end
+
+      it "displays evolution data for multiple reports" do
+        school_year = create(:school_year, start_year: 2030)
+        create(:report, school_year: school_year, created_at: 1.week.ago)
+        create(:report, school_year: school_year, created_at: 1.day.ago)
+
+        get global_evolution_academic_reports_path(school_year_id: school_year.id)
+        expect(response).to have_http_status(:success)
+        expect(assigns(:evolution_data).count).to eq(2)
+      end
+    end
+
+    context "when user is not admin" do
+      it "redirects to index page" do
+        get global_evolution_academic_reports_path
+        expect(response).to redirect_to(academic_reports_path)
+      end
+    end
+  end
 end
