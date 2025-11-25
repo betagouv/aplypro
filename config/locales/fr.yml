@@ -216,6 +216,7 @@ fr:
           index: Historique des rapports
           show: Statistiques de l'académie
           global: Statistiques globales
+          global_evolution: Évolution des statistiques globales
         students:
           show: "%{name}"
           search_results: Recherche d'un élève
@@ -558,6 +559,14 @@ fr:
       export_csv: Exporter en CSV
       compared_to: "Comparé au rapport :"
       admin_badge: Administrateur
+      global_evolution:
+        button: Évolution des statistiques globales
+        title: "Évolution des statistiques globales - Année scolaire %{year}"
+        select_school_year: Sélectionner une année scolaire
+        table_title: Statistiques globales par rapport
+        report_date: Date du rapport
+        no_data_title: Aucune donnée disponible
+        no_data_message: Aucun rapport n'a été généré pour cette année scolaire.
       export:
         unauthorized: Accès non autorisé
     welcome:
