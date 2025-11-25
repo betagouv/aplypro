@@ -455,6 +455,7 @@ export default class extends Controller {
     })
 
     rows.forEach(row => tbody.appendChild(row))
+    this.reapplyRowColors()
   }
 
   toggleUaiSearch(event) {
@@ -490,6 +491,7 @@ export default class extends Controller {
 
     const visibleCount = this.filterRowsAndMarkers(rows, searchValue)
     this.toggleNoResultsMessage(tbody, visibleCount, searchValue)
+    this.reapplyRowColors()
   }
 
   filterRowsAndMarkers(rows, searchValue) {
@@ -530,5 +532,24 @@ export default class extends Controller {
     row.id = 'no-results-row'
     row.innerHTML = '<td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-mention-grey);"><em>Aucun établissement ne correspond à votre recherche</em></td>'
     return row
+  }
+
+  reapplyRowColors() {
+    const tbody = document.getElementById('establishments-tbody')
+    const rows = tbody.querySelectorAll('tr.academic-map')
+    let visibleIndex = 0
+
+    rows.forEach(row => {
+      if (row.style.display !== 'none') {
+        if (!row.classList.contains('selected')) {
+          if (visibleIndex % 2 === 0) {
+            row.style.backgroundColor = ''
+          } else {
+            row.style.backgroundColor = 'var(--background-contrast-grey)'
+          }
+        }
+        visibleIndex++
+      }
+    })
   }
 }
