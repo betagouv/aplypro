@@ -187,6 +187,7 @@ export default class extends Controller {
 
     this.currentTransform = initialTransform
     this.svg.call(this.zoom)
+      .on("dblclick.zoom", null)
       .call(this.zoom.transform, initialTransform)
 
     this.zoom.scaleExtent([initialTransform.k * 0.8, Infinity])
