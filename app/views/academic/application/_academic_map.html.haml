@@ -21,7 +21,8 @@
   }
     %h5
       %i.fr-icon-earth-fill
-      = "Répartition géographique des #{@establishments_data.count} établissements"
+      %span{data: { "academic-target": "establishmentCount" }}
+        = "Répartition géographique des #{@establishments_data.count} établissements"
     .fr-grid-row
       .fr-col-12.fr-col-md-6
         %div{data: { "academic-target": "mapContainer" }}

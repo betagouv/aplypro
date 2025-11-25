@@ -12,7 +12,7 @@ import {
 } from "utils/map_utils"
 
 export default class extends Controller {
-  static targets = ["mapContainer"]
+  static targets = ["mapContainer", "establishmentCount"]
 
   static values = {
     highlightColor: { type: String, default: mapColors.lightYellow },
@@ -492,6 +492,7 @@ export default class extends Controller {
     const visibleCount = this.filterRowsAndMarkers(rows, searchValue)
     this.toggleNoResultsMessage(tbody, visibleCount, searchValue)
     this.reapplyRowColors()
+    this.updateEstablishmentCount(visibleCount)
   }
 
   filterRowsAndMarkers(rows, searchValue) {
@@ -551,5 +552,11 @@ export default class extends Controller {
         visibleIndex++
       }
     })
+  }
+
+  updateEstablishmentCount(count) {
+    if (this.hasEstablishmentCountTarget) {
+      this.establishmentCountTarget.textContent = `Répartition géographique des ${count} établissements`
+    }
   }
 }
