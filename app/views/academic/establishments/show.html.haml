@@ -1,5 +1,8 @@
 %h2.fr-mt-2w= "Établissement: #{@establishment_data[@etab.uai][:name]}"
 
+.fr-container.fr-mb-2w
+  = link_to "Retour à la carte des établissements", academic_home_path, class: "fr-btn fr-btn--secondary", data: { turbo: false }
+
 .fr-container.fr-my-4w
   .fr-grid-row.fr-grid-row--gutters
     .fr-col-12.fr-col-md-6
@@ -57,8 +60,3 @@
 
 .fr-container
   = render 'academic/establishments/establishment_timeline'
-
-.fr-container
-  .fr-grid-row.fr-mb-4w
-    .fr-col-12
-      = link_to "Retour à la carte des établissements", academic_home_path, class: "fr-btn fr-btn--secondary", data: { turbo: false }
