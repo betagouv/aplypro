@@ -56,7 +56,7 @@ describe Stats::Indicator::Count::PfmpsPayable do
     it { is_expected.to eq({ "ENPU" => 1, "MASA" => 2, "ARMEE" => 3, "MER" => 4, "ENPR" => 4 }) }
   end
 
-  describe "excluding paid PFMPs" do
+  describe "including paid PFMPs" do
     before do
       mef = create(:mef, daily_rate: 1, yearly_cap: 100)
       establishment = create(:establishment)
@@ -81,8 +81,8 @@ describe Stats::Indicator::Count::PfmpsPayable do
       end
     end
 
-    it "excludes already paid PFMPs" do
-      expect(described_class.new(current_start_year).global_data).to eq(3)
+    it "includes already paid PFMPs" do
+      expect(described_class.new(current_start_year).global_data).to eq(5)
     end
   end
 end

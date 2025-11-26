@@ -7,7 +7,7 @@ module Stats
         def initialize(paid_indicator:, payable_indicator:)
           super(
             numerator_indicator: paid_indicator,
-            denominator_indicator: [paid_indicator, payable_indicator]
+            denominator_indicator: payable_indicator
           )
         end
 

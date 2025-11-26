@@ -37,22 +37,8 @@ module Stats
       compute_ratio(numerator_data, denominator_data)
     end
 
-    def compute_data(indicator_or_indicators, data_method)
-      return indicator_or_indicators.send(data_method) unless indicator_or_indicators.is_a?(Array)
-
-      sum_indicators(indicator_or_indicators, data_method)
-    end
-
-    def sum_indicators(indicators, data_method)
-      results = indicators.map { |indicator| indicator.send(data_method) }
-
-      results.first.is_a?(Hash) ? sum_hashes(results) : results.sum
-    end
-
-    def sum_hashes(hashes)
-      hashes.each_with_object({}) do |hash, accumulator|
-        hash.each { |key, value| accumulator[key] = (accumulator[key] || 0) + value }
-      end
+    def compute_data(indicator, data_method)
+      indicator.send(data_method)
     end
 
     def compute_ratio(numerator_data, denominator_data)

@@ -11,14 +11,8 @@ module Stats
                              .merge(Schooling.with_attributive_decisions)
                              .where(schoolings: { status: 0 })
 
-          paid_pfmp_ids = payable_base
-                          .joins(payment_requests: :asp_payment_request_transitions)
-                          .where(asp_payment_request_transitions: { most_recent: true, to_state: "paid" })
-                          .distinct
-                          .pluck(:id)
-
           super(
-            all: payable_base.where.not(id: paid_pfmp_ids)
+            all: payable_base
           )
         end
 
