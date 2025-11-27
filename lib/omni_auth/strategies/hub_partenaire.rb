@@ -4,9 +4,9 @@ require "omniauth-oauth2"
 
 module OmniAuth
   module Strategies
-    class Cas < OmniAuth::Strategies::OAuth2
+    class HubPartenaire < OmniAuth::Strategies::OAuth2
       # Give your strategy a name.
-      option :name, "cas"
+      option :name, "hub-partenaire"
 
       # You may specify that your strategy should use PKCE by setting
       # the pkce option to true: https://tools.ietf.org/html/rfc7636
