@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "omni_auth/strategies/cas"
+require "omni_auth/strategies/hub_partenaire"
 
 # Assuming you have not yet modified this file, each configuration option below
 # is set to its default value. Note that some are commented out while others

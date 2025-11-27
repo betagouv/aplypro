@@ -173,7 +173,7 @@ module Users
                 when :fim, :academic
                   IdentityMappers::Fim.new(raw)
                 when :masa
-                  IdentityMappers::Cas.new(raw)
+                  IdentityMappers::HubPartenaire.new(raw)
                 else
                   raise "No mapper suitable for auth provider: #{data.provider}"
                 end

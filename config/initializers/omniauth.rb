@@ -10,7 +10,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   unless Rails.env.production?
     portals = ["MENJ (FIM)"]
 
-    portals.push("MASA (CAS)") if Rails.env.development?
+    portals.push("MASA (Hub Partenaire)") if Rails.env.development?
 
     provider :developer,
              path_prefix: "/users/auth",
@@ -82,14 +82,14 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   provider :openid_connect, {
     name: :masa,
     path_prefix: "/users/auth",
-    scope: ENV.fetch("APLYPRO_CAS_OIDC_SCOPE"),
+    scope: ENV.fetch("APLYPRO_HUB_PARTENAIRE_OIDC_SCOPE"),
     response_type: :code,
-    issuer: ENV.fetch("APLYPRO_CAS_OIDC_ISSUER"),
+    issuer: ENV.fetch("APLYPRO_HUB_PARTENAIRE_OIDC_ISSUER"),
     client_options: {
-      host: ENV.fetch("APLYPRO_CAS_OIDC_HOST"),
-      redirect_uri: ENV.fetch("APLYPRO_CAS_OIDC_REDIRECT_URI"),
-      identifier: ENV.fetch("APLYPRO_CAS_OIDC_CLIENT_ID"),
-      secret: ENV.fetch("APLYPRO_CAS_OIDC_CLIENT_SECRET")
+      host: ENV.fetch("APLYPRO_HUB_PARTENAIRE_OIDC_HOST"),
+      redirect_uri: ENV.fetch("APLYPRO_HUB_PARTENAIRE_OIDC_REDIRECT_URI"),
+      identifier: ENV.fetch("APLYPRO_HUB_PARTENAIRE_OIDC_CLIENT_ID"),
+      secret: ENV.fetch("APLYPRO_HUB_PARTENAIRE_OIDC_CLIENT_SECRET")
     }
   }
 end

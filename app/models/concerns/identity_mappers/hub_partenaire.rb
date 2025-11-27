@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module IdentityMappers
-  class Cas < Base
+  class HubPartenaire < Base
     def students_provider
       "fregata"
     end
