@@ -10,13 +10,13 @@ module Rectifiable
         "flash.pfmps.rectification.threshold_not_reached",
         threshold: PfmpManager::EXCESS_AMOUNT_RECTIFICATION_THRESHOLD
       )
-      render :confirm_rectification, status: :unprocessable_entity
+      render :confirm_rectification, status: :unprocessable_content
     end
 
     rescue_from PfmpManager::RectificationAmountZeroError do
       @student = @pfmp.student
       flash.now[:alert] = t("flash.pfmps.rectification.zero_difference")
-      render :confirm_rectification, status: :unprocessable_entity
+      render :confirm_rectification, status: :unprocessable_content
     end
   end
 
@@ -38,7 +38,7 @@ module Rectifiable
       redirect_to_pfmp(alert: t("flash.pfmps.rectification.cannot_rectify"))
     end
   rescue ActiveRecord::RecordInvalid
-    render :confirm_rectification, status: :unprocessable_entity
+    render :confirm_rectification, status: :unprocessable_content
   end
 
   private
