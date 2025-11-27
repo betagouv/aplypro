@@ -19,7 +19,7 @@ WORKDIR /app
 # node_modules)
 COPY package.json package-lock.json ./
 
-RUN npm i
+RUN npm ci
 
 COPY . .
 
