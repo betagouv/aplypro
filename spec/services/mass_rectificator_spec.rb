@@ -33,7 +33,7 @@ RSpec.describe MassRectificator do
     end
 
     context "when schooling already has rectified PFMPs" do
-      let!(:pfmp) { create(:pfmp, :rectified) } # rubocop:disable RSpec/LetSetup
+      let!(:pfmp) { create(:pfmp, :rectified) }
 
       it "skips the schooling" do
         results = corrector.call

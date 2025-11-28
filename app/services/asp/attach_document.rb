@@ -17,7 +17,7 @@ module ASP
 
         name = attachment_file_name(schooling, DESCRIPTIONS[attachment_name])
 
-        attachment.purge if attachment.present?
+        attachment.presence&.purge
 
         attachment.attach(
           io: output,

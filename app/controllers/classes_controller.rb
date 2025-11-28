@@ -34,7 +34,7 @@ class ClassesController < ApplicationController
       @pfmp.schooling = @classe.schoolings.last
       @pfmp.save # save to populate the errors hash
       @pfmp.errors.delete(:schooling) # remove the one about schooling
-      render :bulk_pfmp, status: :unprocessable_entity
+      render :bulk_pfmp, status: :unprocessable_content
     end
   end
 
@@ -59,7 +59,7 @@ class ClassesController < ApplicationController
     if @pfmps.all?(&:save)
       redirect_to school_year_class_path(selected_school_year, @classe), notice: t("pfmps.update.success")
     else
-      render :bulk_pfmp_completion, status: :unprocessable_entity
+      render :bulk_pfmp_completion, status: :unprocessable_content
     end
   end
 

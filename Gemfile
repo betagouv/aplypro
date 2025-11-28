@@ -55,7 +55,6 @@ gem "devise"
 gem "devise-i18n"
 gem "omniauth-oauth2"
 gem "omniauth_openid_connect", require: false
-gem "omniauth-rails_csrf_protection"
 
 # data fetching
 gem "faraday"

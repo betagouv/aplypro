@@ -171,7 +171,7 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def rattach_attributive_decisions_zip!(content, filename)
-    attributive_decisions_zip.purge if attributive_decisions_zip.present?
+    attributive_decisions_zip.presence&.purge
 
     attributive_decisions_zip.attach(
       io: content,

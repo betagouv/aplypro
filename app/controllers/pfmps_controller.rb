@@ -27,7 +27,7 @@ class PfmpsController < ApplicationController
       redirect_to student_path(@schooling.student),
                   notice: t("pfmps.new.success")
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -36,7 +36,7 @@ class PfmpsController < ApplicationController
       redirect_to school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp),
                   notice: t("pfmps.edit.success")
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

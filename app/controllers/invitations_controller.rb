@@ -21,7 +21,7 @@ class InvitationsController < ApplicationController
     if @invitation.save
       redirect_to establishment_invitations_path, notice: t("flash.invites.created", email: @invitation.email)
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
