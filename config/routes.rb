@@ -182,6 +182,8 @@ Rails.application.routes.draw do
       match "/users/auth/#{action}/callback", to: "users/omniauth_callbacks##{action}", via: %i[get post]
     end
 
+    get "/users/auth/failure", to: "users/omniauth_callbacks#failure"
+
     get "login", to: "home#login", as: :new_user_session
     delete "sign_out", to: "devise/sessions#destroy", as: :destroy_user_session
   end
