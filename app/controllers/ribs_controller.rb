@@ -22,7 +22,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     if @rib.save
       redirect_to student_path(@student), notice: t(".success")
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -37,7 +37,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
 
         redirect_to student_path(@student), notice: t(".success")
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
   end
@@ -58,7 +58,7 @@ class RibsController < ApplicationController # rubocop:disable Metrics/ClassLeng
     if @ribs.each(&:save).all?(&:valid?)
       redirect_to school_year_class_path(selected_school_year, @classe), notice: t("ribs.create.success")
     else
-      render :missing, status: :unprocessable_entity
+      render :missing, status: :unprocessable_content
     end
   end
 

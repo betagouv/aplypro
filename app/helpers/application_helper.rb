@@ -2,7 +2,7 @@
 
 module ApplicationHelper
   def format_date(date)
-    date.strftime("%d/%m/%Y") if date.present?
+    date.presence&.strftime("%d/%m/%Y")
   end
 
   def success_badge(status, content)

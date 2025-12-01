@@ -2,6 +2,9 @@
 
 OmniAuth.config.logger = Rails.logger
 
+# Mitigate CVE-2015-9284
+OmniAuth.config.request_validation_phase = OmniAuth::AuthenticityTokenProtection.new(key: :_csrf_token)
+
 # rubocop:disable Metrics/BlockLength
 Rails.application.config.middleware.use OmniAuth::Builder do
   unless Rails.env.production?

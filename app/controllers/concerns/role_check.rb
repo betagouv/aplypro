@@ -15,7 +15,7 @@ module RoleCheck
   )
     return if current_user.confirmed_director?
 
-    redirect_back fallback_location: redirect_path, alert: alert_message and return
+    redirect_back_or_to redirect_path, alert: alert_message and return
   end
 
   def update_confirmed_director!

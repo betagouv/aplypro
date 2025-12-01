@@ -9,7 +9,7 @@ class UsersController < ApplicationController
     if @user.update(user_params)
       redirect_to root_path
     else
-      render :select_establishment, status: :unprocessable_entity
+      render :select_establishment, status: :unprocessable_content
     end
   end
 
