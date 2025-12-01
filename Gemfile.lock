@@ -397,9 +397,6 @@ GEM
     omniauth-oauth2 (1.8.0)
       oauth2 (>= 1.4, < 3)
       omniauth (~> 2.0)
-    omniauth-rails_csrf_protection (2.0.0)
-      actionpack (>= 4.2)
-      omniauth (~> 2.0)
     omniauth_openid_connect (0.8.0)
       omniauth (>= 1.9, < 3)
       openid_connect (~> 2.2)
@@ -719,7 +716,6 @@ DEPENDENCIES
   net-sftp
   nokogiri
   omniauth-oauth2
-  omniauth-rails_csrf_protection
   omniauth_openid_connect
   pg
   puma (~> 6.4)
