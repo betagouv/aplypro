@@ -191,6 +191,13 @@ describe PfmpManager do
                                                  .and change(pfmp, :day_count).to(0)
     end
 
+    it "sanitizes address data during rectification" do
+      dirty_address_params = { address_line1: "123\u0000 rue\u0001 test", address_line2: "Apt\u200B 5" }
+      manager.rectify_and_update_attributes!(confirmed_pfmp_params, dirty_address_params)
+      expect(pfmp.student.reload.address_line1).to eq("123 rue test")
+      expect(pfmp.student.reload.address_line2).to eq("Apt 5")
+    end
+
     context "when rectifying an initially invalid PFMP" do
       let(:invalid_pfmp) do
         payment_request = create(:asp_payment_request, :paid)

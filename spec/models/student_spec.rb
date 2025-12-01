@@ -292,4 +292,62 @@ RSpec.describe Student do
       it { is_expected.to eq "#{student.first_name}, Jean, Louis" }
     end
   end
+
+  describe "address sanitization" do
+    it "removes control characters from address_line1" do
+      student = create(:student, address_line1: "123 rue\u0000 de la paix\u0001")
+      expect(student.address_line1).to eq("123 rue de la paix")
+    end
+
+    it "removes control characters from address_line2" do
+      student = create(:student, address_line2: "Apt\u001F 5\u007F")
+      expect(student.address_line2).to eq("Apt 5")
+    end
+
+    it "removes Unicode control characters from address lines" do
+      student = create(:student, address_line1: "123\u200B rue\u200C test\uFEFF")
+      expect(student.address_line1).to eq("123 rue test")
+    end
+
+    it "normalizes multiple spaces in address lines" do
+      student = create(:student, address_line1: "123   rue    test", address_line2: "Apt  5")
+      expect(student.address_line1).to eq("123 rue test")
+      expect(student.address_line2).to eq("Apt 5")
+    end
+
+    it "strips leading and trailing spaces from address lines" do
+      student = create(:student, address_line1: "  123 rue test  ", address_line2: "  Apt 5  ")
+      expect(student.address_line1).to eq("123 rue test")
+      expect(student.address_line2).to eq("Apt 5")
+    end
+
+    it "handles nil address lines" do
+      student = create(:student, address_line1: nil, address_line2: nil)
+      expect(student.address_line1).to be_nil
+      expect(student.address_line2).to be_nil
+    end
+
+    it "handles empty address lines" do
+      student = create(:student, address_line1: "", address_line2: "")
+      expect(student.address_line1).to be_nil
+      expect(student.address_line2).to be_nil
+    end
+
+    it "handles addresses with only control characters" do
+      student = create(:student, address_line1: "\u0000\u0001\u200B")
+      expect(student.address_line1).to eq("")
+    end
+
+    it "sanitizes on update" do
+      student = create(:student, address_line1: "Valid address")
+      student.update!(address_line1: "Dirty\u0000 address")
+      expect(student.address_line1).to eq("Dirty address")
+    end
+
+    it "preserves valid characters including accents and special punctuation" do
+      student = create(:student, address_line1: "123 rue de l'Église, Bât. A-B", address_line2: "Résidence")
+      expect(student.address_line1).to eq("123 rue de l'Église, Bât. A-B")
+      expect(student.address_line2).to eq("Résidence")
+    end
+  end
 end
