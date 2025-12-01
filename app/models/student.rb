@@ -9,6 +9,12 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   validates :address_city_insee_code, length: { maximum: 5 }, allow_blank: true
 
+  normalizes :address_line1, :address_line2, with: lambda { |value|
+    next if value.blank?
+
+    value.gsub(/[\p{Cc}\p{Cf}\p{Co}\p{Cn}]/, "").gsub(/\s+/, " ").strip
+  }
+
   enum :biological_sex, { sex_unknown: 0, male: 1, female: 2 }, validate: { allow_nil: true }, default: :sex_unknown
 
   has_many :schoolings, dependent: :delete_all
