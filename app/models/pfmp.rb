@@ -194,10 +194,14 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def amounts_yearly_reached?
+    raise MefMissingWageError, mef.code unless mef&.wage
+
     total_pfmps_for_mef > mef.wage.yearly_cap
   end
 
   def amounts_yearly_exceeded?
+    raise MefMissingWageError, mef.code unless mef&.wage
+
     total_pfmps_for_mef >= mef.wage.yearly_cap
   end
 
