@@ -42,10 +42,10 @@
             %li.fr-nav__item
               %a.fr-nav__link{ href: academic_users_path, target: "_self", "aria-current" => current_path?(academic_users_path) ? "page" : nil }
                 = t("menu.users")
+            %li.fr-nav__item
+              %a.fr-nav__link{ href: academic_reports_path, target: "_self", "aria-current" => current_path?(academic_reports_path) ? "page" : nil }
+                = t("menu.stats")
             - if current_user.admin?
-              %li.fr-nav__item
-                %a.fr-nav__link{ href: academic_reports_path, target: "_self", "aria-current" => current_path?(academic_reports_path) ? "page" : nil }
-                  = t("menu.stats")
               %li.fr-nav__item
                 %a.fr-nav__link{ href: academic_tools_path, target: "_self", "aria-current" => current_path?(academic_tools_path) ? "page" : nil }
                   = t("menu.tools")
