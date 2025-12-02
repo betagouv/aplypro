@@ -5,6 +5,22 @@ module SchoolingsHelper
     success_badge(schooling.attributive_decision.attached?, "Décision d'attribution")
   end
 
+  def attributive_decision_status_badge(schooling)
+    if schooling.attributive_decision.attached?
+      if schooling.abrogation_decision.attached?
+        dsfr_badge(status: :error) { "Abrogée" }
+      elsif schooling.cancellation_decision.attached?
+        dsfr_badge(status: :error) { "Annulée" }
+      else
+        dsfr_badge(status: :success) { "Générée" }
+      end
+    elsif schooling.generating_attributive_decision
+      dsfr_badge(status: :info) { "En cours de génération" }
+    else
+      dsfr_badge(status: :error) { "Non générée" }
+    end
+  end
+
   def display_dates(schooling)
     start_date = schooling.start_date
     end_date = schooling.end_date
