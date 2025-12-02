@@ -1,6 +1,24 @@
 = render partial: 'ribs/informations', locals: { student: @student, display_buttons: false }
 
 %section.fr-pb-3w
+  %h2.fr-h4 Scolarités et décisions d'attribution
+  .fr-table.fr-table--layout-fixed.fr-table--no-caption
+    %table
+      %caption Liste des scolarités et décisions d'attribution de l'élève
+      %thead
+        %th{scope: "col"} Année scolaire
+        %th{scope: "col"} Classe
+        %th{scope: "col"} Établissement
+        %th{scope: "col"} Décision d'attribution
+      %tbody
+        - @schoolings.sort_by { |schooling| schooling.classe.school_year.start_year }.reverse_each do |schooling|
+          %tr
+            %td= schooling.classe.school_year.to_s
+            %td= schooling.classe.label
+            %td= schooling.establishment.name
+            %td= attributive_decision_status_badge(schooling)
+
+%section.fr-pb-3w
   %h2.fr-h4 PFMPs de l'élève
   - if pfmps?(@schoolings)
     - filtered_schoolings = schoolings_with_pfmps(@schoolings)

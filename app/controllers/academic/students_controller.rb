@@ -2,6 +2,7 @@
 
 module Academic
   class StudentsController < Academic::ApplicationController
+    skip_before_action :infer_page_title, only: :show
     before_action :set_student, only: :show
     before_action :set_search_result, only: :search_results
 
@@ -11,7 +12,13 @@ module Academic
     STUDENTS_PER_PAGE = 50
 
     def show
-      @schoolings = @student.schoolings.includes(:classe, :establishment, :pfmps)
+      @schoolings = @student.schoolings.includes(
+        :pfmps,
+        :attributive_decision_attachment,
+        :abrogation_decision_attachment,
+        :cancellation_decision_attachment,
+        classe: %i[establishment school_year]
+      )
 
       infer_page_title(name: @student.full_name)
     end

@@ -7,11 +7,11 @@ Fonctionnalité: Navigation pour les administrateurs académiques
     Et qu'il existe un établissement avec le code académie "14"
     Et qu'il existe un établissement avec le code académie "16"
 
-  Scénario: Un personnel académique non-admin ne voit pas les liens statistiques et outils
+  Scénario: Un personnel académique non-admin voit les statistiques mais pas les outils
     Sachant que je suis un personnel académique de "06"
     Et que je me connecte en tant que personnel académique
     Alors la page contient "Académie 06"
-    Et la page ne contient pas "Statistiques"
+    Et la page contient "Statistiques"
     Et la page ne contient pas "Outils"
 
   Scénario: Un personnel académique admin voit les liens statistiques et outils
