@@ -2,6 +2,7 @@
 
 module Academic
   class StudentsController < Academic::ApplicationController
+    skip_before_action :infer_page_title, only: :show
     before_action :set_student, only: :show
     before_action :set_search_result, only: :search_results
 
