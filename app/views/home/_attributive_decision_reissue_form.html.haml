@@ -5,8 +5,8 @@
   .fr-collapse#accordion-106
     = form_with method: :post, url: school_year_establishment_reissue_attributive_decisions_path(selected_school_year, current_establishment), data: { controller: "confirm-director" } do |form|
       .fr-checkbox-group
-        = form.check_box :confirmed_director, checked: current_user.confirmed_director?, data: { confirm_director_target: "checkbox", action: "change->confirm-director#toggleSubmitButton" }
-        = form.label :confirmed_director, class: "fr-label" do
+        = form.check_box :confirmed_director, { checked: current_user.confirmed_director?, id: "reissue_confirmed_director", data: { confirm_director_target: "checkbox", action: "change->confirm-director#toggleSubmitButton" } }, "1", "0"
+        %label.fr-label{for: "reissue_confirmed_director"}
           = t("panels.attributive_decisions.confirm_director").html_safe
           .fr-text--sm.fr-mt-1w= confirmed_director_information
       = form.submit "Rééditer les décisions d'attribution", class: "fr-btn fr-btn--secondary", data: { confirm_director_target: "submit" }
