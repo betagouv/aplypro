@@ -151,27 +151,60 @@ Sachantque("je suis un personnel MENJ directeur de l'établissement {string}") d
     step %(il existe un établissement "#{uai}")
   end
 
-  OmniAuth.config.mock_auth[:fim] = make_fim_hash(
-    name: Faker::Name.name,
-    email: Faker::Internet.email,
-    raw_info: {
-      FrEduRneResp: uais.map { |u| FactoryBot.build(:fredurneresp, uai: u) },
-      FrEduFonctAdm: "DIR"
-    }
-  )
-end
-
-Sachantque("je suis un personnel MENJ directeur de l'établissement {string} avec l'email {string}") do |uai_list, email|
-  uais = uai_list.split(", ")
+  name = Faker::Name.name
+  email = Faker::Internet.email
 
   OmniAuth.config.mock_auth[:fim] = make_fim_hash(
-    name: Faker::Name.name,
+    name: name,
     email: email,
     raw_info: {
       FrEduRneResp: uais.map { |u| FactoryBot.build(:fredurneresp, uai: u) },
       FrEduFonctAdm: "DIR"
     }
   )
+
+  uais.each do |uai|
+    establishment = Establishment.find_by(uai: uai)
+    user = User.find_or_create_by!(email: email, provider: "fim") do |u|
+      u.name = name
+      u.uid = Faker::Alphanumeric.alpha
+      u.token = "token"
+      u.secret = "secret"
+    end
+    EstablishmentUserRole.find_or_initialize_by(user: user, establishment: establishment).update!(role: :dir)
+    establishment.update!(confirmed_director: user)
+  end
+end
+
+Sachantque("je suis un personnel MENJ directeur de l'établissement {string} avec l'email {string}") do |uai_list, email|
+  uais = uai_list.split(", ")
+
+  uais.each do |uai|
+    step %(il existe un établissement "#{uai}")
+  end
+
+  name = Faker::Name.name
+
+  OmniAuth.config.mock_auth[:fim] = make_fim_hash(
+    name: name,
+    email: email,
+    raw_info: {
+      FrEduRneResp: uais.map { |u| FactoryBot.build(:fredurneresp, uai: u) },
+      FrEduFonctAdm: "DIR"
+    }
+  )
+
+  uais.each do |uai|
+    establishment = Establishment.find_by(uai: uai)
+    user = User.find_or_create_by!(email: email, provider: "fim") do |u|
+      u.name = name
+      u.uid = Faker::Alphanumeric.alpha
+      u.token = "token"
+      u.secret = "secret"
+    end
+    EstablishmentUserRole.find_or_initialize_by(user: user, establishment: establishment).update!(role: :dir)
+    establishment.update!(confirmed_director: user)
+  end
 end
 
 Sachantque("je suis un personnel MENJ avec un accès spécifique pour l'UAI {string}") do |uai|

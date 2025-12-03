@@ -205,14 +205,12 @@
     def summary
       establishment = @schooling.establishment
 
-      director = establishment.confirmed_director || establishment.users.directors.first
-
       composer.text("Numéro de dossier administratif : #{schooling.administrative_number}")
       composer.text("Numéro de décision attributive annuelle : #{schooling.attributive_decision_number}")
       composer.text("Bénéficiaire : #{student}")
       composer.text("Adresse email de l'établissement : #{establishment.email}")
       composer.text("Téléphone de l'établissement : #{establishment.telephone}")
-      composer.text("#{director.name}, représentant légal de l’établissement d’enseignement #{establishment.name}, (#{establishment.uai}), sis #{establishment.address}, ci-après désigné « l’établissement ».")
+      composer.text("#{confirmed_director.name}, représentant légal de l'établissement d'enseignement #{establishment.name}, (#{establishment.uai}), sis #{establishment.address}, ci-après désigné « l'établissement ».")
     end
   end
 end

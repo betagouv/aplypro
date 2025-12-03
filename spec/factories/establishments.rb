@@ -41,7 +41,8 @@ FactoryBot.define do
       sygne_provider
 
       after(:create) do |establishment|
-        create(:user, :director, provider: "fim", establishment: establishment)
+        director = create(:user, :director, provider: "fim", establishment: establishment)
+        establishment.update!(confirmed_director: director)
       end
     end
 
@@ -49,7 +50,8 @@ FactoryBot.define do
       fregata_provider
 
       after(:create) do |establishment|
-        create(:user, :director, provider: "masa", establishment: establishment)
+        director = create(:user, :director, provider: "masa", establishment: establishment)
+        establishment.update!(confirmed_director: director)
       end
     end
   end

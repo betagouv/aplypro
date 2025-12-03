@@ -64,4 +64,14 @@ RSpec.describe Generate::AttributiveDecisionJob, :student_api do
   it "bumps the version" do
     expect { job.perform_now }.to change(schooling, :attributive_decision_version).from(0).to(1)
   end
+
+  context "when the confirmed director is missing" do
+    before do
+      schooling.establishment.update!(confirmed_director: nil)
+    end
+
+    it "raises an error" do
+      expect { job.perform_now }.to raise_error Generator::MissingConfirmedDirectorError
+    end
+  end
 end

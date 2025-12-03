@@ -16,7 +16,7 @@
 
   .fr-grid-row
     .fr-col-md-6.fr-mb-3w
-    = form_with model: @schooling, url: school_year_class_schooling_path(selected_school_year, @classe, @schooling), method: :patch, builder: DsfrFormBuilder, data: { turbo: false } do |form|
+    = form_with model: @schooling, url: school_year_class_schooling_path(selected_school_year, @classe, @schooling), method: :patch, builder: DsfrFormBuilder, data: { turbo: false, controller: "confirm-director" } do |form|
       %ul
         %li
           Etudiant :
@@ -42,4 +42,4 @@
         - if @schooling.removable_extended_end_date?
           = form.hidden_field :extended_end_date, value: nil
 
-        = form.submit submit, class: 'fr-btn fr-btn--primary'
+        = form.submit submit, class: 'fr-btn fr-btn--primary', data: { confirm_director_target: "submit" }

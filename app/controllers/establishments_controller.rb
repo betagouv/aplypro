@@ -6,7 +6,7 @@ class EstablishmentsController < ApplicationController
   before_action :check_director,
                 :update_confirmed_director!,
                 :check_confirmed_director_for_attributive_decision,
-                only: :create_attributive_decisions
+                only: %i[create_attributive_decisions reissue_attributive_decisions]
 
   include Zipline
 

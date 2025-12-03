@@ -45,14 +45,12 @@ module Generator
     def summary
       establishment = @schooling.establishment
 
-      director = establishment.confirmed_director || establishment.users.directors.first
-
       composer.text("Numéro de dossier administratif : #{@schooling.administrative_number}", style: :paragraph)
       composer.text("Numéro de décision attributive annuelle : #{@schooling.attributive_decision_number}", style: :paragraph)
       composer.text("Bénéficiaire : #{student.full_name}", style: :paragraph)
       composer.text("Adresse email de l'établissement : #{establishment.email}", style: :paragraph)
       composer.text("Téléphone de l'établissement : #{establishment.telephone}", style: :paragraph)
-      composer.text("#{director.name}, représentant légal de l’établissement d’enseignement #{establishment.name}, (#{establishment.uai}), sis #{establishment.address}.", style: :paragraph)
+      composer.text("#{confirmed_director.name}, représentant légal de l'établissement d'enseignement #{establishment.name}, (#{establishment.uai}), sis #{establishment.address}.", style: :paragraph)
     end
   end
 end

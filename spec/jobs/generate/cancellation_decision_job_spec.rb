@@ -28,6 +28,16 @@ RSpec.describe Generate::CancellationDecisionJob, :student_api do
       expect(Schooling).to receive(:transaction) # rubocop:disable RSpec/MessageSpies
       job.perform_now
     end
+
+    context "when the confirmed director is missing" do
+      before do
+        schooling.establishment.update!(confirmed_director: nil)
+      end
+
+      it "raises an error" do
+        expect { job.perform_now }.to raise_error Generator::MissingConfirmedDirectorError
+      end
+    end
   end
 
   describe "callbacks" do
