@@ -3,6 +3,8 @@
 require "hexapdf"
 
 module Generator
+  class MissingConfirmedDirectorError < StandardError; end
+
   class Document
     include ActionView::Helpers::NumberHelper
 
@@ -69,6 +71,13 @@ module Generator
       else
         I18n.t("attributive_decision.address", address: student.address)
       end
+    end
+
+    def confirmed_director
+      director = schooling.establishment.confirmed_director
+      raise MissingConfirmedDirectorError if director.nil?
+
+      director
     end
 
     def legal
