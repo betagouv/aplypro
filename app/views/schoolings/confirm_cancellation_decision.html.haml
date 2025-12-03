@@ -3,7 +3,7 @@
   = dsfr_alert(type: :warning, title: t("tooltips.cancellation_decision"))
 
 .fr-col-md-6.fr-mt-3w
-= form_with url: cancellation_decision_school_year_class_schooling_path(selected_school_year, @classe, @schooling), method: :get do |form|
+= form_with url: cancellation_decision_school_year_class_schooling_path(selected_school_year, @classe, @schooling), method: :get, data: { controller: "confirm-director" } do |form|
   %ul
     %li
       Etudiant :
@@ -23,4 +23,4 @@
 
   .fr-btns-group.fr-btns-group--inline.fr-mt-3w
     = link_to "Annuler", school_year_class_path(selected_school_year, @classe), class: 'fr-btn fr-btn--secondary'
-    = form.submit "Confirmer la révocation", class: 'fr-btn fr-btn--danger fr-btn--secondary'
+    = form.submit "Confirmer la révocation", class: 'fr-btn fr-btn--danger fr-btn--secondary', data: { confirm_director_target: "submit" }
