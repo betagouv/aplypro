@@ -1,43 +1,20 @@
 # frozen_string_literal: true
 
-def make_fim_hash(name:, email:, raw_info:)
-  OmniAuth::AuthHash.new(
-    {
-      provider: "fim",
-      uid: email,
-      credentials: {
-        token: "test token"
-      },
-      info: {
-        name:,
-        email:
-      },
-      extra: {
-        raw_info:
-      }
+def make_provider_hash(provider:, name:, email:, raw_info:)
+  OmniAuth::AuthHash.new({
+    provider:,
+    uid: email,
+    credentials: {
+      token: "test token"
+    },
+    info: {
+      name:,
+      email:
+    },
+    extra: {
+      raw_info:
     }
-  )
-end
-
-def make_cas_hash(name:, email:, raw_info:)
-  OmniAuth::AuthHash.new(
-    {
-      provider: "masa",
-      uid: email,
-      credentials: {
-        token: "test token"
-      },
-      info: {
-        name:,
-        email:
-      },
-      extra: {
-        raw_info: {
-          attributes: raw_info
-        }
-      }
-    }
-  )
+  })
 end
 
 Sachantque("je suis un agent de l'ASP") do
@@ -73,7 +50,8 @@ Sachantque("je me connecte au portail ASP") do
 end
 
 Sachantque("je suis un personnel académique de {string}") do |academy|
-  OmniAuth.config.mock_auth[:academic] = make_fim_hash(
+  OmniAuth.config.mock_auth[:academic] = make_provider_hash(
+    provider: "fim",
     name: Faker::Name.name,
     email: Faker::Internet.email,
     raw_info: {
@@ -85,7 +63,8 @@ end
 Sachantque("je suis un personnel académique des académies de {string}") do |academies_list|
   academies = academies_list.split(", ")
 
-  OmniAuth.config.mock_auth[:academic] = make_fim_hash(
+  OmniAuth.config.mock_auth[:academic] = make_provider_hash(
+    provider: "fim",
     name: Faker::Name.name,
     email: Faker::Internet.email,
     raw_info: {
@@ -95,7 +74,8 @@ Sachantque("je suis un personnel académique des académies de {string}") do |ac
 end
 
 Sachantque("je suis un personnel académique sans validation") do
-  OmniAuth.config.mock_auth[:academic] = make_fim_hash(
+  OmniAuth.config.mock_auth[:academic] = make_provider_hash(
+    provider: "fim",
     name: Faker::Name.name,
     email: Faker::Internet.email,
     raw_info: {}
@@ -103,7 +83,8 @@ Sachantque("je suis un personnel académique sans validation") do
 end
 
 Sachantque("je suis un personnel académique administrateur") do
-  OmniAuth.config.mock_auth[:academic] = make_fim_hash(
+  OmniAuth.config.mock_auth[:academic] = make_provider_hash(
+    provider: "fim",
     name: Faker::Name.name,
     email: Faker::Internet.email,
     raw_info: {
@@ -113,7 +94,8 @@ Sachantque("je suis un personnel académique administrateur") do
 end
 
 Sachantque("je suis un personnel MENJ de l'établissement {string}") do |uai|
-  OmniAuth.config.mock_auth[:fim] = make_fim_hash(
+  OmniAuth.config.mock_auth[:fim] = make_provider_hash(
+    provider: "fim",
     name: Faker::Name.name,
     email: Faker::Internet.email,
     raw_info: {
@@ -123,12 +105,13 @@ Sachantque("je suis un personnel MENJ de l'établissement {string}") do |uai|
 end
 
 Sachantque("je suis un personnel MASA directeur de l'établissement {string}") do |uai|
-  OmniAuth.config.mock_auth[:masa] = make_cas_hash(
+  OmniAuth.config.mock_auth[:masa] = make_provider_hash(
+    provider: "masa",
     name: Faker::Name.name,
     email: Faker::Internet.email,
     raw_info: {
-      fr_edu_rne_resp: FactoryBot.build(:fredurneresp, uai: uai),
-      fr_edu_fonct_adm: "DIR"
+      FrEduRneResp: FactoryBot.build(:fredurneresp, uai: uai),
+      FrEduFonctAdm: "DIR"
     }
   )
 end
@@ -154,7 +137,8 @@ Sachantque("je suis un personnel MENJ directeur de l'établissement {string}") d
   name = Faker::Name.name
   email = Faker::Internet.email
 
-  OmniAuth.config.mock_auth[:fim] = make_fim_hash(
+  OmniAuth.config.mock_auth[:fim] = make_provider_hash(
+    provider: "fim",
     name: name,
     email: email,
     raw_info: {
@@ -185,7 +169,8 @@ Sachantque("je suis un personnel MENJ directeur de l'établissement {string} ave
 
   name = Faker::Name.name
 
-  OmniAuth.config.mock_auth[:fim] = make_fim_hash(
+  OmniAuth.config.mock_auth[:fim] = make_provider_hash(
+    provider: "fim",
     name: name,
     email: email,
     raw_info: {
@@ -208,7 +193,8 @@ Sachantque("je suis un personnel MENJ directeur de l'établissement {string} ave
 end
 
 Sachantque("je suis un personnel MENJ avec un accès spécifique pour l'UAI {string}") do |uai|
-  OmniAuth.config.mock_auth[:fim] = make_fim_hash(
+  OmniAuth.config.mock_auth[:fim] = make_provider_hash(
+    provider: "fim",
     name: Faker::Name.name,
     email: Faker::Internet.email,
     raw_info: {
@@ -218,7 +204,8 @@ Sachantque("je suis un personnel MENJ avec un accès spécifique pour l'UAI {str
 end
 
 Sachantque("je suis un personnel MENJ de l'établissement {string} avec l'email {string}") do |uai, email|
-  OmniAuth.config.mock_auth[:fim] = make_fim_hash(
+  OmniAuth.config.mock_auth[:fim] = make_provider_hash(
+    provider: "fim",
     name: Faker::Name.name,
     email: email,
     raw_info: {
@@ -228,7 +215,8 @@ Sachantque("je suis un personnel MENJ de l'établissement {string} avec l'email 
 end
 
 Sachantque("je suis un personnel MENJ sans FrEduRne avec l'email {string}") do |email|
-  OmniAuth.config.mock_auth[:fim] = make_fim_hash(
+  OmniAuth.config.mock_auth[:fim] = make_provider_hash(
+    provider: "fim",
     name: Faker::Name.name,
     email: email,
     raw_info: {}
@@ -236,7 +224,8 @@ Sachantque("je suis un personnel MENJ sans FrEduRne avec l'email {string}") do |
 end
 
 Sachantque("je suis un personnel MASA de l'établissement {string} avec l'email {string}") do |uai, email|
-  OmniAuth.config.mock_auth[:masa] = make_cas_hash(
+  OmniAuth.config.mock_auth[:masa] = make_provider_hash(
+    provider: "masa",
     name: Faker::Name.name,
     email: email,
     raw_info: {
@@ -301,7 +290,8 @@ Alors("je n'ai pas accès aux actions de chef d'établissement") do
 end
 
 Sachantque("je suis un personnel MENJ de l'établissement {string} avec une délégation DELEG-CE pour APLyPro") do |uai|
-  OmniAuth.config.mock_auth[:fim] = make_fim_hash(
+  OmniAuth.config.mock_auth[:fim] = make_provider_hash(
+    provider: "fim",
     name: Faker::Name.name,
     email: Faker::Internet.email,
     raw_info: {
@@ -313,7 +303,8 @@ end
 Sachantque(
   "je suis un personnel MENJ de l'établissement {string} avec une mauvaise délégation DELEG-CE pour APLyPro"
 ) do |uai|
-  OmniAuth.config.mock_auth[:fim] = make_fim_hash(
+  OmniAuth.config.mock_auth[:fim] = make_provider_hash(
+    provider: "fim",
     name: Faker::Name.name,
     email: Faker::Internet.email,
     raw_info: {
@@ -325,7 +316,8 @@ end
 Sachantque("j'ai désormais le rôle de directeur pour l'établissement {string}") do |uai|
   last_user = User.last
 
-  OmniAuth.config.mock_auth[:fim] = make_fim_hash(
+  OmniAuth.config.mock_auth[:fim] = make_provider_hash(
+    provider: "fim",
     name: last_user.name,
     email: last_user.email,
     raw_info: {

@@ -8,9 +8,7 @@ OmniAuth.config.request_validation_phase = OmniAuth::AuthenticityTokenProtection
 # rubocop:disable Metrics/BlockLength
 Rails.application.config.middleware.use OmniAuth::Builder do
   unless Rails.env.production?
-    portals = ["MENJ (FIM)"]
-
-    portals.push("MASA (Hub Partenaire)") if Rails.env.development?
+    portals = ["MENJ (FIM)", "MASA (Hub Partenaire)"]
 
     provider :developer,
              path_prefix: "/users/auth",
