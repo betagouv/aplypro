@@ -83,6 +83,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     name: :masa,
     path_prefix: "/users/auth",
     scope: ENV.fetch("APLYPRO_HUB_PARTENAIRE_OIDC_SCOPE"),
+    discovery: true,
     response_type: :code,
     issuer: ENV.fetch("APLYPRO_HUB_PARTENAIRE_OIDC_ISSUER"),
     client_options: {
