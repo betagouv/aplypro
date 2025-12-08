@@ -4,7 +4,7 @@ require "rails_helper"
 
 # rubocop:disable RSpec/MultipleMemoizedHelpers
 
-RSpec.describe IdentityMappers::Base do
+RSpec.describe IdentityMappers::Provider do
   let(:mapper) { described_class.new(attributes) }
   let(:fredurneresp) { build(:fredurneresp, uai: "dir") }
   let(:fredufonctadm) { "DIR" }
@@ -13,11 +13,37 @@ RSpec.describe IdentityMappers::Base do
 
   let(:attributes) do
     {
-      "FrEduRneResp" => fredurneresp,
-      "FrEduRne" => fredurne,
-      "FrEduFonctAdm" => fredufonctadm,
-      "FrEduResDel" => freduresdel
+      "provider" => "masa",
+      "extra" => {
+        "raw_info" => {
+          "FrEduRneResp" => fredurneresp,
+          "FrEduRne" => fredurne,
+          "FrEduFonctAdm" => fredufonctadm,
+          "FrEduResDel" => freduresdel
+        }
+      }
     }
+  end
+
+  describe "#responsibilities" do
+    subject(:result) { mapper.responsibility_uais }
+
+    let(:mapper) { described_class.new(attributes) }
+    let(:fredurneresp) { [build(:fredurneresp, uai: "456")] }
+    let(:attributes) do
+      {
+        "provider" => "fim",
+        "extra" => { "raw_info" => { "FrEduRneResp" => fredurneresp, "FrEduFonctAdm" => "DIR" } }
+      }
+    end
+
+    context "when the AplyproResp attribute is present" do
+      before do
+        attributes["extra"]["raw_info"].merge!({ "AplyproResp" => "123" })
+      end
+
+      it { is_expected.to contain_exactly "456", "123" }
+    end
   end
 
   describe "#all_indicated_uais" do
@@ -76,17 +102,10 @@ RSpec.describe IdentityMappers::Base do
   describe "#establishments_authorised_for" do
     subject(:result) { mapper.establishments_authorised_for(email) }
 
-    let(:mapper) { IdentityMappers::Fim.new(attributes) }
     let(:email) { "jean.valjean@ac-paris.fr" }
 
     it "contains the delegated establishment" do
       expect(result.pluck(:uai)).to eq ["delegated"]
-    end
-
-    context "when there is no attributes" do
-      let(:attributes) { {} }
-
-      it { is_expected.to be_empty }
     end
 
     context "when there is an invitation for the email, even for an UAI not in the FrEduRne" do
@@ -132,7 +151,7 @@ RSpec.describe IdentityMappers::Base do
 
     context "when there is no FrEduRneResp" do
       it "is empty" do
-        attributes.delete("FrEduRneResp")
+        attributes["extra"]["raw_info"].delete("FrEduRneResp")
 
         expect(described_class.new(attributes).responsibility_uais).to be_empty
       end

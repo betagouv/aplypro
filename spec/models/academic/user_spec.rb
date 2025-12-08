@@ -25,6 +25,7 @@ RSpec.describe Academic::User do
     context "when AplyproAcademieResp contains a star" do
       let(:oidc_attributes) do
         {
+          "provider" => "academic",
           "extra" => {
             "raw_info" => {
               "AplyproAcademieResp" => ["*"]
@@ -41,6 +42,7 @@ RSpec.describe Academic::User do
     context "when AplyproAcademieResp contains multiple academies including a star" do
       let(:oidc_attributes) do
         {
+          "provider" => "academic",
           "extra" => {
             "raw_info" => {
               "AplyproAcademieResp" => ["01", "*", "02"]
@@ -57,6 +59,7 @@ RSpec.describe Academic::User do
     context "when AplyproAcademieResp does not contain a star" do
       let(:oidc_attributes) do
         {
+          "provider" => "academic",
           "extra" => {
             "raw_info" => {
               "AplyproAcademieResp" => %w[01 02]
@@ -73,6 +76,7 @@ RSpec.describe Academic::User do
     context "when AplyproAcademieResp is empty" do
       let(:oidc_attributes) do
         {
+          provider: "academic",
           "extra" => {
             "raw_info" => {
               "AplyproAcademieResp" => []

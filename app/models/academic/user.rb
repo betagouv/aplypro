@@ -28,7 +28,7 @@ module Academic
     def admin?
       return false if oidc_attributes.blank?
 
-      mapper = IdentityMappers::Fim.new(oidc_attributes.fetch("extra", {}).fetch("raw_info", {}))
+      mapper = IdentityMappers::Provider.new(oidc_attributes)
       mapper.aplypro_academies.any? { |academy| academy == "*" }
     end
 

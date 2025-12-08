@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 module IdentityMappers
-  # rubocop:disable Metrics/ClassLength
-  class Base
-    attr_accessor :attributes
+  class Provider # rubocop:disable Metrics/ClassLength
+    attr_accessor :attributes, :provider
 
     FREDURNERESP_MAPPING = %i[uai type category activity tna_sym tty_code tna_code].freeze
     FREDURNE_MAPPING     = %i[uai type category function uaj tna_sym tty_code tna_code].freeze
@@ -11,16 +10,24 @@ module IdentityMappers
     FREDURESDEL_MARKER = "applicationname=aplypro"
     FREDURESDEL_RESPONSIBILITIES_PREFIX = "FrEduRneResp="
 
-    def initialize(attributes)
-      @attributes = normalize(attributes)
-    end
-
-    def students_provider
-      raise NotImplementedError
+    def initialize(data)
+      @provider = data["provider"].to_sym
+      @attributes = normalize(data["extra"]["raw_info"])
     end
 
     def normalize(attributes)
       attributes
+    end
+
+    def students_provider
+      case provider
+      when :fim, :academic
+        "sygne"
+      when :masa
+        "fregata"
+      else
+        raise "No mapper suitable for auth provider: #{provider}"
+      end
     end
 
     def parse_delegation_line(line)
@@ -87,13 +94,22 @@ module IdentityMappers
     end
 
     def responsibility_uais
-      return [] if !director?
+      return [] unless director?
 
-      Array(attributes["FrEduRneResp"])
-        .reject { |line| no_value?(line) }
-        .map    { |line| parse_responsibility_line(line) }
-        .filter { |attributes| relevant?(attributes) }
-        .pluck(:uai)
+      fr_edu_rne_resp = Array(attributes["FrEduRneResp"]).reject { |line| no_value?(line) }
+                                                         .map    { |line| parse_responsibility_line(line) }
+                                                         .filter { |attributes| relevant?(attributes) }
+                                                         .pluck(:uai)
+
+      fr_edu_rne_resp + aplypro_responsibilities
+    end
+
+    def aplypro_responsibilities
+      Array(attributes["AplyproResp"]).compact
+    end
+
+    def aplypro_academies
+      Array(attributes["AplyproAcademieResp"]).compact
     end
 
     def normal_uais
@@ -130,5 +146,4 @@ module IdentityMappers
       responsibility_uais | normal_uais | delegated_uais
     end
   end
-  # rubocop:enable Metrics/ClassLength
 end
