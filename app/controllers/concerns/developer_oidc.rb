@@ -57,7 +57,7 @@ module DeveloperOidc
       info = { AplyproAcademieResp: attrs["info"]["academy_code"] }
     else
       uai = attrs["info"]["uai"]
-      info = role(attrs) == :dir ? responsibility_hash(attrs, uai) : authorised_hash(attrs, uai)
+      info = role(attrs) == :dir ? responsibility_hash(uai) : authorised_hash(uai)
     end
 
     {
@@ -67,31 +67,18 @@ module DeveloperOidc
     }
   end
 
-  def authorised_hash(attrs, uai)
+  def authorised_hash(uai)
     line = ["#{uai}$UAJ$PU$ADM$111$T3$LYC$340"]
 
-    if provider(attrs) == :fim
-      { FrEduRne: line }
-    else
-      { attributes: { fr_edu_rne: line } }
-    end
+    { FrEduRne: line }
   end
 
-  def responsibility_hash(attrs, uai)
+  def responsibility_hash(uai)
     line = ["#{uai}$UAJ$PU$N$T3$LYC$340"]
 
-    if provider(attrs) == :fim
-      {
-        FrEduRneResp: line,
-        FrEduFonctAdm: "DIR"
-      }
-    else
-      {
-        attributes: {
-          fr_edu_rne_resp: line,
-          fr_edu_fonct_adm: "DIR"
-        }
-      }
-    end
+    {
+      FrEduRneResp: line,
+      FrEduFonctAdm: "DIR"
+    }
   end
 end
