@@ -1,20 +1,22 @@
 # frozen_string_literal: true
 
 def make_provider_hash(provider:, name:, email:, raw_info:)
-  OmniAuth::AuthHash.new({
-    provider:,
-    uid: email,
-    credentials: {
-      token: "test token"
-    },
-    info: {
-      name:,
-      email:
-    },
-    extra: {
-      raw_info:
+  OmniAuth::AuthHash.new(
+    {
+      provider:,
+      uid: email,
+      credentials: {
+        token: "test token"
+      },
+      info: {
+        name:,
+        email:
+      },
+      extra: {
+        raw_info:
+      }
     }
-  })
+  )
 end
 
 Sachantque("je suis un agent de l'ASP") do
@@ -198,7 +200,7 @@ Sachantque("je suis un personnel MENJ avec un accès spécifique pour l'UAI {str
     name: Faker::Name.name,
     email: Faker::Internet.email,
     raw_info: {
-      "AplyproResp" => uai
+      AplyproResp: uai
     }
   )
 end

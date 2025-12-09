@@ -26,7 +26,7 @@ RSpec.describe IdentityMappers::Provider do
   end
 
   describe "#responsibilities" do
-    subject(:result) { mapper.responsibility_uais }
+    subject(:result) { mapper.all_responsibility_uais }
 
     let(:mapper) { described_class.new(attributes) }
     let(:fredurneresp) { [build(:fredurneresp, uai: "456")] }
@@ -122,9 +122,9 @@ RSpec.describe IdentityMappers::Provider do
     end
   end
 
-  describe "#responsibility_uais" do
+  describe "#all_responsibility_uais" do
     context "when there is a FrEduRneResp" do
-      subject(:result) { mapper.responsibility_uais }
+      subject(:result) { mapper.all_responsibility_uais }
 
       context "when it's a not the right kind of school" do
         let(:fredurneresp) { [build(:fredurneresp, uai: "dir wrong", tty_code: "CLG")] }
@@ -153,7 +153,7 @@ RSpec.describe IdentityMappers::Provider do
       it "is empty" do
         attributes["extra"]["raw_info"].delete("FrEduRneResp")
 
-        expect(described_class.new(attributes).responsibility_uais).to be_empty
+        expect(described_class.new(attributes).all_responsibility_uais).to be_empty
       end
     end
   end

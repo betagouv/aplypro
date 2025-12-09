@@ -12,22 +12,7 @@ module IdentityMappers
 
     def initialize(data)
       @provider = data["provider"].to_sym
-      @attributes = normalize(data["extra"]["raw_info"])
-    end
-
-    def normalize(attributes)
-      attributes
-    end
-
-    def students_provider
-      case provider
-      when :fim, :academic
-        "sygne"
-      when :masa
-        "fregata"
-      else
-        raise "No mapper suitable for auth provider: #{provider}"
-      end
+      @attributes = data["extra"]["raw_info"]
     end
 
     def parse_delegation_line(line)
@@ -77,7 +62,7 @@ module IdentityMappers
     end
 
     def establishments_in_responsibility
-      responsibility_uais
+      all_responsibility_uais
         .map { |uai| find_or_create_establishment!(uai) }
     end
 
@@ -93,15 +78,18 @@ module IdentityMappers
         end
     end
 
+    def all_responsibility_uais
+      aplypro_responsibilities + responsibility_uais
+    end
+
     def responsibility_uais
       return [] unless director?
 
-      fr_edu_rne_resp = Array(attributes["FrEduRneResp"]).reject { |line| no_value?(line) }
-                                                         .map    { |line| parse_responsibility_line(line) }
-                                                         .filter { |attributes| relevant?(attributes) }
-                                                         .pluck(:uai)
-
-      fr_edu_rne_resp + aplypro_responsibilities
+      Array(attributes["FrEduRneResp"])
+        .reject { |line| no_value?(line) }
+        .map    { |line| parse_responsibility_line(line) }
+        .filter { |attributes| relevant?(attributes) }
+        .pluck(:uai)
     end
 
     def aplypro_responsibilities
@@ -143,7 +131,20 @@ module IdentityMappers
     end
 
     def all_indicated_uais
-      responsibility_uais | normal_uais | delegated_uais
+      all_responsibility_uais | normal_uais | delegated_uais
+    end
+
+    private
+
+    def students_provider
+      case provider
+      when :fim, :academic
+        "sygne"
+      when :masa
+        "fregata"
+      else
+        raise "No mapper suitable for auth provider: #{provider}"
+      end
     end
   end
 end
