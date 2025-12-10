@@ -191,4 +191,39 @@ RSpec.describe Academic::ReportsController do
       end
     end
   end
+
+  describe "POST export_evolution" do
+    context "when user is admin" do
+      before do
+        allow_any_instance_of(Academic::User).to receive(:admin?).and_return(true) # rubocop:disable RSpec/AnyInstance
+      end
+
+      it "exports CSV with evolution data" do
+        school_year = create(:school_year, start_year: 2030)
+        create(:report, school_year: school_year, created_at: 1.week.ago)
+        create(:report, school_year: school_year, created_at: 1.day.ago)
+
+        post export_evolution_academic_reports_path(school_year_id: school_year.id)
+        expect(response).to have_http_status(:success)
+        expect(response.content_type).to eq("text/csv; charset=utf-8")
+        expect(response.headers["Content-Disposition"]).to include("aplypro_evolution_annee-scol2030")
+      end
+
+      it "returns CSV with correct headers and data" do
+        school_year = create(:school_year, start_year: 2030)
+        create(:report, school_year: school_year)
+
+        post export_evolution_academic_reports_path(school_year_id: school_year.id)
+        expect(response.body).to include("Date du rapport;ID du rapport")
+      end
+    end
+
+    context "when user is not admin" do
+      it "redirects to index page" do
+        school_year = create(:school_year, start_year: 2030)
+        post export_evolution_academic_reports_path(school_year_id: school_year.id)
+        expect(response).to redirect_to(academic_reports_path)
+      end
+    end
+  end
 end

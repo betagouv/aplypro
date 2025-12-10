@@ -18,6 +18,11 @@
                 @school_years.map { |sy| [sy.to_s, sy.id] },
                 { selected: @selected_school_year&.id },
                 { class: 'fr-select', onchange: 'this.form.submit()' }
+      .fr-col-12.fr-col-md-6.fr-text--right
+        - if @evolution_data.any?
+          = button_to export_evolution_academic_reports_path(school_year_id: @selected_school_year&.id), method: :post, class: "fr-btn fr-btn--sm fr-btn--secondary", data: { turbo: false } do
+            %i.fr-icon-download-line.fr-icon--sm.fr-mr-1w{"aria-hidden": "true"}
+            = t("academic.reports.export_csv")
 
     - if @evolution_data.any?
       .fr-grid-row.fr-grid-row--gutters.fr-mt-4w
