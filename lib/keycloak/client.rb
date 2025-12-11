@@ -5,20 +5,23 @@ module Keycloak
     KEYCLOAK_GRANT_TYPE = "password"
 
     def keycloak_host
-      ENV.fetch("KEYCLOAK_HOST")
+      @custom_host || ENV.fetch("KEYCLOAK_HOST")
     end
 
     def keycloak_admin
-      ENV.fetch("KEYCLOAK_ADMIN")
+      @custom_admin || ENV.fetch("KEYCLOAK_ADMIN")
     end
 
     def keycloak_admin_password
-      ENV.fetch("KEYCLOAK_ADMIN_PASSWORD")
+      @custom_password || ENV.fetch("KEYCLOAK_ADMIN_PASSWORD")
     end
 
     attr_reader :access_token, :connection
 
-    def initialize
+    def initialize(host = nil, admin_user = nil, admin_password = nil)
+      @custom_host = host&.chomp("/")
+      @custom_admin = admin_user
+      @custom_password = admin_password
       @access_token = authenticate
       @connection = build_connection
     end
@@ -148,6 +151,32 @@ module Keycloak
       else
         create_user(realm_name, email, { "AplyproAcademieResp" => academy_codes })
       end
+    end
+
+    def get(path)
+      response = connection.get(path)
+      response.body
+    end
+
+    def post(path, body)
+      response = connection.post(path, body)
+      response.body
+    end
+
+    def put(path, body)
+      response = connection.put(path, body)
+      response.body
+    end
+
+    def find_client_id(realm_name, client_id)
+      clients = get("/realms/#{realm_name}/clients?clientId=#{client_id}")
+      clients.first["id"] if clients&.any?
+    end
+
+    def find_client_scope_id(realm_name, scope_name)
+      scopes = get("/realms/#{realm_name}/client-scopes")
+      scope = scopes.find { |s| s["name"] == scope_name }
+      scope["id"] if scope
     end
 
     private
