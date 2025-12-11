@@ -1,13 +1,16 @@
 # frozen_string_literal: true
 
 module Keycloak
-  class Exporter
+  class Exporter # rubocop:disable Metrics/ClassLength
     BUILT_IN_CLIENTS = %w[
       account account-console admin-cli broker realm-management security-admin-console
     ].freeze
     BUILT_IN_ROLES = %w[offline_access uma_authorization].freeze
     BUILT_IN_CLIENT_SCOPES = %w[
       web-origins acr roles profile email address phone offline_access microprofile-jwt
+    ].freeze
+    BUILT_IN_COMPONENT_PROVIDERS = %w[
+      allowed-client-templates allowed-protocol-mappers trusted-hosts consent-required scope
     ].freeze
 
     def initialize(client, realm_name, logger: Logger.new($stdout))
@@ -21,11 +24,17 @@ module Keycloak
 
       export_data = {
         "realm" => export_with_message("realm configuration", "/admin/realms/#{@realm_name}"),
+        "userProfile" => export_user_profile,
         "identityProviders" => export_identity_providers,
         "clientScopes" => export_client_scopes,
         "clients" => export_clients,
         "roles" => export_roles,
-        "authenticationFlows" => export_flows
+        "groups" => export_groups,
+        "components" => export_components,
+        "requiredActions" => export_required_actions,
+        "defaultDefaultClientScopes" => export_default_default_client_scopes,
+        "authenticationFlows" => export_flows,
+        "authenticatorConfigs" => export_authenticator_configs
       }
 
       @logger.info "✓ Export completed"
@@ -77,12 +86,98 @@ module Keycloak
     end
 
     def export_flows
-      export_collection("authentication flows", "/admin/realms/#{@realm_name}/authentication/flows") do |flows|
-        flows.reject { |flow| flow["builtIn"] }
-      end
+      export_collection("authentication flows", "/admin/realms/#{@realm_name}/authentication/flows")
     rescue StandardError => e
       @logger.warn "  ⚠ Could not export authentication flows: #{e.message}"
       []
+    end
+
+    def export_authenticator_configs
+      config_ids = fetch_authenticator_config_ids
+      return [] if config_ids.empty?
+
+      @logger.info "  Exporting authenticator configs..."
+      configs = fetch_configs_by_ids(config_ids)
+      @logger.info "  ✓ #{configs.length} authenticator config(s) exported"
+      configs
+    rescue StandardError => e
+      @logger.warn "  ⚠ Could not export authenticator configs: #{e.message}"
+      []
+    end
+
+    def fetch_authenticator_config_ids
+      flows = @client.get("/admin/realms/#{@realm_name}/authentication/flows")
+      flows.flat_map do |flow|
+        (flow["authenticationExecutions"] || []).map { |exec| exec["authenticatorConfig"] }.compact
+      end.uniq
+    end
+
+    def fetch_configs_by_ids(config_ids)
+      config_ids.map do |config_id|
+        fetch_single_config(config_id)
+      end.compact
+    end
+
+    def fetch_single_config(config_id)
+      encoded_config_id = CGI.escape(config_id)
+      @client.get("/admin/realms/#{@realm_name}/authentication/config/#{encoded_config_id}")
+    rescue StandardError => e
+      @logger.warn "    ⚠ Could not export config #{config_id}: #{e.message}"
+      nil
+    end
+
+    def export_user_profile
+      export_with_message("user profile configuration", "/admin/realms/#{@realm_name}/users/profile")
+    rescue StandardError => e
+      @logger.warn "  ⚠ Could not export user profile: #{e.message}"
+      nil
+    end
+
+    def export_groups
+      export_collection("groups", "/admin/realms/#{@realm_name}/groups")
+    rescue StandardError => e
+      @logger.warn "  ⚠ Could not export groups: #{e.message}"
+      []
+    end
+
+    def export_components
+      export_collection("components", "/admin/realms/#{@realm_name}/components") do |components|
+        filter_built_in_components(components)
+      end
+    rescue StandardError => e
+      @logger.warn "  ⚠ Could not export components: #{e.message}"
+      []
+    end
+
+    def export_required_actions
+      export_collection("required actions", "/admin/realms/#{@realm_name}/authentication/required-actions")
+    rescue StandardError => e
+      @logger.warn "  ⚠ Could not export required actions: #{e.message}"
+      []
+    end
+
+    def export_default_default_client_scopes
+      export_collection(
+        "default default client scopes",
+        "/admin/realms/#{@realm_name}/default-default-client-scopes"
+      )
+    rescue StandardError => e
+      @logger.warn "  ⚠ Could not export default default client scopes: #{e.message}"
+      []
+    end
+
+    def filter_built_in_components(components)
+      components.reject do |component|
+        built_in_provider?(component) || fallback_component?(component)
+      end
+    end
+
+    def built_in_provider?(component)
+      BUILT_IN_COMPONENT_PROVIDERS.include?(component["providerId"])
+    end
+
+    def fallback_component?(component)
+      component["name"]&.start_with?("fallback-")
     end
 
     def filter_built_in_clients(clients)
