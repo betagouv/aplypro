@@ -120,7 +120,11 @@ module Keycloak
 
     def fetch_single_config(config_id)
       encoded_config_id = CGI.escape(config_id)
-      @client.get("/admin/realms/#{@realm_name}/authentication/config/#{encoded_config_id}")
+      response = @client.get("/admin/realms/#{@realm_name}/authentication/config/#{encoded_config_id}")
+
+      return nil if response.is_a?(Hash) && response["error"]
+
+      response
     rescue StandardError => e
       @logger.warn "    ⚠ Could not export config #{config_id}: #{e.message}"
       nil

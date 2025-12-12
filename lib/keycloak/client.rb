@@ -155,26 +155,32 @@ module Keycloak
 
     def get(path)
       response = connection.get(path)
+      raise "HTTP #{response.status}: #{response.body}" unless response.success?
+
       response.body
     end
 
     def post(path, body)
       response = connection.post(path, body)
+      raise "HTTP #{response.status}: #{response.body}" unless response.success?
+
       response.body
     end
 
     def put(path, body)
       response = connection.put(path, body)
+      raise "HTTP #{response.status}: #{response.body}" unless response.success?
+
       response.body
     end
 
     def find_client_id(realm_name, client_id)
-      clients = get("/realms/#{realm_name}/clients?clientId=#{client_id}")
+      clients = get("/admin/realms/#{realm_name}/clients?clientId=#{client_id}")
       clients.first["id"] if clients&.any?
     end
 
     def find_client_scope_id(realm_name, scope_name)
-      scopes = get("/realms/#{realm_name}/client-scopes")
+      scopes = get("/admin/realms/#{realm_name}/client-scopes")
       scope = scopes.find { |s| s["name"] == scope_name }
       scope["id"] if scope
     end
