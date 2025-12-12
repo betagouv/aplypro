@@ -1,5 +1,5 @@
 .fr-checkbox-group.fr-mb-2w
-  %label.fr-label
-    = check_box_tag :confirmed_director, "1", current_user.confirmed_director?, id: nil, data: { confirm_director_target: "checkbox", action: "change->confirm-director#toggleSubmitButton" }
+  = check_box_tag :confirmed_director, "1", current_user.confirmed_director?, id: "confirmed_director_checkbox"
+  %label.fr-label{for: "confirmed_director_checkbox"}
     = message.html_safe
     .fr-text--sm.fr-mt-1w= confirmed_director_information
