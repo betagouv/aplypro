@@ -44,7 +44,7 @@
                     %td{colspan: 2} Aucun paiement effectué
   .fr-grid-row
     .fr-col-md-6.fr-mb-3w
-    = form_with model: @pfmp, url: rectify_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), builder: DsfrFormBuilder, method: :post, data: { controller: "confirm-director" } do |f|
+    = form_with model: @pfmp, url: rectify_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), builder: DsfrFormBuilder, method: :post do |f|
       .fr-mb-3w
         %h2.fr-h4 Modification du nombre de jours
         .fr-grid-row
@@ -93,4 +93,4 @@
 
       .fr-btns-group.fr-btns-group--inline.fr-mt-3w
         = link_to "Annuler", school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), class: 'fr-btn fr-btn--secondary'
-        = f.submit "Confirmer la rectification", class: 'fr-btn fr-btn--danger', data: { confirm_director_target: "submit" }
+        = f.submit "Confirmer la rectification", class: 'fr-btn fr-btn--danger'

@@ -24,7 +24,7 @@
           €
         de plafond annuel
 
-= form_with scope: :validation, method: :post, url: validation_school_year_class_path(selected_school_year, @classe), data: { controller: "confirm-director" } do |form|
+= form_with scope: :validation, method: :post, url: validation_school_year_class_path(selected_school_year, @classe) do |form|
   .fr-table.fr-table--no-caption.fr-mb-3w
     %table
       %caption Liste des pfmps à valider
@@ -62,6 +62,6 @@
 
   .fr-grid-row.fr-grid-row--top
     .fr-mb-2w.fr-mr-md-2w
-      = form.submit t("validations.validate"), class: "fr-btn fr-btn--primary fr-mb-2w", data: { confirm_director_target: "submit" }
+      = form.submit t("validations.validate"), class: "fr-btn fr-btn--primary fr-mb-2w"
       = render partial: "shared/confirmed_director", locals: { message: t("validations.confirm_director") }
 

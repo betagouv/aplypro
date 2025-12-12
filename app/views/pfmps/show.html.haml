@@ -24,8 +24,8 @@
           jours travaillés
 
     - if @pfmp.in_state?(:completed) && current_user.can_validate?
-      = form_with method: :post, url: validate_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), data: { controller: "confirm-director" } do |form|
-        = form.submit "Valider", class: "fr-btn fr-btn--primary fr-mb-2w", disabled: disabled, data: { confirm_director_target: "submit" }
+      = form_with method: :post, url: validate_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp) do |form|
+        = form.submit "Valider", class: "fr-btn fr-btn--primary fr-mb-2w", disabled: disabled
         - if !disabled
           = render partial: "shared/confirmed_director", locals: { message: t("validations.confirm_director") }
 
