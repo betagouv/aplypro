@@ -6,8 +6,9 @@ module Academic
 
     before_action :set_report_context, only: %i[show global export establishments_table]
     before_action :set_extractor, only: %i[show global export establishments_table]
-    before_action :require_admin, only: %i[global_evolution global export]
+    before_action :require_admin, only: %i[global_evolution global export export_evolution]
     before_action :set_index_context, only: %i[index global_evolution]
+    before_action :set_evolution_context, only: %i[global_evolution export_evolution]
 
     def index
       @selected_school_year_id = params[:school_year_id]
@@ -16,20 +17,7 @@ module Academic
       @reports = @reports.where(school_year_id: @selected_school_year_id) if @selected_school_year_id.present?
     end
 
-    def global_evolution
-      @selected_school_year = determine_selected_school_year
-      unless @selected_school_year
-        return redirect_to academic_reports_path,
-                           alert: t("academic.school_years.selected.invalid_school_year")
-      end
-
-      @reports = Report.select(:id, :school_year_id, :created_at)
-                       .where(school_year: @selected_school_year)
-                       .order(created_at: :desc)
-
-      @evolution_data = build_evolution_data
-      @indicators_metadata = Stats::Main.indicators_metadata
-    end
+    def global_evolution; end
 
     def show
       prepare_statistics_data
@@ -41,6 +29,11 @@ module Academic
 
     def export
       zipline(export_files, export_filename)
+    end
+
+    def export_evolution
+      exporter = Reports::EvolutionCSVExporter.new(@selected_school_year)
+      send_data exporter.csv_content, filename: exporter.filename, type: "text/csv; charset=utf-8"
     end
 
     def establishments_table
@@ -85,7 +78,11 @@ module Academic
     def require_admin
       return if current_user.admin?
 
-      redirect_path = action_name == "global_evolution" ? academic_reports_path : academic_report_path(params[:id])
+      redirect_path = if %w[global_evolution export_evolution].include?(action_name)
+                        academic_reports_path
+                      else
+                        academic_report_path(params[:id])
+                      end
       redirect_to redirect_path, alert: t("academic.reports.export.unauthorized")
     end
 
@@ -100,19 +97,17 @@ module Academic
       SchoolYear.find_by(id: params[:school_year_id]) || SchoolYear.order(start_year: :desc).first
     end
 
-    def build_evolution_data
-      return [] if @reports.empty?
-
-      @reports.map do |report|
-        extractor = Reports::BaseExtractor.new(report)
-        global_data = extractor.extract(:global_data)
-
-        {
-          report: report,
-          date: report.created_at,
-          values: global_data.last
-        }
+    def set_evolution_context
+      @selected_school_year = determine_selected_school_year
+      unless @selected_school_year
+        return redirect_to academic_reports_path,
+                           alert: t("academic.school_years.selected.invalid_school_year")
       end
+
+      exporter = Reports::EvolutionCSVExporter.new(@selected_school_year)
+      @reports = exporter.reports
+      @evolution_data = exporter.evolution_data
+      @indicators_metadata = exporter.indicators_metadata
     end
 
     def prepare_statistics_data

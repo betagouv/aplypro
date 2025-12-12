@@ -24,6 +24,12 @@
         .fr-col-12
           %h2.fr-h5= t("academic.reports.global_evolution.table_title")
 
+      .fr-grid-row.fr-grid-row--gutters
+        .fr-col-12.fr-text--right.fr-mb-2w
+          = button_to export_evolution_academic_reports_path(school_year_id: @selected_school_year&.id), method: :post, class: "fr-btn fr-btn--sm fr-btn--secondary", data: { turbo: false } do
+            %i.fr-icon-download-line.fr-icon--sm.fr-mr-1w{"aria-hidden": "true"}
+            = t("academic.reports.export_csv")
+
       .fr-table.fr-table--bordered.stats-table-container
         %table
           %thead
