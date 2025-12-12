@@ -10,7 +10,7 @@ class Student
                     .find_or_initialize_by(classe: classe, student: student)
                     .tap { |sc| sc.assign_attributes(attributes) }
 
-        current_schooling_end_date(schooling)
+        handle_current_schooling_end_date(schooling)
 
         school_year_is_current = @establishment.in_current_school_year_range?(Date.parse(attributes[:start_date]))
         schooling.reopen! if school_year_is_current && attributes[:end_date].nil?
