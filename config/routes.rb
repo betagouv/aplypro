@@ -73,6 +73,7 @@ Rails.application.routes.draw do
     resources :reports, only: %i[index show] do
       collection do
         get :global_evolution
+        post :export_evolution
       end
       member do
         get :global
