@@ -27,6 +27,16 @@ module ASP
       end
     end
 
+    def last_update_date(format: :short)
+      date = if last_transition.present? && in_state?(:paid) && last_transition.metadata.dig("PAIEMENT", "DATEPAIEMENT")
+               Date.strptime(last_transition.metadata.dig("PAIEMENT", "DATEPAIEMENT"), "%d/%m/%Y")
+             else
+               last_transition&.updated_at || updated_at
+             end
+
+      I18n.l(date, format: format)
+    end
+
     def all_status_badges
       current_stages.map do |state|
         disabled = "disabled" if current_state_symbol != state

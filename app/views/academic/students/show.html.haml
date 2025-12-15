@@ -43,6 +43,9 @@
                 %td
                   - if pfmp.latest_payment_request.present?
                     = pfmp.latest_payment_request.status_badge
+                    - if pfmp.latest_payment_request.last_update_date.present?
+                      %br
+                      %small.fr-text--xs= "Mis à jour le #{pfmp.latest_payment_request.last_update_date}"
                   - else
                     %span.fr-badge.fr-badge--sm Aucune demande
                 %td
