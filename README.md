@@ -56,10 +56,9 @@ Ministères :
 
 Systèmes d'authentification :
 
-- FIM : Federation Identity Manager : Pour MENJ, Mer et Armée
-  - Passe par notre Keycloak
-- CAS : Centralized Authentication Service : Pour MASA
-  - Ne passe pas par notre Keycloak (à changer)
+- Passe par notre Keycloak :
+  - FIM (Federation Identity Manager) : Pour MENJ, Mer et Armée
+  - Hub Partenaire : Pour MASA
 
 Sources de données :
 
