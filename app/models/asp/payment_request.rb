@@ -164,6 +164,8 @@ module ASP
       # contract_type_code = classe.establishment.private_contract_type_code
       #
       # return false if ministry.eql?("menj") && !contract_type_code.eql?("99") && !Rails.env.test?
+      return false if schooling.classe.mef.ministry.eql?("masa") && !Rails.env.test?
+
       true
     end
 
