@@ -35,7 +35,7 @@ class Student
 
             begin
               map_schooling!(classe, student, entry)
-            rescue ValidationError
+            rescue ActiveRecord::RecordInvalid
               next
             rescue StandardError => e
               raise e unless Rails.env.production?

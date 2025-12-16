@@ -93,5 +93,24 @@ describe Student::Mappers::Sygne do
         expect { mapper.parse! }.to(change { student.reload.current_schooling })
       end
     end
+
+    context "when a student has invalid data" do
+      let(:next_data) do
+        normal_payload.dup.tap do |students|
+          students.last["ine"] = "123456"
+          students.last["dateDebSco"] = "2025-09-03"
+          students.last["dateFinSco"] = "2025-09-01"
+        end
+      end
+      it "ignores it" do
+        mapper.parse!
+
+        expect(Student.find_by(ine: "123456")).to be_nil
+      end
+
+      it "does not raise an error" do
+        expect { mapper.parse! }.not_to raise_error
+      end
+    end
   end
 end
