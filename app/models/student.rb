@@ -186,4 +186,11 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
                                   .order(end_date: :desc, start_date: :desc)
                                   .first
   end
+
+  def birthplace_city_insee_code_exceptions
+    return "97127" if birthplace_city_insee_code.eql?("97801") && birthdate < Date.new(2008, 1, 1)
+    return "97801" if birthplace_city_insee_code.eql?("97127") && birthdate > Date.new(2007, 12, 31)
+
+    birthplace_city_insee_code
+  end
 end

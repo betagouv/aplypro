@@ -8,8 +8,7 @@ module ASP
         nomusage: :last_name,
         nomnaissance: :last_name,
         datenaissance: :birthdate,
-        sexe: :biological_sex,
-        codeinseecommune: :birthplace_city_insee_code
+        sexe: :biological_sex
       }.freeze
 
       # yes, we know. It's 2024 and we're still doing this silly
@@ -37,6 +36,10 @@ module ASP
 
       def codeinseepaysnai
         InseeCountryCodeMapper.call(student.birthplace_country_insee_code)
+      end
+
+      def codeinseecommune
+        student.birthplace_city_insee_code_exceptions
       end
     end
   end
