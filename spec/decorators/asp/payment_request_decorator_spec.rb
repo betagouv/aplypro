@@ -56,4 +56,65 @@ describe ASP::PaymentRequestDecorator do
       end
     end
   end
+
+  describe "#last_update_date" do
+    subject(:result) { decorator.last_update_date(format: format) }
+
+    let(:format) { :short }
+
+    context "when payment request is paid and has payment date in metadata" do
+      let(:payment_date) { "15/03/2024" }
+      let(:expected_date) { Date.strptime(payment_date, "%d/%m/%Y") }
+      let(:payment_request) { create(:asp_payment_request, :paid) }
+
+      before do
+        transition = payment_request.last_transition
+        metadata = transition.metadata.merge("PAIEMENT" => { "DATEPAIEMENT" => payment_date })
+        transition.update!(metadata: metadata)
+        payment_request.reload
+      end
+
+      it "returns the formatted payment date from metadata" do
+        expect(result).to eq I18n.l(expected_date, format: format)
+      end
+    end
+
+    context "when payment request is paid but metadata lacks payment date" do
+      let(:payment_request) { create(:asp_payment_request, :paid) }
+
+      it "returns the formatted transition updated_at" do
+        expect(result).to eq I18n.l(payment_request.last_transition.updated_at, format: format)
+      end
+    end
+
+    context "when payment request is not paid" do
+      let(:payment_request) { create(:asp_payment_request, :sent) }
+
+      it "returns the formatted transition updated_at" do
+        expect(result).to eq I18n.l(payment_request.last_transition.updated_at, format: format)
+      end
+    end
+
+    context "when format is :long" do
+      let(:format) { :long }
+      let(:payment_request) { create(:asp_payment_request, :sent) }
+
+      it "forwards the format parameter to I18n.l" do
+        expect(result).to eq I18n.l(payment_request.last_transition.updated_at, format: :long)
+      end
+    end
+
+    context "when payment request has no transitions" do
+      let(:payment_request) { create(:asp_payment_request) }
+
+      before do
+        payment_request.asp_payment_request_transitions.destroy_all
+        payment_request.reload
+      end
+
+      it "falls back to payment_request updated_at" do
+        expect(result).to eq I18n.l(payment_request.updated_at, format: format)
+      end
+    end
+  end
 end
