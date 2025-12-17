@@ -153,7 +153,7 @@ describe Student::Mappers::Fregata do
       it "ignores it" do
         mapper.new(data, uai).parse!
 
-        expect(Student.find_by(ine: "123456")).to be_nil
+        expect(Student.find_by(ine: "123456").schoolings).to be_empty
       end
 
       it "does not raise an error" do

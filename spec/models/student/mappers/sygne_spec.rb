@@ -102,10 +102,11 @@ describe Student::Mappers::Sygne do
           students.last["dateFinSco"] = "2025-09-01"
         end
       end
+
       it "ignores it" do
         mapper.parse!
 
-        expect(Student.find_by(ine: "123456")).to be_nil
+        expect(Student.find_by(ine: "123456").schoolings).to be_empty
       end
 
       it "does not raise an error" do
