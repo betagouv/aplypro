@@ -138,5 +138,27 @@ describe Student::Mappers::Fregata do
         expect(Student.pluck(:ine)).to contain_exactly("1111", "3333")
       end
     end
+
+    context "when a student has invalid data" do
+      let(:data) do
+        [
+          build(:fregata_student),
+          build(:fregata_student,
+                ine_value: "123456",
+                dateEntreeFormation: "2025-09-03",
+                dateSortieFormation: "2025-09-01")
+        ]
+      end
+
+      it "ignores it" do
+        mapper.new(data, uai).parse!
+
+        expect(Student.find_by(ine: "123456").schoolings).to be_empty
+      end
+
+      it "does not raise an error" do
+        expect { mapper.new(data, uai).parse! }.not_to raise_error
+      end
+    end
   end
 end

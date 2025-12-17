@@ -26,7 +26,7 @@ class Student
         end
       end
 
-      def parse!
+      def parse! # rubocop:disable Metrics/MethodLength
         map_classes!.each do |classe, entries|
           entries.each do |entry|
             student = map_student!(entry)
@@ -35,6 +35,8 @@ class Student
 
             begin
               map_schooling!(classe, student, entry)
+            rescue ActiveRecord::RecordInvalid
+              next
             rescue StandardError => e
               raise e unless Rails.env.production?
 
@@ -125,7 +127,7 @@ class Student
         "#{self.class}<UAI: #{uai}>"
       end
 
-      def current_schooling_end_date(schooling)
+      def handle_current_schooling_end_date(schooling)
         student = schooling.student
         current_schooling = student.current_schooling
 

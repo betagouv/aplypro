@@ -9,8 +9,8 @@ describe Student::Mappers::Base do
   let(:uai) { create(:establishment).uai }
   let(:mapper) { described_class.new({}, uai) }
 
-  describe "#manage_end_date" do
-    subject(:method) { mapper.current_schooling_end_date(schooling) }
+  describe "#handle_current_schooling_end_date" do
+    subject(:method) { mapper.handle_current_schooling_end_date(schooling) }
 
     let(:classe) { create(:classe) }
     let(:student) { create(:student) }

@@ -28,7 +28,7 @@ class Student
         schooling = Schooling.find_or_initialize_by(classe: classe, student: student)
                              .tap { |sc| sc.assign_attributes(attributes) }
 
-        current_schooling_end_date(schooling)
+        handle_current_schooling_end_date(schooling)
 
         schooling.save!
       end

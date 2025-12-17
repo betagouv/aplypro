@@ -23,4 +23,24 @@ describe Student::Mappers::CSV do
   it "assumes students have the right status" do
     expect { mapper.new(normal_payload, establishment.uai).parse! }.to change(Schooling.where(status: 0), :count)
   end
+
+  context "when a student has invalid data" do
+    let(:data) do
+      normal_payload.tap do |payload|
+        payload.first["ine"] = "123456"
+        payload.first["date_début"] = "2025-09-03"
+        payload.first["date_fin"] = "2025-09-01"
+      end
+    end
+
+    it "ignores it" do
+      mapper.new(data, uai).parse!
+
+      expect(Student.find_by(ine: "123456").schoolings).to be_empty
+    end
+
+    it "does not raise an error" do
+      expect { mapper.new(data, uai).parse! }.not_to raise_error
+    end
+  end
 end
