@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
+  SAINT_MARTIN_BIRTHPLACE_CITY_INSEE_CODE_BEFORE_2008 = "97127"
+  SAINT_MARTIN_BIRTHPLACE_CITY_INSEE_CODE_AFTER_2007 = "97801"
+
   validates :ine,
             :first_name,
             :last_name,
@@ -188,9 +191,14 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def birthplace_city_insee_code_exceptions
-    return "97127" if birthplace_city_insee_code.eql?("97801") && birthdate < Date.new(2008, 1, 1)
-    return "97801" if birthplace_city_insee_code.eql?("97127") && birthdate > Date.new(2007, 12, 31)
+    cutoff = Date.new(2008, 1, 1)
 
-    birthplace_city_insee_code
+    if birthdate < cutoff && birthplace_city_insee_code.eql?(SAINT_MARTIN_BIRTHPLACE_CITY_INSEE_CODE_AFTER_2007)
+      SAINT_MARTIN_BIRTHPLACE_CITY_INSEE_CODE_BEFORE_2008
+    elsif birthdate >= cutoff && birthplace_city_insee_code.eql?(SAINT_MARTIN_BIRTHPLACE_CITY_INSEE_CODE_BEFORE_2008)
+      SAINT_MARTIN_BIRTHPLACE_CITY_INSEE_CODE_AFTER_2007
+    else
+      birthplace_city_insee_code
+    end
   end
 end
