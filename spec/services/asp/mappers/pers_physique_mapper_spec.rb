@@ -29,4 +29,24 @@ describe ASP::Mappers::PersPhysiqueMapper do
       expect(code).to eq :value
     end
   end
+
+  describe "codeinseecommune" do
+    context "when the birthplace city insee code has no exception" do
+      before { student.update!(birthplace_city_insee_code: "12345") }
+
+      it { expect(mapper.codeinseecommune).to eq "12345" }
+    end
+
+    context "when the birthplace city insee code has an exception and before 2008-01-01" do
+      before { student.update!(birthplace_city_insee_code: "97801", birthdate: "2005-05-05") }
+
+      it { expect(mapper.codeinseecommune).to eq "97127" }
+    end
+
+    context "when the birthplace city insee code has an exception and after 2007-12-31" do
+      before { student.update!(birthplace_city_insee_code: "97127", birthdate: "2015-05-05") }
+
+      it { expect(mapper.codeinseecommune).to eq "97801" }
+    end
+  end
 end
