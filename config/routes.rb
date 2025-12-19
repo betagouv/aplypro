@@ -42,6 +42,7 @@ Rails.application.routes.draw do
 
     resources :students do
       get :show
+      resources :pfmps, only: [:show]
     end
 
     resources :school_years, path: :year, only: [] do

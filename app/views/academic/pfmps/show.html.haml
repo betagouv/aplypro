@@ -1,0 +1,74 @@
+%nav.fr-breadcrumb{"aria-label" => "breadcrumb"}
+  %ol.fr-breadcrumb__list
+    %li
+      = link_to "Accueil", academic_root_path, class: "fr-breadcrumb__link"
+    %li
+      = link_to @student.full_name, academic_student_path(@student), class: "fr-breadcrumb__link"
+    %li
+      %span.fr-breadcrumb__link{"aria-current" => "page"}= "PFMP ##{@pfmp.id}"
+
+.fr-container.fr-mb-2w
+  = link_to "Retour à la fiche élève", academic_student_path(@student), class: "fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-arrow-left-line"
+
+%h2.fr-mt-3w.fr-mb-2w
+  PFMP ##{@pfmp.id}
+  = @pfmp.status_badge
+
+.fr-container.fr-my-4w
+  .fr-grid-row.fr-grid-row--gutters
+    .fr-col-12.fr-col-md-6
+      .fr-card.fr-card--shadow
+        .fr-card__body
+          %h3.fr-card__title Informations générales
+          .fr-card__content
+            %ul.fr-list
+              %li
+                %strong Élève:
+                = link_to @student.full_name, academic_student_path(@student), class: "fr-link"
+              %li
+                %strong Numéro administratif:
+                = @pfmp.administrative_number
+              %li
+                %strong Classe:
+                = @pfmp.classe.label
+              %li
+                %strong Année scolaire:
+                = @pfmp.school_year.to_s
+              %li
+                %strong Établissement:
+                = link_to @pfmp.establishment.name, academic_establishment_path(@pfmp.establishment), class: "fr-link"
+
+    .fr-col-12.fr-col-md-6
+      .fr-card.fr-card--shadow
+        .fr-card__body
+          %h3.fr-card__title Période et montant
+          .fr-card__content
+            %ul.fr-list
+              %li
+                %strong Date de début:
+                = l(@pfmp.start_date)
+              %li
+                %strong Date de fin:
+                = l(@pfmp.end_date)
+              %li
+                %strong Nombre de jours:
+                = @pfmp.day_count || "Non renseigné"
+              %li
+                %strong Montant:
+                %span.fr-text--lg
+                  = number_to_currency(@pfmp.amount)
+
+  - if @pfmp.latest_payment_request.present?
+    .fr-grid-row.fr-grid-row--gutters.fr-mt-3w
+      .fr-col-12
+        .fr-callout.fr-icon-information-line
+          %h3.fr-callout__title Statut du paiement
+          .fr-callout__text
+            %p
+              = @pfmp.latest_payment_request.status_badge
+              - if @pfmp.latest_payment_request.last_update_date.present?
+                %span.fr-ml-2w.fr-text--sm= "Mis à jour le #{@pfmp.latest_payment_request.last_update_date}"
+            - if @pfmp.latest_payment_request.status_explanation.present?
+              %p.fr-mt-2w
+                %strong Motif:
+                = @pfmp.latest_payment_request.status_explanation
