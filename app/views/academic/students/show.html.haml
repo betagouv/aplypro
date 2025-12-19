@@ -15,28 +15,30 @@
           %tr
             %td= schooling.classe.school_year.to_s
             %td= schooling.classe.label
-            %td= schooling.establishment.name
+            %td= link_to schooling.establishment.name, academic_establishment_path(schooling.establishment), class: "fr-link"
             %td= attributive_decision_status_badge(schooling)
 
 %section.fr-pb-3w
   %h2.fr-h4 PFMPs de l'élève
   - if pfmps?(@schoolings)
     - filtered_schoolings = schoolings_with_pfmps(@schoolings)
-    .fr-table.fr-table--layout-fixed.fr-table--no-caption
+    .fr-table.fr-table--no-caption
       %table
         %caption Liste des PFMPs de l'élève
         %thead
+          %th{scope: "col"} ID
           %th{scope: "col"} Année scolaire
           %th{scope: "col"} Classe
           %th{scope: "col"} PFMP
           %th{scope: "col"} Statut paiement
-          %th{scope: "col"} Motif
+          %th{scope: "col", style: "width: 30%"} Motif
           %th{scope: "col"} Nombre de jours
           %th{scope: "col"} Montant
         %tbody
           - filtered_schoolings.each do |schooling|
-            - schooling.pfmps.each do |pfmp|
+            - schooling.pfmps.order(start_date: :desc).each do |pfmp|
               %tr
+                %td= link_to pfmp.id, academic_student_pfmp_path(@student, pfmp), class: "fr-link"
                 %td= schooling.classe.school_year.to_s
                 %td= schooling.classe.label
                 %td= pfmp.listing_to_s.html_safe

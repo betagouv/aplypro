@@ -220,6 +220,8 @@ fr:
         students:
           show: "%{name}"
           search_results: Recherche d'un élève
+        pfmps:
+          show: "PFMP #%{id} - %{name}"
       stats:
         index: Statistiques
       school_years:
