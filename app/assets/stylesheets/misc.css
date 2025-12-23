@@ -380,9 +380,52 @@ nav {
   overflow-x: auto;
 }
 
+.stats-table-container table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.stats-table-container thead th {
+  background-color: var(--blue-france-850-200);
+  border-bottom: 2px solid var(--border-default-grey);
+}
+
 .stats-table-container th,
 .stats-table-container td {
   white-space: nowrap;
+}
+
+.stats-table-sticky {
+  max-height: min(700px, 70vh);
+  overflow-y: auto;
+  position: relative;
+}
+
+.stats-table-sticky thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.stats-table-sticky thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.stats-table-sticky th:first-child,
+.stats-table-sticky td:first-child {
+  position: sticky;
+  left: 0;
+  background-color: var(--background-default-grey);
+  z-index: 1;
+  box-shadow: 1px 0 3px rgba(0,0,0,0.1);
+}
+
+.stats-table-sticky thead th:first-child {
+  z-index: 3;
+  background-color: var(--blue-france-850-200);
 }
 
 .academic-stats-page .stats-table-container {
