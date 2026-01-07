@@ -24,12 +24,12 @@ class PaymentFixer
       .merge(Pfmp.not_in_state(:pending))
       .preload(pfmps: :mef)
       .find_each do |student|
-      updates << if student.pfmps.one?
-                   handle_single_pfmp(student.pfmps.first)
-                 else
-                   handle_multiple_pfmps(student.pfmps)
-                 end
-    end
+        updates << if student.pfmps.one?
+                     handle_single_pfmp(student.pfmps.first)
+                   else
+                     handle_multiple_pfmps(student.pfmps)
+                   end
+      end
 
     to_update = updates.flatten.compact.map(&:attributes)
 
@@ -61,16 +61,16 @@ class PaymentFixer
       .not_in_state(:pending)
       .group_by(&:mef)
       .each_value do |grouped_pfmps|
-      grouped_pfmps.sort_by(&:created_at).inject(0) do |accumulated, pfmp|
-        expected = [
-          wages[pfmp.mef.id][:daily_rate] * pfmp.day_count,
-          wages[pfmp.mef.id][:yearly_cap] - accumulated
-        ].min
-        updates << pfmp.tap { |p| p.amount = expected } if expected != pfmp.amount
+        grouped_pfmps.sort_by(&:created_at).inject(0) do |accumulated, pfmp|
+          expected = [
+            wages[pfmp.mef.id][:daily_rate] * pfmp.day_count,
+            wages[pfmp.mef.id][:yearly_cap] - accumulated
+          ].min
+          updates << pfmp.tap { |p| p.amount = expected } if expected != pfmp.amount
 
-        accumulated + expected
+          accumulated + expected
+        end
       end
-    end
 
     updates.flatten
   end

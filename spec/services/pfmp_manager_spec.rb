@@ -30,7 +30,7 @@ describe PfmpManager do
     let(:manager1) { described_class.new(pfmp1) } # rubocop:disable RSpec/IndexedLet
     let(:manager2) { described_class.new(pfmp2) } # rubocop:disable RSpec/IndexedLet
 
-    it "serializes concurrent updates on the same schooling via pessimistic locking", :focus do # rubocop:disable RSpec/ExampleLength
+    it "serializes concurrent updates on the same schooling via pessimistic locking" do # rubocop:disable RSpec/ExampleLength
       execution_order = []
       mutex = Mutex.new
 
