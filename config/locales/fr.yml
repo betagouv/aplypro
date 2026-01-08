@@ -222,6 +222,9 @@ fr:
           search_results: Recherche d'un élève
         pfmps:
           show: "PFMP #%{id} - %{name}"
+        classes:
+          index: Liste des classes
+          show: "%{name}"
       stats:
         index: Statistiques
       school_years:

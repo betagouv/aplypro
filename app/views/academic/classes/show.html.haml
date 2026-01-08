@@ -1,0 +1,48 @@
+%h2.fr-mt-2w= "Classe: #{@classe.label}"
+
+.fr-container.fr-mb-2w
+  = link_to "Retour aux classes", academic_establishment_classes_path(@classe.establishment), class: "fr-btn fr-btn--secondary", data: { turbo: false }
+
+.fr-container.fr-my-4w
+  .fr-grid-row.fr-grid-row--gutters
+    .fr-col-12.fr-col-md-6
+      .fr-card.fr-card--shadow
+        .fr-card__body
+          %h3.fr-card__title Informations générales
+          .fr-card__content
+            %ul.fr-list
+              %li
+                %strong Établissement:
+                = link_to @classe.establishment.name, academic_establishment_path(@classe.establishment), class: "fr-link"
+              %li
+                %strong MEF:
+                = @classe.mef.label
+              %li
+                %strong Année scolaire:
+                = @classe.school_year.to_s
+              %li
+                %strong Nombre d'élèves actifs:
+                = @schoolings.count { |s| s.end_date.nil? }
+
+%section.fr-pb-3w
+  %h2.fr-h4 Élèves de la classe
+  - if @schoolings.any?
+    .fr-table.fr-table--no-caption
+      %table
+        %caption Liste des élèves de la classe
+        %thead
+          %tr
+            %th{scope: "col"} Nom
+            %th{scope: "col"} Prénom
+            %th{scope: "col"} INE
+            %th{scope: "col"} Décision d'attribution
+        %tbody
+          - @schoolings.each do |schooling|
+            - student = schooling.student
+            %tr
+              %td= link_to student.last_name, academic_student_path(student), class: "fr-link"
+              %td= student.first_name
+              %td= student.ine
+              %td= attributive_decision_status_badge(schooling)
+  - else
+    %p Aucun élève trouvé dans cette classe.

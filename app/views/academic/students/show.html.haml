@@ -14,7 +14,7 @@
         - @schoolings.sort_by { |schooling| schooling.classe.school_year.start_year }.reverse_each do |schooling|
           %tr
             %td= schooling.classe.school_year.to_s
-            %td= schooling.classe.label
+            %td= link_to schooling.classe.label, academic_class_path(schooling.classe), class: "fr-link"
             %td= link_to schooling.establishment.name, academic_establishment_path(schooling.establishment), class: "fr-link"
             %td= attributive_decision_status_badge(schooling)
 

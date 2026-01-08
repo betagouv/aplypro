@@ -1,0 +1,26 @@
+%h2.fr-mt-2w= "Classes de l'établissement: #{@establishment.name}"
+
+.fr-container.fr-mb-2w
+  = link_to "Retour à l'établissement", academic_establishment_path(@establishment), class: "fr-btn fr-btn--secondary", data: { turbo: false }
+
+- if @classes.none?
+  .fr-alert.fr-alert--info.fr-my-3w
+    %p.fr-alert__title Aucune classe trouvée pour cet établissement.
+- else
+  .fr-container.fr-my-4w
+    .fr-table.fr-table--no-caption
+      %table
+        %caption Liste des classes
+        %thead
+          %tr
+            %th{scope: "col"} Classe
+            %th{scope: "col"} MEF
+            %th{scope: "col"} Année scolaire
+            %th{scope: "col"} Nombre d'élèves
+        %tbody
+          - @classes.each do |classe|
+            %tr
+              %td= link_to classe.label, academic_class_path(classe), class: "fr-link"
+              %td= classe.mef.label
+              %td= classe.school_year.to_s
+              %td= classe.active_students_count
