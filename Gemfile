@@ -72,10 +72,14 @@ gem "breadcrumbs_on_rails"
 gem "sentry-rails"
 gem "sentry-ruby"
 
+# TODO: remove when following bug is fixed -> https://stackoverflow.com/questions/79844786/ruby-on-rails-redis-connection-pool-wrong-number-of-arguments-given-1-expected
+gem "connection_pool", "< 3"
+gem "sidekiq", "8.0.10"
+
 gem "active_decorator"
 
 gem "redis"
-gem "sidekiq"
+# gem "sidekiq"
 
 gem "rack-attack"
 
