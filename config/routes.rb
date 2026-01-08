@@ -34,7 +34,10 @@ Rails.application.routes.draw do
       member do
         get :users
       end
+      resources :classes, only: [:index]
     end
+
+    resources :classes, only: [:show]
 
     resource :students do
       get :search_results

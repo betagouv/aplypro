@@ -24,6 +24,8 @@
               %li
                 %strong Montant payé:
                 = number_to_currency(@establishment_data[@etab.uai][:paid_amount], unit: "€", format: "%n %u")
+            .fr-mt-3w
+              = link_to "Voir les Classes", academic_establishment_classes_path(@etab), class: "fr-btn fr-btn--secondary"
 
     .fr-col-12.fr-col-md-6
       .fr-card.fr-card--shadow
