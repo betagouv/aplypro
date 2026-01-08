@@ -22,7 +22,7 @@ module Academic
     end
 
     def show
-      infer_page_title(name: @classe)
+      @page_title = @classe.to_s
 
       @schoolings = @classe.schoolings.includes(
         :student,
