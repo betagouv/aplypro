@@ -40,9 +40,9 @@ class ClassesFacade
         .group("schoolings.classe_id", "COALESCE(pfmp_transitions.to_state, 'pending')")
         .count
         .each do |(class_id, state), count|
-      counts[class_id] ||= {}
-      counts[class_id][state.presence || "pending"] = count
-    end
+          counts[class_id] ||= {}
+          counts[class_id][state.presence || "pending"] = count
+        end
 
     counts
   end

@@ -14,8 +14,8 @@ module ASP
         Dir
           .mktmpdir("aplypro_asp")
           .tap do |dir|
-          instance.connection.download!(READ_FOLDER, dir, recursive: true)
-        end
+            instance.connection.download!(READ_FOLDER, dir, recursive: true)
+          end
       end
 
       def remove_file!(filename:)
@@ -43,8 +43,8 @@ module ASP
       %i[host port user password]
         .index_with { |param| ENV.fetch("APLYPRO_ASP_FTP_#{param.upcase}") }
         .tap do |params|
-        params.merge!(encryption: "aes256-cbc") unless Rails.env.development?
-      end
+          params.merge!(encryption: "aes256-cbc") unless Rails.env.development?
+        end
     end
   end
 end

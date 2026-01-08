@@ -30,30 +30,31 @@ describe PfmpManager do
     let(:manager1) { described_class.new(pfmp1) } # rubocop:disable RSpec/IndexedLet
     let(:manager2) { described_class.new(pfmp2) } # rubocop:disable RSpec/IndexedLet
 
-    it "prevents concurrent updates on the same schooling" do # rubocop:disable RSpec/ExampleLength
+    it "serializes concurrent updates on the same schooling via pessimistic locking" do # rubocop:disable RSpec/ExampleLength
       execution_order = []
+      mutex = Mutex.new
 
       thread1 = Thread.new do
         Pfmp.transaction do
-          execution_order << 1
+          mutex.synchronize { execution_order << :thread1_started }
           manager1.update!(day_count: 5)
           sleep(0.2)
-          execution_order << 2
+          mutex.synchronize { execution_order << :thread1_finished }
         end
       end
 
-      sleep(0.1)
-      execution_order << 3
+      sleep(0.05)
 
       thread2 = Thread.new do
+        mutex.synchronize { execution_order << :thread2_attempting }
         manager2.update!(day_count: 7)
-        execution_order << 4
+        mutex.synchronize { execution_order << :thread2_finished }
       end
 
       thread1.join
       thread2.join
 
-      expect(execution_order).to eq [1, 3, 2, 4]
+      expect(execution_order).to eq %i[thread1_started thread2_attempting thread1_finished thread2_finished]
       expect(pfmp1.reload.day_count).to eq 5
       expect(pfmp2.reload.day_count).to eq 7
     end

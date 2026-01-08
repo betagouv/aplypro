@@ -56,10 +56,10 @@ class Student
         map_classes!
           .transform_values! { |student_attrs| map_students!(student_attrs) }
           .each do |classe, students|
-          missing = classe.active_students - students
+            missing = classe.active_students - students
 
-          missing.each(&:close_current_schooling!)
-        end
+            missing.each(&:close_current_schooling!)
+          end
       end
 
       def map_classes!
