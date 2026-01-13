@@ -158,12 +158,12 @@ module ASP
       # Enable follow up lines for when ministry doesnt have funding anymore again
       # For instance:
       #
-      # classe = schooling.classe
-      # ministry = classe.mef.ministry
+      classe = schooling.classe
+      ministry = classe.mef.ministry
       # contract_type_code = classe.establishment.private_contract_type_code
       #
       # return false if ministry.eql?("menj") && !contract_type_code.eql?("99") && !Rails.env.test?
-      return false if schooling.classe.mef.ministry.eql?("mer") && !Rails.env.test?
+      return false if (ministry.eql?("mer") || ministry.eql?("masa")) && !Rails.env.test?
 
       true
     end
