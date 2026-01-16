@@ -127,6 +127,7 @@ group :test do
   gem "rubocop-rspec"
   gem "rubocop-rspec_rails"
   gem "shoulda-matchers"
+  gem "simplecov", require: false
   gem "timecop"
   gem "webmock"
 end
