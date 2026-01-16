@@ -102,7 +102,7 @@ jobs:
             --network="host" \
             --add-host="mock:127.0.0.1" \
             --env-file ./.github/workflows/test.env \
-            --rm aplypro bundle exec rspec
+            --rm aplypro bash -c "bundle exec rspec && echo '--- RSpec Coverage ---' && cat coverage/.last_run.json"
   integration-tests:
     name: "Integration tests: Cucumber"
     runs-on: ubuntu-latest
@@ -139,4 +139,4 @@ jobs:
             --network="host" \
             --add-host="mock:127.0.0.1" \
             --env-file ./.github/workflows/test.env \
-            --rm aplypro bundle exec cucumber
+            --rm aplypro bash -c "bundle exec cucumber && echo '--- Cucumber Coverage ---' && cat coverage/.last_run.json"
