@@ -35,7 +35,10 @@ describe ASP::Mappers::ElementPaiementMapper do
 
   describe "objetecheance" do
     it "returns the PFMP start date formatted as YYYYMM" do
-      payment_request.pfmp.update!(start_date: Date.new(2025, 9, 25))
+      payment_request.pfmp.update!(
+        start_date: Date.new(2025, 9, 25),
+        end_date: Date.new(2025, 10, 25)
+      )
       expect(mapper.objetecheance).to eq "202509"
     end
   end
