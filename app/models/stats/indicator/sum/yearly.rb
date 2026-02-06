@@ -8,7 +8,7 @@ module Stats
           super(
             column: :yearly_cap,
             all: Schooling.for_year(start_year).joins(classe: :mef)
-                          .merge(Mef.with_wages)
+                 .merge(Mef.with_wages)
           )
         end
 

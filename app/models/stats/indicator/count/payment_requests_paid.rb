@@ -7,8 +7,8 @@ module Stats
         def initialize(start_year)
           super(
             all: ASP::PaymentRequest
-              .for_year(start_year)
-              .in_state(:paid)
+                 .for_year(start_year)
+                 .in_state(:paid)
           )
         end
 

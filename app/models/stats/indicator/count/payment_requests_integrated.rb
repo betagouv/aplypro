@@ -7,9 +7,9 @@ module Stats
         def initialize(start_year)
           super(
             all: ASP::PaymentRequest
-              .for_year(start_year)
-              .joins(:asp_payment_request_transitions)
-              .where("asp_payment_request_transitions.to_state": :integrated)
+                 .for_year(start_year)
+                 .joins(:asp_payment_request_transitions)
+                 .where("asp_payment_request_transitions.to_state": :integrated)
           )
         end
 

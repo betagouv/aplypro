@@ -10,10 +10,10 @@ module Stats
                     "(asp_payment_request_transitions.metadata::jsonb#>>'{PAIEMENT,MTNET}')::DECIMAL, " \
                     "pfmps.amount)",
             all: ASP::PaymentRequest
-              .for_year(start_year)
-              .joins(:pfmp)
-              .joins(:asp_payment_request_transitions)
-              .where(asp_payment_request_transitions: { to_state: :paid, most_recent: true })
+                 .for_year(start_year)
+                 .joins(:pfmp)
+                 .joins(:asp_payment_request_transitions)
+                 .where(asp_payment_request_transitions: { to_state: :paid, most_recent: true })
           )
         end
 
