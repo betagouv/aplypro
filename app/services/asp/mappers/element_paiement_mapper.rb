@@ -11,9 +11,8 @@ module ASP
         @payment_request = payment_request
       end
 
-      def codeobjet
-        # we don't support multiple payments per PFMP yet.
-        "VERSE001"
+      def objetecheance
+        payment_request.pfmp.start_date.strftime("%Y%m")
       end
 
       def codetypeversement
