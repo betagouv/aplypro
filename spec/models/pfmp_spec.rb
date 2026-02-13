@@ -345,6 +345,30 @@ RSpec.describe Pfmp do
     end
   end
 
+  describe "#paid_amount" do
+    let(:pfmp) { create(:asp_payment_request, :paid).pfmp }
+
+    context "when MTNET is a float string" do
+      before do
+        pfmp.payment_requests.first.asp_payment_request_transitions
+            .find_by(to_state: "paid")
+            .update!(metadata: { "PAIEMENT" => { "MTNET" => "225.0" } })
+      end
+
+      it "returns the amount as an integer" do
+        expect(pfmp.paid_amount).to eq 225
+      end
+    end
+
+    context "when there is no paid payment request" do
+      let(:pfmp) { create(:pfmp) }
+
+      it "returns nil" do
+        expect(pfmp.paid_amount).to be_nil
+      end
+    end
+  end
+
   describe "rectified amount validation" do
     let(:paid_amount) { 100 }
     let(:pfmp) do
