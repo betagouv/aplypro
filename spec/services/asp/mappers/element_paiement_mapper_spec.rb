@@ -41,5 +41,13 @@ describe ASP::Mappers::ElementPaiementMapper do
       )
       expect(mapper.codeobjet).to eq "202509"
     end
+
+    it "zero-pads single-digit months" do
+      payment_request.pfmp.update!(
+        start_date: Date.new(2026, 1, 5),
+        end_date: Date.new(2026, 2, 5)
+      )
+      expect(mapper.codeobjet).to eq "202601"
+    end
   end
 end
