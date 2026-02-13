@@ -11,7 +11,7 @@ module ASP
         @payment_request = payment_request
       end
 
-      def objetecheance
+      def codeobjet
         payment_request.pfmp.start_date.strftime("%Y%m")
       end
 
