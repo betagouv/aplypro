@@ -21,6 +21,7 @@ module ASP
       check_da_cancellation
       check_rib
       check_schooling
+      check_negative_rectification
     end
 
     private
@@ -109,6 +110,14 @@ module ASP
       %i[address_postal_code address_city_insee_code].each do |info|
         add_error(:"missing_#{info}") if student[info].blank?
       end
+    end
+
+    def check_negative_rectification
+      return unless pfmp.rectified?
+      return unless pfmp.paid_amount.present?
+      return unless pfmp.amount < pfmp.paid_amount
+
+      add_error(:negative_rectification)
     end
 
     def add_error(description)
