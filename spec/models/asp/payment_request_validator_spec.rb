@@ -301,6 +301,60 @@ RSpec.describe ASP::PaymentRequestValidator do
     end
   end
 
+  describe "#check_negative_rectification" do
+    context "when PFMP is rectified and amount is lower than paid amount" do
+      before do
+        allow(pfmp).to receive(:rectified?).and_return(true)
+        allow(pfmp).to receive(:paid_amount).and_return(100)
+        allow(pfmp).to receive(:amount).and_return(50)
+      end
+
+      it "adds an error" do
+        expect { validator.send(:check_negative_rectification) }
+          .to change { payment_request.errors.details[:ready_state_validation] }
+          .to include(a_hash_including(error: :negative_rectification))
+      end
+    end
+
+    context "when PFMP is not rectified" do
+      before do
+        allow(pfmp).to receive(:rectified?).and_return(false)
+      end
+
+      it "does not add an error" do
+        expect { validator.send(:check_negative_rectification) }
+          .not_to change { payment_request.errors.details[:ready_state_validation] }
+      end
+    end
+
+    context "when PFMP is rectified and amount is higher than paid amount" do
+      before do
+        allow(pfmp).to receive(:rectified?).and_return(true)
+        allow(pfmp).to receive(:paid_amount).and_return(50)
+        allow(pfmp).to receive(:amount).and_return(100)
+      end
+
+      it "does not add an error" do
+        expect { validator.send(:check_negative_rectification) }
+          .not_to change { payment_request.errors.details[:ready_state_validation] }
+      end
+    end
+
+    context "when PFMP is rectified with zero amount (payment cancellation)" do
+      before do
+        allow(pfmp).to receive(:rectified?).and_return(true)
+        allow(pfmp).to receive(:paid_amount).and_return(100)
+        allow(pfmp).to receive(:amount).and_return(0)
+      end
+
+      it "adds an error as this would create a payment reversal" do
+        expect { validator.send(:check_negative_rectification) }
+          .to change { payment_request.errors.details[:ready_state_validation] }
+          .to include(a_hash_including(error: :negative_rectification))
+      end
+    end
+  end
+
   describe "#validate" do
     it "calls all check methods" do
       expect(validator).to receive(:check_student)
@@ -314,8 +368,9 @@ RSpec.describe ASP::PaymentRequestValidator do
       expect(validator).to receive(:check_pfmp_overlaps)
       expect(validator).to receive(:check_pfmp_dates)
       expect(validator).to receive(:check_schooling)
+      expect(validator).to receive(:check_negative_rectification)
       validator.validate
     end
   end
 end
-# rubocop enable all
+# rubocop:enable all

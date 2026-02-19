@@ -114,6 +114,15 @@ describe ASP::PaymentRequestStateMachine do
             .to raise_error(ASP::Errors::FundingNotAvailableError)
           expect(asp_payment_request).to be_in_state(:pending)
         end
+
+        it "raises a negative rectification error when the rectification would create an OR" do
+          allow(asp_payment_request).to receive(:payable?).and_return(true)
+          asp_payment_request.errors.add(:ready_state_validation, :negative_rectification)
+
+          expect { asp_payment_request.transition_to!(:ready) }
+            .to raise_error(ASP::Errors::NegativeRectificationError)
+          expect(asp_payment_request).to be_in_state(:pending)
+        end
       end
     end
 

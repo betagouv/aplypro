@@ -138,6 +138,7 @@ fr:
               overlaps: "Une autre PFMP existe avec des dates intersectantes de fin et de début. Veuillez supprimer ou modifier l'une des deux."
               pfmp_outside_schooling_dates: "Les dates de la PFMP ne sont pas comprises dans la période de scolarité de l'élève. Veuillez ajuster les dates de la PFMP pour qu'elles soient incluses dans la période de scolarité."
               cannot_extend_attributive_decision_with_pfmps: "Les élèves ayant changé de formation, de statut ou d'établissement doivent avoir une abrogation de leur décision d'attribution passée. Ce document peut être généré dans la liste des élèves."
+              negative_rectification: "Cette rectification génèrerait un ordre de reversement (montant rectifié inférieur au montant déjà payé). Les envois de paiements négatifs sont temporairement bloqués à la demande de l'ASP afin de ne pas écraser les informations d'adresse."
 
     hints:
       rib:

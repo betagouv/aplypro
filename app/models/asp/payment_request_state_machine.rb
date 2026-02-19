@@ -65,6 +65,7 @@ module ASP
 
     after_guard_failure(to: :ready) do |payment_request, _exception|
       raise ASP::Errors::FundingNotAvailableError unless payment_request.payable?
+      raise ASP::Errors::NegativeRectificationError if payment_request.negative_rectification?
 
       raise(
         ASP::Errors::IncompletePaymentRequestError,

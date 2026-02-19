@@ -7,6 +7,7 @@ module ASP
 
     TRANSITION_RELATION_NAME = :asp_payment_request_transitions
     FUNDING_ISSUE = "Funding not currently available"
+    NEGATIVE_RECTIFICATION_ISSUE = "Negative rectification blocked by ASP"
     RETRYABLE_INCOMPLETE_VALIDATION_TYPES = %i[
       needs_abrogated_attributive_decision
       missing_attributive_decision
@@ -80,6 +81,10 @@ module ASP
       unless last_transition.present? && last_transition.metadata["pending_reasons"] == FUNDING_ISSUE
         mark_pending!({ pending_reason: FUNDING_ISSUE })
       end
+    rescue ASP::Errors::NegativeRectificationError
+      unless last_transition.present? && last_transition.metadata["pending_reason"] == NEGATIVE_RECTIFICATION_ISSUE
+        mark_pending!({ pending_reason: NEGATIVE_RECTIFICATION_ISSUE })
+      end
     end
 
     def mark_pending!(metadata)
@@ -132,6 +137,10 @@ module ASP
 
     def recovery?
       last_transition.present? && last_transition.metadata["ORDREREVERSEMENT"].present?
+    end
+
+    def negative_rectification?
+      errors.details[:ready_state_validation].any? { |e| e[:error] == :negative_rectification }
     end
 
     def eligible_for_incomplete_auto_retry?
