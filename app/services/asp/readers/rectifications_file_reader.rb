@@ -52,6 +52,10 @@ module ASP
           else
             raise "unknown payment state: #{state}"
           end
+        rescue ActiveRecord::RecordNotFound => e
+          raise ASP::Errors::ReadingFileError,
+                "Rectification file reading failed for asp_prestation_dossier_id: #{node.asp_prestation_dossier_id} " \
+                "with message #{e.message}, Node contents: #{node.to_h}"
         end
       end
 
