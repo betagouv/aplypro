@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe ASP::Entities::AddressFixPrestadoss, type: :model do
+describe ASP::Entities::CorrectionAdressePrestadoss, type: :model do
   let(:payment_request) { create(:asp_payment_request, :ready) }
 
   before do

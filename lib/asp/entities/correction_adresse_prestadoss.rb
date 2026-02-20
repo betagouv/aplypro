@@ -2,7 +2,7 @@
 
 module ASP
   module Entities
-    class AddressFixPrestadoss < Prestadoss
+    class CorrectionAdressePrestadoss < Prestadoss
       def self.payment_mapper_class
         ASP::Mappers::PrestadossMapper
       end

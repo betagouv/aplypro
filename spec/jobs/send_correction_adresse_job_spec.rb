@@ -2,19 +2,21 @@
 
 require "rails_helper"
 
-RSpec.describe SendAddressFixJob do
+RSpec.describe SendCorrectionAdresseJob do
   include ActiveJob::TestHelper
 
   let(:server_double) { class_double(ASP::Server) }
+  let(:fichier_double) { instance_double(ASP::Entities::CorrectionAdresseFichier, validate!: nil, to_xml: "<xml/>", filename: "test.xml") }
   let(:pfmps) { create_list(:pfmp, 3, :rectified) }
   let(:pfmp_ids) { pfmps.map(&:id) }
 
   before do
     stub_const("ASP::Server", server_double)
     allow(server_double).to receive(:upload_file!)
+    allow(ASP::Entities::CorrectionAdresseFichier).to receive(:new).and_return(fichier_double)
   end
 
-  it "uploads an address fix file" do
+  it "uploads a correction adresse file" do
     described_class.perform_now(pfmp_ids)
 
     expect(server_double).to have_received(:upload_file!)

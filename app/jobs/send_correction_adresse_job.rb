@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SendAddressFixJob < ApplicationJob
+class SendCorrectionAdresseJob < ApplicationJob
   queue_as :payments
   sidekiq_options retry: false
 
@@ -10,7 +10,7 @@ class SendAddressFixJob < ApplicationJob
 
     return if payment_requests.empty?
 
-    fichier = ASP::Entities::AddressFixFichier.new(payment_requests)
+    fichier = ASP::Entities::CorrectionAdresseFichier.new(payment_requests)
     fichier.validate!
 
     ASP::Server.upload_file!(

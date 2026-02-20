@@ -2,7 +2,7 @@
 
 module ASP
   module Entities
-    class AddressFixDossier < Dossier
+    class CorrectionAdresseDossier < Dossier
       def self.payment_mapper_class
         ASP::Mappers::DossierMapper
       end
@@ -18,7 +18,7 @@ module ASP
       def fragment(xml)
         xml.numadm(numadm)
         xml.codedispositif(codedispositif)
-        xml.listeprestadoss { AddressFixPrestadoss.from_payment_request(payment_request).to_xml(xml) }
+        xml.listeprestadoss { CorrectionAdressePrestadoss.from_payment_request(payment_request).to_xml(xml) }
       end
     end
   end

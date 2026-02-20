@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe ASP::Entities::AddressFixFichier do
+describe ASP::Entities::CorrectionAdresseFichier do
   subject(:file) { described_class.new(payment_requests) }
 
   let(:payment_requests) { create_list(:asp_payment_request, 3, :ready) }
@@ -16,7 +16,7 @@ describe ASP::Entities::AddressFixFichier do
   describe "to_xml" do
     subject(:document) { Nokogiri::XML(file.to_xml) }
 
-    before { mock_entity("AddressFixEnregistrement") }
+    before { mock_entity("CorrectionAdresseEnregistrement") }
 
     it "includes the config" do
       expect(document % "PARAMETRAGE").not_to be_nil
@@ -24,7 +24,7 @@ describe ASP::Entities::AddressFixFichier do
 
     context "when there are multiple students" do
       it "includes one record per payment" do
-        expect(document / "ADDRESSFIXENREGISTREMENT").to have(3).elements
+        expect(document / "CORRECTIONADRESSEENREGISTREMENT").to have(3).elements
       end
     end
   end
