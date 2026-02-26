@@ -12,7 +12,7 @@ module ASP
       end
 
       def codeobjet
-        payment_request.pfmp.start_date.strftime("%Y%m")
+        "VERSE001"
       end
 
       def codetypeversement

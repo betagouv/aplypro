@@ -34,20 +34,6 @@ describe ASP::Mappers::ElementPaiementMapper do
   end
 
   describe "codeobjet" do
-    it "returns the PFMP start date formatted as YYYYMM" do
-      payment_request.pfmp.update!(
-        start_date: Date.new(2025, 9, 25),
-        end_date: Date.new(2025, 10, 25)
-      )
-      expect(mapper.codeobjet).to eq "202509"
-    end
-
-    it "zero-pads single-digit months" do
-      payment_request.pfmp.update!(
-        start_date: Date.new(2026, 1, 5),
-        end_date: Date.new(2026, 2, 5)
-      )
-      expect(mapper.codeobjet).to eq "202601"
-    end
+    it { expect(mapper.codeobjet).to eq "VERSE001" }
   end
 end
