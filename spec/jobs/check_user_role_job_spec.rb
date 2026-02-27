@@ -5,10 +5,10 @@ require "rails_helper"
 RSpec.describe CheckUserRoleJob do
   let(:user) { create(:user, email: "test@example.com") }
   let(:job) { described_class.new }
-  let(:rua_client) { instance_double(Rua::Client) }
+  let(:rua_client) { instance_double(Omogen::Rua) }
 
   before do
-    allow(Rua::Client).to receive(:new).and_return(rua_client)
+    allow(Omogen::Rua).to receive(:new).and_return(rua_client)
     job.user = user
   end
 
@@ -101,7 +101,7 @@ RSpec.describe CheckUserRoleJob do
 
   describe "#dir?" do
     let(:operational_role) do
-      { "specialiteEmploiType" => Rua::Client::DIR_EMPLOI_TYPE }
+      { "specialiteEmploiType" => Omogen::Rua::DIR_EMPLOI_TYPE }
     end
 
     before do

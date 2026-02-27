@@ -18,7 +18,7 @@ class CheckUserRoleJob < ApplicationJob
   end
 
   def rua_info
-    infos = Rua::Client.new.synthese_info(@user.email)
+    infos = Omogen::Rua.new.synthese_info(@user.email)
     raise NoRuaResultError unless infos.size == 1
 
     infos[0]
@@ -32,6 +32,6 @@ class CheckUserRoleJob < ApplicationJob
   end
 
   def dir?
-    last_operational_role["specialiteEmploiType"] == Rua::Client::DIR_EMPLOI_TYPE
+    last_operational_role["specialiteEmploiType"] == Omogen::Rua::DIR_EMPLOI_TYPE
   end
 end
