@@ -10,12 +10,6 @@ class SendCorrectionAdresseJob < ApplicationJob
 
     return if payment_requests.empty?
 
-    fichier = ASP::Entities::CorrectionAdresseFichier.new(payment_requests)
-    fichier.validate!
-
-    ASP::Server.upload_file!(
-      io: fichier.to_xml,
-      path: fichier.filename
-    )
+    ASP::Request.create!(correction_adresse: true).send_correction_adresse!(payment_requests)
   end
 end
