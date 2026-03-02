@@ -20,7 +20,7 @@ RSpec.describe Omogen::Rnvp do
     end
 
     before do
-      stub_request(:post, "#{ENV.fetch('RNVP_RESSOURCE_BASE_URL')}/address")
+      stub_request(:post, "#{ENV.fetch('RNVP_RESOURCE_BASE_URL')}/address")
         .to_return(status: 200, body: address_data.to_json)
     end
 
@@ -39,7 +39,7 @@ RSpec.describe Omogen::Rnvp do
 
   describe "#connection" do
     it "creates a connection with correct resource URL" do
-      expect(described_class.new.resource_connection.url_prefix.to_s).to eq(ENV.fetch("RNVP_RESSOURCE_BASE_URL"))
+      expect(described_class.new.resource_connection.url_prefix.to_s).to eq(ENV.fetch("RNVP_RESOURCE_BASE_URL"))
     end
   end
 end

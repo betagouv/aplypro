@@ -28,7 +28,6 @@ module Omogen
         headers: headers
       ) do |f|
         f.request :json
-        f.response :json
       end
     end
 
