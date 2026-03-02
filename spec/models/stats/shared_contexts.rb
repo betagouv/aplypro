@@ -189,3 +189,20 @@ RSpec.shared_context "when there is data for payable stats per establishments" d
     end
   end
 end
+
+RSpec.shared_context "with the initialization of OMOGEN connection" do
+  before do
+    stub_request(:post, "#{ENV.fetch('APLYPRO_OMOGEN_TOKEN_URL')}/token")
+      .with(
+        body: {
+          grant_type: ENV.fetch("APLYPRO_OMOGEN_GRANT_TYPE"),
+          client_id: ENV.fetch("APLYPRO_OMOGEN_CLIENT_ID"),
+          client_secret: ENV.fetch("APLYPRO_OMOGEN_CLIENT_SECRET")
+        }
+      )
+      .to_return(
+        status: 200,
+        body: { access_token: "fake-token", expires_in: 300 }.to_json
+      )
+  end
+end

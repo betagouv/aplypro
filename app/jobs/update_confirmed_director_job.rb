@@ -14,7 +14,7 @@ class UpdateConfirmedDirectorJob < ApplicationJob
   private
 
   def update_confirmed_director!
-    rua_info = Rua::Client.new.dirs_for_uai(@establishment.uai)
+    rua_info = Omogen::Rua.new.dirs_for_uai(@establishment.uai)
     raise NoListedDirector if rua_info.blank?
     raise MultipleDirector if rua_info.size > 1
 
