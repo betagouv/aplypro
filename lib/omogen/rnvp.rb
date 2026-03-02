@@ -13,21 +13,27 @@ module Omogen
     def addresses(students)
       return [] if students.blank?
 
-      students.each_slice(ADDRESSES_LIMIT).each do |grouped_students|
-        addresses = []
+      addresses = []
+
+      students.each_slice(ADDRESSES_LIMIT).to_a.each do |grouped_students|
+        grouped_addresses = []
 
         grouped_students.each do |student|
           next unless student.lives_in_france?
 
-          addresses << address_mapper(student)
+          grouped_addresses << address_mapper(student)
         end
 
-        data = { addresses: addresses }
+        data = { addresses: grouped_addresses }
 
-        result = api_post("batch", data)
+        body = api_post("batch", data)
 
-        Rails.logger.info(send_addresses(data, result))
+        result = send_addresses(data, body)
+
+        addresses.concat(result)
       end
+
+      addresses
     end
 
     private
@@ -59,6 +65,8 @@ module Omogen
       response = resource_connection.post(resource, data)
 
       JSON.parse(response.body)
+    rescue StandardError => e
+      Rails.logger.info("From RNVP API: #{e}")
     end
 
     def base_url
