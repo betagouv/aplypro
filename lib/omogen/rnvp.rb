@@ -24,11 +24,7 @@ module Omogen
           grouped_addresses << address_mapper(student)
         end
 
-        data = { addresses: grouped_addresses }
-
-        body = api_post("batch", data)
-
-        result = send_addresses(data, body)
+        result = send_addresses(grouped_addresses)
 
         addresses.concat(result)
       end
@@ -38,13 +34,17 @@ module Omogen
 
     private
 
-    def send_addresses(addresses, result)
-      if result["data"].nil?
+    def send_addresses(addresses)
+      result = api_post("batch", { addresses: addresses })
+
+      return [] if result.nil?
+
+      if result["ticket"].present?
         sleep 1000 * result["ticket"]["estimatedWaitingTimeSeconds"].to_i
 
         headers.merge!("job-uuid" => result["ticket"]["jobUUID"])
 
-        send_addresses(addresses, api_post("batch", addresses))
+        send_addresses(addresses)
       else
         result["data"]["rnvpAddresses"]
       end
@@ -66,7 +66,8 @@ module Omogen
 
       JSON.parse(response.body)
     rescue StandardError => e
-      Rails.logger.info("From RNVP API: #{e}")
+      Rails.logger.error("  ⚠ Error calling RNVP API on '/#{resource}' with #{data} : #{e.message}")
+      nil
     end
 
     def base_url

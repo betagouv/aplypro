@@ -19,19 +19,33 @@ RSpec.describe Omogen::Rnvp do
   end
 
   describe "#address" do
-    before do
-      stub_request(:post, "#{ENV.fetch('RNVP_RESOURCE_BASE_URL')}/address")
-        .to_return(status: 200, body: address_data.to_json)
-    end
-
     context "when the student does not live in France" do
       let(:student) { create(:student, :with_foreign_address) }
+
+      before do
+        stub_request(:post, "#{ENV.fetch('RNVP_RESOURCE_BASE_URL')}/address")
+          .to_return(status: 200, body: address_data.to_json)
+      end
 
       it { expect(described_class.new.address(student)).to be_nil }
     end
 
     context "when the student lives in France" do
+      before do
+        stub_request(:post, "#{ENV.fetch('RNVP_RESOURCE_BASE_URL')}/address")
+          .to_return(status: 200, body: address_data.to_json)
+      end
+
       it { expect(described_class.new.address(student)).to eq(address_data) }
+    end
+
+    context "when there is an error" do
+      before do
+        stub_request(:post, "#{ENV.fetch('RNVP_RESOURCE_BASE_URL')}/address")
+          .to_return(status: 500, body: "Une erreur technique non prévisible est survenue.")
+      end
+
+      it { expect(described_class.new.address(student)).to be_nil }
     end
   end
 
@@ -82,6 +96,15 @@ RSpec.describe Omogen::Rnvp do
       end
 
       it { expect(described_class.new.addresses([student, student2])).to eq([address_data, address_data2]) }
+    end
+
+    context "when there is an error" do
+      before do
+        stub_request(:post, "#{ENV.fetch('RNVP_RESOURCE_BASE_URL')}/batch")
+          .to_return(status: 500, body: "Une erreur technique non prévisible est survenue.")
+      end
+
+      it { expect(described_class.new.addresses([student, student2])).to eq([]) }
     end
   end
 
