@@ -71,5 +71,17 @@ module Omogen
         "job-uuid" => @job_uuid
       ).compact
     end
+
+    def auth_url
+      ENV.fetch("RNVP_OMOGEN_TOKEN_URL")
+    end
+
+    def auth_params
+      {
+        grant_type: ENV.fetch("RNVP_OMOGEN_GRANT_TYPE"),
+        client_id: ENV.fetch("RNVP_OMOGEN_CLIENT_ID"),
+        client_secret: ENV.fetch("RNVP_OMOGEN_CLIENT_SECRET")
+      }
+    end
   end
 end

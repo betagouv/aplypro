@@ -31,19 +31,19 @@ module Omogen
       end
     end
 
-    def auth_connection
-      Faraday.new(
-        url: ENV.fetch("APLYPRO_OMOGEN_TOKEN_URL"),
-        headers: { "Content-Type" => "application/x-www-form-urlencoded" }
-      )
+    def auth_url
+      raise NotImplementedError
     end
 
     def auth_params
-      {
-        grant_type: ENV.fetch("APLYPRO_OMOGEN_GRANT_TYPE"),
-        client_id: ENV.fetch("APLYPRO_OMOGEN_CLIENT_ID"),
-        client_secret: ENV.fetch("APLYPRO_OMOGEN_CLIENT_SECRET")
-      }
+      raise NotImplementedError
+    end
+
+    def auth_connection
+      Faraday.new(
+        url: auth_url,
+        headers: { "Content-Type" => "application/x-www-form-urlencoded" }
+      )
     end
   end
 end

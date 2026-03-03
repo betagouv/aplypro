@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require "./spec/models/stats/shared_contexts"
 
 RSpec.describe Omogen::Rnvp do
-  include_context "with the initialization of OMOGEN connection"
-
   let(:student) { create(:student, :with_french_address) }
   let(:address_data) do
     {
@@ -16,6 +13,21 @@ RSpec.describe Omogen::Rnvp do
       "codeInsee" => student.address_city_insee_code,
       "localite" => student.address_city
     }
+  end
+
+  before do
+    stub_request(:post, "#{ENV.fetch('RNVP_OMOGEN_TOKEN_URL')}/token")
+      .with(
+        body: {
+          grant_type: ENV.fetch("RNVP_OMOGEN_GRANT_TYPE"),
+          client_id: ENV.fetch("RNVP_OMOGEN_CLIENT_ID"),
+          client_secret: ENV.fetch("RNVP_OMOGEN_CLIENT_SECRET")
+        }
+      )
+      .to_return(
+        status: 200,
+        body: { access_token: "fake-token", expires_in: 300 }.to_json
+      )
   end
 
   describe "#address" do

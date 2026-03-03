@@ -22,5 +22,17 @@ module Omogen
     def base_url
       ENV.fetch("RUA_RESOURCE_BASE_URL")
     end
+
+    def auth_url
+      ENV.fetch("RUA_OMOGEN_TOKEN_URL")
+    end
+
+    def auth_params
+      {
+        grant_type: ENV.fetch("RUA_OMOGEN_GRANT_TYPE"),
+        client_id: ENV.fetch("RUA_OMOGEN_CLIENT_ID"),
+        client_secret: ENV.fetch("RUA_OMOGEN_CLIENT_SECRET")
+      }
+    end
   end
 end

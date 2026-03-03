@@ -1,10 +1,22 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require "./spec/models/stats/shared_contexts"
 
 RSpec.describe Omogen::Rua do
-  include_context "with the initialization of OMOGEN connection"
+  before do
+    stub_request(:post, "#{ENV.fetch('RUA_OMOGEN_TOKEN_URL')}/token")
+      .with(
+        body: {
+          grant_type: ENV.fetch("RUA_OMOGEN_GRANT_TYPE"),
+          client_id: ENV.fetch("RUA_OMOGEN_CLIENT_ID"),
+          client_secret: ENV.fetch("RUA_OMOGEN_CLIENT_SECRET")
+        }
+      )
+      .to_return(
+        status: 200,
+        body: { access_token: "fake-token", expires_in: 300 }.to_json
+      )
+  end
 
   describe "#agent_info" do
     let(:email) { "test@example.com" }
