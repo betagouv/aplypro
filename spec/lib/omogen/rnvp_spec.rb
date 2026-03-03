@@ -98,6 +98,31 @@ RSpec.describe Omogen::Rnvp do
       it { expect(described_class.new.addresses([student, student2])).to eq([address_data, address_data2]) }
     end
 
+    context "when API returns a waiting timer" do
+      before do
+        stub_request(:post, "#{ENV.fetch('RNVP_RESOURCE_BASE_URL')}/batch")
+          .with { |req| req.headers["Job-Uuid"].nil? }
+          .to_return(status: 200, body: { ticket: { estimatedWaitingTimeSeconds: "1", jobUUID: "123456" } }.to_json)
+
+        stub_request(:post, "#{ENV.fetch('RNVP_RESOURCE_BASE_URL')}/batch")
+          .with { |req| req.headers["Job-Uuid"] = "123456" }
+          .to_return(status: 200, body: { data: { rnvpAddresses: [address_data] } }.to_json)
+      end
+
+      it { expect(described_class.new.addresses([student])).to eq([address_data]) }
+    end
+
+    context "when the API does not return something on time" do
+      before do
+        stub_const("Omogen::Rnvp::TIMEOUT_LIMIT", 2)
+
+        stub_request(:post, "#{ENV.fetch('RNVP_RESOURCE_BASE_URL')}/batch")
+          .to_return(status: 200, body: { ticket: { estimatedWaitingTimeSeconds: "1", jobUUID: "123456" } }.to_json)
+      end
+
+      it { expect(described_class.new.addresses([student])).to eq([]) }
+    end
+
     context "when there is an error" do
       before do
         stub_request(:post, "#{ENV.fetch('RNVP_RESOURCE_BASE_URL')}/batch")

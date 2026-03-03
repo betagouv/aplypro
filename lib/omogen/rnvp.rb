@@ -3,51 +3,42 @@
 module Omogen
   class Rnvp < Omogen::Base
     ADDRESSES_LIMIT = 1000
+    TIMEOUT_LIMIT = 600
 
     def address(student)
       return nil if student.nil? || !student.lives_in_france?
 
+      @job_uuid = nil
       api_post("address", address_mapper(student))
     end
 
     def addresses(students)
       return [] if students.blank?
 
-      addresses = []
-
-      students.each_slice(ADDRESSES_LIMIT).to_a.each do |grouped_students|
-        grouped_addresses = []
-
-        grouped_students.each do |student|
-          next unless student.lives_in_france?
-
-          grouped_addresses << address_mapper(student)
-        end
-
-        result = send_addresses(grouped_addresses)
-
-        addresses.concat(result)
+      students.each_slice(ADDRESSES_LIMIT).flat_map do |group|
+        french_addresses = group.select(&:lives_in_france?).map { |s| address_mapper(s) }
+        @job_uuid = nil
+        send_addresses(french_addresses)
       end
-
-      addresses
     end
 
     private
 
     def send_addresses(addresses)
-      result = api_post("batch", { addresses: addresses })
+      Timeout.timeout(TIMEOUT_LIMIT) do
+        loop do
+          result = api_post("batch", { addresses: addresses })
+          return [] if result.nil?
 
-      return [] if result.nil?
+          return result["data"]["rnvpAddresses"] if result["data"].present?
 
-      if result["ticket"].present?
-        sleep 1000 * result["ticket"]["estimatedWaitingTimeSeconds"].to_i
-
-        headers.merge!("job-uuid" => result["ticket"]["jobUUID"])
-
-        send_addresses(addresses)
-      else
-        result["data"]["rnvpAddresses"]
+          sleep result["ticket"]["estimatedWaitingTimeSeconds"].to_i
+          @job_uuid = result["ticket"]["jobUUID"]
+        end
       end
+    rescue Timeout::Error
+      Rails.logger.error("  ⚠ Time out ! No support from RNVP API after waiting #{TIMEOUT_LIMIT} seconds.")
+      []
     end
 
     def address_mapper(student)
@@ -75,7 +66,10 @@ module Omogen
     end
 
     def headers
-      super.merge!("client-uuid" => ENV.fetch("RNVP_CLIENT_HEADER"))
+      super.merge!(
+        "client-uuid" => ENV.fetch("RNVP_CLIENT_HEADER"),
+        "job-uuid" => @job_uuid
+      ).compact
     end
   end
 end
