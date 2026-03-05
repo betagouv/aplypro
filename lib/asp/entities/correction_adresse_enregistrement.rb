@@ -14,7 +14,7 @@ module ASP
       def individu(xml)
         xml.natureindividu("P")
         PersPhysique.from_payment_request(payment_request).to_xml(xml)
-        xml.adressesindividu { adresse_entity_class.from_payment_request(payment_request).to_xml(xml) }
+        individu_addresses(xml)
         xml.listedossier { CorrectionAdresseDossier.from_payment_request(payment_request).to_xml(xml) }
       rescue ActiveModel::ValidationError => e
         Sentry.capture_exception(
@@ -23,6 +23,13 @@ module ASP
           )
         )
         raise e
+      end
+
+      private
+
+      def individu_addresses(xml)
+        xml.adressesindividu { adresse_entity_class.from_payment_request(payment_request).to_xml(xml) }
+        xml.coordpaiesindividu { CoordPaie.from_payment_request(payment_request).to_xml(xml) }
       end
     end
   end

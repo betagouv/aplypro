@@ -7,6 +7,7 @@ describe ASP::Entities::CorrectionAdressePrestadoss, type: :model do
 
   before do
     mock_entity("Adresse::France")
+    mock_entity("CoordPaie")
   end
 
   it_behaves_like "an XML-fragment producer" do
@@ -17,8 +18,8 @@ describe ASP::Entities::CorrectionAdressePrestadoss, type: :model do
       expect(document.at("adressesprestadoss")).not_to be_nil
     end
 
-    it "does not include a rib" do
-      expect(document.at("coordpaiesprestadoss")).to be_nil
+    it "includes a rib" do
+      expect(document.at("coordpaiesprestadoss")).not_to be_nil
     end
 
     it "does not include payment elements" do
