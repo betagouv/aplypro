@@ -9,14 +9,14 @@ module Omogen
       return nil if student.nil? || !student.lives_in_france?
 
       @job_uuid = nil
-      api_post("address", address_mapper(student))
+      api_post("address", address_payload(student))
     end
 
     def addresses(students)
       return [] if students.blank?
 
       students.each_slice(ADDRESSES_LIMIT).flat_map do |group|
-        french_addresses = group.select(&:lives_in_france?).map { |s| address_mapper(s) }
+        french_addresses = group.select(&:lives_in_france?).map { |s| address_payload(s) }
         @job_uuid = nil
         send_addresses(french_addresses)
       end
@@ -36,12 +36,9 @@ module Omogen
           @job_uuid = result["ticket"]["jobUUID"]
         end
       end
-    rescue Timeout::Error
-      Rails.logger.error("  ⚠ Time out ! No support from RNVP API after waiting #{TIMEOUT_LIMIT} seconds.")
-      []
     end
 
-    def address_mapper(student)
+    def address_payload(student)
       {
         id: student.id,
         ligne2: student.address_line1,
@@ -56,9 +53,6 @@ module Omogen
       response = resource_connection.post(resource, data)
 
       JSON.parse(response.body)
-    rescue StandardError => e
-      Rails.logger.error("  ⚠ Error calling RNVP API on '/#{resource}' with #{data} : #{e.message}")
-      nil
     end
 
     def base_url

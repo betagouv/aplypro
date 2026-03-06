@@ -50,15 +50,6 @@ RSpec.describe Omogen::Rnvp do
 
       it { expect(described_class.new.address(student)).to eq(address_data) }
     end
-
-    context "when there is an error" do
-      before do
-        stub_request(:post, "#{ENV.fetch('RNVP_RESOURCE_BASE_URL')}/address")
-          .to_return(status: 500, body: "Une erreur technique non prévisible est survenue.")
-      end
-
-      it { expect(described_class.new.address(student)).to be_nil }
-    end
   end
 
   describe "#addresses" do
@@ -132,16 +123,7 @@ RSpec.describe Omogen::Rnvp do
           .to_return(status: 200, body: { ticket: { estimatedWaitingTimeSeconds: "1", jobUUID: "123456" } }.to_json)
       end
 
-      it { expect(described_class.new.addresses([student])).to eq([]) }
-    end
-
-    context "when there is an error" do
-      before do
-        stub_request(:post, "#{ENV.fetch('RNVP_RESOURCE_BASE_URL')}/batch")
-          .to_return(status: 500, body: "Une erreur technique non prévisible est survenue.")
-      end
-
-      it { expect(described_class.new.addresses([student, student2])).to eq([]) }
+      it { expect { described_class.new.addresses([student]) }.to raise_error(Timeout::Error) }
     end
   end
 
