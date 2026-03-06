@@ -9,6 +9,7 @@ module ASP
     has_one_attached :file, service: :ovh_asp
     has_one_attached :rejects_file, service: :ovh_asp
     has_one_attached :integrations_file, service: :ovh_asp
+    has_one_attached :correction_adresse_file, service: :ovh_asp
 
     has_many :asp_payment_requests,
              class_name: "ASP::PaymentRequest",
@@ -21,11 +22,12 @@ module ASP
     scope :sent_today, -> { sent_at(Time.current.all_day) }
     scope :sent_this_week, -> { sent_at(Time.current.all_week) } # thank you Active Support <3
 
-    validate :all_requests_ready?, on: :create
+    validate :all_requests_ready?, on: :create, unless: :correction_adresse
 
-    validates :asp_payment_requests, presence: true
+    validates :asp_payment_requests, presence: true, unless: :correction_adresse
 
     attr_reader :asp_file
+    attr_accessor :correction_adresse
 
     class << self
       def total_payment_requests_sent_today
@@ -64,6 +66,17 @@ module ASP
       end
     end
 
+    def send_correction_adresse!(payment_requests)
+      ActiveRecord::Base.transaction do
+        @asp_file = ASP::Entities::CorrectionAdresseFichier.new(payment_requests)
+        @asp_file.validate!
+        correction_adresse_file.attach(io: StringIO.new(@asp_file.to_xml),
+                                       content_type: "text/xml", filename: @asp_file.filename)
+        ASP::Server.upload_file!(io: @asp_file.to_xml, path: @asp_file.filename)
+        update!(sent_at: DateTime.now)
+      end
+    end
+
     def upload_file!
       ASP::Server.upload_file!(
         io: @asp_file.to_xml,
@@ -80,11 +93,7 @@ module ASP
     end
 
     def attach_asp_file!
-      file.attach(
-        io: StringIO.new(@asp_file.to_xml),
-        content_type: "text/xml",
-        filename: @asp_file.filename
-      )
+      file.attach(io: StringIO.new(@asp_file.to_xml), content_type: "text/xml", filename: @asp_file.filename)
     end
 
     def sent_ids
