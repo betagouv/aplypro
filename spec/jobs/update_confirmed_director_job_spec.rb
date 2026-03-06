@@ -6,7 +6,7 @@ RSpec.describe UpdateConfirmedDirectorJob do
   describe "#perform" do
     let(:establishment) { create(:establishment, uai: "0123456X") }
     let!(:director) { create(:user, :confirmed_director, establishment: establishment) }
-    let(:rua_client) { instance_double(Rua::Client) }
+    let(:rua_client) { instance_double(Omogen::Rua) }
     let(:rua_response) do
       [{
         "mails" => [
@@ -16,7 +16,7 @@ RSpec.describe UpdateConfirmedDirectorJob do
     end
 
     before do
-      allow(Rua::Client).to receive(:new).and_return(rua_client)
+      allow(Omogen::Rua).to receive(:new).and_return(rua_client)
       allow(rua_client).to receive(:dirs_for_uai).with(establishment.uai).and_return(rua_response)
     end
 
