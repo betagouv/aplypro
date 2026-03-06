@@ -26,6 +26,10 @@ describe ASP::Entities::Adresse::CorrectionFrance, type: :model do
     it { is_expected.to validate_presence_of(:codecominsee) }
     it { is_expected.to validate_presence_of(:codeinseepays) }
     it { is_expected.to validate_presence_of(:codetypeadr) }
+    it { is_expected.to validate_length_of(:libellevoie).is_at_most(28) }
+    it { is_expected.to validate_length_of(:cpltdistribution).is_at_most(38) }
+    it { is_expected.to validate_length_of(:codeextensionvoie).is_at_most(1) }
+    it { is_expected.to validate_length_of(:codetypevoie).is_at_most(4) }
   end
 
   it_behaves_like "an XML-fragment producer" do
@@ -45,10 +49,10 @@ describe ASP::Entities::Adresse::CorrectionFrance, type: :model do
     end
 
     context "when RNVP provides optional fields" do
-      let(:rnvp_data) { super().merge("voieBis" => "BIS", "voieType" => "R", "ligne5" => "Apt 12") }
+      let(:rnvp_data) { super().merge("voieBis" => "B", "voieType" => "R", "ligne5" => "Apt 12") }
 
       it "includes them in the output" do
-        expect(document.at("codeextensionvoie").text).to eq "BIS"
+        expect(document.at("codeextensionvoie").text).to eq "B"
         expect(document.at("codetypevoie").text).to eq "R"
         expect(document.at("cpltdistribution").text).to eq "Apt 12"
       end
