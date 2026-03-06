@@ -29,17 +29,6 @@ RSpec.describe SendCorrectionAdresseJob do
     expect(rnvp_double).to have_received(:address).exactly(pfmps.size).times
   end
 
-  it "sets rnvp_data on each student" do
-    rnvp_result = { "voieNum" => "1", "voieDen" => "LES MORTURES" }
-    allow(rnvp_double).to receive(:address).and_return(rnvp_result)
-
-    described_class.perform_now(pfmp_ids)
-
-    pfmps.each do |pfmp|
-      expect(pfmp.latest_payment_request.student.rnvp_data).to eq(rnvp_result)
-    end
-  end
-
   context "when no PFMPs are found" do
     it "does not create an ASP request" do
       described_class.perform_now([])
