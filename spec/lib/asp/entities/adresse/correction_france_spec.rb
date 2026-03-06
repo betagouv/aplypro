@@ -6,13 +6,29 @@ describe ASP::Entities::Adresse::CorrectionFrance, type: :model do
   let(:request) { create(:asp_payment_request, :ready) }
   let(:rnvp_data) do
     {
-      "voieNum" => "1",
-      "voieDen" => "LES MORTURES",
-      "voieBis" => "",
-      "voieType" => "",
+      "id" => 0,
+      "ligne2" => "",
+      "ligne3" => "",
+      "ligne4" => "1 LES MORTURES",
       "ligne5" => "",
       "codePostal" => "25390",
-      "codeInsee" => "25288"
+      "localite" => "FOURNETS LUISANS",
+      "codeInsee" => "25288",
+      "idVoie" => "00398234",
+      "idHexaposteL5L6" => "457",
+      "voieNum" => "1",
+      "voieBis" => "",
+      "voieBisFormeLongue" => "",
+      "voieType" => "",
+      "voieDen" => "LES MORTURES",
+      "motDirecteur" => "MORTURES",
+      "cedex" => "non",
+      "propositions" => [],
+      "codesRetour" => [{ "code" => "*004", "message" => "L'orthographe de la localité a été modifiée." }],
+      "statut" => "V",
+      "litigeMineur" => false,
+      "identique" => false,
+      "donneesVides" => false
     }
   end
 
@@ -49,11 +65,11 @@ describe ASP::Entities::Adresse::CorrectionFrance, type: :model do
     end
 
     context "when RNVP provides optional fields" do
-      let(:rnvp_data) { super().merge("voieBis" => "B", "voieType" => "R", "ligne5" => "Apt 12") }
+      let(:rnvp_data) { super().merge("voieBis" => "B", "voieType" => "RUE", "ligne3" => "Apt 12") }
 
       it "includes them in the output" do
         expect(document.at("codeextensionvoie").text).to eq "B"
-        expect(document.at("codetypevoie").text).to eq "R"
+        expect(document.at("codetypevoie").text).to eq "RUE"
         expect(document.at("cpltdistribution").text).to eq "Apt 12"
       end
     end
