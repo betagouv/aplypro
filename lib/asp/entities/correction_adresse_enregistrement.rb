@@ -28,7 +28,7 @@ module ASP
       private
 
       def adresse_entity_class
-        payment_request.student.lives_in_france? ? Adresse::CorrectionFrance : super
+        payment_request.student.lives_in_france? ? Adresse::CorrectionFrance : Adresse::CorrectionEtranger
       end
 
       def individu_addresses(xml)
