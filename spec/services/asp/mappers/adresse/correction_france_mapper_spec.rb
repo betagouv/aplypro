@@ -11,7 +11,7 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
     {
       "voieNum" => "1",
       "voieDen" => "LES MORTURES",
-      "voieBis" => "BIS",
+      "voieBis" => "B",
       "voieType" => "R",
       "ligne5" => "Apt 12",
       "codePostal" => "25390",
@@ -36,7 +36,7 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
   end
 
   describe "#codeextensionvoie" do
-    it { expect(mapper.codeextensionvoie).to eq "BIS" }
+    it { expect(mapper.codeextensionvoie).to eq "B" }
 
     context "when voieBis is blank" do
       before { rnvp_data["voieBis"] = "" }

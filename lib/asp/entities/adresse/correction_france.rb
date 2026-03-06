@@ -12,14 +12,12 @@ module ASP
 
         validates_presence_of %i[
           libellevoie
-          codetypeadr
-          codeinseepays
-          codepostalcedex
-          codecominsee
         ]
 
         validates_length_of :libellevoie, maximum: InduFrance::LIBELLEVOIE_MAX_LENGTH
         validates_length_of :cpltdistribution, maximum: InduFrance::ADRESSE_ATTR_MAX_LENGTH, allow_nil: true
+        validates_length_of :codeextensionvoie, maximum: 1, allow_nil: true
+        validates_length_of :codetypevoie, maximum: 4, allow_nil: true
 
         def self.payment_mapper_class
           Mappers::Adresse::CorrectionFranceMapper
