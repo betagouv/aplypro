@@ -17,11 +17,16 @@ module ASP
         end
 
         def codetypevoie
-          student.rnvp_data["voieType"].presence
+          return nil if student.rnvp_data["voieType"].blank?
+
+          AddressAbbreviator.abbreviate(
+            student.rnvp_data["voieType"],
+            max_length: Entities::Adresse::CorrectionFrance::CODETYPEVOIE_MAX_LENGTH
+          )
         end
 
         def cpltdistribution
-          student.rnvp_data["ligne5"].presence
+          student.rnvp_data["ligne3"].presence
         end
 
         def codepostalcedex

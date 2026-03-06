@@ -9,13 +9,29 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
   let(:student) { payment_request.student }
   let(:rnvp_data) do
     {
-      "voieNum" => "1",
-      "voieDen" => "LES MORTURES",
-      "voieBis" => "B",
-      "voieType" => "R",
-      "ligne5" => "Apt 12",
+      "id" => 0,
+      "ligne2" => "",
+      "ligne3" => "Apt 12",
+      "ligne4" => "1 LES MORTURES",
+      "ligne5" => "",
       "codePostal" => "25390",
-      "codeInsee" => "25288"
+      "localite" => "FOURNETS LUISANS",
+      "codeInsee" => "25288",
+      "idVoie" => "00398234",
+      "idHexaposteL5L6" => "457",
+      "voieNum" => "1",
+      "voieBis" => "B",
+      "voieBisFormeLongue" => "BIS",
+      "voieType" => "RUE",
+      "voieDen" => "LES MORTURES",
+      "motDirecteur" => "MORTURES",
+      "cedex" => "non",
+      "propositions" => [],
+      "codesRetour" => [{ "code" => "*000", "message" => "Adresse sans modification fondamentale." }],
+      "statut" => "V",
+      "litigeMineur" => false,
+      "identique" => false,
+      "donneesVides" => false
     }
   end
 
@@ -46,20 +62,28 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
   end
 
   describe "#codetypevoie" do
-    it { expect(mapper.codetypevoie).to eq "R" }
+    it { expect(mapper.codetypevoie).to eq "RUE" }
 
     context "when voieType is blank" do
       before { rnvp_data["voieType"] = "" }
 
       it { expect(mapper.codetypevoie).to be_nil }
     end
+
+    context "when voieType exceeds 4 characters" do
+      before { rnvp_data["voieType"] = "AVENUE" }
+
+      it "abbreviates to fit within 4 characters" do
+        expect(mapper.codetypevoie.length).to be <= 4
+      end
+    end
   end
 
   describe "#cpltdistribution" do
     it { expect(mapper.cpltdistribution).to eq "Apt 12" }
 
-    context "when ligne5 is blank" do
-      before { rnvp_data["ligne5"] = "" }
+    context "when ligne3 is blank" do
+      before { rnvp_data["ligne3"] = "" }
 
       it { expect(mapper.cpltdistribution).to be_nil }
     end
