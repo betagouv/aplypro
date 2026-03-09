@@ -46,14 +46,14 @@ describe ASP::Entities::Adresse::InduFrance, type: :model do
       context "when the address is too long and contains abbreviatable words" do
         before do
           pfmp.student.update(
-            address_line1: "Résidence Parc Boulevard Victor",
+            address_line1: "Boîte postale du parc Victor Hugo",
             address_line2: "Appartement 12 Impasse du Moulin Ouest Sud"
           )
         end
 
         it "abbreviates the address fields to fit within limits" do
-          expect(document.at("libellevoie").text).to eq "RES PARC BD VICTOR"
-          expect(document.at("cpltdistribution").text).to eq "APP 12 IMP DU MOUL OUEST SUD"
+          expect(document.at("libellevoie").text).to eq "BP DU PARC VICTOR HUGO"
+          expect(document.at("cpltdistribution").text).to eq "APP 12 IMPASSE DU MOULIN OUEST SUD"
         end
       end
 
