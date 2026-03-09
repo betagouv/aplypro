@@ -19,7 +19,7 @@ module ASP
         def codetypevoie
           return nil if student.rnvp_data["voieType"].blank?
 
-          AddressAbbreviator.abbreviate(
+          AddressAbbreviator.abbreviate_road_type(
             student.rnvp_data["voieType"],
             max_length: Entities::Adresse::CorrectionFrance::CODETYPEVOIE_MAX_LENGTH
           )
