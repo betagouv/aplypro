@@ -52,8 +52,8 @@ describe ASP::Entities::Adresse::InduFrance, type: :model do
         end
 
         it "abbreviates the address fields to fit within limits" do
-          expect(document.at("libellevoie").text).to eq "Rdce Parc Bvd Victor"
-          expect(document.at("cpltdistribution").text).to eq "Apt 12 Imp du Moulin Ouest Sud"
+          expect(document.at("libellevoie").text).to eq "RES PARC BD VICTOR"
+          expect(document.at("cpltdistribution").text).to eq "APP 12 IMP DU MOUL OUEST SUD"
         end
       end
 

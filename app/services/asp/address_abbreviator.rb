@@ -2,28 +2,32 @@
 
 module ASP
   class AddressAbbreviator
-    ABBREVIATIONS = {
-      "Boulevard" => "Bvd",
-      "Appartement" => "Apt",
-      "Numéro" => "Num",
-      "Place" => "Plc",
-      "Chemin" => "Ch",
-      "Impasse" => "Imp",
-      "Résidence" => "Rdce",
-      "Avenue" => "Avn"
-    }.freeze
+    ABBREVIATIONS_FILE = Rails.root.join("data/postal-address-abbreviations.csv")
 
-    def self.abbreviate(text, max_length:)
-      return nil if text.blank?
-      return text if text.length <= max_length
+    class << self
+      def abbreviate(text, max_length:)
+        return nil if text.blank?
+        return text if text.length <= max_length
 
-      abbreviated_text = text.dup
+        abbreviated_text = normalize(text.dup)
 
-      ABBREVIATIONS.each do |full_word, abbreviation|
-        abbreviated_text.gsub!(/\b#{Regexp.escape(full_word)}\b/i, abbreviation)
+        CSV.foreach(ABBREVIATIONS_FILE, headers: true).each do |row|
+          abbreviated_text.gsub!(/\b#{Regexp.escape(row['full'])}\b/i, row["abbreviated"])
+        end
+
+        abbreviated_text
       end
 
-      abbreviated_text
+      private
+
+      def normalize(text)
+        text.unicode_normalize(:nfkd)
+            .encode("UTF-8", replace: "")
+            .upcase
+            .gsub(/[^A-Z0-9\s]/, "")
+            .squeeze(" ")
+            .strip
+      end
     end
   end
 end

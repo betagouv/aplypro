@@ -50,7 +50,7 @@ describe ASP::Entities::Adresse::InduEtranger, type: :model do
         end
 
         it "abbreviates the address field to fit within limits" do
-          expect(document.at("localiteetranger").text).to eq "Rdce Oliviers Bvd Victor Hugo"
+          expect(document.at("localiteetranger").text).to eq "RES OLIVIERS BD VICTOR HUGO"
         end
       end
 
