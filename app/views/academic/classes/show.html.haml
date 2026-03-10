@@ -34,7 +34,6 @@
           %tr
             %th{scope: "col"} Nom
             %th{scope: "col"} Prénom
-            %th{scope: "col"} INE
             %th{scope: "col"} Décision d'attribution
         %tbody
           - @schoolings.each do |schooling|
@@ -42,7 +41,6 @@
             %tr
               %td= link_to student.last_name, academic_student_path(student), class: "fr-link"
               %td= student.first_name
-              %td= student.ine
               %td= attributive_decision_status_badge(schooling)
   - else
     %p Aucun élève trouvé dans cette classe.

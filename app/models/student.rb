@@ -190,6 +190,17 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
                                   .first
   end
 
+  def last_rib_for_academy(academy_code)
+    schooling = schoolings.joins(classe: :establishment)
+                          .where(establishments: { academy_code: academy_code })
+                          .order(end_date: :desc, start_date: :desc)
+                          .first
+
+    return unless schooling
+
+    rib(schooling.classe.establishment_id)
+  end
+
   def birthplace_city_insee_code_exceptions
     cutoff = Date.new(2008, 1, 1)
 
