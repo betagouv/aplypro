@@ -5,6 +5,8 @@ module ASP
     ROAD_TYPE_ABBREVIATIONS_PATH = Rails.root.join("data/postal-addresses-abbreviations/road-type.csv")
     COMMON_NAMES_ABBREVIATIONS_PATH = Rails.root.join("data/postal-addresses-abbreviations/common-names.csv")
 
+    @abbreviations_cache = {}
+
     class << self
       def abbreviate_road_type(text, max_length:)
         abbreviate(text, max_length: max_length, csv_path: ROAD_TYPE_ABBREVIATIONS_PATH)
@@ -30,10 +32,10 @@ module ASP
       end
 
       def load_abbreviations(csv_path)
-        CSV.read(csv_path, headers: true)
-           .map { |row| [row["full"], row["abbreviated"]] }
-           .sort_by { |full, _| -full.length }
-           .to_h
+        @abbreviations_cache[csv_path] ||= CSV.read(csv_path, headers: true)
+                                              .map { |row| [row["full"], row["abbreviated"]] }
+                                              .sort_by { |full, _| -full.length }
+                                              .to_h
       end
 
       def normalize(text)
