@@ -7,6 +7,20 @@ describe ASP::Entities::CorrectionAdresseFichier do
 
   let(:payment_requests) { create_list(:asp_payment_request, 3, :ready) }
 
+  before do
+    payment_requests.each do |pr|
+      pr.student.rnvp_data = {
+        "ligne3" => "",
+        "voieNum" => "1",
+        "voieBis" => "",
+        "voieType" => "",
+        "voieDen" => "RUE DE LA PAIX",
+        "codePostal" => pr.student.address_postal_code,
+        "codeInsee" => pr.student.address_city_insee_code
+      }
+    end
+  end
+
   it "produces valid documents" do
     log_on_failure = -> { file.errors.each { |e| Rails.logger.debug "ASP validation error: #{e.message}\n" } }
 
