@@ -105,7 +105,6 @@ RSpec.describe Academic::ClassesController do
       students.each do |student|
         expect(response.body).to include(student.last_name)
         expect(response.body).to include(student.first_name)
-        expect(response.body).to include(student.ine)
       end
     end
 

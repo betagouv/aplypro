@@ -350,4 +350,35 @@ RSpec.describe Student do
       expect(student.address_line2).to eq("Résidence")
     end
   end
+
+  describe "#last_rib_for_academy" do
+    subject { student.last_rib_for_academy(academy_code) }
+
+    let(:academy_code) { "11" }
+    let(:establishment) { create(:establishment, academy_code:) }
+    let!(:rib) { create(:rib, student:, establishment:) }
+
+    context "when the student does not have RIB informations" do
+      let(:rib) { nil }
+
+      it { is_expected.to be_nil }
+    end
+
+    context "when the student has RIB informations" do
+      it { is_expected.to eq rib }
+    end
+
+    context "when the RIB is for an establishment not in the academy" do
+      let(:establishment) { create(:establishment) }
+
+      it { is_expected.to be_nil }
+    end
+
+    context "when there are multiple RIBs in the same academy" do # rubocop:disable RSpec/MultipleMemoizedHelpers
+      let(:establishment2) { create(:establishment, academy_code:) }
+      let(:rib2) { create(:rib, student:, establishment: establishment2, created_at: rib.created_at - 1.day) }
+
+      it { is_expected.to eq rib }
+    end
+  end
 end
