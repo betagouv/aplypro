@@ -23,7 +23,9 @@ class StudentMerger
 
       @student_to_merge.reload
       student_to_merge_id = @student_to_merge.id
+      real_ine = real_ine_from_merge_student
       @student_to_merge.destroy!
+      @target_student.update!(ine: real_ine) if real_ine
 
       Rails.logger.info(
         "Merged student #{student_to_merge_id} into #{@target_student.id}"
@@ -79,5 +81,11 @@ class StudentMerger
 
   def transfer_ribs!
     @student_to_merge.ribs.update!(student_id: @target_student.id, archived_at: DateTime.now)
+  end
+
+  def real_ine_from_merge_student
+    return unless @target_student.cned_fake_ine? && !@student_to_merge.cned_fake_ine?
+
+    @student_to_merge.ine
   end
 end

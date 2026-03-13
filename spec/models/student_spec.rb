@@ -381,4 +381,24 @@ RSpec.describe Student do
       it { is_expected.to eq rib }
     end
   end
+
+  describe "#cned_fake_ine?" do
+    context "when the INE starts with a UAI pattern (7 digits + letter)" do
+      before { student.ine = "0861188D12" }
+
+      it { is_expected.to be_cned_fake_ine }
+    end
+
+    context "when the INE is a real INE (digits only with letter at end)" do
+      before { student.ine = "123456789A" }
+
+      it { is_expected.not_to be_cned_fake_ine }
+    end
+
+    context "when the INE is all digits" do
+      before { student.ine = "1234567890" }
+
+      it { is_expected.not_to be_cned_fake_ine }
+    end
+  end
 end

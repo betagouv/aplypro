@@ -3,6 +3,7 @@
 class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   SAINT_MARTIN_BIRTHPLACE_CITY_INSEE_CODE_BEFORE_2008 = "97127"
   SAINT_MARTIN_BIRTHPLACE_CITY_INSEE_CODE_AFTER_2007 = "97801"
+  CNED_FAKE_INE_PATTERN = /\A\d{7}[A-Z]/
 
   validates :ine,
             :first_name,
@@ -195,6 +196,10 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
         .where(establishments: { academy_code: academy_code })
         .order(created_at: :desc)
         .first
+  end
+
+  def cned_fake_ine?
+    CNED_FAKE_INE_PATTERN.match?(ine)
   end
 
   def birthplace_city_insee_code_exceptions
