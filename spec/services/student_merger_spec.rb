@@ -85,6 +85,45 @@ RSpec.describe StudentMerger do
           expect(rib.reload).to be_archived
         end
       end
+
+      context "when target has the fake CNED INE and source has the real INE" do
+        before do
+          target_student.update!(ine: "0861188D12")
+          source_student.update!(ine: "123456789A")
+        end
+
+        it "updates the target student's INE to the real one" do
+          merger.merge!
+
+          expect(target_student.reload.ine).to eq("123456789A")
+        end
+      end
+
+      context "when target has the real INE and source has the fake CNED INE" do
+        before do
+          target_student.update!(ine: "123456789A")
+          source_student.update!(ine: "0861188D12")
+        end
+
+        it "keeps the target student's real INE" do
+          merger.merge!
+
+          expect(target_student.reload.ine).to eq("123456789A")
+        end
+      end
+
+      context "when both students have fake CNED INEs" do
+        before do
+          target_student.update!(ine: "0861188D12")
+          source_student.update!(ine: "0123456B78")
+        end
+
+        it "keeps the target student's INE unchanged" do
+          merger.merge!
+
+          expect(target_student.reload.ine).to eq("0861188D12")
+        end
+      end
     end
   end
 end
