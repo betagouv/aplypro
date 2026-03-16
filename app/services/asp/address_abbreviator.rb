@@ -2,12 +2,10 @@
 
 module ASP
   class AddressAbbreviator
-    ROAD_TYPE_ABBREVIATIONS_PATH = Rails.root.join("data/postal-addresses-abbreviations/road-type.csv")
-    COMMON_NAMES_ABBREVIATIONS_PATH = Rails.root.join("data/postal-addresses-abbreviations/common-names.csv")
-
-    @abbreviations_cache = {}
-
     class << self
+      ROAD_TYPE_ABBREVIATIONS_PATH = Rails.root.join("data/postal-addresses-abbreviations/road-type.csv")
+      COMMON_NAMES_ABBREVIATIONS_PATH = Rails.root.join("data/postal-addresses-abbreviations/common-names.csv")
+
       def abbreviate_road_type(text, max_length:)
         abbreviate(text, max_length: max_length, csv_path: ROAD_TYPE_ABBREVIATIONS_PATH)
       end
@@ -32,16 +30,19 @@ module ASP
       end
 
       def load_abbreviations(csv_path)
-        @abbreviations_cache[csv_path] ||= CSV.read(csv_path, headers: true)
-                                              .map { |row| [row["full"], row["abbreviated"]] }
-                                              .sort_by { |full, _| -full.length }
-                                              .to_h
+        Rails.cache.fetch("abbreviations_cache", expires_in: 3.hours) do
+          CSV.read(csv_path, headers: true)
+             .map { |row| [row["full"], row["abbreviated"]] }
+             .sort_by { |full, _| -full.length }
+             .to_h
+        end
       end
 
       def normalize(text)
         text.unicode_normalize(:nfkd)
             .encode("UTF-8", replace: "")
             .upcase
+            .gsub(/[[:punct:]]/, " ")
             .gsub(/[^A-Z0-9\s]/, "")
             .squeeze(" ")
             .strip

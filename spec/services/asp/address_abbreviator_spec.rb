@@ -28,37 +28,23 @@ RSpec.describe ASP::AddressAbbreviator do
     end
 
     context "when text exceeds max_length and contains abbreviatable words" do
-      it "abbreviates Boulevard to BV" do
+      it "abbreviates multiple cases" do
         expect(described_class.abbreviate_road_type("12 Boulevard de la République", max_length: 28))
           .to eq("12 BD DE LA REPUBLIQUE")
-      end
-
-      it "abbreviates Appartement to APP" do
         expect(described_class.abbreviate_address_line("Appartement 5 de la rue longue", max_length: 28))
           .to eq("APP 5 DE LA RUE LONGUE")
-      end
-
-      it "abbreviates Place to PL" do
-        expect(described_class.abbreviate_road_type("Place de la Victoire Extraordinaire", max_length: 28))
-          .to eq("PL DE LA VICTOIRE EXTRAORDINAIRE")
-      end
-
-      it "abbreviates Chemin to CHEM" do
         expect(described_class.abbreviate_road_type("Chemin des Écoliers et des Aventuriers", max_length: 28))
           .to eq("CHEM DES ECOLIERS ET DES AVENTURIERS")
-      end
-
-      it "abbreviates Résidence to RESI" do
         expect(described_class.abbreviate_road_type("Résidence Les Oliviers de la Provence", max_length: 28))
-          .to eq("RESI LES OLIVIERS DE LA PROVENCE")
+          .to eq("RES LES OLIVIERS DE LA PROVENCE")
       end
 
-      it "abbreviates Impasse, Grande Rue and Moulin" do
+      it "abbreviates Impasse and Grande Rue" do
         expect(described_class.abbreviate_road_type("Impasse du Moulin de la Grande Rue", max_length: 28))
-          .to eq("IMP DU MOUL DE LA GRAN")
+          .to eq("IMP DU MOULIN DE LA GR")
       end
 
-      it "only abbreviates Grande, and not Impasse, Moulin and Rue" do
+      it "only abbreviates Grande, and not Impasse and Rue" do
         expect(described_class.abbreviate_address_line("Impasse du Moulin de la Grande Rue", max_length: 28))
           .to eq("IMPASSE DU MOULIN DE LA GDE RUE")
       end
@@ -66,14 +52,19 @@ RSpec.describe ASP::AddressAbbreviator do
       it "abbreviates multiple words in the same string" do
         expect(described_class.abbreviate_road_type("Résidence Le Parc, Boulevard Victor Hugo, Appartement 12",
                                                     max_length: 28))
-          .to eq("RESI LE PARC BD VICTOR HUGO APPARTEMENT 12")
+          .to eq("RES LE PARC BD VICTOR HUGO APPARTEMENT 12")
+      end
+
+      it "abbreviates special characters" do
+        expect(described_class.abbreviate_road_type("Lieu-dit de la Place de l'Église Extraordinaire", max_length: 28))
+          .to eq("LD DE LA PL DE L EGLISE EXTRAORDINAIRE")
       end
 
       it "is case insensitive" do
-        expect(described_class.abbreviate_road_type("boulevard de la république française", max_length: 28))
-          .to eq("BD DE LA REPUBLIQUE FRANCAISE")
-        expect(described_class.abbreviate_road_type("BOULEVARD de la république française", max_length: 28))
-          .to eq("BD DE LA REPUBLIQUE FRANCAISE")
+        expect(described_class.abbreviate_road_type("boulevard de la république française, bât. 2", max_length: 28))
+          .to eq("BD DE LA REPUBLIQUE FRANCAISE BAT 2")
+        expect(described_class.abbreviate_road_type("BOULEVARD de la république française, BAT. 2", max_length: 28))
+          .to eq("BD DE LA REPUBLIQUE FRANCAISE BAT 2")
       end
 
       it "only matches whole words" do
