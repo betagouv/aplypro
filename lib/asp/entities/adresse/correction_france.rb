@@ -26,11 +26,11 @@ module ASP
         end
 
         def fragment(xml)
-          voie_fragment(xml)
           xml.codetypeadr(codetypeadr)
+          voie_fragment(xml)
+          xml.codecominsee(codecominsee)
           xml.codeinseepays(codeinseepays)
           xml.codepostalcedex(codepostalcedex)
-          xml.codecominsee(codecominsee)
         end
 
         private
