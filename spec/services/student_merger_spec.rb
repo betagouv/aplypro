@@ -88,7 +88,7 @@ RSpec.describe StudentMerger do
 
       context "when target has the fake CNED INE and source has the real INE" do
         before do
-          target_student.update!(ine: "0861188D12")
+          target_student.update!(ine: "0751234K204567891")
           source_student.update!(ine: "123456789A")
         end
 
@@ -102,7 +102,7 @@ RSpec.describe StudentMerger do
       context "when target has the real INE and source has the fake CNED INE" do
         before do
           target_student.update!(ine: "123456789A")
-          source_student.update!(ine: "0861188D12")
+          source_student.update!(ine: "0751234K204567891")
         end
 
         it "keeps the target student's real INE" do
@@ -114,14 +114,14 @@ RSpec.describe StudentMerger do
 
       context "when both students have fake CNED INEs" do
         before do
-          target_student.update!(ine: "0861188D12")
-          source_student.update!(ine: "0123456B78")
+          target_student.update!(ine: "0751234K204567891")
+          source_student.update!(ine: "0751234K204567892")
         end
 
         it "keeps the target student's INE unchanged" do
           merger.merge!
 
-          expect(target_student.reload.ine).to eq("0861188D12")
+          expect(target_student.reload.ine).to eq("0751234K204567891")
         end
       end
     end

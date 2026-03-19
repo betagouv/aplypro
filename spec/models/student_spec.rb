@@ -384,7 +384,7 @@ RSpec.describe Student do
 
   describe "#cned_fake_ine?" do
     context "when the INE starts with a UAI pattern (7 digits + letter)" do
-      before { student.ine = "0861188D12" }
+      before { student.ine = "0751234K204567891" }
 
       it { is_expected.to be_cned_fake_ine }
     end
