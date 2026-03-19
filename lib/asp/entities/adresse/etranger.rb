@@ -27,8 +27,8 @@ module ASP
         def fragment(xml)
           xml.codetypeadr(codetypeadr)
           xml.codecominsee(codecominsee)
-          xml.codeinseepays(codeinseepays)
           xml.codepostalcedex(codepostalcedex)
+          xml.codeinseepays(codeinseepays)
         end
       end
     end

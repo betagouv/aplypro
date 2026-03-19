@@ -34,12 +34,12 @@ module ASP
         end
 
         def fragment(xml)
-          xml.codetypeadr(codetypeadr)
           xml.libellevoie(libellevoie)
           xml.cpltdistribution(cpltdistribution) if cpltdistribution.present?
-          xml.codecominsee(codecominsee)
+          xml.codetypeadr(codetypeadr)
           xml.codeinseepays(codeinseepays)
           xml.codepostalcedex(codepostalcedex)
+          xml.codecominsee(codecominsee)
         end
       end
     end
