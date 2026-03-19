@@ -13,7 +13,7 @@ RSpec.describe SendCorrectionAdresseJob do
   before do
     allow(ASP::Request).to receive(:create!).and_return(request_double)
     allow(Omogen::Rnvp).to receive(:new).and_return(rnvp_double)
-    allow(rnvp_double).to receive(:address).and_return({})
+    allow(rnvp_double).to receive(:addresses).and_return([{}])
   end
 
   it "creates a correction adresse ASP request" do
@@ -23,10 +23,10 @@ RSpec.describe SendCorrectionAdresseJob do
     expect(request_double).to have_received(:send_correction_adresse!)
   end
 
-  it "calls RNVP for each student" do
+  it "calls RNVP one time for all students" do
     described_class.perform_now(pfmp_ids)
 
-    expect(rnvp_double).to have_received(:address).exactly(pfmps.size).times
+    expect(rnvp_double).to have_received(:addresses).exactly(1).time
   end
 
   context "when no PFMPs are found" do

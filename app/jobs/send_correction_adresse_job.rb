@@ -18,7 +18,7 @@ class SendCorrectionAdresseJob < ApplicationJob
   private
 
   def enrich_with_rnvp!(students)
-    rnvp = Omogen::Rnvp.new
-    students.each { |s| s.rnvp_data = rnvp.address(s) }
+    data = Omogen::Rnvp.new.addresses(students).index_by { |address| address[:id] }
+    students.each { |s| s.rnvp_data = data[s.id] }
   end
 end
