@@ -28,6 +28,8 @@ class Student
         schooling = Schooling.find_or_initialize_by(classe: classe, student: student)
                              .tap { |sc| sc.assign_attributes(attributes) }
 
+        preserve_end_date_for_past_year!(schooling, classe)
+
         handle_current_schooling_end_date(schooling)
 
         schooling.save!
@@ -38,6 +40,13 @@ class Student
       end
 
       private
+
+      def preserve_end_date_for_past_year!(schooling, classe)
+        return unless schooling.persisted? && schooling.end_date_was.present?
+        return unless schooling.end_date.nil? && classe.school_year != SchoolYear.current
+
+        schooling.end_date = schooling.end_date_was
+      end
 
       def all_menj_students?(classe, entries)
         return false if classe.nil?
