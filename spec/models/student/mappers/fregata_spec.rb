@@ -110,6 +110,49 @@ describe Student::Mappers::Fregata do
     end
   end
 
+  context "when a closed schooling from a finished school year is encountered" do
+    let(:past_section_ref) do
+      past_year = SchoolYear.current.start_year - 1
+      { "codeMef" => "27121010210", "anneeScolaireId" => past_year - StudentsApi::Fregata::Api::YEAR_OFFSET }
+    end
+
+    let(:student) { Student.find_by!(ine: "5678") }
+
+    before do
+      mapper.new([build(:fregata_student,
+                        :left_establishment,
+                        ine_value: "5678",
+                        classe_label: "2NDE JARDINERIE",
+                        sectionReference: past_section_ref)], uai).parse!
+    end
+
+    it "does not reopen the schooling when FREGATA returns a null end date" do
+      mapper.new([build(:fregata_student,
+                        ine_value: "5678",
+                        classe_label: "2NDE JARDINERIE",
+                        sectionReference: past_section_ref)], uai).parse!
+
+      expect(student.schoolings.last.open?).to be false
+    end
+
+    context "when the student also has an active schooling in the current year" do
+      before do
+        mapper.new([build(:fregata_student,
+                          ine_value: "5678",
+                          classe_label: "2NDE JARDINERIE")], uai).parse!
+      end
+
+      it "does not close the current year schooling" do
+        mapper.new([build(:fregata_student,
+                          ine_value: "5678",
+                          classe_label: "2NDE JARDINERIE",
+                          sectionReference: past_section_ref)], uai).parse!
+
+        expect(student.reload.current_schooling).to be_present
+      end
+    end
+  end
+
   describe "estEN filtering" do
     context "when all students in a class are estEN" do
       let(:data) do
