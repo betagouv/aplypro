@@ -10,6 +10,15 @@ class SendCorrectionAdresseJob < ApplicationJob
 
     return if payment_requests.empty?
 
+    enrich_with_rnvp!(payment_requests.map(&:student))
+
     ASP::Request.create!(correction_adresse: true).send_correction_adresse!(payment_requests)
+  end
+
+  private
+
+  def enrich_with_rnvp!(students)
+    data = Omogen::Rnvp.new.addresses(students).index_by { |address| address[:id] }
+    students.each { |s| s.rnvp_data = data[s.id] }
   end
 end

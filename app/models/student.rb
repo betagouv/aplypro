@@ -5,6 +5,8 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
   SAINT_MARTIN_BIRTHPLACE_CITY_INSEE_CODE_AFTER_2007 = "97801"
   CNED_FAKE_INE_PATTERN = /\A\d{7}[A-Z]/
 
+  attr_accessor :rnvp_data
+
   validates :ine,
             :first_name,
             :last_name,
