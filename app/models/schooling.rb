@@ -179,6 +179,23 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
+  def merge_attributes(attributes)
+    return assign_attributes(attributes) unless same_mef_and_classe?(attributes)
+
+    new_start = attributes[:start_date]
+    new_end = attributes[:end_date]
+
+    self.start_date = [start_date, new_start].compact.min
+
+    self.end_date = if end_date.nil? || new_end.nil?
+                      nil
+                    else
+                      [end_date, new_end].max
+                    end
+
+    assign_attributes(attributes.except(:start_date, :end_date))
+  end
+
   private
 
   def abrogeable?
@@ -197,5 +214,9 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
           (schooling.start_date.eql?(start_date) && schooling.end_date.eql?(end_date))
         )
       )
+  end
+
+  def same_mef_and_classe?(attributes)
+    classe.label.eql?(attributes[:label]) && mef.code.eql?(attributes[:mef_code])
   end
 end
