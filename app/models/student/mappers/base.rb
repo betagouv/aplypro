@@ -123,6 +123,10 @@ class Student
         raise StudentParsingError, "Student parsing failure for #{uai}: #{e.message}"
       end
 
+      def map_schooling_attributes(entry)
+        schooling_mapper.new.call(entry)
+      end
+
       def inspect
         "#{self.class}<UAI: #{uai}>"
       end

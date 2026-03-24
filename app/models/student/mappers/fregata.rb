@@ -35,10 +35,6 @@ class Student
         schooling.save!
       end
 
-      def map_schooling_attributes(entry)
-        schooling_mapper.new.call(entry)
-      end
-
       private
 
       def preserve_end_date_for_past_year!(schooling, classe)
