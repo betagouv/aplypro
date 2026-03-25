@@ -180,17 +180,17 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def merge_attributes(attributes) # rubocop:disable Metrics/AbcSize
-    return assign_attributes(attributes.slice(:status, :start_date, :end_date)) unless same_mef_and_classe?(attributes)
+    return assign_attributes(attributes.slice(:status, :start_date, :end_date)) unless same_schooling?(attributes)
 
-    new_start = DateTime.parse(attributes[:start_date]) if attributes[:start_date]
-    new_end = DateTime.parse(attributes[:end_date]) if attributes[:end_date]
+    new_start_date = DateTime.parse(attributes[:start_date]) if attributes[:start_date]
+    new_end_date = DateTime.parse(attributes[:end_date]) if attributes[:end_date]
 
-    self.start_date = [start_date, new_start].compact.min
+    self.start_date = [start_date, new_start_date].compact.min
 
-    self.end_date = if end_date.nil? || new_end.nil?
+    self.end_date = if end_date.nil? || new_end_date.nil?
                       nil
                     else
-                      [end_date, new_end].max
+                      [end_date, new_end_date].max
                     end
 
     assign_attributes(attributes.slice(:status))
@@ -216,11 +216,12 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
       )
   end
 
-  def same_mef_and_classe?(attributes) # rubocop:disable Metrics/AbcSize
+  def same_schooling?(attributes) # rubocop:disable Metrics/AbcSize
+    return false if new_record?
+
     student.ine.eql?(attributes[:ine]) &&
       classe.label.eql?(attributes[:label]) &&
       school_year.start_year.eql?(attributes[:school_year].to_i) &&
-      establishment.uai.eql?(attributes[:uai]) &&
       mef.code.eql?(attributes[:mef_code])
   end
 end

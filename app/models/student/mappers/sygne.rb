@@ -6,9 +6,8 @@ class Student
       def map_schooling!(classe, student, entry)
         attributes = map_schooling_attributes(entry)
 
-        schooling = Schooling
-                    .find_or_initialize_by(classe: classe, student: student)
-                    .tap { |sc| sc.merge_attributes(attributes) }
+        schooling = Schooling.find_or_initialize_by(classe: classe, student: student)
+                             .tap { |sc| sc.merge_attributes(attributes) }
 
         handle_current_schooling_end_date(schooling)
 

@@ -114,21 +114,21 @@ describe Student::Mappers::Sygne do
       end
     end
 
-    context "when a student has two schoolings on the same classe" do # rubocop:disable RSpec/MultipleMemoizedHelpers
-      let(:mapper) { described_class.new([first_schooling_student, second_schooling_student], uai) }
-      let(:first_schooling_student) do
-        build(:sygne_student,
-              classe: "1MELEC", ine: "123456", codeUai: uai, dateDebSco: "2025-09-01", dateFinSco: "2025-09-02")
+    context "when a student has two schoolings on the same classe" do
+      let(:mapper) { described_class.new(data, uai) }
+      let(:data) do
+        [
+          build(:sygne_student, classe: "1MELEC", ine: "123456", dateDebSco: "2025-09-01", dateFinSco: "2025-09-02"),
+          build(:sygne_student, classe: "1MELEC", ine: "123456", dateDebSco: "2025-09-03", dateFinSco: nil)
+        ]
       end
-      let(:second_schooling_student) do
-        build(:sygne_student, classe: "1MELEC", ine: "123456", codeUai: uai, dateDebSco: "2025-09-03", dateFinSco: nil)
-      end
-      let(:schooling) { Student.find_by(ine: "123456").current_schooling }
+      let(:student) { Student.find_by(ine: "123456") }
 
       before { mapper.parse! }
 
-      it { expect(schooling.start_date).to eq DateTime.parse("2025-09-01") }
-      it { expect(schooling.end_date).to be_nil }
+      it { expect(student.current_schooling.start_date).to eq Date.parse("2025-09-01") }
+      it { expect(student.current_schooling.end_date).to be_nil }
+      it { expect(student.schoolings.count).to eq(1) }
     end
   end
 end
