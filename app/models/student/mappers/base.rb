@@ -141,18 +141,13 @@ class Student
         student.close_current_schooling!(end_date)
       end
 
-      def manage_assignment_attributes(schooling, attributes) # rubocop:disable Metrics/AbcSize
+      def manage_assignment_attributes(schooling, attributes)
         schooling.assign_attributes(attributes) if schooling.new_record?
 
-        new_start_date = DateTime.parse(attributes[:start_date]) if attributes[:start_date]
-        new_end_date = DateTime.parse(attributes[:end_date]) if attributes[:end_date]
+        start_date = DateTime.parse(attributes[:start_date]) if attributes[:start_date]
+        end_date = DateTime.parse(attributes[:end_date]) if attributes[:end_date]
 
-        schooling.start_date = [schooling.start_date, new_start_date].compact.min
-        schooling.end_date = if schooling.end_date.nil? || new_end_date.nil?
-                               nil
-                             else
-                               [schooling.end_date, new_end_date].compact.max
-                             end
+        schooling.update_new_dates!(start_date, end_date)
 
         schooling.assign_attributes(attributes.except(:start_date, :end_date))
       end

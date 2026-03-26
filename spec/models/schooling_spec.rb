@@ -638,4 +638,59 @@ RSpec.describe Schooling do
       end
     end
   end
+
+  describe "#update_new_dates!" do
+    let(:new_start_date) { Date.parse("2025-09-01") }
+    let(:new_end_date) { Date.parse("2025-10-15") }
+
+    let(:current_start_date) { schooling.start_date } # after(:build)
+    let(:current_end_date) { Date.parse("2025-10-31") }
+    let(:schooling) { create(:schooling, end_date: current_end_date) }
+
+    before { schooling.update_new_dates!(new_start_date, new_end_date) }
+
+    context "when the new start date is earlier than the current start date" do
+      it { expect(schooling.start_date).to eq new_start_date }
+    end
+
+    context "when the new start date is more recent than the current start date" do
+      let(:new_start_date) { Date.parse("2025-10-08") }
+
+      it { expect(schooling.start_date).to eq current_start_date }
+    end
+
+    context "when the new start date is nil" do
+      let(:new_start_date) { nil }
+
+      it { expect(schooling.start_date).to eq current_start_date }
+    end
+
+    context "when the current start date is nil" do
+      let(:current_start_date) { nil }
+
+      it { expect(schooling.start_date).to eq new_start_date }
+    end
+
+    context "when the new end date is earlier than the current end date" do
+      it { expect(schooling.end_date).to eq current_end_date }
+    end
+
+    context "when the new end date is more recent than the current end date" do
+      let(:new_end_date) { Date.parse("2025-11-02") }
+
+      it { expect(schooling.end_date).to eq new_end_date }
+    end
+
+    context "when the new end date is nil" do
+      let(:new_end_date) { nil }
+
+      it { expect(schooling.end_date).to be_nil }
+    end
+
+    context "when the current end date is nil" do
+      let(:current_end_date) { nil }
+
+      it { expect(schooling.end_date).to be_nil }
+    end
+  end
 end
