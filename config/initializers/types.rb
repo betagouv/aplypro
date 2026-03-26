@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-class AspDateType < ActiveModel::Type::Date
-  def cast(value)
-    parsed = super
-
-    I18n.l(parsed, format: :asp)
-  end
-end
-
 module ActiveModel
   module Type
+    class AspDate < Date
+      def cast(value)
+        parsed = super
+
+        I18n.l(parsed, format: :asp)
+      end
+    end
+
     class String
       def cast(value)
         if @limit
@@ -22,4 +22,4 @@ module ActiveModel
   end
 end
 
-ActiveModel::Type.register :asp_date, AspDateType
+ActiveModel::Type.register :asp_date, ActiveModel::Type::AspDate
