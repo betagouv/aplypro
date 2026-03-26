@@ -26,7 +26,7 @@ class Student
         attributes = map_schooling_attributes(entry)
 
         schooling = Schooling.find_or_initialize_by(classe: classe, student: student)
-                             .tap { |sc| sc.merge_attributes(attributes) }
+                             .tap { |sc| manage_assignment_attributes(sc, attributes) }
 
         preserve_end_date_for_past_year!(schooling, classe)
 

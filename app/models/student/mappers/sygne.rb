@@ -4,10 +4,11 @@ class Student
   module Mappers
     class Sygne < Base
       def map_schooling!(classe, student, entry)
-        attributes = map_schooling_attributes(entry)
+        attributes = map_schooling_attributes(entry).slice(:status, :start_date, :end_date)
 
         schooling = Schooling.find_or_initialize_by(classe: classe, student: student)
-                             .tap { |sc| sc.merge_attributes(attributes) }
+
+        manage_assignment_attributes(schooling, attributes)
 
         handle_current_schooling_end_date(schooling)
 
