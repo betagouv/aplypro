@@ -10,7 +10,7 @@ class SendCorrectionAdresseJob < ApplicationJob
 
     return if payment_requests.empty?
 
-    enrich_with_rnvp!(payment_requests.map(&:student))
+    enrich_with_rnvp!(payment_requests.map(&:student).uniq)
 
     ASP::Request.create!(correction_adresse: true).send_correction_adresse!(payment_requests)
   end

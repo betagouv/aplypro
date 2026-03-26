@@ -42,4 +42,16 @@ RSpec.describe SendCorrectionAdresseJob do
       expect(Omogen::Rnvp).not_to have_received(:new)
     end
   end
+
+  context "when a student has two PFMPs in the list" do # rubocop:disable RSpec/MultipleMemoizedHelpers
+    let(:schooling) { create(:schooling) }
+    let(:student) { schooling.student }
+    let(:pfmps) { create_list(:pfmp, 2, :rectified, schooling:) }
+
+    it "sends the student only once" do
+      described_class.perform_now(pfmp_ids)
+
+      expect(rnvp_double).to have_received(:addresses).with([student])
+    end
+  end
 end
