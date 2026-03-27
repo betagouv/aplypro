@@ -666,10 +666,8 @@ RSpec.describe Schooling do
     end
 
     context "when the current start date is nil" do
-      before { schooling.update_column(:start_date, nil) }
-
       it do
-        schooling.reload
+        schooling.start_date = nil
         schooling.merge_date_range(new_start_date, new_end_date)
         expect(schooling.start_date).to eq new_start_date
       end
