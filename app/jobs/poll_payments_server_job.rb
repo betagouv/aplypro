@@ -11,9 +11,9 @@ class PollPaymentsServerJob < ApplicationJob
     Dir.each_child(dir) do |filename|
       next if filename == ".keep" # these are the Git-keep files of our local dev
 
-      file = File.open(File.join(dir, filename))
-
-      ASP::FileSaver.new(file).persist_file!
+      File.open(File.join(dir, filename)) do |file|
+        ASP::FileSaver.new(file).persist_file!
+      end
 
       ProcessASPResponseFileJob.perform_later(filename)
 
