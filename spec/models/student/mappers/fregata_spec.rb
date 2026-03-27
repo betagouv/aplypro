@@ -43,22 +43,6 @@ describe Student::Mappers::Fregata do
 
       expect(Student.find_by!(ine: "test").schoolings.last.end_date).to eq 1.day.ago.to_date
     end
-
-    context "when there was already a previous schooling for this class" do
-      let(:previous_data) do
-        [
-          data.first.deep_dup.tap do |attrs|
-            attrs["dateSortieFormation"] = nil
-          end
-        ]
-      end
-
-      before { mapper.new(previous_data, uai).parse! }
-
-      it "updates the end date in place" do
-        expect { mapper.new(data, uai).parse! }.to change(Schooling.current, :count).by(-1)
-      end
-    end
   end
 
   context "when the student is an apprentice" do
@@ -90,6 +74,30 @@ describe Student::Mappers::Fregata do
     it "parses the correct current one" do
       expect(student.current_schooling.classe.label).to eq "new class"
     end
+  end
+
+  context "when a student has two schoolings on the same classe" do
+    let(:data) do
+      [
+        build(:fregata_student,
+              classe_label: "1MELEC",
+              ine_value: "123456",
+              dateEntreeFormation: "2025-09-01",
+              dateSortieEtablissement: "2025-09-02"),
+        build(:fregata_student,
+              classe_label: "1MELEC",
+              ine_value: "123456",
+              dateEntreeFormation: "2025-09-03",
+              dateSortieEtablissement: nil)
+      ]
+    end
+    let(:student) { Student.find_by(ine: "123456") }
+
+    before { mapper.new(data, uai).parse! }
+
+    it { expect(student.current_schooling.start_date).to eq Date.parse("2025-09-01") }
+    it { expect(student.current_schooling.end_date).to be_nil }
+    it { expect(student.schoolings.count).to eq(1) }
   end
 
   context "when there is a schooling for that classe that was closed" do

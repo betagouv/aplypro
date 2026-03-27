@@ -179,6 +179,16 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
+  def merge_date_range(new_start_date, new_end_date)
+    self.start_date = [start_date, new_start_date].compact.min
+
+    self.end_date = if end_date.nil? || new_end_date.nil?
+                      nil
+                    else
+                      [end_date, new_end_date].compact.max
+                    end
+  end
+
   private
 
   def abrogeable?
