@@ -147,7 +147,7 @@ class Student
         start_date = DateTime.parse(attributes[:start_date]) if attributes[:start_date]
         end_date = DateTime.parse(attributes[:end_date]) if attributes[:end_date]
 
-        schooling.merge_date_range!(start_date, end_date)
+        schooling.merge_date_range(start_date, end_date)
 
         schooling.assign_attributes(attributes.except(:start_date, :end_date))
       end
