@@ -27,7 +27,7 @@ class Student
 
         schooling = Schooling.find_or_initialize_by(classe: classe, student: student)
 
-        manage_assignment_attributes(schooling, attributes)
+        merge_schooling_attributes(schooling, attributes)
 
         preserve_end_date_for_past_year!(schooling, classe)
 

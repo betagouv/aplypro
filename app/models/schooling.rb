@@ -179,7 +179,7 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def update_new_dates!(new_start_date, new_end_date)
+  def merge_date_range!(new_start_date, new_end_date)
     self.start_date = [start_date, new_start_date].compact.min
 
     self.end_date = if end_date.nil? || new_end_date.nil?

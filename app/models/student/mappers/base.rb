@@ -141,13 +141,13 @@ class Student
         student.close_current_schooling!(end_date)
       end
 
-      def manage_assignment_attributes(schooling, attributes)
+      def merge_schooling_attributes(schooling, attributes)
         schooling.assign_attributes(attributes) if schooling.new_record?
 
         start_date = DateTime.parse(attributes[:start_date]) if attributes[:start_date]
         end_date = DateTime.parse(attributes[:end_date]) if attributes[:end_date]
 
-        schooling.update_new_dates!(start_date, end_date)
+        schooling.merge_date_range!(start_date, end_date)
 
         schooling.assign_attributes(attributes.except(:start_date, :end_date))
       end

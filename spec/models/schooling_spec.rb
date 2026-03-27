@@ -639,7 +639,7 @@ RSpec.describe Schooling do
     end
   end
 
-  describe "#update_new_dates!" do
+  describe "#merge_date_range!" do
     let(:new_start_date) { Date.parse("2025-09-01") }
     let(:new_end_date) { Date.parse("2025-10-15") }
 
@@ -647,7 +647,7 @@ RSpec.describe Schooling do
     let(:current_end_date) { Date.parse("2025-10-31") }
     let(:schooling) { create(:schooling, end_date: current_end_date) }
 
-    before { schooling.update_new_dates!(new_start_date, new_end_date) }
+    before { schooling.merge_date_range!(new_start_date, new_end_date) }
 
     context "when the new start date is earlier than the current start date" do
       it { expect(schooling.start_date).to eq new_start_date }
