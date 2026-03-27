@@ -14,6 +14,7 @@ module ASP
     class NegativeRectificationError < Error; end
     class MissingEstablishmentCommuneCodeError < Error; end
     class MissingEstablishmentPostalCodeError < Error; end
+    class MissingRnvpDataError < Error; end
     class PaymentFileValidationError < Error; end
     class ReadingFileError < Error; end
 
