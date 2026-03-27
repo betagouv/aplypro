@@ -135,14 +135,16 @@ class Establishment < ApplicationRecord # rubocop:disable Metrics/ClassLength
                    .split
                    .map { |term| "%#{Student.sanitize_sql_like(term)}%" }
 
+    return Student.none if search_terms.empty?
+
     Student
       .joins(:schoolings)
       .where(schoolings: { classe_id: establishments.joins(:classes).select("classes.id") })
       .includes(current_schooling: { classe: :establishment })
       .where(
         search_terms.map do
-          "(regexp_replace(unaccent(first_name), '[^[:alnum:]]', '', 'g') ILIKE ? OR " \
-            "regexp_replace(unaccent(last_name), '[^[:alnum:]]', '', 'g') ILIKE ?)"
+          "(regexp_replace(unaccent(first_name), '[^[:alnum:]]', '', 'g') ILIKE unaccent(?) OR " \
+            "regexp_replace(unaccent(last_name), '[^[:alnum:]]', '', 'g') ILIKE unaccent(?))"
         end.join(" OR "),
         *search_terms.flat_map { |term| [term, term] }
       )
