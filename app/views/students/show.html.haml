@@ -1,2 +1,14 @@
+%section.fr-pb-3w
+  %ul
+    %li
+      INE :
+      %span= @student.ine
+    %li
+      Date d'anniversaire :
+      %span= l(@student.birthdate)
+    %li
+      Adresse postale :
+      %span= @student.address
+
 = render partial: 'ribs/informations', locals: { student: @student }
 = render partial: 'pfmps/pfmp_student_table', locals: { schoolings: @schoolings }
