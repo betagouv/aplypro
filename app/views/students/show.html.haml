@@ -1,13 +1,13 @@
 %section.fr-pb-3w
   %ul
     %li
-      INE :
+      %strong INE :
       %span= @student.ine
     %li
-      Date d'anniversaire :
+      %strong Date de naissance :
       %span= l(@student.birthdate)
     %li
-      Adresse postale :
+      %strong Adresse postale :
       %span= @student.address
 
 = render partial: 'ribs/informations', locals: { student: @student }
