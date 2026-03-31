@@ -6,9 +6,6 @@
     %li
       %strong Date de naissance :
       %span= l(@student.birthdate)
-    %li
-      %strong Adresse postale :
-      %span= @student.address
 
 = render partial: 'ribs/informations', locals: { student: @student }
 = render partial: 'pfmps/pfmp_student_table', locals: { schoolings: @schoolings }
