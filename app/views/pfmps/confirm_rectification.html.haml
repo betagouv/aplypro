@@ -1,8 +1,12 @@
 .fr-container
-  %h1.fr-h3 Confirmer les données pour rectification de la PFMP
   .fr-grid-row
     .fr-col-md-6.fr-mb-3w
       = dsfr_alert(type: :warning, title: "Êtes-vous certain(e) de vouloir rectifier cette PFMP ?")
+      - if @pfmp.errors.any?
+        = dsfr_alert(type: :warning, title: "Vous ne pouvez pas rectifier cette PFMP pour les raisons suivantes :") do
+          %ul
+            - @pfmp.errors.each do |error|
+              %li= error.message
 
   .fr-accordions-group
     %section.fr-accordion
