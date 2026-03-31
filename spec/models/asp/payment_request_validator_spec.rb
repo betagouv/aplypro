@@ -260,7 +260,7 @@ RSpec.describe ASP::PaymentRequestValidator do
         allow(student).to receive(:transferred?).and_return(true)
         allow(schooling).to receive(:abrogated?).and_return(false)
         allow(pfmp).to receive(:within_schooling_dates?).and_return(true)
-        allow(student).to receive_message_chain(:schoolings, :excluding).and_return([other_schooling])
+        allow(student).to receive_message_chain(:schoolings, :for_year, :excluding).and_return([other_schooling])
         allow(other_schooling).to receive(:classe).and_return(other_classe)
       end
 
