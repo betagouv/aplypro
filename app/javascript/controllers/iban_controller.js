@@ -27,7 +27,7 @@ export default class extends Controller {
     }
 
     buildInputs(valueOverride = null) {
-        const value = this.sanitizeIbanValue(valueOverride || this.originalInputTarget.value)
+        const value = this.sanitizeIbanValue(valueOverride ?? this.originalInputTarget.value)
         const numParts = Math.ceil(value.length / this.charsPerGroupValue) || this.defaultLengthValue
 
         this.containerTargets.forEach(container => container.remove())
@@ -135,9 +135,8 @@ export default class extends Controller {
     clear(e) {
         try {
             e.preventDefault()
-            this.clearAllInputs()
+            this.buildInputs("")
             this.updateoriginalInput()
-            this.toggleClearButton("none")
             this.partTargets[0].focus()
         } catch (error) {
             console.error("IBAN Clear failed:", error)
@@ -227,12 +226,6 @@ export default class extends Controller {
         if (this.hasClearButtonTarget) {
             this.clearButtonTarget.style.display = displayMode
         }
-    }
-
-    clearAllInputs() {
-        this.partTargets.forEach(input => {
-            input.value = ""
-        })
     }
 
     removeEventListeners() {

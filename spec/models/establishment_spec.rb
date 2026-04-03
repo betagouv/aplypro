@@ -100,6 +100,14 @@ RSpec.describe Establishment do
     it "returns empty when search string is blank?" do
       expect(etab.find_students("   ")).to be_empty
     end
+
+    it "finds students regardless of accent in search term" do
+      expect(etab.find_students("nguyome")).to contain_exactly(Student.find_by!(last_name: "N'Guy-ôme"))
+    end
+
+    it "returns empty when search string contains only special characters" do
+      expect(etab.find_students("-")).to be_empty
+    end
   end
 
   describe "#in_current_school_year_range?" do
