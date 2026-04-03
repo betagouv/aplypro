@@ -98,10 +98,7 @@ class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def any_older_schooling?
-    abrogeable? &&
-      student.schoolings.for_year(school_year.start_year).excluding(self).any? do |sc|
-        sc.attributive_decision.attached? && older_than?(sc)
-      end
+    abrogeable? && student.schoolings.for_year(school_year.start_year).excluding(self).any? { |sc| older_than?(sc) }
   end
 
   def extensible?

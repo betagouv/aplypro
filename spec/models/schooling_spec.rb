@@ -530,7 +530,7 @@ RSpec.describe Schooling do
         create(:schooling, student: student, classe: another_classe, end_date: schooling.end_date + 3.months)
       end
 
-      it { is_expected.to be false }
+      it { is_expected.to be true }
     end
 
     context "when student has another schooling on another school_year" do
