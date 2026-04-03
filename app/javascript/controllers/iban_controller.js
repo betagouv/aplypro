@@ -27,7 +27,7 @@ export default class extends Controller {
     }
 
     buildInputs(valueOverride = null) {
-        const value = this.sanitizeIbanValue(valueOverride || this.originalInputTarget.value)
+        const value = this.sanitizeIbanValue(valueOverride ?? this.originalInputTarget.value)
         const numParts = Math.ceil(value.length / this.charsPerGroupValue) || this.defaultLengthValue
 
         this.containerTargets.forEach(container => container.remove())
