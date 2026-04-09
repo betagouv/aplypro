@@ -15,6 +15,8 @@ module ASP
     class MissingEstablishmentCommuneCodeError < Error; end
     class MissingEstablishmentPostalCodeError < Error; end
     class MissingRnvpDataError < Error; end
+    class CorrectionAdresseIdMismatchError < Error; end
+    class CorrectionAdresseRejectedError < Error; end
     class PaymentFileValidationError < Error; end
     class ReadingFileError < Error; end
 

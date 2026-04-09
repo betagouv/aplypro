@@ -32,6 +32,34 @@ describe ASP::FileSaver do
     end
   end
 
+  {
+    correction_adresse_integrations: "identifiants_generes_nps_ficimport_correction_adresse_test.csv",
+    correction_adresse_rejects: "rejets_integ_idp_nps_ficimport_correction_adresse_test.csv"
+  }.each do |type, response_filename|
+    context "when the file is a #{type} file" do
+      let(:request) { create(:asp_request, :correction_adresse, filename: "nps_ficimport_correction_adresse_test.xml") }
+      let(:basename) { response_filename }
+
+      it "attaches to the right request" do
+        expect { file_saver.persist_file! }
+          .to change { request.reload.attachment_for(type).attached? }.from(false).to(true)
+      end
+
+      it "attaches with the right name" do
+        expect { file_saver.persist_file! }
+          .to change { request.reload.attachment_for(type).filename.to_s }.to(basename)
+      end
+
+      context "when the request cannot be found" do
+        before { request.correction_adresse_file.update!(filename: "bar.xml") }
+
+        it "raises an UnmatchedResponseFile error" do
+          expect { file_saver.persist_file! }.to raise_error(ASP::Errors::UnmatchedResponseFile)
+        end
+      end
+    end
+  end
+
   context "when the file is a payment returns file" do
     let(:basename) { build(:asp_filename, :payments) }
 

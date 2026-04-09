@@ -3,6 +3,14 @@
 module ASP
   module Entities
     class CorrectionAdresseFichier < Fichier
+      def filename
+        @filename ||= [
+          "nps_ficimport_correction_adresse_idp",
+          ENV.fetch("APLYPRO_ASP_FILENAME"),
+          filename_timestamp
+        ].join("_").concat(".xml")
+      end
+
       def to_xml
         ASP::Builder.new({ encoding: "UTF-8" }) do |xml|
           xml.fichier(xmlns: XMLNS) do

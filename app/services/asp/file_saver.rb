@@ -26,15 +26,27 @@ module ASP
     end
 
     def find_record!
+      find_payment_return_or_request!
+    rescue ActiveRecord::RecordNotFound
+      raise UnmatchedResponseFile
+    end
+
+    def find_payment_return_or_request!
       if filename.payments_file? || filename.rectifications_file?
         ASP::PaymentReturn.find_or_create_by!(filename: filename.to_s)
       else
-        ASP::Request
-          .joins(:file_blob)
-          .find_by!("active_storage_blobs.filename": filename.original_filename)
+        ASP::Request.joins(source_blob).find_by!("active_storage_blobs.filename": filename.original_filename).tap do |record|
+          record.correction_adresse = correction_adresse_response?
+        end
       end
-    rescue ActiveRecord::RecordNotFound
-      raise UnmatchedResponseFile
+    end
+
+    def source_blob
+      correction_adresse_response? ? :correction_adresse_file_blob : :file_blob
+    end
+
+    def correction_adresse_response?
+      filename.correction_adresse_integrations_file? || filename.correction_adresse_rejects_file?
     end
 
     def target_attachment

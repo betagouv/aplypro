@@ -10,6 +10,8 @@ module ASP
     has_one_attached :rejects_file, service: :ovh_asp
     has_one_attached :integrations_file, service: :ovh_asp
     has_one_attached :correction_adresse_file, service: :ovh_asp
+    has_one_attached :correction_adresse_integrations_file, service: :ovh_asp
+    has_one_attached :correction_adresse_rejects_file, service: :ovh_asp
 
     has_many :asp_payment_requests,
              class_name: "ASP::PaymentRequest",
@@ -61,7 +63,7 @@ module ASP
 
         attach_asp_file!
         upload_file!
-        update_sent_timestamp!
+        update!(sent_at: DateTime.now)
         update_requests! unless rerun
       end
     end
@@ -82,10 +84,6 @@ module ASP
         io: @asp_file.to_xml,
         path: @asp_file.filename
       )
-    end
-
-    def update_sent_timestamp!
-      update!(sent_at: DateTime.now)
     end
 
     def update_requests!
@@ -113,7 +111,7 @@ module ASP
     private
 
     def reader_for(type)
-      klass = "ASP::Readers::#{type.capitalize}FileReader".constantize
+      klass = "ASP::Readers::#{type.to_s.camelize}FileReader".constantize
 
       klass.new(io: attachment_for(type).download)
     end

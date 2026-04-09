@@ -21,6 +21,16 @@ describe ASP::Entities::CorrectionAdresseFichier do
     end
   end
 
+  describe "#filename" do
+    it "includes correction_adresse in the name" do
+      expect(file.filename).to include("correction_adresse")
+    end
+
+    it "has an xml extension" do
+      expect(file.filename).to end_with(".xml")
+    end
+  end
+
   it "produces valid documents" do
     log_on_failure = -> { file.errors.each { |e| Rails.logger.debug "ASP validation error: #{e.message}\n" } }
 
