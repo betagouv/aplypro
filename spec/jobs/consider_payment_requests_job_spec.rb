@@ -21,4 +21,15 @@ RSpec.describe ConsiderPaymentRequestsJob do
     expect { described_class.perform_now }
       .to have_enqueued_job(PreparePaymentRequestJob).exactly(3).times
   end
+
+  context "when there is a rectified PFMP" do
+    let(:old_rectified_pfmp) { create(:pfmp, :rectified) }
+
+    before { payment_requests << old_rectified_pfmp.latest_payment_request }
+
+    it "queues only the correct payment request into SendCorrectionAdresseJob" do
+      expect { described_class.perform_now }
+        .to have_enqueued_job(SendCorrectionAdresseJob).with([old_rectified_pfmp.id]).exactly(1).times
+    end
+  end
 end
