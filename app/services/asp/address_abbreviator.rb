@@ -7,7 +7,10 @@ module ASP
       COMMON_NAMES_ABBREVIATIONS_PATH = Rails.root.join("data/postal-addresses-abbreviations/common-names.csv")
 
       def abbreviate_road_type(text, max_length:)
-        abbreviate(text, max_length: max_length, csv_path: ROAD_TYPE_ABBREVIATIONS_PATH)
+        result = abbreviate(text, max_length: max_length, csv_path: ROAD_TYPE_ABBREVIATIONS_PATH)
+        return result if result.nil? || result.length <= max_length
+
+        result.gsub(/[AEIOU]/, "").first(max_length)
       end
 
       def abbreviate_address_line(text, max_length:)
