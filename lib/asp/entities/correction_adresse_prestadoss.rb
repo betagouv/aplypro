@@ -16,6 +16,12 @@ module ASP
         xml.adressesprestadoss { adresse_entity_class.from_payment_request(payment_request).to_xml(xml) }
         xml.coordpaiesprestadoss { CoordPaie.from_payment_request(payment_request).to_xml(xml) }
       end
+
+      private
+
+      def adresse_entity_class
+        payment_request.student.lives_in_france? ? Adresse::CorrectionFrance : Adresse::CorrectionEtranger
+      end
     end
   end
 end
