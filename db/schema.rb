@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_19_113142) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_10_081816) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "unaccent"
@@ -41,6 +41,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_19_113142) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "asp_adresse_correction_requests", force: :cascade do |t|
+    t.datetime "sent_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "asp_payment_request_transitions", force: :cascade do |t|

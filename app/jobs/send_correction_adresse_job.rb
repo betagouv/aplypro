@@ -14,7 +14,7 @@ class SendCorrectionAdresseJob < ApplicationJob
 
     enrich_with_rnvp!(payment_requests.map(&:student).uniq)
 
-    ASP::Request.create!(correction_adresse: true).send_correction_adresse!(payment_requests)
+    ASP::AdresseCorrectionRequest.create!.send_correction_adresse!(payment_requests)
   end
 
   private

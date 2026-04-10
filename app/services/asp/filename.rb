@@ -2,7 +2,10 @@
 
 module ASP
   class Filename
-    TYPES = %i[rejects integrations payments rectifications].freeze
+    TYPES = %i[
+      rejects integrations payments rectifications
+      correction_adresse_integrations correction_adresse_rejects
+    ].freeze
 
     attr_reader :filename
 
@@ -21,9 +24,9 @@ module ASP
 
       filename_noext = File.basename(filename, ".*")
 
-      name = if rejects_file?
+      name = if rejects_file? || correction_adresse_rejects_file?
                filename_noext.split("integ_idp_").last
-             elsif integrations_file?
+             elsif integrations_file? || correction_adresse_integrations_file?
                filename_noext.split("generes_").last
              end
 
@@ -32,8 +35,12 @@ module ASP
 
     def kind
       case File.basename(filename)
+      when /^rejets_integ_idp.*correction_adresse/
+        :correction_adresse_rejects
       when /^rejets_integ_idp/
         :rejects
+      when /^identifiants_generes.*correction_adresse/
+        :correction_adresse_integrations
       when /^identifiants_generes/
         :integrations
       when /^renvoi_ordrereversement/
