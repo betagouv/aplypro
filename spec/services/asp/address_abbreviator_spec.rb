@@ -71,6 +71,16 @@ RSpec.describe ASP::AddressAbbreviator do
         expect(described_class.abbreviate_road_type("Boulevardier de la rue principale", max_length: 28))
           .to eq("BOULEVARDIER DE LA RUE PRINCIPALE")
       end
+
+      it "abbreviates plural forms using the singular CSV entry" do
+        expect(described_class.abbreviate_road_type("Allees des Platanes et des Marronniers", max_length: 28))
+          .to eq("ALL DES PLATANES ET DES MARRONNIERS")
+      end
+
+      it "abbreviates plural forms for road types" do
+        expect(described_class.abbreviate_road_type("Chemins des Ecoliers", max_length: 10))
+          .to eq("CHEM DES ECOLIERS")
+      end
     end
 
     context "when abbreviated text is still too long" do

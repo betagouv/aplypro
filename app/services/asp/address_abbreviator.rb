@@ -23,14 +23,14 @@ module ASP
         abbreviated_text = normalize(text.dup)
 
         load_abbreviations(csv_path).each do |full_word, abbreviation|
-          abbreviated_text.gsub!(/\b#{Regexp.escape(full_word)}\b/i, abbreviation)
+          abbreviated_text.gsub!(/\b#{Regexp.escape(full_word)}S?\b/i, abbreviation)
         end
 
         abbreviated_text
       end
 
       def load_abbreviations(csv_path)
-        Rails.cache.fetch("abbreviations_cache", expires_in: 3.hours) do
+        Rails.cache.fetch("abbreviations_cache/#{csv_path}", expires_in: 3.hours) do
           CSV.read(csv_path, headers: true)
              .map { |row| [row["full"], row["abbreviated"]] }
              .sort_by { |full, _| -full.length }
