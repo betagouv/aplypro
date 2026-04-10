@@ -9,7 +9,10 @@ module ASP
         end
 
         def libellevoie
-          student.rnvp_data["voieDen"]
+          AddressAbbreviator.abbreviate_address_line(
+            student.rnvp_data["voieDen"],
+            max_length: Entities::Adresse::InduFrance::LIBELLEVOIE_MAX_LENGTH
+          )
         end
 
         def codeextensionvoie
