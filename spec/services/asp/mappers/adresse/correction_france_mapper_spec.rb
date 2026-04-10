@@ -104,5 +104,14 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
       mapper.codecominsee
       expect(InseeExceptionCodes).to have_received(:transform_insee_code).with("25288")
     end
+
+    context "when RNVP does not return a codeInsee" do
+      before { rnvp_data["codeInsee"] = nil }
+
+      it "falls back to the student stored insee code" do
+        mapper.codecominsee
+        expect(InseeExceptionCodes).to have_received(:transform_insee_code).with(student.address_city_insee_code)
+      end
+    end
   end
 end

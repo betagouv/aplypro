@@ -36,8 +36,10 @@ module ASP
           student.rnvp_data["codePostal"]
         end
 
+        # Fallback incase RNVP has no codeInsee
         def codecominsee
-          InseeExceptionCodes.transform_insee_code(student.rnvp_data["codeInsee"])
+          insee_code = student.rnvp_data["codeInsee"].presence || student.address_city_insee_code
+          InseeExceptionCodes.transform_insee_code(insee_code)
         end
       end
     end
