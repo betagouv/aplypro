@@ -37,7 +37,10 @@ describe ASP::FileSaver do
     correction_adresse_rejects: "rejets_integ_idp_nps_ficimport_correction_adresse_test.csv"
   }.each do |type, response_filename|
     context "when the file is a #{type} file" do
-      let(:request) { create(:asp_request, :correction_adresse, filename: "nps_ficimport_correction_adresse_test.xml") }
+      let(:request) do
+        create(:asp_adresse_correction_request, :with_correction_adresse_file,
+               filename: "nps_ficimport_correction_adresse_test.xml")
+      end
       let(:basename) { response_filename }
 
       it "attaches to the right request" do

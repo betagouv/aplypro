@@ -34,16 +34,13 @@ module ASP
     def find_payment_return_or_request!
       if filename.payments_file? || filename.rectifications_file?
         ASP::PaymentReturn.find_or_create_by!(filename: filename.to_s)
+      elsif correction_adresse_response?
+        ASP::AdresseCorrectionRequest.joins(:correction_adresse_file_blob)
+                                     .find_by!("active_storage_blobs.filename": filename.original_filename)
       else
-        request = ASP::Request.joins(source_blob)
-                              .find_by!("active_storage_blobs.filename": filename.original_filename)
-        request.correction_adresse = correction_adresse_response?
-        request
+        ASP::Request.joins(:file_blob)
+                    .find_by!("active_storage_blobs.filename": filename.original_filename)
       end
-    end
-
-    def source_blob
-      correction_adresse_response? ? :correction_adresse_file_blob : :file_blob
     end
 
     def correction_adresse_response?

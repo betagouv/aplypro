@@ -22,15 +22,5 @@ FactoryBot.define do
         request.asp_payment_requests << create(:asp_payment_request, :ready)
       end
     end
-
-    trait :correction_adresse do
-      after(:build) do |request|
-        request.correction_adresse = true
-      end
-
-      after(:create) do |request, ctx|
-        request.correction_adresse_file.attach(io: StringIO.new(ctx.outfile), filename: ctx.filename)
-      end
-    end
   end
 end
