@@ -14,7 +14,7 @@ RSpec.describe SendCorrectionAdresseJob do
     allow(ASP::AdresseCorrectionRequest).to receive(:create!).and_return(request_double)
     allow(Omogen::Rnvp).to receive(:new).and_return(rnvp_double)
     allow(rnvp_double).to receive(:address) { |student| { id: student.id } }
-    allow(rnvp_double).to receive(:addresses) { |students| students.map { |s| { id: s.id } } }
+    allow(rnvp_double).to receive(:addresses) { |students| students.map { |s| { "id" => s.id } } }
   end
 
   it "creates a correction adresse ASP request" do

@@ -29,7 +29,7 @@ class SendCorrectionAdresseJob < ApplicationJob
 
   def fetch_rnvp_data(rnvp, students)
     if students.count > RNVP_STUDENT_BATCH_THRESHOLD
-      rnvp.addresses(students).index_by { |address| address[:id] }
+      rnvp.addresses(students).index_by { |address| address["id"] }
     else
       students.to_h { |s| [s.id, rnvp.address(s)] }
     end
