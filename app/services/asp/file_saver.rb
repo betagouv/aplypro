@@ -35,9 +35,10 @@ module ASP
       if filename.payments_file? || filename.rectifications_file?
         ASP::PaymentReturn.find_or_create_by!(filename: filename.to_s)
       else
-        ASP::Request.joins(source_blob).find_by!("active_storage_blobs.filename": filename.original_filename).tap do |record|
-          record.correction_adresse = correction_adresse_response?
-        end
+        request = ASP::Request.joins(source_blob)
+                              .find_by!("active_storage_blobs.filename": filename.original_filename)
+        request.correction_adresse = correction_adresse_response?
+        request
       end
     end
 
