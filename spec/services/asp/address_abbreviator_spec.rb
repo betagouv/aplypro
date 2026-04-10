@@ -90,10 +90,6 @@ RSpec.describe ASP::AddressAbbreviator do
         expect(result).to eq("12 BD DE LA REPUBLIQUE FRANCAISE EXTRAORDINAIRE")
         expect(result.length).to be > 28
       end
-
-      it "strips vowels from road types as a last resort" do
-        expect(described_class.abbreviate_road_type("BOUCLE", max_length: 4)).to eq("BCL")
-      end
     end
   end
 end

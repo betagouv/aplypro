@@ -73,8 +73,16 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
     context "when voieType exceeds 4 characters" do
       before { rnvp_data["voieType"] = "AVENUE" }
 
-      it "abbreviates to fit within 4 characters" do
-        expect(mapper.codetypevoie.length).to be <= 4
+      it "abbreviates to fit within 4 characters without stripping vowels" do
+        expect(mapper.codetypevoie).to eq "AV"
+      end
+    end
+
+    context "when voieType cannot be abbreviated to 4 characters via CSV" do
+      before { rnvp_data["voieType"] = "BOUCLE" }
+
+      it "strips vowels as a last resort" do
+        expect(mapper.codetypevoie).to eq "BCL"
       end
     end
   end

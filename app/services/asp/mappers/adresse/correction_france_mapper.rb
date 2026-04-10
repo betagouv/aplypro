@@ -22,10 +22,14 @@ module ASP
         def codetypevoie
           return nil if student.rnvp_data["voieType"].blank?
 
-          AddressAbbreviator.abbreviate_road_type(
+          result = AddressAbbreviator.abbreviate_road_type(
             student.rnvp_data["voieType"],
             max_length: Entities::Adresse::CorrectionFrance::CODETYPEVOIE_MAX_LENGTH
           )
+          return result if result.nil? || result.length <= Entities::Adresse::CorrectionFrance::CODETYPEVOIE_MAX_LENGTH
+
+          # Last resort: strip vowels (e.g. BOUCLE -> BCL) when CSV abbreviation still exceeds 4 chars
+          result.gsub(/[AEIOU]/, "").first(Entities::Adresse::CorrectionFrance::CODETYPEVOIE_MAX_LENGTH)
         end
 
         def cpltdistribution
