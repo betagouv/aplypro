@@ -217,14 +217,20 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     return unless mef
     return unless amounts_yearly_reached?
 
-    errors.add(:amount, "Yearly cap of #{mef.wage.yearly_cap} not respected for Mef code: #{mef.code}")
+    errors.add(
+      :amount,
+      "Le plafond annuel de #{mef.wage.yearly_cap}€ n'est pas respecté pour le code MEF : #{mef.code}"
+    )
   end
 
   def rectified_amount_must_differ_from_paid_amount
     return unless amount.present? && paid_amount.present?
     return if amount != paid_amount
 
-    errors.add(:amount, "must be different from the previously paid amount (#{paid_amount}€) when rectifying")
+    errors.add(
+      :amount,
+      "Le montant doit être différent du montant précédemment payé (#{paid_amount}€) lors de la rectification"
+    )
   end
 
   def total_pfmps_for_mef
