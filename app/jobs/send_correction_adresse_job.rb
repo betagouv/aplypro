@@ -12,7 +12,7 @@ class SendCorrectionAdresseJob < ApplicationJob
 
     return if payment_requests.empty?
 
-    enrich_with_rnvp!(payment_requests.map(&:student).uniq)
+    enrich_with_rnvp!(payment_requests.map(&:student))
 
     ASP::AdresseCorrectionRequest.create!.send_correction_adresse!(payment_requests)
   end
@@ -28,10 +28,11 @@ class SendCorrectionAdresseJob < ApplicationJob
   end
 
   def fetch_rnvp_data(rnvp, students)
-    if students.count > RNVP_STUDENT_BATCH_THRESHOLD
-      rnvp.addresses(students).index_by { |address| address[:id] }
+    unique_students = students.uniq
+    if unique_students.count > RNVP_STUDENT_BATCH_THRESHOLD
+      rnvp.addresses(unique_students).index_by { |address| address["id"] }
     else
-      students.to_h { |s| [s.id, rnvp.address(s)] }
+      unique_students.to_h { |s| [s.id, rnvp.address(s)] }
     end
   end
 end

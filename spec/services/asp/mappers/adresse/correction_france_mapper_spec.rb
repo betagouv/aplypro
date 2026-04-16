@@ -73,8 +73,16 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
     context "when voieType exceeds 4 characters" do
       before { rnvp_data["voieType"] = "AVENUE" }
 
-      it "abbreviates to fit within 4 characters" do
-        expect(mapper.codetypevoie.length).to be <= 4
+      it "abbreviates to fit within 4 characters without stripping vowels" do
+        expect(mapper.codetypevoie).to eq "AV"
+      end
+    end
+
+    context "when voieType cannot be abbreviated to 4 characters via CSV" do
+      before { rnvp_data["voieType"] = "BOUCLE" }
+
+      it "strips vowels as a last resort" do
+        expect(mapper.codetypevoie).to eq "BCL"
       end
     end
   end
@@ -103,6 +111,15 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
     it "passes the RNVP insee code to the transformer" do
       mapper.codecominsee
       expect(InseeExceptionCodes).to have_received(:transform_insee_code).with("25288")
+    end
+
+    context "when RNVP does not return a codeInsee" do
+      before { rnvp_data["codeInsee"] = nil }
+
+      it "falls back to the student stored insee code" do
+        mapper.codecominsee
+        expect(InseeExceptionCodes).to have_received(:transform_insee_code).with(student.address_city_insee_code)
+      end
     end
   end
 end

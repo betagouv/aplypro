@@ -7,30 +7,37 @@ module ASP
       COMMON_NAMES_ABBREVIATIONS_PATH = Rails.root.join("data/postal-addresses-abbreviations/common-names.csv")
 
       def abbreviate_road_type(text, max_length:)
-        abbreviate(text, max_length: max_length, csv_path: ROAD_TYPE_ABBREVIATIONS_PATH)
-      end
-
-      def abbreviate_address_line(text, max_length:)
-        abbreviate(text, max_length: max_length, csv_path: COMMON_NAMES_ABBREVIATIONS_PATH)
-      end
-
-      private
-
-      def abbreviate(text, max_length:, csv_path:)
         return nil if text.blank?
         return text if text.length <= max_length
 
         abbreviated_text = normalize(text.dup)
 
-        load_abbreviations(csv_path).each do |full_word, abbreviation|
+        # S? makes each CSV entry also match its plural form (e.g. ALLEE matches ALLEES)
+        # so the CSV only needs singular entries
+        load_abbreviations(ROAD_TYPE_ABBREVIATIONS_PATH).each do |full_word, abbreviation|
+          abbreviated_text.gsub!(/\b#{Regexp.escape(full_word)}S?\b/i, abbreviation)
+        end
+
+        abbreviated_text
+      end
+
+      def abbreviate_address_line(text, max_length:)
+        return nil if text.blank?
+        return text if text.length <= max_length
+
+        abbreviated_text = normalize(text.dup)
+
+        load_abbreviations(COMMON_NAMES_ABBREVIATIONS_PATH).each do |full_word, abbreviation|
           abbreviated_text.gsub!(/\b#{Regexp.escape(full_word)}\b/i, abbreviation)
         end
 
         abbreviated_text
       end
 
+      private
+
       def load_abbreviations(csv_path)
-        Rails.cache.fetch("abbreviations_cache", expires_in: 3.hours) do
+        Rails.cache.fetch("abbreviations_cache/#{csv_path}", expires_in: 3.hours) do
           CSV.read(csv_path, headers: true)
              .map { |row| [row["full"], row["abbreviated"]] }
              .sort_by { |full, _| -full.length }
