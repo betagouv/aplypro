@@ -263,7 +263,8 @@ fr:
         update: *edit_pfmp_title
         validate: "Validation"
         confirm_deletion: "Suppression de la PFMP"
-        confirm_rectification: "Rectification de la PFMP"
+        confirm_rectification: &confirm_rectification_title "Rectification de la PFMP"
+        rectify: *confirm_rectification_title
       ribs:
         new: &new_rib_title
           title: "Ajout de coordonnées bancaires pour %{name}"

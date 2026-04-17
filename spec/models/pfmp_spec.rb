@@ -384,7 +384,7 @@ RSpec.describe Pfmp do
         pfmp.amount = paid_amount
         expect(pfmp).not_to be_valid
         expect(pfmp.errors[:amount]).to include(
-          "must be different from the previously paid amount (#{paid_amount}€) when rectifying"
+          "Le montant doit être différent du montant précédemment payé (#{paid_amount}€) lors de la rectification"
         )
       end
     end
