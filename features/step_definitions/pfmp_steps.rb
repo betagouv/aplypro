@@ -139,6 +139,22 @@ Quand("toutes les PFMPs pour la classe {string} sont validables") do |classe_lab
   end
 end
 
+Sachantque("le montant liquidé de la dernière PFMP de {string} est de {int} euros") do |name, amount|
+  student = find_student_by_full_name(name)
+  pfmp = student.pfmps.last
+  paid_transition = pfmp.payment_requests.in_state(:paid).last
+                        .asp_payment_request_transitions.find_by(to_state: "paid")
+  paid_transition.update!(metadata: paid_transition.metadata.merge("PAIEMENT" => { "MTNET" => amount.to_s }))
+end
+
+Sachantque("la scolarité de {string} se termine avant la fin de la PFMP") do |name|
+  student = find_student_by_full_name(name)
+  pfmp = student.pfmps.last
+  schooling = pfmp.schooling
+  schooling.end_date = pfmp.start_date + 1.day
+  schooling.save!(validate: false)
+end
+
 Alors("je peux changer le nombre de jours de la PFMP à {int}") do |days|
   steps %(
     Quand je clique sur "Modifier la PFMP"

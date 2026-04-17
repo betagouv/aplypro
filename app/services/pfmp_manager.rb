@@ -13,11 +13,8 @@ class PfmpManager # rubocop:disable Metrics/ClassLength
   class RectificationAmountZeroError < RectificationError; end
 
   class RectificationValidationError < RectificationError
-    attr_reader :validation_errors
-
-    def initialize(validation_errors)
-      @validation_errors = validation_errors
-      super
+    def initialize(error_key)
+      super(I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.#{error_key}"))
     end
   end
 
@@ -82,7 +79,6 @@ class PfmpManager # rubocop:disable Metrics/ClassLength
       correct_amount = pfmp.reload.amount
       pfmp.student.update!(confirmed_address_params)
       check_rectification_delta(paid_amount - correct_amount)
-      validate_new_payment_request!
     end
   end
 
@@ -144,12 +140,6 @@ class PfmpManager # rubocop:disable Metrics/ClassLength
     elsif pfmp.in_state?(:completed, :validated)
       pfmp.transition_to!(:pending)
     end
-  end
-
-  def validate_new_payment_request!
-    payment_request = pfmp.latest_payment_request
-    ASP::PaymentRequestValidator.new(payment_request).validate
-    raise RectificationValidationError, payment_request.errors if payment_request.errors.any?
   end
 
   def check_rectification_delta(delta)
