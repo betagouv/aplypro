@@ -11,8 +11,10 @@ class PfmpManager # rubocop:disable Metrics/ClassLength
   class RectificationError < PfmpManagerError; end
   class RectificationAmountThresholdNotReachedError < RectificationError; end
   class RectificationAmountZeroError < RectificationError; end
+
   class RectificationValidationError < RectificationError
     attr_reader :validation_errors
+
     def initialize(validation_errors)
       @validation_errors = validation_errors
       super
@@ -147,7 +149,7 @@ class PfmpManager # rubocop:disable Metrics/ClassLength
   def validate_new_payment_request!
     payment_request = pfmp.latest_payment_request
     ASP::PaymentRequestValidator.new(payment_request).validate
-    raise RectificationValidationError.new(payment_request.errors) if payment_request.errors.any?
+    raise RectificationValidationError, payment_request.errors if payment_request.errors.any?
   end
 
   def check_rectification_delta(delta)
