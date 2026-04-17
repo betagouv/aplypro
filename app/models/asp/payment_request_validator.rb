@@ -112,8 +112,7 @@ module ASP
 
     def check_negative_rectification
       return unless pfmp.rectified?
-      return if pfmp.paid_amount.blank?
-      return unless pfmp.amount < pfmp.paid_amount
+      return unless pfmp.overpaid?
 
       add_error(:negative_rectification)
     end

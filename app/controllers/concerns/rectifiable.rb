@@ -68,7 +68,7 @@ module Rectifiable
   end
 
   def check_negative_rectification!
-    return unless @pfmp.paid_amount.present? && @pfmp.amount.positive? && @pfmp.amount < @pfmp.paid_amount
+    return unless @pfmp.overpaid?
 
     raise_rectification_validation_error(:negative_rectification)
   end
