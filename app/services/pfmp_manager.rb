@@ -11,6 +11,13 @@ class PfmpManager # rubocop:disable Metrics/ClassLength
   class RectificationError < PfmpManagerError; end
   class RectificationAmountThresholdNotReachedError < RectificationError; end
   class RectificationAmountZeroError < RectificationError; end
+  class RectificationValidationError < RectificationError
+    attr_reader :validation_errors
+    def initialize(validation_errors)
+      @validation_errors = validation_errors
+      super
+    end
+  end
 
   EXCESS_AMOUNT_RECTIFICATION_THRESHOLD = 30
 
@@ -71,8 +78,9 @@ class PfmpManager # rubocop:disable Metrics/ClassLength
       pfmp.rectify!
       update!(confirmed_pfmp_params, recalculate_amounts: should_recalculate)
       correct_amount = pfmp.reload.amount
-      check_rectification_delta(paid_amount - correct_amount)
       pfmp.student.update!(confirmed_address_params)
+      check_rectification_delta(paid_amount - correct_amount)
+      validate_new_payment_request!
     end
   end
 
@@ -134,6 +142,12 @@ class PfmpManager # rubocop:disable Metrics/ClassLength
     elsif pfmp.in_state?(:completed, :validated)
       pfmp.transition_to!(:pending)
     end
+  end
+
+  def validate_new_payment_request!
+    payment_request = pfmp.latest_payment_request
+    ASP::PaymentRequestValidator.new(payment_request).validate
+    raise RectificationValidationError.new(payment_request.errors) if payment_request.errors.any?
   end
 
   def check_rectification_delta(delta)

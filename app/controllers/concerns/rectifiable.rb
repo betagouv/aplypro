@@ -4,6 +4,12 @@ module Rectifiable
   extend ActiveSupport::Concern
 
   included do
+    rescue_from PfmpManager::RectificationValidationError do |error|
+      @student = @pfmp.student
+      error.validation_errors.each { |e| @pfmp.errors.add(:base, e.message) }
+      render :confirm_rectification, status: :unprocessable_content
+    end
+
     rescue_from PfmpManager::RectificationAmountThresholdNotReachedError do
       @student = @pfmp.student
       flash.now[:alert] = t(
