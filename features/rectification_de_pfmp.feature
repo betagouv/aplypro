@@ -37,3 +37,25 @@ Fonctionnalité: Rectification de PFMP (gestion d'indus)
     Et que je clique sur "Confirmer la rectification"
     Alors la page contient "Cette rectification génèrerait un ordre de reversement"
     Et la page est titrée "Rectification de la PFMP"
+
+  Scénario: Une erreur est affichée si le montant ne change pas
+    Quand je clique sur "Gérer un indu"
+    Et que je coche la case de responsable légal
+    Et que je clique sur "Confirmer la rectification"
+    Alors la page contient "La différence de montant est nulle."
+    Et la page est titrée "Rectification de la PFMP"
+
+  Scénario: Une erreur est affichée si la différence de montant est insuffisante
+    Quand je clique sur "Gérer un indu"
+    Et que je remplis "Nouveau nombre de jours travaillés" avec "8"
+    Et que je coche la case de responsable légal
+    Et que je clique sur "Confirmer la rectification"
+    Alors la page contient "La différence de montant n'est pas suffisante pour générer un indu (montant minimum: 30€)"
+    Et la page est titrée "Rectification de la PFMP"
+
+  Scénario: La rectification est bloquée si la case de confirmation n'est pas cochée
+    Quand je clique sur "Gérer un indu"
+    Et que je remplis "Nouveau nombre de jours travaillés" avec "5"
+    Et que je décoche la case de responsable légal
+    Et que je clique sur "Confirmer la rectification"
+    Alors la page contient "Vous devez être chef d'établissement"
