@@ -43,7 +43,8 @@
               %td= number_to_currency(@pfmp.amount, unit: "€", format: "%n %u")
               - if last_paid_request
                 %th{scope: "row"} IBAN
-                %td= format_iban(last_paid_request.rib_with_fallback&.iban)
+                %td
+                  %span{data: {controller: "hide-iban", hide_iban_target: "text", action: "click->hide-iban#toggle"}, class: "iban-blur", style: "cursor:pointer;"}= format_iban(last_paid_request.rib_with_fallback&.iban)
               - else
                 %td{colspan: 2}
 
