@@ -8,44 +8,55 @@
             - @pfmp.errors.each do |error|
               %li= error.message
 
-  .fr-accordions-group
-    %section.fr-accordion
-      %h3.fr-accordion__title
-        %button.fr-accordion__btn{"aria-controls" => "accordion-pfmp-details", "aria-expanded" => "false"}
-          Détails de la PFMP et du dernier paiement associé
+  %section.fr-accordion
+    %h3.fr-accordion__title
+      %button.fr-accordion__btn{"aria-controls" => "accordion-pfmp-details", "aria-expanded" => "false"}
+        Détails de la PFMP et du dernier paiement associé
+    .fr-collapse#accordion-pfmp-details
+      - last_paid_request = @pfmp.payment_requests.in_state(:paid).order(created_at: :desc).first
+      .fr-table.fr-table--no-caption.fr-mb-3w
+        %table
+          %caption Détails PFMP et paiement
+          %thead
+            %tr
+              %th{scope: "col", colspan: 2} La PFMP
+              %th{scope: "col", colspan: 2} Dernier paiement
+          %tbody
+            %tr
+              %th{scope: "row"} Période
+              %td= "Du #{l @pfmp.start_date} au #{l @pfmp.end_date}"
+              %th{scope: "row"} Date
+              %td= l(last_paid_request.last_transition.created_at.to_date)
+            %tr
+              %th{scope: "row"} Jours travaillés
+              %td= @pfmp.day_count
+              %th{scope: "row"} Montant payé
+              %td= number_to_currency(last_paid_request.pfmp.amount, unit: "€", format: "%n %u")
+            %tr
+              %th{scope: "row"} Montant
+              %td= number_to_currency(@pfmp.amount, unit: "€", format: "%n %u")
+              %th{scope: "row"} IBAN
+              %td
+                %span{data: {controller: "hide-iban", hide_iban_target: "text", action: "click->hide-iban#toggle"}, class: "iban-blur", style: "cursor:pointer;"}= format_iban(last_paid_request.rib_with_fallback&.iban)
 
-      .fr-collapse#accordion-pfmp-details
-        .fr-grid-row.fr-mb-3w
-          .fr-col-md-6
-            %table.fr-table
-              %tbody
-                %tr
-                  %th{scope: "row"} Période
-                  %td= "Du #{l @pfmp.start_date} au #{l @pfmp.end_date}"
-                %tr
-                  %th{scope: "row"} Jours travaillés
-                  %td= @pfmp.day_count
-                %tr
-                  %th{scope: "row"} Montant
-                  %td= number_to_currency(@pfmp.amount, unit: "€", format: "%n %u")
-
-          .fr-col-md-6
-            %table.fr-table
-              %tbody
-                - if @pfmp.payment_requests.in_state(:paid).any?
-                  - last_paid_request = @pfmp.payment_requests.in_state(:paid).order(created_at: :desc).first
-                  %tr
-                    %th{scope: "row"} Date
-                    %td= l(last_paid_request.last_transition.created_at.to_date)
-                  %tr
-                    %th{scope: "row"} Montant payé
-                    %td= number_to_currency(last_paid_request.pfmp.amount, unit: "€", format: "%n %u")
-                  %tr
-                    %th{scope: "row"} IBAN
-                    %td= format_iban(last_paid_request.rib_with_fallback&.iban)
-                - else
-                  %tr
-                    %td{colspan: 2} Aucun paiement effectué
+  %section.fr-accordion
+    %h3.fr-accordion__title
+      %button.fr-accordion__btn{"aria-controls" => "accordion-schooling-details", "aria-expanded" => "false"}
+        Détails de la scolarité
+    .fr-collapse#accordion-schooling-details
+      .fr-table.fr-table--no-caption.fr-mb-3w
+        %table
+          %caption Scolarité
+          %thead
+            %tr
+              %th{scope: "col", colspan: 2} La scolarité
+          %tbody
+            %tr
+              %th{scope: "row"} Début
+              %td= @schooling.start_date ? l(@schooling.start_date) : "—"
+            %tr
+              %th{scope: "row"} Fin
+              %td= @schooling.max_end_date ? l(@schooling.max_end_date) : "—"
   .fr-grid-row
     .fr-col-md-6.fr-mb-3w
     = form_with model: @pfmp, url: rectify_school_year_class_schooling_pfmp_path(selected_school_year, @classe, @schooling, @pfmp), builder: DsfrFormBuilder, method: :post do |f|

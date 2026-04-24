@@ -369,6 +369,50 @@ RSpec.describe Pfmp do
     end
   end
 
+  describe "#overpaid?" do
+    context "when there is no paid payment request" do
+      let(:pfmp) { create(:pfmp, amount: 50) }
+
+      it { expect(pfmp.overpaid?).to be false }
+    end
+
+    context "when paid_amount is greater than the current amount" do
+      let(:pfmp) do
+        pr = create(:asp_payment_request, :paid)
+        pr.asp_payment_request_transitions
+          .find_by(to_state: "paid")
+          .update!(metadata: { "PAIEMENT" => { "MTNET" => "100" } })
+        pr.pfmp.tap { |p| p.update!(amount: 50) }
+      end
+
+      it { expect(pfmp.overpaid?).to be true }
+    end
+
+    context "when paid_amount equals the current amount" do
+      let(:pfmp) do
+        pr = create(:asp_payment_request, :paid)
+        pr.asp_payment_request_transitions
+          .find_by(to_state: "paid")
+          .update!(metadata: { "PAIEMENT" => { "MTNET" => "50" } })
+        pr.pfmp.tap { |p| p.update!(amount: 50) }
+      end
+
+      it { expect(pfmp.overpaid?).to be false }
+    end
+
+    context "when paid_amount is less than the current amount" do
+      let(:pfmp) do
+        pr = create(:asp_payment_request, :paid)
+        pr.asp_payment_request_transitions
+          .find_by(to_state: "paid")
+          .update!(metadata: { "PAIEMENT" => { "MTNET" => "30" } })
+        pr.pfmp.tap { |p| p.update!(amount: 50) }
+      end
+
+      it { expect(pfmp.overpaid?).to be false }
+    end
+  end
+
   describe "rectified amount validation" do
     let(:paid_amount) { 100 }
     let(:pfmp) do

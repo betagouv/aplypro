@@ -141,7 +141,7 @@ RSpec.describe PfmpsController do
                                                            class_id: pfmp.classe.id,
                                                            schooling_id: pfmp.schooling.id,
                                                            id: pfmp.id),
-             params: { pfmp: pfmp_params, addresse: addresse_params, confirmed_director: "1" }
+             params: { pfmp: pfmp_params.merge(addresse_params), confirmed_director: "1" }
 
         expect(flash[:notice]).to eq(I18n.t("flash.pfmps.rectification.rectified"))
         expect(pfmp.reload.attributes.slice("start_date", "end_date", "day_count", "current_state"))
@@ -156,7 +156,7 @@ RSpec.describe PfmpsController do
       it "redirects with an alert" do
         post rectify_school_year_class_schooling_pfmp_path(
           school_year, class_id: pfmp.classe.id, schooling_id: pfmp.schooling.id, id: pfmp.id
-        ), params: { pfmp: pfmp_params, addresse: addresse_params, confirmed_director: "1" }
+        ), params: { pfmp: pfmp_params.merge(addresse_params), confirmed_director: "1" }
 
         expect(flash[:alert]).to eq(I18n.t("flash.pfmps.rectification.cannot_rectify"))
         expect(pfmp).to be_in_state(:validated)
@@ -166,11 +166,12 @@ RSpec.describe PfmpsController do
     context "when the PFMP update is invalid" do
       let(:pfmp_params) { { start_date: pfmp.end_date + 1.day, end_date: pfmp.end_date } }
 
-      it "renders the confirm_rectification template with unprocessable_entity status" do
+      it "re-renders the form with unprocessable_content status" do
         post rectify_school_year_class_schooling_pfmp_path(
           school_year, class_id: pfmp.classe.id, schooling_id: pfmp.schooling.id, id: pfmp.id
-        ), params: { pfmp: pfmp_params, addresse: addresse_params, confirmed_director: "1" }
+        ), params: { pfmp: pfmp_params.merge(addresse_params), confirmed_director: "1" }
 
+        expect(response).to have_http_status(:unprocessable_content)
         expect(pfmp).to be_in_state(:validated)
       end
     end

@@ -12,6 +12,12 @@ class PfmpManager # rubocop:disable Metrics/ClassLength
   class RectificationAmountThresholdNotReachedError < RectificationError; end
   class RectificationAmountZeroError < RectificationError; end
 
+  class RectificationValidationError < RectificationError
+    def initialize(error_key)
+      super(I18n.t("activerecord.errors.models.asp/payment_request.attributes.ready_state_validation.#{error_key}"))
+    end
+  end
+
   EXCESS_AMOUNT_RECTIFICATION_THRESHOLD = 30
 
   attr_reader :pfmp
@@ -71,8 +77,8 @@ class PfmpManager # rubocop:disable Metrics/ClassLength
       pfmp.rectify!
       update!(confirmed_pfmp_params, recalculate_amounts: should_recalculate)
       correct_amount = pfmp.reload.amount
-      check_rectification_delta(paid_amount - correct_amount)
       pfmp.student.update!(confirmed_address_params)
+      check_rectification_delta(paid_amount - correct_amount)
     end
   end
 

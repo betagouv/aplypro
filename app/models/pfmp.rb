@@ -193,6 +193,10 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
       .to_i
   end
 
+  def overpaid?
+    paid_amount.present? && amount < paid_amount
+  end
+
   def amounts_yearly_reached?
     raise MefMissingWageError, mef.code unless mef&.wage
 
