@@ -25,28 +25,19 @@
             %tr
               %th{scope: "row"} Période
               %td= "Du #{l @pfmp.start_date} au #{l @pfmp.end_date}"
-              - if last_paid_request
-                %th{scope: "row"} Date
-                %td= l(last_paid_request.last_transition.created_at.to_date)
-              - else
-                %td{colspan: 2} Aucun paiement effectué
+              %th{scope: "row"} Date
+              %td= l(last_paid_request.last_transition.created_at.to_date)
             %tr
               %th{scope: "row"} Jours travaillés
               %td= @pfmp.day_count
-              - if last_paid_request
-                %th{scope: "row"} Montant payé
-                %td= number_to_currency(last_paid_request.pfmp.amount, unit: "€", format: "%n %u")
-              - else
-                %td{colspan: 2}
+              %th{scope: "row"} Montant payé
+              %td= number_to_currency(last_paid_request.pfmp.amount, unit: "€", format: "%n %u")
             %tr
               %th{scope: "row"} Montant
               %td= number_to_currency(@pfmp.amount, unit: "€", format: "%n %u")
-              - if last_paid_request
-                %th{scope: "row"} IBAN
-                %td
-                  %span{data: {controller: "hide-iban", hide_iban_target: "text", action: "click->hide-iban#toggle"}, class: "iban-blur", style: "cursor:pointer;"}= format_iban(last_paid_request.rib_with_fallback&.iban)
-              - else
-                %td{colspan: 2}
+              %th{scope: "row"} IBAN
+              %td
+                %span{data: {controller: "hide-iban", hide_iban_target: "text", action: "click->hide-iban#toggle"}, class: "iban-blur", style: "cursor:pointer;"}= format_iban(last_paid_request.rib_with_fallback&.iban)
 
   %section.fr-accordion
     %h3.fr-accordion__title
