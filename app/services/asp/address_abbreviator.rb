@@ -3,6 +3,12 @@
 module ASP
   class AddressAbbreviator
     class << self
+      EXTENSION_CODE_ABBREVIATIONS_MAP = {
+        BIS: "B",
+        TER: "T",
+        QUATER: "Q",
+        QUINQUIES: "C"
+      }
       ROAD_TYPE_ABBREVIATIONS_PATH = Rails.root.join("data/postal-addresses-abbreviations/road-type.csv")
       COMMON_NAMES_ABBREVIATIONS_PATH = Rails.root.join("data/postal-addresses-abbreviations/common-names.csv")
 

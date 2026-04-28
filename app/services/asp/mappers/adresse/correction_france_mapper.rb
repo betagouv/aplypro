@@ -16,7 +16,7 @@ module ASP
         end
 
         def codeextensionvoie
-          student.rnvp_data["voieBis"].presence
+          ASP::AddressAbbreviator::EXTENSION_CODE_ABBREVIATIONS_MAP[student.rnvp_data["voieBis"]&.upcase]
         end
 
         def codetypevoie
@@ -33,7 +33,9 @@ module ASP
         end
 
         def cpltdistribution
-          student.rnvp_data["ligne3"].presence
+          [codeextensionvoie, student.rnvp_data["ligne3"]]
+            .compact
+            .join(", ")
         end
 
         def codepostalcedex
