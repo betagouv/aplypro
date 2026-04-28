@@ -4,6 +4,13 @@ module ASP
   module Mappers
     module Adresse
       class CorrectionFranceMapper < FranceMapper
+        EXTENSION_CODE_ABBREVIATIONS_MAP = {
+          "BIS" => "B",
+          "TER" => "T",
+          "QUATER" => "Q",
+          "QUINQUIES" => "C"
+        }.freeze
+
         def numerovoie
           student.rnvp_data["voieNum"].presence
         end
@@ -16,7 +23,7 @@ module ASP
         end
 
         def codeextensionvoie
-          ASP::AddressAbbreviator::EXTENSION_CODE_ABBREVIATIONS_MAP[student.rnvp_data["voieBis"]&.upcase]
+          EXTENSION_CODE_ABBREVIATIONS_MAP[student.rnvp_data["voieBis"]&.upcase]
         end
 
         def codetypevoie
@@ -33,9 +40,11 @@ module ASP
         end
 
         def cpltdistribution
-          [codeextensionvoie, student.rnvp_data["ligne3"]]
+          voie_bis = student.rnvp_data["voieBis"] if codeextensionvoie.nil?
+
+          [voie_bis, student.rnvp_data["ligne3"]]
             .compact
-            .join(", ")
+            .join(" ")
         end
 
         def codepostalcedex

@@ -20,7 +20,7 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
       "idVoie" => "00398234",
       "idHexaposteL5L6" => "457",
       "voieNum" => "1",
-      "voieBis" => "B",
+      "voieBis" => "BIS",
       "voieBisFormeLongue" => "BIS",
       "voieType" => "RUE",
       "voieDen" => "LES MORTURES",
@@ -59,6 +59,12 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
 
       it { expect(mapper.codeextensionvoie).to be_nil }
     end
+
+    context "when voieBis is not in EXTENSION_CODE_ABBREVIATIONS_MAP" do
+      before { rnvp_data["voieBis"] = "E" }
+
+      it { expect(mapper.codeextensionvoie).to be_nil }
+    end
   end
 
   describe "#codetypevoie" do
@@ -93,7 +99,13 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
     context "when ligne3 is blank" do
       before { rnvp_data["ligne3"] = "" }
 
-      it { expect(mapper.cpltdistribution).to be_nil }
+      it { expect(mapper.cpltdistribution).to be_empty }
+    end
+
+    context "when voieBis is not in EXTENSION_CODE_ABBREVIATIONS_MAP" do
+      before { rnvp_data["voieBis"] = "E" }
+
+      it { expect(mapper.cpltdistribution).to eq "E Apt 12" }
     end
   end
 
