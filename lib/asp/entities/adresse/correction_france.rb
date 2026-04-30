@@ -14,9 +14,17 @@ module ASP
           libellevoie
         ]
 
+        EXTENSION_CODE_ABBREVIATIONS = {
+          "BIS" => "B",
+          "TER" => "T",
+          "QUATER" => "Q",
+          "QUINQUIES" => "C"
+        }.freeze
+
+        CODETYPEVOIE_MAX_LENGTH = 4
+
         validates_length_of :libellevoie, maximum: InduFrance::LIBELLEVOIE_MAX_LENGTH
         validates_length_of :cpltdistribution, maximum: InduFrance::ADRESSE_ATTR_MAX_LENGTH, allow_nil: true
-        CODETYPEVOIE_MAX_LENGTH = 4
 
         validates_length_of :codeextensionvoie, maximum: 1, allow_nil: true
         validates_length_of :codetypevoie, maximum: CODETYPEVOIE_MAX_LENGTH, allow_nil: true

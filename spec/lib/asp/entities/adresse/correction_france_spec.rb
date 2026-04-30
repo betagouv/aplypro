@@ -82,5 +82,16 @@ describe ASP::Entities::Adresse::CorrectionFrance, type: :model do
         expect(document.at("cpltdistribution").text).to eq "B Apt 12"
       end
     end
+
+    context "when voieType is not supported by ASP" do
+      let(:rnvp_data) do
+        super().merge("voieNum" => "15", "voieType" => "BOUCLE", "voieDen" => "DES PRES DE SAINT PIERRE")
+      end
+
+      it "moves the full address line to cpltdistribution" do
+        expect(document.at("codetypevoie")).to be_nil
+        expect(document.at("cpltdistribution").text).to eq "15 BOUCLE DES PRES DE SAINT PIERRE"
+      end
+    end
   end
 end

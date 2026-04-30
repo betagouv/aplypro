@@ -4,13 +4,6 @@ module ASP
   module Mappers
     module Adresse
       class CorrectionFranceMapper < FranceMapper
-        EXTENSION_CODE_ABBREVIATIONS_MAP = {
-          "BIS" => "B",
-          "TER" => "T",
-          "QUATER" => "Q",
-          "QUINQUIES" => "C"
-        }.freeze
-
         def numerovoie
           student.rnvp_data["voieNum"].presence
         end
@@ -23,38 +16,51 @@ module ASP
         end
 
         def codeextensionvoie
-          EXTENSION_CODE_ABBREVIATIONS_MAP[student.rnvp_data["voieBis"]&.upcase]
+          Entities::Adresse::CorrectionFrance::EXTENSION_CODE_ABBREVIATIONS[voie_bis]
         end
 
         def codetypevoie
-          return nil if student.rnvp_data["voieType"].blank?
+          return if voie_type.blank?
 
           result = AddressAbbreviator.abbreviate_road_type(
-            student.rnvp_data["voieType"],
+            voie_type,
             max_length: Entities::Adresse::CorrectionFrance::CODETYPEVOIE_MAX_LENGTH
           )
-          return result if result.nil? || result.length <= Entities::Adresse::CorrectionFrance::CODETYPEVOIE_MAX_LENGTH
-
-          # Last resort: strip vowels (e.g. BOUCLE -> BCL) when CSV abbreviation still exceeds 4 chars
-          result.gsub(/[AEIOU]/, "").first(Entities::Adresse::CorrectionFrance::CODETYPEVOIE_MAX_LENGTH)
+          result if result.length <= Entities::Adresse::CorrectionFrance::CODETYPEVOIE_MAX_LENGTH
         end
 
         def cpltdistribution
-          voie_bis = student.rnvp_data["voieBis"] if codeextensionvoie.nil?
-
-          [voie_bis, student.rnvp_data["ligne3"]]
-            .compact
-            .join(" ")
+          unsupported_voie_address ||
+            [fallback_voie_bis, student.rnvp_data["ligne3"].presence].compact.join(" ").presence
         end
 
         def codepostalcedex
           student.rnvp_data["codePostal"]
         end
 
-        # Fallback incase RNVP has no codeInsee
         def codecominsee
           insee_code = student.rnvp_data["codeInsee"].presence || student.address_city_insee_code
           InseeExceptionCodes.transform_insee_code(insee_code)
+        end
+
+        private
+
+        def voie_bis
+          student.rnvp_data["voieBis"].presence&.upcase
+        end
+
+        def voie_type
+          student.rnvp_data["voieType"].presence&.upcase
+        end
+
+        def fallback_voie_bis
+          voie_bis if codeextensionvoie.nil?
+        end
+
+        def unsupported_voie_address
+          return unless voie_type.present? && codetypevoie.nil?
+
+          [student.rnvp_data["voieNum"], voie_type, student.rnvp_data["voieDen"]].compact.join(" ")
         end
       end
     end
