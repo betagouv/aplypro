@@ -20,7 +20,7 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
       "idVoie" => "00398234",
       "idHexaposteL5L6" => "457",
       "voieNum" => "1",
-      "voieBis" => "B",
+      "voieBis" => "BIS",
       "voieBisFormeLongue" => "BIS",
       "voieType" => "RUE",
       "voieDen" => "LES MORTURES",
@@ -59,6 +59,12 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
 
       it { expect(mapper.codeextensionvoie).to be_nil }
     end
+
+    context "when voieBis is not in EXTENSION_CODE_ABBREVIATIONS_MAP" do
+      before { rnvp_data["voieBis"] = "E" }
+
+      it { expect(mapper.codeextensionvoie).to be_nil }
+    end
   end
 
   describe "#codetypevoie" do
@@ -78,12 +84,16 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
       end
     end
 
-    context "when voieType cannot be abbreviated to 4 characters via CSV" do
+    context "when voieType cannot be abbreviated within 4 characters" do
       before { rnvp_data["voieType"] = "BOUCLE" }
 
-      it "strips vowels as a last resort" do
-        expect(mapper.codetypevoie).to eq "BCL"
-      end
+      it { expect(mapper.codetypevoie).to be_nil }
+    end
+
+    context "when voieType cannot be abbreviated within 4 characters in any casing" do
+      before { rnvp_data["voieType"] = "Boucle" }
+
+      it { expect(mapper.codetypevoie).to be_nil }
     end
   end
 
@@ -94,6 +104,31 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
       before { rnvp_data["ligne3"] = "" }
 
       it { expect(mapper.cpltdistribution).to be_nil }
+    end
+
+    context "when voieBis is not in EXTENSION_CODE_ABBREVIATIONS_MAP" do
+      before { rnvp_data["voieBis"] = "E" }
+
+      it { expect(mapper.cpltdistribution).to eq "E Apt 12" }
+    end
+
+    context "when voieType cannot be abbreviated within 4 characters" do
+      before { rnvp_data.merge!("voieNum" => "15", "voieType" => "BOUCLE", "voieDen" => "DES PRES DE SAINT PIERRE") }
+
+      it "uses the full address line and drops ligne3 to stay within the 38-char limit" do
+        expect(mapper.cpltdistribution).to eq "15 BOUCLE DES PRES DE SAINT PIERRE"
+      end
+    end
+
+    context "when voieBis is unmapped and voieType cannot be abbreviated within 4 characters" do
+      before do
+        rnvp_data.merge!("voieBis" => "A", "voieNum" => "15", "voieType" => "BOUCLE",
+                         "voieDen" => "DES PRES DE SAINT PIERRE")
+      end
+
+      it "uses only the unsupported voie address, ignoring voieBis fallback" do
+        expect(mapper.cpltdistribution).to eq "15 BOUCLE DES PRES DE SAINT PIERRE"
+      end
     end
   end
 

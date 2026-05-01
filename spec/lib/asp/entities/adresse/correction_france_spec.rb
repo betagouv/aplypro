@@ -65,12 +65,32 @@ describe ASP::Entities::Adresse::CorrectionFrance, type: :model do
     end
 
     context "when RNVP provides optional fields" do
-      let(:rnvp_data) { super().merge("voieBis" => "B", "voieType" => "RUE", "ligne3" => "Apt 12") }
+      let(:rnvp_data) { super().merge("voieBis" => "Bis", "voieType" => "RUE", "ligne3" => "Apt 12") }
 
       it "includes them in the output" do
         expect(document.at("codeextensionvoie").text).to eq "B"
         expect(document.at("codetypevoie").text).to eq "RUE"
         expect(document.at("cpltdistribution").text).to eq "Apt 12"
+      end
+    end
+
+    context "when RNVP provides data not processed by ASP" do
+      let(:rnvp_data) { super().merge("voieBis" => "B", "voieType" => "RUE", "ligne3" => "Apt 12") }
+
+      it "maps them in the appropriate output" do
+        expect(document.at("codeextensionvoie")).to be_nil
+        expect(document.at("cpltdistribution").text).to eq "B Apt 12"
+      end
+    end
+
+    context "when voieType is not supported by ASP" do
+      let(:rnvp_data) do
+        super().merge("voieNum" => "15", "voieType" => "BOUCLE", "voieDen" => "DES PRES DE SAINT PIERRE")
+      end
+
+      it "moves the full address line to cpltdistribution" do
+        expect(document.at("codetypevoie")).to be_nil
+        expect(document.at("cpltdistribution").text).to eq "15 BOUCLE DES PRES DE SAINT PIERRE"
       end
     end
   end
