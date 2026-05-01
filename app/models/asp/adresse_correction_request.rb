@@ -18,5 +18,16 @@ module ASP
         update!(sent_at: DateTime.now)
       end
     end
+
+    def rejects
+      return {} unless correction_adresse_rejects_file.attached?
+
+      reader_for(:correction_adresse_rejects).to_h { |row| [row.fields.first, row["Motif rejet"]] }
+    end
+
+    def retry_rejects!
+      pfmp_ids = ASP::PaymentRequest.where(id: rejects.keys).map(&:pfmp_id)
+      SendCorrectionAdresseJob.perform_later(pfmp_ids)
+    end
   end
 end
