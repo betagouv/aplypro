@@ -3,18 +3,22 @@
 class ConsiderPaymentRequestsJob < ApplicationJob
   queue_as :payments
 
-  def perform # rubocop:disable Metrics/AbcSize
+  def perform
     requests = ASP::PaymentRequest.to_consider
+    correctable = requests.select { |r| had_recovery?(r.pfmp.student) }
 
-    correctable, normal = requests.partition do |r|
-      r.pfmp.student.pfmps.any? do |pfmp|
-        pfmp.transitions.any? { |transition| transition.to_state.eql?("rectified") }
-      end
-    end
+    ActiveJob.perform_all_later(*build_jobs(requests, correctable))
+  end
 
-    ActiveJob.perform_all_later(
-      SendCorrectionAdresseJob.new(correctable.map { |r| r.pfmp.id }),
-      normal.map { |r| PreparePaymentRequestJob.new(r) }
-    )
+  private
+
+  def build_jobs(requests, correctable)
+    jobs = requests.map { |r| PreparePaymentRequestJob.new(r) }
+    jobs << SendCorrectionAdresseJob.new(correctable.map { |r| r.pfmp.id }) if correctable.any?
+    jobs
+  end
+
+  def had_recovery?(student)
+    student.pfmps.any? { |pfmp| pfmp.payment_requests.any?(&:recovery?) }
   end
 end

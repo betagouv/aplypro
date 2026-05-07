@@ -85,6 +85,17 @@ FactoryBot.define do
       end
     end
 
+    trait :recovery do
+      integrated
+
+      after(:create) do |req|
+        result = build(:asp_rectifications_file, :success, builder_class: ASP::Builder, payment_request: req)
+        record = create(:asp_payment_return)
+        ASP::Readers::RectificationsFileReader.new(io: result, record: record).process!
+        req.reload
+      end
+    end
+
     trait :paid do
       integrated
 
