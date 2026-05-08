@@ -15,6 +15,7 @@ module Academic
 
       @reports = Report.includes(:school_year).order(created_at: :desc)
       @reports = @reports.where(school_year_id: @selected_school_year_id) if @selected_school_year_id.present?
+      @reports = @reports.page(params[:page])
     end
 
     def global_evolution; end
