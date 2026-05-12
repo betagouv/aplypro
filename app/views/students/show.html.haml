@@ -2,10 +2,11 @@
   %ul
     %li
       %strong INE :
-      - if @student.ine_not_found || @student.ine.blank?
-        %span= "L'INE de l'élève ne semble plus être valide. Merci de vous rapprocher de votre support académique pour qu'il rétablisse la situation dans SYGNE et APLyPro par la suite."
-      - else
-        %span= @student.ine
+      %span= @student.ine
+      - if @student.ine_not_found
+        .fr-alert.fr-alert--warning
+          = "L'INE ne semble plus être valide. Merci de vous rapprocher de votre support académique pour qu'il rétablisse la situation dans la Base élèves établissement (BEE) ou du support CNERTA pour rétablir la situation dans COLENTAGRI."
+
     %li
       %strong Date de naissance :
       %span= l(@student.birthdate)
