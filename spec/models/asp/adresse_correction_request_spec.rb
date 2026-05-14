@@ -11,12 +11,37 @@ RSpec.describe ASP::AdresseCorrectionRequest do
   let(:reason) { "mauvais code postal" }
   let(:rejects_csv) { build(:asp_reject, payment_request: asp_payment_request, reason: reason) }
 
-  def attach_rejects_file(record, csv_content)
-    record.correction_adresse_rejects_file.attach(
-      io: StringIO.new(csv_content),
-      filename: "rejects.csv",
-      content_type: "text/csv"
-    )
+  shared_context "with rejects file attached" do
+    before do
+      correction_request.correction_adresse_rejects_file.attach(
+        io: StringIO.new(rejects_csv),
+        filename: "rejects.csv",
+        content_type: "text/csv"
+      )
+    end
+  end
+
+  describe "#complete?" do
+    context "when no integrations file is attached" do
+      it { expect(correction_request.complete?).to be false }
+    end
+
+    context "when the integrations file is attached and there are rejects" do
+      include_context "with rejects file attached"
+
+      before { allow(correction_request.correction_adresse_integrations_file).to receive(:attached?).and_return(true) }
+
+      it { expect(correction_request.complete?).to be false }
+    end
+
+    context "when the integrations file is attached and there are no rejects" do
+      before do
+        allow(correction_request.correction_adresse_integrations_file).to receive(:attached?).and_return(true)
+        allow(correction_request.correction_adresse_rejects_file).to receive(:attached?).and_return(false)
+      end
+
+      it { expect(correction_request.complete?).to be true }
+    end
   end
 
   describe "#rejects" do
@@ -27,7 +52,7 @@ RSpec.describe ASP::AdresseCorrectionRequest do
     end
 
     context "when a rejects file is attached" do
-      before { attach_rejects_file(correction_request, rejects_csv) }
+      include_context "with rejects file attached"
 
       it "returns a hash keyed by payment request id" do
         expect(correction_request.rejects).to include(asp_payment_request.id.to_s => reason)
@@ -40,7 +65,7 @@ RSpec.describe ASP::AdresseCorrectionRequest do
   end
 
   describe "#retry_rejects!" do
-    before { attach_rejects_file(correction_request, rejects_csv) }
+    include_context "with rejects file attached"
 
     it "enqueues a SendCorrectionAdresseJob for the rejected pfmps" do
       expect { correction_request.retry_rejects! }

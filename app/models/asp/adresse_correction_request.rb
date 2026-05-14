@@ -19,6 +19,10 @@ module ASP
       end
     end
 
+    def complete?
+      correction_adresse_integrations_file.attached? && rejects.empty?
+    end
+
     def rejects
       return {} unless correction_adresse_rejects_file.attached?
 
