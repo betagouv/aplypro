@@ -35,6 +35,8 @@
                   %td= report.school_year.to_s
                   %td
                     = link_to "Voir les statistiques", academic_report_path(report), class: "fr-btn fr-btn--sm"
+    .fr-mt-3w.d-flex.justify-content-center
+      = paginate @reports, params: { school_year_id: @selected_school_year_id }
   - else
     .fr-grid-row.fr-grid-row--gutters
       .fr-col-12
