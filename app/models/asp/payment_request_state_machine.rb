@@ -43,6 +43,7 @@ module ASP
       )
     end
 
+
     after_transition(from: :pending, to: :ready) do |payment_request, _|
       payment_request.update!(
         rib: payment_request.pfmp.student.rib(payment_request.pfmp.classe.establishment)

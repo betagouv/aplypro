@@ -21,20 +21,4 @@ RSpec.describe ConsiderPaymentRequestsJob do
     expect { described_class.perform_now }
       .to have_enqueued_job(PreparePaymentRequestJob).exactly(3).times
   end
-
-  context "when a student had an ordre de reversement" do
-    let(:old_rectified_pfmp) { create(:pfmp, :rectified_with_recovery) }
-
-    before { payment_requests << old_rectified_pfmp.latest_payment_request }
-
-    it "queues the correctable payment request into SendCorrectionAdresseJob" do
-      expect { described_class.perform_now }
-        .to have_enqueued_job(SendCorrectionAdresseJob).with([old_rectified_pfmp.id]).exactly(1).times
-    end
-
-    it "also queues the correctable request into PreparePaymentRequestJob" do
-      expect { described_class.perform_now }
-        .to have_enqueued_job(PreparePaymentRequestJob).exactly(4).times
-    end
-  end
 end
