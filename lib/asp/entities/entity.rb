@@ -62,18 +62,17 @@ module ASP
       end
 
       def adresse_entity_class
-        if full_address_required?
-          payment_request.student.lives_in_france? ? Adresse::InduFrance : Adresse::InduEtranger
+        student = payment_request.student
+        pfmp = payment_request.pfmp
+        if pfmp.needs_rnvp_enrichment?
+          Adresse::CorrectionFrance
+        elsif pfmp.needs_correction_address?
+          Adresse::CorrectionEtranger
+        elsif pfmp.rectified?
+          student.lives_in_france? ? Adresse::InduFrance : Adresse::InduEtranger
         else
-          payment_request.student.lives_in_france? ? Adresse::France : Adresse::Etranger
+          student.lives_in_france? ? Adresse::France : Adresse::Etranger
         end
-      end
-
-      private
-
-      def full_address_required?
-        payment_request.pfmp.rectified? ||
-          payment_request.student.pfmps.any? { |pfmp| pfmp.payment_requests.any?(&:recovery?) }
       end
     end
   end

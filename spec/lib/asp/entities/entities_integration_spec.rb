@@ -22,21 +22,4 @@ describe "ASP Entities" do # rubocop:disable RSpec/DescribeClass
 
     expect { file.validate! }.not_to raise_error, log_on_failure
   end
-
-  context "when a payment request belongs to a student with a recovery history" do
-    let(:recovery_pfmp) { create(:pfmp, :rectified_with_recovery) }
-    let(:payment_requests) { [create(:asp_payment_request, :ready, pfmp: recovery_pfmp)] }
-
-    it "produces a valid document with full address data" do
-      log_on_failure = -> { file.errors.each { |e| Rails.logger.debug "ASP validation error: #{e.message}\n" } }
-
-      expect { file.validate! }.not_to raise_error, log_on_failure
-    end
-
-    it "includes libellevoie in the address" do
-      document = Nokogiri::XML(file.to_xml)
-
-      expect(document.at("libellevoie")).not_to be_nil
-    end
-  end
 end

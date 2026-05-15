@@ -179,6 +179,10 @@ class Student < ApplicationRecord # rubocop:disable Metrics/ClassLength
     date >= birthdate + 18.years
   end
 
+  def had_recovery?
+    pfmps.any? { |pfmp| pfmp.payment_requests.any?(&:recovery?) }
+  end
+
   def retry_pfmps_payment_requests!
     pfmps.in_state(:validated).each { |pfmp| PfmpManager.new(pfmp).retry_payment_request! }
   end

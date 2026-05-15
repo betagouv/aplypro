@@ -25,30 +25,49 @@ describe ASP::Entities::Entity do
       it { expect(entity.adresse_entity_class).to eq ASP::Entities::Adresse::Etranger }
     end
 
-    context "when the PFMP is rectified" do
-      let(:payment_request) { create(:pfmp, :rectified).latest_payment_request }
-
-      before { payment_request.pfmp.student.update!(address_country_code: "100") }
-
-      it { expect(entity.adresse_entity_class).to eq ASP::Entities::Adresse::InduFrance }
-    end
-
-    context "when the student had a recovery payment" do
+    context "when the student had a recovery payment and lives in France" do
       let(:recovery_pfmp) { create(:pfmp, :rectified_with_recovery) }
       let(:payment_request) { create(:asp_payment_request, :sendable, pfmp: recovery_pfmp) }
 
       before { recovery_pfmp.student.update!(address_country_code: "100") }
 
-      it { expect(entity.adresse_entity_class).to eq ASP::Entities::Adresse::InduFrance }
+      it { expect(entity.adresse_entity_class).to eq ASP::Entities::Adresse::CorrectionFrance }
     end
 
     context "when the student had a recovery payment and lives abroad" do
       let(:recovery_pfmp) { create(:pfmp, :rectified_with_recovery) }
       let(:payment_request) { create(:asp_payment_request, :sendable, pfmp: recovery_pfmp) }
 
-      before { recovery_pfmp.student.update!(address_country_code: "099") }
+      before { student.update!(address_country_code: "099") }
 
-      it { expect(entity.adresse_entity_class).to eq ASP::Entities::Adresse::InduEtranger }
+      it { expect(entity.adresse_entity_class).to eq ASP::Entities::Adresse::CorrectionEtranger }
+    end
+
+    context "when the pfmp is rectified and overpaid" do
+      let(:paid_pr) { create(:asp_payment_request, :paid) }
+      let(:rectified_pfmp) do
+        paid_pr.asp_payment_request_transitions
+               .find_by(to_state: "paid")
+               .update!(metadata: { "PAIEMENT" => { "MTNET" => "100" } })
+        paid_pr.pfmp.tap do |p|
+          p.update!(amount: 50)
+          p.rectify!
+        end
+      end
+      let(:payment_request) { create(:asp_payment_request, :sendable, pfmp: rectified_pfmp) }
+
+      before { rectified_pfmp.student.update!(address_country_code: "100") }
+
+      it { expect(entity.adresse_entity_class).to eq ASP::Entities::Adresse::CorrectionFrance }
+    end
+
+    context "when the pfmp is rectified but not overpaid and student has no recovery history" do
+      let(:rectified_pfmp) { create(:pfmp, :rectified) }
+      let(:payment_request) { create(:asp_payment_request, :sendable, pfmp: rectified_pfmp) }
+
+      before { rectified_pfmp.student.update!(address_country_code: "100") }
+
+      it { expect(entity.adresse_entity_class).to eq ASP::Entities::Adresse::InduFrance }
     end
   end
 end
