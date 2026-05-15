@@ -7,7 +7,7 @@ RSpec.describe SendCorrectionAdresseJob do
 
   let(:request_double) { instance_double(ASP::AdresseCorrectionRequest, send_correction_adresse!: nil) }
   let(:rnvp_double) { instance_double(Omogen::Rnvp) }
-  let(:pfmps) { create_list(:pfmp, 3, :rectified) }
+  let(:pfmps) { create_list(:pfmp, 3, :rectified_with_recovery) }
   let(:pfmp_ids) { pfmps.map(&:id) }
 
   before do
@@ -24,6 +24,23 @@ RSpec.describe SendCorrectionAdresseJob do
     expect(request_double).to have_received(:send_correction_adresse!)
   end
 
+  it "enriches the recovery students with RNVP data via address" do
+    described_class.perform_now(pfmp_ids)
+
+    expect(rnvp_double).to have_received(:address).exactly(pfmps.count).times
+  end
+
+  context "when the number of students exceeds the batch threshold" do
+    let(:pfmps) { create_list(:pfmp, ASP::RnvpEnricher::BATCH_THRESHOLD + 1, :rectified_with_recovery) }
+
+    it "calls addresses once for all students" do
+      described_class.perform_now(pfmp_ids)
+
+      expect(rnvp_double).to have_received(:addresses).exactly(1).time
+      expect(rnvp_double).not_to have_received(:address)
+    end
+  end
+
   context "when no PFMPs are found" do
     it "does not create an ASP request" do
       described_class.perform_now([])
@@ -38,48 +55,20 @@ RSpec.describe SendCorrectionAdresseJob do
     end
   end
 
-  context "when the number of students is below the batch threshold" do
-    it "calls address once per student" do
-      described_class.perform_now(pfmp_ids)
+  context "when a student has no RNVP data" do
+    before { allow(rnvp_double).to receive(:address).and_return(nil) }
 
-      expect(rnvp_double).to have_received(:address).exactly(pfmps.count).times
-      expect(rnvp_double).not_to have_received(:addresses)
-    end
-
-    context "when a student has no RNVP data" do
-      before { allow(rnvp_double).to receive(:address).and_return(nil) }
-
-      it "raises MissingRnvpDataError" do
-        expect { described_class.perform_now(pfmp_ids) }.to raise_error(ASP::Errors::MissingRnvpDataError)
-      end
-    end
-  end
-
-  context "when the number of students exceeds the batch threshold" do
-    let(:pfmps) { create_list(:pfmp, described_class::RNVP_STUDENT_BATCH_THRESHOLD + 1, :rectified) }
-
-    it "calls addresses once for all students" do
-      described_class.perform_now(pfmp_ids)
-
-      expect(rnvp_double).to have_received(:addresses).exactly(1).time
-      expect(rnvp_double).not_to have_received(:address)
-    end
-
-    context "when a student has no RNVP data" do
-      before { allow(rnvp_double).to receive(:addresses).and_return([]) }
-
-      it "raises MissingRnvpDataError" do
-        expect { described_class.perform_now(pfmp_ids) }.to raise_error(ASP::Errors::MissingRnvpDataError)
-      end
+    it "raises MissingRnvpDataError" do
+      expect { described_class.perform_now(pfmp_ids) }.to raise_error(ASP::Errors::MissingRnvpDataError)
     end
   end
 
   context "when a student has two PFMPs in the list" do # rubocop:disable RSpec/MultipleMemoizedHelpers
     let(:schooling) { create(:schooling) }
     let(:student) { schooling.student }
-    let(:pfmps) { create_list(:pfmp, 2, :rectified, schooling:) }
+    let(:pfmps) { create_list(:pfmp, 2, :rectified_with_recovery, schooling:) }
 
-    it "sends the student only once" do
+    it "sends the student to RNVP only once" do
       described_class.perform_now(pfmp_ids)
 
       expect(rnvp_double).to have_received(:address).with(student).once

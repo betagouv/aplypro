@@ -25,21 +25,13 @@ describe ASP::Entities::Entity do
       it { expect(entity.adresse_entity_class).to eq ASP::Entities::Adresse::Etranger }
     end
 
-    context "when the PFMP is rectified" do
-      let(:payment_request) { create(:pfmp, :rectified).latest_payment_request }
-
-      before { payment_request.pfmp.student.update!(address_country_code: "100") }
-
-      it { expect(entity.adresse_entity_class).to eq ASP::Entities::Adresse::InduFrance }
-    end
-
-    context "when the student had a recovery payment" do
+    context "when the student had a recovery payment and lives in France" do
       let(:recovery_pfmp) { create(:pfmp, :rectified_with_recovery) }
       let(:payment_request) { create(:asp_payment_request, :sendable, pfmp: recovery_pfmp) }
 
       before { recovery_pfmp.student.update!(address_country_code: "100") }
 
-      it { expect(entity.adresse_entity_class).to eq ASP::Entities::Adresse::InduFrance }
+      it { expect(entity.adresse_entity_class).to eq ASP::Entities::Adresse::CorrectionFrance }
     end
 
     context "when the student had a recovery payment and lives abroad" do
@@ -48,7 +40,7 @@ describe ASP::Entities::Entity do
 
       before { recovery_pfmp.student.update!(address_country_code: "099") }
 
-      it { expect(entity.adresse_entity_class).to eq ASP::Entities::Adresse::InduEtranger }
+      it { expect(entity.adresse_entity_class).to eq ASP::Entities::Adresse::CorrectionEtranger }
     end
   end
 end
