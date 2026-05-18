@@ -50,3 +50,9 @@ Fonctionnalité: Gestion des scolarités de l'élève
     Alors je peux voir dans le tableau "Liste des classes"
       | Classe | Décisions d'attribution | Coordonnées bancaires | PFMPs |
       | 1MELEC |                  0 / 9  |                0 / 9  |       |
+
+  Scénario: Les élèves sans INE trouvé ont un message d'avertissement
+    Alors la page ne contient pas "L'INE ne semble plus être valide."
+    Sachant que l'élève "Dupuis Jean" n'a pas d'INE
+    Lorsque je rafraîchis la page
+    Alors la page contient "L'INE ne semble plus être valide."
