@@ -54,8 +54,11 @@ module ASP
     def send!(rerun: false)
       raise ASP::Errors::RerunningParsedRequest if results_attached?
 
-      ActiveRecord::Base.transaction do
-        @asp_file = ASP::Entities::Fichier.new(asp_payment_requests)
+      requests = asp_payment_requests.to_a
+      ASP::RnvpEnricher.enrich_recovery_students!(requests)
+
+      ApplicationRecord.transaction do
+        @asp_file = ASP::Entities::Fichier.new(requests)
 
         @asp_file.validate!
 

@@ -4,35 +4,14 @@ class SendCorrectionAdresseJob < ApplicationJob
   queue_as :payments
   sidekiq_options retry: false
 
-  RNVP_STUDENT_BATCH_THRESHOLD = 10
-
   def perform(pfmp_ids)
     payment_requests = Pfmp.where(id: pfmp_ids)
                            .filter_map { |pfmp| pfmp.payment_requests.order(:created_at).last }
 
     return if payment_requests.empty?
 
-    enrich_with_rnvp!(payment_requests.map(&:student))
+    ASP::RnvpEnricher.enrich_recovery_students!(payment_requests)
 
     ASP::AdresseCorrectionRequest.create!.send_correction_adresse!(payment_requests)
-  end
-
-  private
-
-  def enrich_with_rnvp!(students)
-    rnvp = Omogen::Rnvp.new
-    data = fetch_rnvp_data(rnvp, students)
-    students.each do |s|
-      s.rnvp_data = data[s.id] || raise(ASP::Errors::MissingRnvpDataError, "No RNVP data for student #{s.id}")
-    end
-  end
-
-  def fetch_rnvp_data(rnvp, students)
-    unique_students = students.uniq
-    if unique_students.count > RNVP_STUDENT_BATCH_THRESHOLD
-      rnvp.addresses(unique_students).index_by { |address| address["id"] }
-    else
-      unique_students.to_h { |s| [s.id, rnvp.address(s)] }
-    end
   end
 end
