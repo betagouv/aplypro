@@ -21,7 +21,7 @@ end
 
 Alors("je devrais voir l'académie {string} dans les options") do |academy_code|
   academy_label = Establishment::ACADEMY_LABELS[academy_code]
-  expect(page).to have_content("#{academy_label} (#{academy_code})")
+  expect(page).to have_text("#{academy_label} (#{academy_code})")
 end
 
 Sachantque("il existe {int} rapports") do |count|
