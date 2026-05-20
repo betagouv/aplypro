@@ -7,7 +7,8 @@ module Stats
         def initialize(start_year)
           super(
             column: :amount,
-            all: Pfmp.for_year(start_year)
+            all: Pfmp
+                 .for_year(start_year)
                  .joins(:schooling)
                  .where.not(schoolings: { extended_end_date: nil })
                  .where("pfmps.end_date > schoolings.end_date")

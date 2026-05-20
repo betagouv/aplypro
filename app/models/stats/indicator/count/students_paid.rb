@@ -6,7 +6,8 @@ module Stats
       class StudentsPaid < Stats::Count
         def initialize(start_year)
           super(
-            all: Schooling.for_year(start_year)
+            all: Schooling
+                 .for_year(start_year)
                  .joins(pfmps: { payment_requests: :asp_payment_request_transitions })
                  .where(asp_payment_request_transitions: { most_recent: true, to_state: "paid" })
                  .select(:student_id)

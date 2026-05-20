@@ -17,7 +17,7 @@ Quand("je clique sur le premier {string}") do |label|
 end
 
 Alors("la page contient {string}") do |content|
-  expect(page).to have_content(content).or(have_button(content))
+  expect(page).to have_text(content).or(have_button(content))
 end
 
 Alors("la page contient un bouton {string} désactivé") do |content|
@@ -25,7 +25,7 @@ Alors("la page contient un bouton {string} désactivé") do |content|
 end
 
 Alors("la page ne contient pas {string}") do |content|
-  expect(page).to have_no_content(content)
+  expect(page).to have_no_text(content)
 end
 
 Alors("le titre de la page contient {string}") do |text|
@@ -80,7 +80,7 @@ end
 
 Alors("la rangée {string} contient {string}") do |row, content|
   within("tr", text: row) do
-    expect(page).to have_content(content)
+    expect(page).to have_text(content)
   end
 end
 
@@ -97,7 +97,7 @@ Quand("je clique sur {string} dans la classe {string}") do |link, title|
 end
 
 Alors("la section pour la classe {string} contient {string}") do |title, text|
-  expect(page.find("section", text: title)).to have_content(text).or(have_button(text))
+  expect(page.find("section", text: title)).to have_text(text).or(have_button(text))
 end
 
 Alors("la section pour la classe {string} contient le tableau {string}") do |title, caption, table|

@@ -7,7 +7,8 @@ module Stats
         def initialize(start_year)
           super(
             column: "pfmps.amount",
-            all: ASP::PaymentRequest.for_year(start_year)
+            all: ASP::PaymentRequest
+                 .for_year(start_year)
                  .joins(:pfmp)
                  .joins(:asp_payment_request_transitions)
                  .where(asp_payment_request_transitions: { most_recent: true })
