@@ -4,6 +4,8 @@ class Student
   module Mappers
     class CSV < Base
       def map_schooling!(classe, student, entry)
+        return if entry["date_début"].present? && DateTime.parse(entry["date_début"]) > DateTime.now
+
         schooling = Schooling.find_or_initialize_by(classe: classe, student: student) do |sc|
           sc.start_date = entry["date_début"]
           sc.end_date = entry["date_fin"]

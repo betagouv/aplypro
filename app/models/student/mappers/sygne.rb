@@ -6,6 +6,8 @@ class Student
       def map_schooling!(classe, student, entry)
         attributes = map_schooling_attributes(entry).slice(:status, :start_date, :end_date)
 
+        return if attributes[:start_date].present? && DateTime.parse(attributes[:start_date]) > DateTime.now
+
         schooling = Schooling.find_or_initialize_by(classe: classe, student: student)
 
         merge_schooling_attributes(schooling, attributes)
