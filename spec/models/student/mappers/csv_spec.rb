@@ -43,4 +43,25 @@ describe Student::Mappers::CSV do
       expect { mapper.new(data, uai).parse! }.not_to raise_error
     end
   end
+
+  context "when the schooling has not yet begun" do
+    let(:data) do
+      normal_payload.tap do |payload|
+        payload.first["ine"] = "123456"
+        payload.first["date_début"] = "2026-05-05"
+      end
+    end
+    let(:student) { Student.find_by(ine: "123456") }
+
+    around do |example|
+      Timecop.safe_mode = false
+      Timecop.freeze("01-05-2026") do
+        example.run
+      end
+    end
+
+    before { mapper.new(data, uai).parse! }
+
+    it { expect(student.schoolings).to be_empty }
+  end
 end

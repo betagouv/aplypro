@@ -3,10 +3,9 @@
 class Student
   module Mappers
     class Sygne < Base
-      def map_schooling!(classe, student, entry)
+      def map_schooling!(classe, student, entry) # rubocop:disable Metrics/AbcSize
         attributes = map_schooling_attributes(entry).slice(:status, :start_date, :end_date)
-
-        return if attributes[:start_date].present? && DateTime.parse(attributes[:start_date]) > DateTime.now
+        return if attributes[:start_date].present? && Date.parse(attributes[:start_date]) > Date.current
 
         schooling = Schooling.find_or_initialize_by(classe: classe, student: student)
 

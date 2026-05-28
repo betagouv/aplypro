@@ -130,5 +130,28 @@ describe Student::Mappers::Sygne do
       it { expect(student.current_schooling.end_date).to be_nil }
       it { expect(student.schoolings.count).to eq(1) }
     end
+
+    context "when the schooling has not yet begun" do
+      let(:mapper) { described_class.new(data, uai) }
+      let(:data) do
+        [
+          build(:sygne_student, classe: "1MELEC", ine: "123456", dateDebSco: "05-05-2026"),
+          build(:sygne_student, classe: "1MELEC", ine: "123456", dateDebSco: "01-05-2026")
+        ]
+    end
+      let(:student) { Student.find_by(ine: "123456") }
+
+      around do |example|
+        Timecop.safe_mode = false
+        Timecop.freeze("01-05-2026") do
+          example.run
+        end
+      end
+
+      before { mapper.parse! }
+
+      it { expect(student.schoolings.count).to eq(1) }
+      it { expect(student.schoolings.first.start_date).to eq(Date.parse("01-05-2026")) }
+    end
   end
 end

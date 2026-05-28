@@ -24,8 +24,7 @@ class Student
 
       def map_schooling!(classe, student, entry)
         attributes = map_schooling_attributes(entry)
-
-        return if attributes[:start_date].present? && DateTime.parse(attributes[:start_date]) > DateTime.now
+        return if attributes[:start_date].present? && Date.parse(attributes[:start_date]) > Date.current
 
         schooling = Schooling.find_or_initialize_by(classe: classe, student: student)
 
