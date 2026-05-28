@@ -138,7 +138,7 @@ describe Student::Mappers::Sygne do
           build(:sygne_student, classe: "1MELEC", ine: "123456", dateDebSco: "05-05-2026"),
           build(:sygne_student, classe: "1MELEC", ine: "123456", dateDebSco: "01-05-2026")
         ]
-    end
+      end
       let(:student) { Student.find_by(ine: "123456") }
 
       around do |example|

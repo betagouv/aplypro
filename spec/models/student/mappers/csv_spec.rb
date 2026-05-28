@@ -44,7 +44,7 @@ describe Student::Mappers::CSV do
     end
   end
 
-  context "when the schooling has not yet begun" do
+  context "when the schooling has not yet begun" do # rubocop:disable RSpec/MultipleMemoizedHelpers
     let(:data) do
       normal_payload.tap do |payload|
         payload.first["ine"] = "123456"
