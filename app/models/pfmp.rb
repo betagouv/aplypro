@@ -88,6 +88,14 @@ class Pfmp < ApplicationRecord # rubocop:disable Metrics/ClassLength
     in_state?(:rectified)
   end
 
+  def needs_correction_address?
+    student.had_recovery? || (rectified? && overpaid?)
+  end
+
+  def needs_rnvp_enrichment?
+    student.lives_in_france? && needs_correction_address?
+  end
+
   def relative_index
     schooling.pfmps.order(created_at: :asc).pluck(:id).find_index(id)
   end

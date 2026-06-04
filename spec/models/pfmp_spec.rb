@@ -413,6 +413,72 @@ RSpec.describe Pfmp do
     end
   end
 
+  describe "#needs_correction_address?" do
+    context "when the student had a recovery payment" do
+      let(:pfmp) { create(:pfmp, :rectified_with_recovery) }
+
+      it { expect(pfmp.needs_correction_address?).to be true }
+    end
+
+    context "when the pfmp is rectified and overpaid" do
+      let(:pfmp) do
+        pr = create(:asp_payment_request, :paid)
+        pr.asp_payment_request_transitions
+          .find_by(to_state: "paid")
+          .update!(metadata: { "PAIEMENT" => { "MTNET" => "100" } })
+        pr.pfmp.tap { |p| p.update!(amount: 50) && p.rectify! }
+      end
+
+      it { expect(pfmp.needs_correction_address?).to be true }
+    end
+
+    context "when the pfmp is rectified but not overpaid and student has no recovery" do
+      let(:pfmp) { create(:pfmp, :rectified) }
+
+      it { expect(pfmp.needs_correction_address?).to be false }
+    end
+
+    context "when the pfmp is not rectified and student has no recovery" do
+      it { expect(pfmp.needs_correction_address?).to be false }
+    end
+  end
+
+  describe "#needs_rnvp_enrichment?" do
+    context "when the student had a recovery and lives in France" do
+      let(:pfmp) { create(:pfmp, :rectified_with_recovery) }
+
+      before { pfmp.student.update!(address_country_code: "100") }
+
+      it { expect(pfmp.needs_rnvp_enrichment?).to be true }
+    end
+
+    context "when the student had a recovery but lives abroad" do
+      let(:pfmp) { create(:pfmp, :rectified_with_recovery) }
+
+      before { pfmp.student.update!(address_country_code: "099") }
+
+      it { expect(pfmp.needs_rnvp_enrichment?).to be false }
+    end
+
+    context "when the pfmp is rectified and overpaid and student lives in France" do
+      let(:pfmp) do
+        pr = create(:asp_payment_request, :paid)
+        pr.asp_payment_request_transitions
+          .find_by(to_state: "paid")
+          .update!(metadata: { "PAIEMENT" => { "MTNET" => "100" } })
+        pr.pfmp.tap { |p| p.update!(amount: 50) && p.rectify! }
+      end
+
+      before { pfmp.student.update!(address_country_code: "100") }
+
+      it { expect(pfmp.needs_rnvp_enrichment?).to be true }
+    end
+
+    context "when none of the conditions apply" do
+      it { expect(pfmp.needs_rnvp_enrichment?).to be false }
+    end
+  end
+
   describe "rectified amount validation" do
     let(:paid_amount) { 100 }
     let(:pfmp) do

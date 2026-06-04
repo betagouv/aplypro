@@ -50,6 +50,15 @@ FactoryBot.define do
       end
     end
 
+    trait :rectified_with_recovery do
+      validated
+
+      after(:create) do |pfmp|
+        create(:asp_payment_request, :recovery, pfmp: pfmp)
+        pfmp.reload.rectify!
+      end
+    end
+
     after(:build) do |pfmp, _|
       PfmpManager.new(pfmp).update!(day_count: pfmp.day_count) if pfmp.day_count.present?
     end
