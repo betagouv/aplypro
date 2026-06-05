@@ -48,3 +48,15 @@ end
 Quand("je clique sur le lien de pagination {int}") do |page_number|
   click_link(page_number.to_s, href: /page=#{page_number}/)
 end
+
+Sachantque("il existe un élève sans date de fin de scolarité pour l'académie {string}") do |academy_code|
+  school_year = SchoolYear.current
+  establishment = FactoryBot.create(:establishment, academy_code: academy_code)
+  classe = FactoryBot.create(:classe, establishment: establishment, school_year: school_year)
+  schooling = FactoryBot.create(:schooling, classe: classe)
+  @student = schooling.student
+end
+
+Quand("je consulte la fiche de cet élève dans l'espace académique") do
+  visit academic_student_path(@student)
+end
