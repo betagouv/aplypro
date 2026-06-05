@@ -36,8 +36,8 @@
             %td= schooling.classe.school_year.to_s
             %td= link_to schooling.classe.label, academic_class_path(schooling.classe), class: "fr-link"
             %td= link_to schooling.establishment.name, academic_establishment_path(schooling.establishment), class: "fr-link"
-            %td= l(schooling.start_date)
-            %td= l(schooling.end_date)
+            %td= schooling.start_date ? l(schooling.start_date) : "N/A"
+            %td= schooling.end_date ? l(schooling.end_date) : "N/A"
             %td= attributive_decision_status_badge(schooling)
 
 %section.fr-pb-3w
