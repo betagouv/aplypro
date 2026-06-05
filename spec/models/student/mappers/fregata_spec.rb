@@ -222,16 +222,13 @@ describe Student::Mappers::Fregata do
       let(:student) { Student.find_by(ine: "123456") }
 
       around do |example|
-        Timecop.safe_mode = false
-        Timecop.freeze("01-05-2026") do
-          example.run
-        end
+        Timecop.freeze(Date.new(2026, 5, 1)) { example.run }
       end
 
       before { mapper.new(data, uai).parse! }
 
       it { expect(student.schoolings.count).to eq(1) }
-      it { expect(student.schoolings.first.start_date).to eq(Date.parse("01-05-2026")) }
+      it { expect(student.schoolings.first.start_date).to eq(Date.new(2026, 5, 1)) }
     end
   end
 end

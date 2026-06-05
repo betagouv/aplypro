@@ -54,10 +54,7 @@ describe Student::Mappers::CSV do
     let(:student) { Student.find_by(ine: "123456") }
 
     around do |example|
-      Timecop.safe_mode = false
-      Timecop.freeze("01-05-2026") do
-        example.run
-      end
+      Timecop.freeze(Date.new(2026, 5, 1)) { example.run }
     end
 
     before { mapper.new(data, uai).parse! }
