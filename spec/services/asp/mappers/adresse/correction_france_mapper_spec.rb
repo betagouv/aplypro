@@ -157,4 +157,16 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
       end
     end
   end
+
+  describe "#extract_rnvp_data" do
+    it { expect(mapper.send(:extract_rnvp_data, "voieNum")).to eq "1" }
+    it { expect(mapper.send(:extract_rnvp_data, "ligne3")).to eq "Apt 12" }
+
+    context "when rnvp_data is nil" do
+      let(:rnvp_data) { nil }
+
+      it { expect(mapper.send(:extract_rnvp_data, "voieNum")).to be_nil }
+      it { expect(mapper.send(:extract_rnvp_data, "ligne3")).to be_nil }
+    end
+  end
 end
