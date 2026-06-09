@@ -165,8 +165,8 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
     context "when rnvp_data is nil" do
       let(:rnvp_data) { nil }
 
-      it { expect(mapper.send(:extract_rnvp_data, "voieNum")).to be_nil }
-      it { expect(mapper.send(:extract_rnvp_data, "ligne3")).to be_nil }
+      it { expect { mapper.send(:extract_rnvp_data, "voieNum") }.to raise_error(ASP::Errors::MissingRnvpDataError) }
+      it { expect { mapper.send(:extract_rnvp_data, "ligne3") }.to raise_error(ASP::Errors::MissingRnvpDataError) }
     end
   end
 end

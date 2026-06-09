@@ -46,7 +46,9 @@ module ASP
         private
 
         def extract_rnvp_data(data)
-          student.rnvp_data&.dig(data)
+          raise ASP::Errors::MissingRnvpDataError, "No RNVP data for student #{student.id}" if student.rnvp_data.nil?
+
+          student.rnvp_data[data]
         end
 
         def voie_bis
