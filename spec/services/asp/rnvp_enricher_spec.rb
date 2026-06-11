@@ -23,7 +23,8 @@ describe ASP::RnvpEnricher do
       it "enriches the student with RNVP data" do
         described_class.enrich_recovery_students!(payment_requests)
 
-        expect(payment_requests.first.student.rnvp_data).to be_present
+        student = payment_requests.first.student
+        expect(Rails.cache.read([described_class::CACHE_KEY_PREFIX, student.id])).to be_present
       end
 
       it "calls RNVP" do
@@ -81,11 +82,10 @@ describe ASP::RnvpEnricher do
         expect(rnvp_double).to have_received(:address).with(schooling.student).once
       end
 
-      it "sets rnvp_data on both payment requests' student" do
+      it "caches RNVP data for the shared student" do
         described_class.enrich_recovery_students!(payment_requests)
 
-        expect(payment_requests[0].student.rnvp_data).to be_present
-        expect(payment_requests[1].student.rnvp_data).to be_present
+        expect(Rails.cache.read([described_class::CACHE_KEY_PREFIX, schooling.student.id])).to be_present
       end
     end
   end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Quand("je me rends sur la page d'accueil") do
+  Rails.cache.clear
   visit "/home"
 end
 
@@ -149,6 +150,7 @@ Alors("debug") do
 end
 
 Quand("je rafraîchis la page") do
+  Rails.cache.clear
   visit current_path
 end
 

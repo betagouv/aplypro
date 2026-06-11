@@ -32,7 +32,7 @@ describe ASP::Entities::Adresse::CorrectionFrance, type: :model do
     }
   end
 
-  before { request.student.rnvp_data = rnvp_data }
+  before { Rails.cache.write([ASP::RnvpEnricher::CACHE_KEY_PREFIX, request.student.id], rnvp_data) }
 
   describe "validation" do
     subject { described_class.from_payment_request(request) }
