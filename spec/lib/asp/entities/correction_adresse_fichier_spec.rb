@@ -9,15 +9,14 @@ describe ASP::Entities::CorrectionAdresseFichier do
 
   before do
     payment_requests.each do |pr|
-      pr.student.rnvp_data = {
-        "ligne3" => "",
-        "voieNum" => "1",
-        "voieBis" => "",
-        "voieType" => "",
-        "voieDen" => "RUE DE LA PAIX",
-        "codePostal" => pr.student.address_postal_code,
-        "codeInsee" => pr.student.address_city_insee_code
-      }
+      Rails.cache.write([ASP::RnvpEnricher::CACHE_KEY_PREFIX, pr.student.id],
+                        "ligne3" => "",
+                        "voieNum" => "1",
+                        "voieBis" => "",
+                        "voieType" => "",
+                        "voieDen" => "RUE DE LA PAIX",
+                        "codePostal" => pr.student.address_postal_code,
+                        "codeInsee" => pr.student.address_city_insee_code)
     end
   end
 

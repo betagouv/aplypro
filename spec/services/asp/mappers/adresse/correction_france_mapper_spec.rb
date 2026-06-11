@@ -35,13 +35,13 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
     }
   end
 
-  before { student.rnvp_data = rnvp_data }
+  before { Rails.cache.write([ASP::RnvpEnricher::CACHE_KEY_PREFIX, student.id], rnvp_data) }
 
   describe "#numerovoie" do
     it { expect(mapper.numerovoie).to eq "1" }
 
     context "when voieNum is blank" do
-      before { rnvp_data["voieNum"] = "" }
+      let(:rnvp_data) { super().merge("voieNum" => "") }
 
       it { expect(mapper.numerovoie).to be_nil }
     end
@@ -55,13 +55,13 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
     it { expect(mapper.codeextensionvoie).to eq "B" }
 
     context "when voieBis is blank" do
-      before { rnvp_data["voieBis"] = "" }
+      let(:rnvp_data) { super().merge("voieBis" => "") }
 
       it { expect(mapper.codeextensionvoie).to be_nil }
     end
 
     context "when voieBis is not in EXTENSION_CODE_ABBREVIATIONS_MAP" do
-      before { rnvp_data["voieBis"] = "E" }
+      let(:rnvp_data) { super().merge("voieBis" => "E") }
 
       it { expect(mapper.codeextensionvoie).to be_nil }
     end
@@ -71,13 +71,13 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
     it { expect(mapper.codetypevoie).to eq "RUE" }
 
     context "when voieType is blank" do
-      before { rnvp_data["voieType"] = "" }
+      let(:rnvp_data) { super().merge("voieType" => "") }
 
       it { expect(mapper.codetypevoie).to be_nil }
     end
 
     context "when voieType exceeds 4 characters" do
-      before { rnvp_data["voieType"] = "AVENUE" }
+      let(:rnvp_data) { super().merge("voieType" => "AVENUE") }
 
       it "abbreviates to fit within 4 characters without stripping vowels" do
         expect(mapper.codetypevoie).to eq "AV"
@@ -85,13 +85,13 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
     end
 
     context "when voieType cannot be abbreviated within 4 characters" do
-      before { rnvp_data["voieType"] = "BOUCLE" }
+      let(:rnvp_data) { super().merge("voieType" => "BOUCLE") }
 
       it { expect(mapper.codetypevoie).to be_nil }
     end
 
     context "when voieType cannot be abbreviated within 4 characters in any casing" do
-      before { rnvp_data["voieType"] = "Boucle" }
+      let(:rnvp_data) { super().merge("voieType" => "Boucle") }
 
       it { expect(mapper.codetypevoie).to be_nil }
     end
@@ -101,19 +101,21 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
     it { expect(mapper.cpltdistribution).to eq "Apt 12" }
 
     context "when ligne3 is blank" do
-      before { rnvp_data["ligne3"] = "" }
+      let(:rnvp_data) { super().merge("ligne3" => "") }
 
       it { expect(mapper.cpltdistribution).to be_nil }
     end
 
     context "when voieBis is not in EXTENSION_CODE_ABBREVIATIONS_MAP" do
-      before { rnvp_data["voieBis"] = "E" }
+      let(:rnvp_data) { super().merge("voieBis" => "E") }
 
       it { expect(mapper.cpltdistribution).to eq "E Apt 12" }
     end
 
     context "when voieType cannot be abbreviated within 4 characters" do
-      before { rnvp_data.merge!("voieNum" => "15", "voieType" => "BOUCLE", "voieDen" => "DES PRES DE SAINT PIERRE") }
+      let(:rnvp_data) do
+        super().merge("voieNum" => "15", "voieType" => "BOUCLE", "voieDen" => "DES PRES DE SAINT PIERRE")
+      end
 
       it "uses the full address line and drops ligne3 to stay within the 38-char limit" do
         expect(mapper.cpltdistribution).to eq "15 BOUCLE DES PRES DE SAINT PIERRE"
@@ -121,9 +123,9 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
     end
 
     context "when voieBis is unmapped and voieType cannot be abbreviated within 4 characters" do
-      before do
-        rnvp_data.merge!("voieBis" => "A", "voieNum" => "15", "voieType" => "BOUCLE",
-                         "voieDen" => "DES PRES DE SAINT PIERRE")
+      let(:rnvp_data) do
+        super().merge("voieBis" => "A", "voieNum" => "15", "voieType" => "BOUCLE",
+                      "voieDen" => "DES PRES DE SAINT PIERRE")
       end
 
       it "uses only the unsupported voie address, ignoring voieBis fallback" do
@@ -149,7 +151,7 @@ describe ASP::Mappers::Adresse::CorrectionFranceMapper do
     end
 
     context "when RNVP does not return a codeInsee" do
-      before { rnvp_data["codeInsee"] = nil }
+      let(:rnvp_data) { super().merge("codeInsee" => nil) }
 
       it "falls back to the student stored insee code" do
         mapper.codecominsee
