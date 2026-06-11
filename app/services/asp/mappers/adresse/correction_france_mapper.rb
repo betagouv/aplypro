@@ -5,12 +5,12 @@ module ASP
     module Adresse
       class CorrectionFranceMapper < FranceMapper
         def numerovoie
-          extract_rnvp_data("voieNum").presence
+          student.rnvp_data["voieNum"].presence
         end
 
         def libellevoie
           AddressAbbreviator.abbreviate_address_line(
-            extract_rnvp_data("voieDen"),
+            student.rnvp_data["voieDen"],
             max_length: Entities::Adresse::InduFrance::LIBELLEVOIE_MAX_LENGTH
           )
         end
@@ -31,30 +31,26 @@ module ASP
 
         def cpltdistribution
           unsupported_voie_address ||
-            [fallback_voie_bis, extract_rnvp_data("ligne3").presence].compact.join(" ").presence
+            [fallback_voie_bis, student.rnvp_data["ligne3"].presence].compact.join(" ").presence
         end
 
         def codepostalcedex
-          extract_rnvp_data("codePostal")
+          student.rnvp_data["codePostal"]
         end
 
         def codecominsee
-          insee_code = extract_rnvp_data("codeInsee").presence || student.address_city_insee_code
+          insee_code = student.rnvp_data["codeInsee"].presence || student.address_city_insee_code
           InseeExceptionCodes.transform_insee_code(insee_code)
         end
 
         private
 
-        def extract_rnvp_data(data)
-          student.rnvp_data&.dig(data)
-        end
-
         def voie_bis
-          extract_rnvp_data("voieBis").presence&.upcase
+          student.rnvp_data["voieBis"].presence&.upcase
         end
 
         def voie_type
-          extract_rnvp_data("voieType").presence&.upcase
+          student.rnvp_data["voieType"].presence&.upcase
         end
 
         def fallback_voie_bis
@@ -64,7 +60,7 @@ module ASP
         def unsupported_voie_address
           return unless voie_type.present? && codetypevoie.nil?
 
-          [extract_rnvp_data("voieNum"), voie_type, extract_rnvp_data("voieDen")].compact.join(" ")
+          [student.rnvp_data["voieNum"], voie_type, student.rnvp_data["voieDen"]].compact.join(" ")
         end
       end
     end
