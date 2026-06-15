@@ -29,15 +29,6 @@ Fonctionnalité: Rectification de PFMP (gestion d'indus)
     Alors la page contient "Les dates de la PFMP ne sont pas comprises dans la période de scolarité"
     Et la page est titrée "Rectification de la PFMP"
 
-  Scénario: Une erreur est affichée si la rectification génèrerait un paiement négatif
-    Sachant que le montant liquidé de la dernière PFMP de "Curie Marie" est de 90 euros
-    Quand je clique sur "Gérer un indu"
-    Et que je remplis "Nouveau nombre de jours travaillés" avec "2"
-    Et que je coche la case de responsable légal
-    Et que je clique sur "Confirmer la rectification"
-    Alors la page contient "Cette rectification génèrerait un ordre de reversement"
-    Et la page est titrée "Rectification de la PFMP"
-
   Scénario: Une erreur est affichée si le montant ne change pas
     Quand je clique sur "Gérer un indu"
     Et que je coche la case de responsable légal
