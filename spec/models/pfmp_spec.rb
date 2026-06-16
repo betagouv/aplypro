@@ -285,6 +285,12 @@ RSpec.describe Pfmp do
       end
     end
 
+    context "when schooling has no start date" do
+      before { pfmp.schooling.update!(start_date: nil) }
+
+      it { expect(pfmp.within_schooling_dates?).to be true }
+    end
+
     context "when schooling is closed" do
       before do
         pfmp.schooling.update!(end_date: "#{SchoolYear.current.start_year}-09-29")
