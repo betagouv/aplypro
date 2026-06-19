@@ -11,7 +11,6 @@ module ASP
     class MaxRequestsPerDayLimitReached < Error; end
     class IncompletePaymentRequestError < Error; end
     class FundingNotAvailableError < Error; end
-    class NegativeRectificationError < Error; end
     class MissingEstablishmentCommuneCodeError < Error; end
     class MissingEstablishmentPostalCodeError < Error; end
     class MissingRnvpDataError < Error; end
