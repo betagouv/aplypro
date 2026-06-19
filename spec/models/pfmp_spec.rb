@@ -269,44 +269,40 @@ RSpec.describe Pfmp do
 
   describe "within_schooling_dates?" do
     context "when schooling is open" do
-      it "returns true" do
-        expect(pfmp.within_schooling_dates?).to be true
+      it { expect(pfmp.within_schooling_dates?).to be true }
+    end
+
+    context "when the start date of the pfmp is inferior to start_date of schooling" do
+      before do
+        pfmp.schooling.update!(start_date: "#{SchoolYear.current.start_year}-10-10")
+        pfmp.update!(start_date: pfmp.schooling.start_date - 1.day, end_date: pfmp.schooling.start_date + 30.days)
       end
 
-      context "when the start date of the pfmp is inferior to start_date of schooling" do
-        before do
-          pfmp.schooling.update!(start_date: "#{SchoolYear.current.start_year}-10-10")
-          pfmp.update!(start_date: pfmp.schooling.start_date - 1.day, end_date: pfmp.schooling.start_date + 30.days)
-        end
+      it { expect(pfmp.within_schooling_dates?).to be false }
+    end
 
-        it "returns false" do
-          expect(pfmp.within_schooling_dates?).to be false
-        end
-      end
+    context "when schooling has no start date" do
+      before { pfmp.schooling.update!(start_date: nil) }
+
+      it { expect(pfmp.within_schooling_dates?).to be true }
     end
 
     context "when schooling is closed" do
+      before { pfmp.schooling.update!(end_date: "#{SchoolYear.current.start_year}-09-29") }
+
+      it { expect(pfmp.within_schooling_dates?).to be true }
+    end
+
+    context "when the dates of the schooling dont cover the pfmp" do
       before do
-        pfmp.schooling.update!(end_date: "#{SchoolYear.current.start_year}-09-29")
+        pfmp.schooling.update!(
+          start_date: "#{SchoolYear.current.end_year}-03-01",
+          end_date: "#{SchoolYear.current.end_year}-04-01"
+        )
+        pfmp.update!(start_date: pfmp.schooling.start_date - 1.day, end_date: pfmp.schooling.start_date + 30.days)
       end
 
-      it "returns true" do
-        expect(pfmp.within_schooling_dates?).to be true
-      end
-
-      context "when the dates of the schooling dont cover the pfmp" do
-        before do
-          pfmp.schooling.update!(
-            start_date: "#{SchoolYear.current.end_year}-03-01",
-            end_date: "#{SchoolYear.current.end_year}-04-01"
-          )
-          pfmp.update!(start_date: pfmp.schooling.start_date - 1.day, end_date: pfmp.schooling.start_date + 30.days)
-        end
-
-        it "returns false" do
-          expect(pfmp.within_schooling_dates?).to be false
-        end
-      end
+      it { expect(pfmp.within_schooling_dates?).to be false }
     end
   end
 
