@@ -7,9 +7,9 @@
       %caption #{@students.total_count} résultats trouvés pour la recherche : #{@name}
       %thead
         %th{scope: "col"}
-          = sortable_column_header(column: "name", label: "Élèves", path: search_results_students_path(name: @name, sort: "name"), current_sort: params[:sort])
+          = sortable_column_header(column: "name", label: "Élèves", path: search_results_academic_students_path(name: @name, sort: "name"), current_sort: params[:sort])
         %th{scope: "col"}
-          = sortable_column_header(column: "establishment", label: "Établissement", path: search_results_students_path(name: @name, sort: "establishment"), current_sort: params[:sort])
+          = sortable_column_header(column: "establishment", label: "Établissement", path: search_results_academic_students_path(name: @name, sort: "establishment"), current_sort: params[:sort])
         %th{scope: "col"} Dernière classe
       %tbody
         - @students.each do |student|
