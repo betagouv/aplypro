@@ -5,6 +5,7 @@ class Student
     class Sygne < Base
       def map_schooling!(classe, student, entry)
         attributes = map_schooling_attributes(entry).slice(:status, :start_date, :end_date)
+        return if future_start_date?(attributes[:start_date])
 
         schooling = Schooling.find_or_initialize_by(classe: classe, student: student)
 

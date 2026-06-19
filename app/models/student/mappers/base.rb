@@ -154,6 +154,10 @@ class Student
 
       private
 
+      def future_start_date?(start_date)
+        start_date.present? && Date.parse(start_date) > Date.current
+      end
+
       def infer_schooling_closing_date(schooling, current_schooling) # rubocop:disable Metrics/AbcSize
         same_year       = schooling.school_year.start_year == current_schooling.school_year.start_year
         current_year    = SchoolYear.current == current_schooling.school_year

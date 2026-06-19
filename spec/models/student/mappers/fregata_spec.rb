@@ -211,5 +211,24 @@ describe Student::Mappers::Fregata do
         expect { mapper.new(data, uai).parse! }.not_to raise_error
       end
     end
+
+    context "when the schooling has not yet begun" do
+      let(:data) do
+        [
+          build(:fregata_student, ine_value: "123456", dateEntreeFormation: "05-05-2026"),
+          build(:fregata_student, ine_value: "123456", dateEntreeFormation: "01-05-2026")
+        ]
+      end
+      let(:student) { Student.find_by(ine: "123456") }
+
+      around do |example|
+        Timecop.freeze(Date.new(2026, 5, 1)) { example.run }
+      end
+
+      before { mapper.new(data, uai).parse! }
+
+      it { expect(student.schoolings.count).to eq(1) }
+      it { expect(student.schoolings.first.start_date).to eq(Date.new(2026, 5, 1)) }
+    end
   end
 end
