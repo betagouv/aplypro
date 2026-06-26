@@ -140,6 +140,13 @@ class ReportSeeder
       *academies.map { |academy| [academy, *generate_academy_row(stats, seed_offset)] }
     ]
 
+    academies_bops_data = [
+      %i[academy bop] + Report::HEADERS,
+      *academies.flat_map do |academy|
+        %w[ENPU ENPR MASA MER].map { |bop| [academy, bop, *generate_academy_row(stats, seed_offset)] }
+      end
+    ]
+
     global_data = [
       Report::HEADERS,
       stats.indicators.map do |indicator|
@@ -151,6 +158,7 @@ class ReportSeeder
       global_data: global_data,
       bops_data: bops_data,
       menj_academies_data: menj_academies_data,
+      academies_bops_data: academies_bops_data,
       establishments_data: [
         %i[uai establishment_name ministry academy private_or_public] + Report::HEADERS, *establishments
       ]
