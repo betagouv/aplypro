@@ -20,7 +20,7 @@ module CacheWarmer
       return unless current_report
 
       extractor = Reports::BaseExtractor.new(current_report)
-      extractor.extract(:menj_academies_data, :establishments_data)
+      extractor.extract(:menj_academies_data, :academies_bops_data, :establishments_data)
     end
   end
 end

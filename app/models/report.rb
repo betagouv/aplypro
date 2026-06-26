@@ -40,6 +40,8 @@ class Report < ApplicationRecord
     required(:menj_academies_data).value(:array, min_size?: 2).each(:array)
 
     required(:establishments_data).value(:array, min_size?: 2).each(:array)
+
+    optional(:academies_bops_data).value(:array, min_size?: 2).each(:array)
   end
 
   attr_accessor :skip_schema_validation
@@ -81,6 +83,7 @@ class Report < ApplicationRecord
         global_data: serialize_data(stats.global_data),
         bops_data: serialize_data(stats.bops_data, %i[bop]),
         menj_academies_data: serialize_data(stats.menj_academies_data, %i[academy]),
+        academies_bops_data: serialize_data(stats.academies_bops_data, %i[academy bop]),
         establishments_data: serialize_data(stats.establishments_data,
                                             %i[uai establishment_name ministry academy private_or_public])
       }

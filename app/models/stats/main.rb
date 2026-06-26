@@ -92,6 +92,15 @@ module Stats
       end
     end
 
+    def academies_bops_data
+      pairs = indicators[:schoolings_count].academies_bops_data.keys.sort_by { |academy, bop| [academy.to_s, bop.to_s] }
+      pairs.map do |pair|
+        { academy: pair[0], bop: pair[1] }.merge(
+          indicators.transform_values { |indicator| indicator.academies_bops_data[pair] }
+        )
+      end
+    end
+
     def establishments_data
       establishments.map do |uai, name, academy, private_code, ministry|
         specific_indicators = {

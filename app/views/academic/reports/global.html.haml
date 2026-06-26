@@ -96,23 +96,43 @@
   .fr-container
     .fr-grid-row.fr-grid-row--gutters
       .fr-col-12
-        %h3.fr-h5 Statistiques par académie MENJ
+        %h3.fr-h5 Statistiques par académie et BOP
 
-  .fr-table.fr-table--bordered.stats-table-container.stats-table-sticky
-    %table
-      %thead
-        %tr
-          - @menj_academies_data.first.each_with_index do |header_value, index|
-            - header = index > 0 ? (@indicators_metadata[index - 1]&.dig(:title) || header_value) : format_table_header(header_value)
-            %th{scope: "col"}
-              = header
-              - if index > 0 && @indicators_metadata[index - 1]&.dig(:tooltip_key)
-                %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-academies-#{index}", type: "button"}
-                  %span.fr-tooltip.fr-placement{id: "tooltip-academies-#{index}", role: "tooltip", "aria-hidden" => "true"}
-                    = t("tooltips.#{@indicators_metadata[index - 1][:tooltip_key]}")
-      %tbody
-        - @menj_academies_data[1..].each do |row|
+  - if @academies_bops_data.present?
+    .fr-table.fr-table--bordered.stats-table-container.stats-table-sticky
+      %table
+        %thead
           %tr
-            - row.each_with_index do |value, index|
-              - indicator_type = index > 0 ? @indicators_metadata[index - 1]&.dig(:type) : nil
-              %td{class: (index == 0 ? "fr-text--bold" : ""), style: (index > 0 ? cell_background_color(value, indicator_type: indicator_type) : "")}= format_stat_value(value, indicator_type: indicator_type)
+            - @academies_bops_data.first.each_with_index do |header_value, index|
+              - header = index >= 2 ? (@indicators_metadata[index - 2]&.dig(:title) || header_value) : format_table_header(header_value)
+              %th{scope: "col"}
+                = header
+                - if index >= 2 && @indicators_metadata[index - 2]&.dig(:tooltip_key)
+                  %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-acad-bops-#{index}", type: "button"}
+                    %span.fr-tooltip.fr-placement{id: "tooltip-acad-bops-#{index}", role: "tooltip", "aria-hidden" => "true"}
+                      = t("tooltips.#{@indicators_metadata[index - 2][:tooltip_key]}")
+        %tbody
+          - @academies_bops_data[1..].each do |row|
+            %tr
+              - row.each_with_index do |value, index|
+                - indicator_type = index >= 2 ? @indicators_metadata[index - 2]&.dig(:type) : nil
+                %td{class: (index < 2 ? "fr-text--bold" : ""), style: (index >= 2 ? cell_background_color(value, indicator_type: indicator_type) : "")}= format_stat_value(value, indicator_type: indicator_type)
+  - else
+    .fr-table.fr-table--bordered.stats-table-container.stats-table-sticky
+      %table
+        %thead
+          %tr
+            - @menj_academies_data.first.each_with_index do |header_value, index|
+              - header = index > 0 ? (@indicators_metadata[index - 1]&.dig(:title) || header_value) : format_table_header(header_value)
+              %th{scope: "col"}
+                = header
+                - if index > 0 && @indicators_metadata[index - 1]&.dig(:tooltip_key)
+                  %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-academies-#{index}", type: "button"}
+                    %span.fr-tooltip.fr-placement{id: "tooltip-academies-#{index}", role: "tooltip", "aria-hidden" => "true"}
+                      = t("tooltips.#{@indicators_metadata[index - 1][:tooltip_key]}")
+        %tbody
+          - @menj_academies_data[1..].each do |row|
+            %tr
+              - row.each_with_index do |value, index|
+                - indicator_type = index > 0 ? @indicators_metadata[index - 1]&.dig(:type) : nil
+                %td{class: (index == 0 ? "fr-text--bold" : ""), style: (index > 0 ? cell_background_color(value, indicator_type: indicator_type) : "")}= format_stat_value(value, indicator_type: indicator_type)

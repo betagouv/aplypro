@@ -178,12 +178,15 @@ RSpec.describe Report do
     let(:create_for_date_school_year) { create(:school_year, start_year: 2040) }
 
     context "when no report exists for the date" do
+      let(:keys) { Report::HEADERS.map(&:to_s) }
+
       before do
         allow(Stats::Main).to receive(:new)
           .and_return(instance_double(Stats::Main,
                                       global_data: [],
                                       bops_data: [{ bop: "ENPR", ribs_count: 4 }],
                                       menj_academies_data: [{ academy: "Data1" }, { academy: "Data2" }],
+                                      academies_bops_data: [{ academy: "Data1", bop: "ENPU" }],
                                       establishments_data: [{ uai: "123456", establishment_name: "Test" }]))
       end
 
@@ -194,15 +197,13 @@ RSpec.describe Report do
 
       it "sets the correct data" do
         described_class.create_for_school_year(create_for_date_school_year, date)
-
         report = described_class.last
-        keys = Report::HEADERS.map(&:to_s)
-
         expect(report.data.keys).to contain_exactly("global_data", "bops_data", "menj_academies_data",
-                                                    "establishments_data")
+                                                    "academies_bops_data", "establishments_data")
         expect(report.data["global_data"].first).to eq(keys)
         expect(report.data["bops_data"].first).to eq(["bop"] + keys)
         expect(report.data["menj_academies_data"].first).to eq(["academy"] + keys)
+        expect(report.data["academies_bops_data"].first).to eq(%w[academy bop] + keys)
         establishments_keys = %w[uai establishment_name ministry academy private_or_public]
         expect(report.data["establishments_data"].first).to eq(establishments_keys + keys)
       end

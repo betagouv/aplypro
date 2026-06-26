@@ -22,6 +22,13 @@ module ReportValidation
     validate_array_structure(:menj_academies_data, [:academy] + self.class::HEADERS)
     establishment_keys = %i[uai establishment_name ministry academy private_or_public]
     validate_array_structure(:establishments_data, establishment_keys + self.class::HEADERS)
+    validate_academies_bops_structure
+  end
+
+  def validate_academies_bops_structure
+    return if data["academies_bops_data"].blank?
+
+    validate_array_structure(:academies_bops_data, %i[academy bop] + self.class::HEADERS)
   end
 
   def process_schema_errors(result)
