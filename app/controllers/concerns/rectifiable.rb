@@ -55,7 +55,6 @@ module Rectifiable
     Pfmp.transaction do
       PfmpManager.new(@pfmp).rectify_and_update_attributes!(pfmp_params, address_params)
       @pfmp.reload
-      check_negative_rectification!
     end
     @pfmp.latest_payment_request.mark_ready!
   end
@@ -65,12 +64,6 @@ module Rectifiable
     return if temp_pfmp.within_schooling_dates?
 
     raise_rectification_validation_error(:pfmp_outside_schooling_dates)
-  end
-
-  def check_negative_rectification!
-    return unless @pfmp.overpaid?
-
-    raise_rectification_validation_error(:negative_rectification)
   end
 
   def raise_rectification_validation_error(error_key)
