@@ -1,14 +1,14 @@
-DOCKER-RUN = docker-compose run -e TERM -e DISABLE_SPRING_WATCHER_LISTEN=1 --rm --entrypoint=""
+DOCKER-RUN = docker compose run -e TERM -e DISABLE_SPRING_WATCHER_LISTEN=1 --rm --entrypoint=""
 BUNDLE-EXEC = bundle exec
 
 build:
-	docker-compose build
+	docker compose build
 
 up:
-	docker-compose up
+	docker compose up
 
 down:
-	docker-compose down
+	docker compose down
 
 .PHONY: db
 db:
@@ -30,7 +30,7 @@ cl:
 	$(DOCKER-RUN) web bin/rails console
 
 rs:
-	docker-compose exec web touch tmp/restart.txt
+	docker compose exec web touch tmp/restart.txt
 
 wipe:
 	$(DOCKER-RUN) web bin/rails db:reset

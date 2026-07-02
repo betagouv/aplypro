@@ -15,6 +15,7 @@ RSpec.describe GenerateReportJob do
                                     global_data: [],
                                     bops_data: [{ BOP: "ENPR", "Coord. bancaires": 4 }],
                                     menj_academies_data: [{ Académie: "Data1" }, { Académie: "Data2" }],
+                                    academies_bops_data: [{ academy: "Data1", bop: "ENPU" }],
                                     establishments_data: [{ UAI: "123456", "Nom de l'établissement": "Test" }]))
     end
 

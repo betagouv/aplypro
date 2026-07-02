@@ -47,72 +47,8 @@
       .fr-col-12
         %h2.fr-h3 Statistiques nationales
 
-    .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
-      .fr-col-12
-        %h3.fr-h5 Statistiques globales
-
-  .fr-table.fr-table--bordered.stats-table-container
-    %table
-      %thead
-        %tr
-          - @global_data.first.each_with_index do |header_value, index|
-            - header = @indicators_metadata[index]&.dig(:title) || header_value
-            %th{scope: "col"}
-              = header
-              - if @indicators_metadata[index]&.dig(:tooltip_key)
-                %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-stats-#{index}", type: "button"}
-                  %span.fr-tooltip.fr-placement{id: "tooltip-stats-#{index}", role: "tooltip", "aria-hidden" => "true"}
-                    = t("tooltips.#{@indicators_metadata[index][:tooltip_key]}")
-      %tbody
-        %tr
-          - @global_data.last.each_with_index do |value, index|
-            - indicator_type = @indicators_metadata[index]&.dig(:type)
-            %td{style: cell_background_color(value, indicator_type: indicator_type)}= format_stat_value(value, indicator_type: indicator_type)
-
-  .fr-container
-    .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
-      .fr-col-12
-        %h3.fr-h5 Statistiques par BOP
-
-  .fr-table.fr-table--bordered.stats-table-container.stats-table-sticky
-    %table
-      %thead
-        %tr
-          - @bops_data.first.each_with_index do |header_value, index|
-            - header = index > 0 ? (@indicators_metadata[index - 1]&.dig(:title) || header_value) : format_table_header(header_value)
-            %th{scope: "col"}
-              = header
-              - if index > 0 && @indicators_metadata[index - 1]&.dig(:tooltip_key)
-                %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-bops-#{index}", type: "button"}
-                  %span.fr-tooltip.fr-placement{id: "tooltip-bops-#{index}", role: "tooltip", "aria-hidden" => "true"}
-                    = t("tooltips.#{@indicators_metadata[index - 1][:tooltip_key]}")
-      %tbody
-        - @bops_data[1..].each do |row|
-          %tr
-            - row.each_with_index do |value, index|
-              - indicator_type = index > 0 ? @indicators_metadata[index - 1]&.dig(:type) : nil
-              %td{style: (index > 0 ? cell_background_color(value, indicator_type: indicator_type) : "")}= format_stat_value(value, indicator_type: indicator_type)
-
-  .fr-container
-    .fr-grid-row.fr-grid-row--gutters
-      .fr-col-12
-        %h3.fr-h5 Statistiques par académie MENJ
-
-  .fr-table.fr-table--bordered.stats-table-container.stats-table-sticky
-    %table
-      %thead
-        %tr
-          - @menj_academies_data.first.each_with_index do |header_value, index|
-            - header = index > 0 ? (@indicators_metadata[index - 1]&.dig(:title) || header_value) : format_table_header(header_value)
-            %th{scope: "col"}
-              = header
-              - if index > 0 && @indicators_metadata[index - 1]&.dig(:tooltip_key)
-                %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-academies-#{index}", type: "button"}
-                  %span.fr-tooltip.fr-placement{id: "tooltip-academies-#{index}", role: "tooltip", "aria-hidden" => "true"}
-                    = t("tooltips.#{@indicators_metadata[index - 1][:tooltip_key]}")
-      %tbody
-        - @menj_academies_data[1..].each do |row|
-          %tr
-            - row.each_with_index do |value, index|
-              - indicator_type = index > 0 ? @indicators_metadata[index - 1]&.dig(:type) : nil
-              %td{class: (index == 0 ? "fr-text--bold" : ""), style: (index > 0 ? cell_background_color(value, indicator_type: indicator_type) : "")}= format_stat_value(value, indicator_type: indicator_type)
+  = render "stats_section", title: "Statistiques globales", data: @global_data, prefix_count: 0, bold_count: 0, tooltip_prefix: "stats", sticky: false
+  = render "stats_section", title: "Statistiques par BOP", data: @bops_data, prefix_count: 1, bold_count: 0, tooltip_prefix: "bops", sticky: true
+  = render "stats_section", title: "Statistiques par académie", data: @menj_academies_data, prefix_count: 1, bold_count: 1, tooltip_prefix: "academies", sticky: true
+  - if @academies_bops_data.present?
+    = render "stats_section", title: "Statistiques par académie et BOP", data: @academies_bops_data, prefix_count: 2, bold_count: 2, tooltip_prefix: "acad-bops", sticky: true

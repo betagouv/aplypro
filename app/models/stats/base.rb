@@ -36,6 +36,10 @@ module Stats
       raise NotImplementedError
     end
 
+    def academies_bops_data
+      raise NotImplementedError
+    end
+
     def establishments_data
       raise NotImplementedError
     end
@@ -67,6 +71,13 @@ module Stats
                 .where("mefs.ministry": :menj)
                 .order(:academy_label)
                 .group(:academy_label)
+    end
+
+    def group_per_academy_and_bop(collection)
+      collection.merge(with_mef_and_establishment)
+                .where.not("mefs.ministry": :armee)
+                .order(:academy_label)
+                .group(:academy_label, bop)
     end
 
     def group_per_establishment(collection)

@@ -21,6 +21,12 @@ module Stats
       @menj_academies_data ||= group_per_menj_academy(all).count
     end
 
+    def academies_bops_data
+      @academies_bops_data ||= group_per_academy_and_bop(all)
+                               .count
+                               .transform_keys { |acad, bop_val| [acad, bop_key_map(bop_val)] }
+    end
+
     def establishments_data
       @establishments_data ||= group_per_establishment(all).count
     end

@@ -29,17 +29,18 @@ RSpec.describe Reports::CSVExporter do
   let(:report) { Report.select(:id, :school_year_id, :created_at).find(full_report.id) }
 
   describe "#csv_files" do
-    it "returns a hash with 4 CSV files" do
+    it "returns a hash with 5 CSV files" do
       result = exporter.csv_files
 
       expect(result.keys).to contain_exactly("statistiques_globales.csv", "statistiques_bops.csv",
-                                             "statistiques_academies_menj.csv", "statistiques_etablissements.csv")
+                                             "statistiques_academies_menj.csv", "statistiques_academies_bops.csv",
+                                             "statistiques_etablissements.csv")
     end
 
     it "generates CSV content with semicolon separator" do
       result = exporter.csv_files
 
-      result.each_value do |csv_content|
+      result.except("statistiques_academies_bops.csv").each_value do |csv_content|
         expect(csv_content).to include(";")
       end
     end

@@ -37,10 +37,8 @@ class ReportSeeder
   end
 
   def self.load_asp_factories
-    FactoryBot.build(:asp_integration)
-  rescue ArgumentError, KeyError => e
-    raise unless e.message.include?("Factory not registered") || e.message.include?("asp")
-
+    FactoryBot.factories.find(:asp_integration)
+  rescue ArgumentError
     load "mock/factories/asp.rb"
   end
 
@@ -60,6 +58,7 @@ class ReportSeeder
     Student.where(id: student_ids).delete_all
     classes.delete_all
     EstablishmentUserRole.where(establishment_id: test_establishment_ids).delete_all
+    User.where(selected_establishment_id: test_establishment_ids).update_all(selected_establishment_id: nil)
     test_establishments.delete_all
   end
 
@@ -98,8 +97,8 @@ class ReportSeeder
     establishments = []
 
     Establishment.where(academy_code: "06").where.not("uai LIKE 'RS%'").find_each do |establishment|
-      indicator_values = stats.indicators.map do |indicator|
-        calculate_real_indicator_value(indicator, establishment, start_year, seed_offset)
+      indicator_values = Report::HEADERS.map do |key|
+        calculate_real_indicator_value(stats.indicators[key], establishment, start_year, seed_offset)
       end
 
       establishments << [
@@ -113,8 +112,8 @@ class ReportSeeder
     end
 
     Establishment.where("uai LIKE 'RS%'").find_each do |establishment|
-      indicator_values = stats.indicators.map do |indicator|
-        calculate_real_indicator_value(indicator, establishment, start_year, seed_offset)
+      indicator_values = Report::HEADERS.map do |key|
+        calculate_real_indicator_value(stats.indicators[key], establishment, start_year, seed_offset)
       end
 
       establishments << [
@@ -140,10 +139,17 @@ class ReportSeeder
       *academies.map { |academy| [academy, *generate_academy_row(stats, seed_offset)] }
     ]
 
+    academies_bops_data = [
+      %i[academy bop] + Report::HEADERS,
+      *academies.flat_map do |academy|
+        %w[ENPU ENPR MASA MER].map { |bop| [academy, bop, *generate_academy_row(stats, seed_offset)] }
+      end
+    ]
+
     global_data = [
       Report::HEADERS,
-      stats.indicators.map do |indicator|
-        generate_global_value(indicator, seed_offset)
+      Report::HEADERS.map do |key|
+        generate_global_value(stats.indicators[key], seed_offset)
       end
     ]
 
@@ -151,6 +157,7 @@ class ReportSeeder
       global_data: global_data,
       bops_data: bops_data,
       menj_academies_data: menj_academies_data,
+      academies_bops_data: academies_bops_data,
       establishments_data: [
         %i[uai establishment_name ministry academy private_or_public] + Report::HEADERS, *establishments
       ]
@@ -158,14 +165,14 @@ class ReportSeeder
   end
 
   def self.generate_bop_row(stats, seed_offset)
-    stats.indicators.map do |indicator|
-      generate_bop_value(indicator, seed_offset)
+    Report::HEADERS.map do |key|
+      generate_bop_value(stats.indicators[key], seed_offset)
     end
   end
 
   def self.generate_academy_row(stats, seed_offset)
-    stats.indicators.map do |indicator|
-      generate_academy_value(indicator, seed_offset)
+    Report::HEADERS.map do |key|
+      generate_academy_value(stats.indicators[key], seed_offset)
     end
   end
 

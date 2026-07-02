@@ -20,6 +20,10 @@ module Stats
       @menj_academies_data ||= compute_ratio_from_indicators(:menj_academies_data)
     end
 
+    def academies_bops_data
+      @academies_bops_data ||= compute_ratio_from_indicators(:academies_bops_data)
+    end
+
     def establishments_data
       @establishments_data ||= compute_ratio_from_indicators(:establishments_data)
     end

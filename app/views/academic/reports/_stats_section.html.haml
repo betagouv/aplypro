@@ -1,0 +1,26 @@
+.fr-container
+  .fr-grid-row.fr-grid-row--gutters.fr-mb-4w
+    .fr-col-12
+      %h3.fr-h5= title
+
+.fr-table.fr-table--bordered.stats-table-container{class: sticky ? "stats-table-sticky" : ""}
+  %table
+    %thead
+      %tr
+        - data.first.each_with_index do |header_value, index|
+          - is_indicator = index >= prefix_count
+          - meta = is_indicator ? @indicators_metadata[index - prefix_count] : nil
+          - header = is_indicator ? (meta&.dig(:title) || header_value) : format_table_header(header_value)
+          %th{scope: "col"}
+            = header
+            - if meta&.dig(:tooltip_key)
+              %button.fr-ml-1w.fr-p-1w.fr-btn--tooltip.fr-btn{"aria-describedby" => "tooltip-#{tooltip_prefix}-#{index}", type: "button"}
+                %span.fr-tooltip.fr-placement{id: "tooltip-#{tooltip_prefix}-#{index}", role: "tooltip", "aria-hidden" => "true"}
+                  = t("tooltips.#{meta[:tooltip_key]}")
+    %tbody
+      - data[1..].each do |row|
+        %tr
+          - row.each_with_index do |value, index|
+            - is_indicator = index >= prefix_count
+            - indicator_type = is_indicator ? @indicators_metadata[index - prefix_count]&.dig(:type) : nil
+            %td{class: (index < bold_count ? "fr-text--bold" : ""), style: (is_indicator ? cell_background_color(value, indicator_type: indicator_type) : "")}= format_stat_value(value, indicator_type: indicator_type)

@@ -18,6 +18,10 @@ FactoryBot.define do
           ["academy"] + Report::HEADERS.map(&:to_s),
           ["Paris"] + Array.new(Report::HEADERS.length, 0)
         ],
+        "academies_bops_data" => [
+          %w[academy bop] + Report::HEADERS.map(&:to_s),
+          %w[Paris ENPU] + Array.new(Report::HEADERS.length, 0)
+        ],
         "establishments_data" => [
           %w[uai establishment_name ministry academy private_or_public] + Report::HEADERS.map(&:to_s),
           ["0010001A", "Lycée Test", "MENJ", "Paris", "Public"] + Array.new(Report::HEADERS.length, 0)

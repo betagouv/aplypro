@@ -124,10 +124,11 @@ module Academic
     end
 
     def set_report_data
-      extracted_data = @extractor.extract(:global_data, :bops_data, :menj_academies_data)
+      extracted_data = @extractor.extract(:global_data, :bops_data, :menj_academies_data, :academies_bops_data)
       @global_data = extracted_data[:global_data]
       @bops_data = extracted_data[:bops_data]
       @menj_academies_data = extracted_data[:menj_academies_data]
+      @academies_bops_data = extracted_data[:academies_bops_data]
       @indicators_metadata = Stats::Main.indicators_metadata
     end
 
