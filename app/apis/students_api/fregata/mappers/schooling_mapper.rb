@@ -18,8 +18,8 @@ module StudentsApi
             libelle: :label,
             code: :status,
             codeMef: :mef_code,
-            codeUai: :uai,
-            anneeScolaireId: :year,
+            codeUai: :uai,  #TODO: Ce champ n'existe pas côté FREGATA, il est uniquement passé en paramètre
+            anneeScolaireId: :school_year,
             dateEntreeFormation: :start_date
           )
 
@@ -39,7 +39,7 @@ module StudentsApi
             end
           }
 
-          map_value :year, ->(value) { value + StudentsApi::Fregata::Api::YEAR_OFFSET }
+          map_value :school_year, ->(value) { value + StudentsApi::Fregata::Api::YEAR_OFFSET }
 
           map_value :mef_code, ->(value) { value.chop }
 

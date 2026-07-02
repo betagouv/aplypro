@@ -12,15 +12,21 @@ describe StudentsApi::Fregata::Mappers::SchoolingMapper do
       dateEntreeFormation: "2024-05-25",
       dateSortieFormation: "2024-05-30",
       dateSortieEtablissement: "2024-06-01",
-      status_code: "2501"
+      status_code: "2501",
+      classe_label: "2NDE JARDINERIE",
+      uai: "123456C"
     )
   end
 
   it "maps the data correctly" do
     expect(mapped).to eq({
+                           mef_code: "2712101021",
+                           label: "2NDE JARDINERIE",
+                           status: :student,
+                           uai: "123456C",
                            start_date: "2024-05-25",
                            end_date: "2024-05-30",
-                           status: :student
+                           school_year: 2025
                          })
   end
 
