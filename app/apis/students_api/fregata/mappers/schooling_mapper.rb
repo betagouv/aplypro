@@ -11,9 +11,15 @@ module StudentsApi
 
           unwrap :statutApprenant
           unwrap :apprenant
+          unwrap :sectionReference
+          unwrap :division
 
           rename_keys(
+            libelle: :label,
             code: :status,
+            codeMef: :mef_code,
+            codeUai: :uai,
+            anneeScolaireId: :year,
             dateEntreeFormation: :start_date
           )
 
@@ -21,7 +27,7 @@ module StudentsApi
 
           map_value :end_date, ->(hash) { hash[:dateSortieFormation] || hash[:dateSortieEtablissement] }
 
-          # Seul le MAPPING "2501" est encore utilisé, les autres statuts ne sont plus retournés par SYGNE
+          # Seul le MAPPING "2501" est encore utilisé, les autres statuts ne sont plus retournés par FREGATA
           map_value :status, lambda { |value|
             case value
             when "2503"
@@ -33,7 +39,11 @@ module StudentsApi
             end
           }
 
-          accept_keys %i[status start_date end_date]
+          map_value :year, ->(value) { value + StudentsApi::Fregata::Api::YEAR_OFFSET }
+
+          map_value :mef_code, ->(value) { value.chop }
+
+          accept_keys %i[mef_code label status uai start_date end_date school_year]
         end
       end
     end
