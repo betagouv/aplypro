@@ -62,6 +62,20 @@ describe Updaters::StudentSchoolingsUpdater do
     end
   end
 
+  context "when all necessary attributes are not present" do
+    let(:matching_schooling_attributes) do
+      {
+        status: :apprentice,
+        start_date: Date.yesterday,
+        end_date: Date.current
+      }
+    end
+
+    it "does not account for it" do
+      expect { updater.call }.not_to(change { schooling.reload.attributes })
+    end
+  end
+
   context "when a schooling is from an unknown establishment" do
     let(:mapped_schooling_attributes) { matching_schooling_attributes.update(uai: "unknown") }
 
