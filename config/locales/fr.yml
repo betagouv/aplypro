@@ -408,7 +408,7 @@ fr:
         La demande a été intégrée.
         Le traitement du paiement peut prendre une à trois semaines.
       rejected: "La demande a été rejetée : %{rejected_reason}."
-      paid: Le paiement a été envoyé par l'agence comptable, et sera effectif dans un délai de un à trois jours ouvrables.
+      paid: Le paiement a été ordonné par l'agence comptable, et devrait être effectif dans un délai de un à trois jours, sauf en cas de rejet bancaire. En cas de rejet bancaire, l'ASP prendra contact avec l'établissement pour régularisation.
       unpaid: "Le paiement a été refusé par l'agence comptable : %{unpaid_reason}."
       recovery: "Un ordre de reversement a été envoyé par pli postal à l'élève le %{date}."
   ministries:
