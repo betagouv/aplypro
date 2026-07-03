@@ -37,7 +37,7 @@ module StudentsApi
 
           map_value :status, ->(value) { STATUS_MAPPING[value] }
 
-          accept_keys %i[ine mef_code label status uai start_date end_date school_year]
+          accept_keys %i[mef_code label status uai start_date end_date school_year]
         end
 
         # Cette fonction ne devrait plus être appelée,
