@@ -18,7 +18,7 @@ module StudentsApi
             libelle: :label,
             code: :status,
             codeMef: :mef_code,
-            codeUai: :uai,  #TODO: Ce champ n'existe pas côté FREGATA, il est uniquement passé en paramètre
+            codeUai: :uai,
             anneeScolaireId: :school_year,
             dateEntreeFormation: :start_date
           )

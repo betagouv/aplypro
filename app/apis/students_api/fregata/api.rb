@@ -54,8 +54,20 @@ module StudentsApi
           find_student_in_payload(data, params[:ine])
         end
 
+        def fetch_student_schoolings(params)
+          data = super
+
+          data
+            .select { |entry| student_entry?(entry, params[:ine]) }
+            .each { |entry| entry["codeUai"] = params.fetch(:uai) }
+        end
+
         def find_student_in_payload(data, ine)
-          data.find { |entry| entry["estEN"] == false && student_mapper.new.call(entry)[:ine].eql?(ine) }
+          data.find { |entry| student_entry?(entry, ine) }
+        end
+
+        def student_entry?(entry, ine)
+          entry["estEN"] == false && student_mapper.new.call(entry)[:ine].eql?(ine)
         end
 
         def client

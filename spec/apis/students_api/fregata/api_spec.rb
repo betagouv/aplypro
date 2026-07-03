@@ -25,6 +25,22 @@ describe StudentsApi::Fregata::Api do
     end
   end
 
+  describe "fetch_student_schoolings" do
+    let(:ine) { "123456789AB" }
+    let(:fregata_student) { build(:fregata_student, ine_value: ine).to_h }
+    let(:other_student) { build(:fregata_student).to_h }
+
+    before do
+      mock_fregata_students_with(uai, [fregata_student, other_student].to_json)
+    end
+
+    it "returns only the requested student's entries" do
+      result = api.send(:fetch_student_schoolings, uai: uai, ine: ine, start_year: SchoolYear.current.start_year)
+
+      expect(result).to eq([fregata_student.merge("codeUai" => uai)])
+    end
+  end
+
   describe "student_endpoint" do
     let(:uai) { student.current_schooling.establishment.uai }
 

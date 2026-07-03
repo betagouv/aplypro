@@ -99,4 +99,40 @@ describe Updaters::StudentSchoolingsUpdater do
       expect { updater.call }.not_to(change { schooling.reload.attributes })
     end
   end
+
+  context "with a real FREGATA-backed schooling" do
+    subject(:updater) { described_class.new(schooling.student) }
+
+    let(:schooling) do
+      establishment = create(:establishment, :fregata_provider)
+      classe = create(:classe, establishment: establishment, label: "2NDE JARDINERIE")
+
+      create(:schooling, classe: classe, status: :student)
+    end
+
+    before do
+      allow(StudentsApi).to receive(:api_for).and_call_original
+
+      classe = schooling.classe
+      fregata_year = classe.school_year.start_year - StudentsApi::Fregata::Api::YEAR_OFFSET
+
+      mock_fregata_students_with(
+        classe.establishment.uai,
+        [
+          build(
+            :fregata_student,
+            ine_value: schooling.student.ine,
+            status_code: "2503",
+            division: { "libelle" => classe.label },
+            sectionReference: { "codeMef" => "#{classe.mef.code}0", "anneeScolaireId" => fregata_year }
+          ).to_h,
+          build(:fregata_student, status_code: "2503").to_h
+        ].to_json
+      )
+    end
+
+    it "finds the matching classe from the FREGATA payload and updates the schooling" do
+      expect { updater.call }.to change { schooling.reload.status }.from("student").to("apprentice")
+    end
+  end
 end
