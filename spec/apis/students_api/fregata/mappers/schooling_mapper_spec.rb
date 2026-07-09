@@ -47,4 +47,25 @@ describe StudentsApi::Fregata::Mappers::SchoolingMapper do
       end
     end
   end
+
+  describe "unwrap order" do
+    let(:data) do
+      build(
+        :fregata_student,
+        statutApprenant: { code: "2501" },
+        division: {
+          code: "2503",
+          libelle: "2NDE JARDINERIE"
+        }
+      )
+    end
+
+    it "maps the statutApprenant code" do
+      expect(mapped[:status]).to eq :student
+    end
+
+    it "still maps the label" do
+      expect(mapped[:label]).to eq "2NDE JARDINERIE"
+    end
+  end
 end
