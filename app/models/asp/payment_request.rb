@@ -177,5 +177,9 @@ module ASP
 
       "#{code_pays}#{cle}#{zonebban}"
     end
+
+    def sent_record_xml
+      Nokogiri::XML(asp_request.file.download).at("ENREGISTREMENT[idEnregistrement='#{id}']").to_xml
+    end
   end
 end

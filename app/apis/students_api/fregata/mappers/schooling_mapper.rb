@@ -9,10 +9,10 @@ module StudentsApi
         define! do
           deep_symbolize_keys
 
-          unwrap :statutApprenant
           unwrap :apprenant
           unwrap :sectionReference
           unwrap :division
+          unwrap :statutApprenant
 
           rename_keys(
             libelle: :label,
