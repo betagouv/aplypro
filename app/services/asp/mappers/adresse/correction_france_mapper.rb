@@ -11,7 +11,7 @@ module ASP
         def libellevoie
           AddressAbbreviator.abbreviate_address_line(
             rnvp_data["voieDen"],
-            max_length: Entities::Adresse::InduFrance::LIBELLEVOIE_MAX_LENGTH
+            max_length: Entities::Adresse::CorrectionFrance::LIBELLEVOIE_MAX_LENGTH
           )
         end
 
