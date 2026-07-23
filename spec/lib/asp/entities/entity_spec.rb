@@ -67,7 +67,7 @@ describe ASP::Entities::Entity do
 
       before { rectified_pfmp.student.update!(address_country_code: "100") }
 
-      it { expect(entity.adresse_entity_class).to eq ASP::Entities::Adresse::InduFrance }
+      it { expect(entity.adresse_entity_class).to eq ASP::Entities::Adresse::France }
     end
   end
 end

@@ -22,9 +22,11 @@ module ASP
         }.freeze
 
         CODETYPEVOIE_MAX_LENGTH = 4
+        LIBELLEVOIE_MAX_LENGTH = 28
+        ADRESSE_ATTR_MAX_LENGTH = 38
 
-        validates_length_of :libellevoie, maximum: InduFrance::LIBELLEVOIE_MAX_LENGTH
-        validates_length_of :cpltdistribution, maximum: InduFrance::ADRESSE_ATTR_MAX_LENGTH, allow_nil: true
+        validates_length_of :libellevoie, maximum: LIBELLEVOIE_MAX_LENGTH
+        validates_length_of :cpltdistribution, maximum: ADRESSE_ATTR_MAX_LENGTH, allow_nil: true
 
         validates_length_of :codeextensionvoie, maximum: 1, allow_nil: true
         validates_length_of :codetypevoie, maximum: CODETYPEVOIE_MAX_LENGTH, allow_nil: true

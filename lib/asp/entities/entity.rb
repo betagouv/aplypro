@@ -68,8 +68,6 @@ module ASP
           Adresse::CorrectionFrance
         elsif pfmp.needs_correction_address?
           Adresse::CorrectionEtranger
-        elsif pfmp.rectified?
-          student.lives_in_france? ? Adresse::InduFrance : Adresse::InduEtranger
         else
           student.lives_in_france? ? Adresse::France : Adresse::Etranger
         end
