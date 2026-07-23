@@ -92,18 +92,20 @@ class PfmpManager # rubocop:disable Metrics/ClassLength
   def retry_payment_request!
     return unless @pfmp.latest_payment_request&.eligible_for_rejected_auto_retry?
 
-    p_r = create_new_payment_request!
-    p_r.mark_ready!
+    resubmit!
   end
 
-  def redress_administrative_number!(new_administrative_number)
+  def fix_administrative_number_and_resubmit!(new_administrative_number)
     update!(administrative_number: new_administrative_number)
 
-    p_r = create_new_payment_request!
-    p_r.mark_ready!
+    resubmit!
   end
 
   private
+
+  def resubmit!
+    create_new_payment_request!.mark_ready!
+  end
 
   def calculate_amount(target_pfmp)
     return 0 if target_pfmp.day_count.nil?

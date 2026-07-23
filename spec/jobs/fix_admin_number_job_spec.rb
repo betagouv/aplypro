@@ -9,9 +9,8 @@ describe FixAdminNumberJob do
   let(:pfmp) { payment_request.pfmp }
   let(:old_number) { pfmp.reload.administrative_number }
   let(:prefix) { old_number[0..-3] }
-  let(:motif) { "Le numéro administratif #{old_number} n'est pas unique dans le référentiel ASP" }
 
-  before { payment_request.mark_rejected!("Motif rejet" => motif) }
+  before { payment_request.mark_rejected!("Motif rejet" => "Le numéro administratif n'est pas unique") }
 
   it "recomputes and persists a fresh administrative_number" do
     expect { perform }.to change { pfmp.reload.administrative_number }
@@ -33,8 +32,8 @@ describe FixAdminNumberJob do
     end
   end
 
-  context "when the embedded suffix is already at the maximum" do
-    let(:motif) { "Le numéro administratif #{prefix}99 n'est pas unique dans le référentiel ASP" }
+  context "when the current suffix is already at the maximum" do
+    before { pfmp.update!(administrative_number: "#{prefix}99") }
 
     it "raises instead of writing an invalid suffix" do
       expect { perform }.to raise_error(described_class::SuffixExhaustedError)
