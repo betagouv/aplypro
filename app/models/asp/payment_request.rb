@@ -162,7 +162,7 @@ module ASP
       # classe = schooling.classe
       # ministry = classe.mef.ministry
 
-      # return false if ministry.eql?("masa") && !Rails.env.test?
+      return false if ministry.eql?("masa") && !Rails.env.test?
 
       true
     end
