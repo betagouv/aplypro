@@ -81,7 +81,7 @@ module Stats
     end
 
     def bops_data
-      %w[ENPU ENPR MASA MER].map do |bop|
+      Schooling::BOP_INDICATORS.map do |bop|
         initialize_indicators({ bop: bop }, :bops_data)
       end
     end

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Schooling < ApplicationRecord # rubocop:disable Metrics/ClassLength
+  BOP_INDICATORS = %w[ENPU ENPR MASA MER].freeze
+
   has_one_attached :attributive_decision
   has_one_attached :abrogation_decision
   has_one_attached :cancellation_decision

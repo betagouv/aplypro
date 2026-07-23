@@ -96,6 +96,13 @@ class PfmpManager # rubocop:disable Metrics/ClassLength
     p_r.mark_ready!
   end
 
+  def redress_administrative_number!(new_administrative_number)
+    update!(administrative_number: new_administrative_number)
+
+    p_r = create_new_payment_request!
+    p_r.mark_ready!
+  end
+
   private
 
   def calculate_amount(target_pfmp)

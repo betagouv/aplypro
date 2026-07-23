@@ -187,6 +187,17 @@ RSpec.describe ASP::PaymentRequest do
       end
     end
 
+    context "when the payment request is in 'rejected' for a reason excluded from auto-retry" do
+      let(:p_r) do
+        create(:asp_payment_request, :rejected,
+               reason: I18n.t("asp.errors.rejected.returns.duplicate_administrative_number"))
+      end
+
+      it "returns false" do
+        expect(p_r.eligible_for_rejected_auto_retry?).to be false
+      end
+    end
+
     context "when the payment request is in 'unpaid'" do
       let(:p_r) do
         create(:asp_payment_request, :unpaid,
