@@ -43,6 +43,12 @@ module ASP
       )
     end
 
+    after_transition(to: :rejected) do |payment_request, transition|
+      code = ASP::ErrorsDictionary.rejected_definition(transition.metadata["Motif rejet"])
+
+      FixAdminNumberJob.perform_later(payment_request.pfmp_id) if code == :duplicate_administrative_number
+    end
+
     after_transition(from: :pending, to: :ready) do |payment_request, _|
       payment_request.update!(
         rib: payment_request.pfmp.student.rib(payment_request.pfmp.classe.establishment)

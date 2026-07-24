@@ -516,6 +516,7 @@ fr:
           invalid_payment_coordinates: La coordonnée de paiement est invalide
           hamlet: Les codes saisis (.*) de la table REFHEXAPOSTE correspondent à un lieu-dit
           bic_length: begin 4, end 6, length 5
+          duplicate_administrative_number: Le numéro admin
         responses:
           payment_coordinates_blocked: Un premier paiement a été tenté par l’ASP, suite à l’échec de celui ci les coordonnées bancaires sont considérées comme bloquées. Pour ces cas l’ASP prend contact avec l’établissement afin de débloquer le premier paiement. Une fois ce déblocage terminé, l’établissement pourra retenter une nouvelle demande de paiement
           birth_commune_not_found: La commune de naissance sélectionnée n'existait pas à la date de naissance de l'individu
@@ -531,6 +532,7 @@ fr:
           invalid_payment_coordinates: Les coordonnées de paiement saisies sont invalides
           hamlet: Incohérence dans l'adresse de l'élève
           bic_length: Merci de vérifier les coordonnées bancaires de l'élève, le code BIC saisi ne peut pas être interprété
+          duplicate_administrative_number: Le numéro administratif attribué à la PFMP n'était pas unique, une correction automatique a été appliquée et la demande de paiement a été renvoyée
           fallback_message: Un problème est survenu, merci de prendre contact avec votre support technique
       unpaid:
         fallback_message: Le paiement a échoué, merci de prendre contact avec votre support technique

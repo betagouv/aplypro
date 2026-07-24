@@ -11,6 +11,7 @@ module ASP
       needs_abrogated_attributive_decision
       missing_attributive_decision
     ].freeze
+    RETRYABLE_WITH_CHANGES = %i[duplicate_administrative_number].freeze
 
     include ::StateMachinable
 
@@ -146,7 +147,9 @@ module ASP
     def eligible_for_rejected_auto_retry?
       return false unless in_state?(:rejected)
 
-      !rejected_error_code.eql?(:fallback_message)
+      code = rejected_error_code
+
+      !code.eql?(:fallback_message) && RETRYABLE_WITH_CHANGES.exclude?(code)
     end
 
     def rejected_error_code
@@ -159,10 +162,10 @@ module ASP
       # For instance:
       #
       # contract_type_code = classe.establishment.private_contract_type_code
-      # classe = schooling.classe
-      # ministry = classe.mef.ministry
+      classe = schooling.classe
+      ministry = classe.mef.ministry
 
-      # return false if ministry.eql?("masa") && !Rails.env.test?
+      return false if ministry.eql?("masa") && !Rails.env.test?
 
       true
     end

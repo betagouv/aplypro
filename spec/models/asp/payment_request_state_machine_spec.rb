@@ -87,6 +87,29 @@ describe ASP::PaymentRequestStateMachine do
     end
   end
 
+  describe "mark_rejected!" do
+    let(:asp_payment_request) { create(:asp_payment_request, :sent) }
+
+    context "when rejected for a non-unique administrative number" do
+      let(:metadata) { { "Motif rejet" => "Le numéro administratif n'est pas unique" } }
+
+      it "enqueues a FixAdminNumberJob for the pfmp" do
+        expect { asp_payment_request.mark_rejected!(metadata) }
+          .to have_enqueued_job(FixAdminNumberJob)
+          .with(asp_payment_request.pfmp_id)
+      end
+    end
+
+    context "when rejected for another reason" do
+      let(:metadata) { { "Motif rejet" => "Le RIB est Invalide" } }
+
+      it "does not enqueue a FixAdminNumberJob" do
+        expect { asp_payment_request.mark_rejected!(metadata) }
+          .not_to have_enqueued_job(FixAdminNumberJob)
+      end
+    end
+  end
+
   describe "#mark_ready!" do
     context "when there are no issues with the payment request" do
       let(:asp_payment_request) { create(:asp_payment_request, :sendable) }
