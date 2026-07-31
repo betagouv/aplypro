@@ -113,6 +113,37 @@ describe PfmpManager do
     end
   end
 
+  describe "#retry_payment_request!" do
+    context "when the latest payment request is rejected with an auto-retryable reason" do
+      let(:pfmp) do
+        create(:asp_payment_request, :rejected,
+               reason: I18n.t("asp.errors.rejected.returns.payment_coordinates_blocked")).pfmp
+      end
+
+      it "creates a new ready payment request" do
+        expect { manager.retry_payment_request! }.to change(pfmp.payment_requests, :count).by(1)
+        expect(pfmp.reload.latest_payment_request).to be_in_state(:ready)
+      end
+    end
+
+    context "when the latest payment request is unpaid because of insufficient trésorerie" do
+      let(:pfmp) { create(:asp_payment_request, :unpaid, code_motif: "TR2").pfmp }
+
+      it "creates a new ready payment request" do
+        expect { manager.retry_payment_request! }.to change(pfmp.payment_requests, :count).by(1)
+        expect(pfmp.reload.latest_payment_request).to be_in_state(:ready)
+      end
+    end
+
+    context "when the latest payment request is unpaid for another reason" do
+      let(:pfmp) { create(:asp_payment_request, :unpaid, code_motif: "RJT").pfmp }
+
+      it "does not create a new payment request" do
+        expect { manager.retry_payment_request! }.not_to change(pfmp.payment_requests, :count)
+      end
+    end
+  end
+
   describe "recalculate_amounts" do
     context "when the amount is updated" do
       context "with a 'terminated' PFMP" do
