@@ -295,6 +295,9 @@ fr:
         confirm_abrogation:
           title: "Abrogation de la décision d'attribution"
           breadcrumb: "Abrogation de la décision d'attribution"
+        confirm_attributive_decision:
+          title: "Édition de la décision d'attribution"
+          breadcrumb: "Édition de la décision d'attribution"
 
   global:
     sponsor: "Direction\nInterministérielle\ndu Numérique"

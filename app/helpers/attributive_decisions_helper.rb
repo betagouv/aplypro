@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module HomeHelper
+module AttributiveDecisionsHelper
   def attributive_decisions_download_button
     count = current_establishment.schoolings.with_attributive_decisions
                                  .joins(:classe)
@@ -22,16 +22,7 @@ module HomeHelper
                                  .where(classe: { school_year: selected_school_year })
                                  .count
 
-    render partial: "home/attributive_decision_form", locals: { establishment: current_establishment, count: count }
-  end
-
-  def cannot_generate_attributive_decisions_button
-    button_to(
-      t("panels.attributive_decisions.not_allowed"),
-      "#",
-      class: "fr-btn fr-btn--primary",
-      disabled: true
-    )
+    render partial: "attributive_decisions/form", locals: { establishment: current_establishment, count: count }
   end
 
   def confirmed_director_information

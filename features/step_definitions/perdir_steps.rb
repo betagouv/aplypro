@@ -123,6 +123,10 @@ Lorsque("je génère les décisions d'attribution de mon établissement") do
   )
 end
 
+Sachantque("mon établissement n'a pas de responsable légal confirmé") do
+  User.last.selected_establishment.update!(confirmed_director: nil)
+end
+
 Sachantque("mon établissement a un directeur confirmé nommé {string}") do |name|
   FactoryBot.create(:user, :confirmed_director, name: name, establishment: Establishment.last)
 end

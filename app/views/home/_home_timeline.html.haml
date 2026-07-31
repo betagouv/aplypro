@@ -12,7 +12,7 @@
     .fr-grid-row.timeline-row
       .fr-col-md-7
         .gray-panel.timeline-section
-          = render 'classes/attributive_decisions_panel'
+          = render 'attributive_decisions/home_panel'
       .fr-col-md-4.fr-ml-4w
         .chart-container
           = pie_chart({ "Élèves avec DA" => @establishment_facade.attributive_decisions_count, "Élèves sans DA" => @establishment_facade.without_attributive_decisions_count }, colors: [dsfr_colors[:green], dsfr_colors[:red]], donut: true)
