@@ -7,6 +7,7 @@ module ASP
 
     TRANSITION_RELATION_NAME = :asp_payment_request_transitions
     FUNDING_ISSUE = "Funding not currently available"
+    UNPAID_TRESORERIE_CODE = "TR2"
     RETRYABLE_INCOMPLETE_VALIDATION_TYPES = %i[
       needs_abrogated_attributive_decision
       missing_attributive_decision
@@ -44,6 +45,11 @@ module ASP
                  .to_sql
       from("(#{subquery}) as asp_payment_requests")
     }
+
+    scope :for_ministry, lambda { |ministry|
+                           joins(pfmp: { schooling: { classe: :mef } })
+                             .where(mefs: { ministry: Mef.ministries.fetch(ministry.to_s) })
+                         }
 
     scope :for_year, lambda { |start_year|
                        joins(pfmp: { schooling: { classe: :school_year } })
@@ -150,6 +156,12 @@ module ASP
       code = rejected_error_code
 
       !code.eql?(:fallback_message) && RETRYABLE_WITH_CHANGES.exclude?(code)
+    end
+
+    def unpaid_tresorerie?
+      return false unless in_state?(:unpaid)
+
+      last_transition.metadata.dig("PAIEMENT", "CODEMOTIFINVAL").eql?(UNPAID_TRESORERIE_CODE)
     end
 
     def rejected_error_code
