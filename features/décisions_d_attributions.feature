@@ -144,3 +144,23 @@ Fonctionnalité: Le personnel de direction peut éditer les décisions d'attribu
     Quand la génération des décisions d'attribution manquantes est complètement finie
     Et que je rafraîchis la page
     Alors la page ne contient pas "Édition de la décision d'attribution en cours"
+
+  Scénario: Sans responsable légal confirmé, le personnel doit confirmer avant de générer une décision d'attribution individuelle
+    Sachant que mon établissement n'a pas de responsable légal confirmé
+    Lorsque je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
+    Et que je clique sur "Éditer la décision d'attribution manquante"
+    Alors la page contient "Êtes-vous certain(e) de vouloir éditer cette décision d'attribution ?"
+    Et la page contient "Curie Marie"
+    Quand je coche la case de responsable légal
+    Et que je clique sur "Éditer la décision d'attribution manquante"
+    Alors la page contient "Édition de la décision d'attribution en cours"
+
+  Scénario: Sans responsable légal confirmé, le personnel qui ne coche pas la case reste sur l'écran de confirmation
+    Sachant que mon établissement n'a pas de responsable légal confirmé
+    Lorsque je consulte le profil de "Curie Marie" dans la classe de "1MELEC"
+    Et que je clique sur "Éditer la décision d'attribution manquante"
+    Alors la page contient "Êtes-vous certain(e) de vouloir éditer cette décision d'attribution ?"
+    Quand je décoche la case de responsable légal
+    Et que je clique sur "Éditer la décision d'attribution manquante"
+    Alors la page contient "Êtes-vous certain(e) de vouloir éditer cette décision d'attribution ?"
+    Et la page ne contient pas "Édition de la décision d'attribution en cours"

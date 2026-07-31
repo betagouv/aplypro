@@ -151,6 +151,7 @@ Rails.application.routes.draw do
           get "confirm_removal"
           get "confirm_removal_cancellation"
           post "remove"
+          get "confirm_attributive_decision"
           post "create_attributive_decision"
         end
 

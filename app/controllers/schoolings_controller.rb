@@ -4,13 +4,18 @@ class SchoolingsController < ApplicationController
   include RoleCheck
 
   before_action :authenticate_user!, :set_classe, :set_schooling
-  before_action :check_director, :update_confirmed_director!, :check_confirmed_director,
-                only: %i[abrogate_decision update]
+  before_action :check_director, only: %i[abrogate_decision update
+                                          confirm_attributive_decision create_attributive_decision]
+  before_action :update_confirmed_director!, :check_confirmed_director, only: %i[abrogate_decision update]
+  before_action :ask_for_director_confirmation, only: :create_attributive_decision
   before_action :set_student_breadcrumbs, only: %i[confirm_removal
                                                    confirm_removal_cancellation
                                                    confirm_da_extension
                                                    confirm_cancellation_decision
-                                                   confirm_abrogation]
+                                                   confirm_abrogation
+                                                   confirm_attributive_decision]
+
+  def confirm_attributive_decision; end
 
   def create_attributive_decision
     @schooling.update(generating_attributive_decision: true)
@@ -67,6 +72,15 @@ class SchoolingsController < ApplicationController
   end
 
   private
+
+  def ask_for_director_confirmation
+    update_confirmed_director! if params.key?(:confirmed_director)
+
+    return if current_establishment.confirmed_director.present?
+
+    redirect_to confirm_attributive_decision_school_year_class_schooling_path(selected_school_year, @classe,
+                                                                              @schooling) and return
+  end
 
   def set_schooling
     @schooling = Schooling.find(params[:id])
