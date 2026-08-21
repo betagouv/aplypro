@@ -6,9 +6,11 @@ class RetryUnpaidTresorerieJob < ApplicationJob
   RETRY_WINDOW = 4.months
 
   def perform(ministry = nil)
-    retried = pfmps_to_retry(ministry).count { |pfmp| PfmpManager.new(pfmp).retry_payment_request! }
+    retried = ApplicationRecord.transaction do
+      pfmps_to_retry(ministry).count { |pfmp| PfmpManager.new(pfmp).retry_payment_request! }
+    end
 
-    Rails.logger.info "Retried #{retried} unpaid trésorerie payment requests"
+    Rails.logger.info "Retried #{retried} unpaid trésorerie payment #{'request'.pluralize(retried)}"
   end
 
   private
