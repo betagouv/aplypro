@@ -2,8 +2,8 @@
 
 require "rails_helper"
 
-RSpec.describe "Action Cable Redis adapter" do
-  it "loads successfully" do
+RSpec.describe ActionCable::SubscriptionAdapter do
+  it "loads the Redis adapter successfully" do
     expect do
       require "action_cable/subscription_adapter/redis"
     end.not_to raise_error
