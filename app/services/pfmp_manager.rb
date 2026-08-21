@@ -90,7 +90,8 @@ class PfmpManager # rubocop:disable Metrics/ClassLength
   end
 
   def retry_payment_request!
-    return unless @pfmp.latest_payment_request&.eligible_for_rejected_auto_retry?
+    return unless @pfmp.latest_payment_request&.eligible_for_rejected_auto_retry? ||
+                  @pfmp.latest_payment_request&.unpaid_tresorerie?
 
     resubmit!
   end
