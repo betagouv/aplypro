@@ -15,7 +15,29 @@ RSpec.describe RetryUnpaidTresorerieJob do
 
     described_class.perform_now
 
-    expect(Rails.logger).to have_received(:info).with("Retried 1 unpaid trésorerie payment requests")
+    expect(Rails.logger).to have_received(:info).with("Retried 1 unpaid trésorerie payment request")
+  end
+
+  context "when retrying a payment request fails" do
+    let!(:other_request) { create(:asp_payment_request, :unpaid, code_motif: "TR2") }
+    let(:job) { described_class.new }
+    let(:successful_manager) { PfmpManager.new(tresorerie_request.pfmp) }
+    let(:failing_manager) { instance_double(PfmpManager) }
+
+    before do
+      allow(job).to receive(:pfmps_to_retry).and_return([tresorerie_request.pfmp, other_request.pfmp])
+      allow(PfmpManager).to receive(:new).and_return(successful_manager, failing_manager)
+      allow(failing_manager).to receive(:retry_payment_request!)
+        .and_raise(PfmpManager::ExistingActivePaymentRequestError)
+      allow(Rails.logger).to receive(:info)
+    end
+
+    it "rolls back all retries and does not log a success" do
+      expect { job.perform_now }.to raise_error(PfmpManager::ExistingActivePaymentRequestError)
+      expect(tresorerie_request.pfmp.payment_requests.reload.count).to eq(1)
+      expect(other_request.pfmp.payment_requests.reload.count).to eq(1)
+      expect(Rails.logger).not_to have_received(:info).with(/Retried/)
+    end
   end
 
   context "when the payment request is unpaid for another reason" do
