@@ -78,8 +78,8 @@ gem "sidekiq", "8.0.10"
 
 gem "active_decorator"
 
-gem "redis"
-# gem "sidekiq"
+# Action Cable 8.0 only supports redis versions below 6.
+gem "redis", ">= 4", "< 6"
 
 gem "rack-attack"
 
