@@ -23,6 +23,13 @@ RSpec.describe PaymentRequests::UnfreezePendingForFundingJob do
       .with("Unfroze 1 pending payment request for funding")
   end
 
+  it "filters funding issues in the database" do
+    requests = described_class.new.send(:pending_requests_for_funding, nil)
+
+    expect(requests).to be_an(ActiveRecord::Relation)
+    expect(requests).to contain_exactly(funding_request)
+  end
+
   context "when a pending payment request is not blocked for funding" do
     let!(:other_pending_request) do
       create(:asp_payment_request, :sendable).tap do |request|
@@ -44,10 +51,13 @@ RSpec.describe PaymentRequests::UnfreezePendingForFundingJob do
       end
     end
     let(:job) { described_class.new }
+    let(:scope) do
+      instance_double(ActiveRecord::Relation, find_each: [funding_request, other_funding_request].each)
+    end
 
     before do
       allow(job).to receive(:pending_requests_for_funding)
-        .and_return([funding_request, other_funding_request])
+        .and_return(scope)
       allow(other_funding_request).to receive(:mark_ready!).and_raise("Could not unfreeze payment request")
       allow(Rails.logger).to receive(:info)
     end

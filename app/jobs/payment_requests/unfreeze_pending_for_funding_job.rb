@@ -6,7 +6,7 @@ module PaymentRequests
 
     def perform(ministry = nil)
       unfrozen = ApplicationRecord.transaction do
-        pending_requests_for_funding(ministry).count(&:mark_ready!)
+        pending_requests_for_funding(ministry).find_each.count(&:mark_ready!)
       end
 
       Rails.logger.info "Unfroze #{unfrozen} pending payment #{'request'.pluralize(unfrozen)} for funding"
@@ -18,12 +18,14 @@ module PaymentRequests
       scope = ASP::PaymentRequest
               .joins(:asp_payment_request_transitions)
               .where(asp_payment_request_transitions: { most_recent: true, to_state: "pending" })
+              .where(
+                "asp_payment_request_transitions.metadata::jsonb ->> 'pending_reason' = ?",
+                ASP::PaymentRequest::FUNDING_ISSUE
+              )
 
       scope = scope.for_ministry(ministry) if ministry.present?
 
-      scope.select do |payment_request|
-        payment_request.last_transition.metadata["pending_reason"] == ASP::PaymentRequest::FUNDING_ISSUE
-      end
+      scope
     end
   end
 end
