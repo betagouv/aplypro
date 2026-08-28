@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe UnfreezePendingForFundingJob do
+RSpec.describe PaymentRequests::UnfreezePendingForFundingJob do
   let!(:funding_request) do
     create(:asp_payment_request, :sendable).tap do |request|
       request.mark_pending!(pending_reason: ASP::PaymentRequest::FUNDING_ISSUE)
