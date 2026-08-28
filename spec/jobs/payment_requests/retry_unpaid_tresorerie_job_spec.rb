@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe RetryUnpaidTresorerieJob do
+RSpec.describe PaymentRequests::RetryUnpaidTresorerieJob do
   let!(:tresorerie_request) { create(:asp_payment_request, :unpaid, code_motif: "TR2") }
 
   it "retries the payment requests unpaid because of insufficient trésorerie" do
