@@ -3,10 +3,6 @@
 module DataEducationApi
   class EstablishmentApi < DataEducationApi::Base
     class << self
-      def dataset
-        "fr-en-annuaire-education"
-      end
-
       def result(uai)
         data = fetch!(uai)["results"]
 
@@ -15,8 +11,12 @@ module DataEducationApi
 
       private
 
+      def dataset
+        "fr-en-annuaire-education"
+      end
+
       def fetch!(uai)
-        where_clause = "identifiant_de_l_etablissement=\"#{uai}\" AND voie_professionnelle=\"1\""
+        where_clause = "identifiant_de_l_etablissement=\"#{uai}\""
         query_params = {
           where: where_clause,
           limit: 10
