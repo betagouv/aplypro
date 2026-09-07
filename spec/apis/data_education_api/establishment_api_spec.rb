@@ -18,7 +18,7 @@ describe DataEducationApi::EstablishmentApi do
   it "calls the right endpoint" do
     described_class.send(:fetch!, uai)
 
-    where_param = "identifiant_de_l_etablissement%3D%22#{uai}%22%20AND%20voie_professionnelle%3D%221%22"
+    where_param = "identifiant_de_l_etablissement%3D%22#{uai}%22"
     url = "#{api}/fr-en-annuaire-education/records?where=#{where_param}&limit=10"
 
     expect(WebMock).to have_requested(:get, url)

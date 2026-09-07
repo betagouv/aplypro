@@ -16,7 +16,7 @@ module DataEducationApi
       private
 
       def fetch!(uai)
-        where_clause = "identifiant_de_l_etablissement=\"#{uai}\" AND voie_professionnelle=\"1\""
+        where_clause = "identifiant_de_l_etablissement=\"#{uai}\""
         query_params = {
           where: where_clause,
           limit: 10
