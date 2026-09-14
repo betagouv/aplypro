@@ -6,6 +6,13 @@ require "./spec/models/stats/shared_contexts"
 describe Stats::Indicator::Count::PfmpsPayable do
   let(:current_start_year) { SchoolYear.current.start_year }
 
+  around do |example|
+    Timecop.safe_mode = false
+    Timecop.freeze("2025-10-01") do
+      example.run
+    end
+  end
+
   describe "#global_data" do
     subject { described_class.new(current_start_year).global_data }
 

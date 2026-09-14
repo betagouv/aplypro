@@ -7,6 +7,13 @@ describe Stats::Indicator::Ratio::PfmpsPaidPayable do
   let(:current_start_year) { SchoolYear.current.start_year }
   let(:indicator) { Stats::Main.new(current_start_year).indicators[:pfmps_paid_payable_ratio] }
 
+  around do |example|
+    Timecop.safe_mode = false
+    Timecop.freeze("2025-10-01") do
+      example.run
+    end
+  end
+
   describe "#global_data" do
     subject(:ratio_data) { indicator.global_data }
 
