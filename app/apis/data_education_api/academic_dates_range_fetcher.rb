@@ -4,10 +4,6 @@ module DataEducationApi
   # Returns the eligible range that is allowed for establishments to input PFMPs for a given year based on API data
   class AcademicDatesRangeFetcher < DataEducationApi::Base
     class << self
-      def dataset
-        "fr-en-calendrier-scolaire"
-      end
-
       def call(academy_code, year = SchoolYear.current.start_year)
         cache_key = "academic_dates_range_fetcher/#{academy_code}/#{year}"
 
@@ -75,6 +71,10 @@ module DataEducationApi
         return nil if year_record.nil?
 
         { end_date: year_record["end_date"] }
+      end
+
+      def dataset
+        "fr-en-calendrier-scolaire"
       end
 
       def fetch!(param)

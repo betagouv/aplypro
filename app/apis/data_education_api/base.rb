@@ -3,10 +3,6 @@
 module DataEducationApi
   class Base
     class << self
-      def dataset
-        raise NotImplementedError
-      end
-
       protected
 
       def client
@@ -19,6 +15,10 @@ module DataEducationApi
       end
 
       private
+
+      def dataset
+        raise NotImplementedError
+      end
 
       def fetch!(param)
         raise NotImplementedError
