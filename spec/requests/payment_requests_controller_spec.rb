@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# rubocop:disable RSpec/MultipleMemoizedHelpers
+# rubocop:disable-next RSpec/MultipleMemoizedHelpers
 RSpec.describe PaymentRequestsController do
   let(:school_year) { SchoolYear.current }
   let(:schooling) { create(:schooling) }
@@ -72,4 +72,3 @@ RSpec.describe PaymentRequestsController do
     end
   end
 end
-# rubocop:enable RSpec/MultipleMemoizedHelpers

@@ -22,7 +22,7 @@ RSpec.describe ValidationsFacade do
       end
     end
 
-    # rubocop:disable RSpec/MultipleMemoizedHelpers
+    # rubocop:disable-next RSpec/MultipleMemoizedHelpers
     context "when there are failed payment requests in different states" do
       let(:schooling_with_rejected) { create(:schooling, classe: classe) }
       let(:schooling_with_unpaid) { create(:schooling, classe: classe) }
@@ -45,7 +45,6 @@ RSpec.describe ValidationsFacade do
         expect(failed_pfmps["incomplete"]).to include(pfmp_incomplete)
       end
     end
-    # rubocop:enable RSpec/MultipleMemoizedHelpers
 
     context "when a pfmp has multiple payment requests" do
       let(:schooling) { create(:schooling, classe: classe) }

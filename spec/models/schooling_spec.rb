@@ -463,7 +463,7 @@ RSpec.describe Schooling do
     end
   end
 
-  # rubocop:disable RSpec/MultipleMemoizedHelpers
+  # rubocop:disable-next RSpec/MultipleMemoizedHelpers
   describe "#any_older_schooling?" do
     subject { schooling.any_older_schooling? }
 
@@ -540,7 +540,6 @@ RSpec.describe Schooling do
       it { is_expected.to be false }
     end
   end
-  # rubocop:enable RSpec/MultipleMemoizedHelpers
 
   describe "#older_than?" do
     subject { schooling.send(:older_than?, another_schooling) }

@@ -2,7 +2,7 @@
 
 require "sidekiq/web"
 
-# rubocop:disable Metrics/BlockLength
+# rubocop:disable-next Metrics/BlockLength
 Rails.application.routes.draw do
   namespace :asp do
     resources :schoolings, only: %i[index show] do
@@ -229,4 +229,3 @@ Rails.application.routes.draw do
 
   mount Sidekiq::Web => "/sidekiq"
 end
-# rubocop:enable Metrics/BlockLength

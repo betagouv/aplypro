@@ -37,7 +37,7 @@ class ValidationsController < ApplicationController
   end
 
   # Validate all Pfmps for a given classe
-  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable-next Metrics/AbcSize
   def validate
     if validation_params.empty?
       redirect_to validation_school_year_class_path(selected_school_year, @classe),
@@ -51,7 +51,6 @@ class ValidationsController < ApplicationController
     redirect_to school_year_validations_path(selected_school_year),
                 notice: t("validations.create.success", classe_label: @classe.label)
   end
-  # rubocop:enable Metrics/AbcSize
 
   private
 

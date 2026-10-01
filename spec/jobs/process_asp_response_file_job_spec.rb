@@ -15,11 +15,10 @@ RSpec.describe ProcessASPResponseFileJob do
     allow(asp_request).to receive(:parse_response_file!)
 
     # NOTE: this is ActiveRecord API we're fine
-    # rubocop:disable RSpec/MessageChain
+    # rubocop:disable-next RSpec/MessageChain
     allow(ActiveStorage::Blob)
       .to receive_message_chain(:find_by, :attachments, :first, :record)
       .and_return(asp_request)
-    # rubocop:enable RSpec/MessageChain
   end
 
   it "uses ASP::Filename to find the record that holds the filename" do

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# rubocop:disable RSpec/MultipleMemoizedHelpers
+# rubocop:disable-next RSpec/MultipleMemoizedHelpers
 RSpec.describe EstablishmentsController do
   subject(:create_attributive_decisions) do
     post school_year_establishment_create_attributive_decisions_path(school_year, establishment),
@@ -101,4 +101,3 @@ RSpec.describe EstablishmentsController do
     end
   end
 end
-# rubocop:enable RSpec/MultipleMemoizedHelpers

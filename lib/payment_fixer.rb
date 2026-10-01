@@ -14,7 +14,7 @@ class PaymentFixer
   end
 
   # sorry
-  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable-next Metrics/AbcSize
   def call
     updates = []
 
@@ -37,7 +37,6 @@ class PaymentFixer
 
     Pfmp.upsert_all(to_update, update_only: [:amount]) # rubocop:disable Rails/SkipsModelValidations
   end
-  # rubocop:enable Metrics/AbcSize
 
   def handle_single_pfmp(pfmp)
     # count the expected amount manually (no DB roundtrip) since we
@@ -53,7 +52,7 @@ class PaymentFixer
   end
 
   # sorry
-  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable-next Metrics/AbcSize
   def handle_multiple_pfmps(pfmps)
     updates = []
 
@@ -74,5 +73,4 @@ class PaymentFixer
 
     updates.flatten
   end
-  # rubocop:enable Metrics/AbcSize
 end

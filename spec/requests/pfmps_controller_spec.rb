@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# rubocop:disable RSpec/MultipleMemoizedHelpers
+# rubocop:disable-next RSpec/MultipleMemoizedHelpers
 RSpec.describe PfmpsController do
   let(:school_year) { SchoolYear.current }
   let(:schooling) { create(:schooling) }
@@ -177,4 +177,3 @@ RSpec.describe PfmpsController do
     end
   end
 end
-# rubocop:enable RSpec/MultipleMemoizedHelpers

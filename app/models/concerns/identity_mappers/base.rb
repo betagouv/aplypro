@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module IdentityMappers
-  # rubocop:disable Metrics/ClassLength
+  # rubocop:disable-next Metrics/ClassLength
   class Base
     attr_accessor :attributes
 
@@ -130,5 +130,4 @@ module IdentityMappers
       responsibility_uais | normal_uais | delegated_uais
     end
   end
-  # rubocop:enable Metrics/ClassLength
 end

@@ -3,7 +3,7 @@
 require "rails_helper"
 require "support/webmock_helpers"
 
-# rubocop:disable RSpec/MultipleMemoizedHelpers
+# rubocop:disable-next RSpec/MultipleMemoizedHelpers
 RSpec.describe Sync::StudentJob, :student_api do
   let(:classe) { create(:classe, establishment: establishment) }
   let(:schooling) { create(:schooling, classe: classe) }
@@ -100,4 +100,3 @@ RSpec.describe Sync::StudentJob, :student_api do
     it_behaves_like "maps all the extra fields correctly"
   end
 end
-# rubocop:enable RSpec/MultipleMemoizedHelpers

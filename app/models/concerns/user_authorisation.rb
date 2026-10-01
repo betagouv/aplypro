@@ -3,7 +3,7 @@
 module UserAuthorisation
   extend ActiveSupport::Concern
 
-  # rubocop:disable Metrics/BlockLength
+  # rubocop:disable-next Metrics/BlockLength
   included do
     def current_role
       return if selected_establishment.blank?
@@ -47,5 +47,4 @@ module UserAuthorisation
       director?
     end
   end
-  # rubocop:enable Metrics/BlockLength
 end
