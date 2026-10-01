@@ -12,7 +12,7 @@ module ASP
     # uppercase the tag. The responding bit that comes before has
     # nothing to do with it.
 
-    # rubocop:disable Style/MissingRespondToMissing
+    # rubocop:disable-next Style/MissingRespondToMissing
     def method_missing(method, *args, &)
       args = args.map do |a|
         a.is_a?(String) ? I18n.transliterate(a) : a
@@ -20,6 +20,5 @@ module ASP
 
       super(method.to_s.upcase, *args, &)
     end
-    # rubocop:enable Style/MissingRespondToMissing
   end
 end

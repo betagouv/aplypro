@@ -14,7 +14,7 @@ RSpec.describe Keycloak::InviteAcademicUserJob do
       allow(Turbo::StreamsChannel).to receive(:broadcast_render_to)
     end
 
-    # rubocop:disable RSpec/ExampleLength
+    # rubocop:disable-next RSpec/ExampleLength
     it "creates invitation record and broadcasts result" do
       expect do
         described_class.new.perform(email, academy_codes, user.id, stream_id)
@@ -31,7 +31,6 @@ RSpec.describe Keycloak::InviteAcademicUserJob do
         locals: { result: success_result, email: email, academy_codes: academy_codes }
       )
     end
-    # rubocop:enable RSpec/ExampleLength
 
     it "broadcasts error when exception occurs" do
       allow(AcademicInvitation).to receive(:create!).and_raise(StandardError.new("Database error"))

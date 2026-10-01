@@ -4,7 +4,7 @@ Quand("je me rend sur la page de recherche de dossier") do
   visit "/asp/schoolings"
 end
 
-# rubocop:disable Layout/LineLength
+# rubocop:disable-next Layout/LineLength
 Quand("une PFMP de 30 euros a été saisie, validée et envoyée en paiement pour l'élève {string}") do |name|
   steps %(
     Sachant que je suis un personnel MENJ directeur de l'établissement "DINUM"
@@ -18,7 +18,6 @@ Quand("une PFMP de 30 euros a été saisie, validée et envoyée en paiement pou
     Et que la dernière PFMP de "#{name}" en classe de "A1" a une requête de paiement envoyée
   )
 end
-# rubocop:enable Layout/LineLength
 
 Sachantque("le numéro administratif de {string} est {string}") do |name, administrative_number|
   student = find_student_by_full_name(name)

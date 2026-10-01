@@ -4,7 +4,7 @@ require "rails_helper"
 
 require "./spec/support/shared/student_mapper"
 
-# rubocop:disable RSpec/MultipleMemoizedHelpers
+# rubocop:disable-next RSpec/MultipleMemoizedHelpers
 describe Student::Mappers::Base do
   let(:uai) { create(:establishment).uai }
   let(:mapper) { described_class.new({}, uai) }
@@ -134,4 +134,3 @@ describe Student::Mappers::Base do
     end
   end
 end
-# rubocop:enable RSpec/MultipleMemoizedHelpers

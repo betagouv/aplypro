@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# rubocop:disable RSpec/AnyInstance
+# rubocop:disable-next RSpec/AnyInstance
 RSpec.describe Omogen::Base do
   before do
     allow_any_instance_of(described_class).to receive(:base_url).and_return("http://base.fr")
@@ -28,4 +28,3 @@ RSpec.describe Omogen::Base do
     end
   end
 end
-# rubocop:enable RSpec/AnyInstance
