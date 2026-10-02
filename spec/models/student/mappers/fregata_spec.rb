@@ -82,12 +82,12 @@ describe Student::Mappers::Fregata do
         build(:fregata_student,
               classe_label: "1MELEC",
               ine_value: "123456",
-              dateEntreeFormation: "2025-09-01",
-              dateSortieEtablissement: "2025-09-02"),
+              dateEntreeFormation: "2026-09-01",
+              dateSortieEtablissement: "2026-09-02"),
         build(:fregata_student,
               classe_label: "1MELEC",
               ine_value: "123456",
-              dateEntreeFormation: "2025-09-03",
+              dateEntreeFormation: "2026-09-03",
               dateSortieEtablissement: nil)
       ]
     end
@@ -95,7 +95,7 @@ describe Student::Mappers::Fregata do
 
     before { mapper.new(data, uai).parse! }
 
-    it { expect(student.current_schooling.start_date).to eq Date.parse("2025-09-01") }
+    it { expect(student.current_schooling.start_date).to eq Date.parse("2026-09-01") }
     it { expect(student.current_schooling.end_date).to be_nil }
     it { expect(student.schoolings.count).to eq(1) }
   end

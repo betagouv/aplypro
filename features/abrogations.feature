@@ -15,14 +15,14 @@ Fonctionnalité: Gestion des abrogations
     Lorsque je me déconnecte
     Et que je suis un personnel MENJ de l'établissement "DINUM" avec une délégation DELEG-CE pour APLyPro
     Lorsque je me connecte en tant que personnel MENJ
-    Sachant que l'élève "Curie Marie" a une décision d'attribution abrogeable pour l'année scolaire 2025
+    Sachant que l'élève "Curie Marie" a une décision d'attribution abrogeable pour l'année scolaire 2026
     Lorsque je consulte la liste des décisions d'attributions abrogeables
     Alors la page contient un bouton "Abroger la décision d'attribution" désactivé
 
   Scénario: La décision d'attribution est abrogeable si les conditions sont réunies
-    Sachant que l'élève "Curie Marie" a une décision d'attribution abrogeable pour l'année scolaire 2025
+    Sachant que l'élève "Curie Marie" a une décision d'attribution abrogeable pour l'année scolaire 2026
     Lorsque je consulte la liste des décisions d'attributions abrogeables
-    Alors la page contient "Année scolaire 2025 - 2026"
+    Alors la page contient "Année scolaire 2026 - 2027"
     Et la page contient "Curie Marie"
     Lorsque je clique sur "Abroger la décision d'attribution"
     Alors la page contient "Êtes-vous certain(e) de vouloir abroger cette décision d'attribution ?"
@@ -30,5 +30,5 @@ Fonctionnalité: Gestion des abrogations
     Et que je clique sur "Confirmer l'abrogation"
     Alors la page contient "Télécharger l'abrogation"
     Lorsque je consulte la liste des décisions d'attributions abrogeables
-    Alors la page ne contient pas "Année scolaire 2025 - 2026"
+    Alors la page ne contient pas "Année scolaire 2026 - 2027"
     Et la page ne contient pas "Curie Marie"
