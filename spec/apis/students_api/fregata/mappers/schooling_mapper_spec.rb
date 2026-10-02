@@ -26,7 +26,7 @@ describe StudentsApi::Fregata::Mappers::SchoolingMapper do
                            uai: "123456C",
                            start_date: "2024-05-25",
                            end_date: "2024-05-30",
-                           school_year: 2025
+                           school_year: 2026
                          })
   end
 
