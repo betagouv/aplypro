@@ -9,7 +9,7 @@ describe Stats::Indicator::Ratio::PfmpsPaidPayable do
 
   around do |example|
     Timecop.safe_mode = false
-    Timecop.freeze("2025-10-01") do
+    Timecop.freeze("2026-10-01") do
       example.run
     end
   end
