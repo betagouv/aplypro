@@ -83,7 +83,7 @@ class SchoolingsController < ApplicationController
   end
 
   def set_schooling
-    @schooling = Schooling.find(params[:id])
+    @schooling = @classe.schoolings.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to school_year_classes_path(selected_school_year), alert: t("errors.schoolings.not_found")
   end
