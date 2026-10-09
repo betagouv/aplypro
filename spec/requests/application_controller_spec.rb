@@ -47,4 +47,17 @@ RSpec.describe ApplicationController do
       end
     end
   end
+
+  describe "current establishment" do
+    before do
+      sign_in(establishment_user, scope: :user)
+      establishment_user.establishment_user_roles.find_by!(establishment: establishment).destroy!
+    end
+
+    it "rejects an establishment selected before the user's role was revoked" do
+      get school_year_classes_path(school_year)
+
+      expect(response).to redirect_to(user_select_establishment_path(establishment_user))
+    end
+  end
 end
