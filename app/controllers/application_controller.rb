@@ -43,8 +43,9 @@ class ApplicationController < ActionController::Base
 
   def current_establishment
     return unless current_user
+    return @current_establishment if defined?(@current_establishment)
 
-    @current_establishment ||= current_user.establishments.find_by(id: current_user.selected_establishment_id)
+    @current_establishment = current_user.establishments.find_by(id: current_user.selected_establishment_id)
   end
 
   def redirect_asp_users!
