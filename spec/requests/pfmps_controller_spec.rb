@@ -34,6 +34,20 @@ RSpec.describe PfmpsController do
       it { is_expected.to redirect_to school_year_classes_path(SchoolYear.current) }
     end
 
+    context "when trying to access a PFMP from another schooling of the same student" do
+      let(:former_schooling) { create(:schooling, :closed, student: student) }
+      let(:former_pfmp) { create(:pfmp, schooling: former_schooling) }
+
+      before do
+        get school_year_class_schooling_pfmp_path(school_year,
+                                                  class_id: schooling.classe.id,
+                                                  schooling_id: schooling.id,
+                                                  id: former_pfmp.id)
+      end
+
+      it { is_expected.to redirect_to student_path(student) }
+    end
+
     context "when trying to access a deleted PFMP" do
       before do
         pfmp.destroy!
