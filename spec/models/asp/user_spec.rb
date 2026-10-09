@@ -19,6 +19,12 @@ RSpec.describe ASP::User do
         it { is_expected.not_to be_valid }
       end
 
+      context "when an allowed domain is followed by another domain" do
+        let(:email) { "test@asp-public.fr.attacker.com" }
+
+        it { is_expected.not_to be_valid }
+      end
+
       context "when the email is 'asp-public.fr'" do
         let(:email) { "test@asp-public.fr" }
 
