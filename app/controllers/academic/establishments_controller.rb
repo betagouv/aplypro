@@ -38,9 +38,7 @@ module Academic
     end
 
     def find_establishment
-      @etab = Establishment.joins(:classes)
-                           .where(academy_code: selected_academy,
-                                  "classes.school_year_id": selected_school_year)
+      @etab = Establishment.where(academy_code: selected_academy)
                            .find(params.require(:id))
       @establishment_facade = EstablishmentFacade.new(current_establishment, selected_school_year)
     end
