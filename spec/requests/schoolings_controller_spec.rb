@@ -49,4 +49,16 @@ RSpec.describe SchoolingsController do
       end
     end
   end
+
+  describe "schooling scope" do
+    let(:foreign_schooling) { create(:schooling) }
+
+    it "does not allow access to a schooling from another establishment" do
+      get confirm_removal_school_year_class_schooling_path(schooling.classe.school_year,
+                                                           class_id: schooling.classe.id,
+                                                           id: foreign_schooling.id)
+
+      expect(response).to redirect_to school_year_classes_path(SchoolYear.current)
+    end
+  end
 end

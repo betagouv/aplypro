@@ -30,6 +30,14 @@ RSpec.describe Academic::EstablishmentsController do
       get academic_establishment_path(establishment)
       expect(response).to have_http_status(:success)
     end
+
+    it "returns success when the establishment has no classes" do
+      classe.destroy!
+
+      get academic_establishment_path(establishment)
+
+      expect(response).to have_http_status(:success)
+    end
   end
 
   describe "GET users" do

@@ -60,3 +60,7 @@ end
 Quand("je consulte la fiche de cet élève dans l'espace académique") do
   visit academic_student_path(@student)
 end
+
+Alors("la fiche affiche le nom complet de l'élève") do
+  expect(page).to have_css("h2", text: "Élève : #{@student.full_name}")
+end

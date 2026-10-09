@@ -4,7 +4,7 @@ module PfmpResource
   extend ActiveSupport::Concern
 
   def set_pfmp
-    @pfmp = @schooling.student.pfmps.find(params[:id])
+    @pfmp = @schooling.pfmps.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to student_path(@schooling.student),
                 alert: t("errors.pfmps.not_found") and return

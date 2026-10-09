@@ -10,7 +10,6 @@ RSpec.describe Academic::ToolsController do
     allow_any_instance_of(described_class).to receive(:authorised_academy_codes).and_return(["01"]) # rubocop:disable RSpec/AnyInstance
     allow_any_instance_of(described_class).to receive(:selected_academy).and_return("01") # rubocop:disable RSpec/AnyInstance
     allow(user).to receive(:admin?).and_return(true)
-    allow(Keycloak::RemoveUserJob).to receive(:perform_later)
   end
 
   describe "GET index" do
@@ -22,36 +21,35 @@ RSpec.describe Academic::ToolsController do
 
   describe "POST remove_keycloak_user" do
     it "enqueues removal job and shows loading state" do
-      post remove_keycloak_user_academic_tools_path, params: { email: "user@example.com" }, as: :turbo_stream
+      expect do
+        post remove_keycloak_user_academic_tools_path, params: { email: "user@example.com" }, as: :turbo_stream
+      end.to have_enqueued_job(Keycloak::RemoveUserJob)
+        .with("user@example.com", "keycloak_removal_status")
 
       expect(response).to have_http_status(:success)
       expect(response.body).to include("Suppression en cours...")
-      expect(Keycloak::RemoveUserJob).to have_received(:perform_later)
-        .with("user@example.com", "keycloak_removal_status")
     end
   end
 
   describe "POST invite_keycloak_user" do
-    before do
-      allow(Keycloak::InviteAcademicUserJob).to receive(:perform_later)
-    end
-
     it "enqueues invite job with filtered academy codes" do
-      post invite_keycloak_user_academic_tools_path, params: { email: "user@example.com", academy_codes: ["", "44"] },
-                                                     as: :turbo_stream
+      expect do
+        post invite_keycloak_user_academic_tools_path,
+             params: { email: "user@example.com", academy_codes: ["", "44"] }, as: :turbo_stream
+      end.to have_enqueued_job(Keycloak::InviteAcademicUserJob)
+        .with("user@example.com", ["44"], user.id, "keycloak_invitation_status")
 
       expect(response).to have_http_status(:success)
-      expect(Keycloak::InviteAcademicUserJob).to have_received(:perform_later)
-        .with("user@example.com", ["44"], user.id, "keycloak_invitation_status")
     end
 
     it "handles multiple academy codes" do
-      post invite_keycloak_user_academic_tools_path,
-           params: { email: "user@example.com", academy_codes: ["", "44", "06"] }, as: :turbo_stream
+      expect do
+        post invite_keycloak_user_academic_tools_path,
+             params: { email: "user@example.com", academy_codes: ["", "44", "06"] }, as: :turbo_stream
+      end.to have_enqueued_job(Keycloak::InviteAcademicUserJob)
+        .with("user@example.com", %w[44 06], user.id, "keycloak_invitation_status")
 
       expect(response).to have_http_status(:success)
-      expect(Keycloak::InviteAcademicUserJob).to have_received(:perform_later)
-        .with("user@example.com", %w[44 06], user.id, "keycloak_invitation_status")
     end
   end
 end

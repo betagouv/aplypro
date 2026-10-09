@@ -46,4 +46,5 @@ Fonctionnalité: Gestion du personnel académique
   Scénario: Le personnel académique peut consulter la fiche d'un élève sans date de fin de scolarité
     Sachant qu'il existe un élève sans date de fin de scolarité pour l'académie "06"
     Quand je consulte la fiche de cet élève dans l'espace académique
+    Alors la fiche affiche le nom complet de l'élève
     Alors la page contient "N/A"
