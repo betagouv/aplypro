@@ -37,6 +37,7 @@ en:
           attributes:
             base:
               specific_mef_or_whole_establishment: you cannot exclude a certain MEF code in an establishment that is already completely excluded (regardless of the MEF)
+              uai_or_mef_code: an UAI or a MEF code is required
         asp/request:
           attributes:
             base:

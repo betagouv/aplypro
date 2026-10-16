@@ -5,8 +5,15 @@ require "rails_helper"
 RSpec.describe Exclusion do
   describe "validation" do
     it { is_expected.to belong_to(:school_year).class_name("SchoolYear").optional }
-    it { is_expected.to validate_presence_of(:uai) }
     it { is_expected.to validate_uniqueness_of(:uai).scoped_to(%i[mef_code school_year_id]) }
+
+    it "requires either an UAI or a MEF code" do
+      expect(build(:exclusion, uai: nil, mef_code: nil)).not_to be_valid
+    end
+
+    it "allows a MEF exclusion without an UAI" do
+      expect(build(:exclusion, :whole_mef)).to be_valid
+    end
 
     it "cannot be equally the whole establishment and a specific diploma" do
       create(:exclusion, :whole_establishment, uai: "FOO")
@@ -22,7 +29,6 @@ RSpec.describe Exclusion do
     let(:uai) { nil }
     let(:school_year) { nil }
 
-    # Begin: Whole establishment
     context "when the whole establishment is excluded for all years" do
       let(:exclusion) { create(:exclusion, :whole_establishment, school_year: nil) }
 
@@ -60,9 +66,7 @@ RSpec.describe Exclusion do
         it { is_expected.to be false }
       end
     end
-    # End: Whole establishment
 
-    # Begin: Specific MEF
     context "when the establishment and that specific MEF is excluded for all years" do
       let(:exclusion) { create(:exclusion, school_year: nil) }
 
@@ -102,7 +106,35 @@ RSpec.describe Exclusion do
         it { is_expected.to be false }
       end
     end
-    # End: Specific MEF
+
+    context "when the MEF is excluded from every establishment for all years" do
+      let(:exclusion) { create(:exclusion, :whole_mef, school_year: nil) }
+
+      let(:uai) { "ANY_UAI" }
+      let(:mef_code) { exclusion.mef_code }
+      let(:school_year) { SchoolYear.find_or_create_by!(start_year: 2022) }
+
+      it { is_expected.to be true }
+    end
+
+    context "when the MEF is excluded from every establishment for a specific school year" do
+      let(:exclusion) { create(:exclusion, :whole_mef) }
+
+      let(:uai) { "ANY_UAI" }
+      let(:mef_code) { exclusion.mef_code }
+
+      context "with the excluded school year" do
+        let(:school_year) { exclusion.school_year }
+
+        it { is_expected.to be true }
+      end
+
+      context "with another school year" do
+        let(:school_year) { SchoolYear.find_or_create_by!(start_year: 2022) }
+
+        it { is_expected.to be false }
+      end
+    end
 
     context "when the establishment and another MEF are excluded" do
       let(:exclusion) { create(:exclusion) }

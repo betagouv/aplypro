@@ -30,5 +30,14 @@ RSpec.describe PreparePaymentRequestJob, :student_api do
       expect { described_class.perform_now(payment_request) }
         .to change(payment_request, :current_state).from("pending").to("ready")
     end
+
+    context "when the PFMP ends on the schooling end date" do
+      before { payment_request.schooling.update!(end_date: payment_request.pfmp.end_date) }
+
+      it "marks it ready" do
+        expect { described_class.perform_now(payment_request) }
+          .to change(payment_request, :current_state).from("pending").to("ready")
+      end
+    end
   end
 end
