@@ -66,6 +66,7 @@ RSpec.describe Exclusion do
         it { is_expected.to be false }
       end
     end
+
     context "when the establishment and that specific MEF is excluded for all years" do
       let(:exclusion) { create(:exclusion, school_year: nil) }
 
@@ -105,6 +106,7 @@ RSpec.describe Exclusion do
         it { is_expected.to be false }
       end
     end
+
     context "when the MEF is excluded from every establishment for all years" do
       let(:exclusion) { create(:exclusion, :whole_mef, school_year: nil) }
 
@@ -133,6 +135,7 @@ RSpec.describe Exclusion do
         it { is_expected.to be false }
       end
     end
+
     context "when the establishment and another MEF are excluded" do
       let(:exclusion) { create(:exclusion) }
 
