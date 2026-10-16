@@ -210,7 +210,7 @@ Rails.application.routes.draw do
     end
   end
 
-  if Rails.env.production?
+  unless Rails.env.local?
     Sidekiq::Web.use(Rack::Auth::Basic) do |user, password|
       # https://github.com/sidekiq/sidekiq/wiki/Monitoring#rails-http-basic-auth-from-routes
       # Protect against timing attacks:
