@@ -9,5 +9,9 @@ FactoryBot.define do
     trait :whole_establishment do
       mef_code { nil }
     end
+
+    trait :whole_mef do
+      uai { nil }
+    end
   end
 end
