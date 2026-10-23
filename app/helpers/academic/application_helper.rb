@@ -2,12 +2,12 @@
 
 module Academic
   module ApplicationHelper
-    def sortable_column_header(column:, label:, path:, current_sort:, **options)
+    def sortable_column_header(column:, label:, path:, current_sort:, **)
       is_active = (current_sort.blank? && column == "name") || current_sort == column
       css_class = ["fr-link", ("fr-text--heavy" if is_active)].compact.join(" ")
       title = "Trier par #{label.downcase}"
 
-      link_to path, class: css_class, title: title, **options do
+      link_to path, class: css_class, title: title, ** do
         concat label
         concat " "
         concat content_tag(:i, "", class: "fr-icon-arrow-down-s-line fr-icon--sm") if is_active

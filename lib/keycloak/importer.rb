@@ -290,12 +290,12 @@ module Keycloak
       @logger.error "    ⚠ Error adding default default client scope '#{scope['name']}': #{e.message}"
     end
 
-    def import_collection(type, items, name_key, &block)
+    def import_collection(type, items, name_key, &)
       @logger.info "  Importing #{type}..."
       return if items.blank?
 
       items.each do |item|
-        import_collection_item(type, item, name_key, &block)
+        import_collection_item(type, item, name_key, &)
       end
     end
 
