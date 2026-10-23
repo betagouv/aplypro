@@ -9,7 +9,7 @@ module ASP
     validates :uid, :provider, :name, :email, presence: true
 
     validates :email, format: {
-      with: /\A[^@\s]+@(?:#{EMAIL_DOMAIN.map { Regexp.escape(_1) }.join('|')})\z/i
+      with: /\A[^@\s]+@(?:#{EMAIL_DOMAIN.map { Regexp.escape(it) }.join('|')})\z/i
     }
 
     class << self
