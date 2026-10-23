@@ -62,7 +62,10 @@ Sachantque("une demande de paiement pour l'académie {string} a été mise à jo
   establishment = FactoryBot.create(:establishment, academy_code: academy_code)
   classe = FactoryBot.create(:classe, establishment: establishment, school_year: school_year)
   schooling = FactoryBot.create(:schooling, classe: classe)
-  @pfmp = FactoryBot.create(:pfmp, schooling: schooling)
+  school_year_range = establishment.school_year_range(school_year.start_year)
+  @pfmp = FactoryBot.create(:pfmp, schooling: schooling,
+                                   start_date: school_year_range.begin,
+                                   end_date: school_year_range.begin + 1.week)
   payment_request = ASP::PaymentRequest.create!(pfmp: @pfmp)
   payment_request.transition_to!(:pending)
   payment_request.last_transition.update!(updated_at: Date.strptime(date, "%d/%m/%Y").in_time_zone)
