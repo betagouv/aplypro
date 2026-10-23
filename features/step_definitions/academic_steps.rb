@@ -57,8 +57,25 @@ Sachantque("il existe un élève sans date de fin de scolarité pour l'académie
   @student = schooling.student
 end
 
+Sachantque("une demande de paiement pour l'académie {string} a été mise à jour le {string}") do |academy_code, date|
+  school_year = FactoryBot.create(:school_year)
+  establishment = FactoryBot.create(:establishment, academy_code: academy_code)
+  classe = FactoryBot.create(:classe, establishment: establishment, school_year: school_year)
+  schooling = FactoryBot.create(:schooling, classe: classe)
+  @pfmp = FactoryBot.create(:pfmp, schooling: schooling)
+  payment_request = ASP::PaymentRequest.create!(pfmp: @pfmp)
+  payment_request.transition_to!(:pending)
+  payment_request.last_transition.update!(updated_at: Date.strptime(date, "%d/%m/%Y").in_time_zone)
+
+  @student = payment_request.student
+end
+
 Quand("je consulte la fiche de cet élève dans l'espace académique") do
   visit academic_student_path(@student)
+end
+
+Quand("je consulte le détail de cette PFMP dans l'espace académique") do
+  visit academic_student_pfmp_path(@student, @pfmp)
 end
 
 Alors("la fiche affiche le nom complet de l'élève") do

@@ -48,3 +48,13 @@ Fonctionnalité: Gestion du personnel académique
     Quand je consulte la fiche de cet élève dans l'espace académique
     Alors la fiche affiche le nom complet de l'élève
     Alors la page contient "N/A"
+
+  Scénario: Le personnel académique voit la date de mise à jour du paiement sur la fiche élève
+    Sachant qu'une demande de paiement pour l'académie "06" a été mise à jour le "05/04/2024"
+    Quand je consulte la fiche de cet élève dans l'espace académique
+    Alors la page contient "Mis à jour le 05/04/2024"
+
+  Scénario: Le personnel académique voit la date de mise à jour du paiement sur le détail de la PFMP
+    Sachant qu'une demande de paiement pour l'académie "06" a été mise à jour le "05/04/2024"
+    Quand je consulte le détail de cette PFMP dans l'espace académique
+    Alors la page contient "Mis à jour le 05/04/2024"
