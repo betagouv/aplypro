@@ -67,7 +67,7 @@
             %p
               = @pfmp.latest_payment_request.status_badge
               - if @pfmp.latest_payment_request.last_update_date.present?
-                %span.fr-ml-2w.fr-text--sm= "Mis à jour le #{@pfmp.latest_payment_request.last_update_date}"
+                %span.fr-ml-2w.fr-text--sm= "Mis à jour le #{@pfmp.latest_payment_request.last_update_date(format: "%d/%m/%Y")}"
             - if @pfmp.latest_payment_request.status_explanation.present?
               %p.fr-mt-2w
                 %strong Motif:
