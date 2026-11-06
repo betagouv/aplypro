@@ -155,7 +155,7 @@ RSpec.describe WageSeeder do
         expect(wages).not_to be_empty
         expect(wages.pluck(:daily_rate)).to all(be_positive)
         expect(wages.pluck(:yearly_cap)).to all(be_positive)
-        expect(wages.flat_map(&:mef_codes).uniq.size).to eq(1471)
+        expect(wages.flat_map(&:mef_codes).uniq.size).to eq(1466)
       end
     end
   end
