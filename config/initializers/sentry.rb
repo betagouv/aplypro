@@ -9,7 +9,7 @@ Sentry.init do |config|
   # We recommend adjusting this value in production.
   config.traces_sample_rate = 0.1
 
-  config.include_local_variables = true
+  config.data_collection.stack_frame_variables = true
 
   # this is provided by Scalingo
   config.release = ENV.fetch("CONTAINER_VERSION", nil)
