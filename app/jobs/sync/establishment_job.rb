@@ -12,6 +12,7 @@ module Sync
       attributes = Establishment::API_MAPPING.to_h do |col, attr|
         [attr, data[col]]
       end
+      attributes.delete(:email) unless establishment.email.nil?
 
       establishment.update!(attributes)
     end

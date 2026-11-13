@@ -23,4 +23,12 @@ RSpec.describe Sync::EstablishmentJob do
       expect { described_class.perform_now(establishment) }.to change(establishment, attr)
     end
   end
+
+  context "when the establishment already has an email" do
+    before { establishment.update!(email: "contact@establishment.fr") }
+
+    it "does not update it from the API" do
+      expect { described_class.perform_now(establishment) }.not_to change(establishment, :email)
+    end
+  end
 end
