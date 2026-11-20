@@ -39,9 +39,16 @@ RSpec.describe Academic::PfmpsController do
     it_behaves_like "the historical payment IBAN"
 
     context "when an old payment has no saved RIB" do
-      let(:previous_iban) { payment_request.reconstructed_iban }
-
-      before { payment_request.update!(rib: nil) }
+      before do
+        coordinates = {
+          "CODEISOPAYS" => previous_iban[0, 2],
+          "CLECONTROL" => previous_iban[2, 2],
+          "ZONEBBAN" => previous_iban[4..]
+        }
+        transition = payment_request.last_transition
+        transition.update!(metadata: transition.metadata.deep_merge("PAIEMENT" => { "COORDPAIE" => coordinates }))
+        payment_request.update!(rib: nil)
+      end
 
       it_behaves_like "the historical payment IBAN"
     end
