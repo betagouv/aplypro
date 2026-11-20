@@ -55,6 +55,7 @@
           %th{scope: "col"} Classe
           %th{scope: "col"} PFMP
           %th{scope: "col"} Statut paiement
+          %th{scope: "col"} IBAN utilisé
           %th{scope: "col", style: "width: 30%"} Motif
           %th{scope: "col"} Nombre de jours
           %th{scope: "col"} Montant
@@ -74,6 +75,12 @@
                       %small.fr-text--xs= "Mis à jour le #{pfmp.latest_payment_request.last_update_date(format: "%d/%m/%Y")}"
                   - else
                     %span.fr-badge.fr-badge--sm Aucune demande
+                %td
+                  - iban = pfmp_payment_iban(pfmp)
+                  - if iban.present?
+                    %code= mask_iban(iban)
+                  - else
+                    Non renseigné
                 %td
                   - if pfmp.latest_payment_request.present?
                     = pfmp.latest_payment_request.status_explanation

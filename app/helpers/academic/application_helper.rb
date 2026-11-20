@@ -2,6 +2,10 @@
 
 module Academic
   module ApplicationHelper
+    def pfmp_payment_iban(pfmp)
+      pfmp.latest_payment_request&.historical_iban
+    end
+
     def sortable_column_header(column:, label:, path:, current_sort:, **)
       is_active = (current_sort.blank? && column == "name") || current_sort == column
       css_class = ["fr-link", ("fr-text--heavy" if is_active)].compact.join(" ")
