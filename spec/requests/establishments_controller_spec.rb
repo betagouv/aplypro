@@ -40,6 +40,14 @@ RSpec.describe EstablishmentsController do
       expect(response).to have_http_status(:ok)
     end
 
+    it "keeps available PDFs unchanged" do
+      schooling = create(:schooling, :with_attributive_decision, classe: classe)
+
+      post school_year_establishment_download_attributive_decisions_path(school_year, establishment)
+
+      expect(schooling.attributive_decision.download).to eq("hello")
+    end
+
     context "when decisions are being generated" do
       before { create(:schooling, classe: classe, generating_attributive_decision: true) }
 
@@ -48,6 +56,33 @@ RSpec.describe EstablishmentsController do
 
         expect(response).to redirect_to(root_path)
         expect(flash[:alert]).to eq(I18n.t("panels.attributive_decisions.generating.body.other"))
+      end
+    end
+
+    context "when an attached PDF is missing from storage" do
+      let(:schooling) { create(:schooling, :with_attributive_decision, classe: classe) }
+      let(:blob) { schooling.attributive_decision.blob }
+
+      before { blob.service.delete(blob.key) }
+
+      it "regenerates the PDF before including it in the ZIP" do
+        post school_year_establishment_download_attributive_decisions_path(school_year, establishment)
+
+        archive = StringIO.new(response.body)
+        entry = ZipKit::FileReader.read_zip_structure(io: archive).first
+        expect(entry.filename.force_encoding(Encoding::UTF_8)).to eq(blob.key)
+        expect(entry.extractor_from(archive).extract(1024)).to start_with("%PDF-")
+        expect(blob.reload.open(&:read)).to start_with("%PDF-")
+      end
+
+      it "preserves the decision number, filename and storage path" do
+        original = [schooling.attributive_decision_number, blob.id, blob.key, blob.filename.to_s]
+
+        post school_year_establishment_download_attributive_decisions_path(school_year, establishment)
+
+        decision = schooling.reload.attributive_decision
+        expect([schooling.attributive_decision_number, decision.blob.id, decision.key, decision.filename.to_s])
+          .to eq(original)
       end
     end
 
