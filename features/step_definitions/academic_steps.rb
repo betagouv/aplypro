@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "../../spec/support/attributive_decision_helpers"
+
 Quand("je me rend sur la page d'accueil du personnel académique") do
   visit "/academic/home"
 end
@@ -75,6 +77,24 @@ end
 
 Quand("je consulte la fiche de cet élève dans l'espace académique") do
   visit academic_student_path(@student)
+end
+
+Sachantque("une PFMP de l'académie {string} a été payée avec l'IBAN {string}") do |academy_code, iban|
+  payment_request = FactoryBot.create(:asp_payment_request, :paid)
+  @pfmp = payment_request.pfmp
+  @student = payment_request.student
+  @pfmp.establishment.update!(academy_code: academy_code)
+  payment_request.rib.update!(iban: iban)
+end
+
+Sachantque("l'élève utilise maintenant l'IBAN {string}") do |iban|
+  @student.rib(@pfmp.establishment).archive!
+  FactoryBot.create(:rib, student: @student, establishment: @pfmp.establishment, iban: iban)
+end
+
+Alors("la ligne de cette PFMP contient {string}") do |content|
+  row = find_link(@pfmp.id.to_s, href: academic_student_pfmp_path(@student, @pfmp)).ancestor("tr")
+  expect(row).to have_text(content)
 end
 
 Quand("je consulte le détail de cette PFMP dans l'espace académique") do

@@ -58,3 +58,13 @@ Fonctionnalité: Gestion du personnel académique
     Sachant qu'une demande de paiement pour l'académie "06" a été mise à jour le "05/04/2024"
     Quand je consulte le détail de cette PFMP dans l'espace académique
     Alors la page contient "Mis à jour le 05/04/2024"
+
+  Scénario: Le personnel académique retrouve l'IBAN utilisé avant une modification des coordonnées bancaires
+    Sachant qu'une PFMP de l'académie "06" a été payée avec l'IBAN "FR7630006000011234567890189"
+    Et que l'élève utilise maintenant l'IBAN "FR1420041010050500013M02606"
+    Quand je consulte la fiche de cet élève dans l'espace académique
+    Alors la page contient "FR14 **** **** **** **** 3M02 606"
+    Et la ligne de cette PFMP contient "FR76 **** **** **** **** 7890 189"
+    Quand je consulte le détail de cette PFMP dans l'espace académique
+    Alors la page contient "FR76 **** **** **** **** 7890 189"
+    Et la page ne contient pas "FR14 **** **** **** **** 3M02 606"
