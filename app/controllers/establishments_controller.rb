@@ -30,7 +30,8 @@ class EstablishmentsController < ApplicationController
 
   def download_attributive_decisions
     if current_establishment.some_attributive_decisions_generating?(selected_school_year)
-      return redirect_to root_path, alert: t("panels.attributive_decisions.generating.body.other")
+      return redirect_to school_year_home_path(selected_school_year),
+                         alert: t("panels.attributive_decisions.generating.body.other")
     end
 
     documents = schoolings_for_selected_school_year
