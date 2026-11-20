@@ -182,6 +182,10 @@ module ASP
       true
     end
 
+    def historical_iban
+      rib&.iban || reconstructed_iban
+    end
+
     def reconstructed_iban
       return nil if !in_state?(:paid) || recovery?
 

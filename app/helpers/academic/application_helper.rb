@@ -3,10 +3,7 @@
 module Academic
   module ApplicationHelper
     def pfmp_payment_iban(pfmp)
-      payment_request = pfmp.latest_payment_request
-      return unless payment_request
-
-      payment_request.rib&.iban || payment_request.reconstructed_iban
+      pfmp.latest_payment_request&.historical_iban
     end
 
     def sortable_column_header(column:, label:, path:, current_sort:, **)
