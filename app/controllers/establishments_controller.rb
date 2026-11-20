@@ -29,6 +29,11 @@ class EstablishmentsController < ApplicationController
   end
 
   def download_attributive_decisions
+    if current_establishment.some_attributive_decisions_generating?(selected_school_year)
+      return redirect_to school_year_home_path(selected_school_year),
+                         alert: t("panels.attributive_decisions.generating.body.other")
+    end
+
     documents = schoolings_for_selected_school_year
                 .with_attached_attributive_decision
                 .map(&:attributive_decision)

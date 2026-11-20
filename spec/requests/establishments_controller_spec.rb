@@ -40,6 +40,19 @@ RSpec.describe EstablishmentsController do
       expect(response).to have_http_status(:ok)
     end
 
+    context "when decisions are being generated" do
+      let(:school_year) { SchoolYear.find_by!(start_year: SchoolYear.current.start_year - 1) }
+
+      before { create(:schooling, classe: classe, generating_attributive_decision: true) }
+
+      it "redirects back with the generation in progress message" do
+        post school_year_establishment_download_attributive_decisions_path(school_year, establishment)
+
+        expect(response).to redirect_to(school_year_home_path(school_year))
+        expect(flash[:alert]).to eq(I18n.t("panels.attributive_decisions.generating.body.other"))
+      end
+    end
+
     context "when an attributive decision is missing" do
       before { schoolings.last.attributive_decision.purge }
 
