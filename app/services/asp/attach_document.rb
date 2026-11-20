@@ -17,14 +17,14 @@ module ASP
 
         name = attachment_file_name(schooling, DESCRIPTIONS[attachment_name])
 
-        blob = ActiveStorage::Blob.create_and_upload!(
-          io: output,
-          filename: name,
-          content_type: "application/pdf",
-          metadata: { archive_path: archive_path(schooling.classe, name) }
-        )
+        attachment.presence&.purge
 
-        attachment.attach(blob)
+        attachment.attach(
+          io: output,
+          key: attributive_decision_key(schooling.classe, name),
+          filename: name,
+          content_type: "application/pdf"
+        )
       end
 
       def attachment_file_name(schooling, description)
@@ -36,7 +36,7 @@ module ASP
         ].join("_").concat(".pdf")
       end
 
-      def archive_path(classe, filename)
+      def attributive_decision_key(classe, filename)
         [
           classe.establishment.uai,
           classe.school_year.start_year,
