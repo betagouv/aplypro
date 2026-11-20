@@ -36,14 +36,14 @@ RSpec.describe Academic::PfmpsController do
       create(:rib, student: student, establishment: pfmp.establishment)
     end
 
-    include_examples "the historical payment IBAN"
+    it_behaves_like "the historical payment IBAN"
 
     context "when an old payment has no saved RIB" do
       let(:previous_iban) { payment_request.reconstructed_iban }
 
       before { payment_request.update!(rib: nil) }
 
-      include_examples "the historical payment IBAN"
+      it_behaves_like "the historical payment IBAN"
     end
   end
 
@@ -54,7 +54,8 @@ RSpec.describe Academic::PfmpsController do
       get academic_student_pfmp_path(student, pfmp)
 
       expect(response.body).to include("Non renseigné")
-      expect(response.body).not_to include(ApplicationController.helpers.mask_iban(student.rib(pfmp.establishment).iban))
+      expect(response.body)
+        .not_to include(ApplicationController.helpers.mask_iban(student.rib(pfmp.establishment).iban))
     end
   end
 end
