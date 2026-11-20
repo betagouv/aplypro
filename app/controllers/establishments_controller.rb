@@ -33,7 +33,7 @@ class EstablishmentsController < ApplicationController
                 .with_attached_attributive_decision
                 .map(&:attributive_decision)
                 .filter(&:attached?)
-                .map { |d| [d, d.key] }
+                .map { |d| [d.blob, d.metadata.fetch("archive_path", d.key)] }
 
     zipline(documents, attributive_decisions_archive_name)
   end
