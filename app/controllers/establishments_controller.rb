@@ -33,26 +33,16 @@ class EstablishmentsController < ApplicationController
       return redirect_to root_path, alert: t("panels.attributive_decisions.generating.body.other")
     end
 
-    documents = schoolings_for_selected_school_year.with_attached_attributive_decision.filter_map do |schooling|
-      decision = schooling.attributive_decision
-      next unless decision.attached?
-
-      regenerate_missing_attributive_decision(schooling)
-      [decision, decision.key]
-    end
+    documents = schoolings_for_selected_school_year
+                .with_attached_attributive_decision
+                .map(&:attributive_decision)
+                .filter(&:attached?)
+                .map { |d| [d, d.key] }
 
     zipline(documents, attributive_decisions_archive_name)
   end
 
   private
-
-  def regenerate_missing_attributive_decision(schooling)
-    blob = schooling.attributive_decision.blob
-    return if blob.service.exist?(blob.key)
-
-    blob.upload(Generator::Attributor.new(schooling).write, identify: false)
-    blob.save!
-  end
 
   def check_confirmed_director_for_attributive_decision
     check_confirmed_director(alert_message: t("panels.attributive_decisions.not_director"))
